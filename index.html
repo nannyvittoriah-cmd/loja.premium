@@ -3,159 +3,202 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loja Gamer</title>
+<title>Loja Neon</title>
 
 <style>
 body {
-    margin: 0;
+    margin:0;
     font-family: Arial;
-    background: #000;
-    color: #fff;
+    background: black;
+    color: white;
 }
 
+/* TOPO */
 header {
-    text-align: center;
-    padding: 20px;
-    font-size: 25px;
-    color: #ff00ff;
-    text-shadow: 0 0 10px #ff00ff;
+    text-align:center;
+    padding:20px;
+    font-size:26px;
+    color:#ff00ff;
+    text-shadow:0 0 15px #ff00ff;
 }
 
+/* CATEGORIAS */
 .categorias {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:20px;
+    padding:20px;
 }
 
-button {
-    background: #111;
-    border: 2px solid #ff00ff;
-    color: #ff00ff;
-    padding: 10px;
-    border-radius: 10px;
-    cursor: pointer;
+.categoria-box {
+    width:150px;
+    height:150px;
+    background:#111;
+    border:2px solid #ff00ff;
+    border-radius:15px;
+    text-align:center;
+    cursor:pointer;
+    box-shadow:0 0 15px #ff00ff;
+    transition:0.3s;
 }
 
-button:hover {
-    background: #ff00ff;
-    color: black;
+.categoria-box:hover {
+    transform:scale(1.1);
 }
 
+.categoria-box img {
+    width:80px;
+    margin-top:15px;
+}
+
+.categoria-box p {
+    color:#ff00ff;
+}
+
+/* PRODUTOS */
 .produtos {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 20px;
+    display:none;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:15px;
+    padding:20px;
 }
 
 .card {
-    background: #111;
-    border: 2px solid #ff00ff;
-    border-radius: 10px;
-    padding: 10px;
-    margin: 10px;
-    width: 200px;
-    text-align: center;
+    background:#111;
+    border:2px solid #ff00ff;
+    border-radius:10px;
+    width:200px;
+    text-align:center;
+    padding:10px;
+    box-shadow:0 0 10px #ff00ff;
 }
 
 .card img {
-    width: 100%;
-    border-radius: 10px;
+    width:100%;
+    border-radius:10px;
 }
 
-.admin-panel {
-    display: none;
-    position: fixed;
-    top: 10%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #111;
-    border: 2px solid #ff00ff;
-    padding: 20px;
-    border-radius: 10px;
+.card button {
+    background:black;
+    border:2px solid #ff00ff;
+    color:#ff00ff;
+    padding:8px;
+    margin-top:5px;
+    cursor:pointer;
+}
+
+.card button:hover {
+    background:#ff00ff;
+    color:black;
+}
+
+/* BOTÃO VOLTAR */
+.voltar {
+    display:none;
+    text-align:center;
+    margin-top:10px;
 }
 </style>
 
 </head>
 <body>
 
-<header>🔥 LOJA GAMER 🔥</header>
+<header>🔥 LOJA NEON 🔥</header>
 
-<div class="categorias">
-    <button onclick="mostrar('ff')">Free Fire</button>
-    <button onclick="mostrar('fortnite')">Fortnite</button>
-    <button onclick="mostrar('caixa')">Caixas</button>
+<!-- CATEGORIAS -->
+<div class="categorias" id="categorias">
+
+    <div class="categoria-box" onclick="abrir('ff')">
+        <img src="https://i.imgur.com/3ZQ3Z6k.png">
+        <p>Free Fire</p>
+    </div>
+
+    <div class="categoria-box" onclick="abrir('fortnite')">
+        <img src="https://i.imgur.com/Jn1XxYb.png">
+        <p>Fortnite</p>
+    </div>
+
+    <div class="categoria-box" onclick="abrir('insta')">
+        <img src="https://i.imgur.com/Y6X0Z9B.png">
+        <p>Instagram</p>
+    </div>
+
+    <div class="categoria-box" onclick="abrir('caixa')">
+        <img src="https://i.imgur.com/zYIlgBl.png">
+        <p>Caixa Sorteio</p>
+    </div>
+
 </div>
 
+<!-- BOTÃO VOLTAR -->
+<div class="voltar" id="voltar">
+    <button onclick="voltar()">⬅ Voltar</button>
+</div>
+
+<!-- PRODUTOS -->
 <div class="produtos" id="produtos"></div>
-
-<br><br>
-<center>
-<button onclick="loginAdmin()">Painel Admin</button>
-</center>
-
-<div class="admin-panel" id="admin">
-    <h3>Painel Admin</h3>
-    <input id="nome" placeholder="Nome"><br><br>
-    <input id="preco" placeholder="Preço"><br><br>
-    <input id="img" placeholder="URL da imagem"><br><br>
-    <select id="categoria">
-        <option value="ff">Free Fire</option>
-        <option value="fortnite">Fortnite</option>
-        <option value="caixa">Caixa</option>
-    </select><br><br>
-    <button onclick="addProduto()">Adicionar</button>
-</div>
 
 <script>
 
-let numeroWhatsApp = "5598984853563";
+let numero = "5598984853563"; // TROCA PELO SEU
 
-let produtos = [
-    {nome:"100 Diamantes FF", preco:5, img:"https://i.imgur.com/3ZQ3Z6k.png", cat:"ff"},
-    {nome:"500 V-Bucks Fortnite", preco:20, img:"https://i.imgur.com/Jn1XxYb.png", cat:"fortnite"},
-    {nome:"Caixa Misteriosa", preco:10, img:"https://i.imgur.com/zYIlgBl.png", cat:"caixa"}
-];
+let dados = {
 
-function mostrar(cat) {
+ff: [
+    {nome:"Diamantes FF", preco:"R$5", img:"https://i.imgur.com/3ZQ3Z6k.png"},
+    {nome:"Conta FF", preco:"R$20", img:"https://i.imgur.com/3ZQ3Z6k.png"},
+    {nome:"Passe Elite", preco:"R$15", img:"https://i.imgur.com/3ZQ3Z6k.png"},
+    {nome:"Curtidas FF", preco:"R$3", img:"https://i.imgur.com/3ZQ3Z6k.png"}
+],
+
+fortnite: [
+    {nome:"V-Bucks", preco:"R$20", img:"https://i.imgur.com/Jn1XxYb.png"},
+    {nome:"Conta Fortnite", preco:"R$50", img:"https://i.imgur.com/Jn1XxYb.png"}
+],
+
+insta: [
+    {nome:"Seguidores", preco:"R$10", img:"https://i.imgur.com/Y6X0Z9B.png"},
+    {nome:"Curtidas", preco:"R$5", img:"https://i.imgur.com/Y6X0Z9B.png"},
+    {nome:"Visualizações", preco:"R$7", img:"https://i.imgur.com/Y6X0Z9B.png"}
+],
+
+caixa: [
+    {nome:"Caixa de Sorteio", preco:"R$1", img:"https://i.imgur.com/zYIlgBl.png"}
+]
+
+};
+
+function abrir(cat){
+    document.getElementById("categorias").style.display="none";
+    document.getElementById("produtos").style.display="flex";
+    document.getElementById("voltar").style.display="block";
+
     let area = document.getElementById("produtos");
-    area.innerHTML = "";
+    area.innerHTML="";
 
-    produtos.filter(p => p.cat == cat).forEach(p => {
+    dados[cat].forEach(p=>{
         area.innerHTML += `
         <div class="card">
             <img src="${p.img}">
             <h4>${p.nome}</h4>
-            <p>R$ ${p.preco}</p>
-            <input type="number" value="1" min="1" id="qtd">
-            <button onclick="comprar('${p.nome}', ${p.preco})">Comprar</button>
+            <p>${p.preco}</p>
+            <button onclick="comprar('${p.nome}')">Comprar</button>
         </div>`;
     });
 }
 
-function comprar(nome, preco) {
-    let msg = `Quero comprar: ${nome}`;
-    let link = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(msg)}`;
+function voltar(){
+    document.getElementById("categorias").style.display="flex";
+    document.getElementById("produtos").style.display="none";
+    document.getElementById("voltar").style.display="none";
+}
+
+function comprar(produto){
+    let msg = "Quero comprar: " + produto;
+    let link = `https://wa.me/${numero}?text=${encodeURIComponent(msg)}`;
     window.open(link);
-}
-
-function loginAdmin() {
-    let senha = prompt("Digite a senha admin:");
-    if(senha === "Lorrannyh.170") {
-        document.getElementById("admin").style.display = "block";
-    } else {
-        alert("Senha errada!");
-    }
-}
-
-function addProduto() {
-    let nome = document.getElementById("nome").value;
-    let preco = document.getElementById("preco").value;
-    let img = document.getElementById("img").value;
-    let cat = document.getElementById("categoria").value;
-
-    produtos.push({nome, preco, img, cat});
-    alert("Produto adicionado!");
 }
 
 </script>
