@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>BONYX.SH</title>
 
 <style>
@@ -12,30 +11,24 @@ body{
   margin:0;
   font-family:Arial;
   background:url('https://i.imgur.com/8Km9tLL.png') no-repeat center/cover;
+  color:white;
 }
 
+/* ESCURECER FUNDO */
 .overlay{
   background:rgba(0,0,0,0.75);
   min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  padding:20px;
 }
 
-/* CAIXA PRINCIPAL */
-.box{
-  width:90%;
+/* CAIXA LOGIN */
+.login-box{
   max-width:350px;
+  margin:auto;
   background:#0a0f2c;
   padding:20px;
   border-radius:20px;
   box-shadow:0 0 20px #ff00ff;
-}
-
-/* TITULO */
-h1{
-  text-align:center;
-  color:#ff00ff;
 }
 
 /* INPUT */
@@ -62,18 +55,20 @@ input{
   box-shadow:0 0 10px #ff00ff;
 }
 
-/* HOME */
-.home{
-  padding:20px;
-}
-
-/* CARD */
+/* CARDS */
 .card{
   background:#111a44;
   padding:15px;
   border-radius:15px;
   margin:10px 0;
-  box-shadow:0 0 10px #000;
+  box-shadow:0 0 10px black;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
 }
 
 /* MENU */
@@ -87,10 +82,7 @@ input{
   padding:20px;
   transition:0.3s;
 }
-
-.menu.active{
-  right:0;
-}
+.menu.active{right:0}
 
 .menu div{
   padding:15px;
@@ -98,7 +90,6 @@ input{
 }
 
 </style>
-
 </head>
 
 <body>
@@ -108,8 +99,9 @@ input{
 </div>
 
 <div class="menu" id="menu">
-  <div onclick="minhaConta()">Minha conta</div>
+  <div onclick="conta()">Minha conta</div>
   <div onclick="compras()">Minhas compras</div>
+  <div onclick="favoritos()">Favoritos</div>
   <div onclick="contato()">Contato</div>
   <div onclick="admin()">Admin</div>
 </div>
@@ -118,34 +110,38 @@ input{
 
 const ADMIN = "nannyvittoriah@gmail.com";
 
-// LOGIN
-function loginTela(){
+// ================= LOGIN =================
+function telaLogin(){
   app.innerHTML = `
-    <div class="box">
-      <h1>BONYX.SH 💎</h1>
+    <div class="login-box">
+      <h2>BONYX.SH 💎</h2>
+
       <input id="email" placeholder="Email">
       <input id="senha" placeholder="Senha">
+
       <button class="btn" onclick="login()">Entrar</button>
       <button class="btn" onclick="cadastro()">Cadastrar</button>
     </div>
   `;
 }
 
-// CADASTRO
+// ================= CADASTRO =================
 function cadastro(){
   let users = JSON.parse(localStorage.getItem("users")) || [];
 
   users.push({
     email:email.value,
     senha:senha.value,
-    compras:[]
+    compras:[],
+    fav:[],
+    feedback:false
   });
 
   localStorage.setItem("users", JSON.stringify(users));
   alert("Conta criada!");
 }
 
-// LOGIN
+// ================= LOGIN =================
 function login(){
   let users = JSON.parse(localStorage.getItem("users")) || [];
 
@@ -155,85 +151,133 @@ function login(){
     localStorage.setItem("user", user.email);
     home();
   }else{
-    alert("Erro no login");
+    alert("Login inválido");
   }
 }
 
-// HOME
+// ================= HOME =================
 function home(){
-  document.body.innerHTML += ""; // mantém fundo
-
   app.innerHTML = `
-    <div class="home">
-      <button onclick="abrirMenu()">☰</button>
+    <button onclick="menuToggle()">☰</button>
 
-      <h2>Categorias</h2>
+    <h2>Categorias</h2>
 
-      <div class="card" onclick="produtos()">
-        💎 Dimas Free Fire
-      </div>
+    <div class="grid">
+      <div class="card" onclick="produtos()">Free Fire</div>
+      <div class="card">Clash</div>
     </div>
+
+    <h2>Feedback dos clientes</h2>
+    <div class="card">⭐️⭐️⭐️⭐️⭐️ - Emory</div>
+    <div class="card">⭐️⭐️⭐️⭐️ - Sofia</div>
   `;
 }
 
-// PRODUTOS
+// ================= PRODUTOS =================
 function produtos(){
   app.innerHTML = `
-    <div class="home">
-      <button onclick="home()">Voltar</button>
+    <button onclick="home()">Voltar</button>
 
-      <div class="card">
-        200 Dimas - R$14
-        <button class="btn" onclick="comprar('200 Dimas',14)">Comprar</button>
-      </div>
+    <div class="card">
+      <h3>DIMAS FF</h3>
+      <p>Descrição: Entrega rápida</p>
 
-      <div class="card">
-        620 Dimas - R$25
-        <button class="btn" onclick="comprar('620 Dimas',25)">Comprar</button>
-      </div>
+      <input id="qtd" type="number" placeholder="Quantidade">
+
+      <p>Preço: R$ 14</p>
+
+      <button class="btn" onclick="comprar('Dimas FF',14)">Comprar</button>
+      <button class="btn" onclick="fav('Dimas FF')">Favoritar</button>
     </div>
   `;
 }
 
-// COMPRAR
+// ================= COMPRAR =================
 function comprar(nome,preco){
-  alert("PIX: (98) 98485-3563\nLorrane Vitória Alves Vaz");
+  let users = JSON.parse(localStorage.getItem("users"));
+  let email = localStorage.getItem("user");
+  let user = users.find(u=>u.email==email);
+
+  user.compras.push({nome,preco});
+  localStorage.setItem("users", JSON.stringify(users));
+
+  alert("PIX: (98) 98485-3563\nNome: Lorrane Vitória Alves Vaz");
 }
 
-// MENU
-function abrirMenu(){
+// ================= FAVORITOS =================
+function fav(nome){
+  let users = JSON.parse(localStorage.getItem("users"));
+  let email = localStorage.getItem("user");
+  let user = users.find(u=>u.email==email);
+
+  user.fav.push(nome);
+  localStorage.setItem("users", JSON.stringify(users));
+
+  alert("Adicionado aos favoritos");
+}
+
+// ================= MENU =================
+function menuToggle(){
   menu.classList.toggle("active");
 }
 
-// CONTA
-function minhaConta(){
-  app.innerHTML = `<h2>Conta: ${localStorage.getItem("user")}</h2>`;
+// ================= CONTA =================
+function conta(){
+  app.innerHTML = `
+    <h2>Minha conta</h2>
+    <p>${localStorage.getItem("user")}</p>
+  `;
 }
 
-// COMPRAS
+// ================= COMPRAS =================
 function compras(){
-  app.innerHTML = `<h2>Compras (em breve)</h2>`;
+  let users = JSON.parse(localStorage.getItem("users"));
+  let email = localStorage.getItem("user");
+  let user = users.find(u=>u.email==email);
+
+  app.innerHTML = `<h2>Compras</h2>`;
+
+  user.compras.forEach(c=>{
+    app.innerHTML += `<div class="card">${c.nome} - R$ ${c.preco}</div>`;
+  });
 }
 
-// CONTATO
+// ================= FAVORITOS =================
+function favoritos(){
+  let users = JSON.parse(localStorage.getItem("users"));
+  let email = localStorage.getItem("user");
+  let user = users.find(u=>u.email==email);
+
+  app.innerHTML = `<h2>Favoritos</h2>`;
+
+  user.fav.forEach(f=>{
+    app.innerHTML += `<div class="card">${f}</div>`;
+  });
+}
+
+// ================= CONTATO =================
 function contato(){
-  app.innerHTML = `<h2>Fale com a gerente</h2>`;
+  app.innerHTML = `
+    <h2>Fale com a gerente</h2>
+    <p>WhatsApp: (98) 98485-3563</p>
+  `;
 }
 
-// ADMIN
+// ================= ADMIN =================
 function admin(){
   if(localStorage.getItem("user") !== ADMIN){
     alert("Acesso negado");
     return;
   }
+
   app.innerHTML = `<h2>PAINEL ADMIN 👑</h2>`;
 }
 
-// INIT
+// ================= INIT =================
 if(localStorage.getItem("user")){
   home();
 }else{
-  loginTela();
+  telaLogin();
 }
 
 </script>
