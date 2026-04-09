@@ -1,111 +1,206 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>BONYS.SH</title>
-
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BONYX.SH</title>
 
 <style>
-body{background:#0a0f2c;color:white;font-family:Arial}
-button{background:#ff00ff;color:white;padding:10px;border:none}
-.card{background:#111a44;padding:10px;margin:10px;border-radius:10px}
+body{
+  margin:0;
+  font-family:Arial;
+  color:white;
+  background:url('https://i.imgur.com/8Km9tLL.png') no-repeat center/cover;
+}
+
+/* overlay */
+.overlay{
+  background:rgba(0,0,0,0.8);
+  min-height:100vh;
+  padding:20px;
+}
+
+/* botões */
+.btn{
+  background:#ff00ff;
+  color:black;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  width:100%;
+  margin-top:10px;
+}
+
+/* cards */
+.card{
+  background:#111a44;
+  padding:15px;
+  margin:10px 0;
+  border-radius:15px;
+}
+
+/* input */
+input{
+  width:100%;
+  padding:10px;
+  margin:5px 0;
+  border:none;
+  border-radius:10px;
+}
+
+/* menu */
+.menu{
+  position:fixed;
+  right:-300px;
+  top:0;
+  width:250px;
+  height:100%;
+  background:#0a0f2c;
+  padding:20px;
+  transition:.3s;
+}
+.menu.active{right:0}
+
 </style>
 
 </head>
 
 <body>
-
-<h1>BONYS.SH 🔥</h1>
-
-<input id="email" placeholder="Email">
-<input id="senha" placeholder="Senha">
-<button onclick="login()">Entrar</button>
+<div class="overlay">
 
 <div id="app"></div>
 
+</div>
+
+<div class="menu" id="menu">
+  <h3>Menu</h3>
+  <div onclick="minhaConta()">Minha Conta</div>
+  <div onclick="minhasCompras()">Minhas Compras</div>
+  <div onclick="favoritos()">Favoritos</div>
+  <div onclick="chat()">Contato</div>
+  <div onclick="abrirAdmin()">Admin</div>
+</div>
+
 <script>
 
-// 🔥 COLE SUA CONFIG AQUI
-const firebaseConfig = {
-  apiKey: "COLOCA_AQUI",
-  authDomain: "COLOCA_AQUI",
-  projectId: "COLOCA_AQUI",
-};
+// CONFIG
+const ADMIN = "nannyvittoriah@gmail.com";
 
-firebase.initializeApp(firebaseConfig);
+// ================= LOGIN =================
+function telaLogin(){
+  app.innerHTML = `
+    <h1>BONYX.SH 💎</h1>
 
-const auth = firebase.auth();
-const db = firebase.firestore();
+    <input id="email" placeholder="Email">
+    <input id="senha" placeholder="Senha">
+
+    <button class="btn" onclick="login()">Entrar</button>
+    <button class="btn" onclick="cadastro()">Cadastrar</button>
+  `;
+}
+
+// CADASTRO
+function cadastro(){
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+
+  users.push({
+    email:email.value,
+    senha:senha.value,
+    compras:[],
+    fav:[]
+  });
+
+  localStorage.setItem("users", JSON.stringify(users));
+  alert("Cadastrado!");
+}
 
 // LOGIN
 function login(){
-  let email = document.getElementById("email").value;
-  let senha = document.getElementById("senha").value;
+  let users = JSON.parse(localStorage.getItem("users")) || [];
 
-  auth.signInWithEmailAndPassword(email, senha)
-  .catch(()=> {
-    auth.createUserWithEmailAndPassword(email, senha);
-  });
-}
+  let user = users.find(u=>u.email==email.value && u.senha==senha.value);
 
-// USUÁRIO LOGADO
-auth.onAuthStateChanged(user=>{
   if(user){
-    carregar(user.email);
+    localStorage.setItem("logado", user.email);
+    telaHome();
+  }else{
+    alert("Erro login");
   }
-});
+}
 
-// CARREGAR
-function carregar(email){
+// ================= HOME =================
+function telaHome(){
+  app.innerHTML = `
+    <button onclick="menuToggle()">☰</button>
 
-  document.getElementById("app").innerHTML = `
-    <h2>Bem-vinda ${email}</h2>
-    <div id="produtos"></div>
+    <h2>Categorias</h2>
 
-    <input id="nome">
-    <input id="preco">
-    <button onclick="add()">Adicionar Produto</button>
+    <div class="card" onclick="abrirProdutos()">Dimas Free Fire</div>
   `;
+}
 
-  db.collection("produtos").onSnapshot(snapshot=>{
-    let div = document.getElementById("produtos");
-    div.innerHTML="";
+// ================= PRODUTOS =================
+function abrirProdutos(){
+  app.innerHTML = `
+    <button onclick="telaHome()">Voltar</button>
 
-    snapshot.forEach(doc=>{
-      let p = doc.data();
+    <div class="card">
+      <h3>200 Dimas</h3>
+      <p>R$ 14</p>
+      <input id="qtd" type="number" placeholder="Quantidade">
+      <button class="btn" onclick="comprar('200 Dimas',14)">Comprar</button>
+    </div>
 
-      div.innerHTML += `
-        <div class="card">
-          ${p.nome} - R$ ${p.preco}
-          <button onclick="comprar('${p.nome}')">Comprar</button>
-        </div>
-      `;
-    });
+    <div class="card">
+      <h3>620 Dimas</h3>
+      <p>R$ 25</p>
+      <button class="btn" onclick="comprar('620 Dimas',25)">Comprar</button>
+    </div>
+  `;
+}
+
+// ================= COMPRAR =================
+function comprar(nome,preco){
+  let users = JSON.parse(localStorage.getItem("users"));
+  let email = localStorage.getItem("logado");
+
+  let user = users.find(u=>u.email==email);
+
+  user.compras.push({nome,preco});
+
+  localStorage.setItem("users", JSON.stringify(users));
+
+  alert(`PIX: (98) 98485-3563\nNome: Lorrane Vitória Alves Vaz`);
+}
+
+// ================= MENU =================
+function menuToggle(){
+  menu.classList.toggle("active");
+}
+
+// ================= CONTA =================
+function minhaConta(){
+  let email = localStorage.getItem("logado");
+
+  app.innerHTML = `
+    <h2>Minha Conta</h2>
+    <p>Email: ${email}</p>
+  `;
+}
+
+// ================= COMPRAS =================
+function minhasCompras(){
+  let users = JSON.parse(localStorage.getItem("users"));
+  let email = localStorage.getItem("logado");
+  let user = users.find(u=>u.email==email);
+
+  app.innerHTML = `<h2>Minhas Compras</h2>`;
+
+  user.compras.forEach(c=>{
+    app.innerHTML += `<p>${c.nome} - R$ ${c.preco}</p>`;
   });
 }
 
-// ADD PRODUTO
-function add(){
-  db.collection("produtos").add({
-    nome:document.getElementById("nome").value,
-    preco:document.getElementById("preco").value
-  });
-}
-
-// COMPRAR
-function comprar(nome){
-  db.collection("pedidos").add({
-    produto:nome,
-    status:"aguardando pix"
-  });
-
-  alert("PIX: (98) 98485-3563");
-}
-
-</script>
-
-</body>
-</html>
+// ================= CHAT =================
+function chat(){
+  app.innerHTML
