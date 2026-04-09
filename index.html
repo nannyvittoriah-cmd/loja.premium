@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Game Store</title>
+<title>Game Store PRO</title>
 
 <style>
 body {
@@ -15,20 +15,33 @@ body {
 
 /* HEADER */
 header {
+    background: #010814;
     padding: 15px;
     text-align: center;
-    font-size: 20px;
-    background: #010814;
     box-shadow: 0 0 10px #39ff14;
 }
 
+/* TELAS */
+.tela { display: none; padding: 10px; }
+.ativa { display: block; }
+
 /* INPUT */
 input {
-    width: 90%;
-    margin: 10px;
+    width: 100%;
     padding: 10px;
+    margin: 5px 0;
     border-radius: 8px;
     border: none;
+}
+
+/* BOTÃO */
+.btn {
+    background: #39ff14;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    font-weight: bold;
+    border-radius: 8px;
 }
 
 /* PRODUTOS */
@@ -36,170 +49,149 @@ input {
     display: grid;
     grid-template-columns: repeat(2,1fr);
     gap: 10px;
-    padding: 10px;
 }
 
 .card {
     background: #0d2b5c;
     padding: 10px;
-    border-radius: 12px;
-    box-shadow: 0 0 10px #39ff14;
-    transition: 0.2s;
-}
-
-.card:hover {
-    transform: scale(1.05);
-}
-
-.btn {
-    background: #39ff14;
-    border: none;
-    padding: 8px;
-    width: 100%;
-    font-weight: bold;
-    border-radius: 6px;
-    margin-top: 5px;
-}
-
-/* CARRINHO */
-.carrinho {
-    position: fixed;
-    bottom: 70px;
-    right: 10px;
-    background: #010814;
-    padding: 10px;
     border-radius: 10px;
-    width: 200px;
     box-shadow: 0 0 10px #39ff14;
 }
 
 /* CHAT */
 .chat {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
     background: #010814;
-    padding: 5px;
-    display: flex;
+    height: 200px;
+    overflow-y: auto;
+    padding: 10px;
 }
-
-.chat input {
-    flex: 1;
-    margin: 0;
-}
-
 </style>
 </head>
 
 <body>
 
-<header>🎮 Game Store</header>
+<header>🎮 Game Store PRO</header>
 
-<input id="cliente" placeholder="Digite seu nome">
-
-<div class="produtos" id="produtos"></div>
-
-<!-- CARRINHO -->
-<div class="carrinho">
-    <h4>🛒 Carrinho</h4>
-    <div id="itens"></div>
-    <button class="btn" onclick="finalizar()">Finalizar</button>
+<!-- LOGIN -->
+<div id="login" class="tela ativa">
+    <h3>Login</h3>
+    <input id="nome" placeholder="Seu nome">
+    <button class="btn" onclick="entrar()">Entrar</button>
 </div>
 
-<!-- CHAT -->
-<div class="chat">
-    <input id="msg" placeholder="Fale com o vendedor...">
+<!-- LOJA -->
+<div id="loja" class="tela">
+    <h3>Produtos</h3>
+    <div class="produtos" id="produtos"></div>
+    <button class="btn" onclick="abrirCliente()">Painel Cliente</button>
+</div>
+
+<!-- CLIENTE -->
+<div id="cliente" class="tela">
+    <h3>Meu Painel</h3>
+
+    <h4>Pedidos</h4>
+    <div id="pedidos"></div>
+
+    <h4>Chat</h4>
+    <div class="chat" id="chat"></div>
+    <input id="msg">
     <button class="btn" onclick="enviar()">Enviar</button>
+</div>
+
+<!-- ADMIN -->
+<div id="admin" class="tela">
+    <h3>Admin</h3>
+
+    <input id="senha" placeholder="Senha">
+    <button class="btn" onclick="logarAdmin()">Entrar</button>
+
+    <div id="painelAdmin" style="display:none">
+
+        <h4>Adicionar Produto</h4>
+        <input id="p_nome" placeholder="Nome">
+        <input id="p_preco" placeholder="Preço">
+        <input id="p_desc" placeholder="Descrição">
+        <button class="btn" onclick="addProduto()">Adicionar</button>
+
+        <h4>Pedidos</h4>
+        <div id="adminPedidos"></div>
+
+        <h4>Chat</h4>
+        <div id="adminChat"></div>
+        <input id="resposta">
+        <button class="btn" onclick="responder()">Responder</button>
+
+    </div>
 </div>
 
 <script>
 
-// PRODUTOS (EDITA AQUI)
+// 🔥 TROCAR ISSO DEPOIS PELO SEU BACKEND
+const API_URL = "https://SEU-SERVIDOR.com";
+
+// DADOS TEMPORÁRIOS
 let produtos = [
-    {
-        nome:"35 Tokens",
-        preco:6.47,
-        estoque:10,
-        desc:"Entrega rápida via ID"
-    },
-    {
-        nome:"55 Tokens",
-        preco:10.00,
-        estoque:5,
-        desc:"Instantâneo"
-    }
+    {nome:"35 Tokens",preco:6.47,desc:"Entrega rápida"},
+    {nome:"Conta FF Rara",preco:50,desc:"Conta full"}
 ];
 
-let carrinho = [];
+let pedidos = [];
+let chat = [];
 
-// MOSTRAR PRODUTOS
-function mostrar(){
+let usuario = "";
+
+// LOGIN
+function entrar(){
+    usuario = document.getElementById("nome").value;
+    if(!usuario) return alert("Digite seu nome");
+
+    abrir("loja");
+    carregarProdutos();
+}
+
+// TROCAR TELA
+function abrir(tela){
+    document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"));
+    document.getElementById(tela).classList.add("ativa");
+}
+
+// PRODUTOS
+function carregarProdutos(){
     let div = document.getElementById("produtos");
-    div.innerHTML = "";
+    div.innerHTML="";
 
     produtos.forEach((p,i)=>{
-        div.innerHTML += `
+        div.innerHTML+=`
         <div class="card">
             <h3>${p.nome}</h3>
-            <p>💰 R$ ${p.preco}</p>
-            <p>📦 Estoque: ${p.estoque}</p>
+            <p>R$ ${p.preco}</p>
             <p>${p.desc}</p>
-            <button class="btn" onclick="add(${i})">Adicionar</button>
+            <button class="btn" onclick="comprar(${i})">Comprar</button>
         </div>`;
     });
 }
 
-// ADICIONAR NO CARRINHO
-function add(i){
-    if(produtos[i].estoque <= 0){
-        alert("Sem estoque!");
-        return;
-    }
-
-    carrinho.push(produtos[i]);
-    produtos[i].estoque--;
-
-    atualizar();
-    mostrar();
+// COMPRAR
+function comprar(i){
+    pedidos.push({cliente:usuario,produto:produtos[i].nome});
+    alert("Pedido feito!");
 }
 
-// ATUALIZAR CARRINHO
-function atualizar(){
-    let div = document.getElementById("itens");
-    div.innerHTML = "";
+// CLIENTE
+function abrirCliente(){
+    abrir("cliente");
 
-    let total = 0;
+    let div = document.getElementById("pedidos");
+    div.innerHTML="";
 
-    carrinho.forEach(p=>{
-        div.innerHTML += `<div>${p.nome}</div>`;
-        total += p.preco;
+    pedidos.forEach(p=>{
+        if(p.cliente === usuario){
+            div.innerHTML += `<div>${p.produto}</div>`;
+        }
     });
 
-    div.innerHTML += `<hr>Total: R$ ${total.toFixed(2)}`;
-}
-
-// FINALIZAR COMPRA
-function finalizar(){
-    let nome = document.getElementById("cliente").value;
-
-    if(!nome){
-        alert("Digite seu nome");
-        return;
-    }
-
-    if(carrinho.length === 0){
-        alert("Carrinho vazio");
-        return;
-    }
-
-    let lista = carrinho.map(p=>p.nome).join(", ");
-    let total = carrinho.reduce((t,p)=>t+p.preco,0);
-
-    let numero = "5598984853563";
-
-    let msg = `Cliente: ${nome}%0AProdutos: ${lista}%0ATotal: R$ ${total.toFixed(2)}`;
-
-    window.open(`https://wa.me/${numero}?text=${msg}`);
+    atualizarChat();
 }
 
 // CHAT
@@ -207,12 +199,58 @@ function enviar(){
     let msg = document.getElementById("msg").value;
     if(!msg) return;
 
-    alert("Mensagem enviada: " + msg);
-    document.getElementById("msg").value = "";
+    chat.push(`Cliente (${usuario}): ${msg}`);
+    atualizarChat();
 }
 
-// INICIAR
-mostrar();
+function responder(){
+    let msg = document.getElementById("resposta").value;
+    chat.push("Vendedor: "+msg);
+    atualizarAdmin();
+}
+
+// ATUALIZAR CHAT
+function atualizarChat(){
+    let div = document.getElementById("chat");
+    div.innerHTML="";
+
+    chat.forEach(m=>{
+        div.innerHTML+=`<div>${m}</div>`;
+    });
+}
+
+// ADMIN
+function logarAdmin(){
+    if(document.getElementById("senha").value === "1234"){
+        document.getElementById("painelAdmin").style.display="block";
+        atualizarAdmin();
+    }
+}
+
+function atualizarAdmin(){
+    let p = document.getElementById("adminPedidos");
+    p.innerHTML="";
+    pedidos.forEach(i=>{
+        p.innerHTML+=`<div>${i.cliente} - ${i.produto}</div>`;
+    });
+
+    let c = document.getElementById("adminChat");
+    c.innerHTML="";
+    chat.forEach(m=>{
+        c.innerHTML+=`<div>${m}</div>`;
+    });
+}
+
+// ADD PRODUTO
+function addProduto(){
+    produtos.push({
+        nome:p_nome.value,
+        preco:p_preco.value,
+        desc:p_desc.value
+    });
+
+    alert("Produto adicionado!");
+}
 
 </script>
 
