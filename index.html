@@ -4,171 +4,186 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bonoxs.SH</title>
-
-<style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #001f5c;
-    color: white;
-}
-
-header {
-    text-align: center;
-    padding: 20px;
-    font-size: 28px;
-    font-weight: bold;
-    color: #ff00aa;
-}
-
-.container {
-    padding: 20px;
-}
-
-.btn {
-    display: block;
-    background: #ff00aa;
-    color: white;
-    padding: 15px;
-    margin: 10px 0;
-    text-align: center;
-    border-radius: 10px;
-    cursor: pointer;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.card {
-    background: #002d80;
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 10px;
-}
-
-.hidden {
-    display: none;
-}
-
-h2 {
-    color: #00ff88;
-}
-
-.logo {
-    font-size: 40px;
-    text-align: center;
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header>Bonoxs.SH</header>
-
-<div class="container" id="home">
-
-    <div class="btn" onclick="show('ff')">🔥 Free Fire</div>
-    <div class="btn" onclick="show('insta')">📸 Instagram</div>
-    <div class="btn" onclick="show('misterio')">❓ Caixa Misteriosa</div>
-
+<!-- LOGIN -->
+<div class="login" id="login">
+  <h2>Bonoxs.SH</h2>
+  <input type="email" placeholder="Email">
+  <input type="password" placeholder="Senha">
+  <button onclick="entrar()">Entrar</button>
 </div>
 
-<!-- FREE FIRE -->
-<div class="container hidden" id="ff">
-    <h2>💎 Tokens Free Fire</h2>
+<!-- PAINEL -->
+<div class="painel" id="painel">
 
-    <div class="card" onclick="comprar('35 Tokens - R$6,47')">35 Tokens - R$6,47</div>
-    <div class="card" onclick="comprar('55 Tokens - R$10,00')">55 Tokens - R$10,00</div>
-    <div class="card" onclick="comprar('80 Tokens - R$14,00')">80 Tokens - R$14,00</div>
-    <div class="card" onclick="comprar('120 Tokens - R$22,00')">120 Tokens - R$22,00</div>
-    <div class="card" onclick="comprar('200 Tokens - R$32,00')">200 Tokens - R$32,00</div>
-    <div class="card" onclick="comprar('280 Tokens - R$39,00')">280 Tokens - R$39,00</div>
-    <div class="card" onclick="comprar('400 Tokens - R$55,00')">400 Tokens - R$55,00</div>
-    <div class="card" onclick="comprar('600 Tokens - R$80,00')">600 Tokens - R$80,00</div>
-    <div class="card" onclick="comprar('1000 Tokens - R$102,00')">1000 Tokens - R$102,00</div>
-    <div class="card" onclick="comprar('1400 Tokens - R$150,00')">1400 Tokens - R$150,00</div>
-    <div class="card" onclick="comprar('2000 Tokens - R$205,00')">2000 Tokens - R$205,00</div>
+  <header>
+    <h1>Bonoxs.SH</h1>
+    <button onclick="logout()">Sair</button>
+  </header>
 
-    <h2>🎫 Passe FF</h2>
-    <div class="card" onclick="comprar('Passe FF - R$10,00')">Passe FF - R$10,00</div>
+  <div class="saldo">
+    💰 Saldo: R$ <span id="saldo">0.00</span>
+    <button onclick="addSaldo()">+ Adicionar</button>
+  </div>
 
-    <div class="btn" onclick="voltar()">⬅ Voltar</div>
-</div>
+  <!-- CATEGORIAS -->
+  <div class="categorias">
+    <button onclick="mostrar('ff')">Free Fire</button>
+    <button onclick="mostrar('fort')">Fortnite</button>
+    <button onclick="mostrar('misterio')">Caixa Misteriosa</button>
+  </div>
 
-<!-- INSTAGRAM -->
-<div class="container hidden" id="insta">
+  <!-- PRODUTOS -->
+  <div id="ff" class="produtos">
+    <h3>Free Fire</h3>
 
-    <h2>📊 Seguidores</h2>
-    <div class="card" onclick="comprar('100 seguidores - R$8')">100 - R$8</div>
-    <div class="card" onclick="comprar('200 seguidores - R$15')">200 - R$15</div>
-    <div class="card" onclick="comprar('300 seguidores - R$22')">300 - R$22</div>
-    <div class="card" onclick="comprar('400 seguidores - R$28')">400 - R$28</div>
-    <div class="card" onclick="comprar('500 seguidores - R$35')">500 - R$35</div>
-    <div class="card" onclick="comprar('600 seguidores - R$42')">600 - R$42</div>
-    <div class="card" onclick="comprar('700 seguidores - R$50')">700 - R$50</div>
-    <div class="card" onclick="comprar('800 seguidores - R$58')">800 - R$58</div>
-    <div class="card" onclick="comprar('900 seguidores - R$65')">900 - R$65</div>
-    <div class="card" onclick="comprar('1000 seguidores - R$75')">1000 - R$75</div>
-
-    <h2>❤️ Curtidas</h2>
-    <div class="card" onclick="comprar('100 curtidas - R$5')">100 - R$5</div>
-    <div class="card" onclick="comprar('200 curtidas - R$9')">200 - R$9</div>
-    <div class="card" onclick="comprar('300 curtidas - R$13')">300 - R$13</div>
-    <div class="card" onclick="comprar('400 curtidas - R$17')">400 - R$17</div>
-    <div class="card" onclick="comprar('500 curtidas - R$21')">500 - R$21</div>
-    <div class="card" onclick="comprar('600 curtidas - R$25')">600 - R$25</div>
-    <div class="card" onclick="comprar('700 curtidas - R$30')">700 - R$30</div>
-    <div class="card" onclick="comprar('800 curtidas - R$34')">800 - R$34</div>
-    <div class="card" onclick="comprar('900 curtidas - R$38')">900 - R$38</div>
-    <div class="card" onclick="comprar('1000 curtidas - R$45')">1000 - R$45</div>
-
-    <h2>👀 Visualizações</h2>
-    <div class="card" onclick="comprar('500 views - R$8')">500 - R$8</div>
-    <div class="card" onclick="comprar('600 views - R$9,50')">600 - R$9,50</div>
-    <div class="card" onclick="comprar('700 views - R$11')">700 - R$11</div>
-    <div class="card" onclick="comprar('800 views - R$12,50')">800 - R$12,50</div>
-    <div class="card" onclick="comprar('900 views - R$14')">900 - R$14</div>
-    <div class="card" onclick="comprar('1000 views - R$16')">1000 - R$16</div>
-    <div class="card" onclick="comprar('1200 views - R$19')">1200 - R$19</div>
-    <div class="card" onclick="comprar('1500 views - R$23')">1500 - R$23</div>
-    <div class="card" onclick="comprar('2000 views - R$30')">2000 - R$30</div>
-
-    <div class="btn" onclick="voltar()">⬅ Voltar</div>
-</div>
-
-<!-- CAIXA -->
-<div class="container hidden" id="misterio">
-    <h2 style="text-align:center; font-size:50px; color:#00ff88;">❓</h2>
-    <div class="card" onclick="comprar('Caixa Misteriosa - R$1')">
-        Caixa Misteriosa - R$1
+    <div class="card">
+      <p>💎 100 Diamantes</p>
+      <span>R$ 5,00</span>
+      <button onclick="comprar('100 Diamantes')">Comprar</button>
     </div>
 
-    <div class="btn" onclick="voltar()">⬅ Voltar</div>
+  </div>
+
+  <div id="fort" class="produtos">
+    <h3>Fortnite</h3>
+
+    <div class="card">
+      <p>🪙 1000 V-Bucks</p>
+      <span>R$ 25,00</span>
+      <button onclick="comprar('1000 V-Bucks')">Comprar</button>
+    </div>
+
+  </div>
+
+  <div id="misterio" class="produtos">
+    <h3>🎁 Caixa Misteriosa</h3>
+
+    <div class="card">
+      <p>🔥 Caixa Surpresa</p>
+      <span>R$ 1,00</span>
+      <button onclick="comprar('Caixa Misteriosa')">Comprar</button>
+    </div>
+
+  </div>
+
+  <!-- PEDIDOS -->
+  <div class="pedidos">
+    <h3>📦 Meus Pedidos</h3>
+    <ul id="lista"></ul>
+  </div>
+
 </div>
 
-<script>
-function show(id){
-    document.getElementById('home').style.display = 'none';
-    document.getElementById('ff').style.display = 'none';
-    document.getElementById('insta').style.display = 'none';
-    document.getElementById('misterio').style.display = 'none';
+<script src="script.js"></script>
+</body>
+</html>
 
-    document.getElementById(id).style.display = 'block';
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #000;
+  color: white;
 }
 
-function voltar(){
-    document.getElementById('home').style.display = 'block';
-    document.getElementById('ff').style.display = 'none';
-    document.getElementById('insta').style.display = 'none';
-    document.getElementById('misterio').style.display = 'none';
+.login {
+  text-align: center;
+  margin-top: 100px;
+}
+
+input {
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+}
+
+button {
+  background: #ff00aa;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  background: #111;
+}
+
+.saldo {
+  padding: 10px;
+  text-align: center;
+}
+
+.categorias {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px;
+}
+
+.produtos {
+  display: none;
+  padding: 10px;
+}
+
+.card {
+  background: rgba(255,255,255,0.1);
+  padding: 10px;
+  margin: 10px;
+  border-radius: 15px;
+}
+
+.pedidos {
+  padding: 10px;
+}
+
+let saldo = 0;
+
+function entrar(){
+  document.getElementById("login").style.display = "none";
+  document.getElementById("painel").style.display = "block";
+}
+
+function logout(){
+  location.reload();
+}
+
+function addSaldo(){
+  let valor = prompt("Digite o valor:");
+  saldo += parseFloat(valor);
+  document.getElementById("saldo").innerText = saldo.toFixed(2);
+}
+
+function mostrar(cat){
+  document.querySelectorAll(".produtos").forEach(p => p.style.display="none");
+  document.getElementById(cat).style.display = "block";
 }
 
 function comprar(produto){
-    let numero = "5598984853563";
-    let mensagem = "Olá, quero comprar: " + produto;
-    let url = "https://wa.me/" + numero + "?text=" + encodeURIComponent(mensagem);
-    window.open(url, '_blank');
-}
-</script>
+  if(saldo <= 0){
+    alert("Saldo insuficiente!");
+    return;
+  }
 
-</body>
-</html
+  let lista = document.getElementById("lista");
+  let item = document.createElement("li");
+
+  item.innerText = produto + " - Enviado para WhatsApp";
+
+  lista.appendChild(item);
+
+  // REDIRECIONAR WHATSAPP
+  let numero = "5598984753563";
+  let msg = "Olá, quero comprar: " + produto;
+
+  window.open(`https://wa.me/${numero}?text=${msg}`, "_blank");
+}
