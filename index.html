@@ -3,283 +3,168 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BONYX.SH</title>
+<title>Minha Loja</title>
 
 <style>
-
-body{
-  margin:0;
-  font-family:Arial;
-  background:url('https://i.imgur.com/8Km9tLL.png') no-repeat center/cover;
-  color:white;
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #0a0f2c;
+    color: white;
 }
 
-/* ESCURECER FUNDO */
-.overlay{
-  background:rgba(0,0,0,0.75);
-  min-height:100vh;
-  padding:20px;
+/* HEADER */
+header {
+    background: #060a1a;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
 }
 
-/* CAIXA LOGIN */
-.login-box{
-  max-width:350px;
-  margin:auto;
-  background:#0a0f2c;
-  padding:20px;
-  border-radius:20px;
-  box-shadow:0 0 20px #ff00ff;
+header h1 {
+    color: #00c3ff;
 }
 
-/* INPUT */
-input{
-  width:100%;
-  padding:12px;
-  margin:10px 0;
-  border:none;
-  border-radius:10px;
-  background:#020617;
-  color:white;
+/* BOTÕES */
+button {
+    background: #00c3ff;
+    border: none;
+    padding: 10px;
+    color: black;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
-/* BOTÃO NEON */
-.btn{
-  width:100%;
-  padding:12px;
-  background:#ff00ff;
-  color:black;
-  font-weight:bold;
-  border:none;
-  border-radius:10px;
-  margin-top:10px;
-  box-shadow:0 0 10px #ff00ff;
+/* LOGIN */
+#login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
 }
 
-/* CARDS */
-.card{
-  background:#111a44;
-  padding:15px;
-  border-radius:15px;
-  margin:10px 0;
-  box-shadow:0 0 10px black;
+.login-box {
+    background: #11183f;
+    padding: 30px;
+    border-radius: 10px;
 }
 
-/* GRID */
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
 }
 
-/* MENU */
-.menu{
-  position:fixed;
-  right:-250px;
-  top:0;
-  width:250px;
-  height:100%;
-  background:#0a0f2c;
-  padding:20px;
-  transition:0.3s;
-}
-.menu.active{right:0}
-
-.menu div{
-  padding:15px;
-  border-bottom:1px solid #333;
+/* PRODUTOS */
+#loja {
+    display: none;
+    padding: 20px;
 }
 
+.produtos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: #11183f;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.card h3 {
+    color: #00c3ff;
+}
+
+/* CARRINHO */
+#carrinho {
+    position: fixed;
+    right: 0;
+    top: 0;
+    background: #060a1a;
+    width: 250px;
+    height: 100%;
+    padding: 15px;
+}
 </style>
-</head>
 
+</head>
 <body>
 
-<div class="overlay">
-  <div id="app"></div>
+<header>
+    <h1>MINHA LOJA</h1>
+    <button onclick="logout()">Sair</button>
+</header>
+
+<!-- LOGIN -->
+<div id="login">
+    <div class="login-box">
+        <h2>Login</h2>
+        <input type="text" id="user" placeholder="Email">
+        <input type="password" id="pass" placeholder="Senha">
+        <button onclick="login()">Entrar</button>
+    </div>
 </div>
 
-<div class="menu" id="menu">
-  <div onclick="conta()">Minha conta</div>
-  <div onclick="compras()">Minhas compras</div>
-  <div onclick="favoritos()">Favoritos</div>
-  <div onclick="contato()">Contato</div>
-  <div onclick="admin()">Admin</div>
+<!-- LOJA -->
+<div id="loja">
+    <h2>Produtos</h2>
+
+    <div class="produtos">
+
+        <div class="card">
+            <h3>Produto 1</h3>
+            <p>R$ 10,00</p>
+            <button onclick="addCarrinho('Produto 1', 10)">Comprar</button>
+        </div>
+
+        <div class="card">
+            <h3>Produto 2</h3>
+            <p>R$ 25,00</p>
+            <button onclick="addCarrinho('Produto 2', 25)">Comprar</button>
+        </div>
+
+        <div class="card">
+            <h3>Produto 3</h3>
+            <p>R$ 50,00</p>
+            <button onclick="addCarrinho('Produto 3', 50)">Comprar</button>
+        </div>
+
+    </div>
+</div>
+
+<!-- CARRINHO -->
+<div id="carrinho">
+    <h3>Carrinho</h3>
+    <ul id="lista"></ul>
+    <p>Total: R$ <span id="total">0</span></p>
 </div>
 
 <script>
+let total = 0;
 
-const ADMIN = "nannyvittoriah@gmail.com";
-
-// ================= LOGIN =================
-function telaLogin(){
-  app.innerHTML = `
-    <div class="login-box">
-      <h2>BONYX.SH 💎</h2>
-
-      <input id="email" placeholder="Email">
-      <input id="senha" placeholder="Senha">
-
-      <button class="btn" onclick="login()">Entrar</button>
-      <button class="btn" onclick="cadastro()">Cadastrar</button>
-    </div>
-  `;
+function login() {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("loja").style.display = "block";
 }
 
-// ================= CADASTRO =================
-function cadastro(){
-  let users = JSON.parse(localStorage.getItem("users")) || [];
-
-  users.push({
-    email:email.value,
-    senha:senha.value,
-    compras:[],
-    fav:[],
-    feedback:false
-  });
-
-  localStorage.setItem("users", JSON.stringify(users));
-  alert("Conta criada!");
+function logout() {
+    location.reload();
 }
 
-// ================= LOGIN =================
-function login(){
-  let users = JSON.parse(localStorage.getItem("users")) || [];
+function addCarrinho(nome, preco) {
+    let lista = document.getElementById("lista");
 
-  let user = users.find(u=>u.email==email.value && u.senha==senha.value);
+    let item = document.createElement("li");
+    item.innerText = nome + " - R$" + preco;
 
-  if(user){
-    localStorage.setItem("user", user.email);
-    home();
-  }else{
-    alert("Login inválido");
-  }
+    lista.appendChild(item);
+
+    total += preco;
+    document.getElementById("total").innerText = total;
 }
-
-// ================= HOME =================
-function home(){
-  app.innerHTML = `
-    <button onclick="menuToggle()">☰</button>
-
-    <h2>Categorias</h2>
-
-    <div class="grid">
-      <div class="card" onclick="produtos()">Free Fire</div>
-      <div class="card">Clash</div>
-    </div>
-
-    <h2>Feedback dos clientes</h2>
-    <div class="card">⭐️⭐️⭐️⭐️⭐️ - Emory</div>
-    <div class="card">⭐️⭐️⭐️⭐️ - Sofia</div>
-  `;
-}
-
-// ================= PRODUTOS =================
-function produtos(){
-  app.innerHTML = `
-    <button onclick="home()">Voltar</button>
-
-    <div class="card">
-      <h3>DIMAS FF</h3>
-      <p>Descrição: Entrega rápida</p>
-
-      <input id="qtd" type="number" placeholder="Quantidade">
-
-      <p>Preço: R$ 14</p>
-
-      <button class="btn" onclick="comprar('Dimas FF',14)">Comprar</button>
-      <button class="btn" onclick="fav('Dimas FF')">Favoritar</button>
-    </div>
-  `;
-}
-
-// ================= COMPRAR =================
-function comprar(nome,preco){
-  let users = JSON.parse(localStorage.getItem("users"));
-  let email = localStorage.getItem("user");
-  let user = users.find(u=>u.email==email);
-
-  user.compras.push({nome,preco});
-  localStorage.setItem("users", JSON.stringify(users));
-
-  alert("PIX: (98) 98485-3563\nNome: Lorrane Vitória Alves Vaz");
-}
-
-// ================= FAVORITOS =================
-function fav(nome){
-  let users = JSON.parse(localStorage.getItem("users"));
-  let email = localStorage.getItem("user");
-  let user = users.find(u=>u.email==email);
-
-  user.fav.push(nome);
-  localStorage.setItem("users", JSON.stringify(users));
-
-  alert("Adicionado aos favoritos");
-}
-
-// ================= MENU =================
-function menuToggle(){
-  menu.classList.toggle("active");
-}
-
-// ================= CONTA =================
-function conta(){
-  app.innerHTML = `
-    <h2>Minha conta</h2>
-    <p>${localStorage.getItem("user")}</p>
-  `;
-}
-
-// ================= COMPRAS =================
-function compras(){
-  let users = JSON.parse(localStorage.getItem("users"));
-  let email = localStorage.getItem("user");
-  let user = users.find(u=>u.email==email);
-
-  app.innerHTML = `<h2>Compras</h2>`;
-
-  user.compras.forEach(c=>{
-    app.innerHTML += `<div class="card">${c.nome} - R$ ${c.preco}</div>`;
-  });
-}
-
-// ================= FAVORITOS =================
-function favoritos(){
-  let users = JSON.parse(localStorage.getItem("users"));
-  let email = localStorage.getItem("user");
-  let user = users.find(u=>u.email==email);
-
-  app.innerHTML = `<h2>Favoritos</h2>`;
-
-  user.fav.forEach(f=>{
-    app.innerHTML += `<div class="card">${f}</div>`;
-  });
-}
-
-// ================= CONTATO =================
-function contato(){
-  app.innerHTML = `
-    <h2>Fale com a gerente</h2>
-    <p>WhatsApp: (98) 98485-3563</p>
-  `;
-}
-
-// ================= ADMIN =================
-function admin(){
-  if(localStorage.getItem("user") !== ADMIN){
-    alert("Acesso negado");
-    return;
-  }
-
-  app.innerHTML = `<h2>PAINEL ADMIN 👑</h2>`;
-}
-
-// ================= INIT =================
-if(localStorage.getItem("user")){
-  home();
-}else{
-  telaLogin();
-}
-
 </script>
 
 </body>
