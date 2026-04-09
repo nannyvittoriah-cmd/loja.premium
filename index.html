@@ -3,99 +3,131 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>BONYX.SH</title>
 
 <style>
+
 body{
   margin:0;
   font-family:Arial;
-  color:white;
   background:url('https://i.imgur.com/8Km9tLL.png') no-repeat center/cover;
 }
 
-/* overlay */
 .overlay{
-  background:rgba(0,0,0,0.8);
+  background:rgba(0,0,0,0.75);
   min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* CAIXA PRINCIPAL */
+.box{
+  width:90%;
+  max-width:350px;
+  background:#0a0f2c;
+  padding:20px;
+  border-radius:20px;
+  box-shadow:0 0 20px #ff00ff;
+}
+
+/* TITULO */
+h1{
+  text-align:center;
+  color:#ff00ff;
+}
+
+/* INPUT */
+input{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border:none;
+  border-radius:10px;
+  background:#020617;
+  color:white;
+}
+
+/* BOTÃO NEON */
+.btn{
+  width:100%;
+  padding:12px;
+  background:#ff00ff;
+  color:black;
+  font-weight:bold;
+  border:none;
+  border-radius:10px;
+  margin-top:10px;
+  box-shadow:0 0 10px #ff00ff;
+}
+
+/* HOME */
+.home{
   padding:20px;
 }
 
-/* botões */
-.btn{
-  background:#ff00ff;
-  color:black;
-  padding:12px;
-  border:none;
-  border-radius:10px;
-  width:100%;
-  margin-top:10px;
-}
-
-/* cards */
+/* CARD */
 .card{
   background:#111a44;
   padding:15px;
-  margin:10px 0;
   border-radius:15px;
+  margin:10px 0;
+  box-shadow:0 0 10px #000;
 }
 
-/* input */
-input{
-  width:100%;
-  padding:10px;
-  margin:5px 0;
-  border:none;
-  border-radius:10px;
-}
-
-/* menu */
+/* MENU */
 .menu{
   position:fixed;
-  right:-300px;
+  right:-250px;
   top:0;
   width:250px;
   height:100%;
   background:#0a0f2c;
   padding:20px;
-  transition:.3s;
+  transition:0.3s;
 }
-.menu.active{right:0}
+
+.menu.active{
+  right:0;
+}
+
+.menu div{
+  padding:15px;
+  border-bottom:1px solid #333;
+}
 
 </style>
 
 </head>
 
 <body>
+
 <div class="overlay">
-
-<div id="app"></div>
-
+  <div id="app"></div>
 </div>
 
 <div class="menu" id="menu">
-  <h3>Menu</h3>
-  <div onclick="minhaConta()">Minha Conta</div>
-  <div onclick="minhasCompras()">Minhas Compras</div>
-  <div onclick="favoritos()">Favoritos</div>
-  <div onclick="chat()">Contato</div>
-  <div onclick="abrirAdmin()">Admin</div>
+  <div onclick="minhaConta()">Minha conta</div>
+  <div onclick="compras()">Minhas compras</div>
+  <div onclick="contato()">Contato</div>
+  <div onclick="admin()">Admin</div>
 </div>
 
 <script>
 
-// CONFIG
 const ADMIN = "nannyvittoriah@gmail.com";
 
-// ================= LOGIN =================
-function telaLogin(){
+// LOGIN
+function loginTela(){
   app.innerHTML = `
-    <h1>BONYX.SH 💎</h1>
-
-    <input id="email" placeholder="Email">
-    <input id="senha" placeholder="Senha">
-
-    <button class="btn" onclick="login()">Entrar</button>
-    <button class="btn" onclick="cadastro()">Cadastrar</button>
+    <div class="box">
+      <h1>BONYX.SH 💎</h1>
+      <input id="email" placeholder="Email">
+      <input id="senha" placeholder="Senha">
+      <button class="btn" onclick="login()">Entrar</button>
+      <button class="btn" onclick="cadastro()">Cadastrar</button>
+    </div>
   `;
 }
 
@@ -106,12 +138,11 @@ function cadastro(){
   users.push({
     email:email.value,
     senha:senha.value,
-    compras:[],
-    fav:[]
+    compras:[]
   });
 
   localStorage.setItem("users", JSON.stringify(users));
-  alert("Cadastrado!");
+  alert("Conta criada!");
 }
 
 // LOGIN
@@ -121,86 +152,91 @@ function login(){
   let user = users.find(u=>u.email==email.value && u.senha==senha.value);
 
   if(user){
-    localStorage.setItem("logado", user.email);
-    telaHome();
+    localStorage.setItem("user", user.email);
+    home();
   }else{
-    alert("Erro login");
+    alert("Erro no login");
   }
 }
 
-// ================= HOME =================
-function telaHome(){
+// HOME
+function home(){
+  document.body.innerHTML += ""; // mantém fundo
+
   app.innerHTML = `
-    <button onclick="menuToggle()">☰</button>
+    <div class="home">
+      <button onclick="abrirMenu()">☰</button>
 
-    <h2>Categorias</h2>
+      <h2>Categorias</h2>
 
-    <div class="card" onclick="abrirProdutos()">Dimas Free Fire</div>
-  `;
-}
-
-// ================= PRODUTOS =================
-function abrirProdutos(){
-  app.innerHTML = `
-    <button onclick="telaHome()">Voltar</button>
-
-    <div class="card">
-      <h3>200 Dimas</h3>
-      <p>R$ 14</p>
-      <input id="qtd" type="number" placeholder="Quantidade">
-      <button class="btn" onclick="comprar('200 Dimas',14)">Comprar</button>
-    </div>
-
-    <div class="card">
-      <h3>620 Dimas</h3>
-      <p>R$ 25</p>
-      <button class="btn" onclick="comprar('620 Dimas',25)">Comprar</button>
+      <div class="card" onclick="produtos()">
+        💎 Dimas Free Fire
+      </div>
     </div>
   `;
 }
 
-// ================= COMPRAR =================
+// PRODUTOS
+function produtos(){
+  app.innerHTML = `
+    <div class="home">
+      <button onclick="home()">Voltar</button>
+
+      <div class="card">
+        200 Dimas - R$14
+        <button class="btn" onclick="comprar('200 Dimas',14)">Comprar</button>
+      </div>
+
+      <div class="card">
+        620 Dimas - R$25
+        <button class="btn" onclick="comprar('620 Dimas',25)">Comprar</button>
+      </div>
+    </div>
+  `;
+}
+
+// COMPRAR
 function comprar(nome,preco){
-  let users = JSON.parse(localStorage.getItem("users"));
-  let email = localStorage.getItem("logado");
-
-  let user = users.find(u=>u.email==email);
-
-  user.compras.push({nome,preco});
-
-  localStorage.setItem("users", JSON.stringify(users));
-
-  alert(`PIX: (98) 98485-3563\nNome: Lorrane Vitória Alves Vaz`);
+  alert("PIX: (98) 98485-3563\nLorrane Vitória Alves Vaz");
 }
 
-// ================= MENU =================
-function menuToggle(){
+// MENU
+function abrirMenu(){
   menu.classList.toggle("active");
 }
 
-// ================= CONTA =================
+// CONTA
 function minhaConta(){
-  let email = localStorage.getItem("logado");
-
-  app.innerHTML = `
-    <h2>Minha Conta</h2>
-    <p>Email: ${email}</p>
-  `;
+  app.innerHTML = `<h2>Conta: ${localStorage.getItem("user")}</h2>`;
 }
 
-// ================= COMPRAS =================
-function minhasCompras(){
-  let users = JSON.parse(localStorage.getItem("users"));
-  let email = localStorage.getItem("logado");
-  let user = users.find(u=>u.email==email);
-
-  app.innerHTML = `<h2>Minhas Compras</h2>`;
-
-  user.compras.forEach(c=>{
-    app.innerHTML += `<p>${c.nome} - R$ ${c.preco}</p>`;
-  });
+// COMPRAS
+function compras(){
+  app.innerHTML = `<h2>Compras (em breve)</h2>`;
 }
 
-// ================= CHAT =================
-function chat(){
-  app.innerHTML
+// CONTATO
+function contato(){
+  app.innerHTML = `<h2>Fale com a gerente</h2>`;
+}
+
+// ADMIN
+function admin(){
+  if(localStorage.getItem("user") !== ADMIN){
+    alert("Acesso negado");
+    return;
+  }
+  app.innerHTML = `<h2>PAINEL ADMIN 👑</h2>`;
+}
+
+// INIT
+if(localStorage.getItem("user")){
+  home();
+}else{
+  loginTela();
+}
+
+</script>
+
+</body>
+</html>
