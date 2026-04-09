@@ -3,68 +3,200 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Minha Loja</title>
+<title>Minha Loja PRO</title>
 
 <style>
 body {
-  font-family: Arial;
-  background: #0a0f2c;
-  color: white;
-  text-align: center;
+    margin: 0;
+    font-family: Arial;
+    background: #001f4d;
+    color: white;
+}
+
+/* TELAS */
+.tela {
+    display: none;
+    padding: 20px;
+}
+
+.ativa {
+    display: block;
+}
+
+/* BOTÕES */
+button {
+    background: #00ff99;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    margin: 5px 0;
+}
+
+/* INPUT */
+input {
+    padding: 10px;
+    width: 100%;
+    margin: 5px 0;
+}
+
+/* PRODUTOS */
+.produtos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
 }
 
 .card {
-  background: #11183f;
-  margin: 10px;
-  padding: 15px;
-  border-radius: 10px;
+    background: #003399;
+    padding: 10px;
 }
 
-button {
-  padding: 10px;
-  background: #00c3ff;
-  border: none;
+/* CHAT */
+#chat {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 250px;
+    background: #002b80;
+    padding: 10px;
+}
+
+#mensagens {
+    height: 150px;
+    overflow-y: auto;
+    background: #001f4d;
+    margin-bottom: 5px;
 }
 </style>
 </head>
 
 <body>
 
-<h1>🔥 MINHA LOJA</h1>
+<!-- LOGIN -->
+<div id="login" class="tela ativa">
+    <h2>Login</h2>
+    <input id="email" placeholder="Email">
+    <input id="senha" type="password" placeholder="Senha">
+    <button onclick="logar()">Entrar</button>
+    <button onclick="mostrar('cadastro')">Cadastrar</button>
+</div>
 
-<div id="produtos"></div>
+<!-- CADASTRO -->
+<div id="cadastro" class="tela">
+    <h2>Cadastro</h2>
+    <input id="novoEmail" placeholder="Email">
+    <input id="novaSenha" placeholder="Senha">
+    <button onclick="cadastrar()">Criar Conta</button>
+</div>
 
-<h3>Carrinho</h3>
-<div id="carrinho"></div>
-<p>Total: R$ <span id="total">0</span></p>
+<!-- LOJA -->
+<div id="loja" class="tela">
+    <h2>Loja</h2>
+
+    <button onclick="mostrar('admin')">Painel Admin</button>
+
+    <div class="produtos" id="produtos"></div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin" class="tela">
+    <h2>Admin</h2>
+
+    <input id="nomeProd" placeholder="Nome">
+    <input id="precoProd" placeholder="Preço">
+    <input id="descProd" placeholder="Descrição">
+    <input id="catProd" placeholder="Categoria">
+
+    <button onclick="addProduto()">Adicionar Produto</button>
+    <button onclick="mostrar('loja')">Voltar</button>
+</div>
+
+<!-- CHAT -->
+<div id="chat">
+    <div id="mensagens"></div>
+    <input id="msg" placeholder="Mensagem">
+    <button onclick="enviar()">Enviar</button>
+</div>
 
 <script>
-let total = 0;
-
+// BANCO FAKE
+let usuarios = [];
 let produtos = [
-  {nome:"Token FF", preco:10},
-  {nome:"Conta FF", preco:50},
-  {nome:"Skin Rara", preco:30}
+    {nome:"Conta FF", preco:10, desc:"Conta top", categoria:"game"}
 ];
 
-let html = "";
+// TELAS
+function mostrar(id){
+    document.querySelectorAll(".tela").forEach(t => t.classList.remove("ativa"));
+    document.getElementById(id).classList.add("ativa");
+}
 
-produtos.forEach(p => {
-  html += `
-    <div class="card">
-      <h3>${p.nome}</h3>
-      <p>R$ ${p.preco}</p>
-      <button onclick="comprar('${p.nome}', ${p.preco})">Comprar</button>
-    </div>
-  `;
-});
+// LOGIN
+function cadastrar(){
+    usuarios.push({
+        email: document.getElementById("novoEmail").value,
+        senha: document.getElementById("novaSenha").value
+    });
+    alert("Conta criada!");
+    mostrar("login");
+}
 
-document.getElementById("produtos").innerHTML = html;
+function logar(){
+    let email = document.getElementById("email").value;
+    let senha = document.getElementById("senha").value;
 
-function comprar(nome, preco){
-  total += preco;
-  document.getElementById("carrinho").innerHTML += `<p>${nome} - R$ ${preco}</p>`;
-  document.getElementById("total").innerText = total;
+    let user = usuarios.find(u => u.email == email && u.senha == senha);
+
+    if(user){
+        mostrar("loja");
+        carregarProdutos();
+    } else {
+        alert("Erro no login");
+    }
+}
+
+// PRODUTOS
+function carregarProdutos(){
+    let area = document.getElementById("produtos");
+    area.innerHTML = "";
+
+    produtos.forEach((p,i)=>{
+        area.innerHTML += `
+        <div class="card">
+            <h3>${p.nome}</h3>
+            <p>${p.desc}</p>
+            <p>R$ ${p.preco}</p>
+            <button onclick="comprar(${i})">Comprar</button>
+        </div>`;
+    });
+}
+
+function addProduto(){
+    produtos.push({
+        nome: nomeProd.value,
+        preco: precoProd.value,
+        desc: descProd.value,
+        categoria: catProd.value
+    });
+
+    alert("Produto adicionado!");
+}
+
+// CHAT
+function enviar(){
+    let msg = document.getElementById("msg").value;
+    let box = document.getElementById("mensagens");
+
+    box.innerHTML += `<p><b>Cliente:</b> ${msg}</p>`;
+    document.getElementById("msg").value = "";
+
+    setTimeout(()=>{
+        box.innerHTML += `<p><b>Vendedor:</b> Ok, já vou atender!</p>`;
+    },1000);
+}
+
+function comprar(i){
+    alert("Compra simulada de: " + produtos[i].nome);
 }
 </script>
 
