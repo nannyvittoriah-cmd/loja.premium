@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loja PRO</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: linear-gradient(180deg,#061530,#0a2c66);
+    color: white;
+}
+
+header {
+    padding: 15px;
+    text-align: center;
+    background: #020c20;
+    font-size: 22px;
+}
+
+.container {
+    padding: 15px;
+}
+
+/* PRODUTOS */
+.produtos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(150px,1fr));
+    gap: 10px;
+}
+
+.card {
+    background: #0d2b5c;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.btn {
+    background: #39ff14;
+    border: none;
+    padding: 8px;
+    margin-top: 5px;
+    width: 100%;
+    font-weight: bold;
+}
+
+/* CARRINHO */
+.carrinho {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: #020c20;
+    padding: 10px;
+    border-radius: 10px;
+    width: 200px;
+}
+
+.chat {
+    position: fixed;
+    bottom: 0;
+    right: 10px;
+    width: 250px;
+}
+
+.chat-box {
+    background: #020c20;
+    height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>💎 Loja PRO</header>
+
+<div class="container">
+    <input id="cliente" placeholder="Seu nome" style="width:100%;padding:8px;">
+    
+    <div class="produtos" id="produtos"></div>
+</div>
+
+<!-- CARRINHO -->
+<div class="carrinho">
+    <h4>Carrinho 🛒</h4>
+    <div id="itens"></div>
+    <button class="btn" onclick="finalizar()">Finalizar</button>
+</div>
+
+<!-- CHAT -->
+<div class="chat">
+    <div class="chat-box" id="chat"></div>
+    <input id="msg">
+    <button onclick="enviar()">Enviar</button>
+</div>
+
+<script>
+
+let produtos = [
+    {nome:"35 Tokens", preco:6.47},
+    {nome:"55 Tokens", preco:10.00},
+    {nome:"Conta FF Rara", preco:50}
+];
+
+let carrinho = [];
+
+function mostrar(){
+    let div = document.getElementById("produtos");
+    div.innerHTML="";
+    
+    produtos.forEach(p=>{
+        div.innerHTML+=`
+        <div class="card">
+            <h3>${p.nome}</h3>
+            <p>R$ ${p.preco}</p>
+            <button class="btn" onclick="add('${p.nome}',${p.preco})">Adicionar</button>
+        </div>`;
+    });
+}
+
+function add(nome,preco){
+    carrinho.push({nome,preco});
+    atualizar();
+}
+
+function atualizar(){
+    let div = document.getElementById("itens");
+    div.innerHTML="";
+    let total=0;
+
+    carrinho.forEach(i=>{
+        div.innerHTML+=`<div>${i.nome}</div>`;
+        total+=i.preco;
+    });
+
+    div.innerHTML+=`<hr>Total: R$ ${total.toFixed(2)}`;
+}
+
+function finalizar(){
+    let nome = document.getElementById("cliente").value;
+    if(!nome) return alert("Digite seu nome");
+
+    let pedido = carrinho.map(i=>i.nome).join(", ");
+    let total = carrinho.reduce((t,i)=>t+i.preco,0);
+
+    let pix = "98984853563";
+
+    let msg = `Cliente: ${nome}%0AProdutos: ${pedido}%0ATotal: R$ ${total.toFixed(2)}%0APagar via PIX: ${pix}`;
+
+    window.open(`https://wa.me/55${pix}?text=${msg}`);
+}
+
+// CHAT
+function enviar(){
+    let msg = document.getElementById("msg").value;
+    if(!msg) return;
+
+    let chat = document.getElementById("chat");
+    chat.innerHTML+=`<div>Cliente: ${msg}</div>`;
+
+    setTimeout(()=>{
+        chat.innerHTML+=`<div>Suporte: Já te respondo!</div>`;
+    },1000);
+
+    document.getElementById("msg").value="";
+}
+
+mostrar();
+
+</script>
+
+</body>
+</html>
