@@ -6,197 +6,65 @@
 <title>Minha Loja</title>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial;
-}
-
 body {
-    background: #0a0f2c;
-    color: white;
-}
-
-/* HEADER */
-header {
-    background: #060a1a;
-    padding: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-header h1 {
-    color: #00c3ff;
-    font-size: 20px;
-}
-
-/* LOGIN */
-#login {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
-}
-
-.login-box {
-    background: #11183f;
-    padding: 25px;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 350px;
-}
-
-input {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 5px;
-}
-
-/* BOTÃO */
-button {
-    width: 100%;
-    padding: 12px;
-    background: #00c3ff;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-}
-
-/* LOJA */
-#loja {
-    display: none;
-    padding: 15px;
-}
-
-.produtos {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 15px;
-}
-
-/* TABLET */
-@media (min-width: 600px) {
-    .produtos {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* PC */
-@media (min-width: 900px) {
-    .produtos {
-        grid-template-columns: repeat(4, 1fr);
-    }
+  font-family: Arial;
+  background: #0a0f2c;
+  color: white;
+  text-align: center;
 }
 
 .card {
-    background: #11183f;
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
+  background: #11183f;
+  margin: 10px;
+  padding: 15px;
+  border-radius: 10px;
 }
 
-.card h3 {
-    color: #00c3ff;
-    margin-bottom: 10px;
-}
-
-/* CARRINHO MOBILE */
-#carrinho {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background: #060a1a;
-    padding: 10px;
-    border-top: 2px solid #00c3ff;
-}
-
-#carrinho h3 {
-    font-size: 14px;
-}
-
-#lista {
-    max-height: 80px;
-    overflow-y: auto;
-    font-size: 12px;
+button {
+  padding: 10px;
+  background: #00c3ff;
+  border: none;
 }
 </style>
-
 </head>
+
 <body>
 
-<header>
-    <h1>MINHA LOJA</h1>
-    <button onclick="logout()">Sair</button>
-</header>
+<h1>🔥 MINHA LOJA</h1>
 
-<!-- LOGIN -->
-<div id="login">
-    <div class="login-box">
-        <h2>Entrar</h2>
-        <input type="text" placeholder="Email">
-        <input type="password" placeholder="Senha">
-        <button onclick="login()">Entrar</button>
-    </div>
-</div>
+<div id="produtos"></div>
 
-<!-- LOJA -->
-<div id="loja">
-    <h2>Produtos</h2>
-
-    <div class="produtos">
-        <div class="card">
-            <h3>Produto 1</h3>
-            <p>R$ 10</p>
-            <button onclick="addCarrinho('Produto 1',10)">Comprar</button>
-        </div>
-
-        <div class="card">
-            <h3>Produto 2</h3>
-            <p>R$ 25</p>
-            <button onclick="addCarrinho('Produto 2',25)">Comprar</button>
-        </div>
-
-        <div class="card">
-            <h3>Produto 3</h3>
-            <p>R$ 50</p>
-            <button onclick="addCarrinho('Produto 3',50)">Comprar</button>
-        </div>
-    </div>
-</div>
-
-<!-- CARRINHO -->
-<div id="carrinho">
-    <h3>Carrinho</h3>
-    <ul id="lista"></ul>
-    <p>Total: R$ <span id="total">0</span></p>
-</div>
+<h3>Carrinho</h3>
+<div id="carrinho"></div>
+<p>Total: R$ <span id="total">0</span></p>
 
 <script>
 let total = 0;
 
-function login() {
-    document.getElementById("login").style.display = "none";
-    document.getElementById("loja").style.display = "block";
-}
+let produtos = [
+  {nome:"Token FF", preco:10},
+  {nome:"Conta FF", preco:50},
+  {nome:"Skin Rara", preco:30}
+];
 
-function logout() {
-    location.reload();
-}
+let html = "";
 
-function addCarrinho(nome, preco) {
-    let lista = document.getElementById("lista");
+produtos.forEach(p => {
+  html += `
+    <div class="card">
+      <h3>${p.nome}</h3>
+      <p>R$ ${p.preco}</p>
+      <button onclick="comprar('${p.nome}', ${p.preco})">Comprar</button>
+    </div>
+  `;
+});
 
-    let item = document.createElement("li");
-    item.innerText = nome + " - R$" + preco;
+document.getElementById("produtos").innerHTML = html;
 
-    lista.appendChild(item);
-
-    total += preco;
-    document.getElementById("total").innerText = total;
+function comprar(nome, preco){
+  total += preco;
+  document.getElementById("carrinho").innerHTML += `<p>${nome} - R$ ${preco}</p>`;
+  document.getElementById("total").innerText = total;
 }
 </script>
 
