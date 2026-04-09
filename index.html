@@ -3,27 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Game Store PRO</title>
+<title>Game Market</title>
 
 <style>
 body {
     margin: 0;
     font-family: Arial;
-    background: linear-gradient(180deg,#020c20,#071a3a);
+    background: linear-gradient(180deg,#020c40,#071a80);
     color: white;
 }
 
 /* HEADER */
 header {
-    background: #010814;
+    background: #01082a;
     padding: 15px;
     text-align: center;
-    box-shadow: 0 0 10px #39ff14;
+    box-shadow: 0 0 10px #ff00ff;
 }
 
 /* TELAS */
-.tela { display: none; padding: 10px; }
-.ativa { display: block; }
+.tela {display:none;padding:10px;}
+.ativa {display:block;}
 
 /* INPUT */
 input {
@@ -34,14 +34,15 @@ input {
     border: none;
 }
 
-/* BOTÃO */
+/* BOTÃO ROSA NEON */
 .btn {
-    background: #39ff14;
+    background: #ff00ff;
     border: none;
     padding: 10px;
     width: 100%;
     font-weight: bold;
     border-radius: 8px;
+    color: white;
 }
 
 /* PRODUTOS */
@@ -52,15 +53,15 @@ input {
 }
 
 .card {
-    background: #0d2b5c;
+    background: #0a2caa;
     padding: 10px;
     border-radius: 10px;
-    box-shadow: 0 0 10px #39ff14;
+    box-shadow: 0 0 10px #ff00ff;
 }
 
 /* CHAT */
 .chat {
-    background: #010814;
+    background: #01082a;
     height: 200px;
     overflow-y: auto;
     padding: 10px;
@@ -70,25 +71,34 @@ input {
 
 <body>
 
-<header>🎮 Game Store PRO</header>
+<header>🎮 Game Market</header>
 
 <!-- LOGIN -->
 <div id="login" class="tela ativa">
-    <h3>Login</h3>
-    <input id="nome" placeholder="Seu nome">
-    <button class="btn" onclick="entrar()">Entrar</button>
+    <h3>Entrar</h3>
+
+    <input id="email" placeholder="Email">
+    <input id="telefone" placeholder="Telefone">
+
+    <button class="btn" onclick="login()">Entrar</button>
+
+    <hr>
+
+    <button class="btn" onclick="loginGoogle()">Entrar com Google</button>
 </div>
 
 <!-- LOJA -->
 <div id="loja" class="tela">
     <h3>Produtos</h3>
     <div class="produtos" id="produtos"></div>
+
     <button class="btn" onclick="abrirCliente()">Painel Cliente</button>
+    <button class="btn" onclick="abrirAdmin()">Admin</button>
 </div>
 
 <!-- CLIENTE -->
 <div id="cliente" class="tela">
-    <h3>Meu Painel</h3>
+    <h3>Minha Conta</h3>
 
     <h4>Pedidos</h4>
     <div id="pedidos"></div>
@@ -127,33 +137,39 @@ input {
 
 <script>
 
-// 🔥 TROCAR ISSO DEPOIS PELO SEU BACKEND
-const API_URL = "https://SEU-SERVIDOR.com";
-
-// DADOS TEMPORÁRIOS
+// DADOS
+let usuario = "";
 let produtos = [
     {nome:"35 Tokens",preco:6.47,desc:"Entrega rápida"},
-    {nome:"Conta FF Rara",preco:50,desc:"Conta full"}
+    {nome:"Conta FF Rara",preco:50,desc:"Conta top"}
 ];
-
 let pedidos = [];
 let chat = [];
 
-let usuario = "";
+// LOGIN NORMAL
+function login(){
+    let email = document.getElementById("email").value;
+    let tel = document.getElementById("telefone").value;
 
-// LOGIN
-function entrar(){
-    usuario = document.getElementById("nome").value;
-    if(!usuario) return alert("Digite seu nome");
+    if(!email || !tel) return alert("Preencha tudo");
 
+    usuario = email;
+    abrir("loja");
+    carregarProdutos();
+}
+
+// LOGIN GOOGLE (SIMULADO)
+function loginGoogle(){
+    usuario = "GoogleUser";
+    alert("Login Google (simulado)");
     abrir("loja");
     carregarProdutos();
 }
 
 // TROCAR TELA
-function abrir(tela){
-    document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativa"));
-    document.getElementById(tela).classList.add("ativa");
+function abrir(t){
+    document.querySelectorAll(".tela").forEach(el=>el.classList.remove("ativa"));
+    document.getElementById(t).classList.add("ativa");
 }
 
 // PRODUTOS
@@ -187,7 +203,7 @@ function abrirCliente(){
 
     pedidos.forEach(p=>{
         if(p.cliente === usuario){
-            div.innerHTML += `<div>${p.produto}</div>`;
+            div.innerHTML+=`<div>${p.produto}</div>`;
         }
     });
 
@@ -209,7 +225,6 @@ function responder(){
     atualizarAdmin();
 }
 
-// ATUALIZAR CHAT
 function atualizarChat(){
     let div = document.getElementById("chat");
     div.innerHTML="";
@@ -220,6 +235,10 @@ function atualizarChat(){
 }
 
 // ADMIN
+function abrirAdmin(){
+    abrir("admin");
+}
+
 function logarAdmin(){
     if(document.getElementById("senha").value === "1234"){
         document.getElementById("painelAdmin").style.display="block";
