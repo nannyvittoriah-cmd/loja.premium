@@ -2,218 +2,258 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BONYS.SH</title>
 
 <style>
+
 body{
   margin:0;
   font-family:Arial;
-  background:#0a0f2c;
+  background: linear-gradient(135deg,#020617,#0a0f2c);
   color:white;
 }
-h1,h2{color:#00bfff}
-button{
-  background:#ff00ff;
-  border:none;
-  padding:10px;
+
+/* HEADER */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px;
+}
+
+.logo{
+  color:#00bfff;
+  font-size:22px;
+  font-weight:bold;
+}
+
+.icons button{
+  background:transparent;
+  border:1px solid #1e293b;
   color:white;
-  cursor:pointer;
+  border-radius:50%;
+  width:40px;
+  height:40px;
+  margin-left:10px;
 }
-input{
-  padding:10px;
-  margin:5px;
+
+/* CATEGORIAS */
+.categorias{
+  display:flex;
+  gap:10px;
+  padding:15px;
 }
-.card{
+
+.cat{
+  width:100px;
+  height:100px;
   background:#111a44;
+  border-radius:15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* PRODUTOS */
+.produtos{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:15px;
+}
+
+.card{
+  background:#0f172a;
+  border-radius:15px;
   padding:10px;
-  margin:10px;
+}
+
+.card img{
+  width:100%;
   border-radius:10px;
 }
-.hidden{display:none}
+
+.preco{
+  border:2px solid #00bfff;
+  padding:8px;
+  margin-top:10px;
+  border-radius:10px;
+  text-align:center;
+}
+
+/* BOTÃO NEON */
+.neon{
+  background:#ff00ff;
+  color:white;
+  border:none;
+  padding:10px;
+  border-radius:10px;
+  width:100%;
+  margin-top:10px;
+}
+
+/* MENU LATERAL */
+.menu{
+  position:fixed;
+  right:-300px;
+  top:0;
+  width:300px;
+  height:100%;
+  background:#0f172a;
+  transition:0.3s;
+  padding:20px;
+}
+
+.menu.active{
+  right:0;
+}
+
+.menu div{
+  padding:15px 0;
+  border-bottom:1px solid #1e293b;
+}
+
+/* MODAL */
+.modal{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.7);
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+
+.modal-box{
+  background:#0f172a;
+  padding:20px;
+  border-radius:15px;
+  width:80%;
+}
+
+input{
+  width:100%;
+  padding:10px;
+  margin:10px 0;
+  background:#020617;
+  border:none;
+  color:white;
+}
+
 </style>
 
 </head>
 
 <body>
 
-<div id="app"></div>
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">BONYS.SH</div>
+
+  <div class="icons">
+    <button onclick="openLogin()">👤</button>
+    <button onclick="openCart()">🛒</button>
+    <button onclick="toggleMenu()">☰</button>
+  </div>
+</div>
+
+<!-- CATEGORIAS -->
+<div class="categorias">
+  <div class="cat">FF</div>
+  <div class="cat">COC</div>
+  <div class="cat">Fortnite</div>
+</div>
+
+<!-- PRODUTOS -->
+<div class="produtos" id="produtos"></div>
+
+<!-- MENU -->
+<div class="menu" id="menu">
+  <h3>Olá 👋</h3>
+  <div>Minha conta</div>
+  <div>Compras</div>
+  <div>Favoritos</div>
+  <div onclick="openLogin()">Entrar</div>
+</div>
+
+<!-- LOGIN -->
+<div class="modal" id="login">
+  <div class="modal-box">
+    <h2>Entrar</h2>
+    <input placeholder="Email">
+    <input placeholder="Senha">
+    <button class="neon">Entrar</button>
+  </div>
+</div>
+
+<!-- CARRINHO -->
+<div class="modal" id="cart">
+  <div class="modal-box">
+    <h2>Carrinho</h2>
+    <p id="cartList">Vazio</p>
+  </div>
+</div>
 
 <script>
 
-const ADMIN = "nannyvittoriah@gmail.com";
-
-// ================= LOGIN =================
-function telaLogin(){
-  document.getElementById("app").innerHTML = `
-    <h1>BONYS.SH 🔥</h1>
-    <input id="email" placeholder="Digite seu email">
-    <br>
-    <button onclick="login()">Entrar</button>
-  `;
-}
-
-function login(){
-  const email = document.getElementById("email").value;
-  localStorage.setItem("user", email);
-
-  if(email === ADMIN){
-    telaAdmin();
-  } else {
-    telaCliente();
+// PRODUTOS EXEMPLO
+const produtos = [
+  {
+    nome:"Conta FF Nivel 68",
+    preco:"179,99",
+    img:"https://i.imgur.com/6XbKQpT.png"
+  },
+  {
+    nome:"Conta Gemada",
+    preco:"650,00",
+    img:"https://i.imgur.com/6XbKQpT.png"
   }
-}
+];
 
-// ================= CLIENTE =================
-function telaCliente(){
-  document.getElementById("app").innerHTML = `
-    <h1>Loja BONYS.SH</h1>
+const lista = document.getElementById("produtos");
 
-    <h2>Produtos</h2>
-    <div id="produtos"></div>
-
-    <h2>Chat</h2>
-    <input id="msg">
-    <button onclick="enviar('cliente')">Enviar</button>
-    <div id="chat"></div>
+produtos.forEach(p=>{
+  lista.innerHTML += `
+    <div class="card">
+      <img src="${p.img}">
+      <h3>${p.nome}</h3>
+      <div class="preco">R$ ${p.preco}</div>
+      <button class="neon" onclick="comprar('${p.nome}')">Comprar</button>
+    </div>
   `;
+});
 
-  carregarProdutos();
-  atualizarChat();
+// MENU
+function toggleMenu(){
+  document.getElementById("menu").classList.toggle("active");
 }
 
-// PRODUTOS
-function carregarProdutos(){
-  let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
-  let div = document.getElementById("produtos");
-
-  div.innerHTML = "";
-
-  produtos.forEach(p=>{
-    div.innerHTML += `
-      <div class="card">
-        <h3>${p.nome}</h3>
-        <p>R$ ${p.preco}</p>
-        <button onclick="comprar('${p.nome}')">Comprar</button>
-      </div>
-    `;
-  });
+// LOGIN
+function openLogin(){
+  document.getElementById("login").style.display="flex";
 }
 
-// COMPRAR
+// CARRINHO
+let carrinho = [];
+
 function comprar(nome){
-  let pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
-
-  pedidos.push({
-    produto:nome,
-    status:"aguardando pix"
-  });
-
-  localStorage.setItem("pedidos", JSON.stringify(pedidos));
-
-  alert("PIX: (98) 98485-3563\nEnvie o comprovante no chat!");
+  carrinho.push(nome);
+  alert("PIX: (98) 98485-3563");
 }
 
-// ================= ADMIN =================
-function telaAdmin(){
+function openCart(){
+  document.getElementById("cart").style.display="flex";
+  document.getElementById("cartList").innerHTML = carrinho.join("<br>") || "Vazio";
+}
 
-  if(localStorage.getItem("user") !== ADMIN){
-    alert("Acesso negado!");
-    telaLogin();
-    return;
+// FECHAR AO CLICAR FORA
+window.onclick = function(e){
+  if(e.target.className === "modal"){
+    e.target.style.display = "none";
   }
-
-  document.getElementById("app").innerHTML = `
-    <h1>PAINEL ADMIN 👑</h1>
-
-    <h2>Adicionar Produto</h2>
-    <input id="nome" placeholder="Nome">
-    <input id="preco" placeholder="Preço">
-    <button onclick="addProduto()">Adicionar</button>
-
-    <hr>
-
-    <h2>Pedidos</h2>
-    <div id="pedidos"></div>
-
-    <hr>
-
-    <h2>Chat</h2>
-    <input id="msg">
-    <button onclick="enviar('admin')">Enviar</button>
-    <div id="chat"></div>
-  `;
-
-  atualizarPedidos();
-  atualizarChat();
-}
-
-// ADD PRODUTO
-function addProduto(){
-  let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
-
-  produtos.push({
-    nome:document.getElementById("nome").value,
-    preco:document.getElementById("preco").value
-  });
-
-  localStorage.setItem("produtos", JSON.stringify(produtos));
-  alert("Produto adicionado!");
-}
-
-// PEDIDOS
-function atualizarPedidos(){
-  setInterval(()=>{
-    let pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
-    let div = document.getElementById("pedidos");
-
-    if(!div) return;
-
-    div.innerHTML = "";
-
-    pedidos.forEach(p=>{
-      div.innerHTML += `<div class="card">${p.produto} - ${p.status}</div>`;
-    });
-
-  },1000);
-}
-
-// ================= CHAT =================
-function enviar(tipo){
-  let chat = JSON.parse(localStorage.getItem("chat")) || [];
-
-  chat.push({
-    tipo:tipo,
-    msg:document.getElementById("msg").value
-  });
-
-  localStorage.setItem("chat", JSON.stringify(chat));
-}
-
-function atualizarChat(){
-  setInterval(()=>{
-    let chat = JSON.parse(localStorage.getItem("chat")) || [];
-    let div = document.getElementById("chat");
-
-    if(!div) return;
-
-    div.innerHTML = "";
-
-    chat.forEach(m=>{
-      div.innerHTML += `<p><b>${m.tipo}:</b> ${m.msg}</p>`;
-    });
-
-  },1000);
-}
-
-// INICIAR
-if(localStorage.getItem("user")){
-  if(localStorage.getItem("user") === ADMIN){
-    telaAdmin();
-  } else {
-    telaCliente();
-  }
-} else {
-  telaLogin();
 }
 
 </script>
