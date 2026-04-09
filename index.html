@@ -13,127 +13,136 @@ body {
     color: #fff;
 }
 
-/* HEADER */
 header {
     text-align: center;
     padding: 20px;
-    font-size: 24px;
+    font-size: 25px;
     color: #ff00ff;
     text-shadow: 0 0 10px #ff00ff;
 }
 
-/* BOTÕES NEON */
-.neon-btn {
-    display: block;
-    margin: 10px auto;
-    padding: 15px;
-    width: 80%;
-    text-align: center;
+.categorias {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+button {
+    background: #111;
     border: 2px solid #ff00ff;
     color: #ff00ff;
-    background: transparent;
+    padding: 10px;
     border-radius: 10px;
-    text-shadow: 0 0 10px #ff00ff;
-    box-shadow: 0 0 10px #ff00ff;
     cursor: pointer;
 }
 
-.neon-btn:hover {
+button:hover {
     background: #ff00ff;
     color: black;
 }
 
-/* PRODUTOS */
-.produto {
-    border: 1px solid #ff00ff;
-    margin: 10px;
+.produtos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.card {
+    background: #111;
+    border: 2px solid #ff00ff;
+    border-radius: 10px;
     padding: 10px;
+    margin: 10px;
+    width: 200px;
+    text-align: center;
+}
+
+.card img {
+    width: 100%;
     border-radius: 10px;
 }
 
-/* ADMIN */
-#adminPanel {
+.admin-panel {
     display: none;
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #111;
+    border: 2px solid #ff00ff;
     padding: 20px;
-}
-
-input {
-    padding: 10px;
-    margin: 5px;
-    width: 90%;
+    border-radius: 10px;
 }
 </style>
-</head>
 
+</head>
 <body>
 
 <header>🔥 LOJA GAMER 🔥</header>
 
-<!-- LOGIN ADMIN -->
-<div style="text-align:center;">
-    <button class="neon-btn" onclick="loginAdmin()">Área Admin</button>
+<div class="categorias">
+    <button onclick="mostrar('ff')">Free Fire</button>
+    <button onclick="mostrar('fortnite')">Fortnite</button>
+    <button onclick="mostrar('caixa')">Caixas</button>
 </div>
 
-<!-- CATEGORIAS -->
-<div id="categorias">
-    <button class="neon-btn" onclick="mostrar('ff')">Itens Free Fire</button>
-    <button class="neon-btn" onclick="mostrar('fortnite')">Fortnite</button>
-    <button class="neon-btn" onclick="mostrar('caixa')">Caixas de Sorteio</button>
-</div>
+<div class="produtos" id="produtos"></div>
 
-<!-- PRODUTOS -->
-<div id="produtos"></div>
+<br><br>
+<center>
+<button onclick="loginAdmin()">Painel Admin</button>
+</center>
 
-<!-- ADMIN -->
-<div id="adminPanel">
-    <h2>Painel Admin</h2>
-
-    <input id="nome" placeholder="Nome do Produto">
-    <input id="preco" placeholder="Preço">
-    <input id="categoria" placeholder="Categoria (ff, fortnite, caixa)">
-    <button class="neon-btn" onclick="addProduto()">Adicionar Produto</button>
+<div class="admin-panel" id="admin">
+    <h3>Painel Admin</h3>
+    <input id="nome" placeholder="Nome"><br><br>
+    <input id="preco" placeholder="Preço"><br><br>
+    <input id="img" placeholder="URL da imagem"><br><br>
+    <select id="categoria">
+        <option value="ff">Free Fire</option>
+        <option value="fortnite">Fortnite</option>
+        <option value="caixa">Caixa</option>
+    </select><br><br>
+    <button onclick="addProduto()">Adicionar</button>
 </div>
 
 <script>
 
-let produtos = JSON.parse(localStorage.getItem("produtos")) || [
-    {nome:"Diamantes FF", preco:"R$10", categoria:"ff"},
-    {nome:"Skin Fortnite", preco:"R$25", categoria:"fortnite"},
-    {nome:"Caixa Misteriosa", preco:"R$5", categoria:"caixa"}
-];
+let numeroWhatsApp = "5598984853563";
 
-function salvar() {
-    localStorage.setItem("produtos", JSON.stringify(produtos));
-}
+let produtos = [
+    {nome:"100 Diamantes FF", preco:5, img:"https://i.imgur.com/3ZQ3Z6k.png", cat:"ff"},
+    {nome:"500 V-Bucks Fortnite", preco:20, img:"https://i.imgur.com/Jn1XxYb.png", cat:"fortnite"},
+    {nome:"Caixa Misteriosa", preco:10, img:"https://i.imgur.com/zYIlgBl.png", cat:"caixa"}
+];
 
 function mostrar(cat) {
     let area = document.getElementById("produtos");
     area.innerHTML = "";
 
-    produtos.filter(p => p.categoria === cat).forEach(p => {
+    produtos.filter(p => p.cat == cat).forEach(p => {
         area.innerHTML += `
-        <div class="produto">
-            <h3>${p.nome}</h3>
-            <p>${p.preco}</p>
-            <button class="neon-btn" onclick="comprar('${p.nome}','${p.preco}')">
-                Comprar
-            </button>
-        </div>
-        `;
+        <div class="card">
+            <img src="${p.img}">
+            <h4>${p.nome}</h4>
+            <p>R$ ${p.preco}</p>
+            <input type="number" value="1" min="1" id="qtd">
+            <button onclick="comprar('${p.nome}', ${p.preco})">Comprar</button>
+        </div>`;
     });
 }
 
 function comprar(nome, preco) {
-    let msg = `Quero comprar ${nome} por ${preco}`;
-    let numero = "5598984853563"; // seu número
-
-    window.open(`https://wa.me/${numero}?text=${encodeURIComponent(msg)}`);
+    let msg = `Quero comprar: ${nome}`;
+    let link = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(msg)}`;
+    window.open(link);
 }
 
 function loginAdmin() {
-    let senha = prompt("Digite a senha:");
-    if(senha === "1234") {
-        document.getElementById("adminPanel").style.display = "block";
+    let senha = prompt("Digite a senha admin:");
+    if(senha === "Lorrannyh.170") {
+        document.getElementById("admin").style.display = "block";
     } else {
         alert("Senha errada!");
     }
@@ -142,22 +151,14 @@ function loginAdmin() {
 function addProduto() {
     let nome = document.getElementById("nome").value;
     let preco = document.getElementById("preco").value;
-    let categoria = document.getElementById("categoria").value;
+    let img = document.getElementById("img").value;
+    let cat = document.getElementById("categoria").value;
 
-    produtos.push({nome, preco, categoria});
-    salvar();
+    produtos.push({nome, preco, img, cat});
     alert("Produto adicionado!");
 }
 
 </script>
-</html><header onclick="clickAdmin()">🔥 LOJA GAMER 🔥</let cliques = 0;
 
-function clickAdmin() {
-    cliques++;
-    if(cliques === 5) {
-        loginAdmin();
-        cliques = 0;
-    }
-}
-
-
+</body>
+</html>
