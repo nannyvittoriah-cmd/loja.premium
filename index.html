@@ -41,7 +41,7 @@ body{
     padding:5px;
 }
 
-/* PRODUTOS GRID */
+/* GRID */
 #produtos{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -66,15 +66,18 @@ button{
     border-radius:10px;
     color:white;
     font-weight:bold;
-    margin-top:5px;
 }
 
-/* PIX */
-.pix{
-    grid-column:1/3;
-    border:1px solid #00ffcc;
+/* PIX FIXO */
+#pix{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    background:#000;
+    border-top:2px solid #00ffcc;
     padding:15px;
-    border-radius:12px;
+    display:none;
     text-align:center;
 }
 </style>
@@ -86,77 +89,115 @@ button{
 
 <div class="categorias">
 
-    <!-- FREE FIRE -->
     <div class="cat" onclick="mostrar('ff')">
         <img src="https://i.imgur.com/8QfKuz1.png">
         <p>Free Fire</p>
     </div>
 
-    <!-- INSTAGRAM -->
     <div class="cat" onclick="mostrar('insta')">
         <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png">
         <p>Instagram</p>
+    </div>
+
+    <div class="cat" onclick="mostrar('misterio')">
+        <img src="https://i.imgur.com/6RLixvH.png">
+        <p>Caixa Misteriosa</p>
     </div>
 
 </div>
 
 <div id="produtos"></div>
 
+<!-- PIX FIXO -->
+<div id="pix"></div>
+
 <script>
 
-// MOSTRAR PRODUTOS
+// FUNÇÃO MOSTRAR
 function mostrar(cat){
     let div = document.getElementById("produtos");
     div.innerHTML = "";
 
+    // FREE FIRE
     if(cat === "ff"){
-        div.innerHTML += produto("100 Dimas", "R$ 7");
-        div.innerHTML += produto("200 Dimas", "R$ 14");
-        div.innerHTML += produto("300 Dimas", "R$ 20");
-        div.innerHTML += produto("500 Dimas", "R$ 32");
-        div.innerHTML += produto("800 Dimas", "R$ 50");
-        div.innerHTML += produto("1000 Dimas", "R$ 65");
-        div.innerHTML += produto("1500 Dimas", "R$ 95");
-        div.innerHTML += produto("2000 Dimas", "R$ 120");
+        titulo("💎 Tokens Free Fire");
+
+        add("35 Tokens","R$ 6,47");
+        add("55 Tokens","R$ 10,00");
+        add("80 Tokens","R$ 14,00");
+        add("120 Tokens","R$ 22,00");
+        add("200 Tokens","R$ 32,00");
+        add("280 Tokens","R$ 39,00");
+        add("400 Tokens","R$ 55,00");
+        add("600 Tokens","R$ 80,00");
+        add("1000 Tokens","R$ 102,00");
+        add("1400 Tokens","R$ 150,00");
+        add("2000 Tokens","R$ 205,00");
     }
 
+    // INSTAGRAM
     if(cat === "insta"){
-        div.innerHTML += produto("100 Seguidores", "R$ 5");
-        div.innerHTML += produto("500 Seguidores", "R$ 15");
-        div.innerHTML += produto("1000 Seguidores", "R$ 25");
+        titulo("📊 Seguidores");
+        add("100 Seguidores","R$ 8");
+        add("500 Seguidores","R$ 35");
+        add("1000 Seguidores","R$ 75");
+
+        titulo("❤️ Curtidas");
+        add("100 Curtidas","R$ 5");
+        add("500 Curtidas","R$ 21");
+        add("1000 Curtidas","R$ 45");
+
+        titulo("👀 Visualizações");
+        add("500 Views","R$ 8");
+        add("1000 Views","R$ 16");
+        add("2000 Views","R$ 30");
+    }
+
+    // CAIXA MISTERIOSA
+    if(cat === "misterio"){
+        titulo("🎁 Caixa Misteriosa");
+
+        add("Caixa Bronze","R$ 10");
+        add("Caixa Prata","R$ 20");
+        add("Caixa Ouro","R$ 30");
     }
 }
 
-// TEMPLATE
-function produto(nome, preco){
-    return `
+// TITULO
+function titulo(txt){
+    document.getElementById("produtos").innerHTML += `
+    <div style="grid-column:1/3; text-align:center; font-weight:bold;">
+        ${txt}
+    </div>`;
+}
+
+// PRODUTO
+function add(nome, preco){
+    document.getElementById("produtos").innerHTML += `
     <div class="produto">
         <h4>${nome}</h4>
         <p>${preco}</p>
-
-        <button onclick="comprar('${nome}','${preco}')">
-            Comprar
-        </button>
-    </div>
-    `;
+        <button onclick="comprar('${nome}','${preco}')">Comprar</button>
+    </div>`;
 }
 
-// COMPRA
+// COMPRA (PIX AUTOMÁTICO)
 function comprar(nome, preco){
-    let div = document.getElementById("produtos");
+    let pix = document.getElementById("pix");
 
-    div.innerHTML += `
-    <div class="pix">
+    pix.style.display = "block";
+    pix.innerHTML = `
         <h3>Pagamento via PIX</h3>
+        <p>Produto: ${nome}</p>
+        <p>Valor: ${preco}</p>
         <p>Chave: (98) 984853563</p>
 
         <a href="https://wa.me/5598984853563?text=Comprei ${nome} - ${preco}">
-            <button>Enviar comprovante no WhatsApp</button>
+            <button>Enviar comprovante</button>
         </a>
-    </div>
     `;
 }
 </script>
 
 </body>
-</html
+</html>
