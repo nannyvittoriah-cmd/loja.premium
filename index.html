@@ -5,10 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Loja Gamer</title>
 
-<!-- FIREBASE (VERSÃO CORRETA) -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-
 <style>
 body{
     margin:0;
@@ -17,112 +13,134 @@ body{
     color:white;
 }
 
-.tela{ display:none; padding:20px; }
-.ativa{ display:block; }
-
-input{
-    width:90%;
-    padding:12px;
-    margin:5px;
-    border-radius:10px;
-    border:1px solid #ff00aa;
-    background:transparent;
-    color:white;
+/* TOPO */
+.topo{
+    padding:15px;
 }
 
+/* CATEGORIAS */
+.categorias{
+    display:flex;
+    gap:10px;
+    overflow:auto;
+}
+
+.cat{
+    min-width:120px;
+    text-align:center;
+    border:1px solid #ff00aa;
+    border-radius:12px;
+    padding:10px;
+    cursor:pointer;
+    background: rgba(255,0,170,0.1);
+}
+
+.cat img{
+    width:60px;
+    height:60px;
+    border-radius:10px;
+}
+
+.cat p{
+    margin:5px 0 0;
+    font-size:14px;
+}
+
+/* PRODUTOS */
+.produto{
+    border:1px solid #ff00aa;
+    padding:15px;
+    margin:15px;
+    border-radius:12px;
+}
+
+/* BOTÃO */
 button{
     background:#ff00aa;
     border:none;
-    padding:12px;
-    width:95%;
+    padding:10px;
+    width:100%;
     border-radius:10px;
     color:white;
     font-weight:bold;
-    margin-top:10px;
+}
+
+/* PIX */
+.pix{
+    border:1px solid #00ffcc;
+    padding:15px;
+    margin:15px;
+    border-radius:12px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-<div id="login" class="tela ativa">
-    <h2>Login</h2>
+<div class="topo">
+    <h2>Categorias</h2>
 
-    <input id="email" placeholder="Email">
-    <input id="senha" type="password" placeholder="Senha">
+    <div class="categorias">
 
-    <button onclick="login()">ENTRAR</button>
-    <button onclick="loginGoogle()">Entrar com Google</button>
+        <!-- FREE FIRE -->
+        <div class="cat" onclick="mostrar('ff')">
+            <img src="https://i.imgur.com/8QfKuz1.png">
+            <p>Free Fire</p>
+        </div>
 
-    <p onclick="trocarTela('cadastro')" style="color:#ff00aa;cursor:pointer;">
-        Criar conta
-    </p>
+        <!-- INSTAGRAM -->
+        <div class="cat" onclick="mostrar('insta')">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png">
+            <p>Instagram</p>
+        </div>
+
+    </div>
 </div>
 
-<!-- CADASTRO -->
-<div id="cadastro" class="tela">
-    <h2>Cadastro</h2>
-
-    <input id="novoEmail" placeholder="Email">
-    <input id="novaSenha" type="password" placeholder="Senha">
-
-    <button onclick="cadastrar()">Cadastrar</button>
-</div>
-
-<!-- LOJA -->
-<div id="loja" class="tela">
-    <h2>Login realizado com sucesso 🔥</h2>
-</div>
+<div id="produtos"></div>
 
 <script>
-// 🔥 COLOCA SUA CONFIG REAL DO FIREBASE
-const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_PROJETO.firebaseapp.com",
-  projectId: "SEU_PROJETO",
-};
+function mostrar(cat){
+    let div = document.getElementById("produtos");
+    div.innerHTML = "";
 
-// INICIAR FIREBASE
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
+    if(cat === "ff"){
+        div.innerHTML += produto("Dimas FF 110", "R$ 10");
+        div.innerHTML += produto("Dimas FF 310", "R$ 25");
+    }
 
-// LOGIN EMAIL
-function login(){
-    let email = document.getElementById("email").value;
-    let senha = document.getElementById("senha").value;
-
-    auth.signInWithEmailAndPassword(email, senha)
-    .then(() => trocarTela("loja"))
-    .catch(err => alert(err.message));
+    if(cat === "insta"){
+        div.innerHTML += produto("100 Seguidores", "R$ 5");
+        div.innerHTML += produto("500 Seguidores", "R$ 15");
+    }
 }
 
-// CADASTRO
-function cadastrar(){
-    let email = document.getElementById("novoEmail").value;
-    let senha = document.getElementById("novaSenha").value;
+function produto(nome, preco){
+    return `
+    <div class="produto">
+        <h3>${nome}</h3>
+        <p>${preco}</p>
 
-    auth.createUserWithEmailAndPassword(email, senha)
-    .then(() => {
-        alert("Conta criada com sucesso!");
-        trocarTela("login");
-    })
-    .catch(err => alert(err.message));
+        <button onclick="comprar('${nome}','${preco}')">
+            COMPRAR
+        </button>
+    </div>
+    `;
 }
 
-// GOOGLE LOGIN
-function loginGoogle(){
-    let provider = new firebase.auth.GoogleAuthProvider();
+function comprar(nome, preco){
+    let div = document.getElementById("produtos");
 
-    auth.signInWithPopup(provider)
-    .then(() => trocarTela("loja"))
-    .catch(err => alert(err.message));
-}
+    div.innerHTML += `
+    <div class="pix">
+        <h3>Pagamento via PIX</h3>
+        <p>Chave: (98) 984853563</p>
 
-// TROCAR TELA
-function trocarTela(tela){
-    document.querySelectorAll(".tela").forEach(t => t.classList.remove("ativa"));
-    document.getElementById(tela).classList.add("ativa");
+        <a href="https://wa.me/5598984853563?text=Comprei ${nome} - ${preco}">
+            <button>Enviar comprovante no WhatsApp</button>
+        </a>
+    </div>
+    `;
 }
 </script>
 
