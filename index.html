@@ -5,44 +5,138 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bonoxs.SH</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <style>
+@keyframes btnShimmer {
+    0%   { transform: translateX(-150%) skewX(-18deg); }
+    100% { transform: translateX(250%)  skewX(-18deg); }
+}
+
+* {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 800;
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: #001f5c;
+    background: #120B0F;
     color: white;
+    font-size: 17px;
+    zoom: 80%;
 }
 
 header {
-    text-align: center;
-    padding: 20px;
-    font-size: 28px;
-    font-weight: bold;
-    color: #ff00aa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    height: 80px;
+    background: #120B0F;
+    font-size: 20px;
+    font-weight: 800;
+    color: #D077AE;
+    border-bottom: 2px solid #A599A1;
+    z-index: 100;
+}
+
+header .back-btn {
+    position: absolute;
+    left: 16px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: #A288FF;
+    border-radius: 50px;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+header .back-btn.visible {
+    display: flex;
+}
+
+header .back-btn .material-icons {
+    font-size: 22px;
+    color: white;
 }
 
 .container {
-    padding: 20px;
+    padding: 16px;
+}
+
+.divider-dashed {
+    border: none;
+    border-top: 2px dashed #A599A1;
+    margin: 14px 0;
+    opacity: 0.5;
 }
 
 .btn {
-    display: block;
-    background: #ff00aa;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #D077AE;
     color: white;
-    padding: 15px;
-    margin: 10px 0;
+    padding: 0 20px;
+    margin: 5px 0;
     text-align: center;
-    border-radius: 10px;
+    border-radius: 50px;
     cursor: pointer;
     text-decoration: none;
-    font-weight: bold;
+    font-size: 17px;
+    font-weight: 800;
+    min-height: 65px;
+    border: 2px solid #D077AE;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 40%;
+    height: 100%;
+    background: rgba(255,255,255,0.18);
+    transform: translateX(-150%) skewX(-18deg);
+    animation: btnShimmer 3.2s ease infinite 1.2s;
+}
+
+.btn.close-btn {
+    background: #A288FF;
+    border-color: #A288FF;
+}
+
+.btn .material-icons {
+    font-size: 20px;
 }
 
 .card {
-    background: #002d80;
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #2A1A22;
+    color: white;
+    padding: 0 20px;
+    margin: 5px 0;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 800;
+    min-height: 65px;
+    border: 2px solid rgba(208,119,174,0.25);
+}
+
+.card .material-icons {
+    font-size: 18px;
+    color: #D077AE;
+    flex-shrink: 0;
 }
 
 .hidden {
@@ -50,125 +144,130 @@ header {
 }
 
 h2 {
-    color: #00ff88;
-}
-
-.logo {
-    font-size: 40px;
-    text-align: center;
+    color: #D077AE;
+    font-size: 18px;
+    font-weight: 800;
+    margin: 16px 0 10px;
 }
 </style>
 </head>
 
 <body>
 
-<header>Bonyx.SH</header>
+<header>
+    <div class="back-btn" id="toolbar-back" onclick="goBack()">
+        <span class="material-icons">arrow_back</span>
+    </div>
+    BONYX.SH
+</header>
 
 <div class="container" id="home">
-
-    <div class="btn" onclick="show('ff')">🔥 Free Fire</div>
-    <div class="btn" onclick="show('insta')">📸 Instagram</div>
-    <div class="btn" onclick="show('misterio')">❓ Caixa Misteriosa</div>
-
+    <div class="btn" onclick="show('ff-tokens')"><span class="material-icons">local_fire_department</span> FREE FIRE - TOKENS DE EVOLUÇÃO</div>
+    <div class="btn" onclick="show('ff-passe')"><span class="material-icons">confirmation_number</span> FREE FIRE - PASSE BOOYAH</div>
+    <hr class="divider-dashed">
+    <div class="btn" onclick="show('insta-seguidores')"><span class="material-icons">group</span> INSTAGRAM - SEGUIDORES REAIS</div>
+    <div class="btn" onclick="show('insta-curtidas')"><span class="material-icons">favorite</span> INSTAGRAM - CURTIDAS REAIS</div>
+    <div class="btn" onclick="show('insta-views')"><span class="material-icons">visibility</span> INSTAGRAM - VIEWS REAIS</div>
+    <hr class="divider-dashed">
+    <div class="btn" onclick="show('misterio')"><span class="material-icons">help</span> PACOTE DE ITEM MISTERIOSO</div>
 </div>
 
-<!-- FREE FIRE -->
-<div class="container hidden" id="ff">
-    <h2>💎 Tokens Free Fire</h2>
-
-    <div class="card" onclick="comprar('35 Tokens - R$6,47')">35 Tokens - R$6,47</div>
-    <div class="card" onclick="comprar('55 Tokens - R$10,00')">55 Tokens - R$10,00</div>
-    <div class="card" onclick="comprar('80 Tokens - R$14,00')">80 Tokens - R$14,00</div>
-    <div class="card" onclick="comprar('120 Tokens - R$22,00')">120 Tokens - R$22,00</div>
-    <div class="card" onclick="comprar('200 Tokens - R$32,00')">200 Tokens - R$32,00</div>
-    <div class="card" onclick="comprar('280 Tokens - R$39,00')">280 Tokens - R$39,00</div>
-    <div class="card" onclick="comprar('400 Tokens - R$55,00')">400 Tokens - R$55,00</div>
-    <div class="card" onclick="comprar('600 Tokens - R$80,00')">600 Tokens - R$80,00</div>
-    <div class="card" onclick="comprar('1000 Tokens - R$102,00')">1000 Tokens - R$102,00</div>
-    <div class="card" onclick="comprar('1400 Tokens - R$150,00')">1400 Tokens - R$150,00</div>
-    <div class="card" onclick="comprar('2000 Tokens - R$205,00')">2000 Tokens - R$205,00</div>
-
-    <h2>🎫 Passe FF</h2>
-    <div class="card" onclick="comprar('Passe FF - R$10,00')">Passe FF - R$10,00</div>
-
-    <div class="btn" onclick="voltar()">⬅ Voltar</div>
+<div class="container hidden" id="ff-tokens">
+    <h2><span class="material-icons" style="vertical-align:middle;font-size:18px;">diamond</span> FREE FIRE - TOKENS DE EVOLUÇÃO</h2>
+    <div class="card" onclick="buy('35 TOKENS - R$ 6,47')"><span class="material-icons">toll</span>35 TOKENS - R$ 6,47</div>
+    <div class="card" onclick="buy('55 TOKENS - R$ 10,00')"><span class="material-icons">toll</span>55 TOKENS - R$ 10,00</div>
+    <div class="card" onclick="buy('80 TOKENS - R$ 14,00')"><span class="material-icons">toll</span>80 TOKENS - R$ 14,00</div>
+    <div class="card" onclick="buy('120 TOKENS - R$ 22,00')"><span class="material-icons">toll</span>120 TOKENS - R$ 22,00</div>
+    <div class="card" onclick="buy('200 TOKENS - R$ 32,00')"><span class="material-icons">toll</span>200 TOKENS - R$ 32,00</div>
+    <div class="card" onclick="buy('280 TOKENS - R$ 39,00')"><span class="material-icons">toll</span>280 TOKENS - R$ 39,00</div>
+    <div class="card" onclick="buy('400 TOKENS - R$ 55,00')"><span class="material-icons">toll</span>400 TOKENS - R$ 55,00</div>
+    <div class="card" onclick="buy('600 TOKENS - R$ 80,00')"><span class="material-icons">toll</span>600 TOKENS - R$ 80,00</div>
+    <div class="card" onclick="buy('1000 TOKENS - R$ 102,00')"><span class="material-icons">toll</span>1000 TOKENS - R$ 102,00</div>
+    <div class="card" onclick="buy('1400 TOKENS - R$ 150,00')"><span class="material-icons">toll</span>1400 TOKENS - R$ 150,00</div>
+    <div class="card" onclick="buy('2000 TOKENS - R$ 205,00')"><span class="material-icons">toll</span>2000 TOKENS - R$ 205,00</div>
+    <div class="btn close-btn" onclick="goBack()"><span class="material-icons">arrow_back</span> OK!! FECHAR!!</div>
 </div>
 
-<!-- INSTAGRAM -->
-<div class="container hidden" id="insta">
-
-    <h2>📊 Seguidores</h2>
-    <div class="card" onclick="comprar('100 seguidores - R$8')">100 - R$8</div>
-    <div class="card" onclick="comprar('200 seguidores - R$15')">200 - R$15</div>
-    <div class="card" onclick="comprar('300 seguidores - R$22')">300 - R$22</div>
-    <div class="card" onclick="comprar('400 seguidores - R$28')">400 - R$28</div>
-    <div class="card" onclick="comprar('500 seguidores - R$35')">500 - R$35</div>
-    <div class="card" onclick="comprar('600 seguidores - R$42')">600 - R$42</div>
-    <div class="card" onclick="comprar('700 seguidores - R$50')">700 - R$50</div>
-    <div class="card" onclick="comprar('800 seguidores - R$58')">800 - R$58</div>
-    <div class="card" onclick="comprar('900 seguidores - R$65')">900 - R$65</div>
-    <div class="card" onclick="comprar('1000 seguidores - R$75')">1000 - R$75</div>
-
-    <h2>❤️ Curtidas</h2>
-    <div class="card" onclick="comprar('100 curtidas - R$5')">100 - R$5</div>
-    <div class="card" onclick="comprar('200 curtidas - R$9')">200 - R$9</div>
-    <div class="card" onclick="comprar('300 curtidas - R$13')">300 - R$13</div>
-    <div class="card" onclick="comprar('400 curtidas - R$17')">400 - R$17</div>
-    <div class="card" onclick="comprar('500 curtidas - R$21')">500 - R$21</div>
-    <div class="card" onclick="comprar('600 curtidas - R$25')">600 - R$25</div>
-    <div class="card" onclick="comprar('700 curtidas - R$30')">700 - R$30</div>
-    <div class="card" onclick="comprar('800 curtidas - R$34')">800 - R$34</div>
-    <div class="card" onclick="comprar('900 curtidas - R$38')">900 - R$38</div>
-    <div class="card" onclick="comprar('1000 curtidas - R$45')">1000 - R$45</div>
-
-    <h2>👀 Visualizações</h2>
-    <div class="card" onclick="comprar('500 views - R$8')">500 - R$8</div>
-    <div class="card" onclick="comprar('600 views - R$9,50')">600 - R$9,50</div>
-    <div class="card" onclick="comprar('700 views - R$11')">700 - R$11</div>
-    <div class="card" onclick="comprar('800 views - R$12,50')">800 - R$12,50</div>
-    <div class="card" onclick="comprar('900 views - R$14')">900 - R$14</div>
-    <div class="card" onclick="comprar('1000 views - R$16')">1000 - R$16</div>
-    <div class="card" onclick="comprar('1200 views - R$19')">1200 - R$19</div>
-    <div class="card" onclick="comprar('1500 views - R$23')">1500 - R$23</div>
-    <div class="card" onclick="comprar('2000 views - R$30')">2000 - R$30</div>
-
-    <div class="btn" onclick="voltar()">⬅ Voltar</div>
+<div class="container hidden" id="ff-passe">
+    <h2><span class="material-icons" style="vertical-align:middle;font-size:18px;">confirmation_number</span> FREE FIRE - PASSE BOOYAH</h2>
+    <div class="card" onclick="buy('PASSE FF - R$ 10,00')"><span class="material-icons">confirmation_number</span>PASSE FF - R$ 10,00</div>
+    <div class="btn close-btn" onclick="goBack()"><span class="material-icons">arrow_back</span> OK!! FECHAR!!</div>
 </div>
 
-<!-- CAIXA -->
+<div class="container hidden" id="insta-seguidores">
+    <h2><span class="material-icons" style="vertical-align:middle;font-size:18px;">group</span> INSTAGRAM - SEGUIDORES REAIS</h2>
+    <div class="card" onclick="buy('100 SEGUIDORES - R$ 8,00')"><span class="material-icons">person_add</span>100 SEGUIDORES - R$ 8,00</div>
+    <div class="card" onclick="buy('200 SEGUIDORES - R$ 15,00')"><span class="material-icons">person_add</span>200 SEGUIDORES - R$ 15,00</div>
+    <div class="card" onclick="buy('300 SEGUIDORES - R$ 22,00')"><span class="material-icons">person_add</span>300 SEGUIDORES - R$ 22,00</div>
+    <div class="card" onclick="buy('400 SEGUIDORES - R$ 28,00')"><span class="material-icons">person_add</span>400 SEGUIDORES - R$ 28,00</div>
+    <div class="card" onclick="buy('500 SEGUIDORES - R$ 35,00')"><span class="material-icons">person_add</span>500 SEGUIDORES - R$ 35,00</div>
+    <div class="card" onclick="buy('600 SEGUIDORES - R$ 42,00')"><span class="material-icons">person_add</span>600 SEGUIDORES - R$ 42,00</div>
+    <div class="card" onclick="buy('700 SEGUIDORES - R$ 50,00')"><span class="material-icons">person_add</span>700 SEGUIDORES - R$ 50,00</div>
+    <div class="card" onclick="buy('800 SEGUIDORES - R$ 58,00')"><span class="material-icons">person_add</span>800 SEGUIDORES - R$ 58,00</div>
+    <div class="card" onclick="buy('900 SEGUIDORES - R$ 65,00')"><span class="material-icons">person_add</span>900 SEGUIDORES - R$ 65,00</div>
+    <div class="card" onclick="buy('1000 SEGUIDORES - R$ 75,00')"><span class="material-icons">person_add</span>1000 SEGUIDORES - R$ 75,00</div>
+    <div class="btn close-btn" onclick="goBack()"><span class="material-icons">arrow_back</span> OK!! FECHAR!!</div>
+</div>
+
+<div class="container hidden" id="insta-curtidas">
+    <h2><span class="material-icons" style="vertical-align:middle;font-size:18px;">favorite</span> INSTAGRAM - CURTIDAS REAIS</h2>
+    <div class="card" onclick="buy('100 CURTIDAS - R$ 5,00')"><span class="material-icons">favorite</span>100 CURTIDAS - R$ 5,00</div>
+    <div class="card" onclick="buy('200 CURTIDAS - R$ 9,00')"><span class="material-icons">favorite</span>200 CURTIDAS - R$ 9,00</div>
+    <div class="card" onclick="buy('300 CURTIDAS - R$ 13,00')"><span class="material-icons">favorite</span>300 CURTIDAS - R$ 13,00</div>
+    <div class="card" onclick="buy('400 CURTIDAS - R$ 17,00')"><span class="material-icons">favorite</span>400 CURTIDAS - R$ 17,00</div>
+    <div class="card" onclick="buy('500 CURTIDAS - R$ 21,00')"><span class="material-icons">favorite</span>500 CURTIDAS - R$ 21,00</div>
+    <div class="card" onclick="buy('600 CURTIDAS - R$ 25,00')"><span class="material-icons">favorite</span>600 CURTIDAS - R$ 25,00</div>
+    <div class="card" onclick="buy('700 CURTIDAS - R$ 30,00')"><span class="material-icons">favorite</span>700 CURTIDAS - R$ 30,00</div>
+    <div class="card" onclick="buy('800 CURTIDAS - R$ 34,00')"><span class="material-icons">favorite</span>800 CURTIDAS - R$ 34,00</div>
+    <div class="card" onclick="buy('900 CURTIDAS - R$ 38,00')"><span class="material-icons">favorite</span>900 CURTIDAS - R$ 38,00</div>
+    <div class="card" onclick="buy('1000 CURTIDAS - R$ 45,00')"><span class="material-icons">favorite</span>1000 CURTIDAS - R$ 45,00</div>
+    <div class="btn close-btn" onclick="goBack()"><span class="material-icons">arrow_back</span> OK!! FECHAR!!</div>
+</div>
+
+<div class="container hidden" id="insta-views">
+    <h2><span class="material-icons" style="vertical-align:middle;font-size:18px;">visibility</span> INSTAGRAM - VIEWS REAIS</h2>
+    <div class="card" onclick="buy('500 VIEWS - R$ 8,00')"><span class="material-icons">visibility</span>500 VIEWS - R$ 8,00</div>
+    <div class="card" onclick="buy('600 VIEWS - R$ 9,50')"><span class="material-icons">visibility</span>600 VIEWS - R$ 9,50</div>
+    <div class="card" onclick="buy('700 VIEWS - R$ 11,00')"><span class="material-icons">visibility</span>700 VIEWS - R$ 11,00</div>
+    <div class="card" onclick="buy('800 VIEWS - R$ 12,50')"><span class="material-icons">visibility</span>800 VIEWS - R$ 12,50</div>
+    <div class="card" onclick="buy('900 VIEWS - R$ 14,00')"><span class="material-icons">visibility</span>900 VIEWS - R$ 14,00</div>
+    <div class="card" onclick="buy('1000 VIEWS - R$ 16,00')"><span class="material-icons">visibility</span>1000 VIEWS - R$ 16,00</div>
+    <div class="card" onclick="buy('1200 VIEWS - R$ 19,00')"><span class="material-icons">visibility</span>1200 VIEWS - R$ 19,00</div>
+    <div class="card" onclick="buy('1500 VIEWS - R$ 23,00')"><span class="material-icons">visibility</span>1500 VIEWS - R$ 23,00</div>
+    <div class="card" onclick="buy('2000 VIEWS - R$ 30,00')"><span class="material-icons">visibility</span>2000 VIEWS - R$ 30,00</div>
+    <div class="btn close-btn" onclick="goBack()"><span class="material-icons">arrow_back</span> OK!! FECHAR!!</div>
+</div>
+
 <div class="container hidden" id="misterio">
-    <h2 style="text-align:center; font-size:50px; color:#00ff88;">❓</h2>
-    <div class="card" onclick="comprar('Caixa Misteriosa - R$1')">
-        Caixa Misteriosa - R$1
+    <h2 style="text-align:center;"><span class="material-icons" style="vertical-align:middle;font-size:18px;">help</span> PACOTE DE ITEM MISTERIOSO</h2>
+    <div class="card" onclick="buy('ITEM MISTERIOSO - R$ 1,00')">
+        <span class="material-icons">help</span>ITEM MISTERIOSO - R$ 1,00
     </div>
-
-    <div class="btn" onclick="voltar()">⬅ Voltar</div>
+    <div class="btn close-btn" onclick="goBack()"><span class="material-icons">arrow_back</span> OK!! FECHAR!!</div>
 </div>
 
 <script>
-function show(id){
-    document.getElementById('home').style.display = 'none';
-    document.getElementById('ff').style.display = 'none';
-    document.getElementById('insta').style.display = 'none';
-    document.getElementById('misterio').style.display = 'none';
+const sections = ['home', 'ff-tokens', 'ff-passe', 'insta-seguidores', 'insta-curtidas', 'insta-views', 'misterio'];
 
-    document.getElementById(id).style.display = 'block';
+function show(sectionId) {
+    sections.forEach(id => document.getElementById(id).style.display = 'none');
+    document.getElementById(sectionId).style.display = 'block';
+    document.getElementById('toolbar-back').classList.add('visible');
 }
 
-function voltar(){
+function goBack() {
+    sections.forEach(id => document.getElementById(id).style.display = 'none');
     document.getElementById('home').style.display = 'block';
-    document.getElementById('ff').style.display = 'none';
-    document.getElementById('insta').style.display = 'none';
-    document.getElementById('misterio').style.display = 'none';
+    document.getElementById('toolbar-back').classList.remove('visible');
 }
 
-function comprar(produto){
-    let numero = "5598984853563";
-    let mensagem = "Olá, quero comprar: " + produto;
-    let url = "https://wa.me/" + numero + "?text=" + encodeURIComponent(mensagem);
+function buy(product) {
+    let phone = "5598984853563";
+    let message = "Oiê! Eu Quero: " + product;
+    let url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message);
     window.open(url, '_blank');
 }
 </script>
 
 </body>
-</html
+</html>
