@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Loja Gamer</title>
 
+<!-- FIREBASE (VERSÃO CORRETA) -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
 <style>
 body{
     margin:0;
@@ -13,11 +17,9 @@ body{
     color:white;
 }
 
-/* TELAS */
 .tela{ display:none; padding:20px; }
 .ativa{ display:block; }
 
-/* INPUT */
 input{
     width:90%;
     padding:12px;
@@ -28,7 +30,6 @@ input{
     color:white;
 }
 
-/* BOTÃO */
 button{
     background:#ff00aa;
     border:none;
@@ -38,36 +39,6 @@ button{
     color:white;
     font-weight:bold;
     margin-top:10px;
-}
-
-/* CATEGORIAS */
-.categorias{
-    display:flex;
-    gap:10px;
-    overflow:auto;
-}
-
-.cat{
-    padding:10px;
-    border:1px solid #ff00aa;
-    border-radius:10px;
-    cursor:pointer;
-}
-
-/* PRODUTOS */
-.produto{
-    border:1px solid #ff00aa;
-    padding:10px;
-    margin-top:10px;
-    border-radius:10px;
-}
-
-/* PIX */
-.pix-box{
-    border:1px solid #00ffcc;
-    padding:15px;
-    margin-top:15px;
-    border-radius:10px;
 }
 </style>
 </head>
@@ -82,8 +53,9 @@ button{
     <input id="senha" type="password" placeholder="Senha">
 
     <button onclick="login()">ENTRAR</button>
+    <button onclick="loginGoogle()">Entrar com Google</button>
 
-    <p onclick="mostrarCadastro()" style="color:#ff00aa;cursor:pointer;">
+    <p onclick="trocarTela('cadastro')" style="color:#ff00aa;cursor:pointer;">
         Criar conta
     </p>
 </div>
@@ -100,100 +72,57 @@ button{
 
 <!-- LOJA -->
 <div id="loja" class="tela">
-
-    <h2>Categorias</h2>
-
-    <div class="categorias">
-        <div class="cat" onclick="mostrar('ff')">Free Fire</div>
-        <div class="cat" onclick="mostrar('fortnite')">Fortnite</div>
-    </div>
-
-    <!-- PRODUTOS -->
-    <div id="produtos"></div>
-
+    <h2>Login realizado com sucesso 🔥</h2>
 </div>
 
 <script>
-let usuario = null;
+// 🔥 COLOCA SUA CONFIG REAL DO FIREBASE
+const firebaseConfig = {
+  apiKey: "SUA_API_KEY",
+  authDomain: "SEU_PROJETO.firebaseapp.com",
+  projectId: "SEU_PROJETO",
+};
+
+// INICIAR FIREBASE
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+// LOGIN EMAIL
+function login(){
+    let email = document.getElementById("email").value;
+    let senha = document.getElementById("senha").value;
+
+    auth.signInWithEmailAndPassword(email, senha)
+    .then(() => trocarTela("loja"))
+    .catch(err => alert(err.message));
+}
 
 // CADASTRO
 function cadastrar(){
-    let email = document.getElementById('novoEmail').value;
-    let senha = document.getElementById('novaSenha').value;
+    let email = document.getElementById("novoEmail").value;
+    let senha = document.getElementById("novaSenha").value;
 
-    localStorage.setItem(email, senha);
-    alert("Conta criada!");
-    trocarTela('login');
+    auth.createUserWithEmailAndPassword(email, senha)
+    .then(() => {
+        alert("Conta criada com sucesso!");
+        trocarTela("login");
+    })
+    .catch(err => alert(err.message));
 }
 
-// LOGIN
-function login(){
-    let email = document.getElementById('email').value;
-    let senha = document.getElementById('senha').value;
+// GOOGLE LOGIN
+function loginGoogle(){
+    let provider = new firebase.auth.GoogleAuthProvider();
 
-    let senhaSalva = localStorage.getItem(email);
-
-    if(senhaSalva === senha){
-        usuario = email;
-        trocarTela('loja');
-    } else {
-        alert("Login inválido!");
-    }
+    auth.signInWithPopup(provider)
+    .then(() => trocarTela("loja"))
+    .catch(err => alert(err.message));
 }
 
 // TROCAR TELA
 function trocarTela(tela){
-    document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
-    document.getElementById(tela).classList.add('ativa');
-}
-
-function mostrarCadastro(){
-    trocarTela('cadastro');
-}
-
-// MOSTRAR PRODUTOS
-function mostrar(cat){
-    let div = document.getElementById('produtos');
-    div.innerHTML = "";
-
-    if(cat === "ff"){
-        div.innerHTML += produtoHTML("Dimas FF 110", "R$ 10");
-        div.innerHTML += produtoHTML("Dimas FF 310", "R$ 25");
-    }
-
-    if(cat === "fortnite"){
-        div.innerHTML += produtoHTML("V-Bucks 1000", "R$ 30");
-    }
-}
-
-// TEMPLATE PRODUTO
-function produtoHTML(nome, preco){
-    return `
-    <div class="produto">
-        <h3>${nome}</h3>
-        <p>${preco}</p>
-
-        <button onclick="comprar('${nome}', '${preco}')">
-            COMPRAR
-        </button>
-    </div>
-    `;
-}
-
-// COMPRA
-function comprar(nome, preco){
-    let div = document.getElementById('produtos');
-
-    div.innerHTML += `
-    <div class="pix-box">
-        <h3>Pagamento via PIX</h3>
-        <p>Chave: (98) 984853563</p>
-
-        <a href="https://wa.me/5598984853563?text=Comprei ${nome} - ${preco}">
-            <button>Enviar comprovante no WhatsApp</button>
-        </a>
-    </div>
-    `;
+    document.querySelectorAll(".tela").forEach(t => t.classList.remove("ativa"));
+    document.getElementById(tela).classList.add("ativa");
 }
 </script>
 
