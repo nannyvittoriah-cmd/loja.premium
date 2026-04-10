@@ -13,14 +13,13 @@ body{
     color:white;
 }
 
-/* LOGIN */
-.login{
-    padding:20px;
-    text-align:center;
-}
+/* TELAS */
+.tela{ display:none; padding:20px; }
+.ativa{ display:block; }
 
+/* INPUT */
 input{
-    width:80%;
+    width:90%;
     padding:12px;
     margin:5px;
     border-radius:10px;
@@ -29,11 +28,12 @@ input{
     color:white;
 }
 
+/* BOTÃO */
 button{
     background:#ff00aa;
     border:none;
     padding:12px;
-    width:85%;
+    width:95%;
     border-radius:10px;
     color:white;
     font-weight:bold;
@@ -42,98 +42,160 @@ button{
 
 /* CATEGORIAS */
 .categorias{
-    padding:15px;
+    display:flex;
+    gap:10px;
+    overflow:auto;
 }
 
-.categorias img{
-    width:100px;
-    border-radius:10px;
-    margin:5px;
-}
-
-/* COMPRA */
-.compra{
-    margin:15px;
-    padding:15px;
-    border:1px solid #ff00aa;
-    border-radius:15px;
-}
-
-/* AVALIAÇÕES */
-.avaliacoes{
-    padding:15px;
-}
-
-.card{
-    border:1px solid #ff00aa;
-    border-radius:10px;
+.cat{
     padding:10px;
-    margin-bottom:10px;
+    border:1px solid #ff00aa;
+    border-radius:10px;
+    cursor:pointer;
+}
+
+/* PRODUTOS */
+.produto{
+    border:1px solid #ff00aa;
+    padding:10px;
+    margin-top:10px;
+    border-radius:10px;
+}
+
+/* PIX */
+.pix-box{
+    border:1px solid #00ffcc;
+    padding:15px;
+    margin-top:15px;
+    border-radius:10px;
 }
 </style>
-
 </head>
 
 <body>
 
 <!-- LOGIN -->
-<div class="login">
+<div id="login" class="tela ativa">
     <h2>Login</h2>
-    <input type="text" placeholder="Email"><br>
-    <input type="password" placeholder="Senha"><br>
-    <button>ENTRAR</button><br><br>
 
-    <button>Entrar com Google</button><br>
-    <button>Entrar com Discord</button><br>
+    <input id="email" placeholder="Email">
+    <input id="senha" type="password" placeholder="Senha">
 
-    <p>Novo por aqui? <span style="color:#ff00aa;">Cadastrar-se</span></p>
+    <button onclick="login()">ENTRAR</button>
+
+    <p onclick="mostrarCadastro()" style="color:#ff00aa;cursor:pointer;">
+        Criar conta
+    </p>
 </div>
 
-<!-- CATEGORIAS -->
-<div class="categorias">
+<!-- CADASTRO -->
+<div id="cadastro" class="tela">
+    <h2>Cadastro</h2>
+
+    <input id="novoEmail" placeholder="Email">
+    <input id="novaSenha" type="password" placeholder="Senha">
+
+    <button onclick="cadastrar()">Cadastrar</button>
+</div>
+
+<!-- LOJA -->
+<div id="loja" class="tela">
+
     <h2>Categorias</h2>
-    <img src="https://via.placeholder.com/100">
-    <img src="https://via.placeholder.com/100">
-    <img src="https://via.placeholder.com/100">
-</div>
 
-<!-- COMPRA -->
-<div class="compra">
-    <h2>Free Fire</h2>
-    <p>DIMAS FF</p>
-
-    <select>
-        <option>1</option>
-        <option>2</option>
-    </select>
-
-    <select>
-        <option>R$ 10</option>
-        <option>R$ 20</option>
-    </select>
-
-    <button>COMPRAR</button>
-</div>
-
-<!-- AVALIAÇÕES -->
-<div class="avaliacoes">
-    <h2>Feedback dos Clientes</h2>
-
-    <div class="card">
-        ⭐⭐⭐⭐⭐<br>
-        Entrega rápida, recomendo!
+    <div class="categorias">
+        <div class="cat" onclick="mostrar('ff')">Free Fire</div>
+        <div class="cat" onclick="mostrar('fortnite')">Fortnite</div>
     </div>
 
-    <div class="card">
-        ⭐⭐⭐⭐⭐<br>
-        Muito bom, comprarei novamente!
-    </div>
+    <!-- PRODUTOS -->
+    <div id="produtos"></div>
 
-    <div class="card">
-        ⭐⭐⭐⭐⭐<br>
-        Atendimento top!
-    </div>
 </div>
+
+<script>
+let usuario = null;
+
+// CADASTRO
+function cadastrar(){
+    let email = document.getElementById('novoEmail').value;
+    let senha = document.getElementById('novaSenha').value;
+
+    localStorage.setItem(email, senha);
+    alert("Conta criada!");
+    trocarTela('login');
+}
+
+// LOGIN
+function login(){
+    let email = document.getElementById('email').value;
+    let senha = document.getElementById('senha').value;
+
+    let senhaSalva = localStorage.getItem(email);
+
+    if(senhaSalva === senha){
+        usuario = email;
+        trocarTela('loja');
+    } else {
+        alert("Login inválido!");
+    }
+}
+
+// TROCAR TELA
+function trocarTela(tela){
+    document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
+    document.getElementById(tela).classList.add('ativa');
+}
+
+function mostrarCadastro(){
+    trocarTela('cadastro');
+}
+
+// MOSTRAR PRODUTOS
+function mostrar(cat){
+    let div = document.getElementById('produtos');
+    div.innerHTML = "";
+
+    if(cat === "ff"){
+        div.innerHTML += produtoHTML("Dimas FF 110", "R$ 10");
+        div.innerHTML += produtoHTML("Dimas FF 310", "R$ 25");
+    }
+
+    if(cat === "fortnite"){
+        div.innerHTML += produtoHTML("V-Bucks 1000", "R$ 30");
+    }
+}
+
+// TEMPLATE PRODUTO
+function produtoHTML(nome, preco){
+    return `
+    <div class="produto">
+        <h3>${nome}</h3>
+        <p>${preco}</p>
+
+        <button onclick="comprar('${nome}', '${preco}')">
+            COMPRAR
+        </button>
+    </div>
+    `;
+}
+
+// COMPRA
+function comprar(nome, preco){
+    let div = document.getElementById('produtos');
+
+    div.innerHTML += `
+    <div class="pix-box">
+        <h3>Pagamento via PIX</h3>
+        <p>Chave: (98) 984853563</p>
+
+        <a href="https://wa.me/5598984853563?text=Comprei ${nome} - ${preco}">
+            <button>Enviar comprovante no WhatsApp</button>
+        </a>
+    </div>
+    `;
+}
+</script>
 
 </body>
 </html>
