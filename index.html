@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Login Pro</title>
+<title>Bonyx Login</title>
 
 <style>
 body{
@@ -16,7 +16,7 @@ height:100vh;
 color:white;
 }
 
-.box{
+.container{
 background:#121a3a;
 padding:20px;
 border-radius:12px;
@@ -41,7 +41,11 @@ cursor:pointer;
 font-weight:bold;
 }
 
-#dash{
+.login{background:#4a6bff;color:white;}
+.google{background:#db4437;color:white;}
+.register{background:#22c55e;color:white;}
+
+#dashboard{
 display:none;
 text-align:center;
 }
@@ -50,7 +54,8 @@ text-align:center;
 
 <body>
 
-<div class="box" id="authBox">
+<!-- LOGIN -->
+<div class="container" id="auth">
 
 <h2>Login / Cadastro</h2>
 
@@ -60,18 +65,20 @@ text-align:center;
 <input id="email" placeholder="Email">
 <input id="password" type="password" placeholder="Senha">
 
-<button onclick="register()">Cadastrar</button>
-<button onclick="login()">Entrar</button>
-<button onclick="googleLogin()">Entrar com Google</button>
+<button class="register" onclick="register()">Cadastrar</button>
+<button class="login" onclick="login()">Entrar</button>
+<button class="google" onclick="googleLogin()">Google</button>
 
 </div>
 
-<div id="dash">
+<!-- DASHBOARD -->
+<div id="dashboard">
 <h1>Bem-vindo 👋</h1>
 <p id="info"></p>
 <button onclick="logout()">Sair</button>
 </div>
 
+<!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth,
@@ -84,15 +91,13 @@ signOut
 
 import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-
-// 🔥 COLOQUE SEU CONFIG AQUI
 const firebaseConfig = {
-apiKey: "SUA_API_KEY",
-authDomain: "SEU_AUTH_DOMAIN",
-projectId: "SEU_PROJECT_ID",
-storageBucket: "SEU_STORAGE",
-messagingSenderId: "SEU_SENDER_ID",
-appId: "SEU_APP_ID"
+  apiKey: "AIzaSyDo8baLqLDPTKTajoC-kl_6P_w3VMO0414",
+  authDomain: "bonyx-sh.firebaseapp.com",
+  projectId: "bonyx-sh",
+  storageBucket: "bonyx-sh.firebasestorage.app",
+  messagingSenderId: "379347082201",
+  appId: "1:379347082201:web:842b31bf3e9df3c12fd7c8"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -100,7 +105,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 
-// 🟢 CADASTRO
+// 🔥 CADASTRO
 window.register = async () => {
 let name = document.getElementById("name").value;
 let username = document.getElementById("username").value;
@@ -109,67 +114,59 @@ let email = document.getElementById("email").value;
 let password = document.getElementById("password").value;
 
 try{
-const userCred = await createUserWithEmailAndPassword(auth, email, password);
+const user = await createUserWithEmailAndPassword(auth, email, password);
 
-await setDoc(doc(db, "users", userCred.user.uid), {
-name,
-username,
-phone,
-email
+await setDoc(doc(db,"users",user.user.uid),{
+name, username, phone, email
 });
 
-show(userCred.user);
+show(user.user);
 
-}catch(e){
-alert(e.message);
-}
+}catch(e){ alert(e.message); }
 };
 
 
-// 🔵 LOGIN
+// 🔥 LOGIN
 window.login = async () => {
 let email = document.getElementById("email").value;
 let password = document.getElementById("password").value;
 
 try{
-const userCred = await signInWithEmailAndPassword(auth, email, password);
-show(userCred.user);
-}catch(e){
-alert(e.message);
-}
+const user = await signInWithEmailAndPassword(auth, email, password);
+show(user.user);
+}catch(e){ alert(e.message); }
 };
 
 
-// 🔴 GOOGLE LOGIN
+// 🔥 GOOGLE LOGIN
 window.googleLogin = async () => {
 const provider = new GoogleAuthProvider();
 
 try{
-const result = await signInWithPopup(auth, provider);
+const user = await signInWithPopup(auth, provider);
 
-await setDoc(doc(db, "users", result.user.uid), {
-name: result.user.displayName,
-email: result.user.email
+await setDoc(doc(db,"users",user.user.uid),{
+name: user.user.displayName,
+email: user.user.email
 });
 
-show(result.user);
-}catch(e){
-alert(e.message);
-}
+show(user.user);
+
+}catch(e){ alert(e.message); }
 };
 
 
-// 🟣 DASHBOARD
+// 🔥 DASHBOARD
 function show(user){
-document.getElementById("authBox").style.display="none";
-document.getElementById("dash").style.display="block";
+document.getElementById("auth").style.display="none";
+document.getElementById("dashboard").style.display="block";
 
 document.getElementById("info").innerText =
 "Logado: " + user.email;
 }
 
 
-// 🚪 LOGOUT
+// 🔥 LOGOUT
 window.logout = async () => {
 await signOut(auth);
 location.reload();
