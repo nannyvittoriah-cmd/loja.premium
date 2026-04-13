@@ -11,7 +11,8 @@ signOut
 import { getFirestore, doc, setDoc } 
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// 🔥 SEU FIREBASE (não muda)
+
+// 🔥 FIREBASE (SEU PROJETO)
 const firebaseConfig = {
   apiKey: "AIzaSyDo8baLqLDPTKTajoC-kl_6P_w3VMO0414",
   authDomain: "bonyx-sh.firebaseapp.com",
@@ -21,30 +22,38 @@ const firebaseConfig = {
   appId: "1:379347082201:web:842b31bf3e9df3c12fd7c8"
 };
 
+
+// 🔥 INIT
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
 
 /* =========================
-   🔐 CADASTRO (EMAIL ÚNICO)
+   🔐 CADASTRO
 ========================= */
 window.register = async () => {
-let email = document.getElementById("email").value;
-let password = document.getElementById("password").value;
-
 try {
+
+const email = document.getElementById("email")?.value;
+const password = document.getElementById("password")?.value;
+
+if(!email || !password){
+alert("Preencha email e senha");
+return;
+}
+
 const user = await createUserWithEmailAndPassword(auth, email, password);
 
-// salva usuário no Firestore
-await setDoc(doc(db, "users", user.user.uid), {
-email: email
+// salva no Firestore
+await setDoc(doc(db,"users",user.user.uid),{
+email
 });
 
 showUser(user.user);
 
 } catch (e) {
-alert(e.message); // já bloqueia email repetido automaticamente
+alert(e.message);
 }
 };
 
@@ -53,12 +62,20 @@ alert(e.message); // já bloqueia email repetido automaticamente
    🔑 LOGIN
 ========================= */
 window.login = async () => {
-let email = document.getElementById("email").value;
-let password = document.getElementById("password").value;
-
 try {
+
+const email = document.getElementById("email")?.value;
+const password = document.getElementById("password")?.value;
+
+if(!email || !password){
+alert("Preencha email e senha");
+return;
+}
+
 const user = await signInWithEmailAndPassword(auth, email, password);
+
 showUser(user.user);
+
 } catch (e) {
 alert("Email ou senha inválidos");
 }
@@ -68,24 +85,26 @@ alert("Email ou senha inválidos");
 /* =========================
    🔄 AUTO LOGIN
 ========================= */
-onAuthStateChanged(auth, (user) => {
-if (user) {
+onAuthStateChanged(auth,(user)=>{
+if(user){
 showUser(user);
 }
 });
 
 
 /* =========================
-   🟣 PAINEL (NÃO MUDA SEU DESIGN)
+   🟣 PAINEL (SEM MEXER NO DESIGN)
 ========================= */
-function showUser(user) {
+function showUser(user){
 
-// ⚠️ só troca telas (não mexe no visual)
-document.getElementById("loginBox").style.display = "none";
-document.getElementById("dashboard").style.display = "block";
+const loginBox = document.getElementById("loginBox");
+const dashboard = document.getElementById("dashboard");
+const info = document.getElementById("userInfo");
 
-// mostra email logado
-document.getElementById("userInfo").innerText = user.email;
+if(loginBox) loginBox.style.display = "none";
+if(dashboard) dashboard.style.display = "block";
+if(info) info.innerText = user.email;
+
 }
 
 
