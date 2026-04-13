@@ -6,7 +6,7 @@
 
 <style>
 
-/* FUNDO */
+/* FUNDO FIXO */
 .fundo {
     position: fixed;
     top: 0;
@@ -18,70 +18,119 @@
     z-index: -1;
 }
 
-/* CONTEÚDO */
+/* BODY */
 body {
     margin: 0;
     font-family: Arial;
+}
+
+/* =======================
+   🔥 AVISO
+======================= */
+
+#avisoTela{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+}
+
+.avisoBox{
+    background:white;
+    color:black;
+    padding:20px;
+    border-radius:12px;
+    max-width:400px;
+
+    /* neon leve */
+    border:2px solid #ff4da6;
+    box-shadow:0 0 10px rgba(255,77,166,0.4);
+}
+
+.neonBtn{
+    margin-top:15px;
+    padding:12px;
+    width:200px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    background:#ff4da6;
+    color:white;
+    box-shadow:0 0 10px #ff4da6, 0 0 20px #ff4da6;
+}
+
+.continuarSeparado{
+    margin-top:15px;
+}
+
+/* =======================
+   🔥 CATEGORIAS
+======================= */
+
+#categorias{
+    display:none;
+    padding: 20px 15px;
+    min-height: 100vh;
     color: white;
+    flex-direction: column;
 }
 
-/* CATEGORIAS */
-.container {
-    padding: 20px;
-}
-
-.categoria {
+/* TOPO */
+.topo {
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
     margin-bottom: 15px;
+    color: #ff4da6;
+    text-shadow: 0 0 6px rgba(255, 77, 166, 0.6);
 }
 
-.cat-btn {
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+/* CARD */
+.card {
+    background: #11194a;
+    border-radius: 14px;
+    padding: 12px;
+    text-align: center;
+    border: 2px solid #ff4da6;
+    box-shadow: 0 0 8px rgba(255, 77, 166, 0.3);
+}
+
+/* IMAGEM */
+.card img {
     width: 100%;
-    padding: 14px;
-    border-radius: 12px;
-    background: linear-gradient(90deg, #ff2fa0, #7a00ff);
-    color: white;
-    border: none;
-    font-size: 16px;
-    box-shadow: 0 0 12px rgba(255, 47, 160, 0.6);
-    cursor: pointer;
-}
-
-/* SUBCATEGORIAS ANIMAÇÃO */
-.subcategorias {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease;
-    margin-top: 8px;
-}
-
-.subcategorias button {
-    display: block;
-    width: 100%;
-    margin: 6px 0;
-    padding: 10px;
+    height: 110px;
+    object-fit: contain;
+    background: #000;
     border-radius: 10px;
-    border: none;
-    background: #111;
-    color: #fff;
-    box-shadow: 0 0 8px rgba(0,0,0,0.5);
 }
 
-/* BOTÃO WHATSAPP FLUTUANTE */
-.whatsapp {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #25D366;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 30px;
-    color: white;
-    text-decoration: none;
-    box-shadow: 0 0 15px rgba(0,0,0,0.4);
+/* NOME */
+.nome {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+/* BOTÕES */
+.voltarBtn{
+    margin-top:15px;
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    background:#333;
+    color:white;
+    cursor:pointer;
 }
 
 </style>
@@ -91,64 +140,80 @@ body {
 
 <div class="fundo"></div>
 
-<div class="container">
+<!-- 🔥 AVISO -->
+<div id="avisoTela">
 
-    <h2>Bonys Story</h2>
+    <div class="avisoBox">
+        <h2>⚠️ Aviso</h2>
 
-    <!-- CATEGORIA 1 -->
-    <div class="categoria">
-        <button class="cat-btn" onclick="toggleSub('cat1')">
-            Seguidores & Curtidas
-        </button>
+        <p>
+        Este site não possui login ou cadastro.<br><br>
 
-        <div id="cat1" class="subcategorias">
-            <button>Sem seguidores por R$6,00</button>
-            <button>Curtidas básicas</button>
-            <button>Visualizações FF 33 toques R$10,99</button>
-        </div>
+        ✔ Nenhum dado é salvo<br>
+        ✔ Compra direta via WhatsApp<br>
+        ✔ Processo rápido e simples<br><br>
+
+        Apenas escolha seu produto e finalize o pedido.
+        </p>
     </div>
 
-    <!-- CATEGORIA 2 -->
-    <div class="categoria">
-        <button class="cat-btn" onclick="toggleSub('cat2')">
-            Free Fire Serviços
-        </button>
-
-        <div id="cat2" class="subcategorias">
-            <button>Skin básica FF</button>
-            <button>Diamantes teste</button>
-            <button>Passe elite</button>
-        </div>
+    <!-- botão separado do quadrado -->
+    <div class="continuarSeparado">
+        <button class="neonBtn" onclick="irCategorias()">CONTINUAR</button>
     </div>
 
 </div>
 
-<!-- WHATSAPP -->
-<a class="whatsapp" href="https://wa.me/5598984843563" target="_blank">
-    💬
-</a>
+<!-- 🔥 CATEGORIAS -->
+<div id="categorias">
+
+    <div class="topo">Bonys Story</div>
+
+    <button class="voltarBtn" onclick="voltarAviso()">⬅ Voltar</button>
+
+    <h3>Categorias</h3>
+
+    <div class="grid">
+
+        <div class="card">
+            <img src="https://i.imgur.com/NgqTIHu.jpeg">
+            <div class="nome">⚡ Sensi FF</div>
+        </div>
+
+        <div class="card">
+            <img src="https://i.imgur.com/tm2T0RM.jpeg">
+            <div class="nome">🔥 Free Fire</div>
+        </div>
+
+        <div class="card">
+            <img src="https://i.imgur.com/XF6wb2O.jpeg">
+            <div class="nome">📸 Redes Sociais</div>
+        </div>
+
+        <div class="card">
+            <img src="https://i.imgur.com/Nb0Ba33.jpeg">
+            <div class="nome">💎 Tokens Evolutivas</div>
+        </div>
+
+        <div class="card">
+            <img src="https://i.imgur.com/31BewwU.jpeg">
+            <div class="nome">🎁 Caixa Misteriosa</div>
+        </div>
+
+    </div>
+
+</div>
 
 <script>
-
-function toggleSub(id) {
-
-    const all = document.querySelectorAll('.subcategorias');
-
-    all.forEach(el => {
-        if (el.id !== id) {
-            el.style.maxHeight = null;
-        }
-    });
-
-    const el = document.getElementById(id);
-
-    if (el.style.maxHeight) {
-        el.style.maxHeight = null;
-    } else {
-        el.style.maxHeight = el.scrollHeight + "px";
-    }
+function irCategorias(){
+document.getElementById("avisoTela").style.display="none";
+document.getElementById("categorias").style.display="block";
 }
 
+function voltarAviso(){
+document.getElementById("categorias").style.display="none";
+document.getElementById("avisoTela").style.display="flex";
+}
 </script>
 
 </body>
