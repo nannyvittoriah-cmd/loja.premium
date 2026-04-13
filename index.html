@@ -1,24 +1,24 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { 
+import {
 getAuth,
 createUserWithEmailAndPassword,
 signInWithEmailAndPassword,
-GoogleAuthProvider,
-signInWithPopup,
+onAuthStateChanged,
 signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import { getFirestore, doc, setDoc } 
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+// 🔥 SEU FIREBASE (não muda)
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_AUTH_DOMAIN",
-  projectId: "SEU_PROJECT_ID",
-  storageBucket: "SEU_STORAGE_BUCKET",
-  messagingSenderId: "SEU_SENDER_ID",
-  appId: "SEU_APP_ID"
+  apiKey: "AIzaSyDo8baLqLDPTKTajoC-kl_6P_w3VMO0414",
+  authDomain: "bonyx-sh.firebaseapp.com",
+  projectId: "bonyx-sh",
+  storageBucket: "bonyx-sh.firebasestorage.app",
+  messagingSenderId: "379347082201",
+  appId: "1:379347082201:web:842b31bf3e9df3c12fd7c8"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -26,81 +26,74 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 
-// 🔥 CADASTRO (NÃO MUDA SEU DESIGN)
+/* =========================
+   🔐 CADASTRO (EMAIL ÚNICO)
+========================= */
 window.register = async () => {
-let name = document.getElementById("name").value;
-let username = document.getElementById("username").value;
-let phone = document.getElementById("phone").value;
 let email = document.getElementById("email").value;
 let password = document.getElementById("password").value;
 
-try{
+try {
 const user = await createUserWithEmailAndPassword(auth, email, password);
 
-await setDoc(doc(db,"users",user.user.uid),{
-name,
-username,
-phone,
-email
+// salva usuário no Firestore
+await setDoc(doc(db, "users", user.user.uid), {
+email: email
 });
 
-// chama sua função do painel (não muda layout)
 showUser(user.user);
 
-}catch(e){
-alert(e.message);
+} catch (e) {
+alert(e.message); // já bloqueia email repetido automaticamente
 }
 };
 
 
-// 🔥 LOGIN NORMAL
+/* =========================
+   🔑 LOGIN
+========================= */
 window.login = async () => {
 let email = document.getElementById("email").value;
 let password = document.getElementById("password").value;
 
-try{
+try {
 const user = await signInWithEmailAndPassword(auth, email, password);
 showUser(user.user);
-}catch(e){
-alert(e.message);
+} catch (e) {
+alert("Email ou senha inválidos");
 }
 };
 
 
-// 🔥 GOOGLE LOGIN
-window.googleLogin = async () => {
-const provider = new GoogleAuthProvider();
-
-try{
-const user = await signInWithPopup(auth, provider);
-
-await setDoc(doc(db,"users",user.user.uid),{
-name: user.user.displayName,
-email: user.user.email
+/* =========================
+   🔄 AUTO LOGIN
+========================= */
+onAuthStateChanged(auth, (user) => {
+if (user) {
+showUser(user);
+}
 });
 
-showUser(user.user);
 
-}catch(e){
-alert(e.message);
+/* =========================
+   🟣 PAINEL (NÃO MUDA SEU DESIGN)
+========================= */
+function showUser(user) {
+
+// ⚠️ só troca telas (não mexe no visual)
+document.getElementById("loginBox").style.display = "none";
+document.getElementById("dashboard").style.display = "block";
+
+// mostra email logado
+document.getElementById("userInfo").innerText = user.email;
 }
-};
 
 
-// 🔥 LOGOUT
+/* =========================
+   🚪 LOGOUT
+========================= */
 window.logout = async () => {
 await signOut(auth);
 location.reload();
 };
-
-
-// 🔥 IMPORTANTE: NÃO MUDA SEU DESIGN
-// só chama sua função de trocar tela
-function showUser(user){
-document.getElementById("loginBox").style.display = "none";
-document.getElementById("dashboard").style.display = "block";
-
-// você já tinha isso no seu layout roxo
-document.getElementById("userInfo").innerText = user.email;
-}
 </script>
