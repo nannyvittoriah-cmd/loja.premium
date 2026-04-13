@@ -2,199 +2,217 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Loja</title>
+<title>Bonys Story</title>
 
 <style>
-body{
-margin:0;
-font-family:Arial;
-background:url("https://i.imgur.com/iWGitub.jpeg") no-repeat center center fixed;
-background-size:cover;
-color:white;
+
+/* FUNDO FIXO */
+.fundo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("https://i.imgur.com/iWGitub.jpeg") no-repeat center center;
+    background-size: cover;
+    z-index: -1;
 }
 
-/* overlay escuro */
-.overlay{
-background: rgba(0,0,0,0.65);
-min-height:100vh;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-padding:20px;
-text-align:center;
+/* BODY */
+body {
+    margin: 0;
+    font-family: Arial;
 }
 
-/* quadrado branco aviso */
-.notice{
-background:white;
-color:black;
-padding:20px;
-border-radius:12px;
-max-width:400px;
-box-shadow:0 0 15px rgba(0,0,0,0.4);
+/* =======================
+   🔥 AVISO
+======================= */
+
+#avisoTela{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
 }
 
-/* botão neon */
-.neon{
-margin-top:15px;
-padding:12px;
-width:100%;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
-background:#ff4fd8;
-color:white;
-box-shadow:0 0 10px #ff4fd8, 0 0 20px #ff4fd8;
-transition:0.2s;
+.avisoBox{
+    background:white;
+    color:black;
+    padding:20px;
+    border-radius:12px;
+    max-width:400px;
+
+    /* neon leve */
+    border:2px solid #ff4da6;
+    box-shadow:0 0 10px rgba(255,77,166,0.4);
 }
 
-.neon:hover{
-box-shadow:0 0 15px #ff4fd8, 0 0 30px #ff4fd8;
+.neonBtn{
+    margin-top:15px;
+    padding:12px;
+    width:200px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    background:#ff4da6;
+    color:white;
+    box-shadow:0 0 10px #ff4da6, 0 0 20px #ff4da6;
 }
 
-/* categorias */
-#categories{
-display:none;
-width:100%;
-text-align:center;
+.continuarSeparado{
+    margin-top:15px;
 }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:10px;
-margin-top:10px;
+/* =======================
+   🔥 CATEGORIAS
+======================= */
+
+#categorias{
+    display:none;
+    padding: 20px 15px;
+    min-height: 100vh;
+    color: white;
+    flex-direction: column;
 }
 
-.card{
-background:rgba(255,255,255,0.1);
-backdrop-filter: blur(10px);
-padding:10px;
-border-radius:12px;
+/* TOPO */
+.topo {
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+    color: #ff4da6;
+    text-shadow: 0 0 6px rgba(255, 77, 166, 0.6);
 }
 
-.card img{
-width:100%;
-border-radius:10px;
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
 }
 
-button.buy{
-margin-top:8px;
-width:100%;
-padding:10px;
-border:none;
-border-radius:8px;
-background:#ff4fd8;
-color:white;
-font-weight:bold;
-cursor:pointer;
+/* CARD */
+.card {
+    background: #11194a;
+    border-radius: 14px;
+    padding: 12px;
+    text-align: center;
+    border: 2px solid #ff4da6;
+    box-shadow: 0 0 8px rgba(255, 77, 166, 0.3);
 }
+
+/* IMAGEM */
+.card img {
+    width: 100%;
+    height: 110px;
+    object-fit: contain;
+    background: #000;
+    border-radius: 10px;
+}
+
+/* NOME */
+.nome {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+/* BOTÕES */
+.voltarBtn{
+    margin-top:15px;
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    background:#333;
+    color:white;
+    cursor:pointer;
+}
+
 </style>
-
 </head>
 
 <body>
 
-<!-- 🔥 AVISO INICIAL -->
-<div class="overlay" id="intro">
+<div class="fundo"></div>
 
-<div class="notice">
+<!-- 🔥 AVISO -->
+<div id="avisoTela">
 
-<h2>⚠️ Aviso Importante</h2>
+    <div class="avisoBox">
+        <h2>⚠️ Aviso</h2>
 
-<p>
-Este site não possui login ou cadastro.<br><br>
+        <p>
+        Este site não possui login ou cadastro.<br><br>
 
-📌 Nenhum dado é salvo no sistema.<br>
-📌 As compras são feitas diretamente.<br>
-📌 Tudo é rápido e simples, sem conta ou registro.<br><br>
+        ✔ Nenhum dado é salvo<br>
+        ✔ Compra direta via WhatsApp<br>
+        ✔ Processo rápido e simples<br><br>
 
-✔ Você escolhe o produto<br>
-✔ Faz o pedido direto no WhatsApp<br>
-✔ Sem necessidade de login
-</p>
+        Apenas escolha seu produto e finalize o pedido.
+        </p>
+    </div>
 
-<button class="neon" onclick="goCategories()">CONTINUAR</button>
-
-</div>
+    <!-- botão separado do quadrado -->
+    <div class="continuarSeparado">
+        <button class="neonBtn" onclick="irCategorias()">CONTINUAR</button>
+    </div>
 
 </div>
 
 <!-- 🔥 CATEGORIAS -->
-<div id="categories">
+<div id="categorias">
 
-<h2>🔥 Categorias</h2>
+    <div class="topo">Bonys Story</div>
 
-<!-- FF -->
-<h3>Free Fire</h3>
-<div class="grid">
+    <button class="voltarBtn" onclick="voltarAviso()">⬅ Voltar</button>
 
-<div class="card">
-<img src="https://i.imgur.com/iWGitub.jpeg">
-<p>Diamantes FF</p>
-<button class="buy" onclick="buy('Diamantes FF')">Comprar</button>
-</div>
+    <h3>Categorias</h3>
 
-<div class="card">
-<img src="https://i.imgur.com/iWGitub.jpeg">
-<p>Pass Elite</p>
-<button class="buy" onclick="buy('Pass Elite')">Comprar</button>
-</div>
+    <div class="grid">
 
-</div>
+        <div class="card">
+            <img src="https://i.imgur.com/NgqTIHu.jpeg">
+            <div class="nome">⚡ Sensi FF</div>
+        </div>
 
-<!-- Instagram -->
-<h3>Instagram</h3>
-<div class="grid">
+        <div class="card">
+            <img src="https://i.imgur.com/tm2T0RM.jpeg">
+            <div class="nome">🔥 Free Fire</div>
+        </div>
 
-<div class="card">
-<img src="https://i.imgur.com/iWGitub.jpeg">
-<p>Seguidores</p>
-<button class="buy" onclick="buy('Seguidores Instagram')">Comprar</button>
-</div>
+        <div class="card">
+            <img src="https://i.imgur.com/XF6wb2O.jpeg">
+            <div class="nome">📸 Redes Sociais</div>
+        </div>
 
-<div class="card">
-<img src="https://i.imgur.com/iWGitub.jpeg">
-<p>Curtidas</p>
-<button class="buy" onclick="buy('Curtidas Instagram')">Comprar</button>
-</div>
+        <div class="card">
+            <img src="https://i.imgur.com/Nb0Ba33.jpeg">
+            <div class="nome">💎 Tokens Evolutivas</div>
+        </div>
 
-</div>
+        <div class="card">
+            <img src="https://i.imgur.com/31BewwU.jpeg">
+            <div class="nome">🎁 Caixa Misteriosa</div>
+        </div>
 
-<!-- Coins -->
-<h3>Coins</h3>
-<div class="grid">
-
-<div class="card">
-<img src="https://i.imgur.com/iWGitub.jpeg">
-<p>Coins VIP</p>
-<button class="buy" onclick="buy('Coins VIP')">Comprar</button>
-</div>
-
-<div class="card">
-<img src="https://i.imgur.com/iWGitub.jpeg">
-<p>Caixa Misteriosa</p>
-<button class="buy" onclick="buy('Caixa Misteriosa')">Comprar</button>
-</div>
-
-</div>
+    </div>
 
 </div>
 
 <script>
-function goCategories(){
-document.getElementById("intro").style.display="none";
-document.getElementById("categories").style.display="block";
+function irCategorias(){
+document.getElementById("avisoTela").style.display="none";
+document.getElementById("categorias").style.display="block";
 }
 
-// WhatsApp automático
-function buy(product){
-let number = "5598984853563";
-let msg = "Olá, quero comprar: " + product;
-let url = "https://wa.me/" + number + "?text=" + encodeURIComponent(msg);
-window.open(url, "_blank");
+function voltarAviso(){
+document.getElementById("categorias").style.display="none";
+document.getElementById("avisoTela").style.display="flex";
 }
 </script>
 
