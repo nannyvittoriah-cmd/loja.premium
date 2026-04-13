@@ -2,80 +2,86 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Loja FF</title>
+<title>Bonys Story</title>
 
 <style>
 
-body{
-margin:0;
-font-family:Arial;
-background:#0b0f2a;
-color:white;
+/* FUNDO */
+.fundo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("https://i.imgur.com/iWGitub.jpeg") no-repeat center center;
+    background-size: cover;
+    z-index: -1;
 }
 
-.fundo{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:url("https://i.imgur.com/iWGitub.jpeg") no-repeat center center;
-background-size:cover;
-z-index:-1;
-filter:brightness(0.6);
+/* CONTEÚDO */
+body {
+    margin: 0;
+    font-family: Arial;
+    color: white;
 }
 
-.tela{
-display:none;
-padding:20px;
+/* CATEGORIAS */
+.container {
+    padding: 20px;
 }
 
-.ativo{display:block;}
-
-.topo{
-text-align:center;
-font-size:22px;
-color:#ff4da6;
-margin-bottom:15px;
+.categoria {
+    margin-bottom: 15px;
 }
 
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
+.cat-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #ff2fa0, #7a00ff);
+    color: white;
+    border: none;
+    font-size: 16px;
+    box-shadow: 0 0 12px rgba(255, 47, 160, 0.6);
+    cursor: pointer;
 }
 
-.card{
-background:#11194a;
-border:2px solid #ff4da6;
-border-radius:12px;
-padding:10px;
-text-align:center;
+/* SUBCATEGORIAS ANIMAÇÃO */
+.subcategorias {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    margin-top: 8px;
 }
 
-.card img{
-width:100%;
-height:100px;
-object-fit:contain;
-background:black;
-border-radius:10px;
+.subcategorias button {
+    display: block;
+    width: 100%;
+    margin: 6px 0;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #111;
+    color: #fff;
+    box-shadow: 0 0 8px rgba(0,0,0,0.5);
 }
 
-button{
-margin-top:8px;
-width:100%;
-padding:10px;
-border:none;
-border-radius:8px;
-background:#ff4da6;
-color:white;
-font-weight:bold;
-cursor:pointer;
-}
-
-.voltar{
-background:#333;
-margin-bottom:10px;
+/* BOTÃO WHATSAPP FLUTUANTE */
+.whatsapp {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #25D366;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    color: white;
+    text-decoration: none;
+    box-shadow: 0 0 15px rgba(0,0,0,0.4);
 }
 
 </style>
@@ -85,162 +91,62 @@ margin-bottom:10px;
 
 <div class="fundo"></div>
 
-<!-- ================= CATEGORIAS ================= -->
-<div id="categorias" class="tela ativo">
+<div class="container">
 
-<div class="topo">🔥 Bonys Story</div>
+    <h2>Bonys Story</h2>
 
-<div class="grid">
+    <!-- CATEGORIA 1 -->
+    <div class="categoria">
+        <button class="cat-btn" onclick="toggleSub('cat1')">
+            Seguidores & Curtidas
+        </button>
 
-<div class="card" onclick="openRede()">
-<img src="https://cdn-icons-png.flaticon.com/512/174/174855.png">
-<p>📸 Redes Sociais</p>
-</div>
+        <div id="cat1" class="subcategorias">
+            <button>Sem seguidores por R$6,00</button>
+            <button>Curtidas básicas</button>
+            <button>Visualizações FF 33 toques R$10,99</button>
+        </div>
+    </div>
 
-<div class="card" onclick="openTokens()">
-<img src="https://i.imgur.com/31BewwU.jpeg">
-<p>💎 Tokens Universal FF</p>
-</div>
+    <!-- CATEGORIA 2 -->
+    <div class="categoria">
+        <button class="cat-btn" onclick="toggleSub('cat2')">
+            Free Fire Serviços
+        </button>
 
-<div class="card" onclick="openElite()">
-<img src="https://i.imgur.com/31BewwU.jpeg">
-<p>🎮 Pass de Elite FF</p>
-</div>
-
-<div class="card">
-<img src="https://i.imgur.com/31BewwU.jpeg">
-<p>💎 Diamantes FF</p>
-</div>
-
-<div class="card">
-<img src="https://i.imgur.com/31BewwU.jpeg">
-<p>🎁 Caixa Surpresa FF</p>
-</div>
-
-<div class="card">
-<img src="https://i.imgur.com/31BewwU.jpeg">
-<p>🎯 Sensi FF</p>
-</div>
+        <div id="cat2" class="subcategorias">
+            <button>Skin básica FF</button>
+            <button>Diamantes teste</button>
+            <button>Passe elite</button>
+        </div>
+    </div>
 
 </div>
 
-</div>
-
-<!-- ================= REDES SOCIAIS ================= -->
-<div id="rede" class="tela">
-
-<button class="voltar" onclick="back()">⬅ Voltar</button>
-
-<div class="topo">Instagram Seguidores</div>
-
-<div class="grid">
-
-<div class="card">
-<img src="https://cdn-icons-png.flaticon.com/512/174/174855.png">
-<p>100 Seguidores</p>
-<button onclick="buy('100 Seguidores')">Comprar</button>
-</div>
-
-<div class="card">
-<img src="https://cdn-icons-png.flaticon.com/512/174/174855.png">
-<p>300 Seguidores</p>
-<button onclick="buy('300 Seguidores')">Comprar</button>
-</div>
-
-<div class="card">
-<img src="https://cdn-icons-png.flaticon.com/512/174/174855.png">
-<p>1K Seguidores</p>
-<button onclick="buy('1K Seguidores')">Comprar</button>
-</div>
-
-<div class="card">
-<img src="https://cdn-icons-png.flaticon.com/512/174/174855.png">
-<p>2K Seguidores</p>
-<button onclick="buy('2K Seguidores')">Comprar</button>
-</div>
-
-</div>
-
-</div>
-
-<!-- ================= TOKENS ================= -->
-<div id="tokens" class="tela">
-
-<button class="voltar" onclick="back()">⬅ Voltar</button>
-
-<div class="topo">Tokens Universal FF</div>
-
-<div class="grid">
-
-<div class="card">
-<img src="https://i.imgur.com/31BewwU.jpeg">
-<p>Token 100</p>
-<button onclick="buy('Token 100')">Comprar</button>
-</div>
-
-<div class="card">
-<img src="https://i.imgur.com/31BewwU.jpeg">
-<p>Token 500</p>
-<button onclick="buy('Token 500')">Comprar</button>
-</div>
-
-</div>
-
-</div>
-
-<!-- ================= ELITE ================= -->
-<div id="elite" class="tela">
-
-<button class="voltar" onclick="back()">⬅ Voltar</button>
-
-<div class="topo">Pass de Elite FF</div>
-
-<div class="grid">
-
-<div class="card">
-<img src="https://i.imgur.com/31BewwU.jpeg">
-<p>Elite Básico</p>
-<button onclick="buy('Pass Elite Básico')">Comprar</button>
-</div>
-
-<div class="card">
-<img src="https://i.imgur.com/31BewwU.jpeg">
-<p>Elite Premium</p>
-<button onclick="buy('Pass Elite Premium')">Comprar</button>
-</div>
-
-</div>
-
-</div>
+<!-- WHATSAPP -->
+<a class="whatsapp" href="https://wa.me/5598984843563" target="_blank">
+    💬
+</a>
 
 <script>
 
-function openRede(){
-switchPage("rede");
-}
+function toggleSub(id) {
 
-function openTokens(){
-switchPage("tokens");
-}
+    const all = document.querySelectorAll('.subcategorias');
 
-function openElite(){
-switchPage("elite");
-}
+    all.forEach(el => {
+        if (el.id !== id) {
+            el.style.maxHeight = null;
+        }
+    });
 
-function switchPage(id){
-document.querySelectorAll(".tela").forEach(t=>t.classList.remove("ativo"));
-document.getElementById(id).classList.add("ativo");
-}
+    const el = document.getElementById(id);
 
-function back(){
-switchPage("categorias");
-}
-
-function buy(product){
-let number = "5598984853563";
-let msg = "Olá, quero comprar: " + product;
-let url = "https://wa.me/" + number + "?text=" + encodeURIComponent(msg);
-window.open(url,"_blank");
+    if (el.style.maxHeight) {
+        el.style.maxHeight = null;
+    } else {
+        el.style.maxHeight = el.scrollHeight + "px";
+    }
 }
 
 </script>
