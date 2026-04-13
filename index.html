@@ -7,69 +7,81 @@
 <style>
 
 /* FUNDO */
+.fundo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("https://i.imgur.com/iWGitub.jpeg") no-repeat center center;
+    background-size: cover;
+    z-index: -1;
+}
+
+/* CONTEÚDO */
 body {
     margin: 0;
-    padding: 0;
-    font-size: 19px; /* fonte maior */
-    font-family: Arial, sans-serif;
-    background: url("https://i.imgur.com/iWGitub.jpeg") no-repeat center center fixed;
-    background-size: cover;
+    font-family: Arial;
     color: white;
 }
 
-/* TITULOS */
-h1, h2 {
-    font-size: 30px;
-    text-align: center;
-}
-
 /* CATEGORIAS */
-.categorias, .subcategorias {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 15px;
+.container {
     padding: 20px;
 }
 
-/* CARD */
-.card {
-    background: rgba(0,0,0,0.65);
-    border-radius: 15px;
-    padding: 15px;
-    text-align: center;
-    cursor: pointer;
-    transition: 0.3s;
+.categoria {
+    margin-bottom: 15px;
 }
 
-.card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px #ff4da6;
-}
-
-.card img {
+.cat-btn {
     width: 100%;
-    border-radius: 10px;
-    margin-bottom: 10px;
+    padding: 14px;
+    border-radius: 12px;
+    background: linear-gradient(90deg, #ff2fa0, #7a00ff);
+    color: white;
+    border: none;
+    font-size: 16px;
+    box-shadow: 0 0 12px rgba(255, 47, 160, 0.6);
+    cursor: pointer;
 }
 
-/* WHATSAPP FLUTUANTE */
-.whatsapp-float {
+/* SUBCATEGORIAS ANIMAÇÃO */
+.subcategorias {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    margin-top: 8px;
+}
+
+.subcategorias button {
+    display: block;
+    width: 100%;
+    margin: 6px 0;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #111;
+    color: #fff;
+    box-shadow: 0 0 8px rgba(0,0,0,0.5);
+}
+
+/* BOTÃO WHATSAPP FLUTUANTE */
+.whatsapp {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 65px;
-    height: 65px;
     background: #25D366;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     display: flex;
-    align-items: center;
     justify-content: center;
-    box-shadow: 0 0 15px black;
-    z-index: 999;
-}
-
-.whatsapp-float img {
-    width: 35px;
+    align-items: center;
+    font-size: 30px;
+    color: white;
+    text-decoration: none;
+    box-shadow: 0 0 15px rgba(0,0,0,0.4);
 }
 
 </style>
@@ -77,84 +89,63 @@ h1, h2 {
 
 <body>
 
-<h1>Bonys Story</h1>
+<div class="fundo"></div>
 
-<!-- WHATSAPP -->
-<a class="whatsapp-float" href="https://wa.me/5598984843563" target="_blank">
-    <img src="https://cdn-icons-png.flaticon.com/512/124/124034.png">
-</a>
+<div class="container">
 
-<!-- CATEGORIAS -->
-<div class="categorias">
+    <h2>Bonys Story</h2>
 
-    <div class="card" onclick="abrirCategoria('instagram')">
-        <img src="https://i.imgur.com/4M34hi2.png">
-        <h3>Instagram</h3>
+    <!-- CATEGORIA 1 -->
+    <div class="categoria">
+        <button class="cat-btn" onclick="toggleSub('cat1')">
+            Seguidores & Curtidas
+        </button>
+
+        <div id="cat1" class="subcategorias">
+            <button>Sem seguidores por R$6,00</button>
+            <button>Curtidas básicas</button>
+            <button>Visualizações FF 33 toques R$10,99</button>
+        </div>
     </div>
 
-    <div class="card" onclick="abrirCategoria('ff')">
-        <img src="https://i.imgur.com/0e6bW8Q.png">
-        <h3>Free Fire</h3>
+    <!-- CATEGORIA 2 -->
+    <div class="categoria">
+        <button class="cat-btn" onclick="toggleSub('cat2')">
+            Free Fire Serviços
+        </button>
+
+        <div id="cat2" class="subcategorias">
+            <button>Skin básica FF</button>
+            <button>Diamantes teste</button>
+            <button>Passe elite</button>
+        </div>
     </div>
 
 </div>
 
-<h2>Produtos</h2>
-<div class="subcategorias" id="subcategorias"></div>
+<!-- WHATSAPP -->
+<a class="whatsapp" href="https://wa.me/5598984843563" target="_blank">
+    💬
+</a>
 
 <script>
 
-function abrirCategoria(tipo) {
+function toggleSub(id) {
 
-    let container = document.getElementById("subcategorias");
-    container.innerHTML = "";
+    const all = document.querySelectorAll('.subcategorias');
 
-    /* INSTAGRAM */
-    if (tipo === "instagram") {
+    all.forEach(el => {
+        if (el.id !== id) {
+            el.style.maxHeight = null;
+        }
+    });
 
-        container.innerHTML = `
-        <div class="card">
-            <img src="https://i.imgur.com/abc1.jpg">
-            <h3>Seguidores Instagram</h3>
-            <p>💰 Sem seguidores por R$ 6,00 (TESTE)</p>
-        </div>
+    const el = document.getElementById(id);
 
-        <div class="card">
-            <img src="https://i.imgur.com/abc2.jpg">
-            <h3>Curtidas Instagram</h3>
-            <p>Melhore seu engajamento rápido</p>
-        </div>
-
-        <div class="card">
-            <img src="https://i.imgur.com/abc3.jpg">
-            <h3>Visualizações Reels</h3>
-            <p>Mais alcance nos vídeos</p>
-        </div>
-        `;
-    }
-
-    /* FREE FIRE */
-    if (tipo === "ff") {
-
-        container.innerHTML = `
-        <div class="card">
-            <img src="https://i.imgur.com/xyz1.jpg">
-            <h3>33 Toques Universal</h3>
-            <p>🔥 R$ 10,99 (TESTE)</p>
-        </div>
-
-        <div class="card">
-            <img src="https://i.imgur.com/xyz2.jpg">
-            <h3>Diamantes FF</h3>
-            <p>Entrega rápida no ID</p>
-        </div>
-
-        <div class="card">
-            <img src="https://i.imgur.com/xyz3.jpg">
-            <h3>Skins Free Fire</h3>
-            <p>Skins exclusivas e raras</p>
-        </div>
-        `;
+    if (el.style.maxHeight) {
+        el.style.maxHeight = null;
+    } else {
+        el.style.maxHeight = el.scrollHeight + "px";
     }
 }
 
