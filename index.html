@@ -1,118 +1,149 @@
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-getAuth,
-createUserWithEmailAndPassword,
-signInWithEmailAndPassword,
-onAuthStateChanged,
-signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Loja Gamer</title>
 
-import { getFirestore, doc, setDoc } 
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-
-// 🔥 FIREBASE (SEU PROJETO)
-const firebaseConfig = {
-  apiKey: "AIzaSyDo8baLqLDPTKTajoC-kl_6P_w3VMO0414",
-  authDomain: "bonyx-sh.firebaseapp.com",
-  projectId: "bonyx-sh",
-  storageBucket: "bonyx-sh.firebasestorage.app",
-  messagingSenderId: "379347082201",
-  appId: "1:379347082201:web:842b31bf3e9df3c12fd7c8"
-};
-
-
-// 🔥 INIT
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-
-/* =========================
-   🔐 CADASTRO
-========================= */
-window.register = async () => {
-try {
-
-const email = document.getElementById("email")?.value;
-const password = document.getElementById("password")?.value;
-
-if(!email || !password){
-alert("Preencha email e senha");
-return;
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:url("https://i.imgur.com/iWGitub.jpeg") no-repeat center center fixed;
+background-size:cover;
+color:white;
 }
 
-const user = await createUserWithEmailAndPassword(auth, email, password);
-
-// salva no Firestore
-await setDoc(doc(db,"users",user.user.uid),{
-email
-});
-
-showUser(user.user);
-
-} catch (e) {
-alert(e.message);
-}
-};
-
-
-/* =========================
-   🔑 LOGIN
-========================= */
-window.login = async () => {
-try {
-
-const email = document.getElementById("email")?.value;
-const password = document.getElementById("password")?.value;
-
-if(!email || !password){
-alert("Preencha email e senha");
-return;
+.overlay{
+background: rgba(0,0,0,0.65);
+min-height:100vh;
+padding:20px;
 }
 
-const user = await signInWithEmailAndPassword(auth, email, password);
-
-showUser(user.user);
-
-} catch (e) {
-alert("Email ou senha inválidos");
-}
-};
-
-
-/* =========================
-   🔄 AUTO LOGIN
-========================= */
-onAuthStateChanged(auth,(user)=>{
-if(user){
-showUser(user);
-}
-});
-
-
-/* =========================
-   🟣 PAINEL (SEM MEXER NO DESIGN)
-========================= */
-function showUser(user){
-
-const loginBox = document.getElementById("loginBox");
-const dashboard = document.getElementById("dashboard");
-const info = document.getElementById("userInfo");
-
-if(loginBox) loginBox.style.display = "none";
-if(dashboard) dashboard.style.display = "block";
-if(info) info.innerText = user.email;
-
+.header{
+text-align:center;
+margin-bottom:20px;
 }
 
+.slogan{
+font-size:14px;
+opacity:0.8;
+}
 
-/* =========================
-   🚪 LOGOUT
-========================= */
-window.logout = async () => {
-await signOut(auth);
-location.reload();
-};
+.section-title{
+margin-top:20px;
+font-size:18px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+margin-top:10px;
+}
+
+.card{
+background:rgba(255,255,255,0.1);
+backdrop-filter: blur(10px);
+padding:10px;
+border-radius:12px;
+text-align:center;
+}
+
+.card img{
+width:100%;
+border-radius:10px;
+}
+
+button{
+margin-top:8px;
+width:100%;
+padding:10px;
+border:none;
+border-radius:8px;
+background:#ff4fd8;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="overlay">
+
+<div class="header">
+<h1>🔥 Loja Bonyx</h1>
+<p class="slogan">Compra rápida, direta e sem complicação</p>
+</div>
+
+<!-- CATEGORIA 1 -->
+<div class="section-title">📌 Free Fire</div>
+<div class="grid">
+
+<div class="card">
+<img src="https://i.imgur.com/iWGitub.jpeg">
+<p>Diamantes FF</p>
+<button onclick="buy('Diamantes Free Fire')">Comprar</button>
+</div>
+
+<div class="card">
+<img src="https://i.imgur.com/iWGitub.jpeg">
+<p>Pass Elite</p>
+<button onclick="buy('Pass Elite')">Comprar</button>
+</div>
+
+</div>
+
+<!-- CATEGORIA 2 -->
+<div class="section-title">📌 Instagram</div>
+<div class="grid">
+
+<div class="card">
+<img src="https://i.imgur.com/iWGitub.jpeg">
+<p>Seguidores</p>
+<button onclick="buy('Seguidores Instagram')">Comprar</button>
+</div>
+
+<div class="card">
+<img src="https://i.imgur.com/iWGitub.jpeg">
+<p>Curtidas</p>
+<button onclick="buy('Curtidas Instagram')">Comprar</button>
+</div>
+
+</div>
+
+<!-- CATEGORIA 3 -->
+<div class="section-title">📌 Coins / Extras</div>
+<div class="grid">
+
+<div class="card">
+<img src="https://i.imgur.com/iWGitub.jpeg">
+<p>Coins VIP</p>
+<button onclick="buy('Coins VIP')">Comprar</button>
+</div>
+
+<div class="card">
+<img src="https://i.imgur.com/iWGitub.jpeg">
+<p>Caixa Misteriosa</p>
+<button onclick="buy('Caixa Misteriosa')">Comprar</button>
+</div>
+
+</div>
+
+</div>
+
+<script>
+function buy(product){
+let number = "5598984853563"; // seu WhatsApp
+let message = "Olá, quero comprar: " + product;
+
+let url = "https://wa.me/" + number + "?text=" + encodeURIComponent(message);
+
+window.open(url, "_blank");
+}
 </script>
+
+</body>
+</html>
