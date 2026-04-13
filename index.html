@@ -1,87 +1,7 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-<meta charset="UTF-8">
-<title>Bonyx Login</title>
-
-<style>
-body{
-margin:0;
-font-family:Arial;
-background:#0b0f2a;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-color:white;
-}
-
-.container{
-background:#121a3a;
-padding:20px;
-border-radius:12px;
-width:320px;
-}
-
-input{
-width:100%;
-padding:10px;
-margin:5px 0;
-border:none;
-border-radius:6px;
-}
-
-button{
-width:100%;
-padding:10px;
-margin-top:8px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-font-weight:bold;
-}
-
-.login{background:#4a6bff;color:white;}
-.google{background:#db4437;color:white;}
-.register{background:#22c55e;color:white;}
-
-#dashboard{
-display:none;
-text-align:center;
-}
-</style>
-</head>
-
-<body>
-
-<!-- LOGIN -->
-<div class="container" id="auth">
-
-<h2>Login / Cadastro</h2>
-
-<input id="name" placeholder="Nome">
-<input id="username" placeholder="Usuário">
-<input id="phone" placeholder="Telefone">
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Senha">
-
-<button class="register" onclick="register()">Cadastrar</button>
-<button class="login" onclick="login()">Entrar</button>
-<button class="google" onclick="googleLogin()">Google</button>
-
-</div>
-
-<!-- DASHBOARD -->
-<div id="dashboard">
-<h1>Bem-vindo 👋</h1>
-<p id="info"></p>
-<button onclick="logout()">Sair</button>
-</div>
-
-<!-- FIREBASE -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth,
+import { 
+getAuth,
 createUserWithEmailAndPassword,
 signInWithEmailAndPassword,
 GoogleAuthProvider,
@@ -89,15 +9,16 @@ signInWithPopup,
 signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, setDoc } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDo8baLqLDPTKTajoC-kl_6P_w3VMO0414",
-  authDomain: "bonyx-sh.firebaseapp.com",
-  projectId: "bonyx-sh",
-  storageBucket: "bonyx-sh.firebasestorage.app",
-  messagingSenderId: "379347082201",
-  appId: "1:379347082201:web:842b31bf3e9df3c12fd7c8"
+  apiKey: "SUA_API_KEY",
+  authDomain: "SEU_AUTH_DOMAIN",
+  projectId: "SEU_PROJECT_ID",
+  storageBucket: "SEU_STORAGE_BUCKET",
+  messagingSenderId: "SEU_SENDER_ID",
+  appId: "SEU_APP_ID"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -105,7 +26,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 
-// 🔥 CADASTRO
+// 🔥 CADASTRO (NÃO MUDA SEU DESIGN)
 window.register = async () => {
 let name = document.getElementById("name").value;
 let username = document.getElementById("username").value;
@@ -117,24 +38,32 @@ try{
 const user = await createUserWithEmailAndPassword(auth, email, password);
 
 await setDoc(doc(db,"users",user.user.uid),{
-name, username, phone, email
+name,
+username,
+phone,
+email
 });
 
-show(user.user);
+// chama sua função do painel (não muda layout)
+showUser(user.user);
 
-}catch(e){ alert(e.message); }
+}catch(e){
+alert(e.message);
+}
 };
 
 
-// 🔥 LOGIN
+// 🔥 LOGIN NORMAL
 window.login = async () => {
 let email = document.getElementById("email").value;
 let password = document.getElementById("password").value;
 
 try{
 const user = await signInWithEmailAndPassword(auth, email, password);
-show(user.user);
-}catch(e){ alert(e.message); }
+showUser(user.user);
+}catch(e){
+alert(e.message);
+}
 };
 
 
@@ -150,20 +79,12 @@ name: user.user.displayName,
 email: user.user.email
 });
 
-show(user.user);
+showUser(user.user);
 
-}catch(e){ alert(e.message); }
-};
-
-
-// 🔥 DASHBOARD
-function show(user){
-document.getElementById("auth").style.display="none";
-document.getElementById("dashboard").style.display="block";
-
-document.getElementById("info").innerText =
-"Logado: " + user.email;
+}catch(e){
+alert(e.message);
 }
+};
 
 
 // 🔥 LOGOUT
@@ -171,7 +92,15 @@ window.logout = async () => {
 await signOut(auth);
 location.reload();
 };
-</script>
 
-</body>
-</html>
+
+// 🔥 IMPORTANTE: NÃO MUDA SEU DESIGN
+// só chama sua função de trocar tela
+function showUser(user){
+document.getElementById("loginBox").style.display = "none";
+document.getElementById("dashboard").style.display = "block";
+
+// você já tinha isso no seu layout roxo
+document.getElementById("userInfo").innerText = user.email;
+}
+</script>
