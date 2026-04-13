@@ -1,65 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Bonys Story</title>
+
+<style>
+
+/* FUNDO */
+.fundo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("https://i.imgur.com/iWGitub.jpeg") no-repeat center center;
+    background-size: cover;
+    z-index: -1;
+}
+
+/* BODY */
+body {
+    margin: 0;
+    font-family: Arial;
+    color: white;
+}
+
+/* LOGIN */
+#login {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box {
+    background: rgba(0,0,0,0.7);
+    padding: 25px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 320px;
+    text-align: center;
+    border: 2px solid #ff4da6;
+}
+
+.box h2 {
+    margin-bottom: 15px;
+    color: #ff4da6;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 8px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #ff4da6;
+    color: white;
+    font-weight: bold;
+}
+
+.link {
+    margin-top: 10px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* CATEGORIAS */
+#categorias {
+    display: none;
+    padding: 20px 15px;
+    min-height: 100vh;
+}
+
+/* TOPO */
+.topo {
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+    color: #ff4da6;
+    text-shadow: 0 0 6px rgba(255, 77, 166, 0.6);
+}
+
+/* TITULO */
+.titulo {
+    font-size: 18px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+/* CARD */
+.card {
+    background: #11194a;
+    border-radius: 14px;
+    padding: 12px;
+    text-align: center;
+    border: 2px solid #ff4da6;
+}
+
+/* IMG */
+.card img {
+    width: 100%;
+    height: 110px;
+    object-fit: contain;
+    background: #000;
+    border-radius: 10px;
+}
+
+/* NOME */
+.nome {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="fundo"></div>
+
+<!-- LOGIN -->
+<div id="login">
+    <div class="box">
+        <h2>Bonys Story</h2>
+
+        <input type="text" placeholder="Usuário">
+        <input type="password" placeholder="Senha">
+
+        <button onclick="entrar()">Entrar</button>
+
+        <div class="link" onclick="alert('Cadastro simples ativado!')">
+            Criar conta
+        </div>
+    </div>
+</div>
+
+<!-- CATEGORIAS -->
+<div id="categorias">
+
+    <div class="topo">Bonys Story</div>
+    <div class="titulo">Categorias</div>
+
+    <div class="grid">
+
+        <div class="card">
+            <img src="https://i.imgur.com/NgqTIHu.jpeg">
+            <div class="nome">⚡ Sensi FF</div>
+        </div>
+
+        <div class="card">
+            <img src="https://i.imgur.com/tm2T0RM.jpeg">
+            <div class="nome">🔥 Free Fire</div>
+        </div>
+
+        <div class="card">
+            <img src="https://i.imgur.com/XF6wb2O.jpeg">
+            <div class="nome">📸 Redes Sociais</div>
+        </div>
+
+        <div class="card">
+            <img src="https://i.imgur.com/Nb0Ba33.jpeg">
+            <div class="nome">💎 Tokens Evolutivas</div>
+        </div>
+
+        <div class="card">
+            <img src="https://i.imgur.com/31BewwU.jpeg">
+            <div class="nome">🎁 Caixa Misteriosa</div>
+        </div>
+
+    </div>
+
+</div>
+
 <script>
-// CONFIG FIREBASE
-const firebaseConfig = {
-  apiKey: "AIzaSyDo8baLqLDPTKTajoC-kl_6P_w3VMO0414",
-  authDomain: "bonyx-sh.firebaseapp.com",
-  projectId: "bonyx-sh",
-  storageBucket: "bonyx-sh.firebasestorage.app",
-  messagingSenderId: "379347082201",
-  appId: "1:379347082201:web:b43fa6cd0d90cee62fd7c8"
-};
 
-firebase.initializeApp(firebaseConfig);
-
-const erro = document.getElementById("erro");
-
-// LOGIN EMAIL
-function loginEmail() {
-    erro.innerText = "";
-
-    firebase.auth().signInWithEmailAndPassword(
-        email.value, senha.value
-    )
-    .then(() => entrar())
-    .catch(e => erro.innerText = e.message);
-}
-
-// CADASTRO
-function cadastrar() {
-    erro.innerText = "";
-
-    firebase.auth().createUserWithEmailAndPassword(
-        email.value, senha.value
-    )
-    .then(() => entrar())
-    .catch(e => erro.innerText = e.message);
-}
-
-// LOGIN GOOGLE
-function loginGoogle() {
-    erro.innerText = "Abrindo Google...";
-
-    const provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithRedirect(provider);
-}
-
-// RESULTADO GOOGLE
-firebase.auth().getRedirectResult()
-.then(result => {
-    if (result.user) {
-        entrar();
-    }
-})
-.catch(e => erro.innerText = e.message);
-
-// MANTER LOGADO
-firebase.auth().onAuthStateChanged(user => {
-    if (user) entrar();
-});
-
-// ENTRAR
-function entrar() {
+/* LOGIN SIMPLES */
+function entrar(){
     document.getElementById("login").style.display = "none";
     document.getElementById("categorias").style.display = "block";
 }
+
 </script>
+
+</body>
+</html>
