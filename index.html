@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Loja Gamer</title>
+<title>Loja</title>
 
 <style>
 body{
@@ -13,25 +13,52 @@ background-size:cover;
 color:white;
 }
 
+/* overlay escuro */
 .overlay{
 background: rgba(0,0,0,0.65);
 min-height:100vh;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
 padding:20px;
-}
-
-.header{
 text-align:center;
-margin-bottom:20px;
 }
 
-.slogan{
-font-size:14px;
-opacity:0.8;
+/* quadrado branco aviso */
+.notice{
+background:white;
+color:black;
+padding:20px;
+border-radius:12px;
+max-width:400px;
+box-shadow:0 0 15px rgba(0,0,0,0.4);
 }
 
-.section-title{
-margin-top:20px;
-font-size:18px;
+/* botão neon */
+.neon{
+margin-top:15px;
+padding:12px;
+width:100%;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+background:#ff4fd8;
+color:white;
+box-shadow:0 0 10px #ff4fd8, 0 0 20px #ff4fd8;
+transition:0.2s;
+}
+
+.neon:hover{
+box-shadow:0 0 15px #ff4fd8, 0 0 30px #ff4fd8;
+}
+
+/* categorias */
+#categories{
+display:none;
+width:100%;
+text-align:center;
 }
 
 .grid{
@@ -46,7 +73,6 @@ background:rgba(255,255,255,0.1);
 backdrop-filter: blur(10px);
 padding:10px;
 border-radius:12px;
-text-align:center;
 }
 
 .card img{
@@ -54,7 +80,7 @@ width:100%;
 border-radius:10px;
 }
 
-button{
+button.buy{
 margin-top:8px;
 width:100%;
 padding:10px;
@@ -71,63 +97,86 @@ cursor:pointer;
 
 <body>
 
-<div class="overlay">
+<!-- 🔥 AVISO INICIAL -->
+<div class="overlay" id="intro">
 
-<div class="header">
-<h1>🔥 Loja Bonyx</h1>
-<p class="slogan">Compra rápida, direta e sem complicação</p>
+<div class="notice">
+
+<h2>⚠️ Aviso Importante</h2>
+
+<p>
+Este site não possui login ou cadastro.<br><br>
+
+📌 Nenhum dado é salvo no sistema.<br>
+📌 As compras são feitas diretamente.<br>
+📌 Tudo é rápido e simples, sem conta ou registro.<br><br>
+
+✔ Você escolhe o produto<br>
+✔ Faz o pedido direto no WhatsApp<br>
+✔ Sem necessidade de login
+</p>
+
+<button class="neon" onclick="goCategories()">CONTINUAR</button>
+
 </div>
 
-<!-- CATEGORIA 1 -->
-<div class="section-title">📌 Free Fire</div>
+</div>
+
+<!-- 🔥 CATEGORIAS -->
+<div id="categories">
+
+<h2>🔥 Categorias</h2>
+
+<!-- FF -->
+<h3>Free Fire</h3>
 <div class="grid">
 
 <div class="card">
 <img src="https://i.imgur.com/iWGitub.jpeg">
 <p>Diamantes FF</p>
-<button onclick="buy('Diamantes Free Fire')">Comprar</button>
+<button class="buy" onclick="buy('Diamantes FF')">Comprar</button>
 </div>
 
 <div class="card">
 <img src="https://i.imgur.com/iWGitub.jpeg">
 <p>Pass Elite</p>
-<button onclick="buy('Pass Elite')">Comprar</button>
+<button class="buy" onclick="buy('Pass Elite')">Comprar</button>
 </div>
 
 </div>
 
-<!-- CATEGORIA 2 -->
-<div class="section-title">📌 Instagram</div>
+<!-- Instagram -->
+<h3>Instagram</h3>
 <div class="grid">
 
 <div class="card">
 <img src="https://i.imgur.com/iWGitub.jpeg">
 <p>Seguidores</p>
-<button onclick="buy('Seguidores Instagram')">Comprar</button>
+<button class="buy" onclick="buy('Seguidores Instagram')">Comprar</button>
 </div>
 
 <div class="card">
 <img src="https://i.imgur.com/iWGitub.jpeg">
 <p>Curtidas</p>
-<button onclick="buy('Curtidas Instagram')">Comprar</button>
+<button class="buy" onclick="buy('Curtidas Instagram')">Comprar</button>
 </div>
 
 </div>
 
-<!-- CATEGORIA 3 -->
-<div class="section-title">📌 Coins / Extras</div>
+<!-- Coins -->
+<h3>Coins</h3>
 <div class="grid">
 
 <div class="card">
 <img src="https://i.imgur.com/iWGitub.jpeg">
 <p>Coins VIP</p>
-<button onclick="buy('Coins VIP')">Comprar</button>
+<button class="buy" onclick="buy('Coins VIP')">Comprar</button>
 </div>
 
 <div class="card">
 <img src="https://i.imgur.com/iWGitub.jpeg">
 <p>Caixa Misteriosa</p>
-<button onclick="buy('Caixa Misteriosa')">Comprar</button>
+<button class="buy" onclick="buy('Caixa Misteriosa')">Comprar</button>
 </div>
 
 </div>
@@ -135,12 +184,16 @@ cursor:pointer;
 </div>
 
 <script>
+function goCategories(){
+document.getElementById("intro").style.display="none";
+document.getElementById("categories").style.display="block";
+}
+
+// WhatsApp automático
 function buy(product){
-let number = "5598984853563"; // seu WhatsApp
-let message = "Olá, quero comprar: " + product;
-
-let url = "https://wa.me/" + number + "?text=" + encodeURIComponent(message);
-
+let number = "5598984853563";
+let msg = "Olá, quero comprar: " + product;
+let url = "https://wa.me/" + number + "?text=" + encodeURIComponent(msg);
 window.open(url, "_blank");
 }
 </script>
