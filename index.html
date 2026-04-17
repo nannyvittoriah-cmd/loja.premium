@@ -1,233 +1,287 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<title>Bonys Story</title>
-
-<style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #0b1a4a;
-    color: white;
-}
-
-/* ================= AVISO ================= */
-#aviso {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background-color: #0b1a4a;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.caixa-aviso {
-    background-color: #0b1a4a;
-    border: 3px solid #ff4da6;
-    border-radius: 15px;
-    padding: 30px;
-    width: 80%;
-    max-width: 400px;
-    text-align: center;
-    box-shadow: 0 0 20px #ff4da6;
-}
-
-.caixa-aviso h1 {
-    color: #ff4da6;
-}
-
-.botao {
-    margin-top: 20px;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 8px;
-    background: #ff4da6;
-    color: white;
-    cursor: pointer;
-}
-
-/* ================= SITE ================= */
-.tela {
-    display: none;
-    padding: 30px;
-    min-height: 100vh;
-}
-
-.ativa {
-    display: block;
-}
-
-/* LINHA */
-.linha {
-    width: 80%;
-    height: 2px;
-    background: #ff4da6;
-    margin: 30px auto;
-}
-
-/* TITULO */
-.titulo-categorias {
-    margin: 20px 0;
-    font-size: 22px;
-    color: #ff4da6;
-}
-
-/* GRID */
-.categorias {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-}
-
-.categoria {
-    background-color: #0b1a4a;
-    border: 2px solid #ff4da6;
-    border-radius: 10px;
-    padding: 10px;
-    cursor: pointer;
-}
-
-.categoria img {
-    width: 100%;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 8px;
-}
-
-/* BOTÃO VOLTAR */
-.voltar {
-    margin-bottom: 20px;
-    background: #ff4da6;
-    border: none;
-    padding: 10px 20px;
-    color: white;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-/* RESPONSIVO */
-@media (max-width: 700px) {
-    .categorias {
-        grid-template-columns: repeat(2, 1fr);
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bonyx Store</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(180deg, #0a0f2c, #050d1f);
+      color: white;
     }
-}
-
-</style>
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      background: #070b20;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .logo {
+      font-weight: bold;
+      color: #ff2e93;
+    }
+    .search {
+      width: 50%;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+    }
+    .banner {
+      padding: 15px;
+      text-align: center;
+    }
+    .banner-box {
+      background: linear-gradient(90deg, #ff2e93, #7a00ff);
+      padding: 20px;
+      border-radius: 15px;
+    }
+    .categorias {
+      padding: 10px;
+    }
+    .cat, .sub-cat {
+      background: #121a4a;
+      padding: 8px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      display: inline-block;
+      margin: 5px;
+    }
+    .sub-categorias {
+      margin-left: 20px;
+      margin-top: 10px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 12px;
+    }
+    .card {
+      background: #121a4a;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(255, 46, 147, 0.3);
+    }
+    .card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+    }
+    .info {
+      padding: 10px;
+    }
+    .nome {
+      font-size: 14px;
+    }
+    .preco {
+      color: #ff2e93;
+      font-weight: bold;
+    }
+    .btn {
+      width: 100%;
+      background: #ff2e93;
+      border: none;
+      padding: 10px;
+      color: white;
+      border-radius: 10px;
+      margin-top: 5px;
+    }
+    .modal {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #070b20;
+      padding: 20px;
+      display: none;
+      border-radius: 20px 20px 0 0;
+    }
+    .modal.show {
+      display: block;
+    }
+  </style>
 </head>
-
 <body>
 
-<!-- AVISO -->
-<div id="aviso">
-    <div class="caixa-aviso">
-        <h1>Aviso Importante</h1>
-        <p>Sem login/cadastro por enquanto.</p>
-        <button class="botao" onclick="entrar()">Entrar no site</button>
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">BONYX</div>
+    <input class="search" placeholder="Pesquisar..." onkeyup="buscar(this.value)">
+  </div>
+
+  <!-- BANNER -->
+  <div class="banner">
+    <div class="banner-box">
+      <h2>🔥 Ofertas da Bonyx</h2>
+      <p>Itens digitais com entrega rápida</p>
     </div>
-</div>
+  </div>
 
-<!-- HOME -->
-<div id="home" class="tela">
-    <h1>Bem-vindo 💖</h1>
+  <!-- CATEGORIAS -->
+  <div class="categorias" id="cats">
+    <!-- As categorias serão geradas aqui -->
+  </div>
 
-    <div class="linha"></div>
+  <!-- SUBCATEGORIAS -->
+  <div class="sub-categorias" id="subCats">
+    <!-- Subcategorias geradas aqui -->
+  </div>
 
-    <h2 class="titulo-categorias">CATEGORIAS</h2>
+  <!-- PRODUTOS -->
+  <div class="grid" id="produtos">
+    <!-- Produtos serão gerados aqui -->
+  </div>
 
-    <div class="categorias">
-        <div class="categoria" onclick="abrir('roupas')">
-            <img src="https://i.imgur.com/8Km9tLL.jpg">
-            <p>Roupas</p>
-        </div>
+  <!-- MODAL -->
+  <div class="modal" id="modal">
+    <h3 id="nome"></h3>
+    <p id="preco"></p>
+    <button class="btn" onclick="comprar()">Finalizar compra</button>
+  </div>
 
-        <div class="categoria" onclick="abrir('acessorios')">
-            <img src="https://i.imgur.com/jTqVY9C.jpg">
-            <p>Acessórios</p>
-        </div>
+  <script>
+    // Dados das categorias, subcategorias e produtos
+    const categorias = [
+      {
+        nome: "Instagram",
+        subcategorias: [
+          {
+            nome: "Seguidores",
+            produtos: [
+              { nome: "100 seguidores", preco: 5, img: "https://i.imgur.com/8Km9tLL.jpg" },
+              { nome: "1000 seguidores", preco: 40, img: "https://i.imgur.com/8Km9tLL.jpg" }
+            ]
+          },
+          {
+            nome: "Curtidas",
+            produtos: [
+              { nome: "500 curtidas", preco: 10, img: "https://i.imgur.com/8Km9tLL.jpg" }
+            ]
+          }
+        ]
+      },
+      {
+        nome: "TikTok",
+        subcategorias: [
+          {
+            nome: "Curtidas",
+            produtos: [
+              { nome: "100 curtidas", preco: 8, img: "https://i.imgur.com/8Km9tLL.jpg" },
+              { nome: "1000 curtidas", preco: 35, img: "https://i.imgur.com/8Km9tLL.jpg" }
+            ]
+          },
+          {
+            nome: "Seguidores",
+            produtos: [
+              { nome: "500 seguidores", preco: 20, img: "https://i.imgur.com/8Km9tLL.jpg" }
+            ]
+          }
+        ]
+      },
+      {
+        nome: "Free Fire",
+        subcategorias: [
+          {
+            nome: "Contas",
+            produtos: [
+              { nome: "Conta rara", preco: 80, img: "https://i.imgur.com/8Km9tLL.jpg" }
+            ]
+          }
+        ]
+      }
+    ];
 
-        <div class="categoria" onclick="abrir('make')">
-            <img src="https://i.imgur.com/3ZQ3Z6L.jpg">
-            <p>Maquiagem</p>
-        </div>
+    let categoriaSelecionada = null;
+    let subcategoriaSelecionada = null;
 
-        <div class="categoria" onclick="abrir('perfume')">
-            <img src="https://i.imgur.com/6Iej2c3.jpg">
-            <p>Perfumes</p>
-        </div>
+    // Gerar categorias principais
+    const areaCat = document.getElementById("cats");
+    categorias.forEach(cat => {
+      areaCat.innerHTML += `<div class="cat" onclick="selecionarCategoria('${cat.nome}')">${cat.nome}</div>`;
+    });
 
-        <div class="categoria" onclick="abrir('calcados')">
-            <img src="https://i.imgur.com/5tj6S7Ol.jpg">
-            <p>Calçados</p>
-        </div>
+    // Selecionar uma categoria e mostrar suas subcategorias
+    function selecionarCategoria(nomeCategoria) {
+      categoriaSelecionada = categorias.find(c => c.nome === nomeCategoria);
+      const areaSub = document.getElementById("subCats");
+      areaSub.innerHTML = ''; // Limpar subcategorias
+      categoriaSelecionada.subcategorias.forEach(sub => {
+        areaSub.innerHTML += `<div class="sub-cat" onclick="selecionarSubcategoria('${sub.nome}')">${sub.nome}</div>`;
+      });
+      document.getElementById("produtos").innerHTML = ''; // Limpar produtos
+    }
 
-        <div class="categoria" onclick="abrir('bolsas')">
-            <img src="https://i.imgur.com/XR4f5QZ.jpg">
-            <p>Bolsas</p>
-        </div>
+    // Selecionar uma subcategoria e mostrar produtos
+    function selecionarSubcategoria(nomeSubcategoria) {
+      subcategoriaSelecionada = categoriaSelecionada.subcategorias.find(s => s.nome === nomeSubcategoria);
+      const areaProd = document.getElementById("produtos");
+      areaProd.innerHTML = ''; // Limpar produtos anteriores
+      subcategoriaSelecionada.produtos.forEach(p => {
+        areaProd.innerHTML += `
+          <div class="card">
+            <img src="${p.img}">
+            <div class="info">
+              <div class="nome">${p.nome}</div>
+              <div class="preco">R$${p.preco}</div>
+              <button class="btn" onclick='abrirModal("${p.nome}", ${p.preco})'>Comprar</button>
+            </div>
+          </div>`;
+      });
+    }
 
-        <div class="categoria" onclick="abrir('promo')">
-            <img src="https://i.imgur.com/0y0y0y0.jpg">
-            <p>Promoções</p>
-        </div>
-    </div>
-</div>
+    // Modal de compra
+    function abrirModal(nome, preco) {
+      document.getElementById("nome").innerText = nome;
+      document.getElementById("preco").innerText = `Preço: R$${preco}`;
+      document.getElementById("modal").classList.add("show");
+    }
 
-<!-- EXEMPLO DE CATEGORIA -->
-<div id="roupas" class="tela">
-    <button class="voltar" onclick="voltar()">← Voltar</button>
-    <h1>Roupas</h1>
-    <p>Aqui vão seus produtos de roupas 👕</p>
-</div>
+    function comprar() {
+      alert("Compra simulada com sucesso!");
+      document.getElementById("modal").classList.remove("show");
+    }
 
-<div id="acessorios" class="tela">
-    <button class="voltar" onclick="voltar()">← Voltar</button>
-    <h1>Acessórios</h1>
-</div>
+    // Busca de produtos
+    function buscar(txt) {
+      txt = txt.toLowerCase();
+      let lista = [];
+      categorias.forEach(cat => {
+        cat.subcategorias.forEach(sub => {
+          sub.produtos.forEach(p => {
+            if (p.nome.toLowerCase().includes(txt)) {
+              lista.push(p);
+            }
+          });
+        });
+      });
+      // Mostrar resultado da busca
+      const areaProd = document.getElementById("produtos");
+      const areaSub = document.getElementById("subCats");
+      areaSub.innerHTML = ''; // Limpa subcategorias
+      areaProd.innerHTML = ''; // Limpa produtos
+      if (lista.length === 0) {
+        areaProd.innerHTML = "<p style='padding:10px;'>Nenhum item encontrado.</p>";
+        return;
+      }
+      lista.forEach(p => {
+        areaProd.innerHTML += `
+          <div class="card">
+            <img src="${p.img}">
+            <div class="info">
+              <div class="nome">${p.nome}</div>
+              <div class="preco">R$${p.preco}</div>
+              <button class="btn" onclick='abrirModal("${p.nome}", ${p.preco})'>Comprar</button>
+            </div>
+          </div>`;
+      });
+    }
 
-<div id="make" class="tela">
-    <button class="voltar" onclick="voltar()">← Voltar</button>
-    <h1>Maquiagem</h1>
-</div>
-
-<div id="perfume" class="tela">
-    <button class="voltar" onclick="voltar()">← Voltar</button>
-    <h1>Perfumes</h1>
-</div>
-
-<div id="calcados" class="tela">
-    <button class="voltar" onclick="voltar()">← Voltar</button>
-    <h1>Calçados</h1>
-</div>
-
-<div id="bolsas" class="tela">
-    <button class="voltar" onclick="voltar()">← Voltar</button>
-    <h1>Bolsas</h1>
-</div>
-
-<div id="promo" class="tela">
-    <button class="voltar" onclick="voltar()">← Voltar</button>
-    <h1>Promoções</h1>
-</div>
-
-<script>
-function entrar() {
-    document.getElementById("aviso").style.display = "none";
-    document.getElementById("home").classList.add("ativa");
-}
-
-function abrir(id) {
-    document.getElementById("home").classList.remove("ativa");
-    document.getElementById(id).classList.add("ativa");
-}
-
-function voltar() {
-    let telas = document.querySelectorAll(".tela");
-    telas.forEach(t => t.classList.remove("ativa"));
-    document.getElementById("home").classList.add("ativa");
-}
-</script>
+  </script>
 
 </body>
 </html>
