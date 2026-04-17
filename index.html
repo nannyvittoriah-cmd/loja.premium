@@ -2,114 +2,230 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Login / Cadastro</title>
+<title>Bonys Story</title>
 
 <style>
 body {
     margin: 0;
-    font-family: Arial;
-    background: linear-gradient(135deg, #0a0f2c, #121a40);
+    font-family: Arial, sans-serif;
+    background-color: #0b1a4a;
+    color: white;
+}
+
+/* ================= AVISO ================= */
+#aviso {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: #0b1a4a;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
 }
 
-/* CAIXA PRINCIPAL */
-.container {
-    background: #0f1740;
-    padding: 30px;
+.caixa-aviso {
+    background-color: #0b1a4a;
+    border: 3px solid #ff4da6;
     border-radius: 15px;
-    width: 300px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    padding: 30px;
+    width: 80%;
+    max-width: 400px;
     text-align: center;
+    box-shadow: 0 0 20px #ff4da6;
 }
 
-/* TITULO */
-h2 {
-    color: white;
-    margin-bottom: 20px;
+.caixa-aviso h1 {
+    color: #ff4da6;
 }
 
-/* INPUTS */
-input {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
+.botao {
+    margin-top: 20px;
+    padding: 12px 25px;
+    border: none;
     border-radius: 8px;
-    border: none;
-    outline: none;
-    background: #1c255c;
-    color: white;
-}
-
-/* BOTÃO */
-button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    border-radius: 10px;
-    border: none;
     background: #ff4da6;
     color: white;
-    font-size: 16px;
     cursor: pointer;
-    transition: 0.3s;
 }
 
-button:hover {
-    background: #ff1a8c;
+/* ================= SITE ================= */
+.tela {
+    display: none;
+    padding: 30px;
+    min-height: 100vh;
 }
 
-/* LINK */
-.toggle {
-    color: #ff4da6;
-    margin-top: 15px;
-    cursor: pointer;
+.ativa {
     display: block;
 }
 
-/* ESCONDER */
-.hidden {
-    display: none;
+/* LINHA */
+.linha {
+    width: 80%;
+    height: 2px;
+    background: #ff4da6;
+    margin: 30px auto;
 }
-</style>
 
+/* TITULO */
+.titulo-categorias {
+    margin: 20px 0;
+    font-size: 22px;
+    color: #ff4da6;
+}
+
+/* GRID */
+.categorias {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.categoria {
+    background-color: #0b1a4a;
+    border: 2px solid #ff4da6;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.categoria img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* BOTÃO VOLTAR */
+.voltar {
+    margin-bottom: 20px;
+    background: #ff4da6;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* RESPONSIVO */
+@media (max-width: 700px) {
+    .categorias {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+</style>
 </head>
+
 <body>
 
-<div class="container">
-
-    <!-- LOGIN -->
-    <div id="login">
-        <h2>Login</h2>
-        <input type="text" placeholder="Usuário">
-        <input type="password" placeholder="Senha">
-        <button>Entrar</button>
-        <span class="toggle" onclick="mostrarCadastro()">Não tem conta? Cadastre-se</span>
+<!-- AVISO -->
+<div id="aviso">
+    <div class="caixa-aviso">
+        <h1>Aviso Importante</h1>
+        <p>Sem login/cadastro por enquanto.</p>
+        <button class="botao" onclick="entrar()">Entrar no site</button>
     </div>
+</div>
 
-    <!-- CADASTRO -->
-    <div id="cadastro" class="hidden">
-        <h2>Cadastro</h2>
-        <input type="text" placeholder="Usuário">
-        <input type="email" placeholder="Email">
-        <input type="password" placeholder="Senha">
-        <button>Cadastrar</button>
-        <span class="toggle" onclick="mostrarLogin()">Já tem conta? Entrar</span>
+<!-- HOME -->
+<div id="home" class="tela">
+    <h1>Bem-vindo 💖</h1>
+
+    <div class="linha"></div>
+
+    <h2 class="titulo-categorias">CATEGORIAS</h2>
+
+    <div class="categorias">
+        <div class="categoria" onclick="abrir('roupas')">
+            <img src="https://i.imgur.com/8Km9tLL.jpg">
+            <p>Roupas</p>
+        </div>
+
+        <div class="categoria" onclick="abrir('acessorios')">
+            <img src="https://i.imgur.com/jTqVY9C.jpg">
+            <p>Acessórios</p>
+        </div>
+
+        <div class="categoria" onclick="abrir('make')">
+            <img src="https://i.imgur.com/3ZQ3Z6L.jpg">
+            <p>Maquiagem</p>
+        </div>
+
+        <div class="categoria" onclick="abrir('perfume')">
+            <img src="https://i.imgur.com/6Iej2c3.jpg">
+            <p>Perfumes</p>
+        </div>
+
+        <div class="categoria" onclick="abrir('calcados')">
+            <img src="https://i.imgur.com/5tj6S7Ol.jpg">
+            <p>Calçados</p>
+        </div>
+
+        <div class="categoria" onclick="abrir('bolsas')">
+            <img src="https://i.imgur.com/XR4f5QZ.jpg">
+            <p>Bolsas</p>
+        </div>
+
+        <div class="categoria" onclick="abrir('promo')">
+            <img src="https://i.imgur.com/0y0y0y0.jpg">
+            <p>Promoções</p>
+        </div>
     </div>
+</div>
 
+<!-- EXEMPLO DE CATEGORIA -->
+<div id="roupas" class="tela">
+    <button class="voltar" onclick="voltar()">← Voltar</button>
+    <h1>Roupas</h1>
+    <p>Aqui vão seus produtos de roupas 👕</p>
+</div>
+
+<div id="acessorios" class="tela">
+    <button class="voltar" onclick="voltar()">← Voltar</button>
+    <h1>Acessórios</h1>
+</div>
+
+<div id="make" class="tela">
+    <button class="voltar" onclick="voltar()">← Voltar</button>
+    <h1>Maquiagem</h1>
+</div>
+
+<div id="perfume" class="tela">
+    <button class="voltar" onclick="voltar()">← Voltar</button>
+    <h1>Perfumes</h1>
+</div>
+
+<div id="calcados" class="tela">
+    <button class="voltar" onclick="voltar()">← Voltar</button>
+    <h1>Calçados</h1>
+</div>
+
+<div id="bolsas" class="tela">
+    <button class="voltar" onclick="voltar()">← Voltar</button>
+    <h1>Bolsas</h1>
+</div>
+
+<div id="promo" class="tela">
+    <button class="voltar" onclick="voltar()">← Voltar</button>
+    <h1>Promoções</h1>
 </div>
 
 <script>
-function mostrarCadastro() {
-    document.getElementById("login").classList.add("hidden");
-    document.getElementById("cadastro").classList.remove("hidden");
+function entrar() {
+    document.getElementById("aviso").style.display = "none";
+    document.getElementById("home").classList.add("ativa");
 }
 
-function mostrarLogin() {
-    document.getElementById("cadastro").classList.add("hidden");
-    document.getElementById("login").classList.remove("hidden");
+function abrir(id) {
+    document.getElementById("home").classList.remove("ativa");
+    document.getElementById(id).classList.add("ativa");
+}
+
+function voltar() {
+    let telas = document.querySelectorAll(".tela");
+    telas.forEach(t => t.classList.remove("ativa"));
+    document.getElementById("home").classList.add("ativa");
 }
 </script>
 
