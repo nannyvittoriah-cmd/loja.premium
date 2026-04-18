@@ -7,42 +7,27 @@
 
 <style>
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 
-body{
-    background:#0b0f2a;
-    color:white;
-}
+body{background:#0b0f2a;color:white;}
 
 /* TOPO */
 .topo{
     display:flex;
     justify-content:space-between;
-    align-items:center;
     padding:15px;
     border-bottom:2px solid #ff008c;
+    position:relative;
+    z-index:1000;
 }
 
-.logo{
-    font-size:26px;
-    font-weight:bold;
-    color:#ff008c;
-}
+.logo{color:#ff008c;font-size:24px;font-weight:bold;}
 
-.topo-direita{
-    display:flex;
-    gap:15px;
-    align-items:center;
-}
+.topo-direita{display:flex;gap:10px;align-items:center;}
 
 .notificacao{
     background:#ff008c;
-    padding:8px 12px;
+    padding:8px;
     border-radius:20px;
 }
 
@@ -51,20 +36,40 @@ body{
     font-size:22px;
 }
 
+/* MENU MELHORADO */
 .dropdown{
     position:absolute;
     right:10px;
     top:60px;
     background:#11163a;
     border:1px solid #ff008c;
-    border-radius:10px;
-    display:none;
+    border-radius:12px;
+    display:flex;
     flex-direction:column;
+    min-width:180px;
+
+    opacity:0;
+    transform:translateY(-10px);
+    pointer-events:none;
+    transition:0.3s;
+
+    z-index:9999;
+}
+
+.dropdown.ativo{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
 }
 
 .dropdown div{
-    padding:10px;
+    padding:12px;
     cursor:pointer;
+    border-bottom:1px solid #1f255a;
+}
+
+.dropdown div:last-child{
+    border-bottom:none;
 }
 
 .dropdown div:hover{
@@ -72,11 +77,8 @@ body{
 }
 
 /* CONTEÚDO */
-.container{
-    padding:20px;
-}
+.container{padding:20px;}
 
-/* CATEGORIAS */
 .categorias-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
@@ -87,8 +89,9 @@ body{
 .categoria{
     background:#11163a;
     padding:15px;
-    border-radius:12px;
+    border-radius:10px;
     text-align:center;
+    position:relative;
 }
 
 .categoria img{
@@ -97,27 +100,36 @@ body{
     margin-bottom:10px;
 }
 
-/* BOTÃO */
-.btn{
-    background:#ff008c;
-    color:white;
-    padding:10px;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
+/* BOTÕES ADMIN */
+.acoes{
+    position:absolute;
+    top:5px;
+    right:5px;
+    display:none;
+    gap:5px;
 }
 
-/* LOGIN ADMIN */
+.admin .acoes{display:flex;}
+
+.btn-mini{
+    background:#ff008c;
+    border:none;
+    color:white;
+    padding:3px 6px;
+    cursor:pointer;
+    border-radius:5px;
+}
+
+/* LOGIN */
 .login{
     position:fixed;
-    top:0;
-    left:0;
     width:100%;
     height:100%;
     background:#000000d9;
     display:none;
     justify-content:center;
     align-items:center;
+    z-index:99999;
 }
 
 .box{
@@ -135,8 +147,17 @@ input{
     border-radius:5px;
 }
 
-/* ADMIN */
-.admin{
+button{
+    background:#ff008c;
+    color:white;
+    padding:10px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+/* PAINEL */
+.admin-panel{
     display:none;
     margin-top:20px;
     border:1px solid #ff008c;
@@ -144,12 +165,17 @@ input{
     border-radius:10px;
 }
 
+/* TEMA */
+.light{
+    background:white;
+    color:black;
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- TOPO -->
 <div class="topo">
     <div class="logo">BS</div>
 
@@ -159,61 +185,64 @@ input{
     </div>
 
     <div class="dropdown" id="menuDrop">
-        <div onclick="abrirLogin()">Admin</div>
-        <div onclick="trocarTema()">Tema</div>
+        <div onclick="alert('Afiliados em breve')">Afiliados</div>
+        <div onclick="trocarTema()">Tema claro/escuro</div>
+        <div onclick="abrirLogin()">Painel ADM</div>
     </div>
 </div>
 
-<!-- CONTEÚDO -->
 <div class="container">
 
-    <h2>Bem-vindo à BS Store</h2>
-    <br>
+<h2>Bem-vindo à BS Store</h2>
 
-    <div class="categorias-grid" id="categorias"></div>
+<div class="categorias-grid" id="cats"></div>
 
-    <!-- PAINEL ADMIN -->
-    <div class="admin" id="adminPanel">
-        <h3>Painel Admin</h3>
-        <input type="text" id="nomeCat" placeholder="Nome categoria">
-        <input type="text" id="imgCat" placeholder="URL da imagem">
-        <button class="btn" onclick="addCategoria()">Adicionar</button>
-    </div>
+<div class="admin-panel" id="painel">
+    <h3>Painel ADM</h3>
+    <input id="nome" placeholder="Nome">
+    <input id="img" placeholder="URL imagem">
+    <button onclick="add()">Adicionar</button>
+</div>
 
 </div>
 
 <!-- LOGIN -->
-<div class="login" id="loginBox">
+<div class="login" id="login">
     <div class="box">
         <h3>Admin</h3>
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="senha" placeholder="Senha">
-        <button onclick="login()">Entrar</button>
+        <input id="email" placeholder="Email">
+        <input id="senha" type="password" placeholder="Senha">
+        <button onclick="logar()">Entrar</button>
     </div>
 </div>
 
 <script>
 
-// DADOS INICIAIS
-let categorias = JSON.parse(localStorage.getItem("cats")) || [
-    {nome:"Instagram", img:"https://cdn-icons-png.flaticon.com/512/2111/2111463.png"},
-    {nome:"TikTok", img:"https://cdn-icons-png.flaticon.com/512/3046/3046121.png"},
-    {nome:"Kwai", img:"https://cdn-icons-png.flaticon.com/512/5968/5968805.png"},
-    {nome:"Free Fire", img:"https://cdn-icons-png.flaticon.com/512/5969/5969313.png"},
-    {nome:"Fortnite", img:"https://cdn-icons-png.flaticon.com/512/5968/5968653.png"},
-    {nome:"Contas / Streaming", img:"https://cdn-icons-png.flaticon.com/512/5977/5977590.png"},
-    {nome:"Contas à Venda", img:"https://cdn-icons-png.flaticon.com/512/263/263115.png"},
-    {nome:"Sorteios", img:"https://cdn-icons-png.flaticon.com/512/1828/1828884.png"},
-    {nome:"Itens Aleatórios", img:"https://cdn-icons-png.flaticon.com/512/992/992700.png"}
+let lista = JSON.parse(localStorage.getItem("bsCats")) || [
+{nome:"Instagram",img:"https://cdn-icons-png.flaticon.com/512/2111/2111463.png"},
+{nome:"TikTok",img:"https://cdn-icons-png.flaticon.com/512/3046/3046121.png"},
+{nome:"Kwai",img:"https://cdn-icons-png.flaticon.com/512/5968/5968805.png"},
+{nome:"Free Fire",img:"https://cdn-icons-png.flaticon.com/512/5969/5969313.png"},
+{nome:"Fortnite",img:"https://cdn-icons-png.flaticon.com/512/5968/5968653.png"},
+{nome:"Contas / Streaming",img:"https://cdn-icons-png.flaticon.com/512/5977/5977590.png"},
+{nome:"Contas à Venda",img:"https://cdn-icons-png.flaticon.com/512/263/263115.png"},
+{nome:"Sorteios",img:"https://cdn-icons-png.flaticon.com/512/1828/1828884.png"},
+{nome:"Itens Aleatórios",img:"https://cdn-icons-png.flaticon.com/512/992/992700.png"}
 ];
+
+let admin=false;
 
 // RENDER
 function render(){
-    let area = document.getElementById("categorias");
+    let area=document.getElementById("cats");
     area.innerHTML="";
-    categorias.forEach(c=>{
-        area.innerHTML += `
-        <div class="categoria">
+    lista.forEach((c,i)=>{
+        area.innerHTML+=`
+        <div class="categoria ${admin?'admin':''}">
+            <div class="acoes">
+                <button class="btn-mini" onclick="editar(${i})">✏️</button>
+                <button class="btn-mini" onclick="remover(${i})">❌</button>
+            </div>
             <img src="${c.img}">
             <p>${c.nome}</p>
         </div>`;
@@ -223,34 +252,61 @@ render();
 
 // MENU
 function toggleMenu(){
-    let m = document.getElementById("menuDrop");
-    m.style.display = m.style.display=="flex"?"none":"flex";
+    document.getElementById("menuDrop").classList.toggle("ativo");
 }
+
+// FECHAR AO CLICAR FORA
+document.addEventListener("click", function(e){
+    let menu = document.getElementById("menuDrop");
+    let btn = document.querySelector(".menu");
+
+    if(!menu.contains(e.target) && !btn.contains(e.target)){
+        menu.classList.remove("ativo");
+    }
+});
 
 // LOGIN
 function abrirLogin(){
-    document.getElementById("loginBox").style.display="flex";
+    document.getElementById("login").style.display="flex";
 }
 
-function login(){
-    let email = document.getElementById("email").value;
-    let senha = document.getElementById("senha").value;
+function logar(){
+    let e=document.getElementById("email").value;
+    let s=document.getElementById("senha").value;
 
-    if(email==="nannyvittoriah@gmail.com" && senha==="Lorrannyh.170"){
-        document.getElementById("loginBox").style.display="none";
-        document.getElementById("adminPanel").style.display="block";
+    if(e==="nannyvittoriah@gmail.com" && s==="Lorrannyh.170"){
+        admin=true;
+        document.getElementById("login").style.display="none";
+        document.getElementById("painel").style.display="block";
+        render();
     }else{
         alert("Acesso negado");
     }
 }
 
-// ADD
-function addCategoria(){
-    let nome = document.getElementById("nomeCat").value;
-    let img = document.getElementById("imgCat").value;
+// CRUD
+function add(){
+    let n=document.getElementById("nome").value;
+    let i=document.getElementById("img").value;
+    lista.push({nome:n,img:i});
+    salvar();
+}
 
-    categorias.push({nome,img});
-    localStorage.setItem("cats", JSON.stringify(categorias));
+function editar(i){
+    let n=prompt("Novo nome:", lista[i].nome);
+    let img=prompt("Nova imagem:", lista[i].img);
+    if(n) lista[i].nome=n;
+    if(img) lista[i].img=img;
+    salvar();
+}
+
+function remover(i){
+    lista.splice(i,1);
+    salvar();
+}
+
+function salvar(){
+    localStorage.setItem("bsCats", JSON.stringify(lista));
     render();
 }
 
