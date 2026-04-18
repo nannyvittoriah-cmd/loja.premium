@@ -1,287 +1,209 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bonyx Store</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(180deg, #0a0f2c, #050d1f);
-      color: white;
-    }
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px;
-      background: #070b20;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    .logo {
-      font-weight: bold;
-      color: #ff2e93;
-    }
-    .search {
-      width: 50%;
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-    }
-    .banner {
-      padding: 15px;
-      text-align: center;
-    }
-    .banner-box {
-      background: linear-gradient(90deg, #ff2e93, #7a00ff);
-      padding: 20px;
-      border-radius: 15px;
-    }
-    .categorias {
-      padding: 10px;
-    }
-    .cat, .sub-cat {
-      background: #121a4a;
-      padding: 8px 14px;
-      border-radius: 20px;
-      cursor: pointer;
-      display: inline-block;
-      margin: 5px;
-    }
-    .sub-categorias {
-      margin-left: 20px;
-      margin-top: 10px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      padding: 12px;
-    }
-    .card {
-      background: #121a4a;
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: 0 0 10px rgba(255, 46, 147, 0.3);
-    }
-    .card img {
-      width: 100%;
-      height: 120px;
-      object-fit: cover;
-    }
-    .info {
-      padding: 10px;
-    }
-    .nome {
-      font-size: 14px;
-    }
-    .preco {
-      color: #ff2e93;
-      font-weight: bold;
-    }
-    .btn {
-      width: 100%;
-      background: #ff2e93;
-      border: none;
-      padding: 10px;
-      color: white;
-      border-radius: 10px;
-      margin-top: 5px;
-    }
-    .modal {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: #070b20;
-      padding: 20px;
-      display: none;
-      border-radius: 20px 20px 0 0;
-    }
-    .modal.show {
-      display: block;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BS Store</title>
+
+<style>
+
+/* RESET */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+
+/* FUNDO */
+body{
+    background:#0b0f2a;
+    color:white;
+}
+
+/* TOPO */
+.topo{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px;
+    border-bottom:2px solid #ff008c;
+}
+
+/* LOGO */
+.logo{
+    font-size:26px;
+    font-weight:bold;
+    color:#ff008c;
+}
+
+/* LADO DIREITO TOPO */
+.topo-direita{
+    display:flex;
+    gap:15px;
+    align-items:center;
+}
+
+/* NOTIFICAÇÃO */
+.notificacao{
+    background:#ff008c;
+    padding:8px 12px;
+    border-radius:20px;
+    cursor:pointer;
+}
+
+/* MENU 3 PONTOS */
+.menu{
+    cursor:pointer;
+    font-size:22px;
+}
+
+/* DROPDOWN */
+.dropdown{
+    position:absolute;
+    right:10px;
+    top:60px;
+    background:#11163a;
+    border:1px solid #ff008c;
+    border-radius:10px;
+    display:none;
+    flex-direction:column;
+}
+
+.dropdown div{
+    padding:10px;
+    cursor:pointer;
+}
+
+.dropdown div:hover{
+    background:#ff008c;
+}
+
+/* SEPARAÇÃO */
+.divisor{
+    height:10px;
+    background:#05071a;
+}
+
+/* CONTEÚDO */
+.container{
+    display:flex;
+}
+
+/* ÁREA PRINCIPAL */
+.principal{
+    flex:3;
+    padding:20px;
+}
+
+/* SIDEBAR DIREITA */
+.sidebar{
+    flex:1;
+    border-left:2px solid #ff008c;
+    padding:20px;
+}
+
+/* CATEGORIAS */
+.categoria{
+    background:#11163a;
+    padding:12px;
+    margin-bottom:10px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.categoria:hover{
+    background:#ff008c;
+}
+
+/* BOTÕES */
+.btn{
+    background:#ff008c;
+    color:white;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    box-shadow:0 0 10px #ff008c;
+}
+
+/* TEMA CLARO */
+.light{
+    background:white;
+    color:black;
+}
+
+.light .topo{
+    border-bottom:2px solid #ff008c;
+}
+
+.light .categoria{
+    background:#eee;
+}
+
+</style>
 </head>
+
 <body>
 
-  <!-- HEADER -->
-  <div class="header">
-    <div class="logo">BONYX</div>
-    <input class="search" placeholder="Pesquisar..." onkeyup="buscar(this.value)">
-  </div>
+<!-- TOPO -->
+<div class="topo">
 
-  <!-- BANNER -->
-  <div class="banner">
-    <div class="banner-box">
-      <h2>🔥 Ofertas da Bonyx</h2>
-      <p>Itens digitais com entrega rápida</p>
+    <div class="logo">BS</div>
+
+    <div class="topo-direita">
+        <div class="notificacao">🔔</div>
+        <div class="menu" onclick="abrirMenu()">⋮</div>
     </div>
-  </div>
 
-  <!-- CATEGORIAS -->
-  <div class="categorias" id="cats">
-    <!-- As categorias serão geradas aqui -->
-  </div>
+    <div class="dropdown" id="menuDrop">
+        <div>Afiliados</div>
+        <div onclick="trocarTema()">Tema Claro/Escuro</div>
+    </div>
 
-  <!-- SUBCATEGORIAS -->
-  <div class="sub-categorias" id="subCats">
-    <!-- Subcategorias geradas aqui -->
-  </div>
+</div>
 
-  <!-- PRODUTOS -->
-  <div class="grid" id="produtos">
-    <!-- Produtos serão gerados aqui -->
-  </div>
+<!-- SEPARAÇÃO -->
+<div class="divisor"></div>
 
-  <!-- MODAL -->
-  <div class="modal" id="modal">
-    <h3 id="nome"></h3>
-    <p id="preco"></p>
-    <button class="btn" onclick="comprar()">Finalizar compra</button>
-  </div>
+<!-- CONTEÚDO -->
+<div class="container">
 
-  <script>
-    // Dados das categorias, subcategorias e produtos
-    const categorias = [
-      {
-        nome: "Instagram",
-        subcategorias: [
-          {
-            nome: "Seguidores",
-            produtos: [
-              { nome: "100 seguidores", preco: 5, img: "https://i.imgur.com/8Km9tLL.jpg" },
-              { nome: "1000 seguidores", preco: 40, img: "https://i.imgur.com/8Km9tLL.jpg" }
-            ]
-          },
-          {
-            nome: "Curtidas",
-            produtos: [
-              { nome: "500 curtidas", preco: 10, img: "https://i.imgur.com/8Km9tLL.jpg" }
-            ]
-          }
-        ]
-      },
-      {
-        nome: "TikTok",
-        subcategorias: [
-          {
-            nome: "Curtidas",
-            produtos: [
-              { nome: "100 curtidas", preco: 8, img: "https://i.imgur.com/8Km9tLL.jpg" },
-              { nome: "1000 curtidas", preco: 35, img: "https://i.imgur.com/8Km9tLL.jpg" }
-            ]
-          },
-          {
-            nome: "Seguidores",
-            produtos: [
-              { nome: "500 seguidores", preco: 20, img: "https://i.imgur.com/8Km9tLL.jpg" }
-            ]
-          }
-        ]
-      },
-      {
-        nome: "Free Fire",
-        subcategorias: [
-          {
-            nome: "Contas",
-            produtos: [
-              { nome: "Conta rara", preco: 80, img: "https://i.imgur.com/8Km9tLL.jpg" }
-            ]
-          }
-        ]
-      }
-    ];
+    <!-- PARTE PRINCIPAL -->
+    <div class="principal">
+        <h1>Bem-vindo à BS Store</h1>
+        <br>
+        <button class="btn">Explorar Produtos</button>
+    </div>
 
-    let categoriaSelecionada = null;
-    let subcategoriaSelecionada = null;
+    <!-- SIDEBAR DIREITA -->
+    <div class="sidebar">
+        <h3>Categorias</h3>
+        <br>
 
-    // Gerar categorias principais
-    const areaCat = document.getElementById("cats");
-    categorias.forEach(cat => {
-      areaCat.innerHTML += `<div class="cat" onclick="selecionarCategoria('${cat.nome}')">${cat.nome}</div>`;
-    });
+        <div class="categoria">Games</div>
+        <div class="categoria">Roupas</div>
+        <div class="categoria">Eletrônicos</div>
+        <div class="categoria">Acessórios</div>
+        <div class="categoria">Promoções</div>
 
-    // Selecionar uma categoria e mostrar suas subcategorias
-    function selecionarCategoria(nomeCategoria) {
-      categoriaSelecionada = categorias.find(c => c.nome === nomeCategoria);
-      const areaSub = document.getElementById("subCats");
-      areaSub.innerHTML = ''; // Limpar subcategorias
-      categoriaSelecionada.subcategorias.forEach(sub => {
-        areaSub.innerHTML += `<div class="sub-cat" onclick="selecionarSubcategoria('${sub.nome}')">${sub.nome}</div>`;
-      });
-      document.getElementById("produtos").innerHTML = ''; // Limpar produtos
-    }
+    </div>
 
-    // Selecionar uma subcategoria e mostrar produtos
-    function selecionarSubcategoria(nomeSubcategoria) {
-      subcategoriaSelecionada = categoriaSelecionada.subcategorias.find(s => s.nome === nomeSubcategoria);
-      const areaProd = document.getElementById("produtos");
-      areaProd.innerHTML = ''; // Limpar produtos anteriores
-      subcategoriaSelecionada.produtos.forEach(p => {
-        areaProd.innerHTML += `
-          <div class="card">
-            <img src="${p.img}">
-            <div class="info">
-              <div class="nome">${p.nome}</div>
-              <div class="preco">R$${p.preco}</div>
-              <button class="btn" onclick='abrirModal("${p.nome}", ${p.preco})'>Comprar</button>
-            </div>
-          </div>`;
-      });
-    }
+</div>
 
-    // Modal de compra
-    function abrirModal(nome, preco) {
-      document.getElementById("nome").innerText = nome;
-      document.getElementById("preco").innerText = `Preço: R$${preco}`;
-      document.getElementById("modal").classList.add("show");
-    }
+<script>
 
-    function comprar() {
-      alert("Compra simulada com sucesso!");
-      document.getElementById("modal").classList.remove("show");
-    }
+function abrirMenu(){
+    let menu = document.getElementById("menuDrop");
+    menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
 
-    // Busca de produtos
-    function buscar(txt) {
-      txt = txt.toLowerCase();
-      let lista = [];
-      categorias.forEach(cat => {
-        cat.subcategorias.forEach(sub => {
-          sub.produtos.forEach(p => {
-            if (p.nome.toLowerCase().includes(txt)) {
-              lista.push(p);
-            }
-          });
-        });
-      });
-      // Mostrar resultado da busca
-      const areaProd = document.getElementById("produtos");
-      const areaSub = document.getElementById("subCats");
-      areaSub.innerHTML = ''; // Limpa subcategorias
-      areaProd.innerHTML = ''; // Limpa produtos
-      if (lista.length === 0) {
-        areaProd.innerHTML = "<p style='padding:10px;'>Nenhum item encontrado.</p>";
-        return;
-      }
-      lista.forEach(p => {
-        areaProd.innerHTML += `
-          <div class="card">
-            <img src="${p.img}">
-            <div class="info">
-              <div class="nome">${p.nome}</div>
-              <div class="preco">R$${p.preco}</div>
-              <button class="btn" onclick='abrirModal("${p.nome}", ${p.preco})'>Comprar</button>
-            </div>
-          </div>`;
-      });
-    }
+function trocarTema(){
+    document.body.classList.toggle("light");
+}
 
-  </script>
+</script>
 
 </body>
 </html>
