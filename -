@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Bonyx Store</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:#0f172a;
+    color:white;
+}
+
+/* PAINEL */
+#painel{
+    padding:15px;
+    background:#1e293b;
+    position:fixed;
+    width:100%;
+    top:0;
+    z-index:10;
+}
+
+#painel input, #painel select{
+    margin:5px;
+    padding:8px;
+    border:none;
+    border-radius:5px;
+}
+
+#painel button{
+    padding:8px 12px;
+    background:#ec4899;
+    border:none;
+    color:white;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+/* PRODUTOS */
+#produtos{
+    margin-top:220px;
+    padding:10px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.produto{
+    background:#1e293b;
+    padding:10px;
+    border-radius:10px;
+}
+
+.produto img{
+    width:100%;
+    border-radius:10px;
+}
+
+.produto h3{
+    margin:5px 0;
+}
+
+.produto p{
+    font-size:14px;
+    color:#cbd5e1;
+}
+</style>
+</head>
+
+<body>
+
+<div id="painel">
+  <h2>Bonyx Store - Admin</h2>
+
+  <input type="text" id="nome" placeholder="Nome">
+  <input type="text" id="preco" placeholder="Preço">
+  <input type="text" id="descricao" placeholder="Descrição">
+  <input type="text" id="imagem" placeholder="URL da imagem">
+
+  <select id="categoria"></select>
+  <select id="subcategoria"></select>
+
+  <br>
+
+  <input type="text" id="novaSub" placeholder="Nova Subcategoria">
+  <button onclick="addSub()">Criar Sub</button>
+
+  <button onclick="addProduto()">Adicionar Produto</button>
+</div>
+
+<div id="produtos"></div>
+
+<script>
+// ===== BANCO DE DADOS =====
+let loja = JSON.parse(localStorage.getItem("loja")) || {
+  categorias: [
+    {
+      nome: "Jogos",
+      subcategorias: [
+        {
+          nome: "Free Fire",
+          produtos: []
+        }
+      ]
+    }
+  ]
+};
+
+// ===== SALVAR =====
+function salvar(){
+  localStorage.setItem("loja", JSON.stringify(loja));
+}
+
+// ===== SELECTS =====
+function atualizarSelects(){
+  let cat = document.getElementById("categoria");
+  let sub = document.getElementById("subcategoria");
+
+  cat.innerHTML = "";
+  loja.categorias.forEach((c, i)=>{
+    cat.innerHTML += `<option value="${i}">${c.nome}</option>`;
+  });
+
+  atualizarSub();
+}
+
+function atualizarSub(){
+  let catIndex = document.getElementById("categoria").value;
+  let sub = document.getElementById("subcategoria");
+
+  sub.innerHTML = "";
+  loja.categorias[catIndex].subcategorias.forEach((s, i)=>{
+    sub.innerHTML += `<option value="${i}">${s.nome}</option>`;
+  });
+}
+
+document.getElementById("categoria").onchange = atualizarSub;
+
+// ===== ADICIONAR PRODUTO =====
+function addProduto(){
+  let nome = document.getElementById("nome").value;
+  let preco = document.getElementById("preco").value;
+  let descricao = document.getElementById("descricao").value;
+  let imagem = document.getElementById("imagem").value;
+
+  let catIndex = document.getElementById("categoria").value;
+  let subIndex = document.getElementById("subcategoria").value;
+
+  if(!nome || !preco || !imagem){
+    alert("Preencha tudo!");
+    return;
+  }
+
+  loja.categorias[catIndex].subcategorias[subIndex].produtos.push({
+    nome, preco, descricao, imagem
+  });
+
+  salvar();
+  renderizar();
+}
+
+// ===== ADICIONAR SUBCATEGORIA =====
+function addSub(){
+  let nome = document.getElementById("novaSub").value;
+  let catIndex = document.getElementById("categoria").value;
+
+  if(!nome) return;
+
+  loja.categorias[catIndex].subcategorias.push({
+    nome,
+    produtos: []
+  });
+
+  salvar();
+  atualizarSelects();
+}
+
+// ===== RENDER =====
+function renderizar(){
+  let div = document.getElementById("produtos");
+  div.innerHTML = "";
+
+  loja.categorias.forEach(c=>{
+    c.subcategorias.forEach(s=>{
+      if(s.produtos.length > 0){
+        div.innerHTML += `<h2>${c.nome} > ${s.nome}</h2>`;
+      }
+
+      s.produtos.forEach(p=>{
+        div.innerHTML += `
+          <div class="produto">
+            <img src="${p.imagem}">
+            <h3>${p.nome}</h3>
+            <p>${p.descricao || ""}</p>
+            <strong>${p.preco}</strong>
+          </div>
+        `;
+      });
+    });
+  });
+}
+
+// ===== INIT =====
+atualizarSelects();
+renderizar();
+
+</script>
+
+</body>
+</html>
