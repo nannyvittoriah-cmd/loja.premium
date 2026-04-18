@@ -44,7 +44,6 @@ body{
     background:#ff008c;
     padding:8px 12px;
     border-radius:20px;
-    cursor:pointer;
 }
 
 .menu{
@@ -72,67 +71,77 @@ body{
     background:#ff008c;
 }
 
-.divisor{
-    height:10px;
-    background:#05071a;
-}
-
+/* CONTEÚDO */
 .container{
-    display:flex;
-}
-
-/* PRINCIPAL */
-.principal{
-    flex:3;
     padding:20px;
 }
 
-/* SIDEBAR */
-.sidebar{
-    flex:1;
-    border-left:2px solid #ff008c;
-    padding:20px;
-}
-
-/* GRID DE CATEGORIAS */
+/* CATEGORIAS */
 .categorias-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:10px;
+    gap:15px;
+    margin-top:20px;
 }
 
 .categoria{
     background:#11163a;
-    padding:12px;
-    border-radius:10px;
+    padding:15px;
+    border-radius:12px;
     text-align:center;
-    cursor:pointer;
-    transition:0.3s;
 }
 
-.categoria:hover{
-    background:#ff008c;
+.categoria img{
+    width:50px;
+    height:50px;
+    margin-bottom:10px;
 }
 
 /* BOTÃO */
 .btn{
     background:#ff008c;
     color:white;
-    padding:12px;
+    padding:10px;
     border:none;
     border-radius:10px;
     cursor:pointer;
-    box-shadow:0 0 10px #ff008c;
 }
 
-/* TEMA CLARO */
-.light{
-    background:white;
-    color:black;
+/* LOGIN ADMIN */
+.login{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#000000d9;
+    display:none;
+    justify-content:center;
+    align-items:center;
 }
 
-.light .categoria{
-    background:#eee;
+.box{
+    background:#11163a;
+    padding:20px;
+    border-radius:10px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+input{
+    padding:10px;
+    border:none;
+    border-radius:5px;
+}
+
+/* ADMIN */
+.admin{
+    display:none;
+    margin-top:20px;
+    border:1px solid #ff008c;
+    padding:15px;
+    border-radius:10px;
 }
 
 </style>
@@ -146,58 +155,106 @@ body{
 
     <div class="topo-direita">
         <div class="notificacao">🔔</div>
-        <div class="menu" onclick="abrirMenu()">⋮</div>
+        <div class="menu" onclick="toggleMenu()">⋮</div>
     </div>
 
     <div class="dropdown" id="menuDrop">
-        <div>Afiliados</div>
-        <div onclick="trocarTema()">Tema Claro/Escuro</div>
+        <div onclick="abrirLogin()">Admin</div>
+        <div onclick="trocarTema()">Tema</div>
     </div>
 </div>
 
-<div class="divisor"></div>
-
+<!-- CONTEÚDO -->
 <div class="container">
 
-    <!-- CONTEÚDO -->
-    <div class="principal">
-        <h1>Bem-vindo à BS Store</h1>
-        <br>
-        <button class="btn">Explorar Produtos</button>
+    <h2>Bem-vindo à BS Store</h2>
+    <br>
+
+    <div class="categorias-grid" id="categorias"></div>
+
+    <!-- PAINEL ADMIN -->
+    <div class="admin" id="adminPanel">
+        <h3>Painel Admin</h3>
+        <input type="text" id="nomeCat" placeholder="Nome categoria">
+        <input type="text" id="imgCat" placeholder="URL da imagem">
+        <button class="btn" onclick="addCategoria()">Adicionar</button>
     </div>
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-        <h3>Categorias</h3>
-        <br>
+</div>
 
-        <div class="categorias-grid">
-            <div class="categoria">Instagram</div>
-            <div class="categoria">TikTok</div>
-
-            <div class="categoria">Kwai</div>
-            <div class="categoria">Free Fire</div>
-
-            <div class="categoria">Fortnite</div>
-            <div class="categoria">Contas / Streaming</div>
-
-            <div class="categoria">Contas à Venda</div>
-            <div class="categoria">Sorteios</div>
-
-            <div class="categoria">Itens Aleatórios</div>
-        </div>
-
+<!-- LOGIN -->
+<div class="login" id="loginBox">
+    <div class="box">
+        <h3>Admin</h3>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="senha" placeholder="Senha">
+        <button onclick="login()">Entrar</button>
     </div>
-
 </div>
 
 <script>
 
-function abrirMenu(){
-    let menu = document.getElementById("menuDrop");
-    menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+// DADOS INICIAIS
+let categorias = JSON.parse(localStorage.getItem("cats")) || [
+    {nome:"Instagram", img:"https://cdn-icons-png.flaticon.com/512/2111/2111463.png"},
+    {nome:"TikTok", img:"https://cdn-icons-png.flaticon.com/512/3046/3046121.png"},
+    {nome:"Kwai", img:"https://cdn-icons-png.flaticon.com/512/5968/5968805.png"},
+    {nome:"Free Fire", img:"https://cdn-icons-png.flaticon.com/512/5969/5969313.png"},
+    {nome:"Fortnite", img:"https://cdn-icons-png.flaticon.com/512/5968/5968653.png"},
+    {nome:"Contas / Streaming", img:"https://cdn-icons-png.flaticon.com/512/5977/5977590.png"},
+    {nome:"Contas à Venda", img:"https://cdn-icons-png.flaticon.com/512/263/263115.png"},
+    {nome:"Sorteios", img:"https://cdn-icons-png.flaticon.com/512/1828/1828884.png"},
+    {nome:"Itens Aleatórios", img:"https://cdn-icons-png.flaticon.com/512/992/992700.png"}
+];
+
+// RENDER
+function render(){
+    let area = document.getElementById("categorias");
+    area.innerHTML="";
+    categorias.forEach(c=>{
+        area.innerHTML += `
+        <div class="categoria">
+            <img src="${c.img}">
+            <p>${c.nome}</p>
+        </div>`;
+    });
+}
+render();
+
+// MENU
+function toggleMenu(){
+    let m = document.getElementById("menuDrop");
+    m.style.display = m.style.display=="flex"?"none":"flex";
 }
 
+// LOGIN
+function abrirLogin(){
+    document.getElementById("loginBox").style.display="flex";
+}
+
+function login(){
+    let email = document.getElementById("email").value;
+    let senha = document.getElementById("senha").value;
+
+    if(email==="nannyvittoriah@gmail.com" && senha==="Lorrannyh.170"){
+        document.getElementById("loginBox").style.display="none";
+        document.getElementById("adminPanel").style.display="block";
+    }else{
+        alert("Acesso negado");
+    }
+}
+
+// ADD
+function addCategoria(){
+    let nome = document.getElementById("nomeCat").value;
+    let img = document.getElementById("imgCat").value;
+
+    categorias.push({nome,img});
+    localStorage.setItem("cats", JSON.stringify(categorias));
+    render();
+}
+
+// TEMA
 function trocarTema(){
     document.body.classList.toggle("light");
 }
