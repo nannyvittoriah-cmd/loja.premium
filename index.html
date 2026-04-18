@@ -9,7 +9,10 @@
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 
-body{background:#0b0f2a;color:white;}
+body{
+    background:#0b0f2a;
+    color:white;
+}
 
 /* TOPO */
 .topo{
@@ -31,12 +34,9 @@ body{background:#0b0f2a;color:white;}
     border-radius:20px;
 }
 
-.menu{
-    cursor:pointer;
-    font-size:22px;
-}
+.menu{cursor:pointer;font-size:22px;}
 
-/* MENU MELHORADO */
+/* MENU */
 .dropdown{
     position:absolute;
     right:10px;
@@ -52,7 +52,6 @@ body{background:#0b0f2a;color:white;}
     transform:translateY(-10px);
     pointer-events:none;
     transition:0.3s;
-
     z-index:9999;
 }
 
@@ -65,11 +64,6 @@ body{background:#0b0f2a;color:white;}
 .dropdown div{
     padding:12px;
     cursor:pointer;
-    border-bottom:1px solid #1f255a;
-}
-
-.dropdown div:last-child{
-    border-bottom:none;
 }
 
 .dropdown div:hover{
@@ -100,7 +94,7 @@ body{background:#0b0f2a;color:white;}
     margin-bottom:10px;
 }
 
-/* BOTÕES ADMIN */
+/* ADMIN */
 .acoes{
     position:absolute;
     top:5px;
@@ -116,11 +110,11 @@ body{background:#0b0f2a;color:white;}
     border:none;
     color:white;
     padding:3px 6px;
-    cursor:pointer;
     border-radius:5px;
+    cursor:pointer;
 }
 
-/* LOGIN */
+/* LOGIN / MODAIS */
 .login{
     position:fixed;
     width:100%;
@@ -139,6 +133,7 @@ body{background:#0b0f2a;color:white;}
     display:flex;
     flex-direction:column;
     gap:10px;
+    width:250px;
 }
 
 input{
@@ -167,9 +162,11 @@ button{
 
 /* TEMA */
 .light{
-    background:white;
-    color:black;
+    background:#f1f1f1;
+    color:white;
 }
+
+h1,h2,h3,p{color:white;}
 
 </style>
 </head>
@@ -185,7 +182,7 @@ button{
     </div>
 
     <div class="dropdown" id="menuDrop">
-        <div onclick="alert('Afiliados em breve')">Afiliados</div>
+        <div onclick="abrirAfiliado()">Afiliados</div>
         <div onclick="trocarTema()">Tema claro/escuro</div>
         <div onclick="abrirLogin()">Painel ADM</div>
     </div>
@@ -213,6 +210,23 @@ button{
         <input id="email" placeholder="Email">
         <input id="senha" type="password" placeholder="Senha">
         <button onclick="logar()">Entrar</button>
+    </div>
+</div>
+
+<!-- AFILIADOS -->
+<div class="login" id="afiliadoBox">
+    <div class="box">
+        <h3>Afiliados</h3>
+
+        <p>Indique amigos e participe de sorteios 🎁</p>
+        <p>🏆 Prêmio: conta premium ou itens</p>
+
+        <input placeholder="Seu nome">
+        <input placeholder="Link de indicação">
+
+        <button onclick="alert('Participação confirmada!')">
+            Participar
+        </button>
     </div>
 </div>
 
@@ -255,10 +269,10 @@ function toggleMenu(){
     document.getElementById("menuDrop").classList.toggle("ativo");
 }
 
-// FECHAR AO CLICAR FORA
+// FECHAR FORA
 document.addEventListener("click", function(e){
-    let menu = document.getElementById("menuDrop");
-    let btn = document.querySelector(".menu");
+    let menu=document.getElementById("menuDrop");
+    let btn=document.querySelector(".menu");
 
     if(!menu.contains(e.target) && !btn.contains(e.target)){
         menu.classList.remove("ativo");
@@ -282,6 +296,11 @@ function logar(){
     }else{
         alert("Acesso negado");
     }
+}
+
+// AFILIADO
+function abrirAfiliado(){
+    document.getElementById("afiliadoBox").style.display="flex";
 }
 
 // CRUD
