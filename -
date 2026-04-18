@@ -9,74 +9,33 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 
 body{background:#0b0f2a;color:#fff;}
-body.light{background:#ffffff;color:#000;}
+body.light{background:#fff;color:#000;}
 
 .topo{
-display:flex;
-justify-content:space-between;
-padding:15px;
-border-bottom:2px solid #ff008c;
+display:flex;justify-content:space-between;
+padding:15px;border-bottom:2px solid #ff008c;
 }
 
 .logo{color:#ff008c;font-size:22px;font-weight:bold;}
 .menu{font-size:22px;cursor:pointer;}
-
-.dropdown{
-position:absolute;
-right:10px;
-top:60px;
-background:#11163a;
-border:1px solid #ff008c;
-border-radius:10px;
-display:none;
-}
-
-.dropdown div{padding:12px;cursor:pointer;}
-.dropdown div:hover{background:#ff008c;}
 
 .container{padding:20px;}
 
 .grid{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:15px;
-margin-top:20px;
+gap:15px;margin-top:20px;
 }
 
 .card{
-background:#11163a;
-padding:15px;
-border-radius:10px;
-text-align:center;
-}
-
-body.light .card{background:#eee;}
-
-.admin-btns{display:none;margin-top:5px;}
-.admin .admin-btns{display:block;}
-
-.modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.6);
-display:none;
-justify-content:center;
-align-items:center;
-}
-
-.box{
-background:#11163a;
-padding:20px;
-border-radius:10px;
-width:260px;
-position:relative;
-}
-
-.fechar{
-position:absolute;
-top:10px;
-right:10px;
+background:#11163a;padding:15px;
+border-radius:10px;text-align:center;
 cursor:pointer;
+}
+
+button{
+margin-top:10px;padding:10px;
+background:#ff008c;border:none;color:#fff;border-radius:5px;width:100%;
 }
 
 input{
@@ -87,22 +46,20 @@ border:none;
 border-radius:5px;
 }
 
-button{
-width:100%;
-margin-top:10px;
+/* painel */
+.painel{
+display:none;
+background:#11163a;
 padding:10px;
-background:#ff008c;
-border:none;
-color:#fff;
-border-radius:5px;
+margin-top:20px;
+border-radius:10px;
 }
 
-/* 🔥 PAINEL */
-.painel-box{
+.produto{
 background:#1e244f;
 padding:10px;
-margin-top:10px;
 border-radius:10px;
+margin-top:10px;
 }
 </style>
 </head>
@@ -111,181 +68,187 @@ border-radius:10px;
 
 <div class="topo">
 <div class="logo">BS</div>
-
-<div class="menu" onclick="toggleMenu()">⋮</div>
-
-<div class="dropdown" id="menu">
-<div onclick="abrirAfiliado()">Afiliados</div>
-<div onclick="trocarTema()">Tema</div>
-<div onclick="abrirLogin()">Painel ADM</div>
-</div>
+<div class="menu" onclick="painel.style.display=painel.style.display=='block'?'none':'block'">⚙️</div>
 </div>
 
 <div class="container">
 
-<h2>Bem-vindo à BS Store</h2>
+<h2 id="titulo">Categorias</h2>
+
+<button onclick="voltar()" id="voltarBtn" style="display:none">⬅ Voltar</button>
 
 <div class="grid" id="lista"></div>
 
-<!-- 🔥 PAINEL NOVO -->
-<div id="painel" style="display:none">
+<!-- 🔥 PAINEL -->
+<div id="painel" class="painel">
 
-<h3>Painel ADM COMPLETO</h3>
-
-<div class="painel-box">
-<h4>Editar Categoria</h4>
+<h3>ADMIN</h3>
 
 <input id="nome" placeholder="Nome">
-<input id="img" placeholder="Imagem URL">
-<input id="valor" placeholder="Valor (novo)">
-<input id="desc" placeholder="Descrição (novo)">
+<input id="img" placeholder="Imagem">
+<input id="preco" placeholder="Preço">
+<input id="desc" placeholder="Descrição">
 
-<button onclick="salvarCategoria()">Salvar</button>
-</div>
+<button onclick="salvar()">Salvar</button>
 
-<div class="painel-box" id="listaAdmin"></div>
-
-</div>
+<div id="adminLista"></div>
 
 </div>
 
-<!-- LOGIN -->
-<div class="modal" id="login">
-<div class="box">
-<div class="fechar" onclick="fecharTudo()">✖</div>
-
-<h3>Login ADM</h3>
-<input id="email">
-<input id="senha" type="password">
-<button onclick="logar()">Entrar</button>
-</div>
 </div>
 
 <script>
 
-/* 🔥 NOVO BANCO (SEM QUEBRAR) */
-let dados = JSON.parse(localStorage.getItem("cats")) || [
-{nome:"Instagram",img:"https://cdn-icons-png.flaticon.com/512/2111/2111463.png",valor:"",desc:""},
-{nome:"TikTok",img:"https://cdn-icons-png.flaticon.com/512/3046/3046121.png",valor:"",desc:""}
-];
+let loja = JSON.parse(localStorage.getItem("loja")) || {
+categorias:[
+{nome:"Instagram",img:"https://cdn-icons-png.flaticon.com/512/2111/2111463.png",produtos:[]}
+]
+};
 
+let modo="categoria";
+let atual=null;
 let editIndex=null;
 
-/* RENDER LOJA (NÃO ALTEREI) */
+/* RENDER */
 function render(){
-let area=document.getElementById("lista");
-area.innerHTML="";
-dados.forEach(c=>{
-area.innerHTML+=`
-<div class="card">
+let html="";
+
+if(modo==="categoria"){
+titulo.innerText="Categorias";
+voltarBtn.style.display="none";
+
+loja.categorias.forEach((c,i)=>{
+html+=`
+<div class="card" onclick="abrirCategoria(${i})">
 <img src="${c.img}" width="50"><br>
 ${c.nome}
 </div>`;
 });
 }
 
-/* RENDER ADMIN */
-function renderAdmin(){
-let html="";
-dados.forEach((c,i)=>{
+if(modo==="produto"){
+titulo.innerText=loja.categorias[atual].nome;
+voltarBtn.style.display="block";
+
+loja.categorias[atual].produtos.forEach((p,i)=>{
 html+=`
-<div class="painel-box">
-<b>${c.nome}</b><br>
-<small>Valor: ${c.valor || "—"}</small><br>
-<small>Desc: ${c.desc || "—"}</small><br>
+<div class="produto">
+<img src="${p.img}" width="50"><br>
+<b>${p.nome}</b><br>
+${p.preco}<br>
+<small>${p.desc}</small>
 
 <button onclick="editar(${i})">Editar</button>
-<button onclick="remover(${i})">Excluir</button>
+<button onclick="del(${i})">Excluir</button>
 </div>`;
 });
-listaAdmin.innerHTML=html;
+}
+
+lista.innerHTML=html;
+renderAdmin();
+}
+
+/* ABRIR */
+function abrirCategoria(i){
+modo="produto";
+atual=i;
+render();
+}
+
+function voltar(){
+modo="categoria";
+render();
+}
+
+/* SALVAR */
+function salvar(){
+
+if(modo==="categoria"){
+loja.categorias.push({
+nome:nome.value,
+img:img.value,
+produtos:[]
+});
+}
+
+if(modo==="produto"){
+if(editIndex===null){
+loja.categorias[atual].produtos.push({
+nome:nome.value,
+img:img.value,
+preco:preco.value,
+desc:desc.value
+});
+}else{
+let p=loja.categorias[atual].produtos[editIndex];
+p.nome=nome.value;
+p.img=img.value;
+p.preco=preco.value;
+p.desc=desc.value;
+editIndex=null;
+}
+}
+
+limpar();
+save();
 }
 
 /* EDITAR */
 function editar(i){
+let p=loja.categorias[atual].produtos[i];
+
+nome.value=p.nome;
+img.value=p.img;
+preco.value=p.preco;
+desc.value=p.desc;
+
 editIndex=i;
-
-nome.value=dados[i].nome;
-img.value=dados[i].img;
-valor.value=dados[i].valor;
-desc.value=dados[i].desc;
 }
 
-/* SALVAR */
-function salvarCategoria(){
+/* DELETAR */
+function del(i){
+loja.categorias[atual].produtos.splice(i,1);
+save();
+}
 
-if(editIndex===null){
-dados.push({
-nome:nome.value,
-img:img.value,
-valor:valor.value,
-desc:desc.value
+/* ADMIN LISTA */
+function renderAdmin(){
+let html="";
+
+if(modo==="categoria"){
+loja.categorias.forEach((c,i)=>{
+html+=`
+<div>
+${c.nome}
+<button onclick="remCat(${i})">❌</button>
+</div>`;
 });
-}else{
-dados[editIndex]={
-nome:nome.value,
-img:img.value,
-valor:valor.value,
-desc:desc.value
-};
-editIndex=null;
 }
 
-limpar();
-salvar();
+adminLista.innerHTML=html;
 }
 
-/* REMOVER */
-function remover(i){
-if(confirm("Excluir?")){
-dados.splice(i,1);
-salvar();
-}
+/* REMOVER CAT */
+function remCat(i){
+loja.categorias.splice(i,1);
+save();
 }
 
-/* SALVAR STORAGE */
-function salvar(){
-localStorage.setItem("cats",JSON.stringify(dados));
+/* SAVE */
+function save(){
+localStorage.setItem("loja",JSON.stringify(loja));
 render();
-renderAdmin();
 }
 
 /* LIMPAR */
 function limpar(){
 nome.value="";
 img.value="";
-valor.value="";
+preco.value="";
 desc.value="";
 }
 
-/* LOGIN */
-function abrirLogin(){
-login.style.display="flex";
-}
-
-function logar(){
-if(email.value==="nannyvittoriah@gmail.com" && senha.value==="Lorrannyh.170"){
-login.style.display="none";
-painel.style.display="block";
-renderAdmin();
-}else alert("Erro");
-}
-
-/* MENU */
-function toggleMenu(){
-menu.style.display=menu.style.display=="block"?"none":"block";
-}
-
-function fecharTudo(){
-menu.style.display="none";
-login.style.display="none";
-}
-
-/* TEMA */
-function trocarTema(){
-document.body.classList.toggle("light");
-}
-
+/* INIT */
 render();
 
 </script>
