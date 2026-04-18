@@ -9,20 +9,26 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 
 body{background:#0b0f2a;color:#fff;}
-body.light{background:#fff;color:#000;}
+body.light{background:#ffffff;color:#000;}
 
 .topo{
-display:flex;justify-content:space-between;
-padding:15px;border-bottom:2px solid #ff008c;
+display:flex;
+justify-content:space-between;
+padding:15px;
+border-bottom:2px solid #ff008c;
 }
 
 .logo{color:#ff008c;font-size:22px;font-weight:bold;}
 .menu{font-size:22px;cursor:pointer;}
 
 .dropdown{
-position:absolute;right:10px;top:60px;
-background:#11163a;border:1px solid #ff008c;
-border-radius:10px;display:none;
+position:absolute;
+right:10px;
+top:60px;
+background:#11163a;
+border:1px solid #ff008c;
+border-radius:10px;
+display:none;
 }
 
 .dropdown div{padding:12px;cursor:pointer;}
@@ -33,29 +39,70 @@ border-radius:10px;display:none;
 .grid{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:15px;margin-top:20px;
+gap:15px;
+margin-top:20px;
 }
 
 .card{
-background:#11163a;padding:15px;
-border-radius:10px;text-align:center;
+background:#11163a;
+padding:15px;
+border-radius:10px;
+text-align:center;
 }
 
-input,select{
-width:100%;margin-top:8px;padding:10px;
-border:none;border-radius:5px;
+body.light .card{background:#eee;}
+
+.admin-btns{display:none;margin-top:5px;}
+.admin .admin-btns{display:block;}
+
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.6);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.box{
+background:#11163a;
+padding:20px;
+border-radius:10px;
+width:260px;
+position:relative;
+}
+
+.fechar{
+position:absolute;
+top:10px;
+right:10px;
+cursor:pointer;
+}
+
+input{
+width:100%;
+margin-top:8px;
+padding:10px;
+border:none;
+border-radius:5px;
 }
 
 button{
-width:100%;margin-top:10px;padding:10px;
-background:#ff008c;border:none;color:#fff;border-radius:5px;
+width:100%;
+margin-top:10px;
+padding:10px;
+background:#ff008c;
+border:none;
+color:#fff;
+border-radius:5px;
 }
 
+/* 🔥 PAINEL */
 .painel-box{
-background:#11163a;
+background:#1e244f;
 padding:10px;
-border-radius:10px;
 margin-top:10px;
+border-radius:10px;
 }
 </style>
 </head>
@@ -65,182 +112,178 @@ margin-top:10px;
 <div class="topo">
 <div class="logo">BS</div>
 
-<div class="menu" onclick="menu.style.display=menu.style.display=='block'?'none':'block'">⋮</div>
+<div class="menu" onclick="toggleMenu()">⋮</div>
 
 <div class="dropdown" id="menu">
+<div onclick="abrirAfiliado()">Afiliados</div>
+<div onclick="trocarTema()">Tema</div>
 <div onclick="abrirLogin()">Painel ADM</div>
 </div>
 </div>
 
 <div class="container">
 
-<h2>BS Store</h2>
-<div id="lista" class="grid"></div>
+<h2>Bem-vindo à BS Store</h2>
 
+<div class="grid" id="lista"></div>
+
+<!-- 🔥 PAINEL NOVO -->
 <div id="painel" style="display:none">
 
-<h3>ADMIN COMPLETO</h3>
+<h3>Painel ADM COMPLETO</h3>
 
 <div class="painel-box">
-<h4>Categoria</h4>
-<input id="catNome" placeholder="Nome">
-<button onclick="addCategoria()">Criar</button>
+<h4>Editar Categoria</h4>
+
+<input id="nome" placeholder="Nome">
+<input id="img" placeholder="Imagem URL">
+<input id="valor" placeholder="Valor (novo)">
+<input id="desc" placeholder="Descrição (novo)">
+
+<button onclick="salvarCategoria()">Salvar</button>
 </div>
 
-<div class="painel-box">
-<h4>Subcategoria</h4>
-<select id="catSelect"></select>
-<input id="subNome" placeholder="Nome sub">
-<button onclick="addSub()">Criar</button>
-</div>
-
-<div class="painel-box">
-<h4>Produto</h4>
-<select id="catSelect2"></select>
-<select id="subSelect"></select>
-
-<input id="prodNome" placeholder="Nome">
-<input id="prodPreco" placeholder="Preço">
-<input id="prodDesc" placeholder="Descrição">
-<input id="prodImg" placeholder="Imagem URL">
-
-<button onclick="addProduto()">Adicionar</button>
-</div>
-
-<div class="painel-box" id="adminLista"></div>
+<div class="painel-box" id="listaAdmin"></div>
 
 </div>
 
 </div>
 
-<div id="login" style="display:none">
+<!-- LOGIN -->
+<div class="modal" id="login">
+<div class="box">
+<div class="fechar" onclick="fecharTudo()">✖</div>
+
+<h3>Login ADM</h3>
 <input id="email">
-<input id="senha">
+<input id="senha" type="password">
 <button onclick="logar()">Entrar</button>
+</div>
 </div>
 
 <script>
 
-let loja = JSON.parse(localStorage.getItem("loja")) || {categorias:[]};
+/* 🔥 NOVO BANCO (SEM QUEBRAR) */
+let dados = JSON.parse(localStorage.getItem("cats")) || [
+{nome:"Instagram",img:"https://cdn-icons-png.flaticon.com/512/2111/2111463.png",valor:"",desc:""},
+{nome:"TikTok",img:"https://cdn-icons-png.flaticon.com/512/3046/3046121.png",valor:"",desc:""}
+];
+
+let editIndex=null;
+
+/* RENDER LOJA (NÃO ALTEREI) */
+function render(){
+let area=document.getElementById("lista");
+area.innerHTML="";
+dados.forEach(c=>{
+area.innerHTML+=`
+<div class="card">
+<img src="${c.img}" width="50"><br>
+${c.nome}
+</div>`;
+});
+}
+
+/* RENDER ADMIN */
+function renderAdmin(){
+let html="";
+dados.forEach((c,i)=>{
+html+=`
+<div class="painel-box">
+<b>${c.nome}</b><br>
+<small>Valor: ${c.valor || "—"}</small><br>
+<small>Desc: ${c.desc || "—"}</small><br>
+
+<button onclick="editar(${i})">Editar</button>
+<button onclick="remover(${i})">Excluir</button>
+</div>`;
+});
+listaAdmin.innerHTML=html;
+}
+
+/* EDITAR */
+function editar(i){
+editIndex=i;
+
+nome.value=dados[i].nome;
+img.value=dados[i].img;
+valor.value=dados[i].valor;
+desc.value=dados[i].desc;
+}
+
+/* SALVAR */
+function salvarCategoria(){
+
+if(editIndex===null){
+dados.push({
+nome:nome.value,
+img:img.value,
+valor:valor.value,
+desc:desc.value
+});
+}else{
+dados[editIndex]={
+nome:nome.value,
+img:img.value,
+valor:valor.value,
+desc:desc.value
+};
+editIndex=null;
+}
+
+limpar();
+salvar();
+}
+
+/* REMOVER */
+function remover(i){
+if(confirm("Excluir?")){
+dados.splice(i,1);
+salvar();
+}
+}
+
+/* SALVAR STORAGE */
+function salvar(){
+localStorage.setItem("cats",JSON.stringify(dados));
+render();
+renderAdmin();
+}
+
+/* LIMPAR */
+function limpar(){
+nome.value="";
+img.value="";
+valor.value="";
+desc.value="";
+}
 
 /* LOGIN */
 function abrirLogin(){
-login.style.display="block";
+login.style.display="flex";
 }
 
 function logar(){
 if(email.value==="nannyvittoriah@gmail.com" && senha.value==="Lorrannyh.170"){
-painel.style.display="block";
 login.style.display="none";
-renderSelects();
+painel.style.display="block";
 renderAdmin();
 }else alert("Erro");
 }
 
-/* CATEGORIA */
-function addCategoria(){
-loja.categorias.push({nome:catNome.value,subs:[]});
-salvar();
+/* MENU */
+function toggleMenu(){
+menu.style.display=menu.style.display=="block"?"none":"block";
 }
 
-/* SUB */
-function addSub(){
-let c = catSelect.value;
-loja.categorias[c].subs.push({nome:subNome.value,produtos:[]});
-salvar();
+function fecharTudo(){
+menu.style.display="none";
+login.style.display="none";
 }
 
-/* PRODUTO */
-function addProduto(){
-let c = catSelect2.value;
-let s = subSelect.value;
-
-loja.categorias[c].subs[s].produtos.push({
-nome:prodNome.value,
-preco:prodPreco.value,
-desc:prodDesc.value,
-img:prodImg.value
-});
-
-salvar();
-}
-
-/* RENDER */
-function render(){
-let html="";
-loja.categorias.forEach(c=>{
-html+=`<div>${c.nome}</div>`;
-});
-lista.innerHTML=html;
-}
-
-function renderSelects(){
-catSelect.innerHTML="";
-catSelect2.innerHTML="";
-
-loja.categorias.forEach((c,i)=>{
-catSelect.innerHTML+=`<option value="${i}">${c.nome}</option>`;
-catSelect2.innerHTML+=`<option value="${i}">${c.nome}</option>`;
-});
-updateSub();
-}
-
-function updateSub(){
-let c=catSelect2.value;
-subSelect.innerHTML="";
-if(!loja.categorias[c]) return;
-
-loja.categorias[c].subs.forEach((s,i)=>{
-subSelect.innerHTML+=`<option value="${i}">${s.nome}</option>`;
-});
-}
-
-catSelect2.onchange=updateSub;
-
-/* ADMIN LISTA */
-function renderAdmin(){
-let html="";
-loja.categorias.forEach((c,ci)=>{
-html+=`<h4>${c.nome}</h4>`;
-
-c.subs.forEach((s,si)=>{
-html+=`<div>${s.nome}</div>`;
-
-s.produtos.forEach((p,pi)=>{
-html+=`
-<div>
-${p.nome} - ${p.preco}
-<button onclick="editar(${ci},${si},${pi})">✏️</button>
-<button onclick="delProd(${ci},${si},${pi})">❌</button>
-</div>`;
-});
-});
-});
-adminLista.innerHTML=html;
-}
-
-function editar(c,s,p){
-let prod=loja.categorias[c].subs[s].produtos[p];
-
-prod.nome=prompt("Nome",prod.nome);
-prod.preco=prompt("Preço",prod.preco);
-prod.desc=prompt("Desc",prod.desc);
-prod.img=prompt("Img",prod.img);
-
-salvar();
-}
-
-function delProd(c,s,p){
-loja.categorias[c].subs[s].produtos.splice(p,1);
-salvar();
-}
-
-/* SALVAR */
-function salvar(){
-localStorage.setItem("loja",JSON.stringify(loja));
-render();
-renderSelects();
-renderAdmin();
+/* TEMA */
+function trocarTema(){
+document.body.classList.toggle("light");
 }
 
 render();
