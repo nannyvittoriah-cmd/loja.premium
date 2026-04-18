@@ -12,26 +12,19 @@ body{background:#0b0f2a;color:#fff;}
 body.light{background:#ffffff;color:#000;}
 
 .topo{
-    display:flex;
-    justify-content:space-between;
-    padding:15px;
-    border-bottom:2px solid #ff008c;
-    position:relative;
-    z-index:1000;
+display:flex;justify-content:space-between;
+padding:15px;border-bottom:2px solid #ff008c;
+position:relative;
 }
 
 .logo{color:#ff008c;font-size:22px;font-weight:bold;}
 .menu{font-size:22px;cursor:pointer;}
 
 .dropdown{
-    position:absolute;
-    right:10px;
-    top:60px;
-    background:#11163a;
-    border:1px solid #ff008c;
-    border-radius:10px;
-    display:none;
-    z-index:9999;
+position:absolute;right:10px;top:60px;
+background:#11163a;border:1px solid #ff008c;
+border-radius:10px;display:none;
+z-index:999;
 }
 
 .dropdown div{padding:12px;cursor:pointer;}
@@ -40,67 +33,68 @@ body.light{background:#ffffff;color:#000;}
 .container{padding:20px;}
 
 .grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:15px;
-    margin-top:20px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;margin-top:20px;
 }
 
 .card{
-    background:#11163a;
-    padding:15px;
-    border-radius:10px;
-    text-align:center;
+background:#11163a;padding:15px;
+border-radius:10px;text-align:center;
 }
 
 body.light .card{background:#eee;}
 
-.admin-btns{display:none;margin-top:5px;}
-.admin .admin-btns{display:block;}
-
 .modal{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.6);
-    display:none;
-    justify-content:center;
-    align-items:center;
-    z-index:99999;
+position:fixed;inset:0;
+background:rgba(0,0,0,0.6);
+display:none;justify-content:center;align-items:center;
+z-index:9999;
 }
 
 .box{
-    background:#11163a;
-    padding:20px;
-    border-radius:10px;
-    width:260px;
-    position:relative;
+background:#11163a;padding:20px;
+border-radius:10px;width:260px;position:relative;
 }
 
 body.light .box{background:#fff;color:#000;}
 
-.fechar{
-    position:absolute;
-    top:10px;
-    right:10px;
-    cursor:pointer;
-}
+.fechar{position:absolute;top:10px;right:10px;cursor:pointer;}
 
 input{
-    width:100%;
-    margin-top:8px;
-    padding:10px;
-    border:none;
-    border-radius:5px;
+width:100%;
+margin-top:8px;
+padding:10px;
+border:none;
+border-radius:5px;
 }
 
 button{
-    width:100%;
-    margin-top:10px;
-    padding:10px;
-    background:#ff008c;
-    border:none;
-    color:#fff;
-    border-radius:5px;
+width:100%;
+margin-top:10px;
+padding:10px;
+background:#ff008c;
+border:none;
+color:#fff;
+border-radius:5px;
+}
+
+/* 🔥 NOVO PAINEL */
+.lista-admin{
+margin-top:15px;
+background:#0f1435;
+padding:10px;
+border-radius:10px;
+}
+
+.item-admin{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin:5px 0;
+background:#1e244f;
+padding:8px;
+border-radius:6px;
 }
 </style>
 </head>
@@ -125,15 +119,18 @@ button{
 
 <div class="grid" id="lista"></div>
 
-<!-- 🔥 PAINEL MELHORADO -->
+<!-- 🔥 PAINEL ADM COMPLETO -->
 <div id="painel" style="display:none">
+
 <h3>Painel ADM</h3>
 
 <input id="nome" placeholder="Nome categoria">
 <input id="img" placeholder="URL imagem">
 
-<button id="btnAdd" onclick="add()">Adicionar</button>
-<button id="cancelEdit" onclick="cancelar()" style="display:none;background:#555">Cancelar</button>
+<button id="btnAdd" onclick="salvarCategoria()">Adicionar</button>
+<button onclick="cancelar()" id="cancelarBtn" style="display:none;background:#555">Cancelar</button>
+
+<div class="lista-admin" id="listaAdmin"></div>
 
 </div>
 
@@ -158,9 +155,6 @@ button{
 
 <h3>Programa de Afiliados</h3>
 
-<p>Indique amigos e participe de sorteios 🎁</p>
-<p>Quanto mais indicar, mais chances!</p>
-
 <input id="nomeAfiliado" placeholder="Seu nome">
 <input id="telefoneAfiliado" placeholder="Seu telefone">
 
@@ -170,33 +164,38 @@ button{
 
 <script>
 
-/* CATEGORIAS */
 let dados = JSON.parse(localStorage.getItem("cats")) || [
 {nome:"Instagram",img:"https://cdn-icons-png.flaticon.com/512/2111/2111463.png"},
-{nome:"TikTok",img:"https://cdn-icons-png.flaticon.com/512/3046/3046121.png"},
-{nome:"Kwai",img:"https://cdn-icons-png.flaticon.com/512/5968/5968805.png"},
-{nome:"Free Fire",img:"https://cdn-icons-png.flaticon.com/512/5969/5969313.png"},
-{nome:"Fortnite",img:"https://cdn-icons-png.flaticon.com/512/5968/5968653.png"},
-{nome:"Contas / Streaming",img:"https://cdn-icons-png.flaticon.com/512/5977/5977590.png"},
-{nome:"Contas à Venda",img:"https://cdn-icons-png.flaticon.com/512/263/263115.png"},
-{nome:"Sorteios",img:"https://cdn-icons-png.flaticon.com/512/1828/1828884.png"},
-{nome:"Itens Aleatórios",img:"https://cdn-icons-png.flaticon.com/512/992/992700.png"}
+{nome:"TikTok",img:"https://cdn-icons-png.flaticon.com/512/3046/3046121.png"}
 ];
 
 let admin=false;
 let editIndex=null;
 
-/* RENDER */
+/* RENDER LOJA */
 function render(){
 let area=document.getElementById("lista");
 area.innerHTML="";
-dados.forEach((c,i)=>{
+dados.forEach(c=>{
 area.innerHTML+=`
-<div class="card ${admin?'admin':''}">
+<div class="card">
 <img src="${c.img}" width="50"><br>
 ${c.nome}
+</div>`;
+});
+}
 
-<div class="admin-btns">
+/* RENDER ADMIN */
+function renderAdmin(){
+let area=document.getElementById("listaAdmin");
+area.innerHTML="";
+
+dados.forEach((c,i)=>{
+area.innerHTML+=`
+<div class="item-admin">
+<span>${c.nome}</span>
+
+<div>
 <button onclick="editar(${i})">✏️</button>
 <button onclick="remover(${i})">❌</button>
 </div>
@@ -204,91 +203,22 @@ ${c.nome}
 </div>`;
 });
 }
-render();
 
-/* MENU */
-function toggleMenu(){
-let m=document.getElementById("menu");
-m.style.display=m.style.display=="block"?"none":"block";
-}
-
-/* FECHAR */
-function fecharTudo(){
-document.getElementById("menu").style.display="none";
-document.getElementById("login").style.display="none";
-document.getElementById("afiliado").style.display="none";
-}
-
-/* CLICK FORA */
-document.addEventListener("click", function(e){
-let menu=document.getElementById("menu");
-let btn=document.querySelector(".menu");
-
-if(!menu.contains(e.target) && !btn.contains(e.target)){
-menu.style.display="none";
-}
-
-if(e.target.id==="login") document.getElementById("login").style.display="none";
-if(e.target.id==="afiliado") document.getElementById("afiliado").style.display="none";
-});
-
-/* LOGIN */
-function abrirLogin(){
-fecharTudo();
-document.getElementById("login").style.display="flex";
-}
-
-function logar(){
-if(
-document.getElementById("email").value==="nannyvittoriah@gmail.com" &&
-document.getElementById("senha").value==="Lorrannyh.170"
-){
-admin=true;
-document.getElementById("login").style.display="none";
-document.getElementById("painel").style.display="block";
-render();
-}else alert("Erro no login");
-}
-
-/* AFILIADO */
-function abrirAfiliado(){
-fecharTudo();
-document.getElementById("afiliado").style.display="flex";
-}
-
-function participar(){
-let nome=document.getElementById("nomeAfiliado").value;
-let telefone=document.getElementById("telefoneAfiliado").value;
-let numero="5598984853563";
-
-let msg=`Olá, meu nome é ${nome}.
-Meu telefone: ${telefone}.
-
-Quero participar do programa de afiliados.`;
-
-let link="https://wa.me/"+numero+"?text="+encodeURIComponent(msg);
-window.open(link,"_blank");
-}
-
-/* 🔥 ADD OU EDITAR */
-function add(){
+/* ADD / EDIT */
+function salvarCategoria(){
 
 let nome=document.getElementById("nome").value;
 let img=document.getElementById("img").value;
 
-if(!nome || !img){
-alert("Preencha tudo");
-return;
-}
+if(!nome || !img) return alert("Preencha tudo");
 
 if(editIndex===null){
 dados.push({nome,img});
 }else{
-dados[editIndex].nome=nome;
-dados[editIndex].img=img;
+dados[editIndex]={nome,img};
 editIndex=null;
 document.getElementById("btnAdd").innerText="Adicionar";
-document.getElementById("cancelEdit").style.display="none";
+document.getElementById("cancelarBtn").style.display="none";
 }
 
 limpar();
@@ -299,47 +229,84 @@ salvar();
 function editar(i){
 editIndex=i;
 
-document.getElementById("nome").value=dados[i].nome;
-document.getElementById("img").value=dados[i].img;
+nome.value=dados[i].nome;
+img.value=dados[i].img;
 
-document.getElementById("btnAdd").innerText="Atualizar";
-document.getElementById("cancelEdit").style.display="block";
-
-window.scrollTo({top:0,behavior:"smooth"});
+btnAdd.innerText="Atualizar";
+cancelarBtn.style.display="block";
 }
 
 /* CANCELAR */
 function cancelar(){
 editIndex=null;
 limpar();
-document.getElementById("btnAdd").innerText="Adicionar";
-document.getElementById("cancelEdit").style.display="none";
+btnAdd.innerText="Adicionar";
+cancelarBtn.style.display="none";
 }
 
 /* REMOVER */
 function remover(i){
-if(confirm("Excluir categoria?")){
+if(confirm("Excluir?")){
 dados.splice(i,1);
 salvar();
 }
-}
-
-/* LIMPAR */
-function limpar(){
-document.getElementById("nome").value="";
-document.getElementById("img").value="";
 }
 
 /* SALVAR */
 function salvar(){
 localStorage.setItem("cats",JSON.stringify(dados));
 render();
+renderAdmin();
+}
+
+/* LIMPAR */
+function limpar(){
+nome.value="";
+img.value="";
+}
+
+/* LOGIN */
+function abrirLogin(){
+login.style.display="flex";
+}
+
+function logar(){
+if(email.value==="nannyvittoriah@gmail.com" && senha.value==="Lorrannyh.170"){
+admin=true;
+login.style.display="none";
+painel.style.display="block";
+renderAdmin();
+}else alert("Erro");
+}
+
+/* MENU */
+function toggleMenu(){
+menu.style.display=menu.style.display=="block"?"none":"block";
+}
+
+function fecharTudo(){
+menu.style.display="none";
+login.style.display="none";
+afiliado.style.display="none";
+}
+
+/* AFILIADO */
+function abrirAfiliado(){
+afiliado.style.display="flex";
+}
+
+function participar(){
+let numero="5598984853563";
+let link="https://wa.me/"+numero;
+window.open(link,"_blank");
 }
 
 /* TEMA */
 function trocarTema(){
 document.body.classList.toggle("light");
 }
+
+render();
 
 </script>
 
