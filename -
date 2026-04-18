@@ -9,12 +9,11 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 
 body{background:#0b0f2a;color:#fff;}
-body.light{background:#ffffff;color:#000;}
+body.light{background:#fff;color:#000;}
 
 .topo{
 display:flex;justify-content:space-between;
 padding:15px;border-bottom:2px solid #ff008c;
-position:relative;
 }
 
 .logo{color:#ff008c;font-size:22px;font-weight:bold;}
@@ -24,7 +23,6 @@ position:relative;
 position:absolute;right:10px;top:60px;
 background:#11163a;border:1px solid #ff008c;
 border-radius:10px;display:none;
-z-index:999;
 }
 
 .dropdown div{padding:12px;cursor:pointer;}
@@ -43,58 +41,21 @@ background:#11163a;padding:15px;
 border-radius:10px;text-align:center;
 }
 
-body.light .card{background:#eee;}
-
-.modal{
-position:fixed;inset:0;
-background:rgba(0,0,0,0.6);
-display:none;justify-content:center;align-items:center;
-z-index:9999;
-}
-
-.box{
-background:#11163a;padding:20px;
-border-radius:10px;width:260px;position:relative;
-}
-
-body.light .box{background:#fff;color:#000;}
-
-.fechar{position:absolute;top:10px;right:10px;cursor:pointer;}
-
-input{
-width:100%;
-margin-top:8px;
-padding:10px;
-border:none;
-border-radius:5px;
+input,select{
+width:100%;margin-top:8px;padding:10px;
+border:none;border-radius:5px;
 }
 
 button{
-width:100%;
-margin-top:10px;
-padding:10px;
-background:#ff008c;
-border:none;
-color:#fff;
-border-radius:5px;
+width:100%;margin-top:10px;padding:10px;
+background:#ff008c;border:none;color:#fff;border-radius:5px;
 }
 
-/* 🔥 NOVO PAINEL */
-.lista-admin{
-margin-top:15px;
-background:#0f1435;
+.painel-box{
+background:#11163a;
 padding:10px;
 border-radius:10px;
-}
-
-.item-admin{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin:5px 0;
-background:#1e244f;
-padding:8px;
-border-radius:6px;
+margin-top:10px;
 }
 </style>
 </head>
@@ -104,206 +65,182 @@ border-radius:6px;
 <div class="topo">
 <div class="logo">BS</div>
 
-<div class="menu" onclick="toggleMenu()">⋮</div>
+<div class="menu" onclick="menu.style.display=menu.style.display=='block'?'none':'block'">⋮</div>
 
 <div class="dropdown" id="menu">
-<div onclick="abrirAfiliado()">Afiliados</div>
-<div onclick="trocarTema()">Tema</div>
 <div onclick="abrirLogin()">Painel ADM</div>
 </div>
 </div>
 
 <div class="container">
 
-<h2>Bem-vindo à BS Store</h2>
+<h2>BS Store</h2>
+<div id="lista" class="grid"></div>
 
-<div class="grid" id="lista"></div>
-
-<!-- 🔥 PAINEL ADM COMPLETO -->
 <div id="painel" style="display:none">
 
-<h3>Painel ADM</h3>
+<h3>ADMIN COMPLETO</h3>
 
-<input id="nome" placeholder="Nome categoria">
-<input id="img" placeholder="URL imagem">
+<div class="painel-box">
+<h4>Categoria</h4>
+<input id="catNome" placeholder="Nome">
+<button onclick="addCategoria()">Criar</button>
+</div>
 
-<button id="btnAdd" onclick="salvarCategoria()">Adicionar</button>
-<button onclick="cancelar()" id="cancelarBtn" style="display:none;background:#555">Cancelar</button>
+<div class="painel-box">
+<h4>Subcategoria</h4>
+<select id="catSelect"></select>
+<input id="subNome" placeholder="Nome sub">
+<button onclick="addSub()">Criar</button>
+</div>
 
-<div class="lista-admin" id="listaAdmin"></div>
+<div class="painel-box">
+<h4>Produto</h4>
+<select id="catSelect2"></select>
+<select id="subSelect"></select>
+
+<input id="prodNome" placeholder="Nome">
+<input id="prodPreco" placeholder="Preço">
+<input id="prodDesc" placeholder="Descrição">
+<input id="prodImg" placeholder="Imagem URL">
+
+<button onclick="addProduto()">Adicionar</button>
+</div>
+
+<div class="painel-box" id="adminLista"></div>
 
 </div>
 
 </div>
 
-<!-- LOGIN -->
-<div class="modal" id="login">
-<div class="box">
-<div class="fechar" onclick="fecharTudo()">✖</div>
-
-<h3>Login ADM</h3>
-<input id="email" placeholder="Email">
-<input id="senha" type="password" placeholder="Senha">
+<div id="login" style="display:none">
+<input id="email">
+<input id="senha">
 <button onclick="logar()">Entrar</button>
-</div>
-</div>
-
-<!-- AFILIADO -->
-<div class="modal" id="afiliado">
-<div class="box">
-<div class="fechar" onclick="fecharTudo()">✖</div>
-
-<h3>Programa de Afiliados</h3>
-
-<input id="nomeAfiliado" placeholder="Seu nome">
-<input id="telefoneAfiliado" placeholder="Seu telefone">
-
-<button onclick="participar()">Participar</button>
-</div>
 </div>
 
 <script>
 
-let dados = JSON.parse(localStorage.getItem("cats")) || [
-{nome:"Instagram",img:"https://cdn-icons-png.flaticon.com/512/2111/2111463.png"},
-{nome:"TikTok",img:"https://cdn-icons-png.flaticon.com/512/3046/3046121.png"}
-];
-
-let admin=false;
-let editIndex=null;
-
-/* RENDER LOJA */
-function render(){
-let area=document.getElementById("lista");
-area.innerHTML="";
-dados.forEach(c=>{
-area.innerHTML+=`
-<div class="card">
-<img src="${c.img}" width="50"><br>
-${c.nome}
-</div>`;
-});
-}
-
-/* RENDER ADMIN */
-function renderAdmin(){
-let area=document.getElementById("listaAdmin");
-area.innerHTML="";
-
-dados.forEach((c,i)=>{
-area.innerHTML+=`
-<div class="item-admin">
-<span>${c.nome}</span>
-
-<div>
-<button onclick="editar(${i})">✏️</button>
-<button onclick="remover(${i})">❌</button>
-</div>
-
-</div>`;
-});
-}
-
-/* ADD / EDIT */
-function salvarCategoria(){
-
-let nome=document.getElementById("nome").value;
-let img=document.getElementById("img").value;
-
-if(!nome || !img) return alert("Preencha tudo");
-
-if(editIndex===null){
-dados.push({nome,img});
-}else{
-dados[editIndex]={nome,img};
-editIndex=null;
-document.getElementById("btnAdd").innerText="Adicionar";
-document.getElementById("cancelarBtn").style.display="none";
-}
-
-limpar();
-salvar();
-}
-
-/* EDITAR */
-function editar(i){
-editIndex=i;
-
-nome.value=dados[i].nome;
-img.value=dados[i].img;
-
-btnAdd.innerText="Atualizar";
-cancelarBtn.style.display="block";
-}
-
-/* CANCELAR */
-function cancelar(){
-editIndex=null;
-limpar();
-btnAdd.innerText="Adicionar";
-cancelarBtn.style.display="none";
-}
-
-/* REMOVER */
-function remover(i){
-if(confirm("Excluir?")){
-dados.splice(i,1);
-salvar();
-}
-}
-
-/* SALVAR */
-function salvar(){
-localStorage.setItem("cats",JSON.stringify(dados));
-render();
-renderAdmin();
-}
-
-/* LIMPAR */
-function limpar(){
-nome.value="";
-img.value="";
-}
+let loja = JSON.parse(localStorage.getItem("loja")) || {categorias:[]};
 
 /* LOGIN */
 function abrirLogin(){
-login.style.display="flex";
+login.style.display="block";
 }
 
 function logar(){
 if(email.value==="nannyvittoriah@gmail.com" && senha.value==="Lorrannyh.170"){
-admin=true;
-login.style.display="none";
 painel.style.display="block";
+login.style.display="none";
+renderSelects();
 renderAdmin();
 }else alert("Erro");
 }
 
-/* MENU */
-function toggleMenu(){
-menu.style.display=menu.style.display=="block"?"none":"block";
+/* CATEGORIA */
+function addCategoria(){
+loja.categorias.push({nome:catNome.value,subs:[]});
+salvar();
 }
 
-function fecharTudo(){
-menu.style.display="none";
-login.style.display="none";
-afiliado.style.display="none";
+/* SUB */
+function addSub(){
+let c = catSelect.value;
+loja.categorias[c].subs.push({nome:subNome.value,produtos:[]});
+salvar();
 }
 
-/* AFILIADO */
-function abrirAfiliado(){
-afiliado.style.display="flex";
+/* PRODUTO */
+function addProduto(){
+let c = catSelect2.value;
+let s = subSelect.value;
+
+loja.categorias[c].subs[s].produtos.push({
+nome:prodNome.value,
+preco:prodPreco.value,
+desc:prodDesc.value,
+img:prodImg.value
+});
+
+salvar();
 }
 
-function participar(){
-let numero="5598984853563";
-let link="https://wa.me/"+numero;
-window.open(link,"_blank");
+/* RENDER */
+function render(){
+let html="";
+loja.categorias.forEach(c=>{
+html+=`<div>${c.nome}</div>`;
+});
+lista.innerHTML=html;
 }
 
-/* TEMA */
-function trocarTema(){
-document.body.classList.toggle("light");
+function renderSelects(){
+catSelect.innerHTML="";
+catSelect2.innerHTML="";
+
+loja.categorias.forEach((c,i)=>{
+catSelect.innerHTML+=`<option value="${i}">${c.nome}</option>`;
+catSelect2.innerHTML+=`<option value="${i}">${c.nome}</option>`;
+});
+updateSub();
+}
+
+function updateSub(){
+let c=catSelect2.value;
+subSelect.innerHTML="";
+if(!loja.categorias[c]) return;
+
+loja.categorias[c].subs.forEach((s,i)=>{
+subSelect.innerHTML+=`<option value="${i}">${s.nome}</option>`;
+});
+}
+
+catSelect2.onchange=updateSub;
+
+/* ADMIN LISTA */
+function renderAdmin(){
+let html="";
+loja.categorias.forEach((c,ci)=>{
+html+=`<h4>${c.nome}</h4>`;
+
+c.subs.forEach((s,si)=>{
+html+=`<div>${s.nome}</div>`;
+
+s.produtos.forEach((p,pi)=>{
+html+=`
+<div>
+${p.nome} - ${p.preco}
+<button onclick="editar(${ci},${si},${pi})">✏️</button>
+<button onclick="delProd(${ci},${si},${pi})">❌</button>
+</div>`;
+});
+});
+});
+adminLista.innerHTML=html;
+}
+
+function editar(c,s,p){
+let prod=loja.categorias[c].subs[s].produtos[p];
+
+prod.nome=prompt("Nome",prod.nome);
+prod.preco=prompt("Preço",prod.preco);
+prod.desc=prompt("Desc",prod.desc);
+prod.img=prompt("Img",prod.img);
+
+salvar();
+}
+
+function delProd(c,s,p){
+loja.categorias[c].subs[s].produtos.splice(p,1);
+salvar();
+}
+
+/* SALVAR */
+function salvar(){
+localStorage.setItem("loja",JSON.stringify(loja));
+render();
+renderSelects();
+renderAdmin();
 }
 
 render();
