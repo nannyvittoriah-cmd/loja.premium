@@ -2,269 +2,235 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BS Store</title>
+<title>Painel Curtidas FF</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-
-body{background:#0b0f2a;color:#fff;}
-body.light{background:#fff;color:#000;}
+body{
+    margin:0;
+    font-family:Arial;
+    background:#0f172a;
+    color:white;
+}
 
 .topo{
-display:flex;justify-content:space-between;
-padding:15px;border-bottom:2px solid #ff008c;
-position:relative;
+    background:#1e293b;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
 }
 
-.logo{color:#ff008c;font-size:22px;font-weight:bold;}
-.menu{font-size:22px;cursor:pointer;}
-
-.dropdown{
-position:absolute;
-right:10px;
-top:60px;
-background:#11163a;
-border:1px solid #ff008c;
-border-radius:10px;
-display:none;
-}
-
-.dropdown div{padding:12px;cursor:pointer;}
-.dropdown div:hover{background:#ff008c;}
-
-.container{padding:20px;}
-
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:15px;margin-top:20px;
+.container{
+    padding:15px;
 }
 
 .card{
-background:#11163a;
-padding:15px;
-border-radius:10px;
-text-align:center;
-}
-
-.modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.6);
-display:none;
-justify-content:center;
-align-items:center;
-}
-
-.box{
-background:#11163a;
-padding:20px;
-border-radius:10px;
-width:260px;
-position:relative;
-}
-
-.fechar{
-position:absolute;
-top:10px;
-right:10px;
-cursor:pointer;
-}
-
-input{
-width:100%;
-margin-top:8px;
-padding:10px;
-border:none;
-border-radius:5px;
+    background:#1e293b;
+    padding:15px;
+    margin-bottom:10px;
+    border-radius:10px;
 }
 
 button{
-width:100%;
-margin-top:10px;
-padding:10px;
-background:#ff008c;
-border:none;
-color:#fff;
-border-radius:5px;
+    background:#ec4899;
+    border:none;
+    padding:10px;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
 }
 
-.painel-box{
-background:#1e244f;
-padding:10px;
-margin-top:10px;
-border-radius:10px;
+input, select{
+    width:100%;
+    padding:8px;
+    margin-top:5px;
+    margin-bottom:10px;
+    border-radius:5px;
+    border:none;
 }
+
+.hidden{display:none;}
 </style>
 </head>
 
 <body>
 
 <div class="topo">
-<div class="logo">BS</div>
-
-<div class="menu" onclick="toggleMenu()">⋮</div>
-
-<div class="dropdown" id="menu">
-<div onclick="abrirLogin()">Painel ADM</div>
-</div>
+    <b>Painel FF</b>
+    <div>
+        Saldo: <span id="saldo">0</span>
+    </div>
 </div>
 
 <div class="container">
 
-<h2>Bem-vindo à BS Store</h2>
-<div class="grid" id="lista"></div>
-
-<!-- 🔥 PAINEL -->
-<div id="painel" style="display:none">
-
-<h3>Painel ADM</h3>
-
-<input id="nome" placeholder="Nome categoria">
-<input id="img" placeholder="Imagem URL">
-<input id="valor" placeholder="Valor">
-<input id="desc" placeholder="Descrição">
-
-<button onclick="salvar()">Salvar</button>
-
-<div id="adminLista"></div>
-
-</div>
-
-</div>
-
 <!-- LOGIN -->
-<div class="modal" id="login">
-<div class="box">
-<div class="fechar" onclick="fecharTudo()">✖</div>
-
-<input id="email" placeholder="Email">
-<input id="senha" type="password" placeholder="Senha">
-<button onclick="logar()">Entrar</button>
+<div id="loginBox" class="card">
+    <h3>Login / Cadastro</h3>
+    <input id="user" placeholder="Usuário">
+    <button onclick="login()">Entrar</button>
 </div>
+
+<!-- PAINEL -->
+<div id="painel" class="hidden">
+
+<div class="card">
+    <h3>Enviar Curtidas</h3>
+    <input id="ffid" placeholder="ID Free Fire">
+    
+    <select id="servico"></select>
+    
+    <button onclick="enviar()">Enviar</button>
+</div>
+
+<div class="card">
+    <h3>Pedidos</h3>
+    <div id="pedidos"></div>
+</div>
+
+<div class="card">
+    <h3>Ganhar moedas</h3>
+    <button onclick="ganhar()">Ganhar +10</button>
+</div>
+
+<div class="card">
+    <h3>Admin</h3>
+
+    <input id="catNome" placeholder="Nova categoria">
+    <button onclick="addCategoria()">Adicionar Categoria</button>
+
+    <hr>
+
+    <input id="servNome" placeholder="Nome do serviço">
+    <input id="servDesc" placeholder="Descrição">
+    <input id="servPreco" placeholder="Preço">
+    
+    <select id="catSelect"></select>
+
+    <button onclick="addServico()">Adicionar Serviço</button>
+
+</div>
+
+</div>
+
 </div>
 
 <script>
 
-/* 🔥 DADOS EVOLUÍDOS */
-let dados = JSON.parse(localStorage.getItem("cats")) || [
-{nome:"Instagram",img:"https://cdn-icons-png.flaticon.com/512/2111/2111463.png",valor:"",desc:""},
-{nome:"TikTok",img:"https://cdn-icons-png.flaticon.com/512/3046/3046121.png",valor:"",desc:""}
-];
+let usuario = null;
 
-let editIndex=null;
-
-/* RENDER LOJA (NÃO MUDEI) */
-function render(){
-let html="";
-dados.forEach(c=>{
-html+=`
-<div class="card">
-<img src="${c.img}" width="50"><br>
-${c.nome}
-</div>`;
-});
-lista.innerHTML=html;
-}
-
-/* RENDER ADMIN */
-function renderAdmin(){
-let html="";
-dados.forEach((c,i)=>{
-html+=`
-<div class="painel-box">
-<b>${c.nome}</b><br>
-Valor: ${c.valor || "-"}<br>
-Desc: ${c.desc || "-"}<br>
-
-<button onclick="editar(${i})">Editar</button>
-<button onclick="remover(${i})">Excluir</button>
-</div>`;
-});
-adminLista.innerHTML=html;
-}
-
-/* EDITAR */
-function editar(i){
-editIndex=i;
-
-nome.value=dados[i].nome;
-img.value=dados[i].img;
-valor.value=dados[i].valor;
-desc.value=dados[i].desc;
-}
-
-/* SALVAR */
-function salvar(){
-
-if(editIndex===null){
-dados.push({
-nome:nome.value,
-img:img.value,
-valor:valor.value,
-desc:desc.value
-});
-}else{
-dados[editIndex]={
-nome:nome.value,
-img:img.value,
-valor:valor.value,
-desc:desc.value
+let dados = JSON.parse(localStorage.getItem("dados")) || {
+    users:{},
+    categorias:[],
+    servicos:[]
 };
-editIndex=null;
+
+function salvar(){
+    localStorage.setItem("dados", JSON.stringify(dados));
 }
 
-limpar();
-save();
+function login(){
+    let u = user.value;
+    if(!dados.users[u]){
+        dados.users[u] = {saldo:100, pedidos:[]};
+    }
+    usuario = u;
+    salvar();
+    iniciar();
 }
 
-/* REMOVER */
-function remover(i){
-dados.splice(i,1);
-save();
+function iniciar(){
+    loginBox.classList.add("hidden");
+    painel.classList.remove("hidden");
+    atualizar();
 }
 
-/* SAVE */
-function save(){
-localStorage.setItem("cats",JSON.stringify(dados));
-render();
-renderAdmin();
+function atualizar(){
+    saldo.innerText = dados.users[usuario].saldo;
+
+    // serviços
+    servico.innerHTML="";
+    catSelect.innerHTML="";
+
+    dados.categorias.forEach((c,i)=>{
+        let op = document.createElement("option");
+        op.value=i;
+        op.textContent=c;
+        catSelect.appendChild(op);
+    });
+
+    dados.servicos.forEach((s,i)=>{
+        let op = document.createElement("option");
+        op.value=i;
+        op.textContent = `${s.nome} (${s.preco})`;
+        servico.appendChild(op);
+    });
+
+    // pedidos
+    pedidos.innerHTML="";
+    dados.users[usuario].pedidos.forEach(p=>{
+        let div = document.createElement("div");
+        div.innerText = p;
+        pedidos.appendChild(div);
+    });
 }
 
-/* LIMPAR */
-function limpar(){
-nome.value="";
-img.value="";
-valor.value="";
-desc.value="";
+function ganhar(){
+    dados.users[usuario].saldo += 10;
+    salvar();
+    atualizar();
 }
 
-/* LOGIN */
-function abrirLogin(){
-login.style.display="flex";
+function enviar(){
+    let s = dados.servicos[servico.value];
+    let userData = dados.users[usuario];
+
+    if(!s) return;
+
+    if(userData.saldo < s.preco){
+        alert("Saldo insuficiente");
+        return;
+    }
+
+    userData.saldo -= s.preco;
+
+    let texto = `⏳ Enviando ${s.nome} para ID ${ffid.value}`;
+    userData.pedidos.push(texto);
+
+    salvar();
+    atualizar();
+
+    setTimeout(()=>{
+        userData.pedidos.push(`✔ ${s.nome} entregue`);
+        salvar();
+        atualizar();
+    },3000);
 }
 
-function logar(){
-if(email.value==="nannyvittoriah@gmail.com" && senha.value==="Lorrannyh.170"){
-login.style.display="none";
-painel.style.display="block";
-renderAdmin();
-}else alert("Erro");
+function addCategoria(){
+    let nome = catNome.value;
+    if(!nome) return;
+
+    dados.categorias.push(nome);
+    salvar();
+    atualizar();
 }
 
-/* MENU */
-function toggleMenu(){
-menu.style.display=menu.style.display=="block"?"none":"block";
-}
+function addServico(){
+    let nome = servNome.value;
+    let desc = servDesc.value;
+    let preco = parseInt(servPreco.value);
+    let cat = catSelect.value;
 
-function fecharTudo(){
-menu.style.display="none";
-login.style.display="none";
-}
+    dados.servicos.push({
+        nome,
+        desc,
+        preco,
+        categoria:cat
+    });
 
-/* INIT */
-render();
+    salvar();
+    atualizar();
+}
 
 </script>
 
