@@ -56,7 +56,7 @@ color:#fff;
 border-radius:6px;
 }
 
-/* PRODUTOS (2 COLUNAS) */
+/* PRODUTOS 2 COLUNAS */
 .container{
 display:grid;
 grid-template-columns:repeat(2, 1fr);
@@ -155,7 +155,6 @@ border-radius:6px;
 border:1px solid #555;
 }
 
-/* ITEM ADM */
 .item{
 border:1px solid #333;
 padding:10px;
@@ -166,7 +165,6 @@ margin:5px 0;
 
 <body>
 
-<!-- HEADER -->
 <div class="topbar">
 <div>BONY STORE</div>
 <div onclick="toggleMenu()" style="cursor:pointer;font-size:26px">☰</div>
@@ -180,15 +178,11 @@ margin:5px 0;
 <button onclick="home()">🏠 Home</button>
 <button onclick="openAdmin()">⚙ ADM</button>
 
-<h4>🎨 Temas Claros</h4>
-<button onclick="theme('rosa')">🌸 Rosa</button>
-<button onclick="theme('lilas')">💜 Lilás</button>
-
-<h4>🌙 Temas Escuros</h4>
+<h4>🌙 TEMAS ESCUROS</h4>
 <button onclick="theme('azul')">🔵 Azul</button>
 <button onclick="theme('amarelo')">🟡 Amarelo</button>
 
-<h4>📂 Categorias</h4>
+<h4>📂 CATEGORIAS</h4>
 <button onclick="render('todos')">Todos</button>
 <button onclick="render('passe')">Passes</button>
 <button onclick="render('tokens')">Tokens</button>
@@ -214,22 +208,11 @@ margin:5px 0;
 </div>
 </div>
 
-<!-- MODAL -->
-<div id="modal" class="modal">
-<div class="modalBox">
-<h3 id="mTitulo"></h3>
-<p id="mPreco"></p>
-<p id="mDesc"></p>
-<p id="mEstoque"></p>
-<button onclick="fechar()">FECHAR</button>
-</div>
-</div>
-
 <!-- ADM -->
 <div id="admin" class="admin">
 <div class="adminBox">
 
-<h2>PAINEL ADM</h2>
+<h2>PAINEL ADMIN</h2>
 
 <input id="u" placeholder="Usuário">
 <input id="p" type="password" placeholder="Senha">
@@ -237,11 +220,19 @@ margin:5px 0;
 
 <div id="painel" style="display:none">
 
-<h3>➕ PRODUTOS</h3>
+<h3>📊 DASHBOARD</h3>
+
+<div class="item">Total vendas: <span id="vendas"></span></div>
+<div class="item">Mais vendidos: <span id="maisvendido"></span></div>
+<div class="item">Status loja: 🟢 ONLINE</div>
+
+<hr>
+
+<h3>📦 PRODUTOS</h3>
 
 <input id="pnome" placeholder="Nome">
 <input id="ppreco" placeholder="Preço">
-<input id="pimg" placeholder="Imagem URL">
+<input id="pimg" placeholder="Imagem">
 <textarea id="pdesc" placeholder="Descrição"></textarea>
 <input id="pestoque" placeholder="Estoque">
 <input id="pcat" placeholder="Categoria">
@@ -251,6 +242,11 @@ margin:5px 0;
 
 <div id="produtosADM"></div>
 
+<hr>
+
+<h3>📩 COMPROVANTES (SIMULADO)</h3>
+<div id="hist"></div>
+
 </div>
 </div>
 </div>
@@ -258,6 +254,10 @@ margin:5px 0;
 <script>
 
 let selected="";
+
+/* LOGIN ADMIN */
+const ADMIN_USER="Lorrannyh.170";
+const ADMIN_PASS="Lorrannyh.170";
 
 /* PRODUTOS */
 let produtos=JSON.parse(localStorage.getItem("produtos")||"null")||[
@@ -284,11 +284,11 @@ d.innerHTML=`
 <img src="${p[2]}">
 <h3>${p[0]}</h3>
 <p>R$ ${p[1]}</p>
-<p style="font-size:12px">${p[3]}</p>
+<p>${p[3]}</p>
 <p>Estoque: ${p[4]}</p>
 
 <button class="detailBtn" onclick="detalhe(${i})">DETALHES</button>
-<button class="buyBtn" onclick="buy(${i})" ${p[4]<=0?'disabled':''}>COMPRAR</button>
+<button class="buyBtn" onclick="buy(${i})">COMPRAR</button>
 `;
 
 loja.appendChild(d);
@@ -300,32 +300,8 @@ function toggleMenu(){
 menu.style.right = menu.style.right==="0px"?"-260px":"0px";
 }
 
-/* FECHAR MENU AO CLICAR FORA */
-document.addEventListener("click",function(e){
-let menu=document.getElementById("menu");
-let btn=document.querySelector(".topbar div:last-child");
-
-if(!menu.contains(e.target) && !btn.contains(e.target)){
-menu.style.right="-260px";
-}
-});
-
-/* TEMAS */
+/* TEMAS ESCUROS */
 function theme(t){
-
-if(t==="rosa"){
-document.documentElement.style.setProperty("--border","#ff4fd8");
-document.documentElement.style.setProperty("--border2","#b26bff");
-document.body.style.background="#ffe6f2";
-document.body.style.color="#000";
-}
-
-if(t==="lilas"){
-document.documentElement.style.setProperty("--border","#b26bff");
-document.documentElement.style.setProperty("--border2","#ff4fd8");
-document.body.style.background="#f3e6ff";
-document.body.style.color="#000";
-}
 
 if(t==="azul"){
 document.documentElement.style.setProperty("--border","#00c3ff");
@@ -350,17 +326,6 @@ admin.style.display="none";
 render();
 }
 
-/* DETALHES */
-function detalhe(i){
-modal.style.display="flex";
-mTitulo.innerText=produtos[i][0];
-mPreco.innerText="R$ "+produtos[i][1];
-mDesc.innerText=produtos[i][3];
-mEstoque.innerText="Estoque: "+produtos[i][4];
-}
-
-function fechar(){modal.style.display="none";}
-
 /* COMPRA */
 function buy(i){
 if(produtos[i][4]<=0){alert("Sem estoque");return;}
@@ -375,6 +340,10 @@ loja.style.display="none";
 checkout.style.display="block";
 
 produto.value=selected;
+
+/* vendas */
+let v=Number(localStorage.getItem("vendas")||0);
+localStorage.setItem("vendas",v+1);
 }
 
 /* ENVIO */
@@ -393,21 +362,17 @@ alert("Enviado!");
 home();
 }
 
-/* ADM */
-function openAdmin(){
-admin.style.display="block";
-loja.style.display="none";
-}
-
-/* LOGIN */
+/* ADM LOGIN */
 function login(){
-if(u.value==="admin" && p.value==="123"){
+if(u.value===ADMIN_USER && p.value===ADMIN_PASS){
 painel.style.display="block";
 loadADM();
+loadHist();
+stats();
 }else alert("erro login");
 }
 
-/* ADD */
+/* ADD PRODUTO */
 function add(){
 produtos.push([
 pnome.value,
@@ -423,12 +388,48 @@ render();
 loadADM();
 }
 
-/* ADM LIST */
+/* ADM PRODUTOS */
 function loadADM(){
 produtosADM.innerHTML="";
 produtos.forEach(p=>{
 produtosADM.innerHTML+=`<div class="item">${p[0]} - R$ ${p[1]}</div>`;
 });
+}
+
+/* HISTÓRICO */
+function loadHist(){
+let d=JSON.parse(localStorage.getItem("dados")||"[]");
+
+hist.innerHTML="";
+d.forEach(x=>{
+hist.innerHTML+=`<div class="item">${x.nome} - ${x.produto}</div>`;
+});
+}
+
+/* STATS */
+function stats(){
+vendas.innerText=localStorage.getItem("vendas")||0;
+
+/* mais vendido simples */
+let count={};
+produtos.forEach(p=>count[p[0]]=0);
+
+let d=JSON.parse(localStorage.getItem("dados")||"[]");
+d.forEach(x=>{
+if(count[x.produto]!=undefined) count[x.produto]++;
+});
+
+let top="";
+let max=0;
+
+for(let k in count){
+if(count[k]>max){
+max=count[k];
+top=k;
+}
+}
+
+maisvendido.innerText=top||"Nenhum";
 }
 
 /* INICIAR */
@@ -437,4 +438,4 @@ home();
 </script>
 
 </body>
-</html
+</html>
