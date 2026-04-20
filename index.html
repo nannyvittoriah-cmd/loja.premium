@@ -3,365 +3,278 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bony Store</title>
+<title>Loja Prime</title>
 
 <style>
 :root{
---border:#00c3ff;
+  --bg:#0b0f1a;
+  --card:#141a2a;
+  --text:#fff;
+  --accent:#00d4ff;
+  --accent2:#ffd000;
 }
 
 body{
-margin:0;
-font-family:Arial;
-background:#000;
-color:#fff;
+  margin:0;
+  font-family:Arial;
+  background:var(--bg);
+  color:var(--text);
 }
 
-/* HEADER */
-.topbar{
-display:flex;
-justify-content:space-between;
-padding:15px;
-background:#0b0f2a;
-border-bottom:2px solid var(--border);
+/* TOP */
+header{
+  padding:20px;
+  font-size:30px;
+  font-weight:bold;
+  text-align:center;
+  background:linear-gradient(90deg,#001b2e,#002f4b);
 }
 
 /* MENU */
-#overlay{
-position:fixed;
-top:0;left:0;
-width:100%;height:100%;
-background:rgba(0,0,0,0.6);
-display:none;
-z-index:998;
+#menu{
+  position:fixed;
+  top:0;
+  left:0;
+  width:220px;
+  height:100%;
+  background:#0a0f1f;
+  padding:20px;
+  transform:translateX(-100%);
+  transition:0.3s;
+}
+#menu.open{transform:translateX(0);}
+#menu button{
+  width:100%;
+  margin:10px 0;
+  padding:10px;
+  background:#111;
+  color:#fff;
+  border:1px solid #333;
+  cursor:pointer;
 }
 
-.menu{
-position:fixed;
-top:0;
-right:-260px;
-width:240px;
-height:100%;
-background:#111;
-padding:10px;
-transition:0.3s;
-z-index:999;
-border-left:2px solid var(--border);
-}
-
-.menu button{
-width:100%;
-padding:10px;
-margin:5px 0;
-background:#222;
-color:#fff;
-border:none;
-border-radius:6px;
-cursor:pointer;
-}
-
-/* SEÇÕES */
+/* PRODUTOS */
 .container{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:10px;
-padding:15px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:15px;
+  padding:20px;
 }
 
-/* CARD PRODUTO */
 .card{
-background:#111;
-padding:10px;
-border-radius:10px;
-border:2px solid var(--border);
-text-align:center;
+  background:var(--card);
+  padding:15px;
+  border-radius:10px;
 }
 
 .card img{
-width:100%;
-border-radius:10px;
+  width:100%;
+  border-radius:10px;
 }
 
-.buyBtn{
-background:#00ff66;
-width:100%;
-padding:10px;
-border:none;
-cursor:pointer;
-margin-top:5px;
+.btn{
+  background:green;
+  color:#fff;
+  padding:10px;
+  border:none;
+  width:100%;
+  margin-top:10px;
+  cursor:pointer;
 }
 
-/* PÁGINAS */
-.page{
-display:none;
-padding:15px;
+/* MODAL COMPRA */
+.modal{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.8);
+  display:none;
+  justify-content:center;
+  align-items:center;
 }
 
-/* PIX */
-#pixModal{
-display:none;
-position:fixed;
-top:0;left:0;
-width:100%;height:100%;
-background:rgba(0,0,0,0.8);
-justify-content:center;
-align-items:center;
-z-index:9999;
-}
-
-.pixBox{
-background:#111;
-padding:20px;
-width:320px;
-border-radius:10px;
-border:2px solid var(--border);
-text-align:center;
+.modal-content{
+  background:#111;
+  padding:20px;
+  width:300px;
+  border-radius:10px;
 }
 
 input{
-width:100%;
-padding:10px;
-margin:5px 0;
-background:#222;
-color:#fff;
-border:none;
-border-radius:6px;
+  width:100%;
+  margin:5px 0;
+  padding:8px;
 }
 
 /* ADM */
-.item{
-padding:10px;
-border:1px solid #333;
-margin:5px 0;
+#admin{
+  display:none;
+  padding:20px;
 }
 
-.green{color:#00ff66;}
-.red{color:#ff4444;}
+.admin-card{
+  background:#1a1f33;
+  padding:10px;
+  margin:10px 0;
+}
+
+/* THEMES */
+.theme-blue{--accent:#00d4ff;}
+.theme-yellow{--accent:#ffd000;}
+.theme-dark{--bg:#000;--card:#111;}
 </style>
 </head>
 
 <body>
 
-<div class="topbar">
-<div>💎 BONY STORE</div>
-<div onclick="openMenu()" style="cursor:pointer">☰</div>
+<header onclick="toggleMenu()">LOJA PRIME / LOJA PRO</header>
+
+<div id="menu">
+  <button onclick="showHome()">Home</button>
+  <button onclick="showAdmin()">Painel ADM</button>
+  <button onclick="theme('dark')">Tema Escuro</button>
+  <button onclick="theme('blue')">Tema Azul</button>
+  <button onclick="theme('yellow')">Tema Amarelo</button>
 </div>
 
-<div id="overlay" onclick="closeMenu()"></div>
+<!-- PRODUTOS -->
+<div class="container" id="home"></div>
 
-<!-- MENU -->
-<div id="menu" class="menu">
-<h3>MENU</h3>
-<button onclick="show('home')">🏠 Loja</button>
-<button onclick="show('dm')">📩 DM / Pedidos</button>
-<button onclick="show('admin')">⚙ ADM</button>
+<!-- ADMIN -->
+<div id="admin">
+  <h2>Painel ADM</h2>
+  <div id="adminList"></div>
 </div>
 
-<!-- LOJA -->
-<div id="home" class="page" style="display:block;">
-<div id="loja" class="container"></div>
-</div>
+<!-- MODAL COMPRA -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <h3>Pagamento Pix</h3>
+    <p><b>Nome:</b> SEU NOME AQUI</p>
+    <p><b>Chave Pix:</b> SUA CHAVE PIX</p>
 
-<!-- DM -->
-<div id="dm" class="page">
-<h2>📩 MEUS PEDIDOS (DM)</h2>
-<div id="listaDM"></div>
-</div>
+    <input id="nome" placeholder="Seu nome">
+    <input id="tel" placeholder="Telefone">
+    <input id="link" placeholder="Link comprovante">
 
-<!-- ADM -->
-<div id="admin" class="page">
-<h2>⚙ PAINEL ADM</h2>
-<div id="pedidos"></div>
-</div>
-
-<!-- PIX -->
-<div id="pixModal">
-<div class="pixBox">
-
-<h2>💳 PIX</h2>
-
-<p id="pNome"></p>
-<p id="pValor"></p>
-
-<hr>
-
-<p><b>Lorrane Vitória Alves Vaz</b></p>
-<p style="color:#fff">(98) 98535-3563</p>
-
-<input id="comprovante" placeholder="Link do comprovante">
-
-<button onclick="enviar()"
-style="width:100%;padding:10px;background:#00ff66;border:none;font-weight:bold">
-ENVIAR
-</button>
-
-<button onclick="closePix()"
-style="width:100%;padding:10px;margin-top:5px;background:#444;border:none">
-FECHAR
-</button>
-
-</div>
+    <button onclick="enviarCompra()">Enviar</button>
+  </div>
 </div>
 
 <script>
-
-let pedidoAtual={};
-
-let produtos=[
-{nome:"Passe Básico",preco:"20",img:"https://i.imgur.com/1Q9Z1ZQ.png"},
-{nome:"Passe Premium",preco:"50",img:"https://i.imgur.com/2Q9Z1ZQ.png"},
-{nome:"VIP Ultra",preco:"80",img:"https://i.imgur.com/3Q9Z1ZQ.png"}
+let produtos = [
+  {id:1,nome:"Produto 1",desc:"Descrição",estoque:10,valor:50,img:"https://via.placeholder.com/200"},
+  {id:2,nome:"Produto 2",desc:"Descrição",estoque:5,valor:80,img:"https://via.placeholder.com/200"}
 ];
 
-/* MENU */
-function openMenu(){
-menu.style.right="0";
-overlay.style.display="block";
-}
-function closeMenu(){
-menu.style.right="-260px";
-overlay.style.display="none";
-}
+let produtoSelecionado = null;
 
-/* TROCA PÁGINA */
-function show(p){
-home.style.display="none";
-dm.style.display="none";
-admin.style.display="none";
-
-document.getElementById(p).style.display="block";
-
-if(p==="dm")loadDM();
-if(p==="admin")loadADM();
-}
-
-/* LOJA */
+/* render */
 function render(){
-loja.innerHTML="";
-produtos.forEach(p=>{
-loja.innerHTML+=`
-<div class="card">
-<img src="${p.img}">
-<h3>${p.nome}</h3>
-<p>R$ ${p.preco}</p>
-<button class="buyBtn" onclick="pix('${p.nome}','${p.preco}')">
-COMPRAR
-</button>
-</div>`;
-});
+  let home = document.getElementById("home");
+  home.innerHTML = "";
+
+  produtos.forEach(p=>{
+    home.innerHTML += `
+    <div class="card">
+      <img src="${p.img}">
+      <h3>${p.nome}</h3>
+      <p>${p.desc}</p>
+      <p>Estoque: ${p.estoque}</p>
+      <p>R$ ${p.valor}</p>
+      <button class="btn" onclick="abrirCompra(${p.id})">Comprar</button>
+    </div>`;
+  });
+
+  let admin = document.getElementById("adminList");
+  admin.innerHTML = "";
+
+  produtos.forEach(p=>{
+    admin.innerHTML += `
+    <div class="admin-card">
+      <b>${p.nome}</b><br>
+      Estoque: ${p.estoque}<br>
+      <input id="v${p.id}" placeholder="novo valor">
+      <input id="e${p.id}" placeholder="estoque">
+      <button onclick="atualizar(${p.id})">Atualizar</button>
+      <button onclick="remover(${p.id})">Excluir</button>
+    </div>`;
+  });
 }
 
-/* PIX */
-function pix(nome,valor){
-
-pedidoAtual={nome,valor};
-
-pNome.innerText=nome;
-pValor.innerText="R$ "+valor;
-
-pixModal.style.display="flex";
-
-let pedidos=JSON.parse(localStorage.getItem("pedidos")||"[]");
-
-pedidos.push({
-id:Date.now(),
-produto:nome,
-valor:valor,
-status:"PENDENTE",
-comprovante:""
-});
-
-localStorage.setItem("pedidos",JSON.stringify(pedidos));
+/* compra */
+function abrirCompra(id){
+  produtoSelecionado = produtos.find(p=>p.id===id);
+  document.getElementById("modal").style.display="flex";
 }
 
-/* ENVIAR */
-function enviar(){
+function enviarCompra(){
+  let nome = document.getElementById("nome").value;
+  let tel = document.getElementById("tel").value;
+  let link = document.getElementById("link").value;
 
-let link=document.getElementById("comprovante").value;
+  let msg =
+`Compra:
+Produto: ${produtoSelecionado.nome}
+Valor: ${produtoSelecionado.valor}
+Nome: ${nome}
+Telefone: ${tel}
+Comprovante: ${link}`;
 
-if(!link){
-alert("Cole o comprovante!");
-return;
+  window.open("https://wa.me/?text="+encodeURIComponent(msg));
+
+  document.getElementById("modal").style.display="none";
 }
 
-let pedidos=JSON.parse(localStorage.getItem("pedidos"));
+/* admin */
+function atualizar(id){
+  let p = produtos.find(x=>x.id===id);
+  let v = document.getElementById("v"+id).value;
+  let e = document.getElementById("e"+id).value;
 
-pedidos.forEach(p=>{
-if(p.produto===pedidoAtual.nome){
-p.comprovante=link;
-}
-});
+  if(v) p.valor = v;
+  if(e) p.estoque = e;
 
-localStorage.setItem("pedidos",JSON.stringify(pedidos));
-
-window.open(
-"https://wa.me/55989853563?text="+encodeURIComponent(
-`PIX: ${pedidoAtual.nome} - R$ ${pedidoAtual.valor}\nComprovante: ${link}`
-),
-"_blank"
-);
-
-closePix();
+  render();
 }
 
-/* FECHAR */
-function closePix(){
-pixModal.style.display="none";
+function remover(id){
+  produtos = produtos.filter(p=>p.id!==id);
+  render();
 }
 
-/* DM CLIENTE */
-function loadDM(){
-
-let pedidos=JSON.parse(localStorage.getItem("pedidos")||"[]");
-
-listaDM.innerHTML="";
-
-pedidos.forEach(p=>{
-listaDM.innerHTML+=`
-<div class="item">
-📦 ${p.produto} - R$ ${p.valor}<br>
-📎 ${p.comprovante || "sem comprovante"}<br>
-<span class="${p.status==="VERIFICADO"?"green":"red"}">
-${p.status}
-</span>
-</div>`;
-});
+/* menu */
+function toggleMenu(){
+  document.getElementById("menu").classList.toggle("open");
 }
 
-/* ADM */
-function loadADM(){
-
-let pedidos=JSON.parse(localStorage.getItem("pedidos")||"[]");
-
-pedidos.innerHTML="";
-
-pedidos.forEach((p,i)=>{
-
-pedidos.innerHTML+=`
-<div class="item">
-<b>ID:</b> ${p.id}<br>
-${p.produto} - R$ ${p.valor}<br>
-📎 ${p.comprovante || "nenhum"}<br>
-<span class="${p.status==="VERIFICADO"?"green":"red"}">${p.status}</span><br>
-
-<button onclick="verificar(${i})">✔ Verificar</button>
-</div>`;
-});
-
-document.getElementById("pedidos").innerHTML=pedidos.innerHTML;
+function showHome(){
+  document.getElementById("home").style.display="grid";
+  document.getElementById("admin").style.display="none";
 }
 
-/* VERIFICAR */
-function verificar(i){
-let pedidos=JSON.parse(localStorage.getItem("pedidos"));
-pedidos[i].status="VERIFICADO";
-localStorage.setItem("pedidos",JSON.stringify(pedidos));
-loadADM();
+function showAdmin(){
+  document.getElementById("home").style.display="none";
+  document.getElementById("admin").style.display="block";
 }
 
-/* START */
+/* tema */
+function theme(t){
+  document.body.className = "theme-"+t;
+}
+
+/* init */
 render();
+showHome();
 
+/* ESC fecha menu */
+document.addEventListener("keydown", e=>{
+  if(e.key==="Escape"){
+    document.getElementById("menu").classList.remove("open");
+  }
+});
 </script>
 
 </body>
