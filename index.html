@@ -13,15 +13,40 @@ background:#000;
 color:#fff;
 }
 
-/* HEADER GRANDE */
+/* HEADER */
 .topbar{
-background:#0b0f2a;
-padding:30px;
-font-size:34px;
-text-align:center;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:25px;
+font-size:28px;
 font-weight:bold;
+background:#0b0f2a;
 border-bottom:2px solid #00c3ff;
-letter-spacing:2px;
+}
+
+/* MENU */
+#menu{
+position:fixed;
+top:0;
+right:-240px;
+width:220px;
+height:100%;
+background:#111;
+padding:10px;
+transition:0.3s;
+z-index:999;
+border-left:2px solid #00c3ff;
+}
+
+#menu button{
+width:100%;
+padding:10px;
+margin:5px 0;
+background:#222;
+color:#fff;
+border:none;
+cursor:pointer;
 }
 
 /* LOJA */
@@ -48,12 +73,12 @@ border-radius:10px;
 }
 
 button{
-width:100%;
+cursor:pointer;
 padding:10px;
+border:none;
+width:100%;
 margin-top:5px;
 background:#00c3ff;
-border:none;
-cursor:pointer;
 }
 
 /* CHECKOUT */
@@ -128,7 +153,32 @@ text-align:center;
 
 <body>
 
-<div class="topbar">BONY STORE</div>
+<!-- HEADER -->
+<div class="topbar">
+<div>BONY STORE</div>
+<div onclick="toggleMenu()" style="cursor:pointer;font-size:26px">☰</div>
+</div>
+
+<!-- MENU -->
+<div id="menu">
+
+<h3>MENU</h3>
+
+<button onclick="home()">🏠 Home</button>
+<button onclick="openAdmin()">⚙ ADM</button>
+
+<h4>🎨 Temas</h4>
+<button onclick="theme('#000','#00c3ff')">Azul</button>
+<button onclick="theme('#fff','#ff4fd8')">Rosa</button>
+<button onclick="theme('#fff','#b26bff')">Lilás</button>
+<button onclick="theme('#fff','#ffd400')">Amarelo</button>
+
+<h4>📂 Categorias</h4>
+<button onclick="render('todos')">Todos</button>
+<button onclick="render('passe')">Passes</button>
+<button onclick="render('tokens')">Tokens</button>
+
+</div>
 
 <!-- LOJA -->
 <div id="loja" class="container"></div>
@@ -136,14 +186,16 @@ text-align:center;
 <!-- CHECKOUT -->
 <div id="checkout" class="checkout">
 <div class="box">
+
 <h3>ENVIO DE COMPROVANTE</h3>
 
 <input id="nome" placeholder="Nome">
 <input id="whats" placeholder="WhatsApp">
 <input id="produto" readonly>
-<input id="link" placeholder="Link do comprovante">
+<input id="link" placeholder="Link comprovante">
 
 <button onclick="enviar()">ENVIAR</button>
+
 </div>
 </div>
 
@@ -175,8 +227,9 @@ text-align:center;
 <input id="pnome" placeholder="Nome">
 <input id="ppreco" placeholder="Preço">
 <input id="pimg" placeholder="Imagem">
-<textarea id="pdesc" placeholder="Descrição"></textarea>
+<textarea id="pdesc" placeholder="Descrição completa"></textarea>
 <input id="pestoque" placeholder="Estoque">
+<input id"pcat" placeholder="Categoria (passe/tokens)">
 <button onclick="add()">Adicionar</button>
 
 <hr>
@@ -202,13 +255,12 @@ text-align:center;
 <script>
 
 let selected="";
-let indexSelected=null;
 
 /* PRODUTOS */
 let produtos=JSON.parse(localStorage.getItem("produtos")||"null")||[
-["Passe Básico","20","https://i.imgur.com/1Q9Z1ZQ.png","Acesso básico ao sistema",10],
-["Passe Premium","50","https://i.imgur.com/2Q9Z1ZQ.png","Mais recursos e suporte",5],
-["Passe Elite","80","https://i.imgur.com/3Q9Z1ZQ.png","Acesso completo ao sistema",3]
+["Passe Básico","20","https://i.imgur.com/1Q9Z1ZQ.png","Acesso básico",10,"passe"],
+["Passe Premium","50","https://i.imgur.com/2Q9Z1ZQ.png","Mais recursos",5,"passe"],
+["100 Tokens","25","https://i.imgur.com/3Q9Z1ZQ.png","Moeda interna",10,"tokens"]
 ];
 
 function save(){
@@ -216,10 +268,13 @@ localStorage.setItem("produtos",JSON.stringify(produtos));
 }
 
 /* LOJA */
-function render(){
+function render(cat="todos"){
 loja.innerHTML="";
 
 produtos.forEach((p,i)=>{
+
+if(cat!=="todos" && p[5]!==cat) return;
+
 let d=document.createElement("div");
 d.className="card";
 
@@ -227,7 +282,7 @@ d.innerHTML=`
 <img src="${p[2]}">
 <h3>${p[0]}</h3>
 <p>R$ ${p[1]}</p>
-<p style="font-size:12px;opacity:0.8">${p[3]}</p>
+<p style="font-size:12px">${p[3]}</p>
 <p>Estoque: ${p[4]}</p>
 
 <button onclick="detalhe(${i})">DETALHES</button>
@@ -239,6 +294,24 @@ loja.appendChild(d);
 }
 render();
 
+/* MENU */
+function toggleMenu(){
+menu.style.right = menu.style.right==="0px" ? "-240px":"0px";
+}
+
+/* TEMA */
+function theme(bg,border){
+document.body.style.background=bg;
+document.querySelector(".topbar").style.borderBottom="2px solid "+border;
+}
+
+/* HOME */
+function home(){
+loja.style.display="flex";
+checkout.style.display="none";
+admin.style.display="none";
+}
+
 /* DETALHES */
 function detalhe(i){
 modal.style.display="flex";
@@ -248,23 +321,17 @@ mDesc.innerText=produtos[i][3];
 mEstoque.innerText="Estoque: "+produtos[i][4];
 }
 
-/* FECHAR */
 function fechar(){modal.style.display="none";}
 
 /* COMPRA */
 function buy(i){
-
-if(produtos[i][4]<=0){
-alert("Sem estoque!");
-return;
-}
-
-indexSelected=i;
-selected=produtos[i][0];
+if(produtos[i][4]<=0){alert("Sem estoque");return;}
 
 produtos[i][4]--;
 save();
 render();
+
+selected=produtos[i][0];
 
 loja.style.display="none";
 checkout.style.display="block";
@@ -291,13 +358,6 @@ alert("Enviado!");
 home();
 }
 
-/* HOME */
-function home(){
-loja.style.display="flex";
-checkout.style.display="none";
-admin.style.display="none";
-}
-
 /* ADM */
 function openAdmin(){
 admin.style.display="block";
@@ -311,7 +371,7 @@ painel.style.display="block";
 loadADM();
 loadHist();
 stats();
-}else alert("erro login");
+}else alert("erro");
 }
 
 /* ADD */
@@ -321,7 +381,8 @@ pnome.value,
 ppreco.value,
 pimg.value,
 pdesc.value,
-Number(pestoque.value)
+Number(pestoque.value),
+pcat.value
 ]);
 
 save();
@@ -329,41 +390,30 @@ render();
 loadADM();
 }
 
-/* ADM PRODUTOS */
+/* ADM LIST */
 function loadADM(){
 produtosADM.innerHTML="";
 
 produtos.forEach((p,i)=>{
-let d=document.createElement("div");
-d.className="item";
-
-d.innerHTML=`
-<input value="${p[0]}" onchange="produtos[${i}][0]=this.value;save();render()">
-<input value="${p[1]}" onchange="produtos[${i}][1]=this.value;save();render()">
-<input value="${p[2]}" onchange="produtos[${i}][2]=this.value;save();render()">
-<textarea onchange="produtos[${i}][3]=this.value;save();render()">${p[3]}</textarea>
-<input value="${p[4]}" onchange="produtos[${i}][4]=Number(this.value);save();render()">
-<button onclick="produtos.splice(${i},1);save();render();loadADM()">Excluir</button>
+produtosADM.innerHTML+=`
+<div class="item">
+<input value="${p[0]}" onchange="produtos[${i}][0]=this.value">
+<input value="${p[1]}" onchange="produtos[${i}][1]=this.value">
+<input value="${p[2]}" onchange="produtos[${i}][2]=this.value">
+<textarea onchange="produtos[${i}][3]=this.value">${p[3]}</textarea>
+<input value="${p[4]}" onchange="produtos[${i}][4]=Number(this.value)">
+<input value="${p[5]}" onchange="produtos[${i}][5]=this.value">
+</div>
 `;
-
-produtosADM.appendChild(d);
 });
 }
 
-/* HISTÓRICO */
+/* HIST */
 function loadHist(){
 let dados=JSON.parse(localStorage.getItem("dados")||"[]");
-
 hist.innerHTML="";
-
 dados.forEach(d=>{
-hist.innerHTML+=`
-<div class="item">
-<b>${d.nome}</b><br>
-${d.produto}<br>
-<a href="${d.link}" target="_blank">ver comprovante</a>
-</div>
-`;
+hist.innerHTML+=`<div class="item">${d.nome} - ${d.produto}</div>`;
 });
 }
 
