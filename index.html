@@ -16,7 +16,6 @@ margin:0;
 font-family:Arial;
 background:#000;
 color:#fff;
-transition:0.3s;
 }
 
 /* HEADER */
@@ -31,7 +30,7 @@ background:#0b0f2a;
 border-bottom:2px solid var(--border);
 }
 
-/* MENU */
+/* MENU LATERAL (AGORA CORRETO) */
 .menu{
 position:fixed;
 top:0;
@@ -77,7 +76,6 @@ width:100%;
 border-radius:10px;
 }
 
-/* BOTÕES */
 .buyBtn{
 width:100%;
 padding:10px;
@@ -85,19 +83,6 @@ margin-top:5px;
 background:#00ff66;
 border:none;
 font-weight:bold;
-border-radius:6px;
-cursor:pointer;
-}
-
-.detailBtn{
-width:100%;
-padding:10px;
-margin-top:5px;
-background:#f5f5dc;
-border:none;
-color:#000;
-font-weight:bold;
-border:2px solid var(--border2);
 border-radius:6px;
 cursor:pointer;
 }
@@ -130,11 +115,31 @@ padding:10px;
 margin:5px 0;
 }
 
-/* GRÁFICO */
 .bar{
 height:10px;
 background:#00c3ff;
 margin:5px 0;
+}
+
+/* PIX */
+#pixModal{
+display:none;
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,0.8);
+justify-content:center;
+align-items:center;
+z-index:99999;
+}
+
+.pixBox{
+background:#111;
+padding:20px;
+border-radius:10px;
+width:300px;
+border:2px solid #00c3ff;
+text-align:center;
 }
 </style>
 </head>
@@ -144,18 +149,18 @@ margin:5px 0;
 <!-- HEADER -->
 <div class="topbar">
 <div>BONY STORE</div>
-<div onclick="toggleMenu()" style="cursor:pointer;font-size:26px">☰</div>
+<div onclick="toggleMenu()" style="cursor:pointer">☰</div>
 </div>
 
-<!-- MENU -->
+<!-- MENU LATERAL -->
 <div id="menu" class="menu">
 
 <h3>MENU</h3>
 
-<button onclick="home()">🏠 Home</button>
+<button onclick="home()">🏠 Loja</button>
 <button onclick="openAdmin()">⚙ ADM</button>
 
-<h4>🌙 TEMAS</h4>
+<h4>🎨 TEMAS</h4>
 <button onclick="theme('azul')">🔵 Azul</button>
 <button onclick="theme('amarelo')">🟡 Amarelo</button>
 
@@ -178,15 +183,11 @@ margin:5px 0;
 
 <h3>📊 VENDAS</h3>
 <div class="item">Total: <span id="vendas"></span></div>
-<div class="item">Mais vendido: <span id="maisvendido"></span></div>
 
 <h3>📈 GRÁFICO</h3>
 <div id="grafico"></div>
 
-<h3>🟢 STATUS</h3>
-<div class="item" id="status">ONLINE</div>
-
-<h3>📩 COMPROVANTES</h3>
+<h3>📩 HISTÓRICO</h3>
 <div id="hist"></div>
 
 <h3>➕ PRODUTOS</h3>
@@ -194,26 +195,40 @@ margin:5px 0;
 <input id="ppreco" placeholder="Preço">
 <input id="pimg" placeholder="Imagem">
 <textarea id="pdesc" placeholder="Descrição"></textarea>
-<input id="pestoque" placeholder="Estoque">
-<input id="pcat" placeholder="Categoria">
 <button onclick="add()">Adicionar</button>
+
+</div>
+</div>
+</div>
+
+<!-- PIX -->
+<div id="pixModal">
+<div class="pixBox">
+
+<h2>💳 PIX</h2>
+
+<p id="pixNome"></p>
+<p id="pixValor"></p>
 
 <hr>
 
-<div id="produtosADM"></div>
+<p><b>Nome:</b> SEU NOME AQUI</p>
+<p><b>PIX:</b> SUA-CHAVE-AQUI</p>
 
-</div>
+<button onclick="copiarPix()">📋 Copiar PIX</button>
+<button onclick="fecharPix()">Fechar</button>
+
 </div>
 </div>
 
 <script>
 
-const ADMIN_USER="Lorrannyh.170";
-const ADMIN_PASS="Lorrannyh.170";
+const ADMIN_USER="admin";
+const ADMIN_PASS="123";
 
 let produtos=JSON.parse(localStorage.getItem("produtos")||"null")||[
-["Passe Básico","20","https://i.imgur.com/1Q9Z1ZQ.png","Acesso básico",10,"passe"],
-["Passe Premium","50","https://i.imgur.com/2Q9Z1ZQ.png","Premium",5,"passe"]
+["Passe Básico","20","https://i.imgur.com/1Q9Z1ZQ.png","Desc"],
+["Passe Premium","50","https://i.imgur.com/2Q9Z1ZQ.png","Desc"]
 ];
 
 function save(){
@@ -223,33 +238,35 @@ localStorage.setItem("produtos",JSON.stringify(produtos));
 /* LOJA */
 function render(){
 loja.innerHTML="";
-produtos.forEach((p,i)=>{
+produtos.forEach((p)=>{
 loja.innerHTML+=`
 <div class="card">
 <img src="${p[2]}">
 <h3>${p[0]}</h3>
 <p>R$ ${p[1]}</p>
 <p>${p[3]}</p>
-<p>Estoque: ${p[4]}</p>
-<button class="detailBtn">DETALHES</button>
-<button class="buyBtn">COMPRAR</button>
+
+<button class="buyBtn" onclick="abrirPix('${p[0]}','${p[1]}')">
+COMPRAR
+</button>
+
 </div>`;
 });
 }
 
-/* MENU */
+/* MENU ABRIR/FECHAR (CORRIGIDO) */
 function toggleMenu(){
 let m=document.getElementById("menu");
 m.style.right = (m.style.right==="0px")?"-260px":"0px";
 }
 
-/* FECHAR MENU FORA */
+/* FECHA MENU AO CLICAR FORA */
 document.addEventListener("click",function(e){
-let m=document.getElementById("menu");
-let b=document.querySelector(".topbar div:last-child");
+let menu=document.getElementById("menu");
+let btn=document.querySelector(".topbar div:last-child");
 
-if(!m.contains(e.target) && !b.contains(e.target)){
-m.style.right="-260px";
+if(!menu.contains(e.target) && !btn.contains(e.target)){
+menu.style.right="-260px";
 }
 });
 
@@ -272,78 +289,85 @@ document.body.style.color="#fff";
 
 /* HOME */
 function home(){
-document.getElementById("admin").style.display="none";
-document.getElementById("loja").style.display="grid";
+admin.style.display="none";
+loja.style.display="grid";
 render();
 }
 
 /* ADM */
 function openAdmin(){
-document.getElementById("admin").style.display="block";
-document.getElementById("loja").style.display="none";
+admin.style.display="block";
+loja.style.display="none";
 }
 
 /* LOGIN */
 function login(){
 if(u.value===ADMIN_USER && p.value===ADMIN_PASS){
 painel.style.display="block";
-stats();
 load();
 }else alert("erro login");
 }
 
-/* STATS */
-function stats(){
-let v=localStorage.getItem("vendas")||0;
-vendas.innerText=v;
-
-let count={};
-produtos.forEach(p=>count[p[0]]=0);
-
-let d=JSON.parse(localStorage.getItem("dados")||"[]");
-d.forEach(x=>{
-if(count[x.produto]!=undefined) count[x.produto]++;
-});
-
-let top="nenhum",max=0;
-for(let k in count){
-if(count[k]>max){
-max=count[k];
-top=k;
-}
-}
-
-maisvendido.innerText=top;
-
-/* gráfico */
-grafico.innerHTML="";
-for(let k in count){
-grafico.innerHTML+=`<div>${k}</div><div class="bar" style="width:${count[k]*20}px"></div>`;
-}
-
-/* histórico */
-hist.innerHTML="";
-d.forEach(x=>{
-hist.innerHTML+=`<div class="item">${x.nome} - ${x.produto}</div>`;
-});
-}
-
-/* ADD PRODUTO */
+/* ADD */
 function add(){
-produtos.push([
-pnome.value,
-ppreco.value,
-pimg.value,
-pdesc.value,
-Number(pestoque.value),
-pcat.value
-]);
-
+produtos.push([pnome.value,ppreco.value,pimg.value,pdesc.value]);
 save();
 render();
 }
 
-/* INICIAR */
+/* PIX */
+let atualNome="";
+let atualValor="";
+
+function abrirPix(nome,valor){
+atualNome=nome;
+atualValor=valor;
+
+pixNome.innerText="Produto: "+nome;
+pixValor.innerText="Valor: R$ "+valor;
+
+pixModal.style.display="flex";
+
+/* salva venda */
+let d=JSON.parse(localStorage.getItem("dados")||"[]");
+d.push({produto:nome,valor:valor});
+localStorage.setItem("dados",JSON.stringify(d));
+}
+
+function fecharPix(){
+pixModal.style.display="none";
+}
+
+function copiarPix(){
+navigator.clipboard.writeText("SUA-CHAVE-AQUI");
+alert("PIX copiado!");
+}
+
+/* LOAD ADM */
+function load(){
+let d=JSON.parse(localStorage.getItem("dados")||"[]");
+vendas.innerText=d.length;
+
+hist.innerHTML="";
+d.forEach(x=>{
+hist.innerHTML+=`<div class="item">${x.produto} - R$ ${x.valor}</div>`;
+});
+
+grafico.innerHTML="";
+let c={};
+produtos.forEach(p=>c[p[0]]=0);
+d.forEach(x=>{
+if(c[x.produto]!=undefined) c[x.produto]++;
+});
+
+for(let k in c){
+grafico.innerHTML+=`
+<div>${k}</div>
+<div class="bar" style="width:${c[k]*20}px"></div>`;
+}
+}
+
+/* START */
 home();
 
 </script>
