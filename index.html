@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bony Store Premium</title>
+<title>Bony Store</title>
 
 <style>
 :root{
@@ -22,12 +22,9 @@ color:#fff;
 .topbar{
 display:flex;
 justify-content:space-between;
-align-items:center;
 padding:18px;
 background:#0b0f2a;
 border-bottom:2px solid var(--border);
-font-size:22px;
-font-weight:bold;
 }
 
 /* MENU */
@@ -61,57 +58,52 @@ background:#222;
 color:#fff;
 border:none;
 cursor:pointer;
-border-radius:8px;
+border-radius:6px;
 }
 
 /* LOJA */
 .container{
 display:grid;
 grid-template-columns:repeat(2,1fr);
-gap:15px;
+gap:10px;
 padding:15px;
 }
 
 .card{
 background:#111;
-padding:15px;
-border-radius:12px;
+padding:10px;
+border-radius:10px;
 border:2px solid var(--border);
 text-align:center;
 }
 
-.card img{
-width:100%;
-border-radius:10px;
-}
+.card img{width:100%;border-radius:10px;}
 
 .buyBtn{
 width:100%;
 padding:10px;
-margin-top:8px;
 background:#00ff66;
 border:none;
 cursor:pointer;
-font-weight:bold;
-border-radius:8px;
+margin-top:5px;
 }
 
-/* ADM LAYOUT PREMIUM */
+/* ADM */
 .admin{
 display:none;
-padding:20px;
+padding:15px;
 }
 
-.adminGrid{
+.grid{
 display:grid;
 grid-template-columns:2fr 1fr;
 gap:15px;
 }
 
-.panel{
+.box{
 background:#111;
-padding:20px;
-border-radius:12px;
+padding:15px;
+border-radius:10px;
 border:2px solid var(--border);
 }
 
@@ -126,15 +118,14 @@ border-radius:6px;
 }
 
 .item{
-padding:12px;
+padding:10px;
 border:1px solid #333;
-margin:8px 0;
-border-radius:8px;
+margin:5px 0;
 }
 
 /* STATUS */
-.green{color:#00ff66;font-weight:bold;}
-.red{color:#ff4444;font-weight:bold;}
+.green{color:#00ff66;}
+.red{color:#ff4444;}
 
 /* PIX */
 #pixModal{
@@ -151,8 +142,8 @@ z-index:9999;
 .pixBox{
 background:#111;
 padding:20px;
-width:340px;
-border-radius:12px;
+width:320px;
+border-radius:10px;
 border:2px solid var(--border);
 text-align:center;
 }
@@ -161,9 +152,8 @@ text-align:center;
 
 <body>
 
-<!-- HEADER -->
 <div class="topbar">
-<div>💎 BONY STORE PREMIUM</div>
+<div>💎 BONY STORE</div>
 <div onclick="openMenu()" style="cursor:pointer">☰</div>
 </div>
 
@@ -171,14 +161,12 @@ text-align:center;
 
 <!-- MENU -->
 <div id="menu" class="menu">
-<h3>MENU</h3>
-
 <button onclick="home()">🏠 Loja</button>
 <button onclick="openAdmin()">⚙ ADM</button>
 
 <h4>🎨 TEMAS</h4>
-<button onclick="theme('azul')">🔵 Azul</button>
-<button onclick="theme('amarelo')">🟡 Amarelo</button>
+<button onclick="theme('azul')">Azul</button>
+<button onclick="theme('amarelo')">Amarelo</button>
 </div>
 
 <!-- LOJA -->
@@ -186,10 +174,10 @@ text-align:center;
 
 <!-- ADM -->
 <div id="admin" class="admin">
-<div class="adminGrid">
 
-<!-- ESQUERDA -->
-<div class="panel">
+<div class="grid">
+
+<div class="box">
 
 <h2>🔐 LOGIN ADM</h2>
 
@@ -200,24 +188,24 @@ text-align:center;
 <div id="painel" style="display:none">
 
 <h3>➕ PRODUTOS</h3>
+
 <input id="pnome" placeholder="Nome">
 <input id="ppreco" placeholder="Preço">
 <input id="pimg" placeholder="Imagem">
 <textarea id="pdesc" placeholder="Descrição"></textarea>
+
 <button onclick="add()">Adicionar</button>
 
 <h3>📦 PRODUTOS</h3>
-<div id="listaProdutos"></div>
+<div id="lista"></div>
 
 </div>
-
 </div>
 
-<!-- DIREITA -->
-<div class="panel">
+<div class="box">
 
 <h3>📑 PEDIDOS</h3>
-<div id="pedidosADM"></div>
+<div id="pedidos"></div>
 
 </div>
 
@@ -228,7 +216,7 @@ text-align:center;
 <div id="pixModal">
 <div class="pixBox">
 
-<h2>💳 PAGAMENTO PIX</h2>
+<h2>💳 PIX</h2>
 
 <p id="pNome"></p>
 <p id="pValor"></p>
@@ -236,9 +224,13 @@ text-align:center;
 <hr>
 
 <p><b>Lorrane Vitória Alves Vaz</b></p>
-<p><b>(98) 98484-3563</b></p>
+<p><b>PIX: (98) 98535-3563</b></p>
 
-<button onclick="whats()">WhatsApp comprovante</button>
+<p style="font-size:13px;color:#ccc">
+Coloque o link do seu comprovante para verificarmos
+</p>
+
+<button onclick="whats()">Enviar WhatsApp</button>
 <button onclick="closePix()">Fechar</button>
 
 </div>
@@ -249,9 +241,9 @@ text-align:center;
 const ADMIN_USER="admin";
 const ADMIN_PASS="123";
 
-let produtos=[
-["Passe Básico","20","https://i.imgur.com/1Q9Z1ZQ.png"],
-["Passe Premium","50","https://i.imgur.com/2Q9Z1ZQ.png"]
+let produtos=JSON.parse(localStorage.getItem("produtos")||"null")||[
+["Passe Básico","20","https://i.imgur.com/1Q9Z1ZQ.png","desc"],
+["Passe Premium","50","https://i.imgur.com/2Q9Z1ZQ.png","desc"]
 ];
 
 let pedidoAtual={};
@@ -309,12 +301,14 @@ load();
 /* ADD */
 function add(){
 produtos.push([pnome.value,ppreco.value,pimg.value,pdesc.value]);
-load();
+localStorage.setItem("produtos",JSON.stringify(produtos));
 render();
+load();
 }
 
 /* PIX */
 function pix(nome,valor){
+
 pedidoAtual={nome,valor};
 
 pNome.innerText=nome;
@@ -336,17 +330,30 @@ localStorage.setItem("pedidos",JSON.stringify(pedidos));
 
 /* WHATS */
 function whats(){
-window.open("https://wa.me/5598984843563?text="+encodeURIComponent(
-`PIX - ${pedidoAtual.nome} - R$ ${pedidoAtual.valor}`
-));
+
+let msg=
+`📦 Pedido PIX
+Produto: ${pedidoAtual.nome}
+Valor: R$ ${pedidoAtual.valor}
+
+Envie o comprovante para verificação.`;
+
+window.open("https://wa.me/55989853563?text="+encodeURIComponent(msg));
+
 closePix();
+}
+
+/* CLOSE */
+function closePix(){
+pixModal.style.display="none";
 }
 
 /* LOAD ADM */
 function load(){
+
 let pedidos=JSON.parse(localStorage.getItem("pedidos")||"[]");
 
-pedidosADM.innerHTML="";
+pedidos.innerHTML="";
 
 pedidos.forEach(p=>{
 let cor=p.status==="APROVADO"?"green":"red";
@@ -359,17 +366,16 @@ ${p.produto} - R$ ${p.valor}<br>
 </div>`;
 });
 
-/* produtos ADM */
-listaProdutos.innerHTML="";
+lista.innerHTML="";
 produtos.forEach((p,i)=>{
-listaProdutos.innerHTML+=`
+lista.innerHTML+=`
 <div class="item">
-${p[0]} - R$ ${p[1]}<br>
+${p[0]} - R$ ${p[1]}
 </div>`;
 });
 }
 
-/* TEMAS */
+/* THEME */
 function theme(t){
 if(t==="azul"){
 document.documentElement.style.setProperty("--border","#00c3ff");
