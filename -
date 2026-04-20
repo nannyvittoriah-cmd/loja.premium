@@ -2,237 +2,382 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Painel Curtidas FF</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bonys Story</title>
 
 <style>
+:root{
+--bg:#000;
+--card:#111;
+--text:#fff;
+--border:#00c3ff;
+}
+
 body{
-    margin:0;
-    font-family:Arial;
-    background:#0f172a;
-    color:white;
+margin:0;
+font-family:Arial;
+background:var(--bg);
+color:var(--text);
 }
 
-.topo{
-    background:#1e293b;
-    padding:15px;
-    display:flex;
-    justify-content:space-between;
+/* TOP */
+.topbar{
+display:flex;
+justify-content:space-between;
+padding:15px;
+background:#0b0f2a;
+font-weight:bold;
 }
 
+.dots{cursor:pointer;font-size:24px}
+
+/* MENU */
+.menu{
+position:absolute;
+right:10px;
+top:50px;
+background:#fff;
+color:#000;
+display:none;
+flex-direction:column;
+width:180px;
+border-radius:10px;
+z-index:10;
+}
+
+.menu button{
+padding:10px;
+border:none;
+background:none;
+text-align:left;
+cursor:pointer;
+}
+
+/* STATUS */
+#status{
+text-align:center;
+padding:10px;
+font-weight:bold;
+}
+
+/* LOJA */
 .container{
-    padding:15px;
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:20px;
+padding:20px;
 }
 
 .card{
-    background:#1e293b;
-    padding:15px;
-    margin-bottom:10px;
-    border-radius:10px;
+width:300px;
+background:var(--card);
+border:2px solid var(--border);
+border-radius:15px;
+padding:10px;
 }
 
-button{
-    background:#ec4899;
-    border:none;
-    padding:10px;
-    color:white;
-    border-radius:8px;
-    cursor:pointer;
+.card img{
+width:100%;
+border-radius:10px;
 }
 
-input, select{
-    width:100%;
-    padding:8px;
-    margin-top:5px;
-    margin-bottom:10px;
-    border-radius:5px;
-    border:none;
+button.buy{
+width:100%;
+padding:10px;
+margin-top:10px;
+background:var(--border);
+border:none;
+cursor:pointer;
+font-weight:bold;
 }
 
-.hidden{display:none;}
+/* CHECKOUT */
+.checkout{
+display:none;
+padding:20px;
+}
+
+.box{
+max-width:500px;
+margin:auto;
+background:#111;
+padding:20px;
+border-radius:10px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin:5px 0;
+}
+
+/* PIX BOX */
+.pixbox{
+margin-top:10px;
+padding:10px;
+border:2px solid #444;
+border-radius:10px;
+background:#0a0a0a;
+}
+
+/* ADM */
+.admin{
+display:none;
+padding:20px;
+}
+
+.adminBox{
+max-width:700px;
+margin:auto;
+background:#111;
+padding:20px;
+border-radius:10px;
+}
+
+/* DASH */
+.stats{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin:10px 0;
+}
+
+.stat{
+flex:1;
+background:#222;
+padding:10px;
+border-radius:8px;
+text-align:center;
+}
+
+/* THEMES */
+.rosa{--bg:#fff;--card:#fff;--text:#000;--border:#ff4fd8;}
+.lilas{--bg:#fff;--card:#fff;--text:#000;--border:#b26bff;}
+.azul{--bg:#000;--card:#111;--text:#fff;--border:#00c3ff;}
+.amarelo{--bg:#000;--card:#111;--text:#fff;--border:#ffd400;}
+
 </style>
 </head>
 
-<body>
+<body class="azul">
 
-<div class="topo">
-    <b>Painel FF</b>
-    <div>
-        Saldo: <span id="saldo">0</span>
-    </div>
+<div class="topbar">
+<div>BONYS STORY</div>
+<div class="dots" onclick="toggleMenu()">⋮</div>
 </div>
 
-<div class="container">
-
-<!-- LOGIN -->
-<div id="loginBox" class="card">
-    <h3>Login / Cadastro</h3>
-    <input id="user" placeholder="Usuário">
-    <button onclick="login()">Entrar</button>
+<div class="menu" id="menu">
+<button onclick="goHome()">Home</button>
+<button onclick="setTheme('rosa')">🌸 Rosa</button>
+<button onclick="setTheme('lilas')">💜 Lilás</button>
+<button onclick="setTheme('azul')">🔵 Azul</button>
+<button onclick="setTheme('amarelo')">🟡 Amarelo</button>
+<button onclick="openAdmin()">ADM</button>
 </div>
 
-<!-- PAINEL -->
-<div id="painel" class="hidden">
+<div id="status">🔴 LOJA ONLINE</div>
 
-<div class="card">
-    <h3>Enviar Curtidas</h3>
-    <input id="ffid" placeholder="ID Free Fire">
-    
-    <select id="servico"></select>
-    
-    <button onclick="enviar()">Enviar</button>
+<!-- LOJA -->
+<div id="loja" class="container"></div>
+
+<!-- CHECKOUT -->
+<div id="checkout" class="checkout">
+<div class="box">
+
+<h3>COMPROVANTE</h3>
+
+<input id="nome" placeholder="Nome">
+<input id="sobrenome" placeholder="Sobrenome">
+<input id="email" placeholder="Email">
+<input id="whats" placeholder="WhatsApp">
+
+<input id="produto" readonly>
+
+<div class="pixbox">
+<p>💳 PIX DA LOJA</p>
+<p>📱 (98) 98485-3563</p>
+<p>👤 Lorrane Vitória Alves Vaz</p>
 </div>
 
-<div class="card">
-    <h3>Pedidos</h3>
-    <div id="pedidos"></div>
-</div>
+<input id="linkpix" placeholder="Link do comprovante">
+<input id="nomepix" placeholder="Nome do recebedor">
+<input id="chavepix" placeholder="Chave PIX usada">
 
-<div class="card">
-    <h3>Ganhar moedas</h3>
-    <button onclick="ganhar()">Ganhar +10</button>
-</div>
-
-<div class="card">
-    <h3>Admin</h3>
-
-    <input id="catNome" placeholder="Nova categoria">
-    <button onclick="addCategoria()">Adicionar Categoria</button>
-
-    <hr>
-
-    <input id="servNome" placeholder="Nome do serviço">
-    <input id="servDesc" placeholder="Descrição">
-    <input id="servPreco" placeholder="Preço">
-    
-    <select id="catSelect"></select>
-
-    <button onclick="addServico()">Adicionar Serviço</button>
+<button onclick="send()">ENVIAR COMPROVANTE</button>
 
 </div>
+</div>
+
+<!-- ADM -->
+<div id="admin" class="admin">
+<div class="adminBox">
+
+<h2>PAINEL ADM</h2>
+
+<input id="u" placeholder="Usuário">
+<input id="p" type="password" placeholder="Senha">
+
+<button onclick="login()">Entrar</button>
+
+<div id="panel" style="display:none">
+
+<h3>📊 DASHBOARD</h3>
+
+<div class="stats">
+<div class="stat">👁 Cliques<br><span id="cliques">0</span></div>
+<div class="stat">💰 Vendas<br><span id="vendas">0</span></div>
+<div class="stat">📄 Compras<br><span id="compras">0</span></div>
+</div>
+
+<hr>
+
+<h3>📦 HISTÓRICO</h3>
+<div id="hist"></div>
 
 </div>
 
+</div>
 </div>
 
 <script>
 
-let usuario = null;
+const whatsapp="5598984853563";
+let selected="";
 
-let dados = JSON.parse(localStorage.getItem("dados")) || {
-    users:{},
-    categorias:[],
-    servicos:[]
-};
+/* CLIQUES */
+let clicks=Number(localStorage.getItem("clicks")||0);
+clicks++;
+localStorage.setItem("clicks",clicks);
 
-function salvar(){
-    localStorage.setItem("dados", JSON.stringify(dados));
+/* MENU */
+function toggleMenu(){
+const m=document.getElementById("menu");
+m.style.display=m.style.display==="flex"?"none":"flex";
+}
+
+/* HOME */
+function goHome(){
+document.getElementById("loja").style.display="flex";
+document.getElementById("checkout").style.display="none";
+document.getElementById("admin").style.display="none";
+document.getElementById("menu").style.display="none";
+}
+
+/* THEME */
+function setTheme(t){document.body.className=t}
+
+/* PRODUTOS COMPLETOS */
+const produtos=[
+["Passe Elite Premium","10","https://i.imgur.com/Bud0zyu.png"],
+["25 Tokens Universal","8","https://i.imgur.com/OFmm8PI.jpeg"],
+["50 Tokens Universal","15","https://i.imgur.com/OFmm8PI.jpeg"],
+["100 Tokens Universal","25","https://i.imgur.com/OFmm8PI.jpeg"],
+["200 Tokens Universal","50","https://i.imgur.com/OFmm8PI.jpeg"],
+["300 Tokens Universal","70","https://i.imgur.com/OFmm8PI.jpeg"],
+["400 Tokens Universal","90","https://i.imgur.com/OFmm8PI.jpeg"],
+["500 Tokens Universal","120","https://i.imgur.com/OFmm8PI.jpeg"],
+["600 Tokens Universal","140","https://i.imgur.com/OFmm8PI.jpeg"],
+["700 Tokens Universal","160","https://i.imgur.com/OFmm8PI.jpeg"],
+["800 Tokens Universal","172","https://i.imgur.com/OFmm8PI.jpeg"],
+["900 Tokens Universal","182","https://i.imgur.com/OFmm8PI.jpeg"],
+["1000 Tokens Universal","200","https://i.imgur.com/OFmm8PI.jpeg"]
+];
+
+const box=document.getElementById("loja");
+
+produtos.forEach(p=>{
+const d=document.createElement("div");
+d.className="card";
+d.innerHTML=`
+<img src="${p[2]}">
+<div>${p[0]}</div>
+<div>R$ ${p[1]}</div>
+<button class="buy" onclick="buy('${p[0]}')">COMPRAR</button>
+`;
+box.appendChild(d);
+});
+
+/* BUY */
+function buy(p){
+selected=p;
+document.getElementById("loja").style.display="none";
+document.getElementById("checkout").style.display="block";
+document.getElementById("produto").value=p;
+}
+
+/* SEND */
+function send(){
+
+const n=document.getElementById("nome").value;
+const s=document.getElementById("sobrenome").value;
+const e=document.getElementById("email").value;
+const w=document.getElementById("whats").value;
+
+const link=document.getElementById("linkpix").value;
+const nomepix=document.getElementById("nomepix").value;
+const chavepix=document.getElementById("chavepix").value;
+
+if(!n||!s||!e||!w||!link||!nomepix||!chavepix){
+alert("Preencha tudo!");
+return;
+}
+
+let orders=JSON.parse(localStorage.getItem("orders")||"[]");
+
+orders.push({
+n,s,e,w,
+produto:selected,
+link,nomepix,chavepix,
+data:new Date().toLocaleString()
+});
+
+localStorage.setItem("orders",JSON.stringify(orders));
+
+let vendas=Number(localStorage.getItem("vendas")||0);
+vendas++;
+localStorage.setItem("vendas",vendas);
+
+window.location.href=
+`https://wa.me/${whatsapp}?text=${encodeURIComponent(selected)}`;
+}
+
+/* ADM */
+function openAdmin(){
+document.getElementById("admin").style.display="block";
+document.getElementById("loja").style.display="none";
+document.getElementById("checkout").style.display="none";
 }
 
 function login(){
-    let u = user.value;
-    if(!dados.users[u]){
-        dados.users[u] = {saldo:100, pedidos:[]};
-    }
-    usuario = u;
-    salvar();
-    iniciar();
+
+if(
+document.getElementById("u").value==="Lorrannyh.160" &&
+document.getElementById("p").value==="Lorrannyh.170"
+){
+document.getElementById("panel").style.display="block";
+load();
+}else alert("erro login");
 }
 
-function iniciar(){
-    loginBox.classList.add("hidden");
-    painel.classList.remove("hidden");
-    atualizar();
-}
+/* DASH */
+function load(){
 
-function atualizar(){
-    saldo.innerText = dados.users[usuario].saldo;
+let d=JSON.parse(localStorage.getItem("orders")||"[]");
 
-    // serviços
-    servico.innerHTML="";
-    catSelect.innerHTML="";
+document.getElementById("hist").innerHTML=
+d.length===0?"Sem compras":
+d.slice(-20).map(o=>
+`<div style="border:1px solid #333;padding:5px;margin:5px">
+${o.produto}<br>${o.n} ${o.s}<br>${o.w}
+</div>`
+).join("");
 
-    dados.categorias.forEach((c,i)=>{
-        let op = document.createElement("option");
-        op.value=i;
-        op.textContent=c;
-        catSelect.appendChild(op);
-    });
-
-    dados.servicos.forEach((s,i)=>{
-        let op = document.createElement("option");
-        op.value=i;
-        op.textContent = `${s.nome} (${s.preco})`;
-        servico.appendChild(op);
-    });
-
-    // pedidos
-    pedidos.innerHTML="";
-    dados.users[usuario].pedidos.forEach(p=>{
-        let div = document.createElement("div");
-        div.innerText = p;
-        pedidos.appendChild(div);
-    });
-}
-
-function ganhar(){
-    dados.users[usuario].saldo += 10;
-    salvar();
-    atualizar();
-}
-
-function enviar(){
-    let s = dados.servicos[servico.value];
-    let userData = dados.users[usuario];
-
-    if(!s) return;
-
-    if(userData.saldo < s.preco){
-        alert("Saldo insuficiente");
-        return;
-    }
-
-    userData.saldo -= s.preco;
-
-    let texto = `⏳ Enviando ${s.nome} para ID ${ffid.value}`;
-    userData.pedidos.push(texto);
-
-    salvar();
-    atualizar();
-
-    setTimeout(()=>{
-        userData.pedidos.push(`✔ ${s.nome} entregue`);
-        salvar();
-        atualizar();
-    },3000);
-}
-
-function addCategoria(){
-    let nome = catNome.value;
-    if(!nome) return;
-
-    dados.categorias.push(nome);
-    salvar();
-    atualizar();
-}
-
-function addServico(){
-    let nome = servNome.value;
-    let desc = servDesc.value;
-    let preco = parseInt(servPreco.value);
-    let cat = catSelect.value;
-
-    dados.servicos.push({
-        nome,
-        desc,
-        preco,
-        categoria:cat
-    });
-
-    salvar();
-    atualizar();
+document.getElementById("cliques").innerText=localStorage.getItem("clicks");
+document.getElementById("vendas").innerText=localStorage.getItem("vendas")||0;
+document.getElementById("compras").innerText=d.length;
 }
 
 </script>
 
 </body>
-</html>
