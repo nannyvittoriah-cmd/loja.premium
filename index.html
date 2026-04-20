@@ -6,6 +6,10 @@
 <title>Bony Store</title>
 
 <style>
+:root{
+--border:#00c3ff;
+}
+
 body{
 margin:0;
 font-family:Arial;
@@ -13,15 +17,50 @@ background:#000;
 color:#fff;
 }
 
+/* HEADER */
 .topbar{
 display:flex;
 justify-content:space-between;
 padding:15px;
 background:#0b0f2a;
-border-bottom:2px solid #00c3ff;
+border-bottom:2px solid var(--border);
 }
 
-/* LOJA */
+/* MENU */
+#overlay{
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,0.6);
+display:none;
+z-index:998;
+}
+
+.menu{
+position:fixed;
+top:0;
+right:-260px;
+width:240px;
+height:100%;
+background:#111;
+padding:10px;
+transition:0.3s;
+z-index:999;
+border-left:2px solid var(--border);
+}
+
+.menu button{
+width:100%;
+padding:10px;
+margin:5px 0;
+background:#222;
+color:#fff;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+/* SEÇÕES */
 .container{
 display:grid;
 grid-template-columns:repeat(2,1fr);
@@ -29,11 +68,12 @@ gap:10px;
 padding:15px;
 }
 
+/* CARD PRODUTO */
 .card{
 background:#111;
 padding:10px;
 border-radius:10px;
-border:2px solid #00c3ff;
+border:2px solid var(--border);
 text-align:center;
 }
 
@@ -44,11 +84,17 @@ border-radius:10px;
 
 .buyBtn{
 background:#00ff66;
-border:none;
-padding:10px;
 width:100%;
+padding:10px;
+border:none;
 cursor:pointer;
-font-weight:bold;
+margin-top:5px;
+}
+
+/* PÁGINAS */
+.page{
+display:none;
+padding:15px;
 }
 
 /* PIX */
@@ -60,6 +106,7 @@ width:100%;height:100%;
 background:rgba(0,0,0,0.8);
 justify-content:center;
 align-items:center;
+z-index:9999;
 }
 
 .pixBox{
@@ -67,20 +114,65 @@ background:#111;
 padding:20px;
 width:320px;
 border-radius:10px;
-border:2px solid #00c3ff;
+border:2px solid var(--border);
 text-align:center;
 }
+
+input{
+width:100%;
+padding:10px;
+margin:5px 0;
+background:#222;
+color:#fff;
+border:none;
+border-radius:6px;
+}
+
+/* ADM */
+.item{
+padding:10px;
+border:1px solid #333;
+margin:5px 0;
+}
+
+.green{color:#00ff66;}
+.red{color:#ff4444;}
 </style>
 </head>
 
 <body>
 
 <div class="topbar">
-<div>🛒 BONY STORE</div>
+<div>💎 BONY STORE</div>
+<div onclick="openMenu()" style="cursor:pointer">☰</div>
+</div>
+
+<div id="overlay" onclick="closeMenu()"></div>
+
+<!-- MENU -->
+<div id="menu" class="menu">
+<h3>MENU</h3>
+<button onclick="show('home')">🏠 Loja</button>
+<button onclick="show('dm')">📩 DM / Pedidos</button>
+<button onclick="show('admin')">⚙ ADM</button>
 </div>
 
 <!-- LOJA -->
+<div id="home" class="page" style="display:block;">
 <div id="loja" class="container"></div>
+</div>
+
+<!-- DM -->
+<div id="dm" class="page">
+<h2>📩 MEUS PEDIDOS (DM)</h2>
+<div id="listaDM"></div>
+</div>
+
+<!-- ADM -->
+<div id="admin" class="page">
+<h2>⚙ PAINEL ADM</h2>
+<div id="pedidos"></div>
+</div>
 
 <!-- PIX -->
 <div id="pixModal">
@@ -99,12 +191,12 @@ text-align:center;
 <input id="comprovante" placeholder="Link do comprovante">
 
 <button onclick="enviar()"
-style="background:#00ff66;width:100%;padding:10px;margin-top:10px">
-ENVIAR COMPROVANTE
+style="width:100%;padding:10px;background:#00ff66;border:none;font-weight:bold">
+ENVIAR
 </button>
 
 <button onclick="closePix()"
-style="background:#444;width:100%;padding:10px;margin-top:5px">
+style="width:100%;padding:10px;margin-top:5px;background:#444;border:none">
 FECHAR
 </button>
 
@@ -115,42 +207,46 @@ FECHAR
 
 let pedidoAtual={};
 
-/* 🔥 PRODUTOS (AGORA APARECEM DE VERDADE) */
 let produtos=[
-{
-nome:"Passe Básico",
-preco:"20",
-img:"https://i.imgur.com/1Q9Z1ZQ.png"
-},
-{
-nome:"Passe Premium",
-preco:"50",
-img:"https://i.imgur.com/2Q9Z1ZQ.png"
-},
-{
-nome:"VIP Ultra",
-preco:"80",
-img:"https://i.imgur.com/3Q9Z1ZQ.png"
-}
+{nome:"Passe Básico",preco:"20",img:"https://i.imgur.com/1Q9Z1ZQ.png"},
+{nome:"Passe Premium",preco:"50",img:"https://i.imgur.com/2Q9Z1ZQ.png"},
+{nome:"VIP Ultra",preco:"80",img:"https://i.imgur.com/3Q9Z1ZQ.png"}
 ];
+
+/* MENU */
+function openMenu(){
+menu.style.right="0";
+overlay.style.display="block";
+}
+function closeMenu(){
+menu.style.right="-260px";
+overlay.style.display="none";
+}
+
+/* TROCA PÁGINA */
+function show(p){
+home.style.display="none";
+dm.style.display="none";
+admin.style.display="none";
+
+document.getElementById(p).style.display="block";
+
+if(p==="dm")loadDM();
+if(p==="admin")loadADM();
+}
 
 /* LOJA */
 function render(){
-let loja=document.getElementById("loja");
 loja.innerHTML="";
-
 produtos.forEach(p=>{
 loja.innerHTML+=`
 <div class="card">
 <img src="${p.img}">
 <h3>${p.nome}</h3>
 <p>R$ ${p.preco}</p>
-
-<button class="buyBtn"
-onclick="pix('${p.nome}','${p.preco}')">
+<button class="buyBtn" onclick="pix('${p.nome}','${p.preco}')">
 COMPRAR
 </button>
-
 </div>`;
 });
 }
@@ -160,12 +256,11 @@ function pix(nome,valor){
 
 pedidoAtual={nome,valor};
 
-document.getElementById("pNome").innerText=nome;
-document.getElementById("pValor").innerText="R$ "+valor;
+pNome.innerText=nome;
+pValor.innerText="R$ "+valor;
 
-document.getElementById("pixModal").style.display="flex";
+pixModal.style.display="flex";
 
-/* salva pedido no ADM */
 let pedidos=JSON.parse(localStorage.getItem("pedidos")||"[]");
 
 pedidos.push({
@@ -179,34 +274,30 @@ comprovante:""
 localStorage.setItem("pedidos",JSON.stringify(pedidos));
 }
 
-/* ENVIAR COMPROVANTE */
+/* ENVIAR */
 function enviar(){
 
 let link=document.getElementById("comprovante").value;
 
 if(!link){
-alert("Cole o link do comprovante!");
+alert("Cole o comprovante!");
 return;
 }
 
 let pedidos=JSON.parse(localStorage.getItem("pedidos"));
 
 pedidos.forEach(p=>{
-if(p.produto===pedidoAtual.nome && p.status==="PENDENTE"){
+if(p.produto===pedidoAtual.nome){
 p.comprovante=link;
 }
 });
 
 localStorage.setItem("pedidos",JSON.stringify(pedidos));
 
-let msg=
-`💳 PAGAMENTO PIX
-Produto: ${pedidoAtual.nome}
-Valor: R$ ${pedidoAtual.valor}
-Comprovante: ${link}`;
-
 window.open(
-"https://wa.me/5598984853563?text="+encodeURIComponent(msg),
+"https://wa.me/55989853563?text="+encodeURIComponent(
+`PIX: ${pedidoAtual.nome} - R$ ${pedidoAtual.valor}\nComprovante: ${link}`
+),
 "_blank"
 );
 
@@ -215,7 +306,57 @@ closePix();
 
 /* FECHAR */
 function closePix(){
-document.getElementById("pixModal").style.display="none";
+pixModal.style.display="none";
+}
+
+/* DM CLIENTE */
+function loadDM(){
+
+let pedidos=JSON.parse(localStorage.getItem("pedidos")||"[]");
+
+listaDM.innerHTML="";
+
+pedidos.forEach(p=>{
+listaDM.innerHTML+=`
+<div class="item">
+📦 ${p.produto} - R$ ${p.valor}<br>
+📎 ${p.comprovante || "sem comprovante"}<br>
+<span class="${p.status==="VERIFICADO"?"green":"red"}">
+${p.status}
+</span>
+</div>`;
+});
+}
+
+/* ADM */
+function loadADM(){
+
+let pedidos=JSON.parse(localStorage.getItem("pedidos")||"[]");
+
+pedidos.innerHTML="";
+
+pedidos.forEach((p,i)=>{
+
+pedidos.innerHTML+=`
+<div class="item">
+<b>ID:</b> ${p.id}<br>
+${p.produto} - R$ ${p.valor}<br>
+📎 ${p.comprovante || "nenhum"}<br>
+<span class="${p.status==="VERIFICADO"?"green":"red"}">${p.status}</span><br>
+
+<button onclick="verificar(${i})">✔ Verificar</button>
+</div>`;
+});
+
+document.getElementById("pedidos").innerHTML=pedidos.innerHTML;
+}
+
+/* VERIFICAR */
+function verificar(i){
+let pedidos=JSON.parse(localStorage.getItem("pedidos"));
+pedidos[i].status="VERIFICADO";
+localStorage.setItem("pedidos",JSON.stringify(pedidos));
+loadADM();
 }
 
 /* START */
