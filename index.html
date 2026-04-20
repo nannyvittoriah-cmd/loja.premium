@@ -1,7 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bony Store</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#000;
+color:#fff;
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+padding:15px;
+background:#0b0f2a;
+border-bottom:2px solid #00c3ff;
+}
+
+/* LOJA */
+.container{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+padding:15px;
+}
+
+.card{
+background:#111;
+padding:10px;
+border-radius:10px;
+border:2px solid #00c3ff;
+text-align:center;
+}
+
+.card img{
+width:100%;
+border-radius:10px;
+}
+
+.buyBtn{
+background:#00ff66;
+border:none;
+padding:10px;
+width:100%;
+cursor:pointer;
+font-weight:bold;
+}
+
+/* PIX */
+#pixModal{
+display:none;
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,0.8);
+justify-content:center;
+align-items:center;
+}
+
+.pixBox{
+background:#111;
+padding:20px;
+width:320px;
+border-radius:10px;
+border:2px solid #00c3ff;
+text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+<div>🛒 BONY STORE</div>
+</div>
+
+<!-- LOJA -->
+<div id="loja" class="container"></div>
+
+<!-- PIX -->
 <div id="pixModal">
 <div class="pixBox">
 
-<h2>💳 PAGAMENTO PIX</h2>
+<h2>💳 PIX</h2>
 
 <p id="pNome"></p>
 <p id="pValor"></p>
@@ -9,41 +94,134 @@
 <hr>
 
 <p><b>Lorrane Vitória Alves Vaz</b></p>
-
-<p style="color:#fff">
-(98) 98485-3563
-</p>
-
-<br>
+<p style="color:#fff">(98) 98535-3563</p>
 
 <input id="comprovante" placeholder="Link do comprovante">
 
-<button style="
-width:100%;
-padding:10px;
-margin-top:10px;
-background:#00ff66;
-color:#000;
-font-weight:bold;
-border:none;
-cursor:pointer;
-"
-onclick="enviarComprovante()">
-ENVIAR
+<button onclick="enviar()"
+style="background:#00ff66;width:100%;padding:10px;margin-top:10px">
+ENVIAR COMPROVANTE
 </button>
 
-<button style="
-width:100%;
-padding:10px;
-margin-top:5px;
-background:#444;
-color:#fff;
-border:none;
-cursor:pointer;
-"
-onclick="closePix()">
+<button onclick="closePix()"
+style="background:#444;width:100%;padding:10px;margin-top:5px">
 FECHAR
 </button>
 
 </div>
 </div>
+
+<script>
+
+let pedidoAtual={};
+
+/* 🔥 PRODUTOS (AGORA APARECEM DE VERDADE) */
+let produtos=[
+{
+nome:"Passe Básico",
+preco:"20",
+img:"https://i.imgur.com/1Q9Z1ZQ.png"
+},
+{
+nome:"Passe Premium",
+preco:"50",
+img:"https://i.imgur.com/2Q9Z1ZQ.png"
+},
+{
+nome:"VIP Ultra",
+preco:"80",
+img:"https://i.imgur.com/3Q9Z1ZQ.png"
+}
+];
+
+/* LOJA */
+function render(){
+let loja=document.getElementById("loja");
+loja.innerHTML="";
+
+produtos.forEach(p=>{
+loja.innerHTML+=`
+<div class="card">
+<img src="${p.img}">
+<h3>${p.nome}</h3>
+<p>R$ ${p.preco}</p>
+
+<button class="buyBtn"
+onclick="pix('${p.nome}','${p.preco}')">
+COMPRAR
+</button>
+
+</div>`;
+});
+}
+
+/* PIX */
+function pix(nome,valor){
+
+pedidoAtual={nome,valor};
+
+document.getElementById("pNome").innerText=nome;
+document.getElementById("pValor").innerText="R$ "+valor;
+
+document.getElementById("pixModal").style.display="flex";
+
+/* salva pedido no ADM */
+let pedidos=JSON.parse(localStorage.getItem("pedidos")||"[]");
+
+pedidos.push({
+id:Date.now(),
+produto:nome,
+valor:valor,
+status:"PENDENTE",
+comprovante:""
+});
+
+localStorage.setItem("pedidos",JSON.stringify(pedidos));
+}
+
+/* ENVIAR COMPROVANTE */
+function enviar(){
+
+let link=document.getElementById("comprovante").value;
+
+if(!link){
+alert("Cole o link do comprovante!");
+return;
+}
+
+let pedidos=JSON.parse(localStorage.getItem("pedidos"));
+
+pedidos.forEach(p=>{
+if(p.produto===pedidoAtual.nome && p.status==="PENDENTE"){
+p.comprovante=link;
+}
+});
+
+localStorage.setItem("pedidos",JSON.stringify(pedidos));
+
+let msg=
+`💳 PAGAMENTO PIX
+Produto: ${pedidoAtual.nome}
+Valor: R$ ${pedidoAtual.valor}
+Comprovante: ${link}`;
+
+window.open(
+"https://wa.me/5598984853563?text="+encodeURIComponent(msg),
+"_blank"
+);
+
+closePix();
+}
+
+/* FECHAR */
+function closePix(){
+document.getElementById("pixModal").style.display="none";
+}
+
+/* START */
+render();
+
+</script>
+
+</body>
+</html>
