@@ -1,281 +1,593 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+mkdir -p /tmp/painel-html && cat > /tmp/painel-html/index.html << 'HTMLEOF'
+<!doctype html>
+<html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loja Prime</title>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Passes FF — Painel do Revendedor</title>
+<meta name="description" content="Painel Passes FF: gerencie pedidos, transações e saldo." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
+/* =========================================================
+   PASSES FF — Tema azul elétrico (dark)
+   Variáveis HSL — altere aqui para mudar a paleta inteira
+   ========================================================= */
 :root{
-  --bg:#0b0f1a;
-  --card:#141a2a;
-  --text:#fff;
-  --accent:#00d4ff;
-  --accent2:#ffd000;
+  --background:hsl(222,47%,6%);
+  --foreground:hsl(210,40%,98%);
+  --card:hsl(222,45%,9%);
+  --card-2:hsl(222,47%,7%);
+  --muted:hsl(222,35%,12%);
+  --muted-foreground:hsl(215,20%,65%);
+  --secondary:hsl(222,40%,14%);
+  --border:hsl(217,33%,18%);
+  --input:hsl(217,33%,16%);
+  --primary:hsl(217,91%,60%);
+  --primary-glow:hsl(199,89%,65%);
+  --primary-foreground:hsl(222,47%,6%);
+  --accent:hsl(199,89%,55%);
+  --success:hsl(142,71%,45%);
+  --warning:hsl(38,92%,50%);
+  --destructive:hsl(0,72%,51%);
+  --gradient-primary:linear-gradient(135deg,hsl(217,91%,60%),hsl(199,89%,65%));
+  --gradient-card:linear-gradient(180deg,hsl(222,45%,10%),hsl(222,47%,7%));
+  --shadow-glow:0 0 40px hsl(217 91% 60% / 0.35);
+  --shadow-card:0 8px 32px -8px hsl(222 60% 2% / 0.6);
+  --radius:.75rem;
 }
-
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
 body{
-  margin:0;
-  font-family:Arial;
-  background:var(--bg);
-  color:var(--text);
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:var(--background);
+  color:var(--foreground);
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
 }
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:0;background:transparent;color:inherit}
+input,textarea,select{font-family:inherit}
 
-/* TOP */
-header{
-  padding:20px;
-  font-size:30px;
-  font-weight:bold;
-  text-align:center;
-  background:linear-gradient(90deg,#001b2e,#002f4b);
+/* ---------- Layout ---------- */
+.app{display:flex;min-height:100vh}
+.sidebar{
+  width:260px;background:var(--card);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;flex-shrink:0;
+  position:fixed;inset:0 auto 0 0;z-index:50;
+  transform:translateX(-100%);transition:transform .3s ease;
 }
+.sidebar.open{transform:translateX(0)}
+.sidebar-overlay{
+  position:fixed;inset:0;background:hsl(222 47% 6% / .7);backdrop-filter:blur(4px);
+  z-index:40;display:none;
+}
+.sidebar-overlay.show{display:block}
+.sidebar-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 1rem;height:64px;border-bottom:1px solid var(--border);
+}
+.brand{display:flex;align-items:center;gap:.6rem}
+.brand-icon{
+  width:36px;height:36px;border-radius:.6rem;
+  background:var(--gradient-primary);box-shadow:var(--shadow-glow);
+  display:flex;align-items:center;justify-content:center;color:var(--primary-foreground);
+}
+.brand-name{font-weight:700;font-size:.92rem;line-height:1.1}
+.brand-role{font-size:.72rem;color:var(--muted-foreground)}
+.icon-btn{
+  width:32px;height:32px;border-radius:.4rem;color:var(--muted-foreground);
+  display:inline-flex;align-items:center;justify-content:center;
+}
+.icon-btn:hover{background:var(--secondary);color:var(--foreground)}
+.nav{padding:.75rem;display:flex;flex-direction:column;gap:.25rem}
+.nav a{
+  display:flex;align-items:center;gap:.75rem;
+  padding:.65rem .8rem;border-radius:.55rem;
+  color:var(--muted-foreground);font-size:.9rem;font-weight:500;
+  transition:background .15s,color .15s;
+}
+.nav a:hover{background:var(--secondary);color:var(--foreground)}
+.nav a.active{
+  background:hsl(217 91% 60% / .15);color:var(--primary);
+  box-shadow:inset 3px 0 0 var(--primary);
+}
+.nav a i{width:16px;text-align:center}
 
-/* MENU */
-#menu{
-  position:fixed;
-  top:0;
-  left:0;
-  width:220px;
-  height:100%;
-  background:#0a0f1f;
-  padding:20px;
-  transform:translateX(-100%);
-  transition:0.3s;
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+.header{
+  display:flex;flex-direction:column;gap:1rem;
+  padding:1rem;border-bottom:1px solid var(--border);
+  background:hsl(222 45% 9% / .4);
 }
-#menu.open{transform:translateX(0);}
-#menu button{
-  width:100%;
-  margin:10px 0;
-  padding:10px;
-  background:#111;
-  color:#fff;
-  border:1px solid #333;
-  cursor:pointer;
+.header-row{display:flex;align-items:flex-start;gap:.75rem}
+.menu-toggle{
+  margin-top:.25rem;padding:.4rem;border-radius:.4rem;
+  color:var(--muted-foreground);
 }
-
-/* PRODUTOS */
-.container{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:15px;
-  padding:20px;
-}
-
-.card{
-  background:var(--card);
-  padding:15px;
-  border-radius:10px;
-}
-
-.card img{
-  width:100%;
-  border-radius:10px;
-}
-
+.menu-toggle:hover{background:var(--secondary);color:var(--foreground)}
+.welcome h1{margin:0;font-size:1.25rem;font-weight:700;line-height:1.25}
+.welcome h1 .accent{color:var(--primary)}
+.welcome p{margin:.15rem 0 0;font-size:.85rem;color:var(--muted-foreground)}
+.header-actions{display:flex;gap:.5rem}
 .btn{
-  background:green;
-  color:#fff;
-  padding:10px;
-  border:none;
-  width:100%;
-  margin-top:10px;
-  cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  padding:.55rem .9rem;border-radius:.55rem;font-size:.85rem;font-weight:600;
+  transition:opacity .15s,background .15s;line-height:1;
+}
+.btn-primary{background:var(--gradient-primary);color:var(--primary-foreground);box-shadow:var(--shadow-glow)}
+.btn-primary:hover{opacity:.9}
+.btn-secondary{background:var(--secondary);color:var(--foreground)}
+.btn-secondary:hover{background:hsl(222 40% 18%)}
+.btn-lg{padding:.8rem 1.1rem;font-size:.95rem;width:100%}
+
+.content{flex:1;padding:1.5rem 1rem}
+
+/* ---------- Cards & forms ---------- */
+.card{
+  background:var(--gradient-card);border:1px solid var(--border);
+  border-radius:var(--radius);box-shadow:var(--shadow-card);
+}
+.card-header{padding:1.25rem;border-bottom:1px solid var(--border)}
+.card-title{margin:0;font-size:1.1rem;font-weight:700}
+.card-sub{margin:.2rem 0 0;font-size:.85rem;color:var(--muted-foreground)}
+.card-body{padding:1.25rem}
+
+.empty{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.5rem;padding:4rem 1rem;color:var(--muted-foreground);
+}
+.empty i{font-size:1.75rem;opacity:.6}
+
+.page-header{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:1.25rem}
+.page-icon{
+  width:44px;height:44px;border-radius:.6rem;flex-shrink:0;
+  background:hsl(217 91% 60% / .15);color:var(--primary);
+  display:flex;align-items:center;justify-content:center;font-size:1.25rem;
+}
+.page-header h2{margin:0;font-size:1.4rem;font-weight:700}
+.page-header p{margin:.15rem 0 0;font-size:.85rem;color:var(--muted-foreground)}
+
+.field{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1.1rem}
+.label{font-size:.85rem;font-weight:600;display:flex;align-items:center;gap:.4rem}
+.label i{color:var(--primary)}
+.label .req{color:var(--destructive)}
+.input,.textarea,.select,.readonly{
+  width:100%;background:var(--input);border:1px solid var(--border);
+  color:var(--foreground);border-radius:.55rem;
+  padding:.7rem .85rem;font-size:.9rem;
+  transition:border-color .15s,box-shadow .15s;
+}
+.input:focus,.textarea:focus,.select:focus{
+  outline:none;border-color:var(--primary);
+  box-shadow:0 0 0 3px hsl(217 91% 60% / .2);
+}
+.textarea{resize:none;min-height:90px}
+.readonly{cursor:default}
+.help{font-size:.72rem;color:var(--muted-foreground);margin-top:.25rem}
+
+.input-group{position:relative}
+.input-group .input{padding-right:7rem}
+.input-group .verify{
+  position:absolute;right:.35rem;top:50%;transform:translateY(-50%);
+  padding:.4rem .7rem;font-size:.78rem;
 }
 
-/* MODAL COMPRA */
-.modal{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.8);
-  display:none;
-  justify-content:center;
-  align-items:center;
+.notice{
+  background:hsl(222 35% 12% / .6);border:1px solid var(--border);
+  border-radius:.6rem;padding:.9rem 1rem;font-size:.83rem;color:var(--muted-foreground);
+  line-height:1.55;margin-bottom:1.1rem;
+}
+.notice .warn{color:var(--warning);font-weight:700;display:block;margin-top:.4rem}
+.notice ol{margin:.25rem 0 0;padding-left:1.2rem}
+
+.value-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.85rem 1rem;border:1px solid hsl(217 91% 60% / .3);
+  background:hsl(217 91% 60% / .05);border-radius:.6rem;margin-bottom:1rem;
+}
+.value-row .lbl{display:flex;align-items:center;gap:.5rem;font-weight:500;font-size:.9rem}
+.value-row .lbl i{color:var(--primary)}
+.value-row .amt{font-size:1.25rem;font-weight:700;color:var(--primary)}
+
+.form-footnote{
+  display:flex;align-items:center;justify-content:center;gap:.45rem;
+  margin-top:.9rem;font-size:.75rem;color:var(--muted-foreground);
 }
 
-.modal-content{
-  background:#111;
-  padding:20px;
-  width:300px;
-  border-radius:10px;
+/* ---------- Dashboard ---------- */
+.stats{display:grid;grid-template-columns:1fr;gap:1rem;margin-bottom:1.25rem}
+.stat{
+  background:var(--gradient-card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.1rem;box-shadow:var(--shadow-card);
 }
+.stat-top{display:flex;align-items:center;justify-content:space-between}
+.stat-top p{margin:0;font-size:.82rem;color:var(--muted-foreground)}
+.stat-top i{font-size:1.1rem}
+.stat-val{margin:.6rem 0 0;font-size:1.5rem;font-weight:700}
+.text-primary{color:var(--primary)}
+.text-accent{color:var(--accent)}
+.text-success{color:var(--success)}
+.text-warning{color:var(--warning)}
 
-input{
-  width:100%;
-  margin:5px 0;
-  padding:8px;
+/* ---------- Toast ---------- */
+.toast-host{position:fixed;top:1rem;right:1rem;z-index:100;display:flex;flex-direction:column;gap:.5rem}
+.toast{
+  background:var(--card);border:1px solid var(--border);border-left:3px solid var(--primary);
+  padding:.75rem 1rem;border-radius:.55rem;box-shadow:var(--shadow-card);
+  font-size:.85rem;min-width:240px;animation:slideIn .25s ease;
 }
+.toast.success{border-left-color:var(--success)}
+.toast.error{border-left-color:var(--destructive)}
+.toast .t-title{font-weight:600;display:block}
+.toast .t-desc{display:block;color:var(--muted-foreground);font-size:.78rem;margin-top:.15rem}
+@keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
 
-/* ADM */
-#admin{
-  display:none;
-  padding:20px;
+/* ---------- Pages ---------- */
+.page{display:none;max-width:768px;margin:0 auto}
+.page.active{display:block}
+.page-wide{max-width:none}
+
+/* ---------- Responsivo ---------- */
+@media (min-width:640px){
+  .header{flex-direction:row;align-items:center;justify-content:space-between;padding:1rem 1.5rem}
+  .content{padding:1.5rem}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .welcome h1{font-size:1.5rem}
 }
-
-.admin-card{
-  background:#1a1f33;
-  padding:10px;
-  margin:10px 0;
+@media (min-width:1024px){
+  .sidebar{position:static;transform:none}
+  .sidebar-overlay{display:none!important}
+  .menu-toggle{display:none}
+  .stats{grid-template-columns:repeat(4,1fr)}
 }
-
-/* THEMES */
-.theme-blue{--accent:#00d4ff;}
-.theme-yellow{--accent:#ffd000;}
-.theme-dark{--bg:#000;--card:#111;}
 </style>
 </head>
-
 <body>
+<div class="app">
 
-<header onclick="toggleMenu()">LOJA PRIME / LOJA PRO</header>
+  <!-- Overlay (mobile) -->
+  <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
 
-<div id="menu">
-  <button onclick="showHome()">Home</button>
-  <button onclick="showAdmin()">Painel ADM</button>
-  <button onclick="theme('dark')">Tema Escuro</button>
-  <button onclick="theme('blue')">Tema Azul</button>
-  <button onclick="theme('yellow')">Tema Amarelo</button>
-</div>
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">
+        <div class="brand-icon"><i class="fa-solid fa-gamepad"></i></div>
+        <div>
+          <div class="brand-name">Passes FF</div>
+          <div class="brand-role">Revendedor</div>
+        </div>
+      </div>
+      <button class="icon-btn" onclick="closeSidebar()" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <nav class="nav">
+      <a href="#dashboard" data-page="dashboard"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+      <a href="#novo-pedido" data-page="novo-pedido" class="active"><i class="fa-solid fa-cart-shopping"></i> Novo Pedido</a>
+      <a href="#pedidos" data-page="pedidos"><i class="fa-solid fa-box"></i> Pedidos</a>
+      <a href="#transacoes" data-page="transacoes"><i class="fa-solid fa-right-left"></i> Transações</a>
+      <a href="#suporte" data-page="suporte"><i class="fa-solid fa-headset"></i> Suporte</a>
+      <a href="#configuracoes" data-page="configuracoes"><i class="fa-solid fa-gear"></i> Configurações</a>
+    </nav>
+  </aside>
 
-<!-- PRODUTOS -->
-<div class="container" id="home"></div>
+  <!-- Main -->
+  <div class="main">
+    <header class="header">
+      <div class="header-row">
+        <button class="menu-toggle" onclick="openSidebar()" aria-label="Abrir menu"><i class="fa-solid fa-bars"></i></button>
+        <div class="welcome">
+          <h1>Bem-vindo, <span class="accent">Lorrannyh_vahz!</span></h1>
+          <p>Gerencie sua conta e transações</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary" onclick="toast('success','Depósito','Abra o modal de depósito')"><i class="fa-solid fa-wallet"></i> Depositar</button>
+        <button class="btn btn-secondary" onclick="toast('success','Sessão encerrada','Você saiu da conta')"><i class="fa-solid fa-right-from-bracket"></i> Sair</button>
+      </div>
+    </header>
 
-<!-- ADMIN -->
-<div id="admin">
-  <h2>Painel ADM</h2>
-  <div id="adminList"></div>
-</div>
+    <main class="content">
 
-<!-- MODAL COMPRA -->
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <h3>Pagamento Pix</h3>
-    <p><b>Nome:</b> SEU NOME AQUI</p>
-    <p><b>Chave Pix:</b> SUA CHAVE PIX</p>
+      <!-- DASHBOARD -->
+      <section class="page page-wide" id="page-dashboard">
+        <div class="stats">
+          <div class="stat"><div class="stat-top"><p>Saldo disponível</p><i class="fa-solid fa-wallet text-primary"></i></div><p class="stat-val">R$ 0,00</p></div>
+          <div class="stat"><div class="stat-top"><p>Pedidos hoje</p><i class="fa-solid fa-cart-shopping text-accent"></i></div><p class="stat-val">0</p></div>
+          <div class="stat"><div class="stat-top"><p>Total de pedidos</p><i class="fa-solid fa-box text-success"></i></div><p class="stat-val">0</p></div>
+          <div class="stat"><div class="stat-top"><p>Total gasto</p><i class="fa-solid fa-chart-line text-warning"></i></div><p class="stat-val">R$ 0,00</p></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Atividade recente</h2>
+            <p class="card-sub">Acompanhe seus últimos pedidos e movimentações por aqui.</p>
+          </div>
+          <div class="empty"><i class="fa-solid fa-box"></i><p>Sem atividade recente</p></div>
+        </div>
+      </section>
 
-    <input id="nome" placeholder="Seu nome">
-    <input id="tel" placeholder="Telefone">
-    <input id="link" placeholder="Link comprovante">
+      <!-- NOVO PEDIDO -->
+      <section class="page active" id="page-novo-pedido">
+        <div class="page-header">
+          <div class="page-icon"><i class="fa-solid fa-crown"></i></div>
+          <div>
+            <h2>Novo Pedido</h2>
+            <p>Selecione o serviço desejado e preencha os campos</p>
+          </div>
+        </div>
 
-    <button onclick="enviarCompra()">Enviar</button>
+        <form class="card card-body" onsubmit="enviarPedido(event)">
+          <div class="field">
+            <label class="label"><i class="fa-solid fa-tag"></i> Categoria</label>
+            <div class="readonly">Free Fire Gifts</div>
+          </div>
+          <div class="field">
+            <label class="label"><i class="fa-solid fa-crown"></i> Serviço</label>
+            <select class="select" id="servico" onchange="atualizarValor()">
+              <option value="5.99">1 - Passe Premium - R$ 5.99</option>
+              <option value="12.99">2 - Passe Premium Plus - R$ 12.99</option>
+              <option value="8.50">3 - Diamantes 100 - R$ 8.50</option>
+              <option value="24.90">4 - Diamantes 310 - R$ 24.90</option>
+            </select>
+          </div>
+
+          <div class="notice">
+            O usuário informado receberá um passe na caixa de correio.
+            <span class="warn">AVISO:</span>
+            <ol>
+              <li>Certifique-se de que a caixa de correio está vazia.</li>
+              <li>Delete todas as mensagens da seção AVISO.</li>
+              <li>Isso garante o recebimento correto dos presentes.</li>
+            </ol>
+          </div>
+
+          <div class="field">
+            <label class="label" for="playerId">User ID Free Fire <span class="req">*</span></label>
+            <div class="input-group">
+              <input class="input" id="playerId" maxlength="20" inputmode="numeric"
+                     placeholder="Digite o ID do jogador"
+                     oninput="this.value=this.value.replace(/\D/g,'')" required />
+              <button type="button" class="btn btn-secondary verify" onclick="verificarId()">
+                <i class="fa-solid fa-magnifying-glass"></i> Verificar
+              </button>
+            </div>
+            <p class="help">Mínimo 5 caracteres | Máximo 20 caracteres</p>
+          </div>
+
+          <div class="field">
+            <label class="label" for="msg">Mensagem do presente (Opcional)</label>
+            <textarea class="textarea" id="msg" maxlength="80" placeholder="Digite sua mensagem de presente."></textarea>
+            <p class="help">Mínimo 1 caracteres | Máximo 80 caracteres</p>
+          </div>
+
+          <div class="value-row">
+            <span class="lbl"><i class="fa-solid fa-money-bill-wave"></i> Valor</span>
+            <span class="amt" id="valor">R$ 5.99</span>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg">
+            <i class="fa-solid fa-paper-plane"></i> Enviar Pedido
+          </button>
+          <p class="form-footnote"><i class="fa-solid fa-triangle-exclamation"></i> Confira os dados antes de enviar</p>
+        </form>
+      </section>
+
+      <!-- PEDIDOS -->
+      <section class="page page-wide" id="page-pedidos">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Pedidos</h2>
+            <p class="card-sub">Histórico completo dos seus pedidos</p>
+          </div>
+          <div class="empty"><i class="fa-solid fa-triangle-exclamation"></i><p>Nenhum pedido encontrado</p></div>
+        </div>
+      </section>
+
+      <!-- TRANSAÇÕES -->
+      <section class="page page-wide" id="page-transacoes">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Transações</h2>
+            <p class="card-sub">Histórico completo de todas as suas movimentações</p>
+          </div>
+          <div class="empty"><i class="fa-solid fa-triangle-exclamation"></i><p>Nenhuma transação encontrada</p></div>
+        </div>
+      </section>
+
+      <!-- SUPORTE -->
+      <section class="page" id="page-suporte">
+        <div class="card card-body">
+          <div class="page-header" style="margin-bottom:0">
+            <div class="page-icon"><i class="fa-solid fa-headset"></i></div>
+            <div><h2>Suporte</h2><p>Fale com a nossa equipe</p></div>
+          </div>
+          <div style="display:grid;gap:.75rem;grid-template-columns:1fr;margin-top:1.25rem">
+            <button class="btn btn-secondary" style="justify-content:flex-start;padding:1rem;height:auto">
+              <i class="fa-brands fa-whatsapp text-primary" style="font-size:1.25rem"></i>
+              <span style="text-align:left">
+                <span style="display:block;font-weight:600">WhatsApp</span>
+                <span style="display:block;font-size:.75rem;color:var(--muted-foreground)">Resposta em minutos</span>
+              </span>
+            </button>
+            <button class="btn btn-secondary" style="justify-content:flex-start;padding:1rem;height:auto">
+              <i class="fa-solid fa-envelope text-primary" style="font-size:1.25rem"></i>
+              <span style="text-align:left">
+                <span style="display:block;font-weight:600">E-mail</span>
+                <span style="display:block;font-size:.75rem;color:var(--muted-foreground)">suporte@passesff.com</span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONFIGURAÇÕES -->
+      <section class="page" id="page-configuracoes">
+        <div class="card card-body">
+          <div class="page-header" style="margin-bottom:1.25rem">
+            <div class="page-icon"><i class="fa-solid fa-gear"></i></div>
+            <div><h2>Configurações</h2><p>Gerencie sua conta</p></div>
+          </div>
+          <form onsubmit="event.preventDefault();toast('success','Salvo','Alterações aplicadas')">
+            <div class="field">
+              <label class="label">Nome de usuário</label>
+              <input class="input" value="Lorrannyh_vahz" />
+            </div>
+            <div class="field">
+              <label class="label">E-mail</label>
+              <input type="email" class="input" value="user@passesff.com" />
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">Salvar alterações</button>
+          </form>
+        </div>
+      </section>
+
+    </main>
   </div>
 </div>
 
+<div class="toast-host" id="toast-host"></div>
+
 <script>
-let produtos = [
-  {id:1,nome:"Produto 1",desc:"Descrição",estoque:10,valor:50,img:"https://via.placeholder.com/200"},
-  {id:2,nome:"Produto 2",desc:"Descrição",estoque:5,valor:80,img:"https://via.placeholder.com/200"}
-];
-
-let produtoSelecionado = null;
-
-/* render */
-function render(){
-  let home = document.getElementById("home");
-  home.innerHTML = "";
-
-  produtos.forEach(p=>{
-    home.innerHTML += `
-    <div class="card">
-      <img src="${p.img}">
-      <h3>${p.nome}</h3>
-      <p>${p.desc}</p>
-      <p>Estoque: ${p.estoque}</p>
-      <p>R$ ${p.valor}</p>
-      <button class="btn" onclick="abrirCompra(${p.id})">Comprar</button>
-    </div>`;
-  });
-
-  let admin = document.getElementById("adminList");
-  admin.innerHTML = "";
-
-  produtos.forEach(p=>{
-    admin.innerHTML += `
-    <div class="admin-card">
-      <b>${p.nome}</b><br>
-      Estoque: ${p.estoque}<br>
-      <input id="v${p.id}" placeholder="novo valor">
-      <input id="e${p.id}" placeholder="estoque">
-      <button onclick="atualizar(${p.id})">Atualizar</button>
-      <button onclick="remover(${p.id})">Excluir</button>
-    </div>`;
-  });
+/* Navegação SPA-like via hash */
+const links=document.querySelectorAll('.nav a');
+function navigate(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const el=document.getElementById('page-'+page);
+  if(el)el.classList.add('active');
+  links.forEach(a=>a.classList.toggle('active',a.dataset.page===page));
+  closeSidebar();
+  window.scrollTo({top:0,behavior:'smooth'});
 }
-
-/* compra */
-function abrirCompra(id){
-  produtoSelecionado = produtos.find(p=>p.id===id);
-  document.getElementById("modal").style.display="flex";
-}
-
-function enviarCompra(){
-  let nome = document.getElementById("nome").value;
-  let tel = document.getElementById("tel").value;
-  let link = document.getElementById("link").value;
-
-  let msg =
-`Compra:
-Produto: ${produtoSelecionado.nome}
-Valor: ${produtoSelecionado.valor}
-Nome: ${nome}
-Telefone: ${tel}
-Comprovante: ${link}`;
-
-  window.open("https://wa.me/?text="+encodeURIComponent(msg));
-
-  document.getElementById("modal").style.display="none";
-}
-
-/* admin */
-function atualizar(id){
-  let p = produtos.find(x=>x.id===id);
-  let v = document.getElementById("v"+id).value;
-  let e = document.getElementById("e"+id).value;
-
-  if(v) p.valor = v;
-  if(e) p.estoque = e;
-
-  render();
-}
-
-function remover(id){
-  produtos = produtos.filter(p=>p.id!==id);
-  render();
-}
-
-/* menu */
-function toggleMenu(){
-  document.getElementById("menu").classList.toggle("open");
-}
-
-function showHome(){
-  document.getElementById("home").style.display="grid";
-  document.getElementById("admin").style.display="none";
-}
-
-function showAdmin(){
-  document.getElementById("home").style.display="none";
-  document.getElementById("admin").style.display="block";
-}
-
-/* tema */
-function theme(t){
-  document.body.className = "theme-"+t;
-}
-
-/* init */
-render();
-showHome();
-
-/* ESC fecha menu */
-document.addEventListener("keydown", e=>{
-  if(e.key==="Escape"){
-    document.getElementById("menu").classList.remove("open");
-  }
+links.forEach(a=>a.addEventListener('click',e=>{
+  e.preventDefault();
+  const page=a.dataset.page;
+  history.replaceState(null,'','#'+page);
+  navigate(page);
+}));
+window.addEventListener('load',()=>{
+  const h=location.hash.replace('#','')||'novo-pedido';
+  navigate(h);
 });
-</script>
 
+/* Sidebar mobile */
+function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('overlay').classList.add('show')}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('overlay').classList.remove('show')}
+
+/* Form: valor dinâmico */
+function atualizarValor(){
+  const v=parseFloat(document.getElementById('servico').value).toFixed(2);
+  document.getElementById('valor').textContent='R$ '+v.replace('.',',');
+}
+function verificarId(){
+  const id=document.getElementById('playerId').value;
+  if(id.length<5){toast('error','ID inválido','Digite ao menos 5 caracteres');return}
+  toast('success','ID verificado','Jogador encontrado: '+id);
+}
+function enviarPedido(e){
+  e.preventDefault();
+  const id=document.getElementById('playerId').value;
+  if(id.length<5){toast('error','Erro','ID deve ter ao menos 5 caracteres');return}
+  const valor=document.getElementById('valor').textContent;
+  toast('success','Pedido enviado!','ID '+id+' • '+valor);
+  e.target.reset();atualizarValor();
+}
+
+/* Toasts */
+function toast(type,title,desc){
+  const host=document.getElementById('toast-host');
+  const el=document.createElement('div');
+  el.className='toast '+type;
+  el.innerHTML='<span class="t-title">'+title+'</span><span class="t-desc">'+desc+'</span>';
+  host.appendChild(el);
+  setTimeout(()=>{el.style.opacity='0';el.style.transform='translateY(-8px)';el.style.transition='all .25s';setTimeout(()=>el.remove(),250)},3200);
+}
+</script>
 </body>
 </html>
+HTMLEOF
+cp /tmp/painel-html/index.html /mnt/documents/passes-ff-painel.html
+ls -lh /mnt/documents/passes-ff-painel.html
+Agora vou fazer o QA: renderizar o HTML em PNG para conferir o que ficou certo.
+cd /tmp && cat > qa.mjs << 'EOF'
+import puppeteer from 'puppeteer';
+const browser = await puppeteer.launch({args:['--no-sandbox']});
+const page = await browser.newPage();
+const url = 'file:///mnt/documents/passes-ff-painel.html';
+const sizes = [{w:414,h:896,name:'mobile'},{w:1280,h:800,name:'desktop'}];
+const pages = ['novo-pedido','dashboard','pedidos','suporte'];
+for(const s of sizes){
+  await page.setViewport({width:s.w,height:s.h});
+  for(const p of pages){
+    await page.goto(url+'#'+p,{waitUntil:'networkidle0'});
+    await new Promise(r=>setTimeout(r,400));
+    await page.screenshot({path:`/tmp/qa-${s.name}-${p}.png`,fullPage:true});
+  }
+}
+await browser.close();
+console.log('done');
+EOF
+cd /dev-server && node /tmp/qa.mjs 2>&1 | tail -5 && ls /tmp/qa-*.png
+which chromium google-chrome chrome 2>/dev/null; ls /dev-server/node_modules/puppeteer 2>/dev/null | head -3; ls /dev-server/node_modules/.bin | grep -iE 'chrom|puppet' 2>/dev/null
+cd /tmp && for p in novo-pedido dashboard pedidos suporte configuracoes; do
+  for s in "414,896,mobile" "1280,800,desktop"; do
+    IFS=',' read w h n <<< "$s"
+    chromium --headless --disable-gpu --no-sandbox --hide-scrollbars \
+      --window-size=${w},${h} \
+      --screenshot=/tmp/qa-${n}-${p}.png \
+      "file:///mnt/documents/passes-ff-painel.html#${p}" 2>/dev/null
+  done
+done
+ls -la /tmp/qa-*.png 2>&1 | head -20
+Tamanhos idênticos = Chromium navegou para a URL antes do JS rodar e não trocou de hash. Vou verificar abrindo as duas mais importantes:
+Ler
+qa-mobile-novo-pedido.png
+O Chromium está exibindo o código-fonte em vez de renderizar — parece estar tratando como texto. Provavelmente faltou--orçamento de tempo virtualou ocorre algo como o file://. Vou tentar com bandeiras diferentes e aguardar o carregamento:
+cd /tmp && rm -f qa-*.png
+chromium --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
+  --window-size=414,900 --virtual-time-budget=3000 \
+  --screenshot=/tmp/qa-mobile-novo.png \
+  "file:///mnt/documents/passes-ff-painel.html" 2>&1 | tail -5
+chromium --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
+  --window-size=1280,800 --virtual-time-budget=3000 \
+  --screenshot=/tmp/qa-desktop-novo.png \
+  "file:///mnt/documents/passes-ff-painel.html" 2>&1 | tail -5
+ls -la /tmp/qa-*.png
+Ler
+qa-mobile-novo.png
+Chromium está renderizando comotexto/simplespara arquivo.htmlemarquivo://nesta sandbox. Vou servir via HTTP local:
+cd /mnt/documents && python3 -m http.server 8765 >/dev/null 2>&1 &
+SERVER_PID=$!
+sleep 1
+rm -f /tmp/qa-*.png
+chromium --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
+  --window-size=414,900 --virtual-time-budget=4000 \
+  --screenshot=/tmp/qa-mobile-novo.png \
+  "http://127.0.0.1:8765/passes-ff-painel.html" 2>/dev/null
+chromium --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
+  --window-size=1280,900 --virtual-time-budget=4000 \
+  --screenshot=/tmp/qa-desktop-dash.png \
+  "http://127.0.0.1:8765/passes-ff-painel.html#dashboard" 2>/dev/null
+chromium --headless=new --disable-gpu --no-sandbox --hide-scrollbars \
+  --window-size=414,900 --virtual-time-budget=4000 \
+  --screenshot=/tmp/qa-mobile-pedidos.png \
+  "http://127.0.0.1:8765/passes-ff-painel.html#pedidos" 2>/dev/null
+kill $SERVER_PID 2>/dev/null
+ls -la /tmp/qa-*.png
+Ler
+qa-mobile-novo.png
+/mnt/documentosé mount virtual sem listagem — o python http.server vê vazio. Vou copiar para /tmp:
+Leitura
+qa-mobile-novo-pedido.png
+O index.html não foi visto porque foi escrito antes... espera, foicpMascd /tmp/painel-htmllistou diretório vazio. Você verificará:
+O arquivo está lá. Servidor pegou/index.htmlmas viu diretório vazio?? Talvez o SimpleHTTPServer cacheou a listagem. Vou tentar solicitar direto para/index.html:
+Ler
+qa-mobile-novo-pedido.png
+Visual mobile perfeito — fiel ao print original mas em azul. Vou conferir o desktop e o painel rapidamente:
+Ler
+qa-desktop-novo-pedido.png
+Ler
+qa-desktop-dashboard.png
+Tudo limpo, sem clipping nem overflow, fiel ao print original em azul elétrico. Pequeno detalhe: o "X" da barra lateral aparece no desktop (ele só deveria aparecer no mobile). Vou esconder via CSS:
+sed -i 's|\.sidebar-overlay{display:none!important}|.sidebar-overlay{display:none!important}\n  .sidebar-header .icon-btn{display:none}|' /mnt/documents/passes-ff-painel.html
