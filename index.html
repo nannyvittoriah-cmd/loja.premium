@@ -89,16 +89,7 @@ margin-top:5px;
 }
 
 /* ADM */
-.admin{
-display:none;
-padding:15px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:2fr 1fr;
-gap:15px;
-}
+.admin{display:none;padding:15px;}
 
 .box{
 background:#111;
@@ -123,10 +114,6 @@ border:1px solid #333;
 margin:5px 0;
 }
 
-/* STATUS */
-.green{color:#00ff66;}
-.red{color:#ff4444;}
-
 /* PIX */
 #pixModal{
 display:none;
@@ -147,13 +134,17 @@ border-radius:10px;
 border:2px solid var(--border);
 text-align:center;
 }
+
+.green{color:#00ff66;}
+.red{color:#ff4444;}
 </style>
 </head>
 
 <body>
 
+<!-- HEADER -->
 <div class="topbar">
-<div>💎 BONY STORE</div>
+<div>BONY STORE</div>
 <div onclick="openMenu()" style="cursor:pointer">☰</div>
 </div>
 
@@ -161,6 +152,7 @@ text-align:center;
 
 <!-- MENU -->
 <div id="menu" class="menu">
+<h3>MENU</h3>
 <button onclick="home()">🏠 Loja</button>
 <button onclick="openAdmin()">⚙ ADM</button>
 
@@ -174,9 +166,6 @@ text-align:center;
 
 <!-- ADM -->
 <div id="admin" class="admin">
-
-<div class="grid">
-
 <div class="box">
 
 <h2>🔐 LOGIN ADM</h2>
@@ -187,24 +176,7 @@ text-align:center;
 
 <div id="painel" style="display:none">
 
-<h3>➕ PRODUTOS</h3>
-
-<input id="pnome" placeholder="Nome">
-<input id="ppreco" placeholder="Preço">
-<input id="pimg" placeholder="Imagem">
-<textarea id="pdesc" placeholder="Descrição"></textarea>
-
-<button onclick="add()">Adicionar</button>
-
-<h3>📦 PRODUTOS</h3>
-<div id="lista"></div>
-
-</div>
-</div>
-
-<div class="box">
-
-<h3>📑 PEDIDOS</h3>
+<h3>📦 PEDIDOS</h3>
 <div id="pedidos"></div>
 
 </div>
@@ -216,7 +188,7 @@ text-align:center;
 <div id="pixModal">
 <div class="pixBox">
 
-<h2>💳 PIX</h2>
+<h2>💳 PAGAMENTO PIX</h2>
 
 <p id="pNome"></p>
 <p id="pValor"></p>
@@ -224,14 +196,23 @@ text-align:center;
 <hr>
 
 <p><b>Lorrane Vitória Alves Vaz</b></p>
-<p><b>PIX: (98) 98535-3563</b></p>
+<p><b>(98) 98535-3563</b></p>
 
 <p style="font-size:13px;color:#ccc">
-Coloque o link do seu comprovante para verificarmos
+Cole o link do seu comprovante para verificarmos
 </p>
 
-<button onclick="whats()">Enviar WhatsApp</button>
-<button onclick="closePix()">Fechar</button>
+<input id="comprovante" placeholder="Link do comprovante">
+
+<button style="background:#00ff66;width:100%;padding:10px;margin-top:10px"
+onclick="enviar()">
+ENVIAR
+</button>
+
+<button style="background:#444;width:100%;padding:10px;margin-top:5px"
+onclick="closePix()">
+FECHAR
+</button>
 
 </div>
 </div>
@@ -241,13 +222,14 @@ Coloque o link do seu comprovante para verificarmos
 const ADMIN_USER="admin";
 const ADMIN_PASS="123";
 
-let produtos=JSON.parse(localStorage.getItem("produtos")||"null")||[
-["Passe Básico","20","https://i.imgur.com/1Q9Z1ZQ.png","desc"],
-["Passe Premium","50","https://i.imgur.com/2Q9Z1ZQ.png","desc"]
+let produtos=[
+["Passe Básico","20","https://i.imgur.com/1Q9Z1ZQ.png"],
+["Passe Premium","50","https://i.imgur.com/2Q9Z1ZQ.png"]
 ];
 
 let pedidoAtual={};
 
+/* ELEMENTOS */
 const loja=document.getElementById("loja");
 const menu=document.getElementById("menu");
 const overlay=document.getElementById("overlay");
@@ -298,20 +280,12 @@ load();
 }else alert("erro login");
 }
 
-/* ADD */
-function add(){
-produtos.push([pnome.value,ppreco.value,pimg.value,pdesc.value]);
-localStorage.setItem("produtos",JSON.stringify(produtos));
-render();
-load();
-}
-
 /* PIX */
 function pix(nome,valor){
 
 pedidoAtual={nome,valor};
 
-pNome.innerText=nome;
+pNome.innerText="Produto: "+nome;
 pValor.innerText="R$ "+valor;
 
 pixModal.style.display="flex";
@@ -322,28 +296,45 @@ pedidos.push({
 id:Date.now(),
 produto:nome,
 valor:valor,
-status:"PENDENTE"
+status:"PENDENTE",
+comprovante:""
 });
 
 localStorage.setItem("pedidos",JSON.stringify(pedidos));
 }
 
-/* WHATS */
-function whats(){
+/* ENVIAR COMPROVANTE */
+function enviar(){
+
+let link=document.getElementById("comprovante").value;
+
+if(!link){
+alert("Cole o link do comprovante!");
+return;
+}
+
+let pedidos=JSON.parse(localStorage.getItem("pedidos"));
+
+pedidos.forEach(p=>{
+if(p.id===pedidos[pedidos.length-1].id){
+p.comprovante=link;
+}
+});
+
+localStorage.setItem("pedidos",JSON.stringify(pedidos));
 
 let msg=
-`📦 Pedido PIX
+`💳 PIX ENVIADO
 Produto: ${pedidoAtual.nome}
 Valor: R$ ${pedidoAtual.valor}
-
-Envie o comprovante para verificação.`;
+Comprovante: ${link}`;
 
 window.open("https://wa.me/55989853563?text="+encodeURIComponent(msg));
 
 closePix();
 }
 
-/* CLOSE */
+/* FECHAR */
 function closePix(){
 pixModal.style.display="none";
 }
@@ -356,26 +347,20 @@ let pedidos=JSON.parse(localStorage.getItem("pedidos")||"[]");
 pedidos.innerHTML="";
 
 pedidos.forEach(p=>{
-let cor=p.status==="APROVADO"?"green":"red";
 
-pedidosADM.innerHTML+=`
+let cor=p.status==="VERIFICADO"?"green":"red";
+
+pedidos.innerHTML+=`
 <div class="item">
 <b>ID:</b> ${p.id}<br>
 ${p.produto} - R$ ${p.valor}<br>
-<span class="${cor}">${p.status}</span>
-</div>`;
-});
-
-lista.innerHTML="";
-produtos.forEach((p,i)=>{
-lista.innerHTML+=`
-<div class="item">
-${p[0]} - R$ ${p[1]}
+<span class="${cor}">${p.status}</span><br>
+📎 ${p.comprovante || "sem comprovante"}
 </div>`;
 });
 }
 
-/* THEME */
+/* TEMAS */
 function theme(t){
 if(t==="azul"){
 document.documentElement.style.setProperty("--border","#00c3ff");
