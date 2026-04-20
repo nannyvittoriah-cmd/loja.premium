@@ -7,10 +7,10 @@
 
 <style>
 :root{
---bg:#000;
---card:#111;
+--bg:#0b0f2a;
+--card:#11162f;
+--pink:#ff2fb3;
 --text:#fff;
---border:#00c3ff;
 }
 
 body{
@@ -20,345 +20,219 @@ background:var(--bg);
 color:var(--text);
 }
 
+.hidden{display:none;}
+
+.center{
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+flex-direction:column;
+}
+
+input,button{
+padding:10px;
+margin:5px;
+border-radius:8px;
+border:none;
+}
+
+button{
+cursor:pointer;
+background:var(--pink);
+color:#fff;
+font-weight:bold;
+}
+
 .topbar{
 display:flex;
 justify-content:space-between;
 padding:15px;
-background:#0b0f2a;
-font-weight:bold;
-}
-
-.dots{cursor:pointer;font-size:24px}
-
-.menu{
-position:absolute;
-right:10px;
-top:50px;
-background:#fff;
-color:#000;
-display:none;
-flex-direction:column;
-width:180px;
-border-radius:10px;
+background:#070a1a;
 }
 
 .container{
-display:flex;
-flex-wrap:wrap;
-gap:20px;
-justify-content:center;
-padding:20px;
+padding:15px;
 }
 
 .card{
-width:260px;
 background:var(--card);
-border:2px solid var(--border);
-border-radius:10px;
 padding:10px;
-text-align:center;
-}
-
-.card img{
-width:100%;
-height:160px;
-object-fit:cover;
 border-radius:10px;
+margin:10px 0;
 }
 
-.buy{
-width:100%;
-padding:10px;
-background:var(--border);
-border:none;
-cursor:pointer;
+.flex{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
 }
 
-input{
-width:100%;
-padding:10px;
-margin:5px 0;
-background:#222;
-color:#fff;
-border-radius:6px;
-border:1px solid #555;
+.badge{
+background:var(--pink);
+padding:3px 8px;
+border-radius:5px;
+font-size:12px;
 }
-
-/* tema claro */
-.rosa input,.lilas input{background:#fff;color:#000;}
-.rosa .card,.lilas .card,.rosa .box,.lilas .box{background:#fff;color:#000;}
-
-.checkout{display:none;padding:20px;}
-.box{
-max-width:500px;
-margin:auto;
-background:#111;
-padding:20px;
-border-radius:10px;
-}
-
-.admin{display:none;padding:20px;}
-.adminBox{
-max-width:900px;
-margin:auto;
-background:#111;
-padding:20px;
-border-radius:10px;
-}
-
-.stats{display:flex;gap:10px;flex-wrap:wrap;}
-.stat{flex:1;background:#222;padding:10px;border-radius:8px;text-align:center;}
-
-.item{border:1px solid #333;margin:5px;padding:8px;}
-.nao{border-left:5px solid red;}
-.visto{border-left:5px solid green;}
-
-.rosa{--bg:#fff;--card:#fff;--text:#000;--border:#ff4fd8;}
-.lilas{--bg:#fff;--card:#fff;--text:#000;--border:#b26bff;}
-.azul{--bg:#000;--card:#111;--text:#fff;--border:#00c3ff;}
-.amarelo{--bg:#000;--card:#111;--text:#fff;--border:#ffd400;}
 </style>
 </head>
 
-<body class="azul">
+<body>
+
+<!-- LOGIN -->
+<div id="loginPage" class="center">
+<h2>Bonys Story</h2>
+<input id="user" placeholder="usuário">
+<input id="pass" type="password" placeholder="senha">
+<button onclick="login()">Entrar</button>
+<button onclick="register()">Cadastrar</button>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden">
 
 <div class="topbar">
-<div>BONYS STORY</div>
-<div class="dots" onclick="toggleMenu()">⋮</div>
-</div>
-
-<div id="menu" class="menu">
-<button onclick="goHome()">Home</button>
-<button onclick="setTheme('rosa')">🌸 Rosa</button>
-<button onclick="setTheme('lilas')">💜 Lilás</button>
-<button onclick="setTheme('azul')">🔵 Azul</button>
-<button onclick="setTheme('amarelo')">🟡 Amarelo</button>
-<button onclick="openAdmin()">ADM</button>
-</div>
-
-<div id="loja" class="container"></div>
-
-<!-- CHECKOUT -->
-<div id="checkout" class="checkout">
-<div class="box">
-<h3>COMPROVANTE</h3>
-
-<input id="nome" placeholder="Nome">
-<input id="whats" placeholder="WhatsApp">
-<input id="produto" readonly>
-<input id="link" placeholder="Link comprovante">
-
-<button onclick="enviar()">ENVIAR</button>
+<div>Bonys Story</div>
+<div>
+<span id="userTag"></span>
+<button onclick="logout()">Sair</button>
 </div>
 </div>
 
-<!-- ADM -->
-<div id="Lorrannyh.170" class="Lorrannyh.170">
-<div class="adminBox">
+<div class="container">
 
-<h2>PAINEL ADM</h2>
-
-<input id="u" placeholder="usuario">
-<input id="p" type="password" placeholder="senha">
-<button onclick="login()">Entrar</button>
-
-<div id="painel" style="display:none">
-
-<h3>📊 DASH</h3>
-<div class="stats">
-<div class="stat">Cliques<br><span id="cliques"></span></div>
-<div class="stat">Vendas<br><span id="vendas"></span></div>
-<div class="stat">Pedidos<br><span id="pedidos"></span></div>
+<!-- PRODUTOS -->
+<div class="card">
+<h3>Produtos</h3>
+<div id="products"></div>
 </div>
 
-<hr>
+<!-- CARRINHO -->
+<div class="card">
+<h3>Carrinho</h3>
+<div id="cart"></div>
+<button onclick="buy()">Finalizar compra (PIX)</button>
+</div>
 
-<h3>➕ ADICIONAR PRODUTO</h3>
-<input id="pnome" placeholder="Nome">
-<input id="ppreco" placeholder="Preço">
-<input id="pimg" placeholder="URL da imagem">
-<button onclick="addProduto()">Adicionar</button>
+<!-- FAVORITOS -->
+<div class="card">
+<h3>Favoritos</h3>
+<div id="fav"></div>
+</div>
 
-<hr>
+<!-- ADMIN -->
+<div id="adminPanel" class="card hidden">
+<h3>ADM Painel</h3>
+<p>Adicionar produto</p>
+<input id="pname" placeholder="nome">
+<input id="pprice" placeholder="preço">
+<button onclick="addProduct()">Adicionar</button>
+</div>
 
-<h3>📦 PRODUTOS</h3>
-<div id="produtosADM"></div>
-
-<hr>
-
-<h3>📄 HISTÓRICO</h3>
-<input id="busca" placeholder="Buscar cliente..." oninput="carregar()">
-<div id="hist"></div>
-
+<!-- PIX -->
+<div id="pixBox" class="card hidden">
+<h3>Pagamento PIX</h3>
+<p>Chave PIX: 000.000.000-00</p>
+<p>Envie o comprovante para liberação manual</p>
 </div>
 
 </div>
 </div>
 
 <script>
+let users = JSON.parse(localStorage.getItem("users")||"[]");
+let products = JSON.parse(localStorage.getItem("products")||"[]");
+let cart = [];
+let fav = [];
+let currentUser = null;
 
-let selected="";
-
-/* PRODUTOS AJUSTADOS */
-let produtos=JSON.parse(localStorage.getItem("produtos")||"null")||[
-["🎁 Caixa Misteriosa","1","https://i.imgur.com/2DhmtJ4.png"],
-["Passe Premium","50","https://i.imgur.com/Bud0zyu.png"],
-
-["50 Tokens","15","https://i.imgur.com/OFmm8PI.jpeg"],
-["100 Tokens","25","https://i.imgur.com/OFmm8PI.jpeg"],
-["200 Tokens","50","https://i.imgur.com/OFmm8PI.jpeg"],
-["300 Tokens","70","https://i.imgur.com/OFmm8PI.jpeg"],
-["400 Tokens","90","https://i.imgur.com/OFmm8PI.jpeg"],
-["500 Tokens","120","https://i.imgur.com/OFmm8PI.jpeg"],
-["600 Tokens","140","https://i.imgur.com/OFmm8PI.jpeg"],
-["700 Tokens","160","https://i.imgur.com/OFmm8PI.jpeg"],
-["800 Tokens","172","https://i.imgur.com/OFmm8PI.jpeg"],
-["900 Tokens","182","https://i.imgur.com/OFmm8PI.jpeg"],
-["1000 Tokens","200","https://i.imgur.com/OFmm8PI.jpeg"]
-];
-
-function salvarProdutos(){
-localStorage.setItem("produtos",JSON.stringify(produtos));
-}
-
-/* LOJA */
-function renderLoja(){
-loja.innerHTML="";
-produtos.forEach((p,i)=>{
-let d=document.createElement("div");
-d.className="card";
-d.innerHTML=`
-<img src="${p[2]}">
-<div>${p[0]}</div>
-<div>R$ ${p[1]}</div>
-<button class="buy" onclick="buy('${p[0]}')">COMPRAR</button>
-`;
-loja.appendChild(d);
-});
-}
-renderLoja();
-
-/* MENU */
-function toggleMenu(){menu.style.display=menu.style.display==="flex"?"none":"flex";}
-function setTheme(t){document.body.className=t;}
-function goHome(){loja.style.display="flex";checkout.style.display="none";admin.style.display="none";}
-
-/* COMPRA */
-function buy(p){
-selected=p;
-loja.style.display="none";
-checkout.style.display="block";
-produto.value=p;
-}
-
-/* ENVIO */
-function enviar(){
-if(!nome.value||!whats.value||!link.value){
-alert("Preencha tudo");return;
-}
-
-let dados=JSON.parse(localStorage.getItem("dados")||"[]");
-
-dados.push({
-nome:nome.value,
-produto:selected,
-link:link.value,
-status:"nao"
-});
-
-localStorage.setItem("dados",JSON.stringify(dados));
-
-let v=Number(localStorage.getItem("vendas")||0);
-localStorage.setItem("vendas",v+1);
-
-alert("Enviado!");
-goHome();
-}
-
-/* ADMIN */
-function openAdmin(){
-admin.style.display="block";
-loja.style.display="none";
-}
-
+/* LOGIN */
 function login(){
-if(u.value==="Lorrannyh.170" && p.value==="Lorrannyh.170"){
-painel.style.display="block";
-carregar();
-renderADMProdutos();
-}else alert("erro login");
+let u = user.value;
+let p = pass.value;
+
+let found = users.find(x=>x.user===u && x.pass===p);
+
+if(found){
+currentUser = found;
+enterApp();
+}else{
+alert("erro login");
+}
 }
 
-/* ADD PRODUTO */
-function addProduto(){
-produtos.push([pnome.value,ppreco.value,pimg.value]);
-salvarProdutos();
-renderLoja();
-renderADMProdutos();
+/* REGISTER */
+function register(){
+users.push({user:user.value, pass:pass.value, role:"user"});
+localStorage.setItem("users",JSON.stringify(users));
+alert("criado");
 }
 
-/* EDITAR */
-function renderADMProdutos(){
-produtosADM.innerHTML="";
-produtos.forEach((p,i)=>{
-let d=document.createElement("div");
-d.className="item";
-d.innerHTML=`
-<input value="${p[0]}" onchange="produtos[${i}][0]=this.value;salvarProdutos();renderLoja()">
-<input value="${p[1]}" onchange="produtos[${i}][1]=this.value;salvarProdutos();renderLoja()">
-<input value="${p[2]}" onchange="produtos[${i}][2]=this.value;salvarProdutos();renderLoja()">
-<button onclick="remover(${i})">Excluir</button>
-`;
-produtosADM.appendChild(d);
+/* APP */
+function enterApp(){
+loginPage.classList.add("hidden");
+app.classList.remove("hidden");
+
+userTag.innerText = currentUser.user;
+
+if(currentUser.user === "admin"){
+adminPanel.classList.remove("hidden");
+}
+
+renderProducts();
+}
+
+/* LOGOUT */
+function logout(){
+location.reload();
+}
+
+/* PRODUCTS */
+function renderProducts(){
+productsDiv.innerHTML = "";
+
+products.forEach((p,i)=>{
+productsDiv.innerHTML += `
+<div class="card">
+<b>${p.name}</b> - R$ ${p.price}
+<br>
+<button onclick="addCart(${i})">Comprar</button>
+<button onclick="addFav(${i})">❤️</button>
+</div>`;
 });
 }
 
-function remover(i){
-produtos.splice(i,1);
-salvarProdutos();
-renderLoja();
-renderADMProdutos();
+function addProduct(){
+products.push({name:pname.value, price:pprice.value});
+localStorage.setItem("products",JSON.stringify(products));
+renderProducts();
 }
 
-/* HISTÓRICO */
-function carregar(){
-let dados=JSON.parse(localStorage.getItem("dados")||"[]");
-let b=busca.value.toLowerCase();
-
-hist.innerHTML="";
-
-dados.forEach((d,i)=>{
-if(!d.nome.toLowerCase().includes(b)) return;
-
-let div=document.createElement("div");
-div.className="item "+(d.status==="nao"?"nao":"visto");
-
-div.innerHTML=`
-<b>${d.nome}</b><br>
-${d.produto}<br>
-<a href="${d.link}" target="_blank">Ver comprovante</a><br>
-<button onclick="marcar(${i})">Marcar visto</button>
-`;
-
-hist.appendChild(div);
-});
-
-cliques.innerText=localStorage.getItem("clicks")||0;
-vendas.innerText=localStorage.getItem("vendas")||0;
-pedidos.innerText=dados.length;
+/* CART */
+function addCart(i){
+cart.push(products[i]);
+renderCart();
 }
 
-function marcar(i){
-let dados=JSON.parse(localStorage.getItem("dados")||"[]");
-dados[i].status="visto";
-localStorage.setItem("dados",JSON.stringify(dados));
-carregar();
+function renderCart(){
+cartDiv.innerHTML = cart.map(c=>`<p>${c.name} - R$ ${c.price}</p>`).join("");
 }
 
-/* CLIQUES */
-let c=Number(localStorage.getItem("clicks")||0);
-localStorage.setItem("clicks",c+1);
+/* FAVORITES */
+function addFav(i){
+fav.push(products[i]);
+renderFav();
+}
 
+function renderFav(){
+favDiv.innerHTML = fav.map(f=>`<p>❤️ ${f.name}</p>`).join("");
+}
+
+/* BUY */
+function buy(){
+pixBox.classList.remove("hidden");
+alert("Abra o PIX e envie comprovante");
+}
 </script>
 
 </body>
