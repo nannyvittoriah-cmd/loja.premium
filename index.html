@@ -92,27 +92,11 @@ cursor:pointer;
 font-weight:bold;
 }
 
-/* INPUTS */
-input{
-width:100%;
-padding:10px;
-margin:5px 0;
-border-radius:8px;
-border:1px solid #555;
-background:#222;
-color:#fff;
-}
-
-/* TEMA CLARO */
-.rosa input,
-.lilas input{
-background:#fff;
-color:#000;
-border:1px solid #ccc;
-}
-
 /* CHECKOUT */
-.checkout{display:none;padding:20px;}
+.checkout{
+display:none;
+padding:20px;
+}
 
 .box{
 max-width:500px;
@@ -122,7 +106,13 @@ padding:20px;
 border-radius:10px;
 }
 
-/* PIX */
+input{
+width:100%;
+padding:10px;
+margin:5px 0;
+}
+
+/* PIX BOX */
 .pixbox{
 margin-top:10px;
 padding:10px;
@@ -132,7 +122,10 @@ background:#0a0a0a;
 }
 
 /* ADM */
-.admin{display:none;padding:20px;}
+.admin{
+display:none;
+padding:20px;
+}
 
 .adminBox{
 max-width:700px;
@@ -163,6 +156,7 @@ text-align:center;
 .lilas{--bg:#fff;--card:#fff;--text:#000;--border:#b26bff;}
 .azul{--bg:#000;--card:#111;--text:#fff;--border:#00c3ff;}
 .amarelo{--bg:#000;--card:#111;--text:#fff;--border:#ffd400;}
+
 </style>
 </head>
 
@@ -182,10 +176,12 @@ text-align:center;
 <button onclick="openAdmin()">ADM</button>
 </div>
 
-<div id="status">🟢 LOJA ONLINE</div>
+<div id="status">🔴 LOJA ONLINE</div>
 
+<!-- LOJA -->
 <div id="loja" class="container"></div>
 
+<!-- CHECKOUT -->
 <div id="checkout" class="checkout">
 <div class="box">
 
@@ -195,23 +191,25 @@ text-align:center;
 <input id="sobrenome" placeholder="Sobrenome">
 <input id="email" placeholder="Email">
 <input id="whats" placeholder="WhatsApp">
+
 <input id="produto" readonly>
 
 <div class="pixbox">
-<p>💳 PIX</p>
-<p>📱 5598984853563</p>
-<p>👤 Lorrane Vitória</p>
+<p>💳 PIX DA LOJA</p>
+<p>📱 (98) 98485-3563</p>
+<p>👤 Lorrane Vitória Alves Vaz</p>
 </div>
 
-<input id="linkpix" placeholder="Link comprovante">
-<input id="nomepix" placeholder="Nome recebedor">
-<input id="chavepix" placeholder="Chave PIX">
+<input id="linkpix" placeholder="Link do comprovante">
+<input id="nomepix" placeholder="Nome do recebedor">
+<input id="chavepix" placeholder="Chave PIX usada">
 
-<button onclick="send()">ENVIAR</button>
+<button onclick="send()">ENVIAR COMPROVANTE</button>
 
 </div>
 </div>
 
+<!-- ADM -->
 <div id="admin" class="admin">
 <div class="adminBox">
 
@@ -219,19 +217,26 @@ text-align:center;
 
 <input id="u" placeholder="Usuário">
 <input id="p" type="password" placeholder="Senha">
+
 <button onclick="login()">Entrar</button>
 
 <div id="panel" style="display:none">
 
+<h3>📊 DASHBOARD</h3>
+
 <div class="stats">
-<div class="stat">Cliques<br><span id="cliques"></span></div>
-<div class="stat">Vendas<br><span id="vendas"></span></div>
-<div class="stat">Pedidos<br><span id="compras"></span></div>
+<div class="stat">👁 Cliques<br><span id="cliques">0</span></div>
+<div class="stat">💰 Vendas<br><span id="vendas">0</span></div>
+<div class="stat">📄 Compras<br><span id="compras">0</span></div>
 </div>
 
+<hr>
+
+<h3>📦 HISTÓRICO</h3>
 <div id="hist"></div>
 
 </div>
+
 </div>
 </div>
 
@@ -240,14 +245,43 @@ text-align:center;
 const whatsapp="5598984853563";
 let selected="";
 
-/* PRODUTOS */
+/* CLIQUES */
+let clicks=Number(localStorage.getItem("clicks")||0);
+clicks++;
+localStorage.setItem("clicks",clicks);
+
+/* MENU */
+function toggleMenu(){
+const m=document.getElementById("menu");
+m.style.display=m.style.display==="flex"?"none":"flex";
+}
+
+/* HOME */
+function goHome(){
+document.getElementById("loja").style.display="flex";
+document.getElementById("checkout").style.display="none";
+document.getElementById("admin").style.display="none";
+document.getElementById("menu").style.display="none";
+}
+
+/* THEME */
+function setTheme(t){document.body.className=t}
+
+/* PRODUTOS COMPLETOS */
 const produtos=[
-["25 Tokens","8","https://i.imgur.com/OFmm8PI.jpeg"],
-["50 Tokens","15","https://i.imgur.com/OFmm8PI.jpeg"],
-["100 Tokens","25","https://i.imgur.com/OFmm8PI.jpeg"],
-["200 Tokens","50","https://i.imgur.com/OFmm8PI.jpeg"],
-["500 Tokens","120","https://i.imgur.com/OFmm8PI.jpeg"],
-["1000 Tokens","200","https://i.imgur.com/OFmm8PI.jpeg"]
+["Passe Elite Premium","10","https://i.imgur.com/Bud0zyu.png"],
+["25 Tokens Universal","8","https://i.imgur.com/OFmm8PI.jpeg"],
+["50 Tokens Universal","15","https://i.imgur.com/OFmm8PI.jpeg"],
+["100 Tokens Universal","25","https://i.imgur.com/OFmm8PI.jpeg"],
+["200 Tokens Universal","50","https://i.imgur.com/OFmm8PI.jpeg"],
+["300 Tokens Universal","70","https://i.imgur.com/OFmm8PI.jpeg"],
+["400 Tokens Universal","90","https://i.imgur.com/OFmm8PI.jpeg"],
+["500 Tokens Universal","120","https://i.imgur.com/OFmm8PI.jpeg"],
+["600 Tokens Universal","140","https://i.imgur.com/OFmm8PI.jpeg"],
+["700 Tokens Universal","160","https://i.imgur.com/OFmm8PI.jpeg"],
+["800 Tokens Universal","172","https://i.imgur.com/OFmm8PI.jpeg"],
+["900 Tokens Universal","182","https://i.imgur.com/OFmm8PI.jpeg"],
+["1000 Tokens Universal","200","https://i.imgur.com/OFmm8PI.jpeg"]
 ];
 
 const box=document.getElementById("loja");
@@ -264,69 +298,86 @@ d.innerHTML=`
 box.appendChild(d);
 });
 
-/* MENU */
-function toggleMenu(){
-let m=document.getElementById("menu");
-m.style.display=m.style.display==="flex"?"none":"flex";
-}
-
-function setTheme(t){document.body.className=t;}
-
-function goHome(){
-loja.style.display="flex";
-checkout.style.display="none";
-admin.style.display="none";
-}
-
 /* BUY */
 function buy(p){
 selected=p;
-loja.style.display="none";
-checkout.style.display="block";
-produto.value=p;
+document.getElementById("loja").style.display="none";
+document.getElementById("checkout").style.display="block";
+document.getElementById("produto").value=p;
 }
 
 /* SEND */
 function send(){
-let pedidos=JSON.parse(localStorage.getItem("pedidos")||"[]");
-pedidos.push(selected);
-localStorage.setItem("pedidos",JSON.stringify(pedidos));
 
-let vendas=Number(localStorage.getItem("vendas")||0);
-localStorage.setItem("vendas",vendas+1);
+const n=document.getElementById("nome").value;
+const s=document.getElementById("sobrenome").value;
+const e=document.getElementById("email").value;
+const w=document.getElementById("whats").value;
 
-window.open(`https://wa.me/${whatsapp}?text=${selected}`);
+const link=document.getElementById("linkpix").value;
+const nomepix=document.getElementById("nomepix").value;
+const chavepix=document.getElementById("chavepix").value;
+
+if(!n||!s||!e||!w||!link||!nomepix||!chavepix){
+alert("Preencha tudo!");
+return;
 }
 
-/* ADMIN */
+let orders=JSON.parse(localStorage.getItem("orders")||"[]");
+
+orders.push({
+n,s,e,w,
+produto:selected,
+link,nomepix,chavepix,
+data:new Date().toLocaleString()
+});
+
+localStorage.setItem("orders",JSON.stringify(orders));
+
+let vendas=Number(localStorage.getItem("vendas")||0);
+vendas++;
+localStorage.setItem("vendas",vendas);
+
+window.location.href=
+`https://wa.me/${whatsapp}?text=${encodeURIComponent(selected)}`;
+}
+
+/* ADM */
 function openAdmin(){
-admin.style.display="block";
-loja.style.display="none";
+document.getElementById("admin").style.display="block";
+document.getElementById("loja").style.display="none";
+document.getElementById("checkout").style.display="none";
 }
 
 function login(){
-if(u.value==="Lorrannyh.170" && p.value==="Lorrannyh.170"){
-panel.style.display="block";
+
+if(
+document.getElementById("u").value==="Lorrannyh.160" &&
+document.getElementById("p").value==="Lorrannyh.170"
+){
+document.getElementById("panel").style.display="block";
 load();
 }else alert("erro login");
 }
 
 /* DASH */
 function load(){
-let pedidos=JSON.parse(localStorage.getItem("pedidos")||"[]");
 
-cliques.innerText=localStorage.getItem("clicks")||0;
-vendas.innerText=localStorage.getItem("vendas")||0;
-compras.innerText=pedidos.length;
+let d=JSON.parse(localStorage.getItem("orders")||"[]");
 
-hist.innerHTML=pedidos.map(p=>`<div>${p}</div>`).join("");
+document.getElementById("hist").innerHTML=
+d.length===0?"Sem compras":
+d.slice(-20).map(o=>
+`<div style="border:1px solid #333;padding:5px;margin:5px">
+${o.produto}<br>${o.n} ${o.s}<br>${o.w}
+</div>`
+).join("");
+
+document.getElementById("cliques").innerText=localStorage.getItem("clicks");
+document.getElementById("vendas").innerText=localStorage.getItem("vendas")||0;
+document.getElementById("compras").innerText=d.length;
 }
-
-/* CLIQUES */
-let c=Number(localStorage.getItem("clicks")||0);
-localStorage.setItem("clicks",c+1);
 
 </script>
 
 </body>
-</html>
