@@ -6,21 +6,13 @@
 <title>Bonys Story</title>
 
 <style>
-:root{
---bg:#000;
---card:#111;
---text:#fff;
---border:#00c3ff;
-}
-
 body{
 margin:0;
 font-family:Arial;
-background:var(--bg);
-color:var(--text);
+background:#000;
+color:#fff;
 }
 
-/* TOPO */
 .topbar{
 display:flex;
 justify-content:space-between;
@@ -29,7 +21,7 @@ background:#0b0f2a;
 font-weight:bold;
 }
 
-.dots{cursor:pointer;font-size:24px}
+.menuBtn{cursor:pointer;font-size:22px}
 
 /* MENU */
 .menu{
@@ -55,15 +47,15 @@ cursor:pointer;
 .container{
 display:flex;
 flex-wrap:wrap;
-gap:20px;
+gap:15px;
 justify-content:center;
 padding:20px;
 }
 
 .card{
 width:260px;
-background:var(--card);
-border:2px solid var(--border);
+background:#111;
+border:2px solid #00c3ff;
 border-radius:10px;
 padding:10px;
 text-align:center;
@@ -74,27 +66,16 @@ width:100%;
 border-radius:10px;
 }
 
-.buy{
-width:100%;
-padding:10px;
-background:var(--border);
-border:none;
+button{
 cursor:pointer;
 }
 
-/* INPUT */
-input{
-width:100%;
-padding:10px;
-margin:5px 0;
-background:#222;
-color:#fff;
-border-radius:6px;
-border:1px solid #555;
+/* CHECKOUT */
+.checkout{
+display:none;
+padding:20px;
 }
 
-/* CHECKOUT */
-.checkout{display:none;padding:20px;}
 .box{
 max-width:500px;
 margin:auto;
@@ -104,7 +85,11 @@ border-radius:10px;
 }
 
 /* ADM */
-.admin{display:none;padding:20px;}
+.admin{
+display:none;
+padding:20px;
+}
+
 .adminBox{
 max-width:900px;
 margin:auto;
@@ -113,7 +98,51 @@ padding:20px;
 border-radius:10px;
 }
 
-.stats{display:flex;gap:10px;flex-wrap:wrap;}
+input,textarea{
+width:100%;
+padding:10px;
+margin:5px 0;
+background:#222;
+color:#fff;
+border:1px solid #555;
+border-radius:6px;
+}
+
+/* MODAL */
+.modal{
+display:none;
+position:fixed;
+top:0;left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+align-items:center;
+justify-content:center;
+}
+
+.modalBox{
+background:#111;
+padding:20px;
+max-width:500px;
+border-radius:10px;
+}
+
+/* ITEM ADM */
+.item{
+border:1px solid #333;
+padding:10px;
+margin:5px 0;
+}
+
+.nao{border-left:5px solid red;}
+.visto{border-left:5px solid green;}
+
+.stats{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
 .stat{
 flex:1;
 background:#222;
@@ -121,58 +150,52 @@ padding:10px;
 border-radius:8px;
 text-align:center;
 }
-
-/* HIST */
-.item{
-border:1px solid #333;
-margin:5px;
-padding:8px;
-}
-
-.nao{border-left:5px solid red;}
-.visto{border-left:5px solid green;}
-
-/* TEMAS */
-.rosa{--bg:#fff;--card:#fff;--text:#000;--border:#ff4fd8;}
-.lilas{--bg:#fff;--card:#fff;--text:#000;--border:#b26bff;}
-.azul{--bg:#000;--card:#111;--text:#fff;--border:#00c3ff;}
-.amarelo{--bg:#000;--card:#111;--text:#fff;--border:#ffd400;}
 </style>
 </head>
 
-<body class="azul">
+<body>
 
 <div class="topbar">
 <div>BONYS STORY</div>
-<div class="dots" onclick="toggleMenu()">⋮</div>
+<div class="menuBtn" onclick="toggleMenu()">⋮</div>
 </div>
 
 <div id="menu" class="menu">
-<button onclick="goHome()">Home</button>
-<button onclick="setTheme('rosa')">🌸 Rosa</button>
-<button onclick="setTheme('lilas')">💜 Lilás</button>
-<button onclick="setTheme('azul')">🔵 Azul</button>
-<button onclick="setTheme('amarelo')">🟡 Amarelo</button>
+<button onclick="home()">Home</button>
 <button onclick="openAdmin()">ADM</button>
 </div>
 
+<!-- LOJA -->
 <div id="loja" class="container"></div>
 
 <!-- CHECKOUT -->
 <div id="checkout" class="checkout">
 <div class="box">
-<h3>COMPROVANTE</h3>
+<h3>ENVIO DE COMPROVANTE</h3>
+
 <input id="nome" placeholder="Nome">
 <input id="whats" placeholder="WhatsApp">
 <input id="produto" readonly>
-<input id="link" placeholder="Link comprovante">
+<input id="link" placeholder="Link do comprovante">
+
 <button onclick="enviar()">ENVIAR</button>
+</div>
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="modal">
+<div class="modalBox">
+<h3 id="mTitulo"></h3>
+<p id="mPreco"></p>
+<p id="mDesc" style="white-space:pre-line"></p>
+<button onclick="fechar()" style="width:100%;padding:10px;background:#00c3ff;border:none">FECHAR</button>
 </div>
 </div>
 
 <!-- ADM -->
 <div id="admin" class="admin">
 <div class="adminBox">
+
 <h2>PAINEL ADM</h2>
 
 <input id="u" placeholder="Usuário">
@@ -181,7 +204,7 @@ padding:8px;
 
 <div id="painel" style="display:none">
 
-<h3>📊 DASH</h3>
+<h3>📊 STATS</h3>
 <div class="stats">
 <div class="stat">Cliques<br><span id="cliques"></span></div>
 <div class="stat">Vendas<br><span id="vendas"></span></div>
@@ -190,20 +213,27 @@ padding:8px;
 
 <hr>
 
-<h3>➕ PRODUTOS</h3>
+<h3>➕ PRODUTO</h3>
+
 <input id="pnome" placeholder="Nome">
 <input id="ppreco" placeholder="Preço">
-<input id="pimg" placeholder="Imagem URL">
-<button onclick="addProduto()">Adicionar</button>
+<input id="pimg" placeholder="Imagem">
+<textarea id="pdesc" placeholder="Descrição completa"></textarea>
+<button onclick="add()">Adicionar</button>
 
 <hr>
 
+<h3>📦 PRODUTOS</h3>
 <div id="produtosADM"></div>
 
 <hr>
 
-<h3>📄 HISTÓRICO</h3>
-<input id="busca" placeholder="Buscar..." oninput="carregar()">
+<h3>📩 DM (Mensagens)</h3>
+<div id="msgs"></div>
+
+<hr>
+
+<h3>📄 PEDIDOS</h3>
 <div id="hist"></div>
 
 </div>
@@ -216,55 +246,55 @@ let selected="";
 
 /* PRODUTOS */
 let produtos=JSON.parse(localStorage.getItem("produtos")||"null")||[
-["Passe Básico","20","https://i.imgur.com/1Q9Z1ZQ.png"],
-["Passe Premium","50","https://i.imgur.com/2Q9Z1ZQ.png"],
-["Passe Elite","80","https://i.imgur.com/3Q9Z1ZQ.png"],
-
-["Starter Pack","10","https://i.imgur.com/4Q9Z1ZQ.png"],
-["Pro Pack","30","https://i.imgur.com/5Q9Z1ZQ.png"],
-["Ultra Pack","100","https://i.imgur.com/6Q9Z1ZQ.png"],
-
-["50 Tokens","15","https://i.imgur.com/7Q9Z1ZQ.png"],
-["100 Tokens","25","https://i.imgur.com/8Q9Z1ZQ.png"],
-["200 Tokens","50","https://i.imgur.com/9Q9Z1ZQ.png"],
-["300 Tokens","70","https://i.imgur.com/10Q9Z1ZQ.png"],
-["400 Tokens","90","https://i.imgur.com/11Q9Z1ZQ.png"],
-["500 Tokens","120","https://i.imgur.com/12Q9Z1ZQ.png"],
-["600 Tokens","140","https://i.imgur.com/13Q9Z1ZQ.png"],
-["700 Tokens","160","https://i.imgur.com/14Q9Z1ZQ.png"],
-["800 Tokens","172","https://i.imgur.com/15Q9Z1ZQ.png"],
-["900 Tokens","182","https://i.imgur.com/16Q9Z1ZQ.png"],
-["1000 Tokens","200","https://i.imgur.com/17Q9Z1ZQ.png"],
-
-["Mega Combo","250","https://i.imgur.com/18Q9Z1ZQ.png"],
-["VIP Deluxe","300","https://i.imgur.com/19Q9Z1ZQ.png"]
+[
+"Passe Básico","20","https://i.imgur.com/1Q9Z1ZQ.png",
+"✔ Acesso básico\n✔ Funções limitadas\n✔ Ideal para iniciantes"
+],
+[
+"Passe Premium","50","https://i.imgur.com/2Q9Z1ZQ.png",
+"✔ Mais funções\n✔ Melhor desempenho\n✔ Suporte prioritário"
+],
+[
+"Passe Elite","80","https://i.imgur.com/3Q9Z1ZQ.png",
+"✔ Tudo desbloqueado\n✔ Acesso total\n✔ Premium máximo"
+]
 ];
 
-function salvarProdutos(){
+function save(){
 localStorage.setItem("produtos",JSON.stringify(produtos));
 }
 
 /* LOJA */
-function renderLoja(){
+function render(){
 loja.innerHTML="";
+
 produtos.forEach((p,i)=>{
 let d=document.createElement("div");
 d.className="card";
+
 d.innerHTML=`
-${p[2]?`<img src="${p[2]}">`:""}
-<div>${p[0]}</div>
-<div>R$ ${p[1]}</div>
-<button class="buy" onclick="buy('${p[0]}')">COMPRAR</button>
+<img src="${p[2]}">
+<h3>${p[0]}</h3>
+<p>R$ ${p[1]}</p>
+
+<button onclick="buy('${p[0]}')">COMPRAR</button>
+<button onclick="detalhe(${i})">DETALHES</button>
 `;
+
 loja.appendChild(d);
 });
 }
-renderLoja();
+render();
 
-/* MENU */
-function toggleMenu(){menu.style.display=menu.style.display==="flex"?"none":"flex";}
-function setTheme(t){document.body.className=t;}
-function goHome(){loja.style.display="flex";checkout.style.display="none";admin.style.display="none";}
+/* DETALHES */
+function detalhe(i){
+modal.style.display="flex";
+mTitulo.innerText=produtos[i][0];
+mPreco.innerText="R$ "+produtos[i][1];
+mDesc.innerText=produtos[i][3];
+}
+
+function fechar(){modal.style.display="none";}
 
 /* COMPRA */
 function buy(p){
@@ -291,7 +321,19 @@ let v=Number(localStorage.getItem("vendas")||0);
 localStorage.setItem("vendas",v+1);
 
 alert("Enviado!");
-goHome();
+home();
+}
+
+/* HOME */
+function home(){
+loja.style.display="flex";
+checkout.style.display="none";
+admin.style.display="none";
+}
+
+/* MENU */
+function toggleMenu(){
+menu.style.display=menu.style.display==="flex"?"none":"flex";
 }
 
 /* ADM */
@@ -300,66 +342,90 @@ admin.style.display="block";
 loja.style.display="none";
 }
 
+/* LOGIN */
 function login(){
-if(u.value==="Lorrannyh.170" && p.value==="Lorrannyh.170"){
+if(u.value==="admin" && p.value==="123"){
 painel.style.display="block";
-carregar();
-renderADMProdutos();
-}else alert("erro login");
+loadADM();
+}else alert("erro");
 }
 
 /* ADD */
-function addProduto(){
-produtos.push([pnome.value,ppreco.value,pimg.value]);
-salvarProdutos();
-renderLoja();
-renderADMProdutos();
+function add(){
+produtos.push([
+pnome.value,
+ppreco.value,
+pimg.value,
+pdesc.value
+]);
+
+save();
+render();
+loadADM();
 }
 
-/* ADM LIST */
-function renderADMProdutos(){
+/* ADM PROD */
+function loadADM(){
 produtosADM.innerHTML="";
+
 produtos.forEach((p,i)=>{
 let d=document.createElement("div");
 d.className="item";
+
 d.innerHTML=`
-<input value="${p[0]}" onchange="produtos[${i}][0]=this.value;salvarProdutos();renderLoja()">
-<input value="${p[1]}" onchange="produtos[${i}][1]=this.value;salvarProdutos();renderLoja()">
-<input value="${p[2]}" onchange="produtos[${i}][2]=this.value;salvarProdutos();renderLoja()">
-<button onclick="produtos.splice(${i},1);salvarProdutos();renderLoja();renderADMProdutos()">Excluir</button>
+<input value="${p[0]}" onchange="produtos[${i}][0]=this.value;save();render()">
+<input value="${p[1]}" onchange="produtos[${i}][1]=this.value;save();render()">
+<input value="${p[2]}" onchange="produtos[${i}][2]=this.value;save();render()">
+<textarea onchange="produtos[${i}][3]=this.value;save();render()">${p[3]}</textarea>
+<button onclick="produtos.splice(${i},1);save();render();loadADM()">Excluir</button>
 `;
+
 produtosADM.appendChild(d);
 });
 }
 
+/* DM */
+function loadDM(){
+let msgs=JSON.parse(localStorage.getItem("msgs")||"[]");
+msgsDiv.innerHTML="";
+
+msgs.forEach(m=>{
+let d=document.createElement("div");
+d.className="item";
+d.innerHTML=`<b>${m.nome}</b><br>${m.msg}`;
+msgsDiv.appendChild(d);
+});
+}
+
 /* HIST */
-function carregar(){
+function loadHist(){
 let dados=JSON.parse(localStorage.getItem("dados")||"[]");
 hist.innerHTML="";
 
-dados.forEach((d,i)=>{
-if(busca.value && !d.nome.toLowerCase().includes(busca.value.toLowerCase())) return;
-
-let div=document.createElement("div");
-div.className="item "+(d.status==="nao"?"nao":"visto");
-
-div.innerHTML=`
+dados.forEach(d=>{
+hist.innerHTML+=`
+<div class="item ${d.status}">
 <b>${d.nome}</b><br>
 ${d.produto}<br>
-<a href="${d.link}" target="_blank">Ver comprovante</a>
+<a href="${d.link}" target="_blank">ver</a>
+</div>
 `;
-
-hist.appendChild(div);
 });
-
-cliques.innerText=localStorage.getItem("clicks")||0;
-vendas.innerText=localStorage.getItem("vendas")||0;
-pedidos.innerText=dados.length;
 }
 
-carregar();
+/* STATS */
+function stats(){
+cliques.innerText=localStorage.getItem("clicks")||0;
+vendas.innerText=localStorage.getItem("vendas")||0;
+pedidos.innerText=(JSON.parse(localStorage.getItem("dados")||"[]")).length;
+}
 
-/* CLIQUES */
+setInterval(()=>{
+stats();
+loadHist();
+},1000);
+
+/* CLIQUE */
 let c=Number(localStorage.getItem("clicks")||0);
 localStorage.setItem("clicks",c+1);
 
