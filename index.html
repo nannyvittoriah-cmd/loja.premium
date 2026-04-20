@@ -92,11 +92,27 @@ cursor:pointer;
 font-weight:bold;
 }
 
-/* CHECKOUT */
-.checkout{
-display:none;
-padding:20px;
+/* INPUTS */
+input{
+width:100%;
+padding:10px;
+margin:5px 0;
+border-radius:8px;
+border:1px solid #555;
+background:#222;
+color:#fff;
 }
+
+/* TEMA CLARO */
+.rosa input,
+.lilas input{
+background:#fff;
+color:#000;
+border:1px solid #ccc;
+}
+
+/* CHECKOUT */
+.checkout{display:none;padding:20px;}
 
 .box{
 max-width:500px;
@@ -106,13 +122,7 @@ padding:20px;
 border-radius:10px;
 }
 
-input{
-width:100%;
-padding:10px;
-margin:5px 0;
-}
-
-/* PIX BOX */
+/* PIX */
 .pixbox{
 margin-top:10px;
 padding:10px;
@@ -122,10 +132,7 @@ background:#0a0a0a;
 }
 
 /* ADM */
-.admin{
-display:none;
-padding:20px;
-}
+.admin{display:none;padding:20px;}
 
 .adminBox{
 max-width:700px;
@@ -175,7 +182,7 @@ text-align:center;
 <button onclick="openAdmin()">ADM</button>
 </div>
 
-<div id="status">🔴 LOJA ONLINE</div>
+<div id="status">🟢 LOJA ONLINE</div>
 
 <div id="loja" class="container"></div>
 
@@ -191,16 +198,16 @@ text-align:center;
 <input id="produto" readonly>
 
 <div class="pixbox">
-<p>💳 PIX DA LOJA</p>
-<p>📱 (98) 98485-3563</p>
-<p>👤 Lorrane Vitória Alves Vaz</p>
+<p>💳 PIX</p>
+<p>📱 5598984853563</p>
+<p>👤 Lorrane Vitória</p>
 </div>
 
-<input id="linkpix" placeholder="Link do comprovante">
-<input id="nomepix" placeholder="Nome do recebedor">
-<input id="chavepix" placeholder="Chave PIX usada">
+<input id="linkpix" placeholder="Link comprovante">
+<input id="nomepix" placeholder="Nome recebedor">
+<input id="chavepix" placeholder="Chave PIX">
 
-<button onclick="send()">ENVIAR COMPROVANTE</button>
+<button onclick="send()">ENVIAR</button>
 
 </div>
 </div>
@@ -216,17 +223,12 @@ text-align:center;
 
 <div id="panel" style="display:none">
 
-<h3>📊 DASHBOARD</h3>
-
 <div class="stats">
-<div class="stat">👁 Cliques<br><span id="cliques">0</span></div>
-<div class="stat">💰 Vendas<br><span id="vendas">0</span></div>
-<div class="stat">📄 Compras<br><span id="compras">0</span></div>
+<div class="stat">Cliques<br><span id="cliques"></span></div>
+<div class="stat">Vendas<br><span id="vendas"></span></div>
+<div class="stat">Pedidos<br><span id="compras"></span></div>
 </div>
 
-<hr>
-
-<h3>📦 HISTÓRICO</h3>
 <div id="hist"></div>
 
 </div>
@@ -234,36 +236,18 @@ text-align:center;
 </div>
 
 <script>
+
 const whatsapp="5598984853563";
 let selected="";
 
-/* CLIQUES */
-let clicks=Number(localStorage.getItem("clicks")||0);
-clicks++;
-localStorage.setItem("clicks",clicks);
-
-/* MENU */
-function toggleMenu(){
-const m=document.getElementById("menu");
-m.style.display = m.style.display==="flex" ? "none" : "flex";
-}
-
-/* HOME */
-function goHome(){
-document.getElementById("loja").style.display="flex";
-document.getElementById("checkout").style.display="none";
-document.getElementById("admin").style.display="none";
-}
-
-/* THEME */
-function setTheme(t){
-document.body.className=t;
-}
-
 /* PRODUTOS */
 const produtos=[
-["Passe Elite Premium","10","https://i.imgur.com/Bud0zyu.png"],
-["25 Tokens Universal","8","https://i.imgur.com/OFmm8PI.jpeg"]
+["25 Tokens","8","https://i.imgur.com/OFmm8PI.jpeg"],
+["50 Tokens","15","https://i.imgur.com/OFmm8PI.jpeg"],
+["100 Tokens","25","https://i.imgur.com/OFmm8PI.jpeg"],
+["200 Tokens","50","https://i.imgur.com/OFmm8PI.jpeg"],
+["500 Tokens","120","https://i.imgur.com/OFmm8PI.jpeg"],
+["1000 Tokens","200","https://i.imgur.com/OFmm8PI.jpeg"]
 ];
 
 const box=document.getElementById("loja");
@@ -280,34 +264,69 @@ d.innerHTML=`
 box.appendChild(d);
 });
 
+/* MENU */
+function toggleMenu(){
+let m=document.getElementById("menu");
+m.style.display=m.style.display==="flex"?"none":"flex";
+}
+
+function setTheme(t){document.body.className=t;}
+
+function goHome(){
+loja.style.display="flex";
+checkout.style.display="none";
+admin.style.display="none";
+}
+
 /* BUY */
 function buy(p){
 selected=p;
-document.getElementById("loja").style.display="none";
-document.getElementById("checkout").style.display="block";
-document.getElementById("produto").value=p;
+loja.style.display="none";
+checkout.style.display="block";
+produto.value=p;
 }
 
 /* SEND */
 function send(){
-window.location.href =
-`https://wa.me/${whatsapp}?text=${encodeURIComponent(selected)}`;
+let pedidos=JSON.parse(localStorage.getItem("pedidos")||"[]");
+pedidos.push(selected);
+localStorage.setItem("pedidos",JSON.stringify(pedidos));
+
+let vendas=Number(localStorage.getItem("vendas")||0);
+localStorage.setItem("vendas",vendas+1);
+
+window.open(`https://wa.me/${whatsapp}?text=${selected}`);
 }
 
 /* ADMIN */
 function openAdmin(){
-document.getElementById("admin").style.display="block";
-document.getElementById("loja").style.display="none";
+admin.style.display="block";
+loja.style.display="none";
 }
 
 function login(){
-if(
-document.getElementById("u").value==="admin" &&
-document.getElementById("p").value==="123"
-){
-document.getElementById("panel").style.display="block";
+if(u.value==="Lorrannyh.170" && p.value==="Lorrannyh.170"){
+panel.style.display="block";
+load();
 }else alert("erro login");
 }
+
+/* DASH */
+function load(){
+let pedidos=JSON.parse(localStorage.getItem("pedidos")||"[]");
+
+cliques.innerText=localStorage.getItem("clicks")||0;
+vendas.innerText=localStorage.getItem("vendas")||0;
+compras.innerText=pedidos.length;
+
+hist.innerHTML=pedidos.map(p=>`<div>${p}</div>`).join("");
+}
+
+/* CLIQUES */
+let c=Number(localStorage.getItem("clicks")||0);
+localStorage.setItem("clicks",c+1);
+
 </script>
 
 </body>
+</html>
