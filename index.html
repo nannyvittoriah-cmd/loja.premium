@@ -6,9 +6,15 @@
 <title>Bony Store</title>
 
 <style>
+:root{
+--border:#00c3ff;
+--border2:#ffd400;
+}
+
 body{
 margin:0;
 font-family:Arial;
+transition:0.3s;
 background:#000;
 color:#fff;
 }
@@ -19,49 +25,48 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 padding:25px;
-font-size:28px;
+font-size:30px;
 font-weight:bold;
 background:#0b0f2a;
-border-bottom:2px solid #00c3ff;
+border-bottom:2px solid var(--border);
 }
 
 /* MENU */
-#menu{
+.menu{
 position:fixed;
 top:0;
-right:-240px;
-width:220px;
+right:-260px;
+width:240px;
 height:100%;
 background:#111;
 padding:10px;
 transition:0.3s;
 z-index:999;
-border-left:2px solid #00c3ff;
+border-left:2px solid var(--border);
 }
 
-#menu button{
+.menu button{
 width:100%;
 padding:10px;
 margin:5px 0;
-background:#222;
-color:#fff;
 border:none;
 cursor:pointer;
+background:#222;
+color:#fff;
+border-radius:6px;
 }
 
-/* LOJA */
+/* PRODUTOS 2 COLUNAS */
 .container{
-display:flex;
-flex-wrap:wrap;
+display:grid;
+grid-template-columns:repeat(2, 1fr);
 gap:15px;
-justify-content:center;
 padding:20px;
 }
 
 .card{
-width:260px;
 background:#111;
-border:2px solid #00c3ff;
+border:2px solid var(--border);
 border-radius:10px;
 padding:10px;
 text-align:center;
@@ -72,13 +77,29 @@ width:100%;
 border-radius:10px;
 }
 
-button{
-cursor:pointer;
-padding:10px;
-border:none;
+/* BOTÕES */
+.buyBtn{
 width:100%;
+padding:10px;
 margin-top:5px;
-background:#00c3ff;
+background:#00ff66;
+border:none;
+cursor:pointer;
+font-weight:bold;
+border-radius:6px;
+}
+
+.detailBtn{
+width:100%;
+padding:10px;
+margin-top:5px;
+background:#f5f5dc;
+border:none;
+cursor:pointer;
+color:#000;
+font-weight:bold;
+border:2px solid var(--border2);
+border-radius:6px;
 }
 
 /* CHECKOUT */
@@ -89,6 +110,7 @@ margin:auto;
 background:#111;
 padding:20px;
 border-radius:10px;
+border:2px solid var(--border);
 }
 
 /* MODAL */
@@ -108,16 +130,19 @@ background:#111;
 padding:20px;
 max-width:500px;
 border-radius:10px;
+border:2px solid var(--border2);
 }
 
 /* ADM */
 .admin{display:none;padding:20px;}
+
 .adminBox{
 max-width:900px;
 margin:auto;
 background:#111;
 padding:20px;
 border-radius:10px;
+border:2px solid var(--border);
 }
 
 input,textarea{
@@ -126,27 +151,15 @@ padding:10px;
 margin:5px 0;
 background:#222;
 color:#fff;
-border:1px solid #555;
 border-radius:6px;
+border:1px solid #555;
 }
 
+/* ITEM ADM */
 .item{
 border:1px solid #333;
 padding:10px;
 margin:5px 0;
-}
-
-.stats{
-display:flex;
-gap:10px;
-}
-
-.stat{
-flex:1;
-background:#222;
-padding:10px;
-border-radius:8px;
-text-align:center;
 }
 </style>
 </head>
@@ -160,20 +173,22 @@ text-align:center;
 </div>
 
 <!-- MENU -->
-<div id="menu">
+<div id="menu" class="menu">
 
 <h3>MENU</h3>
 
 <button onclick="home()">🏠 Home</button>
 <button onclick="openAdmin()">⚙ ADM</button>
 
-<h4>🎨 Temas</h4>
-<button onclick="theme('#000','#00c3ff')">Azul</button>
-<button onclick="theme('#fff','#ff4fd8')">Rosa</button>
-<button onclick="theme('#fff','#b26bff')">Lilás</button>
-<button onclick="theme('#fff','#ffd400')">Amarelo</button>
+<h4>🎨 TEMAS CLAROS</h4>
+<button onclick="theme('rosa')">🌸 Rosa</button>
+<button onclick="theme('lilas')">💜 Lilás</button>
 
-<h4>📂 Categorias</h4>
+<h4>🌙 TEMAS ESCUROS</h4>
+<button onclick="theme('azul')">🔵 Azul</button>
+<button onclick="theme('amarelo')">🟡 Amarelo</button>
+
+<h4>📂 CATEGORIAS</h4>
 <button onclick="render('todos')">Todos</button>
 <button onclick="render('passe')">Passes</button>
 <button onclick="render('tokens')">Tokens</button>
@@ -187,7 +202,7 @@ text-align:center;
 <div id="checkout" class="checkout">
 <div class="box">
 
-<h3>ENVIO DE COMPROVANTE</h3>
+<h3>COMPROVANTE</h3>
 
 <input id="nome" placeholder="Nome">
 <input id="whats" placeholder="WhatsApp">
@@ -227,26 +242,14 @@ text-align:center;
 <input id="pnome" placeholder="Nome">
 <input id="ppreco" placeholder="Preço">
 <input id="pimg" placeholder="Imagem">
-<textarea id="pdesc" placeholder="Descrição completa"></textarea>
+<textarea id="pdesc" placeholder="Descrição"></textarea>
 <input id="pestoque" placeholder="Estoque">
-<input id"pcat" placeholder="Categoria (passe/tokens)">
+<input id="pcat" placeholder="Categoria">
 <button onclick="add()">Adicionar</button>
 
 <hr>
 
 <div id="produtosADM"></div>
-
-<hr>
-
-<h3>📊 STATS</h3>
-<div class="stats">
-<div class="stat">Vendas<br><span id="vendas"></span></div>
-<div class="stat">Pedidos<br><span id="pedidos"></span></div>
-</div>
-
-<hr>
-
-<div id="hist"></div>
 
 </div>
 </div>
@@ -272,7 +275,6 @@ function render(cat="todos"){
 loja.innerHTML="";
 
 produtos.forEach((p,i)=>{
-
 if(cat!=="todos" && p[5]!==cat) return;
 
 let d=document.createElement("div");
@@ -285,31 +287,59 @@ d.innerHTML=`
 <p style="font-size:12px">${p[3]}</p>
 <p>Estoque: ${p[4]}</p>
 
-<button onclick="detalhe(${i})">DETALHES</button>
-<button onclick="buy(${i})" ${p[4]<=0?'disabled':''}>COMPRAR</button>
+<button class="detailBtn" onclick="detalhe(${i})">DETALHES</button>
+<button class="buyBtn" onclick="buy(${i})" ${p[4]<=0?'disabled':''}>COMPRAR</button>
 `;
 
 loja.appendChild(d);
 });
 }
-render();
 
 /* MENU */
 function toggleMenu(){
-menu.style.right = menu.style.right==="0px" ? "-240px":"0px";
+menu.style.right = menu.style.right==="0px"?"-260px":"0px";
 }
 
-/* TEMA */
-function theme(bg,border){
-document.body.style.background=bg;
-document.querySelector(".topbar").style.borderBottom="2px solid "+border;
+/* TEMAS */
+function theme(t){
+
+let body=document.body;
+
+if(t==="rosa"){
+body.style.background="#ffe6f2";
+body.style.color="#000";
+document.documentElement.style.setProperty("--border","#ff4fd8");
+document.documentElement.style.setProperty("--border2","#b26bff");
+}
+
+if(t==="lilas"){
+body.style.background="#f3e6ff";
+body.style.color="#000";
+document.documentElement.style.setProperty("--border","#b26bff");
+document.documentElement.style.setProperty("--border2","#ff4fd8");
+}
+
+if(t==="azul"){
+body.style.background="#000";
+body.style.color="#fff";
+document.documentElement.style.setProperty("--border","#00c3ff");
+document.documentElement.style.setProperty("--border2","#ffd400");
+}
+
+if(t==="amarelo"){
+body.style.background="#1a1a00";
+body.style.color="#fff";
+document.documentElement.style.setProperty("--border","#ffd400");
+document.documentElement.style.setProperty("--border2","#00c3ff");
+}
 }
 
 /* HOME */
 function home(){
-loja.style.display="flex";
+loja.style.display="grid";
 checkout.style.display="none";
 admin.style.display="none";
+render();
 }
 
 /* DETALHES */
@@ -351,9 +381,6 @@ link:link.value
 
 localStorage.setItem("dados",JSON.stringify(dados));
 
-let v=Number(localStorage.getItem("vendas")||0);
-localStorage.setItem("vendas",v+1);
-
 alert("Enviado!");
 home();
 }
@@ -369,9 +396,7 @@ function login(){
 if(u.value==="admin" && p.value==="123"){
 painel.style.display="block";
 loadADM();
-loadHist();
-stats();
-}else alert("erro");
+}else alert("erro login");
 }
 
 /* ADD */
@@ -393,37 +418,13 @@ loadADM();
 /* ADM LIST */
 function loadADM(){
 produtosADM.innerHTML="";
-
-produtos.forEach((p,i)=>{
-produtosADM.innerHTML+=`
-<div class="item">
-<input value="${p[0]}" onchange="produtos[${i}][0]=this.value">
-<input value="${p[1]}" onchange="produtos[${i}][1]=this.value">
-<input value="${p[2]}" onchange="produtos[${i}][2]=this.value">
-<textarea onchange="produtos[${i}][3]=this.value">${p[3]}</textarea>
-<input value="${p[4]}" onchange="produtos[${i}][4]=Number(this.value)">
-<input value="${p[5]}" onchange="produtos[${i}][5]=this.value">
-</div>
-`;
+produtos.forEach(p=>{
+produtosADM.innerHTML+=`<div class="item">${p[0]} - R$ ${p[1]}</div>`;
 });
 }
 
-/* HIST */
-function loadHist(){
-let dados=JSON.parse(localStorage.getItem("dados")||"[]");
-hist.innerHTML="";
-dados.forEach(d=>{
-hist.innerHTML+=`<div class="item">${d.nome} - ${d.produto}</div>`;
-});
-}
-
-/* STATS */
-function stats(){
-vendas.innerText=localStorage.getItem("vendas")||0;
-pedidos.innerText=(JSON.parse(localStorage.getItem("dados")||"[]")).length;
-}
-
-setInterval(stats,1000);
+/* INICIAR */
+home();
 
 </script>
 
