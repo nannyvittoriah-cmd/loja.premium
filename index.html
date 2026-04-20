@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bony Store PRO</title>
+<title>Bony Store Premium</title>
 
 <style>
 :root{
@@ -22,9 +22,12 @@ color:#fff;
 .topbar{
 display:flex;
 justify-content:space-between;
+align-items:center;
 padding:18px;
 background:#0b0f2a;
 border-bottom:2px solid var(--border);
+font-size:22px;
+font-weight:bold;
 }
 
 /* MENU */
@@ -58,41 +61,57 @@ background:#222;
 color:#fff;
 border:none;
 cursor:pointer;
+border-radius:8px;
 }
 
 /* LOJA */
 .container{
 display:grid;
 grid-template-columns:repeat(2,1fr);
-gap:10px;
+gap:15px;
 padding:15px;
 }
 
 .card{
 background:#111;
-padding:10px;
-border-radius:10px;
+padding:15px;
+border-radius:12px;
 border:2px solid var(--border);
 text-align:center;
 }
 
-.card img{width:100%;border-radius:10px;}
+.card img{
+width:100%;
+border-radius:10px;
+}
 
 .buyBtn{
 width:100%;
 padding:10px;
+margin-top:8px;
 background:#00ff66;
 border:none;
 cursor:pointer;
+font-weight:bold;
+border-radius:8px;
 }
 
-/* ADM */
-.admin{display:none;padding:15px;}
+/* ADM LAYOUT PREMIUM */
+.admin{
+display:none;
+padding:20px;
+}
 
-.box{
+.adminGrid{
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:15px;
+}
+
+.panel{
 background:#111;
-padding:15px;
-border-radius:10px;
+padding:20px;
+border-radius:12px;
 border:2px solid var(--border);
 }
 
@@ -103,17 +122,19 @@ margin:5px 0;
 background:#222;
 color:#fff;
 border:1px solid #333;
+border-radius:6px;
 }
 
 .item{
-padding:10px;
+padding:12px;
 border:1px solid #333;
-margin:5px 0;
+margin:8px 0;
+border-radius:8px;
 }
 
 /* STATUS */
-.green{color:#00ff66;}
-.red{color:#ff4444;}
+.green{color:#00ff66;font-weight:bold;}
+.red{color:#ff4444;font-weight:bold;}
 
 /* PIX */
 #pixModal{
@@ -130,9 +151,9 @@ z-index:9999;
 .pixBox{
 background:#111;
 padding:20px;
-width:320px;
-border-radius:10px;
-border:2px solid #00c3ff;
+width:340px;
+border-radius:12px;
+border:2px solid var(--border);
 text-align:center;
 }
 </style>
@@ -140,8 +161,9 @@ text-align:center;
 
 <body>
 
+<!-- HEADER -->
 <div class="topbar">
-<div>BONY STORE PRO</div>
+<div>💎 BONY STORE PREMIUM</div>
 <div onclick="openMenu()" style="cursor:pointer">☰</div>
 </div>
 
@@ -150,12 +172,13 @@ text-align:center;
 <!-- MENU -->
 <div id="menu" class="menu">
 <h3>MENU</h3>
+
 <button onclick="home()">🏠 Loja</button>
 <button onclick="openAdmin()">⚙ ADM</button>
 
 <h4>🎨 TEMAS</h4>
-<button onclick="theme('azul')">Azul</button>
-<button onclick="theme('amarelo')">Amarelo</button>
+<button onclick="theme('azul')">🔵 Azul</button>
+<button onclick="theme('amarelo')">🟡 Amarelo</button>
 </div>
 
 <!-- LOJA -->
@@ -163,9 +186,12 @@ text-align:center;
 
 <!-- ADM -->
 <div id="admin" class="admin">
-<div class="box">
+<div class="adminGrid">
 
-<h2>PAINEL ADM COMPLETO</h2>
+<!-- ESQUERDA -->
+<div class="panel">
+
+<h2>🔐 LOGIN ADM</h2>
 
 <input id="u" placeholder="Usuário">
 <input id="p" type="password" placeholder="Senha">
@@ -174,25 +200,27 @@ text-align:center;
 <div id="painel" style="display:none">
 
 <h3>➕ PRODUTOS</h3>
-
 <input id="pnome" placeholder="Nome">
 <input id="ppreco" placeholder="Preço">
 <input id="pimg" placeholder="Imagem">
 <textarea id="pdesc" placeholder="Descrição"></textarea>
-
 <button onclick="add()">Adicionar</button>
 
-<h3>📦 LISTA</h3>
+<h3>📦 PRODUTOS</h3>
 <div id="listaProdutos"></div>
+
+</div>
+
+</div>
+
+<!-- DIREITA -->
+<div class="panel">
 
 <h3>📑 PEDIDOS</h3>
 <div id="pedidosADM"></div>
 
-<h3>🔎 BUSCAR ID</h3>
-<input id="search">
-<button onclick="buscar()">Buscar</button>
-
 </div>
+
 </div>
 </div>
 
@@ -200,7 +228,8 @@ text-align:center;
 <div id="pixModal">
 <div class="pixBox">
 
-<h2>PIX</h2>
+<h2>💳 PAGAMENTO PIX</h2>
+
 <p id="pNome"></p>
 <p id="pValor"></p>
 
@@ -220,9 +249,9 @@ text-align:center;
 const ADMIN_USER="admin";
 const ADMIN_PASS="123";
 
-let produtos=JSON.parse(localStorage.getItem("produtos")||"null")||[
-["Passe Básico","20","https://i.imgur.com/1Q9Z1ZQ.png","Desc"],
-["Passe Premium","50","https://i.imgur.com/2Q9Z1ZQ.png","Desc"]
+let produtos=[
+["Passe Básico","20","https://i.imgur.com/1Q9Z1ZQ.png"],
+["Passe Premium","50","https://i.imgur.com/2Q9Z1ZQ.png"]
 ];
 
 let pedidoAtual={};
@@ -245,7 +274,7 @@ overlay.style.display="none";
 /* LOJA */
 function render(){
 loja.innerHTML="";
-produtos.forEach((p,i)=>{
+produtos.forEach(p=>{
 loja.innerHTML+=`
 <div class="card">
 <img src="${p[2]}">
@@ -274,50 +303,14 @@ function login(){
 if(u.value===ADMIN_USER && p.value===ADMIN_PASS){
 painel.style.display="block";
 load();
-}else alert("erro");
+}else alert("erro login");
 }
 
 /* ADD */
 function add(){
 produtos.push([pnome.value,ppreco.value,pimg.value,pdesc.value]);
-localStorage.setItem("produtos",JSON.stringify(produtos));
+load();
 render();
-loadList();
-}
-
-/* EDIT */
-function edit(i){
-let p=produtos[i];
-let n=prompt("Nome:",p[0]);
-let pr=prompt("Preço:",p[1]);
-let img=prompt("Imagem:",p[2]);
-let d=prompt("Desc:",p[3]);
-
-produtos[i]=[n,pr,img,d];
-localStorage.setItem("produtos",JSON.stringify(produtos));
-render();
-loadList();
-}
-
-/* DELETE */
-function del(i){
-produtos.splice(i,1);
-localStorage.setItem("produtos",JSON.stringify(produtos));
-render();
-loadList();
-}
-
-/* LISTA ADM */
-function loadList(){
-listaProdutos.innerHTML="";
-produtos.forEach((p,i)=>{
-listaProdutos.innerHTML+=`
-<div class="item">
-${p[0]} - R$ ${p[1]}<br>
-<button onclick="edit(${i})">Editar</button>
-<button onclick="del(${i})">Remover</button>
-</div>`;
-});
 }
 
 /* PIX */
@@ -343,8 +336,9 @@ localStorage.setItem("pedidos",JSON.stringify(pedidos));
 
 /* WHATS */
 function whats(){
-let msg=`PIX - ${pedidoAtual.nome} - R$ ${pedidoAtual.valor}`;
-window.open("https://wa.me/5598984843563?text="+encodeURIComponent(msg));
+window.open("https://wa.me/5598984843563?text="+encodeURIComponent(
+`PIX - ${pedidoAtual.nome} - R$ ${pedidoAtual.valor}`
+));
 closePix();
 }
 
@@ -359,13 +353,32 @@ let cor=p.status==="APROVADO"?"green":"red";
 
 pedidosADM.innerHTML+=`
 <div class="item">
-${p.id}<br>
+<b>ID:</b> ${p.id}<br>
 ${p.produto} - R$ ${p.valor}<br>
 <span class="${cor}">${p.status}</span>
 </div>`;
 });
 
-loadList();
+/* produtos ADM */
+listaProdutos.innerHTML="";
+produtos.forEach((p,i)=>{
+listaProdutos.innerHTML+=`
+<div class="item">
+${p[0]} - R$ ${p[1]}<br>
+</div>`;
+});
+}
+
+/* TEMAS */
+function theme(t){
+if(t==="azul"){
+document.documentElement.style.setProperty("--border","#00c3ff");
+document.body.style.background="#000";
+}
+if(t==="amarelo"){
+document.documentElement.style.setProperty("--border","#ffd400");
+document.body.style.background="#1a1a00";
+}
 }
 
 /* START */
