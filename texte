@@ -3,207 +3,278 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BS Store</title>
+<title>Loja Prime</title>
 
 <style>
-
-/* RESET */
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial;
+:root{
+  --bg:#0b0f1a;
+  --card:#141a2a;
+  --text:#fff;
+  --accent:#00d4ff;
+  --accent2:#ffd000;
 }
 
-/* FUNDO */
 body{
-    background:#0b0f2a;
-    color:white;
+  margin:0;
+  font-family:Arial;
+  background:var(--bg);
+  color:var(--text);
 }
 
-/* TOPO */
-.topo{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:15px;
-    border-bottom:2px solid #ff008c;
+/* TOP */
+header{
+  padding:20px;
+  font-size:30px;
+  font-weight:bold;
+  text-align:center;
+  background:linear-gradient(90deg,#001b2e,#002f4b);
 }
 
-/* LOGO */
-.logo{
-    font-size:26px;
-    font-weight:bold;
-    color:#ff008c;
+/* MENU */
+#menu{
+  position:fixed;
+  top:0;
+  left:0;
+  width:220px;
+  height:100%;
+  background:#0a0f1f;
+  padding:20px;
+  transform:translateX(-100%);
+  transition:0.3s;
+}
+#menu.open{transform:translateX(0);}
+#menu button{
+  width:100%;
+  margin:10px 0;
+  padding:10px;
+  background:#111;
+  color:#fff;
+  border:1px solid #333;
+  cursor:pointer;
 }
 
-/* LADO DIREITO TOPO */
-.topo-direita{
-    display:flex;
-    gap:15px;
-    align-items:center;
-}
-
-/* NOTIFICAÇÃO */
-.notificacao{
-    background:#ff008c;
-    padding:8px 12px;
-    border-radius:20px;
-    cursor:pointer;
-}
-
-/* MENU 3 PONTOS */
-.menu{
-    cursor:pointer;
-    font-size:22px;
-}
-
-/* DROPDOWN */
-.dropdown{
-    position:absolute;
-    right:10px;
-    top:60px;
-    background:#11163a;
-    border:1px solid #ff008c;
-    border-radius:10px;
-    display:none;
-    flex-direction:column;
-}
-
-.dropdown div{
-    padding:10px;
-    cursor:pointer;
-}
-
-.dropdown div:hover{
-    background:#ff008c;
-}
-
-/* SEPARAÇÃO */
-.divisor{
-    height:10px;
-    background:#05071a;
-}
-
-/* CONTEÚDO */
+/* PRODUTOS */
 .container{
-    display:flex;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:15px;
+  padding:20px;
 }
 
-/* ÁREA PRINCIPAL */
-.principal{
-    flex:3;
-    padding:20px;
+.card{
+  background:var(--card);
+  padding:15px;
+  border-radius:10px;
 }
 
-/* SIDEBAR DIREITA */
-.sidebar{
-    flex:1;
-    border-left:2px solid #ff008c;
-    padding:20px;
+.card img{
+  width:100%;
+  border-radius:10px;
 }
 
-/* CATEGORIAS */
-.categoria{
-    background:#11163a;
-    padding:12px;
-    margin-bottom:10px;
-    border-radius:10px;
-    cursor:pointer;
-    transition:0.3s;
-}
-
-.categoria:hover{
-    background:#ff008c;
-}
-
-/* BOTÕES */
 .btn{
-    background:#ff008c;
-    color:white;
-    padding:12px;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-    box-shadow:0 0 10px #ff008c;
+  background:green;
+  color:#fff;
+  padding:10px;
+  border:none;
+  width:100%;
+  margin-top:10px;
+  cursor:pointer;
 }
 
-/* TEMA CLARO */
-.light{
-    background:white;
-    color:black;
+/* MODAL COMPRA */
+.modal{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.8);
+  display:none;
+  justify-content:center;
+  align-items:center;
 }
 
-.light .topo{
-    border-bottom:2px solid #ff008c;
+.modal-content{
+  background:#111;
+  padding:20px;
+  width:300px;
+  border-radius:10px;
 }
 
-.light .categoria{
-    background:#eee;
+input{
+  width:100%;
+  margin:5px 0;
+  padding:8px;
 }
 
+/* ADM */
+#admin{
+  display:none;
+  padding:20px;
+}
+
+.admin-card{
+  background:#1a1f33;
+  padding:10px;
+  margin:10px 0;
+}
+
+/* THEMES */
+.theme-blue{--accent:#00d4ff;}
+.theme-yellow{--accent:#ffd000;}
+.theme-dark{--bg:#000;--card:#111;}
 </style>
 </head>
 
 <body>
 
-<!-- TOPO -->
-<div class="topo">
+<header onclick="toggleMenu()">LOJA PRIME / LOJA PRO</header>
 
-    <div class="logo">BS</div>
-
-    <div class="topo-direita">
-        <div class="notificacao">🔔</div>
-        <div class="menu" onclick="abrirMenu()">⋮</div>
-    </div>
-
-    <div class="dropdown" id="menuDrop">
-        <div>Afiliados</div>
-        <div onclick="trocarTema()">Tema Claro/Escuro</div>
-    </div>
-
+<div id="menu">
+  <button onclick="showHome()">Home</button>
+  <button onclick="showAdmin()">Painel ADM</button>
+  <button onclick="theme('dark')">Tema Escuro</button>
+  <button onclick="theme('blue')">Tema Azul</button>
+  <button onclick="theme('yellow')">Tema Amarelo</button>
 </div>
 
-<!-- SEPARAÇÃO -->
-<div class="divisor"></div>
+<!-- PRODUTOS -->
+<div class="container" id="home"></div>
 
-<!-- CONTEÚDO -->
-<div class="container">
+<!-- ADMIN -->
+<div id="admin">
+  <h2>Painel ADM</h2>
+  <div id="adminList"></div>
+</div>
 
-    <!-- PARTE PRINCIPAL -->
-    <div class="principal">
-        <h1>Bem-vindo à BS Store</h1>
-        <br>
-        <button class="btn">Explorar Produtos</button>
-    </div>
+<!-- MODAL COMPRA -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <h3>Pagamento Pix</h3>
+    <p><b>Nome:</b> SEU NOME AQUI</p>
+    <p><b>Chave Pix:</b> SUA CHAVE PIX</p>
 
-    <!-- SIDEBAR DIREITA -->
-    <div class="sidebar">
-        <h3>Categorias</h3>
-        <br>
+    <input id="nome" placeholder="Seu nome">
+    <input id="tel" placeholder="Telefone">
+    <input id="link" placeholder="Link comprovante">
 
-        <div class="categoria">Games</div>
-        <div class="categoria">Roupas</div>
-        <div class="categoria">Eletrônicos</div>
-        <div class="categoria">Acessórios</div>
-        <div class="categoria">Promoções</div>
-
-    </div>
-
+    <button onclick="enviarCompra()">Enviar</button>
+  </div>
 </div>
 
 <script>
+let produtos = [
+  {id:1,nome:"Produto 1",desc:"Descrição",estoque:10,valor:50,img:"https://via.placeholder.com/200"},
+  {id:2,nome:"Produto 2",desc:"Descrição",estoque:5,valor:80,img:"https://via.placeholder.com/200"}
+];
 
-function abrirMenu(){
-    let menu = document.getElementById("menuDrop");
-    menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+let produtoSelecionado = null;
+
+/* render */
+function render(){
+  let home = document.getElementById("home");
+  home.innerHTML = "";
+
+  produtos.forEach(p=>{
+    home.innerHTML += `
+    <div class="card">
+      <img src="${p.img}">
+      <h3>${p.nome}</h3>
+      <p>${p.desc}</p>
+      <p>Estoque: ${p.estoque}</p>
+      <p>R$ ${p.valor}</p>
+      <button class="btn" onclick="abrirCompra(${p.id})">Comprar</button>
+    </div>`;
+  });
+
+  let admin = document.getElementById("adminList");
+  admin.innerHTML = "";
+
+  produtos.forEach(p=>{
+    admin.innerHTML += `
+    <div class="admin-card">
+      <b>${p.nome}</b><br>
+      Estoque: ${p.estoque}<br>
+      <input id="v${p.id}" placeholder="novo valor">
+      <input id="e${p.id}" placeholder="estoque">
+      <button onclick="atualizar(${p.id})">Atualizar</button>
+      <button onclick="remover(${p.id})">Excluir</button>
+    </div>`;
+  });
 }
 
-function trocarTema(){
-    document.body.classList.toggle("light");
+/* compra */
+function abrirCompra(id){
+  produtoSelecionado = produtos.find(p=>p.id===id);
+  document.getElementById("modal").style.display="flex";
 }
 
+function enviarCompra(){
+  let nome = document.getElementById("nome").value;
+  let tel = document.getElementById("tel").value;
+  let link = document.getElementById("link").value;
+
+  let msg =
+`Compra:
+Produto: ${produtoSelecionado.nome}
+Valor: ${produtoSelecionado.valor}
+Nome: ${nome}
+Telefone: ${tel}
+Comprovante: ${link}`;
+
+  window.open("https://wa.me/?text="+encodeURIComponent(msg));
+
+  document.getElementById("modal").style.display="none";
+}
+
+/* admin */
+function atualizar(id){
+  let p = produtos.find(x=>x.id===id);
+  let v = document.getElementById("v"+id).value;
+  let e = document.getElementById("e"+id).value;
+
+  if(v) p.valor = v;
+  if(e) p.estoque = e;
+
+  render();
+}
+
+function remover(id){
+  produtos = produtos.filter(p=>p.id!==id);
+  render();
+}
+
+/* menu */
+function toggleMenu(){
+  document.getElementById("menu").classList.toggle("open");
+}
+
+function showHome(){
+  document.getElementById("home").style.display="grid";
+  document.getElementById("admin").style.display="none";
+}
+
+function showAdmin(){
+  document.getElementById("home").style.display="none";
+  document.getElementById("admin").style.display="block";
+}
+
+/* tema */
+function theme(t){
+  document.body.className = "theme-"+t;
+}
+
+/* init */
+render();
+showHome();
+
+/* ESC fecha menu */
+document.addEventListener("keydown", e=>{
+  if(e.key==="Escape"){
+    document.getElementById("menu").classList.remove("open");
+  }
+});
 </script>
 
 </body>
-</html>
