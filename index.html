@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bonys Story</title>
+<title>Bony Store</title>
 
 <style>
 body{
@@ -13,34 +13,15 @@ background:#000;
 color:#fff;
 }
 
+/* HEADER GRANDE */
 .topbar{
-display:flex;
-justify-content:space-between;
-padding:15px;
 background:#0b0f2a;
+padding:30px;
+font-size:34px;
+text-align:center;
 font-weight:bold;
-}
-
-.menuBtn{cursor:pointer;font-size:22px}
-
-/* MENU */
-.menu{
-position:absolute;
-right:10px;
-top:50px;
-background:#fff;
-color:#000;
-display:none;
-flex-direction:column;
-width:180px;
-border-radius:10px;
-}
-
-.menu button{
-padding:10px;
-border:none;
-background:none;
-cursor:pointer;
+border-bottom:2px solid #00c3ff;
+letter-spacing:2px;
 }
 
 /* LOJA */
@@ -67,45 +48,22 @@ border-radius:10px;
 }
 
 button{
+width:100%;
+padding:10px;
+margin-top:5px;
+background:#00c3ff;
+border:none;
 cursor:pointer;
 }
 
 /* CHECKOUT */
-.checkout{
-display:none;
-padding:20px;
-}
-
+.checkout{display:none;padding:20px;}
 .box{
 max-width:500px;
 margin:auto;
 background:#111;
 padding:20px;
 border-radius:10px;
-}
-
-/* ADM */
-.admin{
-display:none;
-padding:20px;
-}
-
-.adminBox{
-max-width:900px;
-margin:auto;
-background:#111;
-padding:20px;
-border-radius:10px;
-}
-
-input,textarea{
-width:100%;
-padding:10px;
-margin:5px 0;
-background:#222;
-color:#fff;
-border:1px solid #555;
-border-radius:6px;
 }
 
 /* MODAL */
@@ -127,20 +85,35 @@ max-width:500px;
 border-radius:10px;
 }
 
-/* ITEM ADM */
+/* ADM */
+.admin{display:none;padding:20px;}
+.adminBox{
+max-width:900px;
+margin:auto;
+background:#111;
+padding:20px;
+border-radius:10px;
+}
+
+input,textarea{
+width:100%;
+padding:10px;
+margin:5px 0;
+background:#222;
+color:#fff;
+border:1px solid #555;
+border-radius:6px;
+}
+
 .item{
 border:1px solid #333;
 padding:10px;
 margin:5px 0;
 }
 
-.nao{border-left:5px solid red;}
-.visto{border-left:5px solid green;}
-
 .stats{
 display:flex;
 gap:10px;
-flex-wrap:wrap;
 }
 
 .stat{
@@ -155,15 +128,7 @@ text-align:center;
 
 <body>
 
-<div class="topbar">
-<div>BONYS STORY</div>
-<div class="menuBtn" onclick="toggleMenu()">⋮</div>
-</div>
-
-<div id="menu" class="menu">
-<button onclick="home()">Home</button>
-<button onclick="openAdmin()">ADM</button>
-</div>
+<div class="topbar">BONY STORE</div>
 
 <!-- LOJA -->
 <div id="loja" class="container"></div>
@@ -188,7 +153,8 @@ text-align:center;
 <h3 id="mTitulo"></h3>
 <p id="mPreco"></p>
 <p id="mDesc" style="white-space:pre-line"></p>
-<button onclick="fechar()" style="width:100%;padding:10px;background:#00c3ff;border:none">FECHAR</button>
+<p id="mEstoque"></p>
+<button onclick="fechar()">FECHAR</button>
 </div>
 </div>
 
@@ -204,36 +170,29 @@ text-align:center;
 
 <div id="painel" style="display:none">
 
+<h3>➕ PRODUTOS</h3>
+
+<input id="pnome" placeholder="Nome">
+<input id="ppreco" placeholder="Preço">
+<input id="pimg" placeholder="Imagem">
+<textarea id="pdesc" placeholder="Descrição"></textarea>
+<input id="pestoque" placeholder="Estoque">
+<button onclick="add()">Adicionar</button>
+
+<hr>
+
+<div id="produtosADM"></div>
+
+<hr>
+
 <h3>📊 STATS</h3>
 <div class="stats">
-<div class="stat">Cliques<br><span id="cliques"></span></div>
 <div class="stat">Vendas<br><span id="vendas"></span></div>
 <div class="stat">Pedidos<br><span id="pedidos"></span></div>
 </div>
 
 <hr>
 
-<h3>➕ PRODUTO</h3>
-
-<input id="pnome" placeholder="Nome">
-<input id="ppreco" placeholder="Preço">
-<input id="pimg" placeholder="Imagem">
-<textarea id="pdesc" placeholder="Descrição completa"></textarea>
-<button onclick="add()">Adicionar</button>
-
-<hr>
-
-<h3>📦 PRODUTOS</h3>
-<div id="produtosADM"></div>
-
-<hr>
-
-<h3>📩 DM (Mensagens)</h3>
-<div id="msgs"></div>
-
-<hr>
-
-<h3>📄 PEDIDOS</h3>
 <div id="hist"></div>
 
 </div>
@@ -243,21 +202,13 @@ text-align:center;
 <script>
 
 let selected="";
+let indexSelected=null;
 
 /* PRODUTOS */
 let produtos=JSON.parse(localStorage.getItem("produtos")||"null")||[
-[
-"Passe Básico","20","https://i.imgur.com/1Q9Z1ZQ.png",
-"✔ Acesso básico\n✔ Funções limitadas\n✔ Ideal para iniciantes"
-],
-[
-"Passe Premium","50","https://i.imgur.com/2Q9Z1ZQ.png",
-"✔ Mais funções\n✔ Melhor desempenho\n✔ Suporte prioritário"
-],
-[
-"Passe Elite","80","https://i.imgur.com/3Q9Z1ZQ.png",
-"✔ Tudo desbloqueado\n✔ Acesso total\n✔ Premium máximo"
-]
+["Passe Básico","20","https://i.imgur.com/1Q9Z1ZQ.png","Acesso básico ao sistema",10],
+["Passe Premium","50","https://i.imgur.com/2Q9Z1ZQ.png","Mais recursos e suporte",5],
+["Passe Elite","80","https://i.imgur.com/3Q9Z1ZQ.png","Acesso completo ao sistema",3]
 ];
 
 function save(){
@@ -276,9 +227,11 @@ d.innerHTML=`
 <img src="${p[2]}">
 <h3>${p[0]}</h3>
 <p>R$ ${p[1]}</p>
+<p style="font-size:12px;opacity:0.8">${p[3]}</p>
+<p>Estoque: ${p[4]}</p>
 
-<button onclick="buy('${p[0]}')">COMPRAR</button>
 <button onclick="detalhe(${i})">DETALHES</button>
+<button onclick="buy(${i})" ${p[4]<=0?'disabled':''}>COMPRAR</button>
 `;
 
 loja.appendChild(d);
@@ -292,16 +245,31 @@ modal.style.display="flex";
 mTitulo.innerText=produtos[i][0];
 mPreco.innerText="R$ "+produtos[i][1];
 mDesc.innerText=produtos[i][3];
+mEstoque.innerText="Estoque: "+produtos[i][4];
 }
 
+/* FECHAR */
 function fechar(){modal.style.display="none";}
 
 /* COMPRA */
-function buy(p){
-selected=p;
+function buy(i){
+
+if(produtos[i][4]<=0){
+alert("Sem estoque!");
+return;
+}
+
+indexSelected=i;
+selected=produtos[i][0];
+
+produtos[i][4]--;
+save();
+render();
+
 loja.style.display="none";
 checkout.style.display="block";
-produto.value=p;
+
+produto.value=selected;
 }
 
 /* ENVIO */
@@ -311,8 +279,7 @@ let dados=JSON.parse(localStorage.getItem("dados")||"[]");
 dados.push({
 nome:nome.value,
 produto:selected,
-link:link.value,
-status:"nao"
+link:link.value
 });
 
 localStorage.setItem("dados",JSON.stringify(dados));
@@ -331,11 +298,6 @@ checkout.style.display="none";
 admin.style.display="none";
 }
 
-/* MENU */
-function toggleMenu(){
-menu.style.display=menu.style.display==="flex"?"none":"flex";
-}
-
 /* ADM */
 function openAdmin(){
 admin.style.display="block";
@@ -347,7 +309,9 @@ function login(){
 if(u.value==="admin" && p.value==="123"){
 painel.style.display="block";
 loadADM();
-}else alert("erro");
+loadHist();
+stats();
+}else alert("erro login");
 }
 
 /* ADD */
@@ -356,7 +320,8 @@ produtos.push([
 pnome.value,
 ppreco.value,
 pimg.value,
-pdesc.value
+pdesc.value,
+Number(pestoque.value)
 ]);
 
 save();
@@ -364,7 +329,7 @@ render();
 loadADM();
 }
 
-/* ADM PROD */
+/* ADM PRODUTOS */
 function loadADM(){
 produtosADM.innerHTML="";
 
@@ -377,6 +342,7 @@ d.innerHTML=`
 <input value="${p[1]}" onchange="produtos[${i}][1]=this.value;save();render()">
 <input value="${p[2]}" onchange="produtos[${i}][2]=this.value;save();render()">
 <textarea onchange="produtos[${i}][3]=this.value;save();render()">${p[3]}</textarea>
+<input value="${p[4]}" onchange="produtos[${i}][4]=Number(this.value);save();render()">
 <button onclick="produtos.splice(${i},1);save();render();loadADM()">Excluir</button>
 `;
 
@@ -384,30 +350,18 @@ produtosADM.appendChild(d);
 });
 }
 
-/* DM */
-function loadDM(){
-let msgs=JSON.parse(localStorage.getItem("msgs")||"[]");
-msgsDiv.innerHTML="";
-
-msgs.forEach(m=>{
-let d=document.createElement("div");
-d.className="item";
-d.innerHTML=`<b>${m.nome}</b><br>${m.msg}`;
-msgsDiv.appendChild(d);
-});
-}
-
-/* HIST */
+/* HISTÓRICO */
 function loadHist(){
 let dados=JSON.parse(localStorage.getItem("dados")||"[]");
+
 hist.innerHTML="";
 
 dados.forEach(d=>{
 hist.innerHTML+=`
-<div class="item ${d.status}">
+<div class="item">
 <b>${d.nome}</b><br>
 ${d.produto}<br>
-<a href="${d.link}" target="_blank">ver</a>
+<a href="${d.link}" target="_blank">ver comprovante</a>
 </div>
 `;
 });
@@ -415,19 +369,11 @@ ${d.produto}<br>
 
 /* STATS */
 function stats(){
-cliques.innerText=localStorage.getItem("clicks")||0;
 vendas.innerText=localStorage.getItem("vendas")||0;
 pedidos.innerText=(JSON.parse(localStorage.getItem("dados")||"[]")).length;
 }
 
-setInterval(()=>{
-stats();
-loadHist();
-},1000);
-
-/* CLIQUE */
-let c=Number(localStorage.getItem("clicks")||0);
-localStorage.setItem("clicks",c+1);
+setInterval(stats,1000);
 
 </script>
 
