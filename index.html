@@ -7,167 +7,256 @@
 
 <style>
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(180deg, #050d1a, #0b1a2b);
-  color: white;
+  margin:0;
+  font-family: Arial;
+  background:#050d1a;
+  color:white;
 }
 
-/* TOPO */
-header {
-  text-align: center;
-  padding: 25px;
-  font-size: 32px;
-  font-weight: bold;
-  color: gold;
-  text-shadow: 0 0 10px gold;
-  border-bottom: 2px solid gold;
+header{
+  text-align:center;
+  padding:20px;
+  font-size:30px;
+  color:gold;
+  text-shadow:0 0 10px gold;
 }
 
 /* GRID */
-.container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-  gap: 20px;
-  padding: 20px;
+.container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+  padding:20px;
 }
 
 /* CARD */
-.card {
-  background: #0f2238;
-  border: 2px solid gold;
-  border-radius: 12px;
-  padding: 15px;
-  text-align: center;
-  transition: 0.3s;
-  box-shadow: 0 0 15px rgba(255,215,0,0.2);
+.card{
+  background:#0f2238;
+  border:2px solid gold;
+  border-radius:15px;
+  padding:15px;
+  text-align:center;
+  box-shadow:0 0 20px rgba(255,215,0,0.2);
+  transition:.3s;
+}
+.card:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 30px gold;
 }
 
-.card:hover {
-  transform: scale(1.05);
+.card img{
+  width:100%;
+  height:150px;
+  border-radius:10px;
+  object-fit:cover;
 }
 
-/* IMAGEM */
-.card img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 10px;
+.card h2{
+  color:gold;
 }
 
-/* TITULO */
-.card h2 {
-  color: gold;
-  font-size: 18px;
+.estoque{
+  color:#00ffcc;
+  font-weight:bold;
+}
+
+.desc{
+  font-size:13px;
+  color:#ccc;
+  text-align:left;
+  margin-top:10px;
 }
 
 /* BOTÕES */
-.botoes {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
+.botoes{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
 }
 
-.btn {
-  flex: 1;
-  padding: 10px;
-  border-radius: 6px;
-  text-decoration: none;
-  text-align: center;
-  font-weight: bold;
+.btn{
+  flex:1;
+  padding:10px;
+  border-radius:8px;
+  font-weight:bold;
+  text-decoration:none;
+  text-align:center;
+  cursor:pointer;
 }
 
-/* BOTÃO 3D */
-.comprar {
-  background: linear-gradient(gold, #c9a000);
-  color: black;
-  box-shadow: 0 4px #8c6b00;
+/* 3D */
+.comprar{
+  background:linear-gradient(gold,#b89600);
+  color:black;
+  box-shadow:0 5px #7a5d00;
+}
+.comprar:active{
+  transform:translateY(3px);
+  box-shadow:0 2px #7a5d00;
 }
 
-.comprar:active {
-  box-shadow: 0 2px #8c6b00;
-  transform: translateY(2px);
+.pix{
+  background:#00ffcc;
+  color:black;
 }
 
-/* PIX */
-.pix {
-  background: #00ffcc;
-  color: black;
+/* MODAL PIX */
+.modal{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.8);
+  justify-content:center;
+  align-items:center;
 }
 
-/* TEXTO */
-small {
-  color: #ccc;
+.modal-content{
+  background:#0f2238;
+  border:2px solid gold;
+  padding:20px;
+  border-radius:10px;
+  width:300px;
+  text-align:center;
+}
+
+.modal-content input{
+  width:90%;
+  margin:5px;
+  padding:8px;
+  border-radius:5px;
+  border:none;
+}
+
+.pix-chave{
+  color:#00ff00;
+  font-weight:bold;
+}
+
+/* BOTÃO FLUTUANTE */
+.whats{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#25D366;
+  padding:15px;
+  border-radius:50%;
+  text-decoration:none;
+  font-size:20px;
 }
 </style>
-
 </head>
 
 <body>
 
 <header>🎮 Vendas Premium</header>
 
-<div class="container">
+<div class="container" id="produtos"></div>
+
+<!-- MODAL PIX -->
+<div class="modal" id="pixModal">
+  <div class="modal-content">
+    <h3>Pagamento via Pix</h3>
+    <p class="pix-chave">(98)984853563</p>
+
+    <input type="text" id="nome" placeholder="Seu nome">
+    <input type="text" id="comprovante" placeholder="Link do comprovante">
+
+    <button onclick="enviarPix()">Enviar</button>
+    <br><br>
+    <button onclick="fechar()">Fechar</button>
+  </div>
+</div>
 
 <script>
-function produto(nome, preco, estoque, imagem) {
+let produtoAtual="";
+let precoAtual="";
+
+function gerarProduto(nome, preco, imagem){
   return `
   <div class="card">
     <img src="${imagem}">
     <h2>${nome}</h2>
 
     <p><strong>Preço:</strong> ${preco}</p>
-    <p><strong>Estoque:</strong> ${estoque}</p>
+    <p class="estoque">Estoque: 12</p>
 
-    <small>
-    ✔ Entrega na caixa de correio<br>
-    ✔ Caixa vazia obrigatória<br>
-    ✔ Apagar aba AVISO<br>
-    ✔ Entrega instantânea<br>
-    ✔ Envie seu ID no WhatsApp
-    </small>
+    <div class="desc">
+    O usuário informado receberá o item na caixa de correio.<br><br>
+
+    <strong>AVISO:</strong><br>
+    1. Certifique-se de que a caixa está vazia<br>
+    2. Apague mensagens da aba AVISO<br>
+    3. Isso garante o recebimento correto<br>
+    4. Entrega instantânea<br>
+    5. Envie seu ID no WhatsApp
+    </div>
 
     <div class="botoes">
       <a class="btn comprar" target="_blank"
-      href="https://wa.me/5598984853563?text=Quero%20comprar%20${encodeURIComponent(nome)}">
+      href="https://wa.me/5598984853563?text=Quero%20comprar%20${encodeURIComponent(nome)}%20(${preco})%0AID:%20">
       Comprar
       </a>
 
-      <a class="btn pix"
-      href="https://wa.me/5598984853563?text=Vou%20pagar%20via%20Pix%20(${preco})">
+      <div class="btn pix" onclick="abrirPix('${nome}','${preco}')">
       Pix
-      </a>
+      </div>
     </div>
   </div>
   `;
 }
+
+function abrirPix(nome,preco){
+  produtoAtual=nome;
+  precoAtual=preco;
+  document.getElementById("pixModal").style.display="flex";
+}
+
+function fechar(){
+  document.getElementById("pixModal").style.display="none";
+}
+
+function enviarPix(){
+  let nome=document.getElementById("nome").value;
+  let comp=document.getElementById("comprovante").value;
+
+  let msg=`Paguei via Pix\nProduto: ${produtoAtual}\nValor: ${precoAtual}\nNome: ${nome}\nComprovante: ${comp}`;
+
+  window.open(`https://wa.me/5598984853563?text=${encodeURIComponent(msg)}`);
+}
 </script>
 
 <script>
-/* PASSE */
-document.write(produto("Passe Premium", "R$ 10", "12", "https://i.imgur.com/Bud0zyu.png"));
+let produtos=[
+["Passe Premium","R$10","https://i.imgur.com/Bud0zyu.png"],
+["Tokens 25","R$15","https://i.imgur.com/OFmm8PI.jpeg"],
+["Tokens 50","R$20","https://i.imgur.com/OFmm8PI.jpeg"],
+["Tokens 100","R$25","https://i.imgur.com/OFmm8PI.jpeg"],
+["Tokens 200","R$45","https://i.imgur.com/OFmm8PI.jpeg"],
+["Tokens 300","R$70","https://i.imgur.com/OFmm8PI.jpeg"],
+["Tokens 400","R$90","https://i.imgur.com/OFmm8PI.jpeg"],
+["Tokens 500","R$120","https://i.imgur.com/OFmm8PI.jpeg"],
+["Tokens 600","R$140","https://i.imgur.com/OFmm8PI.jpeg"],
+["Tokens 700","R$150","https://i.imgur.com/OFmm8PI.jpeg"],
+["Tokens 800","R$172","https://i.imgur.com/OFmm8PI.jpeg"],
+["Tokens 900","R$182","https://i.imgur.com/OFmm8PI.jpeg"],
+["Tokens 1000","R$200","https://i.imgur.com/OFmm8PI.jpeg"]
+];
 
-/* TOKENS */
-document.write(produto("Tokens 25", "R$ 15", "12", "https://i.imgur.com/OFmm8PI.jpeg"));
-document.write(produto("Tokens 50", "R$ 20", "12", "https://i.imgur.com/OFmm8PI.jpeg"));
-document.write(produto("Tokens 100", "R$ 25", "12", "https://i.imgur.com/OFmm8PI.jpeg"));
-document.write(produto("Tokens 200", "R$ 45", "12", "https://i.imgur.com/OFmm8PI.jpeg"));
-document.write(produto("Tokens 300", "R$ 70", "12", "https://i.imgur.com/OFmm8PI.jpeg"));
-document.write(produto("Tokens 400", "R$ 90", "12", "https://i.imgur.com/OFmm8PI.jpeg"));
-document.write(produto("Tokens 500", "R$ 120", "12", "https://i.imgur.com/OFmm8PI.jpeg"));
-document.write(produto("Tokens 600", "R$ 140", "12", "https://i.imgur.com/OFmm8PI.jpeg"));
-document.write(produto("Tokens 700", "R$ 150", "12", "https://i.imgur.com/OFmm8PI.jpeg"));
-document.write(produto("Tokens 800", "R$ 172", "12", "https://i.imgur.com/OFmm8PI.jpeg"));
-document.write(produto("Tokens 900", "R$ 182", "12", "https://i.imgur.com/OFmm8PI.jpeg"));
-document.write(produto("Tokens 1000", "R$ 200", "12", "https://i.imgur.com/OFmm8PI.jpeg"));
+let html="";
+produtos.forEach(p=>{
+  html+=gerarProduto(p[0],p[1],p[2]);
+});
+document.getElementById("produtos").innerHTML=html;
 </script>
 
-</div>
-
-<footer style="text-align:center; padding:15px; border-top:2px solid gold;">
-💰 Pix: (98) 98485-3563 | Atendimento via WhatsApp ⚡
-</footer>
+<!-- BOTÃO FLUTUANTE -->
+<a class="whats" target="_blank"
+href="https://wa.me/5598984853563?text=Olá quero comprar">
+💬
+</a>
 
 </body>
 </html>
