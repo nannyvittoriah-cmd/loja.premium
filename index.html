@@ -198,7 +198,7 @@ h1 {
   cursor: pointer;
 }
 
-/* MODAL DE ENVIO IGUAL AO PRINT */
+/* MODAL DE ENVIO COM CONTRASTE */
 .modal-envio {
   display: none;
   position: fixed;
@@ -206,7 +206,7 @@ h1 {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.9);
+  background: rgba(0,0,0,0.95);
   z-index: 1000;
   overflow-y: auto;
 }
@@ -221,7 +221,7 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 2px solid var(--border);
 }
 
 .modal-header .limite {
@@ -253,132 +253,74 @@ h1 {
   display: flex;
   align-items: center;
   gap: 8px;
+  text-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
 }
 
 .sub-envio {
-  color: var(--text-dim);
-  font-size: 11px;
+  color: #fff;
+  font-size: 12px;
   margin-bottom: 20px;
   text-transform: uppercase;
+  font-weight: bold;
 }
 
 .input-group {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .input-group label {
   display: block;
-  color: var(--text);
-  font-size: 13px;
+  color: #fff;
+  font-size: 14px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
 }
 
-.input-ff {
-  background: var(--bg);
-  border: 2px solid var(--red);
-  border-radius: 25px;
-  padding: 12px 15px;
+.input-desc {
+  background: #000;
+  border: 3px solid var(--red);
+  border-radius: 30px;
+  padding: 14px 18px;
   width: 100%;
-  color: var(--text);
+  color: #fff;
   font-size: 14px;
   outline: none;
 }
 
-.input-ff::placeholder {
-  color: #4b5563;
+.input-desc::placeholder {
+  color: #6b7280;
 }
 
-.programacoes {
-  border-top: 1px dashed var(--border);
-  padding-top: 20px;
+.descricao-pedido {
+  background: var(--card);
+  border: 2px solid var(--red);
+  border-radius: 12px;
+  padding: 15px;
   margin-bottom: 20px;
-}
-
-.programacoes h4 {
-  font-size: 12px;
-  margin-bottom: 10px;
-}
-
-.toggle-premium {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.toggle-switch {
-  width: 45px;
-  height: 24px;
-  background: #374151;
-  border-radius: 20px;
-  position: relative;
-  cursor: pointer;
-}
-
-.toggle-switch.ativo {
-  background: var(--primary);
-}
-
-.toggle-switch::after {
-  content: '';
-  width: 18px;
-  height: 18px;
-  background: #fff;
-  border-radius: 50%;
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  transition: .3s;
-}
-
-.toggle-switch.ativo::after {
-  left: 24px;
-}
-
-.premium-text {
-  color: #a855f7;
-  font-size: 11px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--gold);
+  text-align: center;
   font-weight: bold;
 }
 
-.info-premium {
-  color: var(--text-dim);
-  font-size: 11px;
-  line-height: 1.6;
-}
-
-.btn-enviar-likes {
+.btn-enviar-whatsapp {
   width: 100%;
   background: var(--red);
   color: #fff;
   border: none;
-  padding: 14px;
-  border-radius: 25px;
+  padding: 16px;
+  border-radius: 30px;
   font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.btn-escalar {
-  width: 100%;
-  background: transparent;
-  color: var(--text);
-  border: 2px solid var(--red);
-  padding: 14px;
-  border-radius: 25px;
-  font-weight: bold;
-  font-size: 14px;
+  font-size: 15px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+  text-transform: uppercase;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
 }
 
 /* CARD REGRAS */
@@ -492,34 +434,21 @@ h1 {
   
   <div class="modal-content">
     <div class="titulo-envio">
-      📈 ENVIOS INFINITOS DE <span style="color:#fff">220</span> FREE FIRE LIKES!!
+      📈 ENVIOS INSTANTÂNEOS SEM TAXAS
     </div>
-    <p class="sub-envio">MELHOR SERVIÇO DE LIKES FF ONLINE!!</p>
+    <p class="sub-envio">MELHOR SERVIÇO DE VENDAS PREMIUM</p>
 
     <div class="input-group">
-      <label>FF Id:</label>
-      <input type="number" class="input-ff" id="ffId" placeholder="">
+      <label>DESCRIÇÃO DE SUA COMPRA</label>
+      <input type="text" class="input-desc" id="descCompra" placeholder="Ex: Meu ID é 123456789">
     </div>
 
-    <div class="programacoes">
-      <h4>PROGRAMAÇÕES:</h4>
-      <div class="toggle-premium">
-        <div class="toggle-switch" id="togglePremium" onclick="togglePremium()"></div>
-        <span class="premium-text">PREMIUM</span>
-      </div>
-      <div class="info-premium">
-        PACOTES DE LIKES AUTOMÁTICOS!!<br>
-        DE 440 ATÉ 132.000 LIKES!!<br>
-        MÁXIMO: 220 LIKES DIÁRIOS!!
-      </div>
+    <div class="descricao-pedido" id="descricaoPedido">
+      Produto: Selecione um produto
     </div>
 
-    <button class="btn-enviar-likes" onclick="enviarLikes()">
-      👍 ENVIAR 220 LIKES FREE-FIRE!!
-    </button>
-
-    <button class="btn-escalar">
-      ⭐ ESCALAR MEUS ENVIOS DE LIKE
+    <button class="btn-enviar-whatsapp" onclick="enviarWhatsApp()">
+      💬 ENVIAR PARA WHATSAPP
     </button>
   </div>
 </div>
@@ -584,7 +513,7 @@ h1 {
 
 <script>
 let produtoSelecionado = "";
-let premiumAtivo = false;
+let precoSelecionado = "";
 
 // TEMA
 function trocarTema(){
@@ -608,8 +537,10 @@ function fecharMenu(){
 }
 
 // MODAL ENVIO
-function abrirModalEnvio(produto){
-  produtoSelecionado = produto;
+function abrirModalEnvio(nome, preco){
+  produtoSelecionado = nome;
+  precoSelecionado = preco;
+  document.getElementById('descricaoPedido').innerHTML = `Produto: ${nome}<br>Valor: ${preco}`;
   document.getElementById('modalEnvio').classList.add('ativo');
   document.body.style.overflow = 'hidden';
 }
@@ -617,26 +548,17 @@ function abrirModalEnvio(produto){
 function fecharModalEnvio(){
   document.getElementById('modalEnvio').classList.remove('ativo');
   document.body.style.overflow = 'auto';
-  document.getElementById('ffId').value = '';
+  document.getElementById('descCompra').value = '';
 }
 
-function togglePremium(){
-  premiumAtivo = !premiumAtivo;
-  document.getElementById('togglePremium').classList.toggle('ativo');
-}
-
-function enviarLikes(){
-  let ffId = document.getElementById('ffId').value;
-  if(!ffId){
-    alert('Digite seu FF ID!');
-    return;
-  }
-  if(ffId.length < 8){
-    alert('FF ID inválido! Verifique se está correto.');
+function enviarWhatsApp(){
+  let desc = document.getElementById('descCompra').value;
+  if(!desc){
+    alert('Digite a descrição da sua compra!');
     return;
   }
   
-  let msg = `Quero ${produtoSelecionado}%0AFF ID: ${ffId}%0APremium: ${premiumAtivo ? 'SIM' : 'NÃO'}`;
+  let msg = `🛒 *NOVO PEDIDO BS LOJA* 🛒\n\n📦 Produto: ${produtoSelecionado}\n💰 Valor: ${precoSelecionado}\n📝 Descrição: ${desc}`;
   window.open(`https://wa.me/5598984853563?text=${encodeURIComponent(msg)}`);
   fecharModalEnvio();
 }
@@ -660,7 +582,7 @@ produtos.forEach(p => {
     <img src="${p[2]}">
     <h3>${p[0]}</h3>
     <p>${p[1]}</p>
-    <button class="btn-enviar" onclick="abrirModalEnvio('${p[0]} - ${p[1]}')">
+    <button class="btn-enviar" onclick="abrirModalEnvio('${p[0]}', '${p[1]}')">
       Iniciar envio
     </button>
   </div>
