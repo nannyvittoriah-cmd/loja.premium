@@ -84,7 +84,7 @@ body {
   font-weight: bold;
 }
 
-/* MENU TRANSPARENTE METADE DA TELA */
+/* MENU */
 .menu {
   display: none;
   position: fixed;
@@ -112,7 +112,6 @@ body {
   gap: 8px;
 }
 
-/* BOTÕES COM BORDA VERMELHA PADRÃO */
 .menu-btn-item {
   display: flex;
   align-items: center;
@@ -127,6 +126,7 @@ body {
   font-weight: 600;
   background: rgba(153, 27, 27, 0.1);
   transition: 0.2s;
+  cursor: pointer;
 }
 
 .menu-btn-item:active {
@@ -134,7 +134,6 @@ body {
   transform: scale(0.98);
 }
 
-/* LOGOS COLORIDAS */
 .icon-vermelho {
   color: var(--red);
 }
@@ -180,7 +179,7 @@ h1 {
   text-align: center;
 }
 
-/* PRODUTOS 2 COLUNAS */
+/* PRODUTOS */
 .produtos-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -230,7 +229,7 @@ h1 {
 }
 
 /* MODAL DE ENVIO */
-.modal-envio {
+.modal-envio, .modal-admin, .modal-login {
   display: none;
   position: fixed;
   top: 0;
@@ -242,7 +241,7 @@ h1 {
   overflow-y: auto;
 }
 
-.modal-envio.ativo {
+.modal-envio.ativo, .modal-admin.ativo, .modal-login.ativo {
   display: block;
 }
 
@@ -323,8 +322,75 @@ h1 {
   text-transform: uppercase;
 }
 
-.btn-enviar-whatsapp:active {
-  transform: scale(0.98);
+/* LOGIN ADMIN */
+.input-admin {
+  background: #0a0a0f;
+  border: 2px solid var(--red);
+  border-radius: 10px;
+  padding: 14px;
+  width: 100%;
+  color: #fff;
+  font-size: 14px;
+  margin-bottom: 15px;
+  outline: none;
+}
+
+.btn-login {
+  width: 100%;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+/* PAINEL ADMIN */
+.painel-admin h2 {
+  color: var(--gold);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.stat-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+}
+
+.stat-box h3 {
+  color: var(--primary);
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.stat-box p {
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+.btn-sair {
+  width: 100%;
+  background: #991b1b;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  margin-top: 15px;
+  cursor: pointer;
 }
 
 /* CARD REGRAS */
@@ -384,7 +450,7 @@ h1 {
 
 <body>
 
-<!-- MENU LATERAL TRANSPARENTE -->
+<!-- MENU -->
 <div class="overlay" id="overlay" onclick="fecharMenu()"></div>
 <div class="menu" id="menu">
   <h3>⚡ Menu BS</h3>
@@ -401,13 +467,78 @@ h1 {
     <span class="icon-rosa">📸</span> Instagram
   </a>
   
-  <a href="#" class="menu-btn-item">
+  <a class="menu-btn-item" onclick="abrirLoginAdmin()">
     <span class="icon-vermelho">👤</span> Admin
   </a>
   
-  <a href="#" class="menu-btn-item" onclick="fecharMenu()">
+  <a class="menu-btn-item" onclick="fecharMenu()">
     ❌ Fechar
   </a>
+</div>
+
+<!-- MODAL LOGIN ADMIN -->
+<div class="modal-login" id="modalLogin">
+  <div class="modal-header">
+    <button class="fechar-modal" onclick="fecharLoginAdmin()">×</button>
+    <div style="width:30px"></div>
+  </div>
+  
+  <div class="modal-content">
+    <div class="titulo-envio">
+      🔐 ÁREA ADMIN
+    </div>
+    <p class="sub-envio">ACESSO RESTRITO</p>
+
+    <div class="label-desc">USUÁRIO</div>
+    <input type="text" class="input-admin" id="usuarioAdmin" placeholder="Digite o usuário">
+    
+    <div class="label-desc">SENHA</div>
+    <input type="password" class="input-admin" id="senhaAdmin" placeholder="Digite a senha">
+
+    <button class="btn-login" onclick="fazerLogin()">
+      ENTRAR
+    </button>
+  </div>
+</div>
+
+<!-- PAINEL ADMIN -->
+<div class="modal-admin" id="modalAdmin">
+  <div class="modal-header">
+    <button class="fechar-modal" onclick="fecharAdmin()">×</button>
+    <div style="width:30px"></div>
+  </div>
+  
+  <div class="modal-content painel-admin">
+    <h2>👤 Painel Admin - Lorrannyh</h2>
+    
+    <div class="stats">
+      <div class="stat-box">
+        <h3 id="totalPedidos">0</h3>
+        <p>PEDIDOS HOJE</p>
+      </div>
+      <div class="stat-box">
+        <h3 id="totalProdutos">8</h3>
+        <p>PRODUTOS</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📊 Ações Rápidas</div>
+      <button class="menu-btn-item" style="width:100%; justify-content:center; margin-bottom:8px;" onclick="alert('Em breve: Adicionar produto')">
+        ➕ Adicionar Produto
+      </button>
+      <button class="menu-btn-item" style="width:100%; justify-content:center; margin-bottom:8px;" onclick="alert('Em breve: Ver pedidos')">
+        📦 Ver Pedidos
+      </button>
+      <button class="menu-btn-item" style="width:100%; justify-content:center;" onclick="alert('Em breve: Editar preços')">
+        💰 Editar Preços
+      </button>
+    </div>
+
+    <button class="btn-sair" onclick="sairAdmin()">
+      🚪 SAIR DA CONTA
+    </button>
+  </div>
 </div>
 
 <!-- MODAL DE ENVIO -->
@@ -450,10 +581,8 @@ h1 {
   <h1>Envios instantânea compras manual com segurança</h1>
   <p class="subtitle">Escolha seu produto abaixo</p>
 
-  <!-- PRODUTOS EM 2 COLUNAS -->
   <div class="produtos-grid" id="produtos"></div>
 
-  <!-- REGRAS DE ENVIO -->
   <div class="card">
     <div class="card-title">
       ℹ️ Regras de Envio
@@ -502,6 +631,52 @@ function fecharMenu(){
   document.getElementById('overlay').classList.remove('ativo');
 }
 
+// LOGIN ADMIN
+function abrirLoginAdmin(){
+  fecharMenu();
+  if(localStorage.getItem('adminBS') === 'logado'){
+    abrirAdmin();
+  } else {
+    document.getElementById('modalLogin').classList.add('ativo');
+  }
+}
+
+function fecharLoginAdmin(){
+  document.getElementById('modalLogin').classList.remove('ativo');
+  document.getElementById('usuarioAdmin').value = '';
+  document.getElementById('senhaAdmin').value = '';
+}
+
+function fazerLogin(){
+  let user = document.getElementById('usuarioAdmin').value;
+  let senha = document.getElementById('senhaAdmin').value;
+  
+  if(user === 'Lorrannyh.170' && senha === 'Lorrannyh.170'){
+    localStorage.setItem('adminBS', 'logado');
+    fecharLoginAdmin();
+    abrirAdmin();
+  } else {
+    alert('Usuário ou senha incorretos!');
+  }
+}
+
+function abrirAdmin(){
+  document.getElementById('modalAdmin').classList.add('ativo');
+  // Atualiza contador de pedidos fake
+  let pedidos = localStorage.getItem('pedidosHoje') || 0;
+  document.getElementById('totalPedidos').innerText = pedidos;
+}
+
+function fecharAdmin(){
+  document.getElementById('modalAdmin').classList.remove('ativo');
+}
+
+function sairAdmin(){
+  localStorage.removeItem('adminBS');
+  fecharAdmin();
+  alert('Você saiu da conta admin!');
+}
+
 // MODAL ENVIO
 function abrirModalEnvio(nome, preco){
   produtoSelecionado = nome;
@@ -518,6 +693,10 @@ function fecharModalEnvio(){
 
 function enviarWhatsApp(){
   let msg = `🛒 *NOVO PEDIDO BS LOJA* 🛒\n\n📦 Produto: ${produtoSelecionado}\n💰 Valor: ${precoSelecionado}`;
+  // Conta pedido
+  let pedidos = parseInt(localStorage.getItem('pedidosHoje') || 0) + 1;
+  localStorage.setItem('pedidosHoje', pedidos);
+  
   window.open(`https://wa.me/5598984853563?text=${encodeURIComponent(msg)}`);
   fecharModalEnvio();
 }
@@ -551,4 +730,4 @@ document.getElementById('produtos').innerHTML = html;
 </script>
 
 </body>
-</html
+</html>
