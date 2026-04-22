@@ -1,280 +1,448 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loja Prime</title>
+<title>LegacyC7 - Impulsionar Perfil</title>
 
 <style>
-:root{
-  --bg:#0b0f1a;
-  --card:#141a2a;
-  --text:#fff;
-  --accent:#00d4ff;
-  --accent2:#ffd000;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body{
-  margin:0;
-  font-family:Arial;
-  background:var(--bg);
-  color:var(--text);
+body {
+  background: #0a0a0f;
+  color: #fff;
+  font-family: 'Arial', sans-serif;
+  padding-bottom: 80px;
 }
 
-/* TOP */
-header{
-  padding:20px;
-  font-size:30px;
-  font-weight:bold;
-  text-align:center;
-  background:linear-gradient(90deg,#001b2e,#002f4b);
+/* TOPO */
+.topbar {
+  background: #12121a;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #1f1f2e;
 }
 
-/* MENU */
-#menu{
-  position:fixed;
-  top:0;
-  left:0;
-  width:220px;
-  height:100%;
-  background:#0a0f1f;
-  padding:20px;
-  transform:translateX(-100%);
-  transition:0.3s;
-}
-#menu.open{transform:translateX(0);}
-#menu button{
-  width:100%;
-  margin:10px 0;
-  padding:10px;
-  background:#111;
-  color:#fff;
-  border:1px solid #333;
-  cursor:pointer;
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: bold;
 }
 
-/* PRODUTOS */
-.container{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:15px;
-  padding:20px;
+.logo span {
+  color: #3b82f6;
 }
 
-.card{
-  background:var(--card);
-  padding:15px;
-  border-radius:10px;
+.icons {
+  display: flex;
+  gap: 12px;
+  font-size: 18px;
 }
 
-.card img{
-  width:100%;
-  border-radius:10px;
+.icon-btn {
+  background: #1e1e2d;
+  border: none;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  color: #fff;
+  cursor: pointer;
 }
 
-.btn{
-  background:green;
-  color:#fff;
-  padding:10px;
-  border:none;
-  width:100%;
-  margin-top:10px;
-  cursor:pointer;
+/* CONTEÚDO */
+.container {
+  padding: 20px 15px;
 }
 
-/* MODAL COMPRA */
-.modal{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.8);
-  display:none;
-  justify-content:center;
-  align-items:center;
+h1 {
+  font-size: 24px;
+  margin-bottom: 5px;
 }
 
-.modal-content{
-  background:#111;
-  padding:20px;
-  width:300px;
-  border-radius:10px;
+.subtitle {
+  color: #9ca3af;
+  font-size: 14px;
+  margin-bottom: 20px;
 }
 
-input{
-  width:100%;
-  margin:5px 0;
-  padding:8px;
+/* CARD ENVIAR LIKES */
+.card {
+  background: #12121a;
+  border: 1px solid #1f1f2e;
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 20px;
 }
 
-/* ADM */
-#admin{
-  display:none;
-  padding:20px;
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
 }
 
-.admin-card{
-  background:#1a1f33;
-  padding:10px;
-  margin:10px 0;
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: bold;
 }
 
-/* THEMES */
-.theme-blue{--accent:#00d4ff;}
-.theme-yellow{--accent:#ffd000;}
-.theme-dark{--bg:#000;--card:#111;}
+.badge {
+  background: #1e40af;
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+label {
+  display: block;
+  color: #9ca3af;
+  font-size: 12px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.input-box {
+  background: #0a0a0f;
+  border: 1px solid #1f1f2e;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.input-box input {
+  background: none;
+  border: none;
+  outline: none;
+  color: #fff;
+  width: 100%;
+  font-size: 14px;
+}
+
+.hint {
+  color: #6b7280;
+  font-size: 12px;
+  margin-bottom: 15px;
+}
+
+.alert {
+  background: #1e3a2e;
+  border: 1px solid #065f46;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  gap: 10px;
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+.btn-primary {
+  width: 100%;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+}
+
+.btn-primary:disabled {
+  background: #374151;
+  cursor: not-allowed;
+}
+
+/* CARD REGRAS */
+.info-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #1f1f2e;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-icon {
+  width: 40px;
+  height: 40px;
+  background: #1e1e2d;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.info-text h3 {
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+
+.info-text p {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* COMO FUNCIONA + DICAS */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.section h3 {
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+.section ol, .section ul {
+  padding-left: 18px;
+  color: #d1d5db;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* NAV INFERIOR */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #12121a;
+  border-top: 1px solid #1f1f2e;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  z-index: 998;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 11px;
+}
+
+.nav-item.active {
+  color: #3b82f6;
+}
+
+.nav-item span {
+  font-size: 18px;
+}
+
+/* CHAT FLUTUANTE */
+.chat-btn {
+  position: fixed;
+  bottom: 85px;
+  right: 20px;
+  background: #3b82f6;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+  z-index: 997;
+}
 </style>
 </head>
 
 <body>
 
-<header onclick="toggleMenu()">LOJA PRIME / LOJA PRO</header>
-
-<div id="menu">
-  <button onclick="showHome()">Home</button>
-  <button onclick="showAdmin()">Painel ADM</button>
-  <button onclick="theme('dark')">Tema Escuro</button>
-  <button onclick="theme('blue')">Tema Azul</button>
-  <button onclick="theme('yellow')">Tema Amarelo</button>
-</div>
-
-<!-- PRODUTOS -->
-<div class="container" id="home"></div>
-
-<!-- ADMIN -->
-<div id="admin">
-  <h2>Painel ADM</h2>
-  <div id="adminList"></div>
-</div>
-
-<!-- MODAL COMPRA -->
-<div class="modal" id="modal">
-  <div class="modal-content">
-    <h3>Pagamento Pix</h3>
-    <p><b>Nome:</b> SEU NOME AQUI</p>
-    <p><b>Chave Pix:</b> SUA CHAVE PIX</p>
-
-    <input id="nome" placeholder="Seu nome">
-    <input id="tel" placeholder="Telefone">
-    <input id="link" placeholder="Link comprovante">
-
-    <button onclick="enviarCompra()">Enviar</button>
+<!-- TOPO -->
+<div class="topbar">
+  <div class="logo">
+    <span>LC</span> Legacy<span>C7</span>
+  </div>
+  <div class="icons">
+    <button class="icon-btn">🔔</button>
+    <button class="icon-btn">☰</button>
+    <button class="icon-btn">🔴</button>
+    <button class="icon-btn">✏️</button>
+    <button class="icon-btn">❤️</button>
   </div>
 </div>
 
+<div class="container">
+  <h1>Impulsionar Perfil</h1>
+  <p class="subtitle">Envie likes instantâneos para sua conta do Free Fire.</p>
+
+  <!-- CARD ENVIAR LIKES -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">
+        💙 Enviar Likes
+      </div>
+      <div class="badge" id="contador">Likes: 1/2</div>
+    </div>
+
+    <label>UID DO JOGADOR</label>
+    <div class="input-box">
+      <span>📋</span>
+      <input type="number" id="uid" placeholder="Digite o UID do Free Fire">
+    </div>
+    <p class="hint">O UID deve conter apenas números.</p>
+
+    <div class="alert">
+      <span>🛡️</span>
+      <div>
+        <strong>Sistema Anti-Ban Ativo</strong><br>
+        O envio feito de forma segura respeitando os limites do jogo.
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="enviarLike()" id="btnEnviar">
+      ⚡ INICIAR ENVIO AGORA
+    </button>
+  </div>
+
+  <!-- CARD REGRAS -->
+  <div class="card">
+    <div class="card-title" style="margin-bottom:15px;">
+      ℹ️ Regras de Envio
+    </div>
+
+    <div class="info-item">
+      <div class="info-icon">🔄</div>
+      <div class="info-text">
+        <h3>Intervalo de 24h</h3>
+        <p>Cada UID pode receber likes uma vez a cada 24 horas.</p>
+      </div>
+    </div>
+
+    <div class="info-item">
+      <div class="info-icon">✅</div>
+      <div class="info-text">
+        <h3>Confirmação Real</h3>
+        <p>Os likes aparecem no seu perfil em até 5 minutos.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMO FUNCIONA + DICAS -->
+  <div class="grid-2">
+    <div class="section">
+      <h3>Como Funciona</h3>
+      <ol>
+        <li>Insira seu UID (ID numérico) do Free Fire</li>
+        <li>Clique em "INICIAR ENVIO" e pronto!</li>
+        <li>Aguarde o ciclo de 24h para novo envio</li>
+      </ol>
+    </div>
+
+    <div class="section">
+      <h3>Dicas</h3>
+      <ul>
+        <li>Verifique se o UID está correto</li>
+        <li>Respeite o intervalo de 24 horas por ID</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- BOTÃO CHAT -->
+<a href="#" class="chat-btn">💬</a>
+
+<!-- NAV INFERIOR -->
+<div class="bottom-nav">
+  <a href="#" class="nav-item">
+    <span>🏠</span>INÍCIO
+  </a>
+  <a href="#" class="nav-item active">
+    <span>💙</span>LIKES
+  </a>
+  <a href="#" class="nav-item">
+    <span>💎</span>PLANOS
+  </a>
+  <a href="#" class="nav-item">
+    <span>🔄</span>HISTÓRICO
+  </a>
+  <a href="#" class="nav-item">
+    <span>👤</span>PERFIL
+  </a>
+  <a href="#" class="nav-item">
+    <span>ℹ️</span>INFO
+  </a>
+  <a href="#" class="nav-item">
+    <span>📝</span>BIO
+  </a>
+  <a href="#" class="nav-item">
+    <span>🚪</span>SAIR
+  </a>
+</div>
+
 <script>
-let produtos = [
-  {id:1,nome:"Produto 1",desc:"Descrição",estoque:10,valor:50,img:"https://via.placeholder.com/200"},
-  {id:2,nome:"Produto 2",desc:"Descrição",estoque:5,valor:80,img:"https://via.placeholder.com/200"}
-];
+let likesRestantes = 1;
+let maxLikes = 2;
 
-let produtoSelecionado = null;
-
-/* render */
-function render(){
-  let home = document.getElementById("home");
-  home.innerHTML = "";
-
-  produtos.forEach(p=>{
-    home.innerHTML += `
-    <div class="card">
-      <img src="${p.img}">
-      <h3>${p.nome}</h3>
-      <p>${p.desc}</p>
-      <p>Estoque: ${p.estoque}</p>
-      <p>R$ ${p.valor}</p>
-      <button class="btn" onclick="abrirCompra(${p.id})">Comprar</button>
-    </div>`;
-  });
-
-  let admin = document.getElementById("adminList");
-  admin.innerHTML = "";
-
-  produtos.forEach(p=>{
-    admin.innerHTML += `
-    <div class="admin-card">
-      <b>${p.nome}</b><br>
-      Estoque: ${p.estoque}<br>
-      <input id="v${p.id}" placeholder="novo valor">
-      <input id="e${p.id}" placeholder="estoque">
-      <button onclick="atualizar(${p.id})">Atualizar</button>
-      <button onclick="remover(${p.id})">Excluir</button>
-    </div>`;
-  });
-}
-
-/* compra */
-function abrirCompra(id){
-  produtoSelecionado = produtos.find(p=>p.id===id);
-  document.getElementById("modal").style.display="flex";
-}
-
-function enviarCompra(){
-  let nome = document.getElementById("nome").value;
-  let tel = document.getElementById("tel").value;
-  let link = document.getElementById("link").value;
-
-  let msg =
-`Compra:
-Produto: ${produtoSelecionado.nome}
-Valor: ${produtoSelecionado.valor}
-Nome: ${nome}
-Telefone: ${tel}
-Comprovante: ${link}`;
-
-  window.open("https://wa.me/?text="+encodeURIComponent(msg));
-
-  document.getElementById("modal").style.display="none";
-}
-
-/* admin */
-function atualizar(id){
-  let p = produtos.find(x=>x.id===id);
-  let v = document.getElementById("v"+id).value;
-  let e = document.getElementById("e"+id).value;
-
-  if(v) p.valor = v;
-  if(e) p.estoque = e;
-
-  render();
-}
-
-function remover(id){
-  produtos = produtos.filter(p=>p.id!==id);
-  render();
-}
-
-/* menu */
-function toggleMenu(){
-  document.getElementById("menu").classList.toggle("open");
-}
-
-function showHome(){
-  document.getElementById("home").style.display="grid";
-  document.getElementById("admin").style.display="none";
-}
-
-function showAdmin(){
-  document.getElementById("home").style.display="none";
-  document.getElementById("admin").style.display="block";
-}
-
-/* tema */
-function theme(t){
-  document.body.className = "theme-"+t;
-}
-
-/* init */
-render();
-showHome();
-
-/* ESC fecha menu */
-document.addEventListener("keydown", e=>{
-  if(e.key==="Escape"){
-    document.getElementById("menu").classList.remove("open");
+function enviarLike(){
+  let uid = document.getElementById('uid').value;
+  let btn = document.getElementById('btnEnviar');
+  
+  if(!uid){
+    alert('Digite um UID válido!');
+    return;
   }
-});
+  
+  if(uid.length < 8){
+    alert('UID muito curto! Verifique se está correto.');
+    return;
+  }
+  
+  if(likesRestantes <= 0){
+    alert('Você já usou seus 2 likes hoje. Volte em 24h!');
+    return;
+  }
+  
+  // Simula envio
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Enviando...';
+  
+  setTimeout(() => {
+    likesRestantes--;
+    document.getElementById('contador').innerText = `Likes: ${likesRestantes}/${maxLikes}`;
+    alert(`✅ Likes enviados com sucesso para o UID: ${uid}\nAguarde até 5 minutos para aparecer no perfil!`);
+    btn.disabled = false;
+    btn.innerHTML = '⚡ INICIAR ENVIO AGORA';
+    document.getElementById('uid').value = '';
+    
+    if(likesRestantes == 0){
+      btn.disabled = true;
+      btn.innerHTML = '⏰ Aguarde 24h';
+    }
+  }, 2000);
+}
 </script>
 
 </body>
