@@ -122,7 +122,7 @@ body {
   border-radius: 10px;
   font-size: 12px;
   font-weight: 600;
-  background: rgba(153, 27, 0.1);
+  background: rgba(153, 27, 27, 0.1);
   transition: 0.2s;
   cursor: pointer;
 }
@@ -168,6 +168,7 @@ h1 {
   text-align: center;
 }
 
+/* CATEGORIAS */
 .categorias {
   display: flex;
   gap: 6px;
@@ -613,7 +614,7 @@ h1 {
     <div style="width:30px"></div>
   </div>
   <div class="modal-content painel-admin">
-    <h2>👤 Painel Admin</h2>
+    <h2>👤 Painel Admin - Lorrannyh</h2>
     <div class="stats">
       <div class="stat-box">
         <h3 id="totalPedidos">0</h3>
@@ -623,7 +624,6 @@ h1 {
         <h3 id="totalProdutos">0</h3>
         <p>PRODUTOS</p>
       </div>
-    </div>
     <div class="tabs">
       <button class="tab-btn ativo" onclick="trocarTab('dashboard')">Dashboard</button>
       <button class="tab-btn" onclick="trocarTab('produtos')">Produtos</button>
@@ -688,15 +688,7 @@ h1 {
         <div id="listaPedidos"></div>
         <button class="btn-salvar btn-secundario" onclick="limparPedidos()">LIMPAR HISTÓRICO</button>
       </div>
-    </div>
     <div class="tab-content" id="tab-config">
-      <div class="card">
-        <div class="card-title">👥 Gerenciar Admins</div>
-        <div id="listaAdmins"></div>
-        <input type="text" class="input-admin" id="novoAdminUser" placeholder="Novo usuário">
-        <input type="password" class="input-admin" id="novoAdminSenha" placeholder="Nova senha">
-        <button class="btn-salvar" onclick="adicionarAdmin()">ADICIONAR ADMIN</button>
-      </div>
       <div class="card">
         <div class="card-title">⚙️ Configurações</div>
         <button class="menu-btn-item" style="width:100%; justify-content:center; margin-bottom:8px;" onclick="exportarDados()">
@@ -786,23 +778,20 @@ h1 {
 </div>
 
 <script>
-let admins = JSON.parse(localStorage.getItem('adminsBS')) || [
-  {user: 'Lorrannyh.170', senha: 'Lorrannyh.170'},
-  {user: 'Admin2', senha: '123456'}
-];
-
+// CATEGORIAS - [nome, [subcategorias]]
 let categorias = JSON.parse(localStorage.getItem('categoriasBS')) || [
-  ['Instagram', ['Seguidores', 'Curtidas', 'Views', 'Comentários']],
-  ['TikTok', ['Seguidores', 'Curtidas', 'Views']],
-  ['Jogos', ['Free Fire', 'Diamantes', 'Passe']],
-  ['Geral', []]
+  ['Instagram', ['Seguidores', 'Curtidas', 'Views', 'Comentários', 'Stories']],
+  ['TikTok', ['Seguidores', 'Curtidas', 'Views', 'Compartilhamentos']],
+  ['Jogos', ['Free Fire', 'Diamantes', 'Passe', 'Skins', 'Contas']],
+  ['Outros', ['Recargas', 'Gift Card', 'Assinaturas']]
 ];
 
+// DADOS - [nome, preco, img, desc, categoria, subcategoria]
 let produtos = JSON.parse(localStorage.getItem('produtosBS')) || [
-  ["Passe Premium", "R$10", "https://i.imgur.com/Bud0zyu.png", "Acesso premium completo", "Jogos", "Free Fire"],
   ["1000 Seguidores Insta", "R$15", "https://i.imgur.com/OFmm8PI.jpeg", "Seguidores reais e brasileiros", "Instagram", "Seguidores"],
-  ["5000 Views TikTok", "R$20", "https://i.imgur.com/OFmm8PI.jpeg", "Views rápidas", "TikTok", "Views"],
-  ["Tokens 100", "R$25", "https://i.imgur.com/OFmm8PI.jpeg", "100 tokens - melhor custo", "Geral", ""]
+  ["5000 Views TikTok", "R$20", "https://i.imgur.com/OFmm8PI.jpeg", "Views rápidas e seguras", "TikTok", "Views"],
+  ["Passe Premium FF", "R$10", "https://i.imgur.com/Bud0zyu.png", "Acesso premium completo", "Jogos", "Free Fire"],
+  ["500 Curtidas Insta", "R$8", "https://i.imgur.com/OFmm8PI.jpeg", "Curtidas brasileiras", "Instagram", "Curtidas"]
 ];
 
 let pedidos = JSON.parse(localStorage.getItem('pedidosBS')) || [];
@@ -815,7 +804,6 @@ function salvarDados(){
   localStorage.setItem('produtosBS', JSON.stringify(produtos));
   localStorage.setItem('pedidosBS', JSON.stringify(pedidos));
   localStorage.setItem('categoriasBS', JSON.stringify(categorias));
-  localStorage.setItem('adminsBS', JSON.stringify(admins));
 }
 
 function trocarTema(){
@@ -855,10 +843,8 @@ function fecharLoginAdmin(){
 function fazerLogin(){
   let user = document.getElementById('usuarioAdmin').value;
   let senha = document.getElementById('senhaAdmin').value;
-  let adminValido = admins.find(a => a.user === user && a.senha === senha);
-  if(adminValido){
+  if(user === 'Lorrannyh.170' && senha === 'Lorrannyh.170'){
     localStorage.setItem('adminBS', 'logado');
-    localStorage.setItem('adminUser', user);
     fecharLoginAdmin();
     abrirAdmin();
   } else {
@@ -871,7 +857,6 @@ function abrirAdmin(){
   atualizarStats();
   renderizarListaPrecos();
   renderizarPedidos();
-  renderizarListaAdmins();
   renderizarListaCategorias();
   atualizarSelectsCategoria();
 }
@@ -882,7 +867,6 @@ function fecharAdmin(){
 
 function sairAdmin(){
   localStorage.removeItem('adminBS');
-  localStorage.removeItem('adminUser');
   fecharAdmin();
   alert('Você saiu da conta admin!');
 }
@@ -980,6 +964,7 @@ function renderizarListaPrecos(){
   document.getElementById('listaEditPrecos').innerHTML = html || '<p style="color:var(--text-dim); text-align:center; font-size:11px;">Nenhum produto</p>';
 }
 
+// CATEGORIAS
 function adicionarCategoria(){
   let nome = document.getElementById('novaCat').value;
   if(!nome) return alert('Digite o nome da categoria!');
@@ -1028,3 +1013,7 @@ function renderizarListaCategorias(){
   let html = '';
   categorias.forEach((c, i) => {
     html += `
+      <div style="background:var(--card); border:1px solid var(--border); border-radius:8px; padding:10px; margin-bottom:8px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <strong style="color:var(--primary)">📁 ${c[0]}</strong>
+          <button onclick="deletarCategoria(${
