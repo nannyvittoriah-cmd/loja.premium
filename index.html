@@ -185,7 +185,6 @@ h1 {
   border-radius: 12px;
   padding: 10px;
   text-align: center;
-  position: relative;
 }
 
 .produto-card img {
@@ -219,25 +218,6 @@ h1 {
   font-weight: bold;
   font-size: 12px;
   cursor: pointer;
-}
-
-.btn-del-prod {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background: var(--red);
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 22px;
-  height: 22px;
-  font-size: 12px;
-  cursor: pointer;
-  display: none;
-}
-
-.admin-logado .btn-del-prod {
-  display: block;
 }
 
 /* MODAIS */
@@ -622,9 +602,9 @@ h1 {
         <div class="card-title">📊 Resumo Rápido</div>
         <p style="color:var(--text-dim); font-size:12px; line-height:1.6">
           Bem-vinda ao painel! Aqui você gerencia tudo da loja.<br><br>
-          • Adicione/edite produtos na aba Produtos<br>
-          • Veja todos os pedidos em Pedidos<br>
-          • Altere preços e configurações em Config
+          - Adicione/edite produtos na aba Produtos<br>
+          - Veja todos os pedidos em Pedidos<br>
+          - Altere preços e configurações em Config
         </p>
       </div>
     </div>
@@ -640,7 +620,7 @@ h1 {
       </div>
 
       <div class="card">
-        <div class="card-title">✏️ Editar Preços</div>
+        <div class="card-title">✏️ Gerenciar Produtos</div>
         <div id="listaEditPrecos"></div>
       </div>
     </div>
@@ -808,7 +788,7 @@ function fecharMenu(){
   document.getElementById('overlay').classList.remove('ativo');
 }
 
-// LOGIN ADMIN
+// LOGIN ADMIN - CORRIGIDO
 function abrirLoginAdmin(){
   fecharMenu();
   if(localStorage.getItem('adminBS') === 'logado'){
@@ -830,10 +810,8 @@ function fazerLogin(){
   
   if(user === 'Lorrannyh.170' && senha === 'Lorrannyh.170'){
     localStorage.setItem('adminBS', 'logado');
-    document.body.classList.add('admin-logado');
     fecharLoginAdmin();
     abrirAdmin();
-    renderizarProdutos();
   } else {
     alert('Usuário ou senha incorretos!');
   }
@@ -852,10 +830,8 @@ function fecharAdmin(){
 
 function sairAdmin(){
   localStorage.removeItem('adminBS');
-  document.body.classList.remove('admin-logado');
   fecharAdmin();
   alert('Você saiu da conta admin!');
-  renderizarProdutos();
 }
 
 // TABS ADMIN
@@ -1054,16 +1030,12 @@ function enviarWhatsApp(){
   fecharModalEnvio();
 }
 
-// RENDERIZAR PRODUTOS
+// RENDERIZAR PRODUTOS - SEM X NA TELA PRINCIPAL
 function renderizarProdutos(){
   let html = "";
-  let isAdmin = localStorage.getItem('adminBS') === 'logado';
-  if(isAdmin) document.body.classList.add('admin-logado');
-  
   produtos.forEach((p, i) => {
     html += `
     <div class="produto-card">
-      ${isAdmin ? `<button class="btn-del-prod" onclick="deletarProduto(${i})">×</button>` : ''}
       <img src="${p[2]}">
       <h3>${p[0]}</h3>
       <p>${p[1]}</p>
@@ -1078,9 +1050,6 @@ function renderizarProdutos(){
 
 // INIT
 renderizarProdutos();
-if(localStorage.getItem('adminBS') === 'logado'){
-  document.body.classList.add('admin-logado');
-}
 </script>
 
 </body>
