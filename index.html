@@ -18,574 +18,134 @@
   --text: #ffffff;
   --text-dim: #9ca3af;
 }
+body.tema-dourado {--primary: #d4af37;--gold: #d4af37;}
+* {margin: 0;padding: 0;box-sizing: border-box;}
+body {background: var(--bg);color: var(--text);font-family: 'Arial', sans-serif;font-size: 12px;}
+.topbar {background: var(--card);padding: 10px;display: flex;align-items: center;justify-content: space-between;border-bottom: 1px solid var(--border);}
+.logo {display: flex;align-items: center;gap: 5px;font-size: 13px;font-weight: bold;position: absolute;left: 50%;transform: translateX(-50%);}
+.logo span {color: var(--primary);}
+.menu-btn,.tema-btn {background: #1a1a1a;border: 1px solid var(--border);border-radius: 6px;color: var(--text);cursor: pointer;font-size: 12px;}
+.menu-btn {width: 30px;height: 30px;}
+.tema-btn {padding: 5px 8px;border: 1px solid var(--primary);color: var(--primary);font-size: 10px;font-weight: bold;}
+.menu {display: none;position: fixed;top: 0;left: 0;width: 50%;height: 100%;background: rgba(10, 10, 15, 0.95);backdrop-filter: blur(8px);border-right: 2px solid var(--red);z-index: 999;padding: 18px 12px;}
+.menu.ativo {display: block;}
+.menu h3 {color: var(--primary);margin-bottom: 18px;font-size: 14px;display: flex;align-items: center;gap: 6px;}
+.menu-btn-item {display: flex;align-items: center;gap: 8px;color: var(--text);text-decoration: none;padding: 10px;margin-bottom: 8px;border: 2px solid #991b1b;border-radius: 10px;font-size: 12px;font-weight: 600;background: rgba(153, 27, 0.1);transition: 0.2s;cursor: pointer;}
+.menu-btn-item:active {background: rgba(153, 27, 0.3);transform: scale(0.98);}
+.icon-vermelho {color: var(--red);}.icon-verde {color: var(--green);}.icon-rosa {color: var(--pink);}
+.overlay {display: none;position: fixed;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0,0,0,0.7);z-index: 998;}
+.overlay.ativo {display: block;}
+.container {padding: 12px 10px;}
+h1 {font-size: 16px;margin-bottom: 3px;text-align: center;}
+.subtitle {color: var(--text-dim);font-size: 11px;margin-bottom: 12px;text-align: center;}
 
-body.tema-dourado {
-  --primary: #d4af37;
-  --gold: #d4af37;
-}
+/* CATEGORIAS COM IMAGEM */
+.categorias-grid {display: grid;grid-template-columns: 1fr 1fr 1fr;gap: 8px;margin-bottom: 15px;}
+.cat-card {background: var(--card);border: 2px solid var(--border);border-radius: 12px;padding: 8px;text-align: center;cursor: pointer;transition: 0.2s;}
+.cat-card.ativo {border-color: var(--primary);background: rgba(45, 95, 207, 0.1);}
+.cat-card img {width: 100%;height: 50px;object-fit: cover;border-radius: 8px;margin-bottom: 4px;}
+.cat-card span {font-size: 10px;font-weight: 600;color: var(--text);}
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* SUBCATEGORIAS */
+.subcategorias {display: none;gap: 5px;margin-bottom: 12px;overflow-x: auto;padding-bottom: 5px;}
+.subcategorias.ativo {display: flex;}
+.subcat-btn {background: #1a1a1a;border: 1px solid var(--border);color: var(--text-dim);padding: 6px 10px;border-radius: 15px;font-size: 10px;cursor: pointer;white-space: nowrap;}
+.subcat-btn.ativo {background: var(--gold);color: #000;border-color: var(--gold);}
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Arial', sans-serif;
-  font-size: 14px;
-}
+.produtos-grid {display: grid;grid-template-columns: 1fr 1fr;gap: 10px;margin: 16px 0;}
+.produto-card {background: var(--card);border: 1px solid var(--border);border-radius: 12px;padding: 8px;text-align: center;}
+.produto-card img {width: 100%;height: 70px;object-fit: cover;border-radius: 8px;margin-bottom: 6px;}
+.produto-card h3 {color: var(--gold);font-size: 11px;margin-bottom: 3px;}
+.produto-card p {color: var(--primary);font-size: 12px;font-weight: bold;margin-bottom: 3px;}
+.produto-desc {color: var(--text-dim);font-size: 9px;line-height: 1.3;margin-bottom: 6px;min-height: 22px;}
+.btn-enviar {width: 100%;background: var(--primary);color: #000;border: none;padding: 8px;border-radius: 8px;font-weight: bold;font-size: 11px;cursor: pointer;}
 
-/* TOPO */
-.topbar {
-  background: var(--card);
-  padding: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 15px;
-  font-weight: bold;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.logo span {
-  color: var(--primary);
-}
-
-.menu-btn,.tema-btn {
-  background: #1a1a1a;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--text);
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.menu-btn {
-  width: 32px;
-  height: 32px;
-}
-
-.tema-btn {
-  padding: 6px 10px;
-  border: 1px solid var(--primary);
-  color: var(--primary);
-  font-size: 11px;
-  font-weight: bold;
-}
-
-/* MENU */
-.menu {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 50%;
-  height: 100%;
-  background: rgba(10, 10, 15, 0.95);
-  backdrop-filter: blur(8px);
-  border-right: 2px solid var(--red);
-  z-index: 999;
-  padding: 20px 15px;
-}
-
-.menu.ativo {
-  display: block;
-}
-
-.menu h3 {
-  color: var(--primary);
-  margin-bottom: 20px;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.menu-btn-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--text);
-  text-decoration: none;
-  padding: 12px;
-  margin-bottom: 10px;
-  border: 2px solid #991b1b;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  background: rgba(153, 27, 27, 0.1);
-  transition: 0.2s;
-  cursor: pointer;
-}
-
-.menu-btn-item:active {
-  background: rgba(153, 27, 27, 0.3);
-  transform: scale(0.98);
-}
-
-.icon-vermelho { color: var(--red); }
-.icon-verde { color: var(--green); }
-.icon-rosa { color: var(--pink); }
-
-.overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.7);
-  z-index: 998;
-}
-
-.overlay.ativo {
-  display: block;
-}
-
-/* CONTEÚDO */
-.container {
-  padding: 15px 12px;
-}
-
-h1 {
-  font-size: 18px;
-  margin-bottom: 4px;
-  text-align: center;
-}
-
-.subtitle {
-  color: var(--text-dim);
-  font-size: 12px;
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-/* PRODUTOS */
-.produtos-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin: 20px 0;
-}
-
-.produto-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 10px;
-  text-align: center;
-}
-
-.produto-card img {
-  width: 100%;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 8px;
-}
-
-.produto-card h3 {
-  color: var(--gold);
-  font-size: 13px;
-  margin-bottom: 4px;
-}
-
-.produto-card p {
-  color: var(--primary);
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 4px;
-}
-
-.produto-desc {
-  color: var(--text-dim);
-  font-size: 10px;
-  line-height: 1.3;
-  margin-bottom: 8px;
-  min-height: 26px;
-}
-
-.btn-enviar {
-  width: 100%;
-  background: var(--primary);
-  color: #000;
-  border: none;
-  padding: 10px;
-  border-radius: 8px;
-  font-weight: bold;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-/* MODAIS */
-.modal-envio,.modal-admin,.modal-login,.modal-geral {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #000000;
-  z-index: 1000;
-  overflow-y: auto;
-}
-
-.modal-envio.ativo,.modal-admin.ativo,.modal-login.ativo,.modal-geral.ativo {
-  display: block;
-}
-
-.modal-header {
-  background: var(--card);
-  padding: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.fechar-modal {
-  background: none;
-  border: none;
-  color: var(--text);
-  font-size: 28px;
-  cursor: pointer;
-}
-
-.modal-content {
-  padding: 20px 15px;
-}
-
-.titulo-envio {
-  color: var(--red);
-  font-size: 17px;
-  font-weight: 800;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.sub-envio {
-  color: #ffffff;
-  font-size: 12px;
-  margin-bottom: 25px;
-  text-transform: uppercase;
-  font-weight: 700;
-}
-
-.label-desc {
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 12px;
-  text-transform: uppercase;
-}
-
-.descricao-pedido {
-  background: #0a0a0f;
-  border: 2px solid var(--red);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 25px;
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--gold);
-  text-align: center;
-  font-weight: 700;
-}
-
-.btn-enviar-whatsapp {
-  width: 100%;
-  background: var(--red);
-  color: #ffffff;
-  border: none;
-  padding: 16px;
-  border-radius: 30px;
-  font-weight: 700;
-  font-size: 15px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  text-transform: uppercase;
-}
-
-/* INPUTS */
-.input-admin,.textarea-admin {
-  background: #0a0a0f;
-  border: 2px solid var(--red);
-  border-radius: 10px;
-  padding: 14px;
-  width: 100%;
-  color: #fff;
-  font-size: 14px;
-  margin-bottom: 15px;
-  outline: none;
-  font-family: 'Arial', sans-serif;
-}
-
-.textarea-admin {
-  resize: vertical;
-  min-height: 80px;
-}
-
-.btn-login,.btn-salvar {
-  width: 100%;
-  background: var(--red);
-  color: #fff;
-  border: none;
-  padding: 14px;
-  border-radius: 10px;
-  font-weight: 700;
-  font-size: 15px;
-  cursor: pointer;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-
-.btn-secundario {
-  background: var(--primary);
-  color: #000;
-}
-
-/* PAINEL ADMIN */
-.painel-admin h2 {
-  color: var(--gold);
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.stat-box {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 15px;
-  text-align: center;
-}
-
-.stat-box h3 {
-  color: var(--primary);
-  font-size: 24px;
-  margin-bottom: 5px;
-}
-
-.stat-box p {
-  color: var(--text-dim);
-  font-size: 11px;
-}
-
-.btn-sair {
-  width: 100%;
-  background: #991b1b;
-  color: #fff;
-  border: none;
-  padding: 12px;
-  border-radius: 10px;
-  font-weight: 700;
-  margin-top: 15px;
-  cursor: pointer;
-}
-
-/* LISTA DE PEDIDOS */
-.pedido-item {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px;
-  margin-bottom: 10px;
-}
-
-.pedido-item h4 {
-  color: var(--gold);
-  font-size: 13px;
-  margin-bottom: 5px;
-}
-
-.pedido-item p {
-  color: var(--text-dim);
-  font-size: 12px;
-  margin-bottom: 3px;
-}
-
-.pedido-data {
-  color: var(--primary);
-  font-size: 10px;
-}
-
-/* TABS ADMIN */
-.tabs {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
-  overflow-x: auto;
-}
-
-.tab-btn {
-  background: var(--card);
-  border: 1px solid var(--border);
-  color: var(--text-dim);
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.tab-btn.ativo {
-  background: var(--red);
-  color: #fff;
-  border-color: var(--red);
-}
-
-.tab-content {
-  display: none;
-}
-
-.tab-content.ativo {
-  display: block;
-}
-
-/* CARD REGRAS */
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 14px;
-  margin-bottom: 15px;
-}
-
-.card-title {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 12px;
-  color: var(--primary);
-}
-
-.info-item {
-  display: flex;
-  gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.info-item:last-child {
-  border-bottom: none;
-}
-
-.info-icon {
-  width: 34px;
-  height: 34px;
-  background: #1e1e2d;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  flex-shrink: 0;
-}
-
-.info-text h3 {
-  font-size: 12px;
-  margin-bottom: 2px;
-}
-
-.info-text p {
-  font-size: 11px;
-  color: var(--text-dim);
-  line-height: 1.3;
-}
+.modal-envio,.modal-admin,.modal-login,.modal-geral {display: none;position: fixed;top: 0;left: 0;width: 100%;height: 100%;background: #000000;z-index: 1000;overflow-y: auto;}
+.modal-envio.ativo,.modal-admin.ativo,.modal-login.ativo,.modal-geral.ativo {display: block;}
+.modal-header {background: var(--card);padding: 12px;display: flex;align-items: center;justify-content: space-between;border-bottom: 1px solid var(--border);position: sticky;top: 0;z-index: 10;}
+.fechar-modal {background: none;border: none;color: var(--text);font-size: 24px;cursor: pointer;}
+.modal-content {padding: 16px 12px;}
+.titulo-envio {color: var(--red);font-size: 15px;font-weight: 800;margin-bottom: 6px;display: flex;align-items: center;gap: 6px;}
+.sub-envio {color: #ffffff;font-size: 11px;margin-bottom: 20px;text-transform: uppercase;font-weight: 700;}
+.label-desc {color: #ffffff;font-size: 12px;font-weight: 700;margin-bottom: 10px;text-transform: uppercase;}
+.descricao-pedido {background: #0a0a0f;border: 2px solid var(--red);border-radius: 12px;padding: 14px;margin-bottom: 20px;font-size: 12px;line-height: 1.5;color: var(--gold);text-align: center;font-weight: 700;}
+.btn-enviar-whatsapp {width: 100%;background: var(--red);color: #ffffff;border: none;padding: 14px;border-radius: 30px;font-weight: 700;font-size: 13px;cursor: pointer;display: flex;align-items: center;justify-content: center;gap: 6px;text-transform: uppercase;}
+.input-admin,.textarea-admin,select.input-admin {background: #0a0a0f;border: 2px solid var(--red);border-radius: 10px;padding: 12px;width: 100%;color: #fff;font-size: 12px;margin-bottom: 12px;outline: none;font-family: 'Arial', sans-serif;}
+.textarea-admin {resize: vertical;min-height: 70px;}
+.btn-login,.btn-salvar {width: 100%;background: var(--red);color: #fff;border: none;padding: 12px;border-radius: 10px;font-weight: 700;font-size: 13px;cursor: pointer;text-transform: uppercase;margin-bottom: 8px;}
+.btn-secundario {background: var(--primary);color: #000;}
+.painel-admin h2 {color: var(--gold);margin-bottom: 16px;text-align: center;font-size: 15px;}
+.stats {display: grid;grid-template-columns: 1fr 1fr;gap: 8px;margin-bottom: 16px;}
+.stat-box {background: var(--card);border: 1px solid var(--border);border-radius: 10px;padding: 12px;text-align: center;}
+.stat-box h3 {color: var(--primary);font-size: 20px;margin-bottom: 4px;}
+.stat-box p {color: var(--text-dim);font-size: 10px;}
+.btn-sair {width: 100%;background: #991b1b;color: #fff;border: none;padding: 10px;border-radius: 10px;font-weight: 700;margin-top: 12px;cursor: pointer;font-size: 12px;}
+.pedido-item {background: var(--card);border: 1px solid var(--border);border-radius: 10px;padding: 10px;margin-bottom: 8px;}
+.pedido-item h4 {color: var(--gold);font-size: 12px;margin-bottom: 4px;}
+.pedido-item p {color: var(--text-dim);font-size: 11px;margin-bottom: 2px;}
+.pedido-data {color: var(--primary);font-size: 9px;}
+.tabs {display: flex;gap: 6px;margin-bottom: 16px;overflow-x: auto;}
+.tab-btn {background: var(--card);border: 1px solid var(--border);color: var(--text-dim);padding: 8px 14px;border-radius: 8px;font-size: 11px;font-weight: 600;cursor: pointer;white-space: nowrap;}
+.tab-btn.ativo {background: var(--red);color: #fff;border-color: var(--red);}
+.tab-content {display: none;}
+.tab-content.ativo {display: block;}
+.card {background: var(--card);border: 1px solid var(--border);border-radius: 12px;padding: 12px;margin-bottom: 12px;}
+.card-title {display: flex;align-items: center;gap: 5px;font-size: 12px;font-weight: bold;margin-bottom: 10px;color: var(--primary);}
+.info-item {display: flex;gap: 8px;padding: 8px 0;border-bottom: 1px solid var(--border);}
+.info-item:last-child {border-bottom: none;}
+.info-icon {width: 30px;height: 30px;background: #1e1e2d;border-radius: 8px;display: flex;align-items: center;justify-content: center;font-size: 14px;flex-shrink: 0;}
+.info-text h3 {font-size: 11px;margin-bottom: 2px;}
+.info-text p {font-size: 10px;color: var(--text-dim);line-height: 1.3;}
+.cat-admin-item {display: flex;gap: 8px;align-items: center;padding: 10px;background: var(--card);border: 1px solid var(--border);border-radius: 8px;margin-bottom: 8px;}
+.cat-admin-item img {width: 40px;height: 40px;object-fit: cover;border-radius: 6px;}
 </style>
 </head>
 
 <body>
 
-<!-- MENU -->
 <div class="overlay" id="overlay" onclick="fecharMenu()"></div>
 <div class="menu" id="menu">
   <h3>⚡ Menu BS</h3>
-
   <a href="#" class="menu-btn-item" onclick="fecharMenu()">
     <span class="icon-vermelho">🏠</span> Início
   </a>
-
   <a href="https://wa.me/5598984853563" class="menu-btn-item" target="_blank">
     <span class="icon-verde">💬</span> WhatsApp
   </a>
-
   <a href="https://instagram.com/chanelff__" class="menu-btn-item" target="_blank">
     <span class="icon-rosa">📸</span> Instagram
   </a>
-
   <a class="menu-btn-item" onclick="abrirLoginAdmin()">
     <span class="icon-vermelho">👤</span> Admin
   </a>
-
   <a class="menu-btn-item" onclick="fecharMenu()">
     ❌ Fechar
   </a>
 </div>
 
-<!-- MODAL LOGIN ADMIN -->
 <div class="modal-login" id="modalLogin">
   <div class="modal-header">
     <button class="fechar-modal" onclick="fecharLoginAdmin()">×</button>
     <div style="width:30px"></div>
   </div>
-
   <div class="modal-content">
-    <div class="titulo-envio">
-      🔐 ÁREA ADMIN
-    </div>
+    <div class="titulo-envio">🔐 ÁREA ADMIN</div>
     <p class="sub-envio">ACESSO RESTRITO</p>
-
     <div class="label-desc">USUÁRIO</div>
     <input type="text" class="input-admin" id="usuarioAdmin" placeholder="Digite o usuário">
-
     <div class="label-desc">SENHA</div>
     <input type="password" class="input-admin" id="senhaAdmin" placeholder="Digite a senha">
-
-    <button class="btn-login" onclick="fazerLogin()">
-      ENTRAR
-    </button>
+    <button class="btn-login" onclick="fazerLogin()">ENTRAR</button>
   </div>
 </div>
 
-<!-- PAINEL ADMIN COMPLETO -->
 <div class="modal-admin" id="modalAdmin">
   <div class="modal-header">
     <button class="fechar-modal" onclick="fecharAdmin()">×</button>
     <div style="width:30px"></div>
   </div>
-
   <div class="modal-content painel-admin">
-    <h2>👤 Painel Admin - Lorrannyh</h2>
-
+    <h2 id="tituloAdmin">👤 Painel Admin</h2>
     <div class="stats">
       <div class="stat-box">
         <h3 id="totalPedidos">0</h3>
@@ -596,55 +156,77 @@ h1 {
         <p>PRODUTOS</p>
       </div>
     </div>
-
     <div class="tabs">
       <button class="tab-btn ativo" onclick="trocarTab('dashboard')">Dashboard</button>
       <button class="tab-btn" onclick="trocarTab('produtos')">Produtos</button>
+      <button class="tab-btn" onclick="trocarTab('categorias')">Categorias</button>
       <button class="tab-btn" onclick="trocarTab('pedidos')">Pedidos</button>
       <button class="tab-btn" onclick="trocarTab('config')">Config</button>
     </div>
-
-    <!-- TAB DASHBOARD -->
     <div class="tab-content ativo" id="tab-dashboard">
       <div class="card">
         <div class="card-title">📊 Resumo Rápido</div>
-        <p style="color:var(--text-dim); font-size:12px; line-height:1.6">
-          Bem-vinda ao painel! Aqui você gerencia tudo da loja.<br><br>
+        <p style="color:var(--text-dim); font-size:11px; line-height:1.6">
+          Bem-vindo ao painel! Aqui você gerencia tudo da loja.<br><br>
           - Adicione/edite produtos na aba Produtos<br>
+          - Crie categorias em Categorias<br>
           - Veja todos os pedidos em Pedidos<br>
           - Altere preços e configurações em Config
         </p>
       </div>
     </div>
-
-    <!-- TAB PRODUTOS -->
     <div class="tab-content" id="tab-produtos">
       <div class="card">
         <div class="card-title">➕ Adicionar Produto</div>
         <input type="text" class="input-admin" id="novoNome" placeholder="Nome do produto">
         <input type="text" class="input-admin" id="novoPreco" placeholder="Preço (Ex: R$10)">
         <input type="text" class="input-admin" id="novoImg" placeholder="Link da imagem">
+        <select class="input-admin" id="novoCat">
+          <option value="">Selecione a Categoria</option>
+        </select>
+        <select class="input-admin" id="novoSubcat">
+          <option value="">Selecione a Subcategoria</option>
+        </select>
         <textarea class="textarea-admin" id="novoDesc" placeholder="Descrição do produto (opcional)"></textarea>
         <button class="btn-salvar" onclick="adicionarProduto()">ADICIONAR PRODUTO</button>
       </div>
-
       <div class="card">
         <div class="card-title">✏️ Gerenciar Produtos</div>
         <div id="listaEditPrecos"></div>
       </div>
-    </div>
-
-    <!-- TAB PEDIDOS -->
+    <div class="tab-content" id="tab-categorias">
+      <div class="card">
+        <div class="card-title">📁 Adicionar Categoria</div>
+        <input type="text" class="input-admin" id="novaCat" placeholder="Nome da categoria">
+        <input type="text" class="input-admin" id="novaCatImg" placeholder="Link da imagem da categoria">
+        <button class="btn-salvar" onclick="adicionarCategoria()">ADICIONAR CATEGORIA</button>
+      </div>
+      <div class="card">
+        <div class="card-title">📂 Adicionar Subcategoria</div>
+        <select class="input-admin" id="selectCatPai">
+          <option value="">Selecione a Categoria Pai</option>
+        </select>
+        <input type="text" class="input-admin" id="novaSubcat" placeholder="Nome da subcategoria">
+        <button class="btn-salvar" onclick="adicionarSubcategoria()">ADICIONAR SUBCATEGORIA</button>
+      </div>
+      <div class="card">
+        <div class="card-title">🗂️ Gerenciar Categorias</div>
+        <div id="listaCategorias"></div>
+      </div>
     <div class="tab-content" id="tab-pedidos">
       <div class="card">
         <div class="card-title">📦 Últimos Pedidos</div>
         <div id="listaPedidos"></div>
         <button class="btn-salvar btn-secundario" onclick="limparPedidos()">LIMPAR HISTÓRICO</button>
       </div>
-    </div>
-
-    <!-- TAB CONFIG -->
     <div class="tab-content" id="tab-config">
+      <div class="card">
+        <div class="card-title">👥 Gerenciar Admins</div>
+        <div id="listaAdmins"></div>
+        <input type="text" class="input-admin" id="novoAdminUser" placeholder="Novo usuário">
+        <input type="password" class="input-admin" id="novoAdminSenha" placeholder="Nova senha">
+        <button class="btn-salvar" onclick="adicionarAdmin()">ADICIONAR ADMIN</button>
+      </div>
       <div class="card">
         <div class="card-title">⚙️ Configurações</div>
         <button class="menu-btn-item" style="width:100%; justify-content:center; margin-bottom:8px;" onclick="exportarDados()">
@@ -654,54 +236,35 @@ h1 {
           📤 Importar Backup
         </button>
         <input type="file" id="importFile" style="display:none" accept=".json" onchange="importarDados(event)">
-        <button class="menu-btn-item" style="width:100%; justify-content:center; background:rgba(220,38,38,0.2)" onclick="resetarLoja()">
+        <button class="menu-btn-item" style="width:100%; justify-content:center; background:rgba(220,38,0.2)" onclick="resetarLoja()">
           🗑️ Resetar Loja
         </button>
       </div>
-    </div>
-
-    <button class="btn-sair" onclick="sairAdmin()">
-      🚪 SAIR DA CONTA
-    </button>
+    <button class="btn-sair" onclick="sairAdmin()">🚪 SAIR DA CONTA</button>
   </div>
 </div>
 
-<!-- MODAL DE ENVIO -->
 <div class="modal-envio" id="modalEnvio">
   <div class="modal-header">
     <button class="fechar-modal" onclick="fecharModalEnvio()">×</button>
     <div style="width:30px"></div>
   </div>
-
   <div class="modal-content">
-    <div class="titulo-envio">
-      📈 ENVIOS INSTANTÂNEOS SEM TAXAS
-    </div>
+    <div class="titulo-envio">📈 ENVIOS INSTANTÂNEOS SEM TAXAS</div>
     <p class="sub-envio">MELHOR SERVIÇO DE VENDAS PREMIUM</p>
-
     <div class="label-desc">DESCRIÇÃO DE SUA COMPRA</div>
-
-    <div class="descricao-pedido" id="descricaoPedido">
-      Produto: Selecione um produto
-    </div>
-
-    <button class="btn-enviar-whatsapp" onclick="enviarWhatsApp()">
-      💬 ENVIAR PARA WHATSAPP
-    </button>
+    <div class="descricao-pedido" id="descricaoPedido">Produto: Selecione um produto</div>
+    <button class="btn-enviar-whatsapp" onclick="enviarWhatsApp()">💬 ENVIAR PARA WHATSAPP</button>
   </div>
 </div>
 
-<!-- MODAL EDITAR PRODUTO -->
 <div class="modal-geral" id="modalEditar">
   <div class="modal-header">
     <button class="fechar-modal" onclick="fecharEditar()">×</button>
     <div style="width:30px"></div>
   </div>
-
   <div class="modal-content">
-    <div class="titulo-envio">
-      ✏️ EDITAR PRODUTO
-    </div>
+    <div class="titulo-envio">✏️ EDITAR PRODUTO</div>
     <input type="hidden" id="editIndex">
     <div class="label-desc">NOME</div>
     <input type="text" class="input-admin" id="editNome">
@@ -709,34 +272,48 @@ h1 {
     <input type="text" class="input-admin" id="editPreco">
     <div class="label-desc">IMAGEM</div>
     <input type="text" class="input-admin" id="editImg">
+    <div class="label-desc">CATEGORIA</div>
+    <select class="input-admin" id="editCat"></select>
+    <div class="label-desc">SUBCATEGORIA</div>
+    <select class="input-admin" id="editSubcat"></select>
     <div class="label-desc">DESCRIÇÃO</div>
     <textarea class="textarea-admin" id="editDesc"></textarea>
     <button class="btn-salvar" onclick="salvarEdicao()">SALVAR ALTERAÇÕES</button>
   </div>
 </div>
 
-<!-- TOPO -->
+<div class="modal-geral" id="modalEditarCat">
+  <div class="modal-header">
+    <button class="fechar-modal" onclick="fecharEditarCat()">×</button>
+    <div style="width:30px"></div>
+  </div>
+  <div class="modal-content">
+    <div class="titulo-envio">✏️ EDITAR CATEGORIA</div>
+    <input type="hidden" id="editCatIndex">
+    <div class="label-desc">NOME</div>
+    <input type="text" class="input-admin" id="editCatNome">
+    <div class="label-desc">IMAGEM</div>
+    <input type="text" class="input-admin" id="editCatImg">
+    <button class="btn-salvar" onclick="salvarEdicaoCat()">SALVAR ALTERAÇÕES</button>
+  </div>
+</div>
+
 <div class="topbar">
   <button class="menu-btn" onclick="abrirMenu()">☰</button>
-
   <div class="logo">
     <span>BS</span> Loja Premium <span>BS</span>
   </div>
-
   <button class="tema-btn" onclick="trocarTema()">🎨 TEMA</button>
 </div>
 
 <div class="container">
   <h1>Envios instantânea compras manual com segurança</h1>
-  <p class="subtitle">Escolha seu produto abaixo</p>
-
+  <p class="subtitle">Escolha sua categoria abaixo</p>
+  <div class="categorias-grid" id="categoriasGrid"></div>
+  <div class="subcategorias" id="subcategorias"></div>
   <div class="produtos-grid" id="produtos"></div>
-
   <div class="card">
-    <div class="card-title">
-      ℹ️ Regras de Envio
-    </div>
-
+    <div class="card-title">ℹ️ Regras de Envio</div>
     <div class="info-item">
       <div class="info-icon">⚡</div>
       <div class="info-text">
@@ -744,7 +321,6 @@ h1 {
         <p>Envios instantâneos porém aguarda ser atendido, para seguranças total</p>
       </div>
     </div>
-
     <div class="info-item">
       <div class="info-icon">📬</div>
       <div class="info-text">
@@ -756,29 +332,42 @@ h1 {
 </div>
 
 <script>
-// DADOS - Agora com descrição [nome, preco, img, desc]
+// ADMINS - [usuario, senha]
+let admins = JSON.parse(localStorage.getItem('adminsBS')) || [
+  {user: 'Lorrannyh.170', senha: 'Lorrannyh.170'},
+  {user: 'Admin2', senha: '123456'}
+];
+
+// CATEGORIAS: [nome, imagem, [subcategorias]]
+let categorias = JSON.parse(localStorage.getItem('categoriasBS')) || [
+  ['Instagram', 'https://i.imgur.com/8Q1Z2nP.png', ['Seguidores', 'Curtidas', 'Views', 'Comentários', 'Stories']],
+  ['TikTok', 'https://i.imgur.com/5xJqZ9L.png', ['Seguidores', 'Curtidas', 'Views', 'Compartilhamentos']],
+  ['Jogos', 'https://i.imgur.com/Bud0zyu.png', ['Free Fire', 'Diamantes', 'Passe', 'Skins', 'Contas']],
+  ['Outros', 'https://i.imgur.com/OFmm8PI.jpeg', ['Recargas', 'Gift Card', 'Assinaturas']]
+];
+
+// PRODUTOS: [nome, preco, img, desc, categoria, subcategoria]
 let produtos = JSON.parse(localStorage.getItem('produtosBS')) || [
-  ["Passe Premium", "R$10", "https://i.imgur.com/Bud0zyu.png", "Acesso premium completo"],
-  ["Tokens 25", "R$15", "https://i.imgur.com/OFmm8PI.jpeg", "25 tokens para usar"],
-  ["Tokens 50", "R$20", "https://i.imgur.com/OFmm8PI.jpeg", "50 tokens com desconto"],
-  ["Tokens 100", "R$25", "https://i.imgur.com/OFmm8PI.jpeg", "100 tokens - melhor custo"],
-  ["Tokens 200", "R$45", "https://i.imgur.com/OFmm8PI.jpeg", "200 tokens premium"],
-  ["Tokens 300", "R$70", "https://i.imgur.com/OFmm8PI.jpeg", "300 tokens VIP"],
-  ["Tokens 400", "R$90", "https://i.imgur.com/OFmm8PI.jpeg", "400 tokens mega"],
-  ["Tokens 500", "R$120", "https://i.imgur.com/OFmm8PI.jpeg", "500 tokens máximo"]
+  ["1000 Seguidores Insta", "R$15", "https://i.imgur.com/OFmm8PI.jpeg", "Seguidores reais e brasileiros", "Instagram", "Seguidores"],
+  ["5000 Views TikTok", "R$20", "https://i.imgur.com/OFmm8PI.jpeg", "Views rápidas e seguras", "TikTok", "Views"],
+  ["Passe Premium FF", "R$10", "https://i.imgur.com/Bud0zyu.png", "Acesso premium completo", "Jogos", "Free Fire"],
+  ["500 Curtidas Insta", "R$8", "https://i.imgur.com/OFmm8PI.jpeg", "Curtidas brasileiras", "Instagram", "Curtidas"]
 ];
 
 let pedidos = JSON.parse(localStorage.getItem('pedidosBS')) || [];
 let produtoSelecionado = "";
 let precoSelecionado = "";
+let categoriaAtual = "";
+let subcategoriaAtual = "";
+let adminLogado = "";
 
-// SALVAR DADOS
 function salvarDados(){
   localStorage.setItem('produtosBS', JSON.stringify(produtos));
   localStorage.setItem('pedidosBS', JSON.stringify(pedidos));
+  localStorage.setItem('categoriasBS', JSON.stringify(categorias));
+  localStorage.setItem('adminsBS', JSON.stringify(admins));
 }
 
-// TEMA
 function trocarTema(){
   document.body.classList.toggle('tema-dourado');
   localStorage.setItem('tema', document.body.classList.contains('tema-dourado')? 'Dourado' : 'Azul');
@@ -788,7 +377,6 @@ if(localStorage.getItem('tema') === 'Dourado'){
   document.body.classList.add('tema-dourado');
 }
 
-// MENU
 function abrirMenu(){
   document.getElementById('menu').classList.add('ativo');
   document.getElementById('overlay').classList.add('ativo');
@@ -799,7 +387,6 @@ function fecharMenu(){
   document.getElementById('overlay').classList.remove('ativo');
 }
 
-// LOGIN ADMIN
 function abrirLoginAdmin(){
   fecharMenu();
   if(localStorage.getItem('adminBS') === 'logado'){
@@ -818,9 +405,11 @@ function fecharLoginAdmin(){
 function fazerLogin(){
   let user = document.getElementById('usuarioAdmin').value;
   let senha = document.getElementById('senhaAdmin').value;
-
-  if(user === 'Lorrannyh.170' && senha === 'Lorrannyh.170'){
+  let adminValido = admins.find(a => a.user === user && a.senha === senha);
+  if(adminValido){
     localStorage.setItem('adminBS', 'logado');
+    localStorage.setItem('adminUser', user);
+    adminLogado = user;
     fecharLoginAdmin();
     abrirAdmin();
   } else {
@@ -829,10 +418,15 @@ function fazerLogin(){
 }
 
 function abrirAdmin(){
+  adminLogado = localStorage.getItem('adminUser') || 'Admin';
+  document.getElementById('tituloAdmin').innerText = `👤 Painel Admin - ${adminLogado}`;
   document.getElementById('modalAdmin').classList.add('ativo');
   atualizarStats();
   renderizarListaPrecos();
   renderizarPedidos();
+  renderizarListaCategorias();
+  renderizarListaAdmins();
+  atualizarSelectsCategoria();
 }
 
 function fecharAdmin(){
@@ -841,11 +435,12 @@ function fecharAdmin(){
 
 function sairAdmin(){
   localStorage.removeItem('adminBS');
+  localStorage.removeItem('adminUser');
+  adminLogado = "";
   fecharAdmin();
   alert('Você saiu da conta admin!');
 }
 
-// TABS ADMIN
 function trocarTab(tab){
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('ativo'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('ativo'));
@@ -853,24 +448,61 @@ function trocarTab(tab){
   document.getElementById('tab-' + tab).classList.add('ativo');
 }
 
-// ADMIN - PRODUTOS COM DESCRIÇÃO
+// CATEGORIAS NA TELA PRINCIPAL
+function renderizarCategoriasGrid(){
+  let html = '';
+  categorias.forEach((c, i) => {
+    html += `
+      <div class="cat-card ${categoriaAtual === c[0]? 'ativo' : ''}" onclick="selecionarCategoria('${c[0]}')">
+        <img src="${c[1]}">
+        <span>${c[0]}</span>
+      </div>
+    `;
+  });
+  document.getElementById('categoriasGrid').innerHTML = html;
+}
+
+function selecionarCategoria(nome){
+  categoriaAtual = nome;
+  subcategoriaAtual = "";
+  renderizarCategoriasGrid();
+
+  let cat = categorias.find(c => c[0] === nome);
+  let subcatDiv = document.getElementById('subcategorias');
+
+  if(cat && cat[2].length > 0){
+    subcatDiv.innerHTML = cat[2].map(s => `<button class="subcat-btn" onclick="selecionarSubcategoria('${s}')">${s}</button>`).join('');
+    subcatDiv.classList.add('ativo');
+  } else {
+    subcatDiv.classList.remove('ativo');
+  }
+  renderizarProdutos();
+}
+
+function selecionarSubcategoria(nome){
+  subcategoriaAtual = nome;
+  document.querySelectorAll('.subcat-btn').forEach(b => b.classList.remove('ativo'));
+  event.target.classList.add('ativo');
+  renderizarProdutos();
+}
+
+// PRODUTOS
 function adicionarProduto(){
   let nome = document.getElementById('novoNome').value;
   let preco = document.getElementById('novoPreco').value;
   let img = document.getElementById('novoImg').value;
+  let cat = document.getElementById('novoCat').value;
+  let subcat = document.getElementById('novoSubcat').value;
   let desc = document.getElementById('novoDesc').value || 'Sem descrição';
-
   if(!nome ||!preco ||!img){
     alert('Preencha nome, preço e imagem!');
     return;
   }
-
-  produtos.push([nome, preco, img, desc]);
+  produtos.push([nome, preco, img, desc, cat, subcat]);
   salvarDados();
   renderizarProdutos();
   atualizarStats();
   renderizarListaPrecos();
-
   document.getElementById('novoNome').value = '';
   document.getElementById('novoPreco').value = '';
   document.getElementById('novoImg').value = '';
@@ -894,6 +526,10 @@ function abrirEditar(index){
   document.getElementById('editPreco').value = produtos[index][1];
   document.getElementById('editImg').value = produtos[index][2];
   document.getElementById('editDesc').value = produtos[index][3] || '';
+  atualizarSelectsCategoria('editCat', produtos[index][4]);
+  setTimeout(() => {
+    atualizarSelectsSubcategoria('editSubcat', produtos[index][4], produtos[index][5]);
+  }, 100);
   document.getElementById('modalEditar').classList.add('ativo');
 }
 
@@ -907,6 +543,8 @@ function salvarEdicao(){
   produtos[index][1] = document.getElementById('editPreco').value;
   produtos[index][2] = document.getElementById('editImg').value;
   produtos[index][3] = document.getElementById('editDesc').value;
+  produtos[index][4] = document.getElementById('editCat').value;
+  produtos[index][5] = document.getElementById('editSubcat').value;
   salvarDados();
   renderizarProdutos();
   renderizarListaPrecos();
@@ -921,151 +559,15 @@ function renderizarListaPrecos(){
       <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:var(--card); border:1px solid var(--border); border-radius:8px; margin-bottom:8px;">
         <div style="flex:1;">
           <strong style="color:var(--gold)">${p[0]}</strong><br>
-          <span style="color:var(--primary); font-size:12px;">${p[1]}</span><br>
-          <span style="color:var(--text-dim); font-size:10px;">${p[3] || 'Sem descrição'}</span>
+          <span style="color:var(--primary); font-size:11px;">${p[1]}</span><br>
+          <span style="color:var(--text-dim); font-size:9px;">${p[4] || 'Sem categoria'} ${p[5]? '> ' + p[5] : ''}</span><br>
+          <span style="color:var(--text-dim); font-size:9px;">${p[3] || 'Sem descrição'}</span>
         </div>
         <div style="display:flex; gap:5px;">
-          <button onclick="abrirEditar(${i})" style="background:var(--primary); color:#000; border:none; padding:6px 10px; border-radius:6px; font-size:11px; cursor:pointer;">✏️</button>
-          <button onclick="deletarProduto(${i})" style="background:var(--red); color:#fff; border:none; padding:6px 10px; border-radius:6px; font-size:11px; cursor:pointer;">🗑️</button>
+          <button onclick="abrirEditar(${i})" style="background:var(--primary); color:#000; border:none; padding:6px 10px; border-radius:6px; font-size:10px; cursor:pointer;">✏️</button>
+          <button onclick="deletarProduto(${i})" style="background:var(--red); color:#fff; border:none; padding:6px 10px; border-radius:6px; font-size:10px; cursor:pointer;">🗑️</button>
         </div>
       </div>
     `;
   });
-  document.getElementById('listaEditPrecos').innerHTML = html || '<p style="color:var(--text-dim); text-align:center;">Nenhum produto</p>';
-}
-
-// ADMIN - PEDIDOS
-function renderizarPedidos(){
-  let html = '';
-  if(pedidos.length === 0){
-    html = '<p style="color:var(--text-dim); text-align:center;">Nenhum pedido ainda</p>';
-  } else {
-    pedidos.slice().reverse().forEach(p => {
-      html += `
-        <div class="pedido-item">
-          <h4>${p.nome}</h4>
-          <p>💰 ${p.preco}</p>
-          <p class="pedido-data">📅 ${p.data}</p>
-        </div>
-      `;
-    });
-  }
-  document.getElementById('listaPedidos').innerHTML = html;
-}
-
-function limparPedidos(){
-  if(confirm('Limpar todo histórico de pedidos?')){
-    pedidos = [];
-    salvarDados();
-    renderizarPedidos();
-    atualizarStats();
-  }
-}
-
-// ADMIN - CONFIG
-function exportarDados(){
-  let dados = {
-    produtos: produtos,
-    pedidos: pedidos,
-    data: new Date().toLocaleString('pt-BR')
-  };
-  let blob = new Blob([JSON.stringify(dados, null, 2)], {type: 'application/json'});
-  let url = URL.createObjectURL(blob);
-  let a = document.createElement('a');
-  a.href = url;
-  a.download = `backup-bs-loja-${Date.now()}.json`;
-  a.click();
-}
-
-function importarDados(event){
-  let file = event.target.files[0];
-  if(!file) return;
-
-  let reader = new FileReader();
-  reader.onload = function(e){
-    try {
-      let dados = JSON.parse(e.target.result);
-      if(confirm('Isso vai substituir todos os dados atuais. Continuar?')){
-        produtos = dados.produtos || produtos;
-        pedidos = dados.pedidos || pedidos;
-        salvarDados();
-        renderizarProdutos();
-        atualizarStats();
-        renderizarListaPrecos();
-        renderizarPedidos();
-        alert('Backup importado com sucesso!');
-      }
-    } catch(err){
-      alert('Arquivo inválido!');
-    }
-  };
-  reader.readAsText(file);
-}
-
-function resetarLoja(){
-  if(confirm('ATENÇÃO: Isso vai apagar TUDO! Tem certeza?')){
-    if(confirm('Última chance! Vai resetar produtos e pedidos. Confirma?')){
-      localStorage.removeItem('produtosBS');
-      localStorage.removeItem('pedidosBS');
-      location.reload();
-    }
-  }
-}
-
-function atualizarStats(){
-  document.getElementById('totalPedidos').innerText = pedidos.length;
-  document.getElementById('totalProdutos').innerText = produtos.length;
-}
-
-// MODAL ENVIO
-function abrirModalEnvio(nome, preco){
-  produtoSelecionado = nome;
-  precoSelecionado = preco;
-  document.getElementById('descricaoPedido').innerHTML = `Produto: ${nome}<br>Valor: ${preco}`;
-  document.getElementById('modalEnvio').classList.add('ativo');
-  document.body.style.overflow = 'hidden';
-}
-
-function fecharModalEnvio(){
-  document.getElementById('modalEnvio').classList.remove('ativo');
-  document.body.style.overflow = 'auto';
-}
-
-function enviarWhatsApp(){
-  let msg = `🛒 *NOVO PEDIDO BS LOJA* 🛒\n\n📦 Produto: ${produtoSelecionado}\n💰 Valor: ${precoSelecionado}`;
-
-  // Salva pedido
-  pedidos.push({
-    nome: produtoSelecionado,
-    preco: precoSelecionado,
-    data: new Date().toLocaleString('pt-BR')
-  });
-  salvarDados();
-
-  window.open(`https://wa.me/5598984853563?text=${encodeURIComponent(msg)}`);
-  fecharModalEnvio();
-}
-
-// RENDERIZAR PRODUTOS COM DESCRIÇÃO
-function renderizarProdutos(){
-  let html = "";
-  produtos.forEach((p, i) => {
-    html += `
-    <div class="produto-card">
-      <img src="${p[2]}">
-      <h3>${p[0]}</h3>
-      <p>${p[1]}</p>
-      <div class="produto-desc">${p[3] || 'Sem descrição'}</div>
-      <button class="btn-enviar" onclick="abrirModalEnvio('${p[0]}', '${p[1]}')">
-        Iniciar envio
-      </button>
-    </div>
-    `;
-  });
-  document.getElementById('produtos').innerHTML = html;
-}
-
-// INIT
-renderizarProdutos();
-</script>
-
+  document.getElementBy
