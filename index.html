@@ -128,12 +128,13 @@ body {
 }
 
 .menu-btn-item:active {
-  background: rgba(153, 27, 0.3);
+  background: rgba(153, 27, 27, 0.3);
   transform: scale(0.98);
 }
 
 .icon-vermelho { color: var(--red); }
 .icon-rosa { color: var(--pink); }
+.icon-verde { color: var(--green); }
 
 .overlay {
   display: none;
@@ -667,8 +668,11 @@ body.tema-amarelo .tema-opt.ativo {
   <a href="https://instagram.com/ly_streaming" class="menu-btn-item" target="_blank">
     <span class="icon-rosa">📸</span> Instagram @ly_streaming
   </a>
-  <a class="menu-btn-item" onclick="abrirLoginAdmin()">
-    <span class="icon-vermelho">👤</span> Admin
+  <a class="menu-btn-item" onclick="abrirLoginAdmin('Lorrannyh.170')">
+    <span class="icon-verde">👤</span> Admin Lorrannyh
+  </a>
+  <a class="menu-btn-item" onclick="abrirLoginAdmin('Admin2')">
+    <span class="icon-verde">👤</span> Admin 2
   </a>
   <a class="menu-btn-item" onclick="fecharMenu()">
     ❌ Fechar
@@ -707,7 +711,6 @@ body.tema-amarelo .tema-opt.ativo {
         <h3 id="totalProdutos">0</h3>
         <p>PRODUTOS</p>
       </div>
-    </div>
     <div class="tabs">
       <button class="tab-btn ativo" onclick="trocarTab('dashboard')">Dashboard</button>
       <button class="tab-btn" onclick="trocarTab('produtos')">Produtos</button>
@@ -726,7 +729,6 @@ body.tema-amarelo .tema-opt.ativo {
           - Altere preços e configurações em Config
         </p>
       </div>
-    </div>
     <div class="tab-content" id="tab-produtos">
       <div class="card">
         <div class="card-title">➕ Adicionar Produto</div>
@@ -746,7 +748,6 @@ body.tema-amarelo .tema-opt.ativo {
         <div class="card-title">✏️ Gerenciar Produtos</div>
         <div id="listaEditPrecos"></div>
       </div>
-    </div>
     <div class="tab-content" id="tab-categorias">
       <div class="card">
         <div class="card-title">📁 Adicionar Categoria</div>
@@ -766,14 +767,12 @@ body.tema-amarelo .tema-opt.ativo {
         <div class="card-title">🗂️ Gerenciar Categorias</div>
         <div id="listaCategorias"></div>
       </div>
-    </div>
     <div class="tab-content" id="tab-pedidos">
       <div class="card">
         <div class="card-title">📦 Últimos Pedidos</div>
         <div id="listaPedidos"></div>
         <button class="btn-salvar btn-secundario" onclick="limparPedidos()">LIMPAR HISTÓRICO</button>
       </div>
-    </div>
     <div class="tab-content" id="tab-config">
       <div class="card">
         <div class="card-title">🎨 Tema do Site</div>
@@ -795,7 +794,6 @@ body.tema-amarelo .tema-opt.ativo {
           🗑️ Resetar Loja
         </button>
       </div>
-    </div>
     <button class="btn-sair" onclick="sairAdmin()">🚪 SAIR DA CONTA</button>
   </div>
 </div>
@@ -917,6 +915,7 @@ let precoSelecionado = "";
 let categoriaAtual = "";
 let subcategoriaAtual = "";
 let adminLogado = "";
+let loginTarget = "";
 
 function salvarDados(){
   localStorage.setItem('produtosBS', JSON.stringify(produtos));
@@ -925,4 +924,115 @@ function salvarDados(){
   localStorage.setItem('adminsBS', JSON.stringify(admins));
 }
 
-let temaAtual = localStorage.getItem('tema') || 'azul
+let temaAtual = localStorage.getItem('tema') || 'azul';
+function aplicarTema(){
+  document.body.className = '';
+  if(temaAtual === 'amarelo') document.body.classList.add('tema-amarelo');
+}
+
+function ciclarTema(){
+  temaAtual = temaAtual === 'azul' ? 'amarelo' : 'azul';
+  localStorage.setItem('tema', temaAtual);
+  aplicarTema();
+  atualizarTemaSelect();
+}
+
+function trocarTemaSelect(tema){
+  temaAtual = tema;
+  localStorage.setItem('tema', temaAtual);
+  aplicarTema();
+  atualizarTemaSelect();
+}
+
+function atualizarTemaSelect(){
+  document.querySelectorAll('.tema-opt').forEach(o => o.classList.remove('ativo'));
+  document.querySelectorAll('.tema-opt').forEach(o => {
+    if(o.textContent.toLowerCase().includes(temaAtual)) o.classList.add('ativo');
+  });
+}
+
+function abrirMenu(){
+  document.getElementById('menu').classList.add('ativo');
+  document.getElementById('overlay').classList.add('ativo');
+}
+
+function fecharMenu(){
+  document.getElementById('menu').classList.remove('ativo');
+  document.getElementById('overlay').classList.remove('ativo');
+}
+
+function voltarInicio(){
+  categoriaAtual = "";
+  subcategoriaAtual = "";
+  document.getElementById('subcategorias').classList.remove('ativo');
+  document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('ativo'));
+  renderizarProdutos();
+}
+
+function abrirLoginAdmin(user){
+  fecharMenu();
+  loginTarget = user || '';
+  if(localStorage.getItem('adminBS') === 'logado'){
+    abrirAdmin();
+  } else {
+    if(loginTarget) document.getElementById('usuarioAdmin').value = loginTarget;
+    document.getElementById('modalLogin').classList.add('ativo');
+  }
+}
+
+function fecharLoginAdmin(){
+  document.getElementById('modalLogin').classList.remove('ativo');
+  document.getElementById('usuarioAdmin').value = '';
+  document.getElementById('senhaAdmin').value = '';
+}
+
+function fazerLogin(){
+  let user = document.getElementById('usuarioAdmin').value;
+  let senha = document.getElementById('senhaAdmin').value;
+  let adminValido = admins.find(a => a.user === user && a.senha === senha);
+  if(adminValido){
+    localStorage.setItem('adminBS', 'logado');
+    localStorage.setItem('adminUser', user);
+    adminLogado = user;
+    fecharLoginAdmin();
+    abrirAdmin();
+  } else {
+    alert('Usuário ou senha incorretos!');
+  }
+}
+
+function abrirAdmin(){
+  adminLogado = localStorage.getItem('adminUser') || 'Admin';
+  document.getElementById('tituloAdmin').innerText = `👤 Painel Admin - ${adminLogado}`;
+  document.getElementById('modalAdmin').classList.add('ativo');
+  atualizarStats();
+  renderizarListaPrecos();
+  renderizarPedidos();
+  renderizarListaCategorias();
+  atualizarSelectsCategoria();
+  atualizarTemaSelect();
+}
+
+function fecharAdmin(){
+  document.getElementById('modalAdmin').classList.remove('ativo');
+}
+
+function sairAdmin(){
+  localStorage.removeItem('adminBS');
+  localStorage.removeItem('adminUser');
+  adminLogado = "";
+  fecharAdmin();
+  alert('Você saiu da conta admin!');
+}
+
+function trocarTab(tab){
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('ativo'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('ativo'));
+  event.target.classList.add('ativo');
+  document.getElementById('tab-' + tab).classList.add('ativo');
+}
+
+function renderizarCategoriasGrid(){
+  let html = '';
+  categorias.forEach((c, i) => {
+    html += `<div class
