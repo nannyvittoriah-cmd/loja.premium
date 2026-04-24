@@ -8,14 +8,13 @@
 <style>
 :root {
   --bg: #000000;
-  --card: #0a0f;
+  --card: #0a0a0f;
   --border: #1a1a1a;
   --primary: #2d5fcf;
   --gold: #d4af37;
   --red: #dc2626;
   --green: #16a34a;
   --pink: #ec4899;
-  --purple: #8b5cf6;
   --text: #ffffff;
   --text-dim: #9ca3af;
 }
@@ -25,9 +24,14 @@ body.tema-dourado {
   --gold: #d4af37;
 }
 
-body.tema-roxo {
-  --primary: #8b5cf6;
-  --gold: #a78bfa;
+body.tema-branco {
+  --bg: #f5f5f5;
+  --card: #ffffff;
+  --border: #e5e5e5;
+  --text: #111111;
+  --text-dim: #6b7280;
+  --primary: #2d5fcf;
+  --gold: #d4af37;
 }
 
 * {
@@ -68,7 +72,7 @@ body {
 }
 
 .menu-btn,.tema-btn {
-  background: #1a1a1a;
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: 6px;
   color: var(--text);
@@ -96,11 +100,15 @@ body {
   left: 0;
   width: 50%;
   height: 100%;
-  background: rgba(10, 15, 0.95);
+  background: rgba(10, 10, 15, 0.95);
   backdrop-filter: blur(8px);
   border-right: 2px solid var(--red);
   z-index: 999;
   padding: 18px 12px;
+}
+
+body.tema-branco .menu {
+  background: rgba(255, 255, 255, 0.95);
 }
 
 .menu.ativo {
@@ -174,10 +182,9 @@ h1 {
   text-align: center;
 }
 
-/* CATEGORIAS COM IMAGEM */
 .categorias-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
   margin-bottom: 15px;
 }
@@ -211,7 +218,6 @@ h1 {
   color: var(--text);
 }
 
-/* SUBCATEGORIAS */
 .subcategorias {
   display: none;
   gap: 5px;
@@ -225,7 +231,7 @@ h1 {
 }
 
 .subcat-btn {
-  background: #1a1a1a;
+  background: var(--card);
   border: 1px solid var(--border);
   color: var(--text-dim);
   padding: 6px 10px;
@@ -310,7 +316,7 @@ h1 {
   left: 0;
   width: 100%;
   height: 100%;
-  background: #000;
+  background: var(--bg);
   z-index: 1000;
   overflow-y: auto;
 }
@@ -354,7 +360,7 @@ h1 {
 }
 
 .sub-envio {
-  color: #ffffff;
+  color: var(--text);
   font-size: 11px;
   margin-bottom: 20px;
   text-transform: uppercase;
@@ -362,7 +368,7 @@ h1 {
 }
 
 .label-desc {
-  color: #ffffff;
+  color: var(--text);
   font-size: 12px;
   font-weight: 700;
   margin-bottom: 10px;
@@ -370,7 +376,7 @@ h1 {
 }
 
 .descricao-pedido {
-  background: #0a0a0f;
+  background: var(--card);
   border: 2px solid var(--red);
   border-radius: 12px;
   padding: 14px;
@@ -382,9 +388,9 @@ h1 {
   font-weight: 700;
 }
 
-.btn-enviar-whatsapp {
+.btn-enviar-insta {
   width: 100%;
-  background: var(--red);
+  background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
   color: #ffffff;
   border: none;
   padding: 14px;
@@ -400,12 +406,12 @@ h1 {
 }
 
 .input-admin,.textarea-admin,select.input-admin {
-  background: #0a0a0f;
+  background: var(--card);
   border: 2px solid var(--red);
   border-radius: 10px;
   padding: 12px;
   width: 100%;
-  color: #fff;
+  color: var(--text);
   font-size: 12px;
   margin-bottom: 12px;
   outline: none;
@@ -572,7 +578,7 @@ h1 {
 .info-icon {
   width: 30px;
   height: 30px;
-  background: #1e1e2d;
+  background: var(--border);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -631,6 +637,29 @@ h1 {
   border-color: var(--primary);
   background: rgba(45, 95, 207, 0.1);
 }
+
+.btn-flutuante {
+  position: fixed;
+  bottom: 20px;
+  right: 15px;
+  width: 55px;
+  height: 55px;
+  background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  cursor: pointer;
+  z-index: 997;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+ 0%, 100% {transform: scale(1);}
+  50% {transform: scale(1.05);}
+}
 </style>
 </head>
 
@@ -642,10 +671,7 @@ h1 {
   <a href="#" class="menu-btn-item" onclick="fecharMenu()">
     <span class="icon-vermelho">🏠</span> Início
   </a>
-  <a href="https://wa.me/5598984853563" class="menu-btn-item" target="_blank">
-    <span class="icon-verde">💬</span> WhatsApp
-  </a>
-  <a href="https://instagram.com/chanelff__" class="menu-btn-item" target="_blank">
+  <a href="https://instagram.com/ly_streaming" class="menu-btn-item" target="_blank">
     <span class="icon-rosa">📸</span> Instagram
   </a>
   <a class="menu-btn-item" onclick="abrirLoginAdmin()">
@@ -707,6 +733,7 @@ h1 {
           - Altere preços e configurações em Config
         </p>
       </div>
+    </div>
     <div class="tab-content" id="tab-produtos">
       <div class="card">
         <div class="card-title">➕ Adicionar Produto</div>
@@ -726,6 +753,7 @@ h1 {
         <div class="card-title">✏️ Gerenciar Produtos</div>
         <div id="listaEditPrecos"></div>
       </div>
+    </div>
     <div class="tab-content" id="tab-categorias">
       <div class="card">
         <div class="card-title">📁 Adicionar Categoria</div>
@@ -745,22 +773,21 @@ h1 {
         <div class="card-title">🗂️ Gerenciar Categorias</div>
         <div id="listaCategorias"></div>
       </div>
+    </div>
     <div class="tab-content" id="tab-pedidos">
       <div class="card">
         <div class="card-title">📦 Últimos Pedidos</div>
         <div id="listaPedidos"></div>
         <button class="btn-salvar btn-secundario" onclick="limparPedidos()">LIMPAR HISTÓRICO</button>
       </div>
-    </div>
     <div class="tab-content" id="tab-config">
       <div class="card">
         <div class="card-title">🎨 Tema do Site</div>
         <div class="tema-select">
           <div class="tema-opt" onclick="trocarTemaSelect('azul')">Azul</div>
-          <div class="tema-opt" onclick="trocarTemaSelect('dourado')">Dourado</div>
-          <div class="tema-opt" onclick="trocarTemaSelect('roxo')">Roxo</div>
+          <div class="tema-opt" onclick="trocarTemaSelect('dourado')">Amarelo</div>
+          <div class="tema-opt" onclick="trocarTemaSelect('branco')">Branco</div>
         </div>
-      </div>
       <div class="card">
         <div class="card-title">⚙️ Configurações</div>
         <button class="menu-btn-item" style="width:100%; justify-content:center; margin-bottom:8px;" onclick="exportarDados()">
@@ -789,7 +816,9 @@ h1 {
     <p class="sub-envio">MELHOR SERVIÇO DE VENDAS PREMIUM</p>
     <div class="label-desc">DESCRIÇÃO DE SUA COMPRA</div>
     <div class="descricao-pedido" id="descricaoPedido">Produto: Selecione um produto</div>
-    <button class="btn-enviar-whatsapp" onclick="enviarWhatsApp()">💬 ENVIAR PARA WHATSAPP</button>
+    <button class="btn-enviar-insta" onclick="enviarInstagram()">
+      📸 ENVIAR PARA INSTAGRAM
+    </button>
   </div>
 </div>
 
@@ -855,7 +884,6 @@ h1 {
         <h3>Envios Instantâneos</h3>
         <p>Envios instantâneos porém aguarda ser atendido, para seguranças total</p>
       </div>
-    </div>
     <div class="info-item">
       <div class="info-icon">📬</div>
       <div class="info-text">
@@ -866,186 +894,4 @@ h1 {
   </div>
 </div>
 
-<script>
-// ADMINS - [usuario, senha]
-let admins = JSON.parse(localStorage.getItem('adminsBS')) || [
-  {user: 'Lorrannyh.170', senha: 'Lorrannyh.170'},
-  {user: 'Admin2', senha: '123456'}
-];
-
-// CATEGORIAS: [nome, imagem, [subcategorias]]
-let categorias = JSON.parse(localStorage.getItem('categoriasBS')) || [
-  ['Instagram', 'https://i.imgur.com/8Q1Z2nP.png', ['Seguidores', 'Curtidas', 'Views', 'Comentários', 'Stories']],
-  ['TikTok', 'https://i.imgur.com/5xJqZ9L.png', ['Seguidores', 'Curtidas', 'Views', 'Compartilhamentos']],
-  ['Jogos', 'https://i.imgur.com/Bud0zyu.png', ['Free Fire', 'Diamantes', 'Passe', 'Skins', 'Contas']],
-  ['Outros', 'https://i.imgur.com/OFmm8PI.jpeg', ['Recargas', 'Gift Card', 'Assinaturas']]
-];
-
-// PRODUTOS: [nome, preco, img, desc, categoria, subcategoria, dono]
-let produtos = JSON.parse(localStorage.getItem('produtosBS')) || [
-  ["1000 Seguidores Insta", "R$15", "https://i.imgur.com/OFmm8PI.jpeg", "Seguidores reais e brasileiros", "Instagram", "Seguidores", "Lorrannyh.170"],
-  ["5000 Views TikTok", "R$20", "https://i.imgur.com/OFmm8PI.jpeg", "Views rápidas e seguras", "TikTok", "Views", "Admin2"],
-  ["Passe Premium FF", "R$10", "https://i.imgur.com/Bud0zyu.png", "Acesso premium completo", "Jogos", "Free Fire", "Lorrannyh.170"],
-  ["500 Curtidas Insta", "R$8", "https://i.imgur.com/OFmm8PI.jpeg", "Curtidas brasileiras", "Instagram", "Curtidas", "Admin2"]
-];
-
-let pedidos = JSON.parse(localStorage.getItem('pedidosBS')) || [];
-let produtoSelecionado = "";
-let precoSelecionado = "";
-let categoriaAtual = "";
-let subcategoriaAtual = "";
-let adminLogado = "";
-
-function salvarDados(){
-  localStorage.setItem('produtosBS', JSON.stringify(produtos));
-  localStorage.setItem('pedidosBS', JSON.stringify(pedidos));
-  localStorage.setItem('categoriasBS', JSON.stringify(categorias));
-  localStorage.setItem('adminsBS', JSON.stringify(admins));
-}
-
-// TEMAS: Azul, Dourado, Roxo
-let temaAtual = localStorage.getItem('tema') || 'Azul';
-function aplicarTema(){
-  document.body.className = '';
-  if(temaAtual === 'Dourado') document.body.classList.add('tema-dourado');
-  if(temaAtual === 'Roxo') document.body.classList.add('tema-roxo');
-}
-
-function ciclarTema(){
-  if(temaAtual === 'Azul') temaAtual = 'Dourado';
-  else if(temaAtual === 'Dourado') temaAtual = 'Roxo';
-  else temaAtual = 'Azul';
-  localStorage.setItem('tema', temaAtual);
-  aplicarTema();
-  atualizarTemaSelect();
-}
-
-function trocarTemaSelect(tema){
-  temaAtual = tema;
-  localStorage.setItem('tema', temaAtual);
-  aplicarTema();
-  atualizarTemaSelect();
-}
-
-function atualizarTemaSelect(){
-  document.querySelectorAll('.tema-opt').forEach(o => o.classList.remove('ativo'));
-  document.querySelectorAll('.tema-opt').forEach(o => {
-    if(o.textContent.toLowerCase() === temaAtual.toLowerCase()) o.classList.add('ativo');
-  });
-}
-
-aplicarTema();
-
-function abrirMenu(){
-  document.getElementById('menu').classList.add('ativo');
-  document.getElementById('overlay').classList.add('ativo');
-}
-
-function fecharMenu(){
-  document.getElementById('menu').classList.remove('ativo');
-  document.getElementById('overlay').classList.remove('ativo');
-}
-
-function abrirLoginAdmin(){
-  fecharMenu();
-  if(localStorage.getItem('adminBS') === 'logado'){
-    abrirAdmin();
-  } else {
-    document.getElementById('modalLogin').classList.add('ativo');
-  }
-}
-
-function fecharLoginAdmin(){
-  document.getElementById('modalLogin').classList.remove('ativo');
-  document.getElementById('usuarioAdmin').value = '';
-  document.getElementById('senhaAdmin').value = '';
-}
-
-function fazerLogin(){
-  let user = document.getElementById('usuarioAdmin').value;
-  let senha = document.getElementById('senhaAdmin').value;
-  let adminValido = admins.find(a => a.user === user && a.senha === senha);
-  if(adminValido){
-    localStorage.setItem('adminBS', 'logado');
-    localStorage.setItem('adminUser', user);
-    adminLogado = user;
-    fecharLoginAdmin();
-    abrirAdmin();
-  } else {
-    alert('Usuário ou senha incorretos!');
-  }
-}
-
-function abrirAdmin(){
-  adminLogado = localStorage.getItem('adminUser') || 'Admin';
-  document.getElementById('tituloAdmin').innerText = `👤 Painel Admin - ${adminLogado}`;
-  document.getElementById('modalAdmin').classList.add('ativo');
-  atualizarStats();
-  renderizarListaPrecos();
-  renderizarPedidos();
-  renderizarListaCategorias();
-  atualizarSelectsCategoria();
-  atualizarTemaSelect();
-}
-
-function fecharAdmin(){
-  document.getElementById('modalAdmin').classList.remove('ativo');
-}
-
-function sairAdmin(){
-  localStorage.removeItem('adminBS');
-  localStorage.removeItem('adminUser');
-  adminLogado = "";
-  fecharAdmin();
-  alert('Você saiu da conta admin!');
-}
-
-function trocarTab(tab){
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('ativo'));
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('ativo'));
-  event.target.classList.add('ativo');
-  document.getElementById('tab-' + tab).classList.add('ativo');
-}
-
-// CATEGORIAS NA TELA PRINCIPAL
-function renderizarCategoriasGrid(){
-  let html = '';
-  categorias.forEach((c, i) => {
-    html += `
-      <div class="cat-card ${categoriaAtual === c[0]? 'ativo' : ''}" onclick="selecionarCategoria('${c[0]}')">
-        <img src="${c[1]}">
-        <span>${c[0]}</span>
-      </div>
-    `;
-  });
-  document.getElementById('categoriasGrid').innerHTML = html;
-}
-
-function selecionarCategoria(nome){
-  categoriaAtual = nome;
-  subcategoriaAtual = "";
-  renderizarCategoriasGrid();
-
-  let cat = categorias.find(c => c[0] === nome);
-  let subcatDiv = document.getElementById('subcategorias');
-
-  if(cat && cat[2].length > 0){
-    subcatDiv.innerHTML = cat[2].map(s => `<button class="subcat-btn" onclick="selecionarSubcategoria('${s}')">${s}</button>`).join('');
-    subcatDiv.classList.add('ativo');
-  } else {
-    subcatDiv.classList.remove('ativo');
-  }
-  renderizarProdutos();
-}
-
-function selecionarSubcategoria(nome){
-  subcategoriaAtual = nome;
-  document.querySelectorAll('.subcat-btn').forEach(b => b.classList.remove('ativo'));
-  event.target.classList.add('ativo');
-  renderizarProdutos();
-}
-
-// PRODUTOS
-function renderizarProdutos(){
-  let html = "";
-  let produtosFiltrados = produtos
+<div class="btn-flutuante" onclick="abrirD
