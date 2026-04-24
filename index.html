@@ -147,7 +147,6 @@ body.tema-branco .menu {
 }
 
 .icon-vermelho { color: var(--red); }
-.icon-verde { color: var(--green); }
 .icon-rosa { color: var(--pink); }
 
 .overlay {
@@ -672,7 +671,7 @@ h1 {
     <span class="icon-vermelho">🏠</span> Início
   </a>
   <a href="https://instagram.com/ly_streaming" class="menu-btn-item" target="_blank">
-    <span class="icon-rosa">📸</span> Instagram
+    <span class="icon-rosa">📸</span> Instagram @ly_streaming
   </a>
   <a class="menu-btn-item" onclick="abrirLoginAdmin()">
     <span class="icon-vermelho">👤</span> Admin
@@ -780,6 +779,7 @@ h1 {
         <div id="listaPedidos"></div>
         <button class="btn-salvar btn-secundario" onclick="limparPedidos()">LIMPAR HISTÓRICO</button>
       </div>
+    </div>
     <div class="tab-content" id="tab-config">
       <div class="card">
         <div class="card-title">🎨 Tema do Site</div>
@@ -788,6 +788,7 @@ h1 {
           <div class="tema-opt" onclick="trocarTemaSelect('dourado')">Amarelo</div>
           <div class="tema-opt" onclick="trocarTemaSelect('branco')">Branco</div>
         </div>
+      </div>
       <div class="card">
         <div class="card-title">⚙️ Configurações</div>
         <button class="menu-btn-item" style="width:100%; justify-content:center; margin-bottom:8px;" onclick="exportarDados()">
@@ -884,6 +885,7 @@ h1 {
         <h3>Envios Instantâneos</h3>
         <p>Envios instantâneos porém aguarda ser atendido, para seguranças total</p>
       </div>
+    </div>
     <div class="info-item">
       <div class="info-icon">📬</div>
       <div class="info-text">
@@ -894,4 +896,143 @@ h1 {
   </div>
 </div>
 
-<div class="btn-flutuante" onclick="abrirD
+<div class="btn-flutuante" onclick="abrirDuvidaInstagram()">💬</div>
+
+<script>
+let admins = JSON.parse(localStorage.getItem('adminsBS')) || [
+  {user: 'Lorrannyh.170', senha: 'Lorrannyh.170'},
+  {user: 'Admin2', senha: '123456'}
+];
+
+let categorias = JSON.parse(localStorage.getItem('categoriasBS')) || [
+  ['Instagram', 'https://i.imgur.com/8Q1Z2nP.png', ['Seguidores', 'Curtidas', 'Views', 'Comentários', 'Stories']],
+  ['TikTok', 'https://i.imgur.com/5xJqZ9L.png', ['Seguidores', 'Curtidas', 'Views', 'Compartilhamentos']],
+  ['Jogos', 'https://i.imgur.com/Bud0zyu.png', ['Free Fire', 'Diamantes', 'Passe', 'Skins', 'Contas']],
+  ['Outros', 'https://i.imgur.com/OFmm8PI.jpeg', ['Recargas', 'Gift Card', 'Assinaturas']]
+];
+
+let produtos = JSON.parse(localStorage.getItem('produtosBS')) || [
+  ["1000 Seguidores Insta", "R$15", "https://i.imgur.com/OFmm8PI.jpeg", "Seguidores reais e brasileiros", "Instagram", "Seguidores", "Lorrannyh.170"],
+  ["5000 Views TikTok", "R$20", "https://i.imgur.com/OFmm8PI.jpeg", "Views rápidas e seguras", "TikTok", "Views", "Admin2"],
+  ["Passe Premium FF", "R$10", "https://i.imgur.com/Bud0zyu.png", "Acesso premium completo", "Jogos", "Free Fire", "Lorrannyh.170"],
+  ["500 Curtidas Insta", "R$8", "https://i.imgur.com/OFmm8PI.jpeg", "Curtidas brasileiras", "Instagram", "Curtidas", "Admin2"]
+];
+
+let pedidos = JSON.parse(localStorage.getItem('pedidosBS')) || [];
+let produtoSelecionado = "";
+let precoSelecionado = "";
+let categoriaAtual = "";
+let subcategoriaAtual = "";
+let adminLogado = "";
+
+function salvarDados(){
+  localStorage.setItem('produtosBS', JSON.stringify(produtos));
+  localStorage.setItem('pedidosBS', JSON.stringify(pedidos));
+  localStorage.setItem('categoriasBS', JSON.stringify(categorias));
+  localStorage.setItem('adminsBS', JSON.stringify(admins));
+}
+
+let temaAtual = localStorage.getItem('tema') || 'azul';
+function aplicarTema(){
+  document.body.className = '';
+  if(temaAtual === 'dourado') document.body.classList.add('tema-dourado');
+  if(temaAtual === 'branco') document.body.classList.add('tema-branco');
+}
+
+function ciclarTema(){
+  if(temaAtual === 'azul') temaAtual = 'dourado';
+  else if(temaAtual === 'dourado') temaAtual = 'branco';
+  else temaAtual = 'azul';
+  localStorage.setItem('tema', temaAtual);
+  aplicarTema();
+  atualizarTemaSelect();
+}
+
+function trocarTemaSelect(tema){
+  temaAtual = tema;
+  localStorage.setItem('tema', temaAtual);
+  aplicarTema();
+  atualizarTemaSelect();
+}
+
+function atualizarTemaSelect(){
+  document.querySelectorAll('.tema-opt').forEach(o => o.classList.remove('ativo'));
+  document.querySelectorAll('.tema-opt').forEach(o => {
+    if(o.textContent.toLowerCase().includes(temaAtual)) o.classList.add('ativo');
+  });
+}
+
+aplicarTema();
+
+function abrirMenu(){
+  document.getElementById('menu').classList.add('ativo');
+  document.getElementById('overlay').classList.add('ativo');
+}
+
+function fecharMenu(){
+  document.getElementById('menu').classList.remove('ativo');
+  document.getElementById('overlay').classList.remove('ativo');
+}
+
+function abrirLoginAdmin(){
+  fecharMenu();
+  if(localStorage.getItem('adminBS') === 'logado'){
+    abrirAdmin();
+  } else {
+    document.getElementById('modalLogin').classList.add('ativo');
+  }
+}
+
+function fecharLoginAdmin(){
+  document.getElementById('modalLogin').classList.remove('ativo');
+  document.getElementById('usuarioAdmin').value = '';
+  document.getElementById('senhaAdmin').value = '';
+}
+
+function fazerLogin(){
+  let user = document.getElementById('usuarioAdmin').value;
+  let senha = document.getElementById('senhaAdmin').value;
+  let adminValido = admins.find(a => a.user === user && a.senha === senha);
+  if(adminValido){
+    localStorage.setItem('adminBS', 'logado');
+    localStorage.setItem('adminUser', user);
+    adminLogado = user;
+    fecharLoginAdmin();
+    abrirAdmin();
+  } else {
+    alert('Usuário ou senha incorretos!');
+  }
+}
+
+function abrirAdmin(){
+  adminLogado = localStorage.getItem('adminUser') || 'Admin';
+  document.getElementById('tituloAdmin').innerText = `👤 Painel Admin - ${adminLogado}`;
+  document.getElementById('modalAdmin').classList.add('ativo');
+  atualizarStats();
+  renderizarListaPrecos();
+  renderizarPedidos();
+  renderizarListaCategorias();
+  atualizarSelectsCategoria();
+  atualizarTemaSelect();
+}
+
+function fecharAdmin(){
+  document.getElementById('modalAdmin').classList.remove('ativo');
+}
+
+function sairAdmin(){
+  localStorage.removeItem('adminBS');
+  localStorage.removeItem('adminUser');
+  adminLogado = "";
+  fecharAdmin();
+  alert('Você saiu da conta admin!');
+}
+
+function trocarTab(tab){
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('ativo'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('ativo'));
+  event.target.classList.add('ativo');
+  document.getElementById('tab-' + tab).classList.add('ativo');
+}
+
+function renderizarCategoriasGrid
