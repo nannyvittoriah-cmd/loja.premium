@@ -4,24 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LY STREAMING</title>
-
 <style>
 :root {
-  --bg: #000000;
-  --card: #0a0a0f;
-  --border: #1a1a1a;
+  --bg: #0a0e1a;
+  --card: #111729;
+  --border: #1e293b;
   --primary: #2d5fcf;
   --gold: #d4af37;
   --red: #dc2626;
   --green: #16a34a;
-  --pink: #ec4899;
+  --purple: #7c3aed;
   --text: #ffffff;
-  --text-dim: #9ca3af;
+  --text-dim: #94a3b8;
 }
 
 body.tema-amarelo {
   --primary: #d4af37;
   --gold: #d4af37;
+}
+
+body.tema-roxo {
+  --primary: #7c3aed;
+  --gold: #a78bfa;
 }
 
 * {
@@ -34,34 +38,70 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: 'Arial', sans-serif;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .topbar {
   background: var(--card);
-  padding: 10px;
+  padding: 8px 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--border);
 }
 
-.logo {
+.logo-area {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 8px;
+}
+
+.logo-img {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, var(--primary), var(--gold));
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.logo {
   font-size: 13px;
   font-weight: bold;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
 }
 
 .logo span {
   color: var(--primary);
 }
 
-.menu-btn,.tema-btn {
+.top-icons {
+  display: flex;
+  gap: 6px;
+}
+
+.icon-btn {
+  width: 28px;
+  height: 28px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.icon-btn.coracao {
+  color: var(--red);
+}
+
+.menu-btn {
+  width: 28px;
+  height: 28px;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -70,31 +110,18 @@ body {
   font-size: 12px;
 }
 
-.menu-btn {
-  width: 30px;
-  height: 30px;
-}
-
-.tema-btn {
-  padding: 5px 8px;
-  border: 1px solid var(--primary);
-  color: var(--primary);
-  font-size: 10px;
-  font-weight: bold;
-}
-
 .menu {
   display: none;
   position: fixed;
   top: 0;
   left: 0;
-  width: 50%;
+  width: 60%;
   height: 100%;
-  background: rgba(10, 10, 15, 0.95);
+  background: rgba(17, 23, 41, 0.98);
   backdrop-filter: blur(8px);
   border-right: 2px solid var(--red);
   z-index: 999;
-  padding: 18px 12px;
+  padding: 16px 10px;
 }
 
 .menu.ativo {
@@ -103,11 +130,8 @@ body {
 
 .menu h3 {
   color: var(--primary);
-  margin-bottom: 18px;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  margin-bottom: 16px;
+  font-size: 13px;
 }
 
 .menu-btn-item {
@@ -116,25 +140,19 @@ body {
   gap: 8px;
   color: var(--text);
   text-decoration: none;
-  padding: 10px;
-  margin-bottom: 8px;
+  padding: 9px;
+  margin-bottom: 7px;
   border: 2px solid #991b1b;
-  border-radius: 10px;
-  font-size: 12px;
+  border-radius: 8px;
+  font-size: 11px;
   font-weight: 600;
   background: rgba(153, 27, 0.1);
-  transition: 0.2s;
   cursor: pointer;
 }
 
 .menu-btn-item:active {
-  background: rgba(153, 27, 27, 0.3);
   transform: scale(0.98);
 }
-
-.icon-vermelho { color: var(--red); }
-.icon-rosa { color: var(--pink); }
-.icon-verde { color: var(--green); }
 
 .overlay {
   display: none;
@@ -155,24 +173,166 @@ body {
   padding: 12px 10px;
 }
 
-h1 {
-  font-size: 16px;
-  margin-bottom: 3px;
-  text-align: center;
+.painel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
 }
 
-.subtitle {
+.painel-header h1 {
+  font-size: 16px;
+}
+
+.data-hoje {
   color: var(--text-dim);
-  font-size: 11px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
   margin-bottom: 12px;
-  text-align: center;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::after {
+  content: '♥';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 32px;
+  opacity: 0.1;
+  color: var(--red);
+}
+
+.stat-card:nth-child(2)::after {
+  content: '👥';
+  color: var(--primary);
+}
+
+.stat-numero {
+  color: var(--primary);
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  color: var(--text-dim);
+  font-size: 9px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.card-cliente {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cliente-info h3 {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.cliente-info h3 span {
+  color: var(--primary);
+}
+
+.cliente-info p {
+  color: var(--text-dim);
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.cliente-info p span {
+  color: var(--purple);
+}
+
+.btn-impulsionar {
+  background: var(--purple);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 10px;
+  cursor: not-allowed;
+  opacity: 0.6;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.icone-cerebro {
+  width: 45px;
+  height: 45px;
+  background: rgba(124, 58, 237, 0.2);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: var(--purple);
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.card-title-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.card-title-left .icon {
+  width: 28px;
+  height: 28px;
+  background: rgba(45, 95, 207, 0.2);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+}
+
+.ver-tudo {
+  color: var(--primary);
+  font-size: 10px;
+  cursor: pointer;
 }
 
 .categorias-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 8px;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .cat-card {
@@ -194,9 +354,13 @@ body.tema-amarelo .cat-card.ativo {
   background: rgba(212, 175, 55, 0.1);
 }
 
+body.tema-roxo .cat-card.ativo {
+  background: rgba(124, 58, 237, 0.1);
+}
+
 .cat-card img {
   width: 100%;
-  height: 60px;
+  height: 55px;
   object-fit: cover;
   border-radius: 8px;
   margin-bottom: 4px;
@@ -241,7 +405,7 @@ body.tema-amarelo .cat-card.ativo {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin: 16px 0;
+  margin: 12px 0;
 }
 
 .produto-card {
@@ -254,7 +418,7 @@ body.tema-amarelo .cat-card.ativo {
 
 .produto-card img {
   width: 100%;
-  height: 70px;
+  height: 65px;
   object-fit: cover;
   border-radius: 8px;
   margin-bottom: 6px;
@@ -262,40 +426,40 @@ body.tema-amarelo .cat-card.ativo {
 
 .produto-card h3 {
   color: var(--gold);
-  font-size: 11px;
+  font-size: 10px;
   margin-bottom: 3px;
 }
 
 .produto-card p {
   color: var(--primary);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: bold;
   margin-bottom: 3px;
 }
 
 .produto-desc {
   color: var(--text-dim);
-  font-size: 9px;
+  font-size: 8px;
   line-height: 1.3;
   margin-bottom: 6px;
-  min-height: 22px;
+  min-height: 20px;
 }
 
-.produto-owner {
+.produto-estoque {
   color: var(--green);
   font-size: 8px;
   margin-bottom: 4px;
 }
 
-.btn-enviar {
+.btn-comprar {
   width: 100%;
   background: var(--primary);
   color: #000;
   border: none;
-  padding: 8px;
+  padding: 7px;
   border-radius: 8px;
   font-weight: bold;
-  font-size: 11px;
+  font-size: 10px;
   cursor: pointer;
 }
 
@@ -341,17 +505,14 @@ body.tema-amarelo .cat-card.ativo {
 
 .titulo-envio {
   color: var(--red);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 800;
   margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
 }
 
 .sub-envio {
   color: var(--text);
-  font-size: 11px;
+  font-size: 10px;
   margin-bottom: 20px;
   text-transform: uppercase;
   font-weight: 700;
@@ -359,7 +520,7 @@ body.tema-amarelo .cat-card.ativo {
 
 .label-desc {
   color: var(--text);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   margin-bottom: 10px;
   text-transform: uppercase;
@@ -371,7 +532,7 @@ body.tema-amarelo .cat-card.ativo {
   border-radius: 12px;
   padding: 14px;
   margin-bottom: 20px;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.5;
   color: var(--gold);
   text-align: center;
@@ -383,15 +544,11 @@ body.tema-amarelo .cat-card.ativo {
   background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
   color: #ffffff;
   border: none;
-  padding: 14px;
+  padding: 13px;
   border-radius: 30px;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
   text-transform: uppercase;
 }
 
@@ -399,18 +556,18 @@ body.tema-amarelo .cat-card.ativo {
   background: var(--card);
   border: 2px solid var(--red);
   border-radius: 10px;
-  padding: 12px;
+  padding: 11px;
   width: 100%;
   color: var(--text);
-  font-size: 12px;
-  margin-bottom: 12px;
+  font-size: 11px;
+  margin-bottom: 11px;
   outline: none;
   font-family: 'Arial', sans-serif;
 }
 
 .textarea-admin {
   resize: vertical;
-  min-height: 70px;
+  min-height: 65px;
 }
 
 .btn-login,.btn-salvar {
@@ -418,10 +575,10 @@ body.tema-amarelo .cat-card.ativo {
   background: var(--red);
   color: #fff;
   border: none;
-  padding: 12px;
+  padding: 11px;
   border-radius: 10px;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
   text-transform: uppercase;
   margin-bottom: 8px;
@@ -434,35 +591,35 @@ body.tema-amarelo .cat-card.ativo {
 
 .painel-admin h2 {
   color: var(--gold);
-  margin-bottom: 16px;
+  margin-bottom: 15px;
   text-align: center;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 15px;
 }
 
 .stat-box {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 12px;
+  padding: 11px;
   text-align: center;
 }
 
 .stat-box h3 {
   color: var(--primary);
-  font-size: 20px;
+  font-size: 19px;
   margin-bottom: 4px;
 }
 
 .stat-box p {
   color: var(--text-dim);
-  font-size: 10px;
+  font-size: 9px;
 }
 
 .btn-sair {
@@ -475,7 +632,7 @@ body.tema-amarelo .cat-card.ativo {
   font-weight: 700;
   margin-top: 12px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .pedido-item {
@@ -488,25 +645,25 @@ body.tema-amarelo .cat-card.ativo {
 
 .pedido-item h4 {
   color: var(--gold);
-  font-size: 12px;
+  font-size: 11px;
   margin-bottom: 4px;
 }
 
 .pedido-item p {
   color: var(--text-dim);
-  font-size: 11px;
+  font-size: 10px;
   margin-bottom: 2px;
 }
 
 .pedido-data {
   color: var(--primary);
-  font-size: 9px;
+  font-size: 8px;
 }
 
 .tabs {
   display: flex;
   gap: 6px;
-  margin-bottom: 16px;
+  margin-bottom: 15px;
   overflow-x: auto;
 }
 
@@ -514,9 +671,9 @@ body.tema-amarelo .cat-card.ativo {
   background: var(--card);
   border: 1px solid var(--border);
   color: var(--text-dim);
-  padding: 8px 14px;
+  padding: 7px 13px;
   border-radius: 8px;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
@@ -536,58 +693,6 @@ body.tema-amarelo .cat-card.ativo {
   display: block;
 }
 
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 12px;
-  margin-bottom: 12px;
-}
-
-.card-title {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 12px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: var(--primary);
-}
-
-.info-item {
-  display: flex;
-  gap: 8px;
-  padding: 8px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.info-item:last-child {
-  border-bottom: none;
-}
-
-.info-icon {
-  width: 30px;
-  height: 30px;
-  background: var(--border);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  flex-shrink: 0;
-}
-
-.info-text h3 {
-  font-size: 11px;
-  margin-bottom: 2px;
-}
-
-.info-text p {
-  font-size: 10px;
-  color: var(--text-dim);
-  line-height: 1.3;
-}
-
 .cat-admin-item {
   display: flex;
   gap: 8px;
@@ -600,8 +705,8 @@ body.tema-amarelo .cat-card.ativo {
 }
 
 .cat-admin-item img {
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   object-fit: cover;
   border-radius: 6px;
 }
@@ -619,7 +724,7 @@ body.tema-amarelo .cat-card.ativo {
   border-radius: 8px;
   text-align: center;
   cursor: pointer;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
 }
 
@@ -636,14 +741,14 @@ body.tema-amarelo .tema-opt.ativo {
   position: fixed;
   bottom: 20px;
   right: 15px;
-  width: 55px;
-  height: 55px;
+  width: 52px;
+  height: 52px;
   background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 22px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.4);
   cursor: pointer;
   z-index: 997;
@@ -653,6 +758,29 @@ body.tema-amarelo .tema-opt.ativo {
 @keyframes pulse {
  0%, 100% {transform: scale(1);}
   50% {transform: scale(1.05);}
+}
+
+.btn-edit-del {
+  display: flex;
+  gap: 5px;
+}
+
+.btn-edit-del button {
+  padding: 5px 9px;
+  border: none;
+  border-radius: 6px;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.btn-edit {
+  background: var(--primary);
+  color: #000;
+}
+
+.btn-del {
+  background: var(--red);
+  color: #fff;
 }
 </style>
 </head>
@@ -668,11 +796,20 @@ body.tema-amarelo .tema-opt.ativo {
   <a href="https://instagram.com/ly_streaming" class="menu-btn-item" target="_blank">
     <span class="icon-rosa">📸</span> Instagram @ly_streaming
   </a>
-  <a class="menu-btn-item" onclick="abrirLoginAdmin('Lorrannyh.170')">
-    <span class="icon-verde">👤</span> Admin Lorrannyh
+  <a href="https://wa.me/5589984753563" class="menu-btn-item" target="_blank">
+    <span class="icon-verde">💬</span> WhatsApp 98984753563
+  </a>
+  <a class="menu-btn-item" onclick="abrirLoginAdmin('Lorrannyh.16')">
+    <span class="icon-vermelho">👤</span> Painel Admin 1
   </a>
   <a class="menu-btn-item" onclick="abrirLoginAdmin('Admin2')">
-    <span class="icon-verde">👤</span> Admin 2
+    <span class="icon-vermelho">👤</span> Painel Admin 2
+  </a>
+  <a class="menu-btn-item" onclick="abrirCategorias()">
+    <span class="icon-vermelho">📂</span> Categorias
+  </a>
+  <a class="menu-btn-item" onclick="abrirRedes()">
+    <span class="icon-rosa">🌐</span> Redes Sociais
   </a>
   <a class="menu-btn-item" onclick="fecharMenu()">
     ❌ Fechar
@@ -685,8 +822,8 @@ body.tema-amarelo .tema-opt.ativo {
     <div style="width:30px"></div>
   </div>
   <div class="modal-content">
-    <div class="titulo-envio">🔐 ÁREA ADMIN</div>
-    <p class="sub-envio">ACESSO RESTRITO</p>
+    <div class="titulo-envio">🔐 PAINEL ADMIN</div>
+    <p class="sub-envio">ACESSO RESTRITO - SEGURO</p>
     <div class="label-desc">USUÁRIO</div>
     <input type="text" class="input-admin" id="usuarioAdmin" placeholder="Digite o usuário">
     <div class="label-desc">SENHA</div>
@@ -705,12 +842,13 @@ body.tema-amarelo .tema-opt.ativo {
     <div class="stats">
       <div class="stat-box">
         <h3 id="totalPedidos">0</h3>
-        <p>PEDIDOS TOTAL</p>
+        <p>TOTAL DE COMPRAS FEITAS</p>
       </div>
       <div class="stat-box">
         <h3 id="totalProdutos">0</h3>
-        <p>PRODUTOS</p>
+        <p>PRODUTOS ATIVOS</p>
       </div>
+    </div>
     <div class="tabs">
       <button class="tab-btn ativo" onclick="trocarTab('dashboard')">Dashboard</button>
       <button class="tab-btn" onclick="trocarTab('produtos')">Produtos</button>
@@ -721,33 +859,36 @@ body.tema-amarelo .tema-opt.ativo {
     <div class="tab-content ativo" id="tab-dashboard">
       <div class="card">
         <div class="card-title">📊 Resumo Rápido</div>
-        <p style="color:var(--text-dim); font-size:11px; line-height:1.6">
+        <p style="color:var(--text-dim); font-size:10px; line-height:1.6">
           Bem-vindo ao painel! Aqui você gerencia tudo da loja.<br><br>
           - Adicione/edite produtos na aba Produtos<br>
-          - Crie categorias em Categorias<br>
+          - Crie categorias e subcategorias em Categorias<br>
           - Veja todos os pedidos em Pedidos<br>
-          - Altere preços e configurações em Config
+          - Altere temas em Config
         </p>
       </div>
+    </div>
     <div class="tab-content" id="tab-produtos">
       <div class="card">
         <div class="card-title">➕ Adicionar Produto</div>
         <input type="text" class="input-admin" id="novoNome" placeholder="Nome do produto">
         <input type="text" class="input-admin" id="novoPreco" placeholder="Preço (Ex: R$10)">
         <input type="text" class="input-admin" id="novoImg" placeholder="Link da imagem">
+        <input type="number" class="input-admin" id="novoEstoque" placeholder="Estoque disponível">
         <select class="input-admin" id="novoCat" onchange="carregarSubcats()">
           <option value="">Selecione a Categoria</option>
         </select>
         <select class="input-admin" id="novoSubcat">
           <option value="">Selecione a Subcategoria</option>
         </select>
-        <textarea class="textarea-admin" id="novoDesc" placeholder="Descrição do produto (opcional)"></textarea>
+        <textarea class="textarea-admin" id="novoDesc" placeholder="Descrição do produto"></textarea>
         <button class="btn-salvar" onclick="adicionarProduto()">ADICIONAR PRODUTO</button>
       </div>
       <div class="card">
         <div class="card-title">✏️ Gerenciar Produtos</div>
         <div id="listaEditPrecos"></div>
       </div>
+    </div>
     <div class="tab-content" id="tab-categorias">
       <div class="card">
         <div class="card-title">📁 Adicionar Categoria</div>
@@ -767,18 +908,21 @@ body.tema-amarelo .tema-opt.ativo {
         <div class="card-title">🗂️ Gerenciar Categorias</div>
         <div id="listaCategorias"></div>
       </div>
+    </div>
     <div class="tab-content" id="tab-pedidos">
       <div class="card">
         <div class="card-title">📦 Últimos Pedidos</div>
         <div id="listaPedidos"></div>
         <button class="btn-salvar btn-secundario" onclick="limparPedidos()">LIMPAR HISTÓRICO</button>
       </div>
+    </div>
     <div class="tab-content" id="tab-config">
       <div class="card">
         <div class="card-title">🎨 Tema do Site</div>
         <div class="tema-select">
           <div class="tema-opt" onclick="trocarTemaSelect('azul')">Azul</div>
-          <div class="tema-opt" onclick="trocarTemaSelect('amarelo')">Amarelo</div>
+          <div class="tema-opt" onclick="trocarTemaSelect('amarelo')">Amarelo Dourado</div>
+          <div class="tema-opt" onclick="trocarTemaSelect('roxo')">Roxo</div>
         </div>
       </div>
       <div class="card">
@@ -794,6 +938,7 @@ body.tema-amarelo .tema-opt.ativo {
           🗑️ Resetar Loja
         </button>
       </div>
+    </div>
     <button class="btn-sair" onclick="sairAdmin()">🚪 SAIR DA CONTA</button>
   </div>
 </div>
@@ -828,6 +973,8 @@ body.tema-amarelo .tema-opt.ativo {
     <input type="text" class="input-admin" id="editPreco">
     <div class="label-desc">IMAGEM</div>
     <input type="text" class="input-admin" id="editImg">
+    <div class="label-desc">ESTOQUE</div>
+    <input type="number" class="input-admin" id="editEstoque">
     <div class="label-desc">CATEGORIA</div>
     <select class="input-admin" id="editCat" onchange="carregarSubcatsEdit()"></select>
     <div class="label-desc">SUBCATEGORIA</div>
@@ -849,190 +996,4 @@ body.tema-amarelo .tema-opt.ativo {
     <div class="label-desc">NOME</div>
     <input type="text" class="input-admin" id="editCatNome">
     <div class="label-desc">IMAGEM</div>
-    <input type="text" class="input-admin" id="editCatImg">
-    <button class="btn-salvar" onclick="salvarEdicaoCat()">SALVAR ALTERAÇÕES</button>
-  </div>
-</div>
-
-<div class="topbar">
-  <button class="menu-btn" onclick="abrirMenu()">☰</button>
-  <div class="logo">
-    <span>LY</span> STREAMING <span>LY</span>
-  </div>
-  <button class="tema-btn" onclick="ciclarTema()">🎨 TEMA</button>
-</div>
-
-<div class="container">
-  <h1>Envios instantânea compras manual com segurança</h1>
-  <p class="subtitle">Escolha sua categoria abaixo</p>
-  <div class="categorias-grid" id="categoriasGrid"></div>
-  <div class="subcategorias" id="subcategorias"></div>
-  <div class="produtos-grid" id="produtos"></div>
-  <div class="card">
-    <div class="card-title">ℹ️ Regras de Envio</div>
-    <div class="info-item">
-      <div class="info-icon">⚡</div>
-      <div class="info-text">
-        <h3>Envios Instantâneos</h3>
-        <p>Envios instantâneos porém aguarda ser atendido, para seguranças total</p>
-      </div>
-    </div>
-    <div class="info-item">
-      <div class="info-icon">📬</div>
-      <div class="info-text">
-        <h3>Confirmação Real</h3>
-        <p>Os produtos aparecem no seu correio do FF</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="btn-flutuante" onclick="abrirDuvidaInstagram()">💬</div>
-
-<script>
-let admins = JSON.parse(localStorage.getItem('adminsBS')) || [
-  {user: 'Lorrannyh.170', senha: 'Lorrannyh.170'},
-  {user: 'Admin2', senha: '123456'}
-];
-
-let categorias = JSON.parse(localStorage.getItem('categoriasBS')) || [
-  ['Instagram', 'https://i.imgur.com/8Q1Z2nP.png', ['Seguidores', 'Curtidas', 'Views', 'Comentários']],
-  ['TikTok', 'https://i.imgur.com/5xJqZ9L.png', ['Seguidores', 'Curtidas', 'Views']],
-  ['Jogos', 'https://i.imgur.com/Bud0zyu.png', ['Free Fire', 'Diamantes', 'Passe', 'Contas']],
-  ['Outros', 'https://i.imgur.com/OFmm8PI.jpeg', ['Recargas', 'Gift Card']]
-];
-
-let produtos = JSON.parse(localStorage.getItem('produtosBS')) || [
-  ["1000 Seguidores Insta", "R$15", "https://i.imgur.com/OFmm8PI.jpeg", "Seguidores reais e brasileiros", "Instagram", "Seguidores", "Lorrannyh.170"],
-  ["5000 Views TikTok", "R$20", "https://i.imgur.com/OFmm8PI.jpeg", "Views rápidas e seguras", "TikTok", "Views", "Admin2"],
-  ["Passe Premium FF", "R$10", "https://i.imgur.com/Bud0zyu.png", "Acesso premium completo", "Jogos", "Free Fire", "Lorrannyh.170"],
-  ["500 Curtidas Insta", "R$8", "https://i.imgur.com/OFmm8PI.jpeg", "Curtidas brasileiras", "Instagram", "Curtidas", "Admin2"]
-];
-
-let pedidos = JSON.parse(localStorage.getItem('pedidosBS')) || [];
-let produtoSelecionado = "";
-let precoSelecionado = "";
-let categoriaAtual = "";
-let subcategoriaAtual = "";
-let adminLogado = "";
-let loginTarget = "";
-
-function salvarDados(){
-  localStorage.setItem('produtosBS', JSON.stringify(produtos));
-  localStorage.setItem('pedidosBS', JSON.stringify(pedidos));
-  localStorage.setItem('categoriasBS', JSON.stringify(categorias));
-  localStorage.setItem('adminsBS', JSON.stringify(admins));
-}
-
-let temaAtual = localStorage.getItem('tema') || 'azul';
-function aplicarTema(){
-  document.body.className = '';
-  if(temaAtual === 'amarelo') document.body.classList.add('tema-amarelo');
-}
-
-function ciclarTema(){
-  temaAtual = temaAtual === 'azul' ? 'amarelo' : 'azul';
-  localStorage.setItem('tema', temaAtual);
-  aplicarTema();
-  atualizarTemaSelect();
-}
-
-function trocarTemaSelect(tema){
-  temaAtual = tema;
-  localStorage.setItem('tema', temaAtual);
-  aplicarTema();
-  atualizarTemaSelect();
-}
-
-function atualizarTemaSelect(){
-  document.querySelectorAll('.tema-opt').forEach(o => o.classList.remove('ativo'));
-  document.querySelectorAll('.tema-opt').forEach(o => {
-    if(o.textContent.toLowerCase().includes(temaAtual)) o.classList.add('ativo');
-  });
-}
-
-function abrirMenu(){
-  document.getElementById('menu').classList.add('ativo');
-  document.getElementById('overlay').classList.add('ativo');
-}
-
-function fecharMenu(){
-  document.getElementById('menu').classList.remove('ativo');
-  document.getElementById('overlay').classList.remove('ativo');
-}
-
-function voltarInicio(){
-  categoriaAtual = "";
-  subcategoriaAtual = "";
-  document.getElementById('subcategorias').classList.remove('ativo');
-  document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('ativo'));
-  renderizarProdutos();
-}
-
-function abrirLoginAdmin(user){
-  fecharMenu();
-  loginTarget = user || '';
-  if(localStorage.getItem('adminBS') === 'logado'){
-    abrirAdmin();
-  } else {
-    if(loginTarget) document.getElementById('usuarioAdmin').value = loginTarget;
-    document.getElementById('modalLogin').classList.add('ativo');
-  }
-}
-
-function fecharLoginAdmin(){
-  document.getElementById('modalLogin').classList.remove('ativo');
-  document.getElementById('usuarioAdmin').value = '';
-  document.getElementById('senhaAdmin').value = '';
-}
-
-function fazerLogin(){
-  let user = document.getElementById('usuarioAdmin').value;
-  let senha = document.getElementById('senhaAdmin').value;
-  let adminValido = admins.find(a => a.user === user && a.senha === senha);
-  if(adminValido){
-    localStorage.setItem('adminBS', 'logado');
-    localStorage.setItem('adminUser', user);
-    adminLogado = user;
-    fecharLoginAdmin();
-    abrirAdmin();
-  } else {
-    alert('Usuário ou senha incorretos!');
-  }
-}
-
-function abrirAdmin(){
-  adminLogado = localStorage.getItem('adminUser') || 'Admin';
-  document.getElementById('tituloAdmin').innerText = `👤 Painel Admin - ${adminLogado}`;
-  document.getElementById('modalAdmin').classList.add('ativo');
-  atualizarStats();
-  renderizarListaPrecos();
-  renderizarPedidos();
-  renderizarListaCategorias();
-  atualizarSelectsCategoria();
-  atualizarTemaSelect();
-}
-
-function fecharAdmin(){
-  document.getElementById('modalAdmin').classList.remove('ativo');
-}
-
-function sairAdmin(){
-  localStorage.removeItem('adminBS');
-  localStorage.removeItem('adminUser');
-  adminLogado = "";
-  fecharAdmin();
-  alert('Você saiu da conta admin!');
-}
-
-function trocarTab(tab){
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('ativo'));
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('ativo'));
-  event.target.classList.add('ativo');
-  document.getElementById('tab-' + tab).classList.add('ativo');
-}
-
-function renderizarCategoriasGrid(){
-  let html = '';
-  categorias.forEach((c, i) => {
-    html += `<div class
+    <input type="
