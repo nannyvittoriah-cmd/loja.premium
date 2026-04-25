@@ -3,731 +3,107 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Premium Vz</title>
+<title>Bonyx - Painel Admin</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
-  :root{
-    --preto:#000000;
-    --rosa-neon:#ff0080;
-    --roxo:#7c3aed;
-    --rosa-glow:rgba(255,0,128,0.6);
-    --card-bg:#0a0a0a;
-    --texto:#ffffff;
-    --cinza:#1a1a1a;
-  }
-
-  *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif}
-
-  body{
-    background:var(--preto);
-    color:var(--texto);
-    font-size:13px;
-    background-image:
-      radial-gradient(circle at 20% 50%, rgba(124,58,237,0.15) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(255,0,128,0.15) 0%, transparent 50%);
-    min-height:100vh;
-  }
-
-  /* LOGIN TELA INICIAL */
- .login-screen{
-    position:fixed;
-    inset:0;
-    background:var(--preto);
-    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000"><defs><radialGradient id="a"><stop offset="0%" stop-color="%23ff0080" stop-opacity=".3"/><stop offset="100%" stop-color="%23000" stop-opacity="0"/></radialGradient></defs><circle cx="500" cy="500" r="500" fill="url(%23a)"/></svg>');
-    background-size:cover;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    z-index:100;
-  }
-
- .login-card{
-    background:var(--card-bg);
-    border:2px solid var(--rosa-neon);
-    border-radius:12px;
-    padding:30px 25px;
-    width:90%;
-    max-width:340px;
-    box-shadow:0 0 30px var(--rosa-glow), inset 0 0 20px rgba(255,0,128,0.1);
-  }
-
- .login-card h3{
-    color:var(--rosa-neon);
-    text-align:center;
-    font-size:18px;
-    margin-bottom:20px;
-    text-shadow:0 0 10px var(--rosa-neon);
-  }
-
- .login-card input{
-    width:100%;
-    padding:12px;
-    margin-bottom:12px;
-    background:var(--preto);
-    border:1px solid #333;
-    color:var(--texto);
-    border-radius:6px;
-    font-size:13px;
-  }
-
- .login-card input:focus{
-    outline:none;
-    border-color:var(--rosa-neon);
-    box-shadow:0 0 10px var(--rosa-glow);
-  }
-
- .btn-rosa{
-    width:100%;
-    background:var(--rosa-neon);
-    color:white;
-    border:none;
-    padding:12px;
-    border-radius:6px;
-    font-weight:700;
-    cursor:pointer;
-    font-size:13px;
-    margin-bottom:10px;
-    box-shadow:0 0 15px var(--rosa-glow);
-    transition:0.3s;
-  }
-
- .btn-rosa:hover{
-    box-shadow:0 0 25px var(--rosa-neon);
-    transform:translateY(-2px);
-  }
-
- .btn-google{
-    width:100%;
-    background:white;
-    color:#000;
-    border:none;
-    padding:12px;
-    border-radius:6px;
-    font-weight:600;
-    cursor:pointer;
-    font-size:13px;
-    margin-bottom:10px;
-  }
-
- .divider{
-    text-align:center;
-    margin:15px 0;
-    font-size:11px;
-    opacity:0.6;
-  }
-
- .link-text{
-    text-align:center;
-    color:var(--rosa-neon);
-    cursor:pointer;
-    font-size:12px;
-    text-decoration:underline;
-  }
-
-  /* HEADER */
- .header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:15px 20px;
-    background:var(--card-bg);
-    border-bottom:1px solid var(--roxo);
-    box-shadow:0 2px 20px rgba(124,58,237,0.3);
-  }
-
- .menu-btn{
-    font-size:22px;
-    background:none;
-    border:none;
-    color:var(--rosa-neon);
-    cursor:pointer;
-    text-shadow:0 0 10px var(--rosa-neon);
-  }
-
- .heart{
-    color:var(--rosa-neon);
-    font-size:24px;
-    filter:drop-shadow(0 0 8px var(--rosa-neon));
-  }
-
- .user-bar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:var(--cinza);
-    padding:10px 20px;
-    font-size:11px;
-    border-bottom:1px solid var(--roxo);
-  }
-
- .container{
-    padding:20px;
-    max-width:1400px;
-    margin:auto;
-  }
-
- .top-info h2{
-    color:var(--rosa-neon);
-    font-size:16px;
-    margin-bottom:6px;
-    text-shadow:0 0 10px var(--rosa-neon);
-  }
-
- .top-info p{
-    font-size:12px;
-    margin-bottom:4px;
-    opacity:0.8;
-  }
-
- .saudacao{
-    margin:20px 0;
-    padding:15px;
-    background:linear-gradient(135deg, var(--card-bg), var(--cinza));
-    border-left:3px solid var(--rosa-neon);
-    border-radius:8px;
-    box-shadow:0 0 15px rgba(255,0,128,0.2);
-  }
-
- .saudacao h3{
-    font-size:14px;
-    color:var(--rosa-neon);
-    margin-bottom:4px;
-  }
-
- .btn-impulsionar{
-    background:var(--cinza);
-    color:#555;
-    border:1px solid #333;
-    padding:12px;
-    width:100%;
-    border-radius:8px;
-    margin-bottom:25px;
-    cursor:not-allowed;
-    font-weight:600;
-  }
-
-  /* CATEGORIAS */
- .section-title{
-    color:var(--texto);
-    font-size:15px;
-    margin-bottom:15px;
-    font-weight:600;
-  }
-
- .grid-categorias{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
-    gap:15px;
-    margin-bottom:30px;
-  }
-
- .cat-card{
-    background:var(--card-bg);
-    border:2px solid var(--roxo);
-    border-radius:10px;
-    overflow:hidden;
-    cursor:pointer;
-    transition:0.3s;
-    box-shadow:0 0 15px rgba(124,58,237,0.3);
-  }
-
- .cat-card:hover{
-    transform:translateY(-5px);
-    box-shadow:0 5px 25px rgba(255,0,128,0.5);
-    border-color:var(--rosa-neon);
-  }
-
- .cat-card img{
-    width:100%;
-    height:120px;
-    object-fit:cover;
-  }
-
- .cat-card h4{
-    padding:10px;
-    font-size:11px;
-    text-align:center;
-    background:linear-gradient(135deg, var(--roxo), var(--rosa-neon));
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    font-weight:700;
-  }
-
-  /* PRODUTOS */
- .produtos-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-    gap:18px;
-  }
-
- .product-card{
-    background:var(--card-bg);
-    border:2px solid var(--roxo);
-    border-radius:12px;
-    overflow:hidden;
-    box-shadow:0 0 20px rgba(124,58,237,0.4);
-  }
-
- .product-header{
-    padding:12px;
-    border-bottom:1px solid var(--roxo);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-  }
-
- .product-header h4{
-    font-size:13px;
-    color:var(--texto);
-  }
-
- .product-body{
-    padding:15px;
-  }
-
- .price-select{
-    width:100%;
-    padding:8px;
-    background:var(--preto);
-    border:1px solid var(--rosa-neon);
-    color:var(--texto);
-    border-radius:6px;
-    margin-bottom:10px;
-    font-size:12px;
-  }
-
- .btn-comprar{
-    width:100%;
-    background:var(--rosa-neon);
-    color:white;
-    border:none;
-    padding:12px;
-    border-radius:8px;
-    font-weight:700;
-    cursor:pointer;
-    font-size:13px;
-    box-shadow:0 0 20px var(--rosa-glow);
-    text-transform:uppercase;
-  }
-
- .btn-favorito{
-    width:100%;
-    background:transparent;
-    border:1px solid var(--rosa-neon);
-    color:var(--rosa-neon);
-    padding:10px;
-    border-radius:8px;
-    margin-top:8px;
-    cursor:pointer;
-    font-size:12px;
-  }
-
-  /* FEEDBACK */
- .feedback-section{
-    margin-top:40px;
-    padding:20px 0;
-  }
-
- .feedback-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-    gap:15px;
-  }
-
- .feedback-card{
-    background:var(--card-bg);
-    border:1px solid var(--roxo);
-    border-radius:10px;
-    padding:15px;
-    box-shadow:0 0 15px rgba(124,58,237,0.2);
-  }
-
- .feedback-user{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    margin-bottom:8px;
-  }
-
- .feedback-user img{
-    width:35px;
-    height:35px;
-    border-radius:50%;
-    border:2px solid var(--rosa-neon);
-  }
-
- .stars{
-    color:var(--rosa-neon);
-    font-size:14px;
-  }
-
- .hidden{display:none!important}
- .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:200;align-items:center;justify-content:center}
- .modal.active{display:flex}
-
- .admin-bar{
-    background:var(--roxo);
-    padding:10px 20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
-    box-shadow:0 0 20px var(--roxo);
-  }
-</style>
-</head>
-<body>
-
-<!-- LOGIN -->
-<div id="loginScreen" class="login-screen">
-  <div class="login-card">
-    <h3>⚡ LOGIN</h3>
-    <div id="formLogin">
-      <input type="text" id="loginEmail" placeholder="Email">
-      <input type="password" id="loginSenha" placeholder="Senha">
-      <button class="btn-rosa" onclick="fazerLogin()">Entrar</button>
-      <div class="divider">OU</div>
-      <button class="btn-google" onclick="loginGoogle()">Entrar com Google</button>
-      <p class="link-text" onclick="mostrarCadastro()">Criar conta</p>
-      <p class="link-text" style="margin-top:10px" onclick="abrirAdmin()">Acesso Admin</p>
-    </div>
-    <div id="formCadastro" class="hidden">
-      <input type="text" id="cadNome" placeholder="Nome completo">
-      <input type="text" id="cadEmail" placeholder="Email">
-      <input type="password" id="cadSenha" placeholder="Senha">
-      <button class="btn-rosa" onclick="cadastrar()">Criar Conta</button>
-      <p class="link-text" onclick="mostrarLogin()">Voltar pro Login</p>
-    </div>
-  </div>
-</div>
-
-<!-- ADMIN LOGIN -->
-<div id="adminModal" class="modal">
-  <div class="login-card">
-    <h3>⚡ PAINEL ADMIN</h3>
-    <input type="text" id="adminUser" placeholder="Usuário">
-    <input type="password" id="adminPass" placeholder="Senha">
-    <button class="btn-rosa" onclick="loginAdmin()">Entrar</button>
-    <p class="link-text" onclick="fecharAdmin()">Voltar</p>
-  </div>
-</div>
-
-<!-- APP -->
-<div id="app" class="hidden">
-  <div class="user-bar">
-    <span id="userLogado"></span>
-    <span class="link-text" onclick="sair()">Sair</span>
-  </div>
-
-  <div class="header">
-    <button class="menu-btn" onclick="toggleMenu()">☰</button>
-    <span class="heart">♥</span>
-  </div>
-
-  <div class="container">
-    <div class="top-info">
-      <h2>Total de compras feitas</h2>
-      <p>@chanelff__ | WhatsApp: 98984753563</p>
-    </div>
-
-    <div class="saudacao">
-      <h3 id="saudacaoNome">Oie, cliente!</h3>
-      <p>Seu painel está otimizado</p>
-    </div>
-
-    <button class="btn-impulsionar" disabled>Impulsionar</button>
-
-    <div id="categoriasView">
-      <h3 class="section-title">Categorias</h3>
-      <div class="grid-categorias" id="gridCategorias"></div>
-    </div>
-
-    <div id="produtosView" class="hidden">
-      <button onclick="voltarCategorias()" style="margin-bottom:15px;background:var(--cinza);border:1px solid var(--roxo);color:var(--texto);padding:8px 15px;border-radius:6px;cursor:pointer;font-size:12px">← Voltar</button>
-      <h3 class="section-title" id="tituloCat"></h3>
-      <div class="produtos-grid" id="gridProdutos"></div>
-    </div>
-
-    <div id="adminPanel" class="hidden">
-      <div class="admin-bar">
-        <span style="font-size:13px;font-weight:bold">PAINEL ADMIN</span>
-        <button onclick="abrirModalProduto()" style="background:var(--rosa-neon);color:white;border:none;padding:8px 15px;border-radius:6px;font-size:12px;cursor:pointer">+ Adicionar</button>
-      </div>
-    </div>
-
-    <div class="feedback-section">
-      <h3 class="section-title">Feedback dos Clientes</h3>
-      <div class="feedback-grid" id="feedbackGrid"></div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL PRODUTO -->
-<div id="modalProduto" class="modal">
-  <div class="login-card">
-    <h3 id="modalTitulo">Adicionar Produto</h3>
-    <select id="pCategoria" class="price-select"></select>
-    <input type="text" id="pNome" placeholder="Nome do produto">
-    <input type="text" id="pImagem" placeholder="URL da imagem">
-    <input type="number" id="pValor" placeholder="Valor R$">
-    <input type="number" id="pEstoque" placeholder="Estoque">
-    <button class="btn-rosa" onclick="salvarProduto()">Salvar</button>
-    <button class="btn-secundario" onclick="fecharModalProduto()" style="background:var(--cinza);color:var(--texto);border:1px solid var(--roxo);padding:10px;border-radius:6px;width:100%;margin-top:8px;cursor:pointer">Fechar</button>
-  </div>
-</div>
-
-<script>
-  const CATEGORIAS = [
-    {nome:'FORTNITE BATTLE ROYALE', img:'https://via.placeholder.com/300x200/7c3aed/ffffff?text=FORTNITE'},
-    {nome:'CLASH OF CLANS', img:'https://via.placeholder.com/300x200/ff0080/ffffff?text=CLASH'},
-    {nome:'FREE FIRE', img:'https://via.placeholder.com/300x200/7c3aed/ffffff?text=FREE+FIRE'},
-    {nome:'FREE FIRE', img:'https://via.placeholder.com/300x200/ff0080/ffffff?text=FREE+FIRE+2'}
-  ];
-
-  let db = JSON.parse(localStorage.getItem('premiumvz_v2')) || {
-    produtos: [
-      {id:1,categoria:'FREE FIRE',nome:'DIMAS FF',valor:179,estoque:10,imagem:''},
-      {id:2,categoria:'FREE FIRE',nome:'DIMAS FF',valor:14.99,estoque:50,imagem:''},
-      {id:3,categoria:'FREE FIRE',nome:'DIMAS FF',valor:13.99,estoque:30,imagem:''}
-    ],
-    clientes: [],
-    feedbacks:[
-      {nome:'Emory',nota:5,img:'https://i.pravatar.cc/100?img=5'},
-      {nome:'Sofia',nota:4,img:'https://i.pravatar.cc/100?img=9'}
-    ],
-    logado:null,
-    admin:false
-  };
-
-  let categoriaAtual = null;
-  let editandoId = null;
-
-  function mostrarCadastro(){
-    document.getElementById('formLogin').classList.add('hidden');
-    document.getElementById('formCadastro').classList.remove('hidden');
-  }
-
-  function mostrarLogin(){
-    document.getElementById('formCadastro').classList.add('hidden');
-    document.getElementById('formLogin').classList.remove('hidden');
-  }
-
-  function cadastrar(){
-    const nome = document.getElementById('cadNome').value.trim();
-    const email = document.getElementById('cadEmail').value.trim();
-    const senha = document.getElementById('cadSenha').value.trim();
-    if(!nome||!email||!senha){alert('Preencha tudo');return;}
-    if(db.clientes.find(c=>c.email===email)){alert('Email já cadastrado');return;}
-    db.clientes.push({nome,email,senha});
-    salvarDB();
-    alert('Conta criada! Faça login');
-    mostrarLogin();
-  }
-
-  function fazerLogin(){
-    const email = document.getElementById('loginEmail').value.trim();
-    const senha = document.getElementById('loginSenha').value.trim();
-    const cliente = db.clientes.find(c=>c.email===email&&c.senha===senha);
-    if(cliente){
-      db.logado = cliente;
-      db.admin = false;
-      salvarDB();
-      entrarSite();
-    }else{
-      alert('Email ou senha incorretos');
-    }
-  }
-
-  function loginGoogle(){
-    alert('Integração com Google em breve');
-  }
-
-  function abrirAdmin(){
-    document.getElementById('loginScreen').classList.add('hidden');
-    document.getElementById('adminModal').classList.add('active');
-  }
-
-  function fecharAdmin(){
-    document.getElementById('adminModal').classList.remove('active');
-    document.getElementById('loginScreen').classList.remove('hidden');
-  }
-
-  function loginAdmin(){
-    const u = document.getElementById('adminUser').value;
-    const p = document.getElementById('adminPass').value;
-    if(u==='Lorrannyh.16' && p==='Lorrannyh.16'){
-      db.admin = true;
-      db.logado = {nome:'Admin',email:'admin'};
-      salvarDB();
-      fecharAdmin();
-      entrarSite();
-    }else{
-      alert('Acesso negado');
-    }
-  }
-
-  function entrarSite(){
-    document.getElementById('loginScreen').classList.add('hidden');
-    document.getElementById('adminModal').classList.remove('active');
-    document.getElementById('app').classList.remove('hidden');
-
-    if(db.admin){
-      document.getElementById('adminPanel').classList.remove('hidden');
-      document.getElementById('saudacaoNome').textContent = 'Oie, Admin!';
-    }else{
-      document.getElementById('adminPanel').classList.add('hidden');
-      document.getElementById('saudacaoNome').textContent = `Oie, ${db.logado.nome}!`;
-    }
-
-    document.getElementById('userLogado').textContent = `Logado: ${db.logado.email}`;
-    init();
-  }
-
-  function sair(){
-    db.logado = null;
-    db.admin = false;
-    salvarDB();
-    location.reload();
-  }
-
-  function init(){
-    renderCategorias();
-    renderFeedback();
-    popularSelectCategoria();
-  }
-
-  function renderCategorias(){
-    const grid = document.getElementById('gridCategorias');
-    grid.innerHTML = CATEGORIAS.map(cat=>`
-      <div class="cat-card" onclick="abrirCategoria('${cat.nome}')">
-        <img src="${cat.img}" alt="${cat.nome}">
-        <h4>${cat.nome}</h4>
-      </div>
-    `).join('');
-  }
-
-  function abrirCategoria(nome){
-    categoriaAtual = nome;
-    document.getElementById('categoriasView').classList.add('hidden');
-    document.getElementById('produtosView').classList.remove('hidden');
-    document.getElementById('tituloCat').textContent = nome;
-    renderProdutos();
-  }
-
-  function voltarCategorias(){
-    document.getElementById('categoriasView').classList.remove('hidden');
-    document.getElementById('produtosView').classList.add('hidden');
-  }
-
-  function renderProdutos(){
-    const grid = document.getElementById('gridProdutos');
-    const lista = db.produtos.filter(p=>p.categoria===categoriaAtual);
-    if(lista.length===0){
-      grid.innerHTML='<p style="grid-column:1/-1;text-align:center;opacity:.5">Nenhum produto</p>';
-      return;
-    }
-    grid.innerHTML = lista.map(p=>`
-      <div class="product-card">
-        <div class="product-header">
-          <h4>${p.nome}</h4>
-          <span style="color:var(--rosa-neon)">💎</span>
-        </div>
-        <div class="product-body">
-          <select class="price-select">
-            <option>R$ ${p.valor.toFixed(2)}</option>
-          </select>
-          <p style="font-size:11px;opacity:.7;margin-bottom:10px">2x8 Aguardando pix</p>
-          <button class="btn-comprar" onclick="comprar(${p.id})">COMPRAR</button>
-          <button class="btn-favorito">♥ ADICIONAR AOS FAVORITOS</button>
-          ${db.admin?`<button onclick="editarProduto(${p.id})" style="width:100%;margin-top:8px;background:var(--roxo);color:white;border:none;padding:8px;border-radius:6px;font-size:11px;cursor:pointer">Editar</button>`:''}
-        </div>
-      </div>
-    `).join('');
-  }
-
-  function renderFeedback(){
-    const grid = document.getElementById('feedbackGrid');
-    grid.innerHTML = db.feedbacks.map(f=>`
-      <div class="feedback-card">
-        <div class="feedback-user">
-          <img src="${f.img}" alt="${f.nome}">
-          <div>
-            <div style="font-size:12px;font-weight:600">${f.nome}</div>
-            <div class="stars">${'★'.repeat(f.nota)}${'☆'.repeat(5-f.nota)}</div>
-          </div>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  function comprar(id){
-    const p = db.produtos.find(prod=>prod.id===id);
-    const msg = `Olá! Quero comprar: ${p.nome} - R$${p.valor.toFixed(2)}`;
-    window.open(`https://wa.me/5598984753563?text=${encodeURIComponent(msg)}`,'_blank');
-  }
-
-  function abrirModalProduto(){
-    editandoId=null;
-    document.getElementById('modalTitulo').textContent='Adicionar Produto';
-    document.getElementById('pNome').value='';
-    document.getElementById('pImagem').value='';
-    document.getElementById('pValor').value='';
-    document.getElementById('pEstoque').value='';
-    document.getElementById('modalProduto').classList.add('active');
-  }
-
-  function editarProduto(id){
-    const p = db.produtos.find(prod=>prod.id===id);
-    editandoId=id;
-    document.getElementById('modalTitulo').textContent='Editar Produto';
-    document.getElementById('pCategoria').value=p.categoria;
-    document.getElementById('pNome').value=p.nome;
-    document.getElementById('pImagem').value=p.imagem;
-    document.getElementById('pValor').value=p.valor;
-    document.getElementById('pEstoque').value=p.estoque;
-    document.getElementById('modalProduto').classList.add('active');
-  }
-
-  function fecharModalProduto(){
-    document.getElementById('modalProduto').classList.remove('active');
-  }
-
-  function popularSelectCategoria(){
-    document.getElementById('pCategoria').innerHTML = CATEGORIAS.map(c=>
-      `<option value="${c.nome}">${c.nome}</option>`
-    ).join('');
-  }
-
-  function salvarProduto(){
-    const produto = {
-      id: editandoId || Date.now(),
-      categoria: document.getElementById('pCategoria').value,
-      nome: document.getElementById('pNome').value,
-      imagem: document.getElementById('pImagem').value,
-      valor: parseFloat(document.getElementById('pValor').value)||0,
-      estoque: parseInt(document.getElementById('pEstoque').value)||0
-    };
-    if(editandoId){
-      const idx = db.produtos.findIndex(p=>p.id===editandoId);
-      db.produtos[idx]=produto;
-    }else{
-      db.produtos.push(produto);
-    }
-    salvarDB();
-    fecharModalProduto();
-    if(categoriaAtual) renderProdutos();
-  }
-
-  function toggleMenu(){
-    alert('Menu: Fechar | Categorias | Redes sociais | Painel Admin');
-  }
-
-  function salvarDB(){
-    localStorage.setItem('premiumvz_v2',JSON.stringify(db));
-  }
-
-  if(db.logado||db.admin){
-    entrarSite();
-  }
-</script>
+:root {
+  --rosa: #ff00c8;
+  --roxo: #8b00ff;
+  --azul: #0099ff;
+  --dourado: #ffd700;
+  --tema: var(--rosa);
+  --roxo-neon: #8b00ff;
+  --vermelho-neon: #ff0033;
+}
+
+* {margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif;}
+
+body {
+  background: #000;
+  color: #fff;
+  min-height: 100vh;
+}
+
+/* Barra superior */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: #000;
+  font-size: 14px;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.top-bar.sair {
+  color: var(--tema);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Header: ☰ | LV PREMIUM | ❤️ */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  border-bottom: 2px solid var(--roxo-neon);
+  background: #000;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.btn-menu {
+  color: var(--tema);
+  font-size: 24px;
+  cursor: pointer;
+  filter: drop-shadow(0 0 10px var(--tema));
+}
+
+.lv-premium {
+  color: var(--dourado);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 15px var(--dourado);
+}
+
+.btn-heart {
+  color: var(--vermelho-neon);
+  font-size: 24px;
+  cursor: pointer;
+  filter: drop-shadow(0 0 15px var(--vermelho-neon));
+}
+
+.container {
+  padding: 20px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* Sistema de ABAS */
+.aba {
+  display: none;
+}
+
+.aba.ativa {
+  display: block;
+}
+
+/* Trocado: Total de compras → Contas do site */
+.titulo-principal {
+  color: var(--tema);
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  text-shadow: 0 0 20px var(--tema);
+}
+
+.info-contato {
+  color: #888;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.info-contato.link {
+  color: #4a9eff;
+}
