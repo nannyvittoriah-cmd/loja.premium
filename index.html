@@ -93,19 +93,6 @@
     font-family:'Orbitron',sans-serif;
   }
 
-.btn-google{
-    width:100%;
-    background:white;
-    color:#000;
-    border:none;
-    padding:12px;
-    border-radius:8px;
-    font-weight:600;
-    cursor:pointer;
-    font-size:13px;
-    margin-bottom:12px;
-  }
-
 .link-text{
     text-align:center;
     color:var(--rosa-neon);
@@ -318,19 +305,6 @@
     font-family:'Orbitron',sans-serif;
   }
 
-.btn-favorito{
-    width:100%;
-    background:transparent;
-    border:1px solid var(--rosa-neon);
-    color:var(--rosa-neon);
-    padding:12px;
-    border-radius:10px;
-    margin-top:10px;
-    cursor:pointer;
-    font-size:11px;
-    font-weight:600;
-  }
-
 .hidden{display:none!important}
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:200;align-items:center;justify-content:center}
 .modal.active{display:flex}
@@ -356,7 +330,6 @@
       <input type="text" id="loginEmail" placeholder="Email">
       <input type="password" id="loginSenha" placeholder="Senha">
       <button class="btn-rosa" onclick="fazerLogin()">Entrar</button>
-      <button class="btn-google" onclick="loginGoogle()">Entrar com Google</button>
       <p class="link-text" onclick="mostrarCadastro()">Criar conta</p>
       <p class="link-text" onclick="abrirAdmin()">Acesso Admin</p>
     </div>
@@ -410,4 +383,258 @@
     </div>
 
     <div id="produtosView" class="hidden">
-      <button onclick="voltarCategorias()" style="margin-bottom:18px;background:var(--cinza);border:1px solid var(--roxo
+      <button onclick="voltarCategorias()" style="margin-bottom:18px;background:var(--cinza);border:1px solid var(--roxo-neon);color:var(--texto);padding:10px 18px;border-radius:8px;cursor:pointer;font-size:12px">← Voltar</button>
+      <h3 class="section-title" id="tituloCat"></h3>
+      <div class="produtos-grid" id="gridProdutos"></div>
+    </div>
+
+    <div id="adminPanel" class="hidden">
+      <div class="admin-bar">
+        <span style="font-size:14px;font-weight:700;font-family:'Orbitron',sans-serif">PAINEL ADMIN</span>
+        <button onclick="abrirModalProduto()" style="background:var(--rosa-neon);color:white;border:none;padding:10px 18px;border-radius:8px;font-size:12px;cursor:pointer;font-weight:700">+ Adicionar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="modalProduto" class="modal">
+  <div class="login-card">
+    <h3 id="modalTitulo">Adicionar Produto</h3>
+    <select id="pCategoria" class="price-select"></select>
+    <input type="text" id="pNome" placeholder="Nome do produto">
+    <input type="text" id="pImagem" placeholder="URL da imagem">
+    <input type="number" id="pValor" placeholder="Valor R$">
+    <input type="number" id="pEstoque" placeholder="Estoque">
+    <button class="btn-rosa" onclick="salvarProduto()">Salvar</button>
+    <button onclick="fecharModalProduto()" style="background:var(--cinza);color:var(--texto);border:1px solid var(--roxo-neon);padding:12px;border-radius:8px;width:100%;margin-top:10px;cursor:pointer">Fechar</button>
+  </div>
+</div>
+
+<script>
+  const CATEGORIAS = [
+    {nome:'FORTNITE BATTLE ROYALE', img:'https://cdn2.unrealengine.com/Fortnite/fortnite-game/home/carousel/08BR-1920x1080-1920x1080.jpg'},
+    {nome:'CLASH OF CLANS', img:'https://clashofclans.com/images/news/clashofclans_banner.jpg'},
+    {nome:'FREE FIRE', img:'https://freefiremobile-a.akamaihd.net/common/web_event/official/logo_ff.png'},
+    {nome:'ROBLOX', img:'https://images.rbxcdn.com/7b3b4a4a4a'},
+    {nome:'MINECRAFT', img:'https://www.minecraft.net/content/dam/games/minecraft/key-art/MC-Vanilla_Media-Block-Image_PC-Bundle-Keyart_800x450.jpg'},
+    {nome:'BRAWL STARS', img:'https://supercell.com/images/games/brawlstars-thumb.jpg'}
+  ];
+
+  let db = JSON.parse(localStorage.getItem('premiumvz_neon')) || {
+    produtos: [],
+    clientes: [],
+    logado:null,
+    admin:false
+  };
+
+  let categoriaAtual = null;
+  let editandoId = null;
+
+  function mostrarCadastro(){
+    document.getElementById('formLogin').classList.add('hidden');
+    document.getElementById('formCadastro').classList.remove('hidden');
+  }
+
+  function mostrarLogin(){
+    document.getElementById('formCadastro').classList.add('hidden');
+    document.getElementById('formLogin').classList.remove('hidden');
+  }
+
+  function cadastrar(){
+    const nome = document.getElementById('cadNome').value.trim();
+    const email = document.getElementById('cadEmail').value.trim();
+    const senha = document.getElementById('cadSenha').value.trim();
+    if(!nome||!email||!senha){alert('Preencha tudo');return;}
+    if(db.clientes.find(c=>c.email===email)){alert('Email já cadastrado');return;}
+    db.clientes.push({nome,email,senha});
+    salvarDB();
+    alert('Conta criada! Faça login');
+    mostrarLogin();
+  }
+
+  function fazerLogin(){
+    const email = document.getElementById('loginEmail').value.trim();
+    const senha = document.getElementById('loginSenha').value.trim();
+    const cliente = db.clientes.find(c=>c.email===email&&c.senha===senha);
+    if(cliente){
+      db.logado = cliente;
+      db.admin = false;
+      salvarDB();
+      entrarSite();
+    }else{
+      alert('Email ou senha incorretos');
+    }
+  }
+
+  function abrirAdmin(){
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('adminModal').classList.add('active');
+  }
+
+  function fecharAdmin(){
+    document.getElementById('adminModal').classList.remove('active');
+    document.getElementById('loginScreen').classList.remove('hidden');
+  }
+
+  function loginAdmin(){
+    const u = document.getElementById('adminUser').value;
+    const p = document.getElementById('adminPass').value;
+    if(u==='Lorrannyh.16' && p==='Lorrannyh.16'){
+      db.admin = true;
+      db.logado = {nome:'Lorrannyh.120',email:'admin'};
+      salvarDB();
+      fecharAdmin();
+      entrarSite();
+    }else{
+      alert('Acesso negado');
+    }
+  }
+
+  function entrarSite(){
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('adminModal').classList.remove('active');
+    document.getElementById('app').classList.remove('hidden');
+
+    if(db.admin){
+      document.getElementById('adminPanel').classList.remove('hidden');
+      document.getElementById('saudacaoNome').textContent = 'Oie, Lorrannyh.120!';
+    }else{
+      document.getElementById('adminPanel').classList.add('hidden');
+      document.getElementById('saudacaoNome').textContent = `Oie, ${db.logado.nome}!`;
+    }
+
+    document.getElementById('userLogado').textContent = `Logado: ${db.logado.email}`;
+    init();
+  }
+
+  function sair(){
+    db.logado = null;
+    db.admin = false;
+    salvarDB();
+    location.reload();
+  }
+
+  function init(){
+    renderCategorias();
+    popularSelectCategoria();
+  }
+
+  function renderCategorias(){
+    const grid = document.getElementById('gridCategorias');
+    grid.innerHTML = CATEGORIAS.map(cat=>`
+      <div class="cat-card" onclick="abrirCategoria('${cat.nome}')">
+        <img src="${cat.img}" alt="${cat.nome}" onerror="this.src='https://via.placeholder.com/300x200/8b00ff/ffffff?text=${cat.nome}'">
+        <h4>${cat.nome}</h4>
+      </div>
+    `).join('');
+  }
+
+  function abrirCategoria(nome){
+    categoriaAtual = nome;
+    document.getElementById('categoriasView').classList.add('hidden');
+    document.getElementById('produtosView').classList.remove('hidden');
+    document.getElementById('tituloCat').textContent = nome;
+    renderProdutos();
+  }
+
+  function voltarCategorias(){
+    document.getElementById('categoriasView').classList.remove('hidden');
+    document.getElementById('produtosView').classList.add('hidden');
+  }
+
+  function renderProdutos(){
+    const grid = document.getElementById('gridProdutos');
+    const lista = db.produtos.filter(p=>p.categoria===categoriaAtual);
+    if(lista.length===0){
+      grid.innerHTML='<p style="grid-column:1/-1;text-align:center;opacity:.5">Nenhum produto cadastrado</p>';
+      return;
+    }
+    grid.innerHTML = lista.map(p=>`
+      <div class="product-card">
+        <div class="product-header">
+          <h4>${p.nome}</h4>
+        </div>
+        <div class="product-body">
+          <select class="price-select">
+            <option>R$ ${p.valor.toFixed(2)}</option>
+          </select>
+          <p style="font-size:11px;opacity:.7;margin-bottom:12px">Estoque: ${p.estoque}</p>
+          <button class="btn-comprar" onclick="comprar(${p.id})">COMPRAR</button>
+          ${db.admin?`<button onclick="editarProduto(${p.id})" style="width:100%;margin-top:10px;background:var(--roxo-neon);color:white;border:none;padding:10px;border-radius:8px;font-size:11px;cursor:pointer">Editar</button>`:''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function comprar(id){
+    const p = db.produtos.find(prod=>prod.id===id);
+    const msg = `Olá! Quero comprar: ${p.nome} - R$${p.valor.toFixed(2)}`;
+    window.open(`https://wa.me/5598984753563?text=${encodeURIComponent(msg)}`,'_blank');
+  }
+
+  function abrirModalProduto(){
+    editandoId=null;
+    document.getElementById('modalTitulo').textContent='Adicionar Produto';
+    document.getElementById('pNome').value='';
+    document.getElementById('pImagem').value='';
+    document.getElementById('pValor').value='';
+    document.getElementById('pEstoque').value='';
+    document.getElementById('modalProduto').classList.add('active');
+  }
+
+  function editarProduto(id){
+    const p = db.produtos.find(prod=>prod.id===id);
+    editandoId=id;
+    document.getElementById('modalTitulo').textContent='Editar Produto';
+    document.getElementById('pCategoria').value=p.categoria;
+    document.getElementById('pNome').value=p.nome;
+    document.getElementById('pImagem').value=p.imagem;
+    document.getElementById('pValor').value=p.valor;
+    document.getElementById('pEstoque').value=p.estoque;
+    document.getElementById('modalProduto').classList.add('active');
+  }
+
+  function fecharModalProduto(){
+    document.getElementById('modalProduto').classList.remove('active');
+  }
+
+  function popularSelectCategoria(){
+    document.getElementById('pCategoria').innerHTML = CATEGORIAS.map(c=>
+      `<option value="${c.nome}">${c.nome}</option>`
+    ).join('');
+  }
+
+  function salvarProduto(){
+    const produto = {
+      id: editandoId || Date.now(),
+      categoria: document.getElementById('pCategoria').value,
+      nome: document.getElementById('pNome').value,
+      imagem: document.getElementById('pImagem').value,
+      valor: parseFloat(document.getElementById('pValor').value)||0,
+      estoque: parseInt(document.getElementById('pEstoque').value)||0
+    };
+    if(editandoId){
+      const idx = db.produtos.findIndex(p=>p.id===editandoId);
+      db.produtos[idx]=produto;
+    }else{
+      db.produtos.push(produto);
+    }
+    salvarDB();
+    fecharModalProduto();
+    if(categoriaAtual) renderProdutos();
+  }
+
+  function toggleMenu(){
+    alert('Menu: Fechar | Categorias | Redes sociais | Painel Admin');
+  }
+
+  function salvarDB(){
+    localStorage.setItem('premiumvz_neon',JSON.stringify(db));
+  }
+
+  if(db.logado||db.admin){
+    entrarSite();
+  }
+</script>
+</body>
+</html>
