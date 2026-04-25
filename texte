@@ -3,1068 +3,383 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BS Loja Premium BS</title>
-
+<title>Premium Vz</title>
 <style>
-:root {
-  --bg: #000000;
-  --card: #0a0a0f;
-  --border: #1a1a1a;
-  --primary: #2d5fcf;
-  --gold: #d4af37;
-  --red: #dc2626;
-  --green: #16a34a;
-  --pink: #ec4899;
-  --text: #ffffff;
-  --text-dim: #9ca3af;
-}
-
-body.tema-dourado {
-  --primary: #d4af37;
-  --gold: #d4af37;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Arial', sans-serif;
-  font-size: 14px;
-}
-
-/* TOPO */
-.topbar {
-  background: var(--card);
-  padding: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 15px;
-  font-weight: bold;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.logo span {
-  color: var(--primary);
-}
-
-.menu-btn,.tema-btn {
-  background: #1a1a1a;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--text);
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.menu-btn {
-  width: 32px;
-  height: 32px;
-}
-
-.tema-btn {
-  padding: 6px 10px;
-  border: 1px solid var(--primary);
-  color: var(--primary);
-  font-size: 11px;
-  font-weight: bold;
-}
-
-/* MENU */
-.menu {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 50%;
-  height: 100%;
-  background: rgba(10, 10, 15, 0.95);
-  backdrop-filter: blur(8px);
-  border-right: 2px solid var(--red);
-  z-index: 999;
-  padding: 20px 15px;
-}
-
-.menu.ativo {
-  display: block;
-}
-
-.menu h3 {
-  color: var(--primary);
-  margin-bottom: 20px;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.menu-btn-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--text);
-  text-decoration: none;
-  padding: 12px;
-  margin-bottom: 10px;
-  border: 2px solid #991b1b;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  background: rgba(153, 27, 27, 0.1);
-  transition: 0.2s;
-  cursor: pointer;
-}
-
-.menu-btn-item:active {
-  background: rgba(153, 27, 27, 0.3);
-  transform: scale(0.98);
-}
-
-.icon-vermelho { color: var(--red); }
-.icon-verde { color: var(--green); }
-.icon-rosa { color: var(--pink); }
-
-.overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.7);
-  z-index: 998;
-}
-
-.overlay.ativo {
-  display: block;
-}
-
-/* CONTEÚDO */
-.container {
-  padding: 15px 12px;
-}
-
-h1 {
-  font-size: 18px;
-  margin-bottom: 4px;
-  text-align: center;
-}
-
-.subtitle {
-  color: var(--text-dim);
-  font-size: 12px;
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-/* PRODUTOS */
-.produtos-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin: 20px 0;
-}
-
-.produto-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 10px;
-  text-align: center;
-}
-
-.produto-card img {
-  width: 100%;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 8px;
-}
-
-.produto-card h3 {
-  color: var(--gold);
-  font-size: 13px;
-  margin-bottom: 4px;
-}
-
-.produto-card p {
-  color: var(--primary);
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 4px;
-}
-
-.produto-desc {
-  color: var(--text-dim);
-  font-size: 10px;
-  line-height: 1.3;
-  margin-bottom: 8px;
-  min-height: 26px;
-}
-
-.btn-enviar {
-  width: 100%;
-  background: var(--primary);
-  color: #000;
-  border: none;
-  padding: 10px;
-  border-radius: 8px;
-  font-weight: bold;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-/* MODAIS */
-.modal-envio,.modal-admin,.modal-login,.modal-geral {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #000000;
-  z-index: 1000;
-  overflow-y: auto;
-}
-
-.modal-envio.ativo,.modal-admin.ativo,.modal-login.ativo,.modal-geral.ativo {
-  display: block;
-}
-
-.modal-header {
-  background: var(--card);
-  padding: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.fechar-modal {
-  background: none;
-  border: none;
-  color: var(--text);
-  font-size: 28px;
-  cursor: pointer;
-}
-
-.modal-content {
-  padding: 20px 15px;
-}
-
-.titulo-envio {
-  color: var(--red);
-  font-size: 17px;
-  font-weight: 800;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.sub-envio {
-  color: #ffffff;
-  font-size: 12px;
-  margin-bottom: 25px;
-  text-transform: uppercase;
-  font-weight: 700;
-}
-
-.label-desc {
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 12px;
-  text-transform: uppercase;
-}
-
-.descricao-pedido {
-  background: #0a0a0f;
-  border: 2px solid var(--red);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 25px;
-  font-size: 14px;
-  line-height: 1.6;
-  color: var(--gold);
-  text-align: center;
-  font-weight: 700;
-}
-
-.btn-enviar-whatsapp {
-  width: 100%;
-  background: var(--red);
-  color: #ffffff;
-  border: none;
-  padding: 16px;
-  border-radius: 30px;
-  font-weight: 700;
-  font-size: 15px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  text-transform: uppercase;
-}
-
-/* INPUTS */
-.input-admin,.textarea-admin {
-  background: #0a0a0f;
-  border: 2px solid var(--red);
-  border-radius: 10px;
-  padding: 14px;
-  width: 100%;
-  color: #fff;
-  font-size: 14px;
-  margin-bottom: 15px;
-  outline: none;
-  font-family: 'Arial', sans-serif;
-}
-
-.textarea-admin {
-  resize: vertical;
-  min-height: 80px;
-}
-
-.btn-login,.btn-salvar {
-  width: 100%;
-  background: var(--red);
-  color: #fff;
-  border: none;
-  padding: 14px;
-  border-radius: 10px;
-  font-weight: 700;
-  font-size: 15px;
-  cursor: pointer;
-  text-transform: uppercase;
-  margin-bottom: 10px;
-}
-
-.btn-secundario {
-  background: var(--primary);
-  color: #000;
-}
-
-/* PAINEL ADMIN */
-.painel-admin h2 {
-  color: var(--gold);
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.stat-box {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 15px;
-  text-align: center;
-}
-
-.stat-box h3 {
-  color: var(--primary);
-  font-size: 24px;
-  margin-bottom: 5px;
-}
-
-.stat-box p {
-  color: var(--text-dim);
-  font-size: 11px;
-}
-
-.btn-sair {
-  width: 100%;
-  background: #991b1b;
-  color: #fff;
-  border: none;
-  padding: 12px;
-  border-radius: 10px;
-  font-weight: 700;
-  margin-top: 15px;
-  cursor: pointer;
-}
-
-/* LISTA DE PEDIDOS */
-.pedido-item {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px;
-  margin-bottom: 10px;
-}
-
-.pedido-item h4 {
-  color: var(--gold);
-  font-size: 13px;
-  margin-bottom: 5px;
-}
-
-.pedido-item p {
-  color: var(--text-dim);
-  font-size: 12px;
-  margin-bottom: 3px;
-}
-
-.pedido-data {
-  color: var(--primary);
-  font-size: 10px;
-}
-
-/* TABS ADMIN */
-.tabs {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
-  overflow-x: auto;
-}
-
-.tab-btn {
-  background: var(--card);
-  border: 1px solid var(--border);
-  color: var(--text-dim);
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.tab-btn.ativo {
-  background: var(--red);
-  color: #fff;
-  border-color: var(--red);
-}
-
-.tab-content {
-  display: none;
-}
-
-.tab-content.ativo {
-  display: block;
-}
-
-/* CARD REGRAS */
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 14px;
-  margin-bottom: 15px;
-}
-
-.card-title {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 12px;
-  color: var(--primary);
-}
-
-.info-item {
-  display: flex;
-  gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.info-item:last-child {
-  border-bottom: none;
-}
-
-.info-icon {
-  width: 34px;
-  height: 34px;
-  background: #1e1e2d;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  flex-shrink: 0;
-}
-
-.info-text h3 {
-  font-size: 12px;
-  margin-bottom: 2px;
-}
-
-.info-text p {
-  font-size: 11px;
-  color: var(--text-dim);
-  line-height: 1.3;
-}
+  :root{
+    --azul-fundo:#0a1a3a;
+    --azul-escuro:#06122b;
+    --roxo:#7c3aed;
+    --azul:#2563eb;
+    --dourado:#fbbf24;
+    --texto:#e5e7eb;
+    --cinza:#1f2937;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+  body{background:var(--azul-fundo);color:var(--texto);font-size:13px}
+.header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--azul-escuro);border-bottom:2px solid var(--roxo)}
+.menu-btn{font-size:20px;background:none;border:none;color:var(--dourado);cursor:pointer}
+.heart{color:var(--roxo);font-size:22px}
+.container{padding:16px;max-width:1200px;margin:auto}
+.top-info h2{color:var(--dourado);font-size:14px;margin-bottom:4px}
+.top-info p{font-size:12px;margin-bottom:2px}
+.saudacao{margin:16px 0;padding:12px;background:var(--cinza);border-left:3px solid var(--azul);border-radius:4px}
+.saudacao h3{font-size:13px;color:var(--dourado)}
+.saudacao p{font-size:12px;opacity:.9}
+.btn-impulsionar{background:var(--cinza);color:#6b7280;border:1px solid #374151;padding:10px;width:100%;border-radius:6px;margin-bottom:20px;cursor:not-allowed}
+.grid-categorias{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:24px}
+.cat-btn{background:linear-gradient(135deg,var(--roxo),var(--azul));border:none;color:white;padding:14px 8px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:bold;border:2px solid var(--dourado)}
+.produtos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+.card{background:var(--azul-escuro);border:1px solid var(--roxo);border-radius:8px;overflow:hidden}
+.card img{width:100%;height:100px;object-fit:cover;background:var(--cinza)}
+.card-body{padding:10px}
+.card h4{font-size:12px;margin-bottom:6px;color:var(--dourado)}
+.card p{font-size:11px;margin-bottom:4px}
+.btn-compra{width:100%;background:var(--dourado);color:var(--azul-fundo);border:none;padding:8px;border-radius:4px;font-weight:bold;cursor:pointer;font-size:11px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:50;align-items:center;justify-content:center}
+.modal.active{display:flex}
+.modal-content{background:var(--azul-escuro);padding:20px;border-radius:8px;width:90%;max-width:360px;border:2px solid var(--roxo)}
+.modal-content h3{color:var(--dourado);margin-bottom:12px;font-size:14px;text-align:center}
+.modal-content input,.modal-content select{width:100%;padding:9px;margin-bottom:10px;background:var(--cinza);border:1px solid var(--roxo);color:var(--texto);border-radius:4px;font-size:12px}
+.modal-content button{width:100%;background:var(--azul);color:white;border:none;padding:9px;border-radius:4px;cursor:pointer;font-size:12px;margin-bottom:8px}
+.btn-secundario{background:var(--cinza)!important;border:1px solid var(--roxo)!important}
+.btn-dourado{background:var(--dourado)!important;color:var(--azul-fundo)!important;font-weight:bold}
+.admin-panel{display:none}
+.admin-panel.active{display:block}
+.admin-bar{background:var(--roxo);padding:8px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.hidden{display:none}
+.user-bar{display:flex;justify-content:space-between;align-items:center;background:var(--cinza);padding:8px 16px;font-size:11px;border-bottom:1px solid var(--roxo)}
+.link{color:var(--dourado);cursor:pointer;text-decoration:underline;font-size:11px}
 </style>
 </head>
-
 <body>
 
-<!-- MENU -->
-<div class="overlay" id="overlay" onclick="fecharMenu()"></div>
-<div class="menu" id="menu">
-  <h3>⚡ Menu BS</h3>
-
-  <a href="#" class="menu-btn-item" onclick="fecharMenu()">
-    <span class="icon-vermelho">🏠</span> Início
-  </a>
-
-  <a href="https://wa.me/5598984853563" class="menu-btn-item" target="_blank">
-    <span class="icon-verde">💬</span> WhatsApp
-  </a>
-
-  <a href="https://instagram.com/chanelff__" class="menu-btn-item" target="_blank">
-    <span class="icon-rosa">📸</span> Instagram
-  </a>
-
-  <a class="menu-btn-item" onclick="abrirLoginAdmin()">
-    <span class="icon-vermelho">👤</span> Admin
-  </a>
-
-  <a class="menu-btn-item" onclick="fecharMenu()">
-    ❌ Fechar
-  </a>
-</div>
-
-<!-- MODAL LOGIN ADMIN -->
-<div class="modal-login" id="modalLogin">
-  <div class="modal-header">
-    <button class="fechar-modal" onclick="fecharLoginAdmin()">×</button>
-    <div style="width:30px"></div>
-  </div>
-
+<!-- LOGIN/CADASTRO CLIENTE -->
+<div id="loginCliente" class="modal active">
   <div class="modal-content">
-    <div class="titulo-envio">
-      🔐 ÁREA ADMIN
+    <h3>♥ Premium Vz ♥</h3>
+    <div id="formLogin">
+      <input type="text" id="clienteUser" placeholder="Usuário ou Email">
+      <input type="password" id="clientePass" placeholder="Senha">
+      <button class="btn-dourado" onclick="loginCliente()">Entrar</button>
+      <button class="btn-secundario" onclick="mostrarCadastro()">Criar conta</button>
+      <p style="text-align:center;margin-top:8px"><span class="link" onclick="abrirLoginAdmin()">Acesso Admin</span></p>
     </div>
-    <p class="sub-envio">ACESSO RESTRITO</p>
-
-    <div class="label-desc">USUÁRIO</div>
-    <input type="text" class="input-admin" id="usuarioAdmin" placeholder="Digite o usuário">
-
-    <div class="label-desc">SENHA</div>
-    <input type="password" class="input-admin" id="senhaAdmin" placeholder="Digite a senha">
-
-    <button class="btn-login" onclick="fazerLogin()">
-      ENTRAR
-    </button>
+    <div id="formCadastro" class="hidden">
+      <input type="text" id="cadNome" placeholder="Nome completo">
+      <input type="text" id="cadUser" placeholder="Criar usuário">
+      <input type="text" id="cadWhats" placeholder="WhatsApp">
+      <input type="password" id="cadPass" placeholder="Criar senha">
+      <button class="btn-dourado" onclick="cadastrarCliente()">Cadastrar</button>
+      <button class="btn-secundario" onclick="mostrarLogin()">Já tenho conta</button>
+    </div>
   </div>
 </div>
 
-<!-- PAINEL ADMIN COMPLETO -->
-<div class="modal-admin" id="modalAdmin">
-  <div class="modal-header">
-    <button class="fechar-modal" onclick="fecharAdmin()">×</button>
-    <div style="width:30px"></div>
-  </div>
-
-  <div class="modal-content painel-admin">
-    <h2>👤 Painel Admin - Lorrannyh</h2>
-
-    <div class="stats">
-      <div class="stat-box">
-        <h3 id="totalPedidos">0</h3>
-        <p>PEDIDOS TOTAL</p>
-      </div>
-      <div class="stat-box">
-        <h3 id="totalProdutos">0</h3>
-        <p>PRODUTOS</p>
-      </div>
-    </div>
-
-    <div class="tabs">
-      <button class="tab-btn ativo" onclick="trocarTab('dashboard')">Dashboard</button>
-      <button class="tab-btn" onclick="trocarTab('produtos')">Produtos</button>
-      <button class="tab-btn" onclick="trocarTab('pedidos')">Pedidos</button>
-      <button class="tab-btn" onclick="trocarTab('config')">Config</button>
-    </div>
-
-    <!-- TAB DASHBOARD -->
-    <div class="tab-content ativo" id="tab-dashboard">
-      <div class="card">
-        <div class="card-title">📊 Resumo Rápido</div>
-        <p style="color:var(--text-dim); font-size:12px; line-height:1.6">
-          Bem-vinda ao painel! Aqui você gerencia tudo da loja.<br><br>
-          - Adicione/edite produtos na aba Produtos<br>
-          - Veja todos os pedidos em Pedidos<br>
-          - Altere preços e configurações em Config
-        </p>
-      </div>
-    </div>
-
-    <!-- TAB PRODUTOS -->
-    <div class="tab-content" id="tab-produtos">
-      <div class="card">
-        <div class="card-title">➕ Adicionar Produto</div>
-        <input type="text" class="input-admin" id="novoNome" placeholder="Nome do produto">
-        <input type="text" class="input-admin" id="novoPreco" placeholder="Preço (Ex: R$10)">
-        <input type="text" class="input-admin" id="novoImg" placeholder="Link da imagem">
-        <textarea class="textarea-admin" id="novoDesc" placeholder="Descrição do produto (opcional)"></textarea>
-        <button class="btn-salvar" onclick="adicionarProduto()">ADICIONAR PRODUTO</button>
-      </div>
-
-      <div class="card">
-        <div class="card-title">✏️ Gerenciar Produtos</div>
-        <div id="listaEditPrecos"></div>
-      </div>
-    </div>
-
-    <!-- TAB PEDIDOS -->
-    <div class="tab-content" id="tab-pedidos">
-      <div class="card">
-        <div class="card-title">📦 Últimos Pedidos</div>
-        <div id="listaPedidos"></div>
-        <button class="btn-salvar btn-secundario" onclick="limparPedidos()">LIMPAR HISTÓRICO</button>
-      </div>
-    </div>
-
-    <!-- TAB CONFIG -->
-    <div class="tab-content" id="tab-config">
-      <div class="card">
-        <div class="card-title">⚙️ Configurações</div>
-        <button class="menu-btn-item" style="width:100%; justify-content:center; margin-bottom:8px;" onclick="exportarDados()">
-          📥 Exportar Backup
-        </button>
-        <button class="menu-btn-item" style="width:100%; justify-content:center; margin-bottom:8px;" onclick="document.getElementById('importFile').click()">
-          📤 Importar Backup
-        </button>
-        <input type="file" id="importFile" style="display:none" accept=".json" onchange="importarDados(event)">
-        <button class="menu-btn-item" style="width:100%; justify-content:center; background:rgba(220,38,38,0.2)" onclick="resetarLoja()">
-          🗑️ Resetar Loja
-        </button>
-      </div>
-    </div>
-
-    <button class="btn-sair" onclick="sairAdmin()">
-      🚪 SAIR DA CONTA
-    </button>
-  </div>
-</div>
-
-<!-- MODAL DE ENVIO -->
-<div class="modal-envio" id="modalEnvio">
-  <div class="modal-header">
-    <button class="fechar-modal" onclick="fecharModalEnvio()">×</button>
-    <div style="width:30px"></div>
-  </div>
-
+<!-- LOGIN ADMIN -->
+<div id="loginAdmin" class="modal">
   <div class="modal-content">
-    <div class="titulo-envio">
-      📈 ENVIOS INSTANTÂNEOS SEM TAXAS
-    </div>
-    <p class="sub-envio">MELHOR SERVIÇO DE VENDAS PREMIUM</p>
-
-    <div class="label-desc">DESCRIÇÃO DE SUA COMPRA</div>
-
-    <div class="descricao-pedido" id="descricaoPedido">
-      Produto: Selecione um produto
-    </div>
-
-    <button class="btn-enviar-whatsapp" onclick="enviarWhatsApp()">
-      💬 ENVIAR PARA WHATSAPP
-    </button>
+    <h3>Painel de Admin</h3>
+    <input type="text" id="adminUser" placeholder="Usuário">
+    <input type="password" id="adminPass" placeholder="Senha">
+    <button class="btn-dourado" onclick="fazerLoginAdmin()">Entrar como Admin</button>
+    <button class="btn-secundario" onclick="voltarLoginCliente()">Voltar</button>
   </div>
 </div>
 
-<!-- MODAL EDITAR PRODUTO -->
-<div class="modal-geral" id="modalEditar">
-  <div class="modal-header">
-    <button class="fechar-modal" onclick="fecharEditar()">×</button>
-    <div style="width:30px"></div>
+<!-- APP PRINCIPAL -->
+<div id="app" class="hidden">
+  <div class="user-bar">
+    <span id="nomeClienteLogado"></span>
+    <span class="link" onclick="sair()">Sair</span>
   </div>
 
+  <div class="header">
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <span class="heart">♥</span>
+  </div>
+
+  <div class="container">
+    <div class="top-info">
+      <h2>Total de compras feitas</h2>
+      <p>@chanelff__ | WhatsApp: 98984753563</p>
+    </div>
+
+    <div class="saudacao">
+      <h3 id="saudacaoCliente">Oie, cliente!</h3>
+      <p>Seu painel está otimizado</p>
+    </div>
+
+    <button class="btn-impulsionar" disabled>Impulsionar</button>
+
+    <div id="categoriasView">
+      <div class="grid-categorias" id="gridCategorias"></div>
+    </div>
+
+    <div id="produtosView" class="hidden">
+      <button onclick="voltarCategorias()" style="margin-bottom:12px;background:var(--cinza);border:1px solid var(--roxo);color:var(--texto);padding:6px 10px;border-radius:4px;cursor:pointer;font-size:11px">← Voltar</button>
+      <h3 id="tituloCat" style="color:var(--dourado);font-size:13px;margin-bottom:12px"></h3>
+      <div class="produtos-grid" id="gridProdutos"></div>
+    </div>
+
+    <div id="adminPanel" class="admin-panel">
+      <div class="admin-bar">
+        <span style="font-size:12px;font-weight:bold">PAINEL ADMIN</span>
+        <button onclick="abrirModalProduto()" style="background:var(--dourado);color:var(--azul-fundo);border:none;padding:6px 10px;border-radius:4px;font-size:11px;cursor:pointer">+ Adicionar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PRODUTO -->
+<div id="modalProduto" class="modal">
   <div class="modal-content">
-    <div class="titulo-envio">
-      ✏️ EDITAR PRODUTO
-    </div>
-    <input type="hidden" id="editIndex">
-    <div class="label-desc">NOME</div>
-    <input type="text" class="input-admin" id="editNome">
-    <div class="label-desc">PREÇO</div>
-    <input type="text" class="input-admin" id="editPreco">
-    <div class="label-desc">IMAGEM</div>
-    <input type="text" class="input-admin" id="editImg">
-    <div class="label-desc">DESCRIÇÃO</div>
-    <textarea class="textarea-admin" id="editDesc"></textarea>
-    <button class="btn-salvar" onclick="salvarEdicao()">SALVAR ALTERAÇÕES</button>
-  </div>
-</div>
-
-<!-- TOPO -->
-<div class="topbar">
-  <button class="menu-btn" onclick="abrirMenu()">☰</button>
-
-  <div class="logo">
-    <span>BS</span> Loja Premium <span>BS</span>
-  </div>
-
-  <button class="tema-btn" onclick="trocarTema()">🎨 TEMA</button>
-</div>
-
-<div class="container">
-  <h1>Envios instantânea compras manual com segurança</h1>
-  <p class="subtitle">Escolha seu produto abaixo</p>
-
-  <div class="produtos-grid" id="produtos"></div>
-
-  <div class="card">
-    <div class="card-title">
-      ℹ️ Regras de Envio
-    </div>
-
-    <div class="info-item">
-      <div class="info-icon">⚡</div>
-      <div class="info-text">
-        <h3>Envios Instantâneos</h3>
-        <p>Envios instantâneos porém aguarda ser atendido, para seguranças total</p>
-      </div>
-    </div>
-
-    <div class="info-item">
-      <div class="info-icon">📬</div>
-      <div class="info-text">
-        <h3>Confirmação Real</h3>
-        <p>Os produtos aparecem no seu correio do FF</p>
-      </div>
-    </div>
+    <h3 id="modalTitulo">Adicionar Produto</h3>
+    <select id="pCategoria"></select>
+    <input type="text" id="pNome" placeholder="Nome do produto">
+    <input type="text" id="pImagem" placeholder="URL da imagem">
+    <input type="number" id="pValor" placeholder="Valor R$">
+    <input type="number" id="pEstoque" placeholder="Estoque">
+    <button class="btn-dourado" onclick="salvarProduto()">Salvar</button>
+    <button class="btn-secundario" onclick="fecharModalProduto()">Fechar</button>
   </div>
 </div>
 
 <script>
-// DADOS - Agora com descrição [nome, preco, img, desc]
-let produtos = JSON.parse(localStorage.getItem('produtosBS')) || [
-  ["Passe Premium", "R$10", "https://i.imgur.com/Bud0zyu.png", "Acesso premium completo"],
-  ["Tokens 25", "R$15", "https://i.imgur.com/OFmm8PI.jpeg", "25 tokens para usar"],
-  ["Tokens 50", "R$20", "https://i.imgur.com/OFmm8PI.jpeg", "50 tokens com desconto"],
-  ["Tokens 100", "R$25", "https://i.imgur.com/OFmm8PI.jpeg", "100 tokens - melhor custo"],
-  ["Tokens 200", "R$45", "https://i.imgur.com/OFmm8PI.jpeg", "200 tokens premium"],
-  ["Tokens 300", "R$70", "https://i.imgur.com/OFmm8PI.jpeg", "300 tokens VIP"],
-  ["Tokens 400", "R$90", "https://i.imgur.com/OFmm8PI.jpeg", "400 tokens mega"],
-  ["Tokens 500", "R$120", "https://i.imgur.com/OFmm8PI.jpeg", "500 tokens máximo"]
-];
+  const CATEGORIAS = [
+    'Categorias FF',
+    'Categorias Instagram',
+    'Categorias TikTok',
+    'Categorias Kwai',
+    'Categorias Curso',
+    'Categoria Caixa Surpresa'
+  ];
 
-let pedidos = JSON.parse(localStorage.getItem('pedidosBS')) || [];
-let produtoSelecionado = "";
-let precoSelecionado = "";
+  let db = JSON.parse(localStorage.getItem('premiumvz')) || {
+    produtos: [],
+    clientes: [],
+    clienteLogado: null,
+    adminLogado: false
+  };
 
-// SALVAR DADOS
-function salvarDados(){
-  localStorage.setItem('produtosBS', JSON.stringify(produtos));
-  localStorage.setItem('pedidosBS', JSON.stringify(pedidos));
-}
+  let categoriaAtual = null;
+  let editandoId = null;
 
-// TEMA
-function trocarTema(){
-  document.body.classList.toggle('tema-dourado');
-  localStorage.setItem('tema', document.body.classList.contains('tema-dourado')? 'Dourado' : 'Azul');
-}
-
-if(localStorage.getItem('tema') === 'Dourado'){
-  document.body.classList.add('tema-dourado');
-}
-
-// MENU
-function abrirMenu(){
-  document.getElementById('menu').classList.add('ativo');
-  document.getElementById('overlay').classList.add('ativo');
-}
-
-function fecharMenu(){
-  document.getElementById('menu').classList.remove('ativo');
-  document.getElementById('overlay').classList.remove('ativo');
-}
-
-// LOGIN ADMIN
-function abrirLoginAdmin(){
-  fecharMenu();
-  if(localStorage.getItem('adminBS') === 'logado'){
-    abrirAdmin();
-  } else {
-    document.getElementById('modalLogin').classList.add('ativo');
-  }
-}
-
-function fecharLoginAdmin(){
-  document.getElementById('modalLogin').classList.remove('ativo');
-  document.getElementById('usuarioAdmin').value = '';
-  document.getElementById('senhaAdmin').value = '';
-}
-
-function fazerLogin(){
-  let user = document.getElementById('usuarioAdmin').value;
-  let senha = document.getElementById('senhaAdmin').value;
-
-  if(user === 'Lorrannyh.170' && senha === 'Lorrannyh.170'){
-    localStorage.setItem('adminBS', 'logado');
-    fecharLoginAdmin();
-    abrirAdmin();
-  } else {
-    alert('Usuário ou senha incorretos!');
-  }
-}
-
-function abrirAdmin(){
-  document.getElementById('modalAdmin').classList.add('ativo');
-  atualizarStats();
-  renderizarListaPrecos();
-  renderizarPedidos();
-}
-
-function fecharAdmin(){
-  document.getElementById('modalAdmin').classList.remove('ativo');
-}
-
-function sairAdmin(){
-  localStorage.removeItem('adminBS');
-  fecharAdmin();
-  alert('Você saiu da conta admin!');
-}
-
-// TABS ADMIN
-function trocarTab(tab){
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('ativo'));
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('ativo'));
-  event.target.classList.add('ativo');
-  document.getElementById('tab-' + tab).classList.add('ativo');
-}
-
-// ADMIN - PRODUTOS COM DESCRIÇÃO
-function adicionarProduto(){
-  let nome = document.getElementById('novoNome').value;
-  let preco = document.getElementById('novoPreco').value;
-  let img = document.getElementById('novoImg').value;
-  let desc = document.getElementById('novoDesc').value || 'Sem descrição';
-
-  if(!nome ||!preco ||!img){
-    alert('Preencha nome, preço e imagem!');
-    return;
+  // CLIENTE
+  function mostrarCadastro(){
+    document.getElementById('formLogin').classList.add('hidden');
+    document.getElementById('formCadastro').classList.remove('hidden');
   }
 
-  produtos.push([nome, preco, img, desc]);
-  salvarDados();
-  renderizarProdutos();
-  atualizarStats();
-  renderizarListaPrecos();
-
-  document.getElementById('novoNome').value = '';
-  document.getElementById('novoPreco').value = '';
-  document.getElementById('novoImg').value = '';
-  document.getElementById('novoDesc').value = '';
-  alert('Produto adicionado!');
-}
-
-function deletarProduto(index){
-  if(confirm('Tem certeza que quer excluir esse produto?')){
-    produtos.splice(index, 1);
-    salvarDados();
-    renderizarProdutos();
-    atualizarStats();
-    renderizarListaPrecos();
+  function mostrarLogin(){
+    document.getElementById('formCadastro').classList.add('hidden');
+    document.getElementById('formLogin').classList.remove('hidden');
   }
-}
 
-function abrirEditar(index){
-  document.getElementById('editIndex').value = index;
-  document.getElementById('editNome').value = produtos[index][0];
-  document.getElementById('editPreco').value = produtos[index][1];
-  document.getElementById('editImg').value = produtos[index][2];
-  document.getElementById('editDesc').value = produtos[index][3] || '';
-  document.getElementById('modalEditar').classList.add('ativo');
-}
+  function cadastrarCliente(){
+    const nome = document.getElementById('cadNome').value.trim();
+    const user = document.getElementById('cadUser').value.trim();
+    const whats = document.getElementById('cadWhats').value.trim();
+    const pass = document.getElementById('cadPass').value.trim();
 
-function fecharEditar(){
-  document.getElementById('modalEditar').classList.remove('ativo');
-}
+    if(!nome ||!user ||!pass){
+      alert('Preencha nome, usuário e senha');
+      return;
+    }
+    if(db.clientes.find(c => c.user === user)){
+      alert('Usuário já existe');
+      return;
+    }
 
-function salvarEdicao(){
-  let index = document.getElementById('editIndex').value;
-  produtos[index][0] = document.getElementById('editNome').value;
-  produtos[index][1] = document.getElementById('editPreco').value;
-  produtos[index][2] = document.getElementById('editImg').value;
-  produtos[index][3] = document.getElementById('editDesc').value;
-  salvarDados();
-  renderizarProdutos();
-  renderizarListaPrecos();
-  fecharEditar();
-  alert('Produto atualizado!');
-}
+    db.clientes.push({nome, user, whats, pass});
+    salvarDB();
+    alert('Cadastro feito! Faça login');
+    mostrarLogin();
+  }
 
-function renderizarListaPrecos(){
-  let html = '';
-  produtos.forEach((p, i) => {
-    html += `
-      <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; background:var(--card); border:1px solid var(--border); border-radius:8px; margin-bottom:8px;">
-        <div style="flex:1;">
-          <strong style="color:var(--gold)">${p[0]}</strong><br>
-          <span style="color:var(--primary); font-size:12px;">${p[1]}</span><br>
-          <span style="color:var(--text-dim); font-size:10px;">${p[3] || 'Sem descrição'}</span>
-        </div>
-        <div style="display:flex; gap:5px;">
-          <button onclick="abrirEditar(${i})" style="background:var(--primary); color:#000; border:none; padding:6px 10px; border-radius:6px; font-size:11px; cursor:pointer;">✏️</button>
-          <button onclick="deletarProduto(${i})" style="background:var(--red); color:#fff; border:none; padding:6px 10px; border-radius:6px; font-size:11px; cursor:pointer;">🗑️</button>
+  function loginCliente(){
+    const user = document.getElementById('clienteUser').value.trim();
+    const pass = document.getElementById('clientePass').value.trim();
+    const cliente = db.clientes.find(c => c.user === user && c.pass === pass);
+
+    if(cliente){
+      db.clienteLogado = cliente;
+      db.adminLogado = false;
+      salvarDB();
+      entrarSite();
+    } else {
+      alert('Usuário ou senha incorretos');
+    }
+  }
+
+  // ADMIN
+  function abrirLoginAdmin(){
+    document.getElementById('loginCliente').classList.remove('active');
+    document.getElementById('loginAdmin').classList.add('active');
+  }
+
+  function voltarLoginCliente(){
+    document.getElementById('loginAdmin').classList.remove('active');
+    document.getElementById('loginCliente').classList.add('active');
+  }
+
+  function fazerLoginAdmin(){
+    const u = document.getElementById('adminUser').value;
+    const p = document.getElementById('adminPass').value;
+    if(u==='Lorrannyh.16' && p==='Lorrannyh.16'){
+      db.adminLogado = true;
+      db.clienteLogado = {nome: 'Admin', user: 'Lorrannyh.16'};
+      salvarDB();
+      document.getElementById('loginAdmin').classList.remove('active');
+      entrarSite();
+    } else {
+      alert('Acesso negado');
+    }
+  }
+
+  function entrarSite(){
+    document.getElementById('loginCliente').classList.remove('active');
+    document.getElementById('loginAdmin').classList.remove('active');
+    document.getElementById('app').classList.remove('hidden');
+
+    if(db.adminLogado){
+      document.getElementById('adminPanel').classList.add('active');
+      document.getElementById('saudacaoCliente').textContent = 'Oie, Admin!';
+    } else {
+      document.getElementById('adminPanel').classList.remove('active');
+      document.getElementById('saudacaoCliente').textContent = `Oie, ${db.clienteLogado.nome}!`;
+    }
+
+    document.getElementById('nomeClienteLogado').textContent = `Logado: ${db.clienteLogado.user}`;
+    init();
+  }
+
+  function sair(){
+    db.clienteLogado = null;
+    db.adminLogado = false;
+    salvarDB();
+    location.reload();
+  }
+
+  // SITE
+  function init(){
+    renderCategorias();
+    popularSelectCategoria();
+  }
+
+  function renderCategorias(){
+    const grid = document.getElementById('gridCategorias');
+    grid.innerHTML = CATEGORIAS.map(cat =>
+      `<button class="cat-btn" onclick="abrirCategoria('${cat}')">${cat}</button>`
+    ).join('');
+  }
+
+  function abrirCategoria(cat){
+    categoriaAtual = cat;
+    document.getElementById('categoriasView').classList.add('hidden');
+    document.getElementById('produtosView').classList.remove('hidden');
+    document.getElementById('tituloCat').textContent = cat;
+    renderProdutos();
+  }
+
+  function voltarCategorias(){
+    document.getElementById('categoriasView').classList.remove('hidden');
+    document.getElementById('produtosView').classList.add('hidden');
+    categoriaAtual = null;
+  }
+
+  function renderProdutos(){
+    const grid = document.getElementById('gridProdutos');
+    const lista = db.produtos.filter(p => p.categoria === categoriaAtual);
+    if(lista.length === 0){
+      grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;opacity:.6;font-size:11px">Nenhum produto cadastrado</p>';
+      return;
+    }
+    grid.innerHTML = lista.map(p => `
+      <div class="card">
+        <img src="${p.imagem || 'https://via.placeholder.com/160x100/1f2937/7c3aed?text=Premium+Vz'}" alt="">
+        <div class="card-body">
+          <h4>${p.nome}</h4>
+          <p>R$ ${p.valor.toFixed(2)}</p>
+          <p>Estoque: ${p.estoque}</p>
+          <button class="btn-compra" onclick="comprar(${p.id})">Comprar</button>
+          ${db.adminLogado? `<button style="width:100%;margin-top:4px;background:var(--roxo);color:white;border:none;padding:6px;border-radius:4px;font-size:10px;cursor:pointer" onclick="editarProduto(${p.id})">Editar</button>` : ''}
         </div>
       </div>
-    `;
-  });
-  document.getElementById('listaEditPrecos').innerHTML = html || '<p style="color:var(--text-dim); text-align:center;">Nenhum produto</p>';
-}
-
-// ADMIN - PEDIDOS
-function renderizarPedidos(){
-  let html = '';
-  if(pedidos.length === 0){
-    html = '<p style="color:var(--text-dim); text-align:center;">Nenhum pedido ainda</p>';
-  } else {
-    pedidos.slice().reverse().forEach(p => {
-      html += `
-        <div class="pedido-item">
-          <h4>${p.nome}</h4>
-          <p>💰 ${p.preco}</p>
-          <p class="pedido-data">📅 ${p.data}</p>
-        </div>
-      `;
-    });
+    `).join('');
   }
-  document.getElementById('listaPedidos').innerHTML = html;
-}
 
-function limparPedidos(){
-  if(confirm('Limpar todo histórico de pedidos?')){
-    pedidos = [];
-    salvarDados();
-    renderizarPedidos();
-    atualizarStats();
+  function comprar(id){
+    const produto = db.produtos.find(p => p.id === id);
+    const msg = `Olá! Quero comprar: ${produto.nome} - R$${produto.valor.toFixed(2)}`;
+    window.open(`https://wa.me/5598984753563?text=${encodeURIComponent(msg)}`, '_blank');
   }
-}
 
-// ADMIN - CONFIG
-function exportarDados(){
-  let dados = {
-    produtos: produtos,
-    pedidos: pedidos,
-    data: new Date().toLocaleString('pt-BR')
-  };
-  let blob = new Blob([JSON.stringify(dados, null, 2)], {type: 'application/json'});
-  let url = URL.createObjectURL(blob);
-  let a = document.createElement('a');
-  a.href = url;
-  a.download = `backup-bs-loja-${Date.now()}.json`;
-  a.click();
-}
+  function abrirModalProduto(){
+    editandoId = null;
+    document.getElementById('modalTitulo').textContent = 'Adicionar Produto';
+    document.getElementById('pNome').value = '';
+    document.getElementById('pImagem').value = '';
+    document.getElementById('pValor').value = '';
+    document.getElementById('pEstoque').value = '';
+    document.getElementById('modalProduto').classList.add('active');
+  }
 
-function importarDados(event){
-  let file = event.target.files[0];
-  if(!file) return;
+  function editarProduto(id){
+    const p = db.produtos.find(prod => prod.id === id);
+    editandoId = id;
+    document.getElementById('modalTitulo').textContent = 'Editar Produto';
+    document.getElementById('pCategoria').value = p.categoria;
+    document.getElementById('pNome').value = p.nome;
+    document.getElementById('pImagem').value = p.imagem;
+    document.getElementById('pValor').value = p.valor;
+    document.getElementById('pEstoque').value = p.estoque;
+    document.getElementById('modalProduto').classList.add('active');
+  }
 
-  let reader = new FileReader();
-  reader.onload = function(e){
-    try {
-      let dados = JSON.parse(e.target.result);
-      if(confirm('Isso vai substituir todos os dados atuais. Continuar?')){
-        produtos = dados.produtos || produtos;
-        pedidos = dados.pedidos || pedidos;
-        salvarDados();
-        renderizarProdutos();
-        atualizarStats();
-        renderizarListaPrecos();
-        renderizarPedidos();
-        alert('Backup importado com sucesso!');
-      }
-    } catch(err){
-      alert('Arquivo inválido!');
+  function fecharModalProduto(){
+    document.getElementById('modalProduto').classList.remove('active');
+  }
+
+  function popularSelectCategoria(){
+    document.getElementById('pCategoria').innerHTML = CATEGORIAS.map(c =>
+      `<option value="${c}">${c}</option>`
+    ).join('');
+  }
+
+  function salvarProduto(){
+    const produto = {
+      id: editandoId || Date.now(),
+      categoria: document.getElementById('pCategoria').value,
+      nome: document.getElementById('pNome').value,
+      imagem: document.getElementById('pImagem').value,
+      valor: parseFloat(document.getElementById('pValor').value) || 0,
+      estoque: parseInt(document.getElementById('pEstoque').value) || 0
+    };
+
+    if(editandoId){
+      const idx = db.produtos.findIndex(p => p.id === editandoId);
+      db.produtos[idx] = produto;
+    } else {
+      db.produtos.push(produto);
     }
-  };
-  reader.readAsText(file);
-}
 
-function resetarLoja(){
-  if(confirm('ATENÇÃO: Isso vai apagar TUDO! Tem certeza?')){
-    if(confirm('Última chance! Vai resetar produtos e pedidos. Confirma?')){
-      localStorage.removeItem('produtosBS');
-      localStorage.removeItem('pedidosBS');
-      location.reload();
-    }
+    salvarDB();
+    fecharModalProduto();
+    if(categoriaAtual) renderProdutos();
   }
-}
 
-function atualizarStats(){
-  document.getElementById('totalPedidos').innerText = pedidos.length;
-  document.getElementById('totalProdutos').innerText = produtos.length;
-}
+  function toggleMenu(){
+    alert('Menu: Fechar | Categorias | Redes sociais | Painel Admin');
+  }
 
-// MODAL ENVIO
-function abrirModalEnvio(nome, preco){
-  produtoSelecionado = nome;
-  precoSelecionado = preco;
-  document.getElementById('descricaoPedido').innerHTML = `Produto: ${nome}<br>Valor: ${preco}`;
-  document.getElementById('modalEnvio').classList.add('ativo');
-  document.body.style.overflow = 'hidden';
-}
+  function salvarDB(){
+    localStorage.setItem('premiumvz', JSON.stringify(db));
+  }
 
-function fecharModalEnvio(){
-  document.getElementById('modalEnvio').classList.remove('ativo');
-  document.body.style.overflow = 'auto';
-}
-
-function enviarWhatsApp(){
-  let msg = `🛒 *NOVO PEDIDO BS LOJA* 🛒\n\n📦 Produto: ${produtoSelecionado}\n💰 Valor: ${precoSelecionado}`;
-
-  // Salva pedido
-  pedidos.push({
-    nome: produtoSelecionado,
-    preco: precoSelecionado,
-    data: new Date().toLocaleString('pt-BR')
-  });
-  salvarDados();
-
-  window.open(`https://wa.me/5598984853563?text=${encodeURIComponent(msg)}`);
-  fecharModalEnvio();
-}
-
-// RENDERIZAR PRODUTOS COM DESCRIÇÃO
-function renderizarProdutos(){
-  let html = "";
-  produtos.forEach((p, i) => {
-    html += `
-    <div class="produto-card">
-      <img src="${p[2]}">
-      <h3>${p[0]}</h3>
-      <p>${p[1]}</p>
-      <div class="produto-desc">${p[3] || 'Sem descrição'}</div>
-      <button class="btn-enviar" onclick="abrirModalEnvio('${p[0]}', '${p[1]}')">
-        Iniciar envio
-      </button>
-    </div>
-    `;
-  });
-  document.getElementById('produtos').innerHTML = html;
-}
-
-// INIT
-renderizarProdutos();
+  // Auto login se já tiver sessão
+  if(db.clienteLogado || db.adminLogado){
+    entrarSite();
+  }
 </script>
+</body>
+</html>
