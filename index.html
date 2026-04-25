@@ -3,194 +3,282 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Painel Admin - Bonyx</title>
+<title>Painel Admin</title>
 <style>
 :root {
   --rosa: #ff00c8;
   --roxo: #8b00ff;
   --azul: #0099ff;
   --dourado: #ffd700;
-  --tema-atual: var(--rosa);
+  --tema: var(--rosa);
+  --roxo-borda: #8b00ff;
 }
 
-* {margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif;}
+* {margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif;}
 
 body {
-  background: #0a0a0a;
+  background: #000;
   color: #fff;
 }
 
-/* Header */
+/* Topo Logado */
+.barra-logado {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: #000;
+  font-size: 14px;
+  color: #fff;
+}
+
+.barra-logado.sair {
+  color: var(--tema);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Header: Menu | LV PREMIUM | Coração */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 20px;
-  border-bottom: 2px solid var(--tema-atual);
+  padding: 16px 20px;
+  border-bottom: 2px solid var(--roxo-borda);
+  background: #000;
 }
 
-.menu-icon {
-  color: var(--tema-atual);
+.icon-menu {
+  color: var(--tema);
   font-size: 24px;
   cursor: pointer;
+  filter: drop-shadow(0 0 10px var(--tema));
 }
 
 .lv-premium {
   color: var(--dourado);
-  font-weight: bold;
-  text-shadow: 0 0 10px var(--dourado);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 15px var(--dourado);
 }
 
-.heart {
-  color: var(--tema-atual);
+.icon-heart {
+  color: #ff0033;
   font-size: 24px;
   cursor: pointer;
+  filter: drop-shadow(0 0 12px #ff0033);
 }
 
-/* Container principal */
-.container {
+.conteudo {
   padding: 20px;
+  max-width: 480px;
+  margin: 0 auto;
 }
 
-.titulo-contas {
-  color: var(--tema-atual);
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 5px;
+/* Trocado: Total de compras → Contas do site */
+.titulo-grande {
+  color: var(--tema);
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 4px;
+  text-shadow: 0 0 20px var(--tema);
 }
 
-.contato {
-  color: #aaa;
-  font-size: 14px;
+.info-contato {
+  color: #888;
+  font-size: 13px;
   margin-bottom: 20px;
 }
 
+.info-contato.azul {
+  color: #4a9eff;
+}
+
+/* Card Oie Admin igualzinho */
 .card-admin {
-  border: 2px solid var(--tema-atual);
-  border-radius: 8px;
-  padding: 15px;
+  border-left: 4px solid var(--tema);
+  background: #0f0f0f;
+  border-radius: 10px;
+  padding: 18px;
   margin-bottom: 20px;
-  box-shadow: 0 0 15px var(--tema-atual);
+  box-shadow: 0 0 25px -8px var(--tema);
 }
 
 .card-admin h2 {
-  color: var(--tema-atual);
-  margin-bottom: 5px;
+  color: var(--tema);
+  font-size: 20px;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.card-admin p {
+  color: #ccc;
+  font-size: 14px;
 }
 
 .btn-impulsionar {
   width: 100%;
-  padding: 15px;
+  padding: 16px;
   background: #1a1a1a;
-  border: 1px solid #333;
-  color: #666;
-  border-radius: 8px;
-  margin-bottom: 25px;
+  border: 1px solid #2a2a2a;
+  color: #555;
+  border-radius: 12px;
+  font-size: 15px;
+  margin-bottom: 30px;
   cursor: not-allowed;
 }
 
-/* Duas colunas */
-.duas-colunas {
+.titulo-categorias {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #fff;
+}
+
+/* Categorias em 2 colunas */
+.grid-cat {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 14px;
+  margin-bottom: 25px;
 }
 
-.coluna h3 {
-  color: var(--tema-atual);
-  margin-bottom: 15px;
-  border-bottom: 1px solid var(--tema-atual);
-  padding-bottom: 5px;
+.card-jogo {
+  border: 2px solid var(--roxo-borda);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 0 18px -6px var(--roxo-borda);
 }
 
-.item-menu {
+.card-jogo.topo-img {
+  height: 130px;
+  background: #050505;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #1a1a1a;
+  position: relative;
+}
+
+.card-jogo.topo-img::before {
+  content: "?";
+  font-size: 32px;
+  color: #4a9eff;
+  background: #0a0a0a;
+  padding: 8px 14px;
+  border-radius: 4px;
+  border: 1px solid #4a9eff;
+}
+
+.card-jogo.nome-overlay {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  font-size: 11px;
+  color: #fff;
+  font-weight: 600;
+  text-shadow: 0 0 8px #000;
+}
+
+.card-jogo.nome-baixo {
+  padding: 12px 8px;
+  text-align: center;
+  color: var(--tema);
+  font-weight: 700;
+  font-size: 12px;
+  background: #000;
+  text-transform: uppercase;
+}
+
+/* Menu + Admin em 2 colunas */
+.grid-painel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.box {
+  background: #0a0a0a;
+  border-radius: 10px;
+  padding: 15px;
+  border: 1px solid #1a1a1a;
+}
+
+.box h4 {
+  color: var(--tema);
+  font-size: 15px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #222;
+  font-weight: 700;
+}
+
+.btn {
+  width: 100%;
+  padding: 11px 10px;
   background: #111;
-  padding: 12px;
-  margin-bottom: 8px;
+  border: 1px solid #222;
+  border-left: 3px solid var(--tema);
+  color: #ddd;
   border-radius: 6px;
-  border-left: 3px solid var(--tema-atual);
+  font-size: 12px;
+  text-align: left;
+  margin-bottom: 8px;
   cursor: pointer;
   transition: 0.2s;
 }
 
-.item-menu:hover {
-  background: #1a1a1a;
-  box-shadow: 0 0 10px var(--tema-atual);
+.btn:hover {
+  background: #181818;
+  border-color: var(--tema);
+  box-shadow: 0 0 12px -4px var(--tema);
 }
 
-.tema-ativo {
-  background: var(--tema-atual);
+.btn.ativo {
+  background: var(--tema);
   color: #000;
-  font-weight: bold;
+  font-weight: 700;
 }
 
-/* Categorias */
-.grid-categorias {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  margin-top: 15px;
-}
-
-.card-categoria {
-  border: 2px solid var(--roxo);
-  border-radius: 8px;
-  overflow: hidden;
-  background: #000;
-}
-
-.card-categoria.img {
-  height: 120px;
-  background: #0a0a0a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 40px;
-}
-
-.card-categoria.nome {
-  padding: 10px;
+.url {
   text-align: center;
-  color: var(--tema-atual);
-  font-weight: bold;
-  border-top: 1px solid #222;
-}
-
-/* Admin actions */
-.admin-actions button {
-  width: 100%;
+  margin-top: 30px;
+  background: #1a1a1a;
   padding: 10px;
-  margin-bottom: 8px;
-  background: #111;
-  border: 1px solid var(--tema-atual);
-  color: var(--tema-atual);
-  border-radius: 6px;
-  cursor: pointer;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #999;
+  border: 1px solid #333;
+  display: inline-block;
+  width: 100%;
 }
 
-.admin-actions button:hover {
-  background: var(--tema-atual);
-  color: #000;
-}
-
-@media (max-width: 768px) {
- .duas-colunas,.grid-categorias {grid-template-columns: 1fr;}
+@media (max-width: 420px) {
+.grid-cat,.grid-painel {grid-template-columns: 1fr;}
 }
 </style>
 </head>
 <body>
 
-<!-- Header: Menu | LV Premium | Coração -->
-<div class="header">
-  <div class="menu-icon" onclick="toggleMenu()">☰</div>
-  <div class="lv-premium">LV PREMIUM</div>
-  <div class="heart">❤️</div>
+<div class="barra-logado">
+  <span>Logado: admin</span>
+  <span class="sair" onclick="logout()">Sair</span>
 </div>
 
-<div class="container">
-  <!-- Trocado: Total de compras → Contas do site -->
-  <div class="titulo-contas">Contas do site</div>
-  <div class="contato">@chanelff__ | WhatsApp: 98984753563</div>
+<!-- Header: ☰ | LV PREMIUM | ❤️ -->
+<div class="header">
+  <div class="icon-menu" onclick="abrirMenu()">☰</div>
+  <div class="lv-premium">LV PREMIUM</div>
+  <div class="icon-heart">❤️</div>
+</div>
+
+<div class="conteudo">
+  <!-- Texto trocado conforme pediu -->
+  <div class="titulo-grande">Contas do site</div>
+  <div class="info-contato">@chanelff__ | WhatsApp: <span class="azul">98984753563</span></div>
 
   <div class="card-admin">
     <h2>Oie, Admin!</h2>
@@ -199,124 +287,115 @@ body {
 
   <button class="btn-impulsionar" disabled>Impulsionar</button>
 
-  <!-- DUAS COLUNAS PRINCIPAIS -->
-  <div class="duas-colunas">
-    
-    <!-- COLUNA ESQUERDA -->
-    <div class="coluna">
-      <h3>Menu</h3>
-      <div class="item-menu">Painel de admin</div>
-      <div class="item-menu tema-ativo" onclick="mudarTema('rosa')">Temas: Rosa (atual)</div>
-      <div class="item-menu" onclick="mudarTema('roxo')">Temas: Roxo</div>
-      <div class="item-menu" onclick="mudarTema('azul')">Temas: Azul</div>
-      <div class="item-menu" onclick="mudarTema('dourado')">Temas: Dourado</div>
-      <div class="item-menu">Carrinho</div>
-      <div class="item-menu">Favoritos</div>
-      <div class="item-menu" onclick="abrirConta()">Sua conta</div>
-
-      <h3 style="margin-top: 25px;">Categorias</h3>
-      <div class="grid-categorias">
-        <div class="card-categoria">
-          <div class="img">🎮</div>
-          <div class="nome">FORTNITE BATTLE ROYALE</div>
-        </div>
-        <div class="card-categoria">
-          <div class="img">⚔️</div>
-          <div class="nome">CLASH OF CLANS</div>
-        </div>
+  <div class="titulo-categorias">Categorias</div>
+  
+  <!-- Categorias em 2 colunas igual no print -->
+  <div class="grid-cat">
+    <div class="card-jogo">
+      <div class="topo-img">
+        <div class="nome-overlay">FORTNITE BATTLE ROYALE</div>
       </div>
+      <div class="nome-baixo">FORTNITE BATTLE ROYALE</div>
+    </div>
+    <div class="card-jogo">
+      <div class="topo-img">
+        <div class="nome-overlay">CLASH OF CLANS</div>
+      </div>
+      <div class="nome-baixo">CLASH OF CLANS</div>
+    </div>
+  </div>
+
+  <!-- Menu + Painel Admin em 2 colunas -->
+  <div class="grid-painel">
+    
+    <!-- COLUNA ESQUERDA: MENU -->
+    <div class="box">
+      <h4>Menu</h4>
+      <button class="btn">Painel de admin</button>
+      <button class="btn ativo" onclick="tema('rosa')">Temas: Rosa (atual)</button>
+      <button class="btn" onclick="tema('roxo')">Temas: Roxo</button>
+      <button class="btn" onclick="tema('azul')">Temas: Azul</button>
+      <button class="btn" onclick="tema('dourado')">Temas: Dourado</button>
+      <button class="btn">Carrinho</button>
+      <button class="btn">Favoritos</button>
+      <button class="btn" onclick="minhaConta()">Sua conta</button>
     </div>
 
-    <!-- COLUNA DIREITA -->
-    <div class="coluna">
-      <h3>Painel Admin</h3>
-      <div class="admin-actions">
-        <button onclick="verHistorico()">Ver histórico de compradores</button>
-        <button onclick="editarItem('valor')">Modificar valores</button>
-        <button onclick="editarItem('descricao')">Modificar descrição</button>
-        <button onclick="editarItem('estoque')">Modificar estoque</button>
-        <button onclick="editarItem('nome')">Modificar nomes</button>
-        <button onclick="removerItem()">Remover categoria/subcategoria</button>
-      </div>
-
-      <h3 style="margin-top: 25px;">Área do Cliente</h3>
-      <div class="admin-actions">
-        <button onclick="verHistoricoCliente()">Ver histórico de compras</button>
-        <button onclick="verDados()">Ver dados da conta</button>
-        <button onclick="verFavoritos()">Ver favoritos</button>
-        <button onclick="verPedidos()">Status de pedidos</button>
-      </div>
+    <!-- COLUNA DIREITA: ADMIN + CLIENTE -->
+    <div class="box">
+      <h4>Painel Admin</h4>
+      <button class="btn" onclick="admin('historico')">Ver histórico de compradores</button>
+      <button class="btn" onclick="admin('valor')">Modificar valores</button>
+      <button class="btn" onclick="admin('desc')">Modificar descrição</button>
+      <button class="btn" onclick="admin('estoque')">Modificar estoque</button>
+      <button class="btn" onclick="admin('nome')">Modificar nomes</button>
+      <button class="btn" onclick="admin('remover')">Remover categoria/subcategoria</button>
+      
+      <h4 style="margin-top:18px;">Área do Cliente</h4>
+      <button class="btn" onclick="cliente('historico')">Ver histórico dele</button>
+      <button class="btn" onclick="cliente('dados')">Ver dados da conta</button>
+      <button class="btn" onclick="cliente('favoritos')">Ver favoritos</button>
+      <button class="btn" onclick="cliente('pedidos')">Status de pedidos</button>
     </div>
 
   </div>
+
+  <div class="url">bonyx-sh.vercel.app</div>
 </div>
 
 <script>
-// Troca de temas
-function mudarTema(cor) {
-  const root = document.documentElement;
-  const cores = {
-    rosa: '#ff00c8',
-    roxo: '#8b00ff', 
-    azul: '#0099ff',
-    dourado: '#ffd700'
-  };
-  root.style.setProperty('--tema-atual', cores[cor]);
-  
-  // Atualiza item ativo
-  document.querySelectorAll('.item-menu').forEach(item => {
-    item.classList.remove('tema-ativo');
-    if(item.textContent.toLowerCase().includes(cor)) {
-      item.classList.add('tema-ativo');
-      item.textContent = `Temas: ${cor.charAt(0).toUpperCase() + cor.slice(1)} (atual)`;
-    } else if(item.textContent.includes('(atual)')) {
-      item.textContent = item.textContent.replace(' (atual)', '');
+const cores = {
+  rosa: '#ff00c8',
+  roxo: '#8b00ff',
+  azul: '#0099ff',
+  dourado: '#ffd700'
+};
+
+function tema(cor) {
+  document.documentElement.style.setProperty('--tema', cores[cor]);
+  document.querySelectorAll('.btn').forEach(b => {
+    if(b.textContent.includes('Temas:')) {
+      b.classList.remove('ativo');
+      if(b.textContent.toLowerCase().includes(cor)) {
+        b.classList.add('ativo');
+        b.textContent = `Temas: ${cor.charAt(0).toUpperCase() + cor.slice(1)} (atual)`;
+      } else {
+        b.textContent = b.textContent.replace(' (atual)', '');
+      }
     }
   });
 }
 
-// Funções do Admin - conecta com seu backend depois
-function verHistorico() {
-  alert('Abrir modal com histórico de todos os compradores');
-  // Aqui você faz um fetch() pro seu backend: /api/admin/historico
+// Admin: pode ver histórico, editar e remover - vale pra categoria e sub
+function admin(tipo) {
+  const acoes = {
+    historico: 'Lista: Nome do comprador | Data | Valor pago | Categoria',
+    valor: 'Abre campo pra alterar preço da categoria/sub selecionada',
+    desc: 'Abre editor pra mudar descrição do produto',
+    estoque: 'Abre input pra alterar quantidade em estoque',
+    nome: 'Abre input pra renomear categoria ou subcategoria',
+    remover: 'Confirma exclusão de categoria/sub + todos produtos dentro'
+  };
+  alert(`ADMIN: ${acoes}`);
+  // fetch(`/api/admin/${tipo}`, {method: 'POST'})
 }
 
-function editarItem(tipo) {
-  alert(`Abrir modal pra editar ${tipo} da categoria/subcategoria selecionada`);
-  // fetch('/api/admin/editar', {method: 'POST', body: {tipo, id, valor}})
+// Cliente: vê só dados dele
+function cliente(tipo) {
+  const acoes = {
+    historico: 'Mostra só as compras do cliente logado',
+    dados: 'Exibe email, telefone e dados da conta dele',
+    favoritos: 'Lista produtos que ele favoritou',
+    pedidos: 'Mostra status: Pendente/Pago/Entregue'
+  };
+  alert(`CONTA: ${acoes}`);
+  // fetch(`/api/conta/${tipo}`)
 }
 
-function removerItem() {
-  if(confirm('Tem certeza que quer remover esta categoria/subcategoria?')) {
-    alert('Item removido');
-    // fetch('/api/admin/remover', {method: 'DELETE', body: {id}})
-  }
-}
-
-// Funções do Cliente
-function abrirConta() {
-  alert('Abrir página/drawer com dados da conta do cliente');
-}
-
-function verHistoricoCliente() {
-  alert('Mostrar só o histórico de compras do cliente logado');
-  // fetch('/api/cliente/historico')
-}
-
-function verDados() {
-  alert('Mostrar dados pessoais do cliente');
-}
-
-function verFavoritos() {
-  alert('Listar itens favoritados pelo cliente');
-}
-
-function verPedidos() {
-  alert('Mostrar status dos pedidos do cliente');
-}
-
-function toggleMenu() {
-  alert('Abrir/fechar menu lateral');
+function abrirMenu() { alert('Drawer lateral'); }
+function minhaConta() { alert('Página de dados do cliente'); }
+function logout() {
+  if(confirm('Sair do painel admin?')) location.reload();
 }
 </script>
 
