@@ -3,94 +3,966 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Premium Vz</title>
+<title>LY STREAMING</title>
 <style>
-  :root{
-    --azul-fundo:#0a1a3a;
-    --azul-escuro:#06122b;
-    --roxo:#7c3aed;
-    --azul:#2563eb;
-    --dourado:#fbbf24;
-    --texto:#e5e7eb;
-    --cinza:#1f2937;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-  body{background:var(--azul-fundo);color:var(--texto);font-size:13px}
-  .header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--azul-escuro);border-bottom:2px solid var(--roxo)}
-  .menu-btn{font-size:20px;background:none;border:none;color:var(--dourado);cursor:pointer}
-  .heart{color:var(--roxo);font-size:22px}
-  .container{padding:16px;max-width:1200px;margin:auto}
-  .top-info h2{color:var(--dourado);font-size:14px;margin-bottom:4px}
-  .top-info p{font-size:12px;margin-bottom:2px}
-  .saudacao{margin:16px 0;padding:12px;background:var(--cinza);border-left:3px solid var(--azul);border-radius:4px}
-  .saudacao h3{font-size:13px;color:var(--dourado)}
-  .saudacao p{font-size:12px;opacity:.9}
-  .btn-impulsionar{background:var(--cinza);color:#6b7280;border:1px solid #374151;padding:10px;width:100%;border-radius:6px;margin-bottom:20px;cursor:not-allowed}
-  .grid-categorias{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:24px}
-  .cat-btn{background:linear-gradient(135deg,var(--roxo),var(--azul));border:none;color:white;padding:14px 8px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:bold;border:2px solid var(--dourado)}
-  .cat-btn:hover{opacity:.9}
-  .produtos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
-  .card{background:var(--azul-escuro);border:1px solid var(--roxo);border-radius:8px;overflow:hidden}
-  .card img{width:100%;height:100px;object-fit:cover;background:var(--cinza)}
-  .card-body{padding:10px}
-  .card h4{font-size:12px;margin-bottom:6px;color:var(--dourado)}
-  .card p{font-size:11px;margin-bottom:4px}
-  .btn-compra{width:100%;background:var(--dourado);color:var(--azul-fundo);border:none;padding:8px;border-radius:4px;font-weight:bold;cursor:pointer;font-size:11px}
-  .btn-compra:hover{background:#f59e0b}
-  .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:50;align-items:center;justify-content:center}
-  .modal.active{display:flex}
-  .modal-content{background:var(--azul-escuro);padding:20px;border-radius:8px;width:90%;max-width:400px;border:2px solid var(--roxo)}
-  .modal-content h3{color:var(--dourado);margin-bottom:12px;font-size:14px}
-  .modal-content input, .modal-content select{width:100%;padding:8px;margin-bottom:10px;background:var(--cinza);border:1px solid var(--roxo);color:var(--texto);border-radius:4px;font-size:12px}
-  .modal-content button{background:var(--azul);color:white;border:none;padding:8px 12px;border-radius:4px;cursor:pointer;font-size:12px;margin-right:6px}
-  .btn-fechar{background:#6b7280!important}
-  .admin-panel{display:none}
-  .admin-panel.active{display:block}
-  .admin-bar{background:var(--roxo);padding:8px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-  .hidden{display:none}
+:root {
+  --bg: #0d0a1f;
+  --card: #1a1333;
+  --border: #2d1b4e;
+  --primary: #8b5cf6;
+  --gold: #d4af37;
+  --pink: #ec4899;
+  --red: #dc2626;
+  --green: #16a34a;
+  --text: #ffffff;
+  --text-dim: #a78bfa;
+  --gradient: linear-gradient(135deg, #1a1333 0%, #2d1b4e 50%, #1a1333 100%);
+}
+
+body.tema-azul {
+  --primary: #3b82f6;
+  --text-dim: #93c5fd;
+  --gradient: linear-gradient(135deg, #0a1628 0%, #1e3a5f 50%, #0a1628 100%);
+  --card: #0f1f3d;
+  --border: #1e3a5f;
+}
+
+body.tema-amarelo {
+  --primary: #d4af37;
+  --text-dim: #fbbf24;
+  --gradient: linear-gradient(135deg, #1f1611 0%, #4a3319 50%, #1f1611 100%);
+  --card: #2d2316;
+  --border: #4a3319;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  background-image: var(--gradient);
+  color: var(--text);
+  font-family: 'Arial', sans-serif;
+  font-size: 11px;
+  min-height: 100vh;
+}
+
+.topbar {
+  background: rgba(26, 19, 51, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-img {
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, var(--primary), var(--pink));
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.logo {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.logo span {
+  color: var(--primary);
+}
+
+.top-icons {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-btn {
+  width: 30px;
+  height: 30px;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s;
+}
+
+.icon-btn:active {
+  transform: scale(0.95);
+}
+
+.icon-btn.coracao {
+  color: var(--red);
+}
+
+.menu-btn {
+  width: 30px;
+  height: 30px;
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 65%;
+  height: 100%;
+  background: rgba(26, 19, 51, 0.98);
+  backdrop-filter: blur(10px);
+  border-right: 2px solid var(--primary);
+  z-index: 999;
+  padding: 20px 12px;
+}
+
+.menu.ativo {
+  display: block;
+}
+
+.menu h3 {
+  color: var(--primary);
+  margin-bottom: 18px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.menu-btn-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  text-decoration: none;
+  padding: 11px;
+  margin-bottom: 8px;
+  border: 2px solid rgba(139, 92, 246, 0.3);
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(139, 92, 246, 0.1);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.menu-btn-item:active {
+  background: rgba(139, 92, 246, 0.2);
+  transform: scale(0.98);
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  z-index: 998;
+}
+
+.overlay.ativo {
+  display: block;
+}
+
+.container {
+  padding: 16px 12px;
+}
+
+.premium-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.premium-header h2 {
+  font-size: 18px;
+  color: var(--primary);
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.categorias-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.cat-card {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: 0.3s;
+  position: relative;
+}
+
+.cat-card:active {
+  transform: scale(0.95);
+  border-color: var(--primary);
+}
+
+.cat-card img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+}
+
+.cat-card-info {
+  padding: 8px;
+  text-align: center;
+  background: linear-gradient(to top, rgba(26,19,51,0.95), transparent);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.cat-card-info span {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text);
+  text-transform: uppercase;
+}
+
+.tela-produto {
+  display: none;
+}
+
+.tela-produto.ativo {
+  display: block;
+}
+
+.btn-voltar {
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 11px;
+  cursor: pointer;
+  margin-bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.produto-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.produto-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.produto-box h3 {
+  font-size: 13px;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+
+.produto-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.produto-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.produto-select {
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.preco-info {
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px;
+  margin-bottom: 12px;
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.btn-comprar {
+  width: 100%;
+  background: linear-gradient(135deg, var(--pink), var(--primary));
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.btn-comprar:active {
+  transform: scale(0.98);
+}
+
+.btn-favorito {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.opcoes-lista {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.opcoes-header {
+  background: rgba(139, 92, 246, 0.2);
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.opcoes-header span {
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.opcao-item {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+}
+
+.opcao-item:last-child {
+  border-bottom: none;
+}
+
+.opcao-nome {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.opcao-preco {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.pagamento-info {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 12px;
+  font-size: 10px;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+.pagamento-info strong {
+  color: var(--green);
+  font-size: 12px;
+}
+
+.feedback-section {
+  margin-top: 24px;
+}
+
+.feedback-header {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.feedback-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.feedback-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.feedback-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary);
+}
+
+.feedback-info h4 {
+  font-size: 11px;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.feedback-stars {
+  color: var(--gold);
+  font-size: 12px;
+}
+
+.modal-admin,.modal-login {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  background-image: var(--gradient);
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.modal-admin.ativo,.modal-login.ativo {
+  display: block;
+}
+
+.modal-header {
+  background: rgba(26, 19, 51, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.fechar-modal {
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.modal-content {
+  padding: 20px 14px;
+}
+
+.titulo-envio {
+  color: var(--red);
+  font-size: 15px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.sub-envio {
+  color: var(--text);
+  font-size: 11px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.label-desc {
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.input-admin,.textarea-admin,select.input-admin {
+  background: var(--card);
+  border: 2px solid var(--primary);
+  border-radius: 10px;
+  padding: 12px;
+  width: 100%;
+  color: var(--text);
+  font-size: 11px;
+  margin-bottom: 12px;
+  outline: none;
+  font-family: 'Arial', sans-serif;
+}
+
+.textarea-admin {
+  resize: vertical;
+  min-height: 70px;
+}
+
+.btn-login,.btn-salvar {
+  width: 100%;
+  background: linear-gradient(135deg, var(--primary), var(--pink));
+  color: #fff;
+  border: none;
+  padding: 13px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.painel-admin h2 {
+  color: var(--gold);
+  margin-bottom: 16px;
+  text-align: center;
+  font-size: 15px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.stat-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+}
+
+.stat-box h3 {
+  color: var(--primary);
+  font-size: 22px;
+  margin-bottom: 4px;
+}
+
+.stat-box p {
+  color: var(--text-dim);
+  font-size: 9px;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.tab-btn {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tab-btn.ativo {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.ativo {
+  display: block;
+}
+
+.card-admin {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.card-title {
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: var(--primary);
+}
+
+.btn-sair {
+  width: 100%;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  margin-top: 14px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.tema-select {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.tema-opt {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.tema-opt.ativo {
+  border-color: var(--primary);
+  background: rgba(139, 92, 246, 0.2);
+}
+
+.item-lista {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.item-lista img {
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.item-lista-info {
+  flex: 1;
+}
+
+.item-lista-info h4 {
+  font-size: 11px;
+  margin-bottom: 3px;
+}
+
+.item-lista-info p {
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.btn-edit-del {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-edit-del button {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  font-size: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-edit {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-del {
+  background: var(--red);
+  color: #fff;
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--text-dim);
+  padding: 30px;
+  font-size: 11px;
+}
 </style>
 </head>
+
 <body>
 
-<div class="header">
-  <button class="menu-btn" onclick="toggleMenu()">☰</button>
-  <span class="heart">♥</span>
+<div class="overlay" id="overlay" onclick="fecharMenu()"></div>
+<div class="menu" id="menu">
+  <h3>⚡ Menu LY</h3>
+  <a href="#" class="menu-btn-item" onclick="fecharMenu();voltarInicio()">
+    🏠 Início
+  </a>
+  <a href="https://instagram.com/chanelff__" class="menu-btn-item" target="_blank">
+    📸 Instagram @chanelff__
+  </a>
+  <a href="https://wa.me/5589984853563" class="menu-btn-item" target="_blank">
+    💬 WhatsApp 98984753563
+  </a>
+  <a class="menu-btn-item" onclick="abrirLoginAdmin()">
+    👤 Painel Admin
+  </a>
+  <a class="menu-btn-item" onclick="abrirTemas()">
+    🎨 Temas: Roxo, Azul, Amarelo Dourado
+  </a>
+  <a class="menu-btn-item" onclick="abrirCategoriasMenu()">
+    📂 Categorias
+  </a>
+  <a class="menu-btn-item" onclick="abrirRedes()">
+    🌐 Redes Sociais do Site
+  </a>
+  <a class="menu-btn-item" onclick="fecharMenu()">
+    ❌ Fechar
+  </a>
 </div>
 
-<div id="loginModal" class="modal active">
+<div class="modal-login" id="modalLogin">
+  <div class="modal-header">
+    <button class="fechar-modal" onclick="fecharLoginAdmin()">×</button>
+    <div style="width:30px"></div>
+  </div>
   <div class="modal-content">
-    <h3>Painel de Admin - Premium Vz</h3>
-    <input type="text" id="user" placeholder="Usuário">
-    <input type="password" id="pass" placeholder="Senha">
-    <button onclick="fazerLogin()">Entrar</button>
+    <div class="titulo-envio">🔐 PAINEL ADMIN - SEGURO</div>
+    <p class="sub-envio">ACESSO RESTRITO DA DONA</p>
+    <div class="label-desc">USUÁRIO</div>
+    <input type="text" class="input-admin" id="usuarioAdmin" placeholder="Digite o usuário">
+    <div class="label-desc">SENHA</div>
+    <input type="password" class="input-admin" id="senhaAdmin" placeholder="Digite a senha">
+    <button class="btn-login" onclick="fazerLogin()">ENTRAR</button>
   </div>
 </div>
 
-<div id="app" class="hidden">
-  <div class="container">
-    <div class="top-info">
-      <h2>Total de compras feitas</h2>
-      <p>@chanelff__ | WhatsApp: 98984753563</p>
+<div class="modal-admin" id="modalAdmin">
+  <div class="modal-header">
+    <button class="fechar-modal" onclick="fecharAdmin()">×</button>
+    <div style="width:30px"></div>
+  </div>
+  <div class="modal-content painel-admin">
+    <h2 id="tituloAdmin">👤 Painel Admin</h2>
+    <div class="stats">
+      <div class="stat-box">
+        <h3 id="totalPedidos">0</h3>
+        <p>TOTAL DE COMPRAS FEITAS</p>
+      </div>
+      <div class="stat-box">
+        <h3 id="totalProdutos">0</h3>
+        <p>PRODUTOS ATIVOS</p>
+      </div>
     </div>
-
-    <div class="saudacao">
-      <h3>Oie, cliente!</h3>
-      <p>Seu painel está otimizado</p>
+    <div class="tabs">
+      <button class="tab-btn ativo" onclick="trocarTab('dashboard')">Dashboard</button>
+      <button class="tab-btn" onclick="trocarTab('produtos')">Produtos</button>
+      <button class="tab-btn" onclick="trocarTab('categorias')">Categorias</button>
+      <button class="tab-btn" onclick="trocarTab('pedidos')">Pedidos</button>
+      <button class="tab-btn" onclick="trocarTab('config')">Config</button>
     </div>
-
-    <button class="btn-impulsionar" disabled>Impulsionar</button>
-
-    <div id="categoriasView">
-      <div class="grid-categorias" id="gridCategorias"></div>
+    <div class="tab-content ativo" id="tab-dashboard">
+      <div class="card-admin">
+        <div class="card-title">📊 Resumo Rápido</div>
+        <p style="color:var(--text-dim); font-size:11px; line-height:1.6">
+          Bem-vinda ao painel! Aqui você gerencia tudo da loja.<br><br>
+          - Adicione/edite produtos na aba Produtos<br>
+          - Crie categorias e subcategorias em Categorias<br>
+          - Veja todos os pedidos em Pedidos<br>
+          - Altere temas em Config
+        </p>
+      </div>
     </div>
-
-    <div id="produtosView" class="hidden">
-      <button onclick="voltarCategorias()" style="margin-bottom:12px;background:var(--cinza);border:1px solid var(--roxo);color:var(--texto);padding:6px 10px;border-radius:4px;cursor:pointer;font-size:11px">← Voltar</button>
-      <h3 id="tituloCat" style="color:var(--dourado);font-size:13px;margin-bottom:12px"></h3>
-      <div class="produtos-grid" id="gridProdutos"></div>
+    <div class="tab-content" id="tab-produtos">
+      <div class="card-admin">
+        <div class="card-title">➕ Adicionar Produto</div>
+        <input type="text" class="input-admin" id="novoNome" placeholder="Nome do produto">
+        <input type="text" class="input-admin" id="novoPreco" placeholder="Preço (Ex: R$179)">
+        <input type="text" class="input-admin" id="novoImg" placeholder="Link da imagem">
+        <input type="number" class="input-admin" id="novoEstoque" placeholder="Estoque disponível">
+        <select class="input-admin" id="novoCat" onchange="carregarSubcats()">
+          <option value="">Selecione a Categoria</option>
+        </select>
+        <select class="input-admin" id="novoSubcat">
+          <option value="">Selecione a Subcategoria</option>
+        </select>
+        <textarea class="textarea-admin" id="novoDesc" placeholder="Descrição do produto"></textarea>
+        <button class="btn-salvar" onclick="adicionarProduto()">ADICIONAR PRODUTO</button>
+      </div>
+      <div class="card-admin">
+        <div class="card-title">✏️ Gerenciar Produtos</div>
+        <div id="listaEditPrecos"></div>
+      </div>
     </div>
+    <div class="tab-content" id="tab-categorias">
+      <div class="card-admin">
+        <div class="card-title">📁 Adicionar Categoria</div>
+        <input type="text" class="input-admin" id="novaCat" placeholder="Nome da categoria">
+        <input type="text" class="input-admin" id="novaCatImg" placeholder="Link da imagem da categoria">
+        <button class="btn-salvar" onclick="adicionarCategoria()">ADICIONAR CATEGORIA</button>
+      </div>
+      <div class="card-admin">
+        <div class="card-title">📂 Adicionar Subcategoria</div>
+        <select class="input-admin" id="selectCatPai">
+          <option value="">Selecione a Categoria Pai</option>
+        </select>
+        <input type="text" class="input-admin" id="novaSubcat" placeholder="Nome da subcategoria">
+        <button class="btn-salvar" onclick="adicionarSubcategoria()">ADICIONAR SUBCATEGORIA</button>
+      </div>
+      <div class="card-admin">
+        <div class="card-title">🗂️ Gerenciar Categorias</div>
+        <div id="listaCategorias"></div>
+      </div>
+    </div>
+    <div class="tab-content" id="tab-pedidos">
+      <div class="card-admin">
+        <div class="card-title">📦 Últimos Pedidos</div>
+        <div id="listaPedidos"></div>
+        <button class="btn-salvar" style="background:var(--primary);color:#000" onclick="limparPedidos()">LIMPAR HISTÓRICO</button>
+      </div>
+    </div>
+    <div class="tab-content" id="tab-config">
+      <div class="card-admin">
+        <div class="card-title">🎨 Tema do Site</div>
+        <div class="tema-select">
+          <div class="tema-opt" onclick="trocarTemaSelect('roxo')">Roxo</div>
+          <div class="tema-opt" onclick="trocarTemaSelect('azul')">Azul</div>
+          <div class="tema-opt" onclick="trocarTemaSelect('amarelo')">Amarelo Dourado</div>
+        </div>
+      </div>
+      <div class="card-admin">
+        <div class="card-title">⚙️ Configurações</div>
+        <button class="menu-btn-item" style="width:100%; justify-content:center; margin-bottom:8px;" onclick="exportarDados()">
+          📥 Exportar Backup
+        </button>
+        <button class="menu-btn-item" style="width:100%; justify-content:center; margin-bottom:8px;" onclick="document.getElementById('importFile').click()">
+          📤 Importar Backup
+        </button>
+        <input type="file" id="importFile" style="display:none" accept=".json" onchange="importarDados(event)">
+        <button class="menu-btn-item" style="width:100%; justify-content:center; background:rgba(220,38,0.2)" onclick="resetarLoja()">
+          🗑️ Resetar Loja
+        </button>
+      </div>
+    </div>
+    <button class="btn-sair" onclick="sairAdmin()">🚪 SAIR DA CONTA</button>
+  </div>
+</div>
 
-    <div id="adminPanel" class="admin-panel">
-      <div class="admin-bar">
-        <span style="font-size:12px;font-weight:bold">PAINEL ADMIN</span>
-        <button onclick="abrirModalProduto()" style="background:var(--dourado);color:var(--azul-fundo);border:none;padding:6px 10px;border-radius:4px;font-size:
+<div class="topbar">
+  <div class="logo-area">
+    <div class="logo-img">VZ</div>
+    <div class="logo">
+      <span>LY</span> STREAMING
+    </div>
+  </div>
+  <div class="top-icons">
+    <div class="icon-btn coracao">♥</div>
+    <button class="menu-btn" onclick="abrirMenu()">☰</button>
+  </div>
+</div>
+
+<div class="container" id="telaHome">
+  <div class="premium-header">
+    <h2><span style="color:var(--gold)">Premium</span> <span style="color:var(--primary)">Vz</span></h2>
+  </div>
+  
+  <div class="section-title">Categorias</div>
+  <div class="categorias-grid" id="categoriasGrid"></div>
+</div>
+
+<div class="container tela-produto" id="telaProduto">
+  <button class="btn-voltar" onclick="voltarInicio()">← Voltar</button>
+  
+  <div id="produtoContent"></div>
+  
+  <div class="feedback-section">
+    <div class="feedback-header">Feedback dos Clientes</div>
+    <div class="feedback-grid" id="feedbackGrid"></div>
+  </div>
+</div>
+
+<script>
+let admins = JSON.parse(localStorage.getItem('adminsBS')) || [
+  {user: 'Lorrannyh.16', senha: 'Lorrannyh.16'}
+];
+
+let categorias = JSON.parse(localStorage.getItem('categoriasBS')) || [
+  ['Fortnite', 'https://i.imgur.com/Q6QZq8E.jpg', ['Battle Royale', 'Skins', 'V-Bucks']],
+  ['Clash of Clans', 'https://i.imgur.com/8p5rX9L.jpg', ['Gemas', 'Contas', 'Tropas']],
+  ['Free Fire', 'https://i.imgur.com/Bud0zyu.png', ['Dimas FF', 'Passe', 'Contas', 'Diamantes']],
+  ['TikTok', 'https://i.imgur.com/5xJqZ9L.png', ['Seguidores', 'Curtidas', 'Views']],
+  ['Instagram', 'https://i.imgur.com/8Q1Z2nP.png', ['Seguidores', 'Curtidas', 'Views']],
+  ['Kwai', 'https://i.imgur.com/OFmm8PI.jpeg', ['Seguidores', 'Curtidas', 'Views']],
+  ['Curso', 'https://i.imgur.com/OFmm8PI.jpeg', ['Marketing', 'Design', 'Programação']],
+  ['Caixa Surpresa
