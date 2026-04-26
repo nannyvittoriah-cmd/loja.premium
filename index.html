@@ -1,188 +1,733 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CHANEL STORE</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Inter, sans-serif; }
-    body { background: #0f0f0f; color: #fff; }
-    .container { max-width: 420px; margin: 0 auto; padding: 16px; }
-    .hidden { display: none; }
-    button { cursor: pointer; border: none; border-radius: 8px; }
-    
-    /* Login */
-    .login { display: flex; flex-direction: column; gap: 12px; margin-top: 80px; }
-    .login input { padding: 14px; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: #fff; }
-    .login .btn-primary { padding: 14px; background: #7c3aed; color: #fff; font-weight: 600; }
-    .login .btn-link { background: none; color: #7c3aed; text-align: center; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Vz</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
-    /* Header */
-    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .logo { font-size: 20px; font-weight: 800; }
-    .menu-btn { font-size: 24px; background: none; color: #fff; }
-    
-    /* Menu 3 pontos */
-    .menu-dropdown { position: absolute; right: 16px; top: 60px; background: #1a1a1a; border-radius: 12px; padding: 8px; display: none; z-index: 10; }
-    .menu-dropdown.active { display: block; }
-    .menu-dropdown button { display: block; width: 180px; text-align: left; padding: 12px; margin: 4px 0; background: #2a2a2a; color: #fff; }
-    
-    /* Home */
-    .banner { background: #7c3aed; padding: 12px; border-radius: 8px; text-align: center; font-weight: 600; margin-bottom: 16px; }
-    .info-bar { display: flex; justify-content: space-between; font-size: 12px; margin: 16px 0; color: #aaa; }
-    .info-bar span { display: flex; align-items: center; gap: 4px; }
-    
-    /* Categorias 2 colunas */
-    .categorias { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .cat-card { background: #1a1a1a; padding: 20px; border-radius: 12px; text-align: center; }
-    
-    /* Segurança */
-    .seguro { background: #1a1a1a; padding: 16px; border-radius: 12px; margin-top: 20px; font-size: 14px; }
-    .seguro p { margin: 6px 0; }
-    
-    /* Painel Admin */
-    .admin h2 { margin: 20px 0 12px; }
-    .admin .card { background: #1a1a1a; padding: 16px; border-radius: 12px; margin-bottom: 12px; }
-    .admin .card h3 { font-size: 16px; margin-bottom: 8px; color: #7c3aed; }
-    .admin ul { padding-left: 18px; color: #ccc; font-size: 14px; }
-    .admin input, .admin select { width: 100%; padding: 10px; margin-top: 8px; background: #2a2a2a; border: 1px solid #333; color: #fff; border-radius: 6px; }
-  </style>
+  :root{
+    --preto:#000000;
+    --rosa-neon:#ff0080;
+    --roxo:#7c3aed;
+    --rosa-glow:rgba(255,0,128,0.6);
+    --card-bg:#0a0a0a;
+    --texto:#ffffff;
+    --cinza:#1a1a1a;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif}
+
+  body{
+    background:var(--preto);
+    color:var(--texto);
+    font-size:13px;
+    background-image:
+      radial-gradient(circle at 20% 50%, rgba(124,58,237,0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(255,0,128,0.15) 0%, transparent 50%);
+    min-height:100vh;
+  }
+
+  /* LOGIN TELA INICIAL */
+ .login-screen{
+    position:fixed;
+    inset:0;
+    background:var(--preto);
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000"><defs><radialGradient id="a"><stop offset="0%" stop-color="%23ff0080" stop-opacity=".3"/><stop offset="100%" stop-color="%23000" stop-opacity="0"/></radialGradient></defs><circle cx="500" cy="500" r="500" fill="url(%23a)"/></svg>');
+    background-size:cover;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:100;
+  }
+
+ .login-card{
+    background:var(--card-bg);
+    border:2px solid var(--rosa-neon);
+    border-radius:12px;
+    padding:30px 25px;
+    width:90%;
+    max-width:340px;
+    box-shadow:0 0 30px var(--rosa-glow), inset 0 0 20px rgba(255,0,128,0.1);
+  }
+
+ .login-card h3{
+    color:var(--rosa-neon);
+    text-align:center;
+    font-size:18px;
+    margin-bottom:20px;
+    text-shadow:0 0 10px var(--rosa-neon);
+  }
+
+ .login-card input{
+    width:100%;
+    padding:12px;
+    margin-bottom:12px;
+    background:var(--preto);
+    border:1px solid #333;
+    color:var(--texto);
+    border-radius:6px;
+    font-size:13px;
+  }
+
+ .login-card input:focus{
+    outline:none;
+    border-color:var(--rosa-neon);
+    box-shadow:0 0 10px var(--rosa-glow);
+  }
+
+ .btn-rosa{
+    width:100%;
+    background:var(--rosa-neon);
+    color:white;
+    border:none;
+    padding:12px;
+    border-radius:6px;
+    font-weight:700;
+    cursor:pointer;
+    font-size:13px;
+    margin-bottom:10px;
+    box-shadow:0 0 15px var(--rosa-glow);
+    transition:0.3s;
+  }
+
+ .btn-rosa:hover{
+    box-shadow:0 0 25px var(--rosa-neon);
+    transform:translateY(-2px);
+  }
+
+ .btn-google{
+    width:100%;
+    background:white;
+    color:#000;
+    border:none;
+    padding:12px;
+    border-radius:6px;
+    font-weight:600;
+    cursor:pointer;
+    font-size:13px;
+    margin-bottom:10px;
+  }
+
+ .divider{
+    text-align:center;
+    margin:15px 0;
+    font-size:11px;
+    opacity:0.6;
+  }
+
+ .link-text{
+    text-align:center;
+    color:var(--rosa-neon);
+    cursor:pointer;
+    font-size:12px;
+    text-decoration:underline;
+  }
+
+  /* HEADER */
+ .header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 20px;
+    background:var(--card-bg);
+    border-bottom:1px solid var(--roxo);
+    box-shadow:0 2px 20px rgba(124,58,237,0.3);
+  }
+
+ .menu-btn{
+    font-size:22px;
+    background:none;
+    border:none;
+    color:var(--rosa-neon);
+    cursor:pointer;
+    text-shadow:0 0 10px var(--rosa-neon);
+  }
+
+ .heart{
+    color:var(--rosa-neon);
+    font-size:24px;
+    filter:drop-shadow(0 0 8px var(--rosa-neon));
+  }
+
+ .user-bar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:var(--cinza);
+    padding:10px 20px;
+    font-size:11px;
+    border-bottom:1px solid var(--roxo);
+  }
+
+ .container{
+    padding:20px;
+    max-width:1400px;
+    margin:auto;
+  }
+
+ .top-info h2{
+    color:var(--rosa-neon);
+    font-size:16px;
+    margin-bottom:6px;
+    text-shadow:0 0 10px var(--rosa-neon);
+  }
+
+ .top-info p{
+    font-size:12px;
+    margin-bottom:4px;
+    opacity:0.8;
+  }
+
+ .saudacao{
+    margin:20px 0;
+    padding:15px;
+    background:linear-gradient(135deg, var(--card-bg), var(--cinza));
+    border-left:3px solid var(--rosa-neon);
+    border-radius:8px;
+    box-shadow:0 0 15px rgba(255,0,128,0.2);
+  }
+
+ .saudacao h3{
+    font-size:14px;
+    color:var(--rosa-neon);
+    margin-bottom:4px;
+  }
+
+ .btn-impulsionar{
+    background:var(--cinza);
+    color:#555;
+    border:1px solid #333;
+    padding:12px;
+    width:100%;
+    border-radius:8px;
+    margin-bottom:25px;
+    cursor:not-allowed;
+    font-weight:600;
+  }
+
+  /* CATEGORIAS */
+ .section-title{
+    color:var(--texto);
+    font-size:15px;
+    margin-bottom:15px;
+    font-weight:600;
+  }
+
+ .grid-categorias{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+    gap:15px;
+    margin-bottom:30px;
+  }
+
+ .cat-card{
+    background:var(--card-bg);
+    border:2px solid var(--roxo);
+    border-radius:10px;
+    overflow:hidden;
+    cursor:pointer;
+    transition:0.3s;
+    box-shadow:0 0 15px rgba(124,58,237,0.3);
+  }
+
+ .cat-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 5px 25px rgba(255,0,128,0.5);
+    border-color:var(--rosa-neon);
+  }
+
+ .cat-card img{
+    width:100%;
+    height:120px;
+    object-fit:cover;
+  }
+
+ .cat-card h4{
+    padding:10px;
+    font-size:11px;
+    text-align:center;
+    background:linear-gradient(135deg, var(--roxo), var(--rosa-neon));
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    font-weight:700;
+  }
+
+  /* PRODUTOS */
+ .produtos-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+    gap:18px;
+  }
+
+ .product-card{
+    background:var(--card-bg);
+    border:2px solid var(--roxo);
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 0 20px rgba(124,58,237,0.4);
+  }
+
+ .product-header{
+    padding:12px;
+    border-bottom:1px solid var(--roxo);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+
+ .product-header h4{
+    font-size:13px;
+    color:var(--texto);
+  }
+
+ .product-body{
+    padding:15px;
+  }
+
+ .price-select{
+    width:100%;
+    padding:8px;
+    background:var(--preto);
+    border:1px solid var(--rosa-neon);
+    color:var(--texto);
+    border-radius:6px;
+    margin-bottom:10px;
+    font-size:12px;
+  }
+
+ .btn-comprar{
+    width:100%;
+    background:var(--rosa-neon);
+    color:white;
+    border:none;
+    padding:12px;
+    border-radius:8px;
+    font-weight:700;
+    cursor:pointer;
+    font-size:13px;
+    box-shadow:0 0 20px var(--rosa-glow);
+    text-transform:uppercase;
+  }
+
+ .btn-favorito{
+    width:100%;
+    background:transparent;
+    border:1px solid var(--rosa-neon);
+    color:var(--rosa-neon);
+    padding:10px;
+    border-radius:8px;
+    margin-top:8px;
+    cursor:pointer;
+    font-size:12px;
+  }
+
+  /* FEEDBACK */
+ .feedback-section{
+    margin-top:40px;
+    padding:20px 0;
+  }
+
+ .feedback-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+    gap:15px;
+  }
+
+ .feedback-card{
+    background:var(--card-bg);
+    border:1px solid var(--roxo);
+    border-radius:10px;
+    padding:15px;
+    box-shadow:0 0 15px rgba(124,58,237,0.2);
+  }
+
+ .feedback-user{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:8px;
+  }
+
+ .feedback-user img{
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    border:2px solid var(--rosa-neon);
+  }
+
+ .stars{
+    color:var(--rosa-neon);
+    font-size:14px;
+  }
+
+ .hidden{display:none!important}
+ .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:200;align-items:center;justify-content:center}
+ .modal.active{display:flex}
+
+ .admin-bar{
+    background:var(--roxo);
+    padding:10px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+    box-shadow:0 0 20px var(--roxo);
+  }
+</style>
 </head>
 <body>
 
-<!-- TELA LOGIN -->
-<div id="loginPage" class="container">
-  <div class="login">
-    <h2>Entrar</h2>
-    <input type="email" placeholder="Email" id="email">
-    <input type="password" placeholder="Senha" id="senha">
-    <button class="btn-primary" onclick="logar()">Entrar</button>
-    <button class="btn-link" onclick="alert('Criar conta')">Criar conta</button>
+<!-- LOGIN -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <h3>⚡ LOGIN</h3>
+    <div id="formLogin">
+      <input type="text" id="loginEmail" placeholder="Email">
+      <input type="password" id="loginSenha" placeholder="Senha">
+      <button class="btn-rosa" onclick="fazerLogin()">Entrar</button>
+      <div class="divider">OU</div>
+      <button class="btn-google" onclick="loginGoogle()">Entrar com Google</button>
+      <p class="link-text" onclick="mostrarCadastro()">Criar conta</p>
+      <p class="link-text" style="margin-top:10px" onclick="abrirAdmin()">Acesso Admin</p>
+    </div>
+    <div id="formCadastro" class="hidden">
+      <input type="text" id="cadNome" placeholder="Nome completo">
+      <input type="text" id="cadEmail" placeholder="Email">
+      <input type="password" id="cadSenha" placeholder="Senha">
+      <button class="btn-rosa" onclick="cadastrar()">Criar Conta</button>
+      <p class="link-text" onclick="mostrarLogin()">Voltar pro Login</p>
+    </div>
   </div>
 </div>
 
-<!-- TELA HOME -->
-<div id="homePage" class="container hidden">
-  <header>
-    <div class="logo">CHANEL STORE</div>
-    <button class="menu-btn" onclick="toggleMenu()">⋮</button>
-  </header>
-  
-  <div class="menu-dropdown" id="menuDropdown">
-    <button onclick="fecharAba()">Fechar</button>
-    <button onclick="irCategorias()">Categorias</button>
-    <button onclick="window.open('https://instagram.com/chanelff__', '_blank')">Rede social</button>
-    <button onclick="abrirAdmin()">Painel Admin</button>
-  </div>
-
-  <div class="banner">Entrega instantânea</div>
-
-  <div class="info-bar">
-    <span>✅ 500+ Clientes</span>
-    <span>✅ 99% Satisfeitos</span>
-    <span>✅ Entrega instantânea</span>
-  </div>
-
-  <h3 id="categoriasTitulo">Compre com segurança</h3>
-  <div class="categorias">
-    <div class="cat-card">Skin Rara #1</div>
-    <div class="cat-card">Skin Rara #2</div>
-    <div class="cat-card">Pacote Premium</div>
-    <div class="cat-card">Item Exclusivo</div>
-  </div>
-
-  <div class="seguro">
-    <p><b>100% seguro ✅</b></p>
-    <p>Pague via Pix - 98984853563</p>
-    <p>Suporte - 98984853563</p>
+<!-- ADMIN LOGIN -->
+<div id="adminModal" class="modal">
+  <div class="login-card">
+    <h3>⚡ PAINEL ADMIN</h3>
+    <input type="text" id="adminUser" placeholder="Usuário">
+    <input type="password" id="adminPass" placeholder="Senha">
+    <button class="btn-rosa" onclick="loginAdmin()">Entrar</button>
+    <p class="link-text" onclick="fecharAdmin()">Voltar</p>
   </div>
 </div>
 
-<!-- TELA ADMIN -->
-<div id="adminPage" class="container hidden">
-  <header>
-    <div class="logo">Painel Admin</div>
-    <button class="menu-btn" onclick="voltarHome()">←</button>
-  </header>
+<!-- APP -->
+<div id="app" class="hidden">
+  <div class="user-bar">
+    <span id="userLogado"></span>
+    <span class="link-text" onclick="sair()">Sair</span>
+  </div>
 
-  <div class="admin">
-    <div class="card">
-      <h3>Dashboard de Vendas</h3>
-      <ul>
-        <li>Relatórios em tempo real: vendas, faturamento, ticket médio</li>
-        <li>Filtros: por data, produto, cliente, forma de pagamento</li>
-        <li>Gráficos: produto mais vendido, horário de pico, lucro</li>
-      </ul>
+  <div class="header">
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <span class="heart">♥</span>
+  </div>
+
+  <div class="container">
+    <div class="top-info">
+      <h2>Total de compras feitas</h2>
+      <p>@chanelff__ | WhatsApp: 98984753563</p>
     </div>
 
-    <div class="card">
-      <h3>Gestão de Produtos</h3>
-      <ul>
-        <li>Editar preço: clica no produto > altera valor > salva</li>
-        <li>Editar descrição e remover produto</li>
-        <li>Estoque: aumenta/diminui quantidade, ativa "esgotado" automático</li>
-        <li>Promoções: criar descontos % ou valor fixo</li>
-      </ul>
-      <input type="text" placeholder="Nome do produto" id="nomeProd">
-      <input type="number" placeholder="Novo preço" id="precoProd">
-      <button class="btn-primary" style="margin-top:8px" onclick="salvarProd()">Salvar alteração</button>
+    <div class="saudacao">
+      <h3 id="saudacaoNome">Oie, cliente!</h3>
+      <p>Seu painel está otimizado</p>
     </div>
+
+    <button class="btn-impulsionar" disabled>Impulsionar</button>
+
+    <div id="categoriasView">
+      <h3 class="section-title">Categorias</h3>
+      <div class="grid-categorias" id="gridCategorias"></div>
+    </div>
+
+    <div id="produtosView" class="hidden">
+      <button onclick="voltarCategorias()" style="margin-bottom:15px;background:var(--cinza);border:1px solid var(--roxo);color:var(--texto);padding:8px 15px;border-radius:6px;cursor:pointer;font-size:12px">← Voltar</button>
+      <h3 class="section-title" id="tituloCat"></h3>
+      <div class="produtos-grid" id="gridProdutos"></div>
+    </div>
+
+    <div id="adminPanel" class="hidden">
+      <div class="admin-bar">
+        <span style="font-size:13px;font-weight:bold">PAINEL ADMIN</span>
+        <button onclick="abrirModalProduto()" style="background:var(--rosa-neon);color:white;border:none;padding:8px 15px;border-radius:6px;font-size:12px;cursor:pointer">+ Adicionar</button>
+      </div>
+    </div>
+
+    <div class="feedback-section">
+      <h3 class="section-title">Feedback dos Clientes</h3>
+      <div class="feedback-grid" id="feedbackGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PRODUTO -->
+<div id="modalProduto" class="modal">
+  <div class="login-card">
+    <h3 id="modalTitulo">Adicionar Produto</h3>
+    <select id="pCategoria" class="price-select"></select>
+    <input type="text" id="pNome" placeholder="Nome do produto">
+    <input type="text" id="pImagem" placeholder="URL da imagem">
+    <input type="number" id="pValor" placeholder="Valor R$">
+    <input type="number" id="pEstoque" placeholder="Estoque">
+    <button class="btn-rosa" onclick="salvarProduto()">Salvar</button>
+    <button class="btn-secundario" onclick="fecharModalProduto()" style="background:var(--cinza);color:var(--texto);border:1px solid var(--roxo);padding:10px;border-radius:6px;width:100%;margin-top:8px;cursor:pointer">Fechar</button>
   </div>
 </div>
 
 <script>
-  const loginPage = document.getElementById('loginPage');
-  const homePage = document.getElementById('homePage');
-  const adminPage = document.getElementById('adminPage');
-  const menu = document.getElementById('menuDropdown');
+  const CATEGORIAS = [
+    {nome:'FORTNITE BATTLE ROYALE', img:'https://via.placeholder.com/300x200/7c3aed/ffffff?text=FORTNITE'},
+    {nome:'CLASH OF CLANS', img:'https://via.placeholder.com/300x200/ff0080/ffffff?text=CLASH'},
+    {nome:'FREE FIRE', img:'https://via.placeholder.com/300x200/7c3aed/ffffff?text=FREE+FIRE'},
+    {nome:'FREE FIRE', img:'https://via.placeholder.com/300x200/ff0080/ffffff?text=FREE+FIRE+2'}
+  ];
 
-  function logar() {
-    // Sem "bem vindo" e sem Google como pediu
-    loginPage.classList.add('hidden');
-    homePage.classList.remove('hidden');
+  let db = JSON.parse(localStorage.getItem('premiumvz_v2')) || {
+    produtos: [
+      {id:1,categoria:'FREE FIRE',nome:'DIMAS FF',valor:179,estoque:10,imagem:''},
+      {id:2,categoria:'FREE FIRE',nome:'DIMAS FF',valor:14.99,estoque:50,imagem:''},
+      {id:3,categoria:'FREE FIRE',nome:'DIMAS FF',valor:13.99,estoque:30,imagem:''}
+    ],
+    clientes: [],
+    feedbacks:[
+      {nome:'Emory',nota:5,img:'https://i.pravatar.cc/100?img=5'},
+      {nome:'Sofia',nota:4,img:'https://i.pravatar.cc/100?img=9'}
+    ],
+    logado:null,
+    admin:false
+  };
+
+  let categoriaAtual = null;
+  let editandoId = null;
+
+  function mostrarCadastro(){
+    document.getElementById('formLogin').classList.add('hidden');
+    document.getElementById('formCadastro').classList.remove('hidden');
   }
 
-  function toggleMenu() {
-    menu.classList.toggle('active');
+  function mostrarLogin(){
+    document.getElementById('formCadastro').classList.add('hidden');
+    document.getElementById('formLogin').classList.remove('hidden');
   }
 
-  function fecharAba() {
-    window.close(); // Só funciona se a aba foi aberta via script
-    alert('Comando para fechar aba enviado');
+  function cadastrar(){
+    const nome = document.getElementById('cadNome').value.trim();
+    const email = document.getElementById('cadEmail').value.trim();
+    const senha = document.getElementById('cadSenha').value.trim();
+    if(!nome||!email||!senha){alert('Preencha tudo');return;}
+    if(db.clientes.find(c=>c.email===email)){alert('Email já cadastrado');return;}
+    db.clientes.push({nome,email,senha});
+    salvarDB();
+    alert('Conta criada! Faça login');
+    mostrarLogin();
   }
 
-  function irCategorias() {
-    document.getElementById('categoriasTitulo').scrollIntoView({behavior: 'smooth'});
-    toggleMenu();
-  }
-
-  function abrirAdmin() {
-    homePage.classList.add('hidden');
-    adminPage.classList.remove('hidden');
-    toggleMenu();
-  }
-
-  function voltarHome() {
-    adminPage.classList.add('hidden');
-    homePage.classList.remove('hidden');
-  }
-
-  function salvarProd() {
-    const nome = document.getElementById('nomeProd').value;
-    const preco = document.getElementById('precoProd').value;
-    if(nome && preco) {
-      alert(`Produto ${nome} atualizado para R$ ${preco}. Log salvo.`);
-      console.log(`ADMIN LOG: Alterou ${nome} para ${preco}`);
+  function fazerLogin(){
+    const email = document.getElementById('loginEmail').value.trim();
+    const senha = document.getElementById('loginSenha').value.trim();
+    const cliente = db.clientes.find(c=>c.email===email&&c.senha===senha);
+    if(cliente){
+      db.logado = cliente;
+      db.admin = false;
+      salvarDB();
+      entrarSite();
+    }else{
+      alert('Email ou senha incorretos');
     }
   }
 
-  // Fecha menu se clicar fora
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('.menu-btn') && !e.target.closest('.menu-dropdown')) {
-      menu.classList.remove('active');
+  function loginGoogle(){
+    alert('Integração com Google em breve');
+  }
+
+  function abrirAdmin(){
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('adminModal').classList.add('active');
+  }
+
+  function fecharAdmin(){
+    document.getElementById('adminModal').classList.remove('active');
+    document.getElementById('loginScreen').classList.remove('hidden');
+  }
+
+  function loginAdmin(){
+    const u = document.getElementById('adminUser').value;
+    const p = document.getElementById('adminPass').value;
+    if(u==='Lorrannyh.16' && p==='Lorrannyh.16'){
+      db.admin = true;
+      db.logado = {nome:'Admin',email:'admin'};
+      salvarDB();
+      fecharAdmin();
+      entrarSite();
+    }else{
+      alert('Acesso negado');
     }
-  });
+  }
+
+  function entrarSite(){
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('adminModal').classList.remove('active');
+    document.getElementById('app').classList.remove('hidden');
+
+    if(db.admin){
+      document.getElementById('adminPanel').classList.remove('hidden');
+      document.getElementById('saudacaoNome').textContent = 'Oie, Admin!';
+    }else{
+      document.getElementById('adminPanel').classList.add('hidden');
+      document.getElementById('saudacaoNome').textContent = `Oie, ${db.logado.nome}!`;
+    }
+
+    document.getElementById('userLogado').textContent = `Logado: ${db.logado.email}`;
+    init();
+  }
+
+  function sair(){
+    db.logado = null;
+    db.admin = false;
+    salvarDB();
+    location.reload();
+  }
+
+  function init(){
+    renderCategorias();
+    renderFeedback();
+    popularSelectCategoria();
+  }
+
+  function renderCategorias(){
+    const grid = document.getElementById('gridCategorias');
+    grid.innerHTML = CATEGORIAS.map(cat=>`
+      <div class="cat-card" onclick="abrirCategoria('${cat.nome}')">
+        <img src="${cat.img}" alt="${cat.nome}">
+        <h4>${cat.nome}</h4>
+      </div>
+    `).join('');
+  }
+
+  function abrirCategoria(nome){
+    categoriaAtual = nome;
+    document.getElementById('categoriasView').classList.add('hidden');
+    document.getElementById('produtosView').classList.remove('hidden');
+    document.getElementById('tituloCat').textContent = nome;
+    renderProdutos();
+  }
+
+  function voltarCategorias(){
+    document.getElementById('categoriasView').classList.remove('hidden');
+    document.getElementById('produtosView').classList.add('hidden');
+  }
+
+  function renderProdutos(){
+    const grid = document.getElementById('gridProdutos');
+    const lista = db.produtos.filter(p=>p.categoria===categoriaAtual);
+    if(lista.length===0){
+      grid.innerHTML='<p style="grid-column:1/-1;text-align:center;opacity:.5">Nenhum produto</p>';
+      return;
+    }
+    grid.innerHTML = lista.map(p=>`
+      <div class="product-card">
+        <div class="product-header">
+          <h4>${p.nome}</h4>
+          <span style="color:var(--rosa-neon)">💎</span>
+        </div>
+        <div class="product-body">
+          <select class="price-select">
+            <option>R$ ${p.valor.toFixed(2)}</option>
+          </select>
+          <p style="font-size:11px;opacity:.7;margin-bottom:10px">2x8 Aguardando pix</p>
+          <button class="btn-comprar" onclick="comprar(${p.id})">COMPRAR</button>
+          <button class="btn-favorito">♥ ADICIONAR AOS FAVORITOS</button>
+          ${db.admin?`<button onclick="editarProduto(${p.id})" style="width:100%;margin-top:8px;background:var(--roxo);color:white;border:none;padding:8px;border-radius:6px;font-size:11px;cursor:pointer">Editar</button>`:''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderFeedback(){
+    const grid = document.getElementById('feedbackGrid');
+    grid.innerHTML = db.feedbacks.map(f=>`
+      <div class="feedback-card">
+        <div class="feedback-user">
+          <img src="${f.img}" alt="${f.nome}">
+          <div>
+            <div style="font-size:12px;font-weight:600">${f.nome}</div>
+            <div class="stars">${'★'.repeat(f.nota)}${'☆'.repeat(5-f.nota)}</div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function comprar(id){
+    const p = db.produtos.find(prod=>prod.id===id);
+    const msg = `Olá! Quero comprar: ${p.nome} - R$${p.valor.toFixed(2)}`;
+    window.open(`https://wa.me/5598984753563?text=${encodeURIComponent(msg)}`,'_blank');
+  }
+
+  function abrirModalProduto(){
+    editandoId=null;
+    document.getElementById('modalTitulo').textContent='Adicionar Produto';
+    document.getElementById('pNome').value='';
+    document.getElementById('pImagem').value='';
+    document.getElementById('pValor').value='';
+    document.getElementById('pEstoque').value='';
+    document.getElementById('modalProduto').classList.add('active');
+  }
+
+  function editarProduto(id){
+    const p = db.produtos.find(prod=>prod.id===id);
+    editandoId=id;
+    document.getElementById('modalTitulo').textContent='Editar Produto';
+    document.getElementById('pCategoria').value=p.categoria;
+    document.getElementById('pNome').value=p.nome;
+    document.getElementById('pImagem').value=p.imagem;
+    document.getElementById('pValor').value=p.valor;
+    document.getElementById('pEstoque').value=p.estoque;
+    document.getElementById('modalProduto').classList.add('active');
+  }
+
+  function fecharModalProduto(){
+    document.getElementById('modalProduto').classList.remove('active');
+  }
+
+  function popularSelectCategoria(){
+    document.getElementById('pCategoria').innerHTML = CATEGORIAS.map(c=>
+      `<option value="${c.nome}">${c.nome}</option>`
+    ).join('');
+  }
+
+  function salvarProduto(){
+    const produto = {
+      id: editandoId || Date.now(),
+      categoria: document.getElementById('pCategoria').value,
+      nome: document.getElementById('pNome').value,
+      imagem: document.getElementById('pImagem').value,
+      valor: parseFloat(document.getElementById('pValor').value)||0,
+      estoque: parseInt(document.getElementById('pEstoque').value)||0
+    };
+    if(editandoId){
+      const idx = db.produtos.findIndex(p=>p.id===editandoId);
+      db.produtos[idx]=produto;
+    }else{
+      db.produtos.push(produto);
+    }
+    salvarDB();
+    fecharModalProduto();
+    if(categoriaAtual) renderProdutos();
+  }
+
+  function toggleMenu(){
+    alert('Menu: Fechar | Categorias | Redes sociais | Painel Admin');
+  }
+
+  function salvarDB(){
+    localStorage.setItem('premiumvz_v2',JSON.stringify(db));
+  }
+
+  if(db.logado||db.admin){
+    entrarSite();
+  }
 </script>
-
-</body>
-</html>
