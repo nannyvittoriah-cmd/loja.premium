@@ -1,158 +1,188 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bonyx - Painel Admin</title>
-<style>
-:root {
-  --rosa: #ff00c8;
-  --roxo: #8b00ff;
-  --azul: #0099ff;
-  --dourado: #ffd700;
-  --tema: var(--rosa);
-  --roxo-neon: #8b00ff;
-  --vermelho-neon: #ff0033;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHANEL STORE</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Inter, sans-serif; }
+    body { background: #0f0f0f; color: #fff; }
+    .container { max-width: 420px; margin: 0 auto; padding: 16px; }
+    .hidden { display: none; }
+    button { cursor: pointer; border: none; border-radius: 8px; }
+    
+    /* Login */
+    .login { display: flex; flex-direction: column; gap: 12px; margin-top: 80px; }
+    .login input { padding: 14px; border-radius: 8px; border: 1px solid #333; background: #1a1a1a; color: #fff; }
+    .login .btn-primary { padding: 14px; background: #7c3aed; color: #fff; font-weight: 600; }
+    .login .btn-link { background: none; color: #7c3aed; text-align: center; }
 
-* {margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif;}
+    /* Header */
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .logo { font-size: 20px; font-weight: 800; }
+    .menu-btn { font-size: 24px; background: none; color: #fff; }
+    
+    /* Menu 3 pontos */
+    .menu-dropdown { position: absolute; right: 16px; top: 60px; background: #1a1a1a; border-radius: 12px; padding: 8px; display: none; z-index: 10; }
+    .menu-dropdown.active { display: block; }
+    .menu-dropdown button { display: block; width: 180px; text-align: left; padding: 12px; margin: 4px 0; background: #2a2a2a; color: #fff; }
+    
+    /* Home */
+    .banner { background: #7c3aed; padding: 12px; border-radius: 8px; text-align: center; font-weight: 600; margin-bottom: 16px; }
+    .info-bar { display: flex; justify-content: space-between; font-size: 12px; margin: 16px 0; color: #aaa; }
+    .info-bar span { display: flex; align-items: center; gap: 4px; }
+    
+    /* Categorias 2 colunas */
+    .categorias { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .cat-card { background: #1a1a1a; padding: 20px; border-radius: 12px; text-align: center; }
+    
+    /* Segurança */
+    .seguro { background: #1a1a1a; padding: 16px; border-radius: 12px; margin-top: 20px; font-size: 14px; }
+    .seguro p { margin: 6px 0; }
+    
+    /* Painel Admin */
+    .admin h2 { margin: 20px 0 12px; }
+    .admin .card { background: #1a1a1a; padding: 16px; border-radius: 12px; margin-bottom: 12px; }
+    .admin .card h3 { font-size: 16px; margin-bottom: 8px; color: #7c3aed; }
+    .admin ul { padding-left: 18px; color: #ccc; font-size: 14px; }
+    .admin input, .admin select { width: 100%; padding: 10px; margin-top: 8px; background: #2a2a2a; border: 1px solid #333; color: #fff; border-radius: 6px; }
+  </style>
+</head>
+<body>
 
-body {
-  background: #000;
-  color: #fff;
-  min-height: 100vh;
-}
+<!-- TELA LOGIN -->
+<div id="loginPage" class="container">
+  <div class="login">
+    <h2>Entrar</h2>
+    <input type="email" placeholder="Email" id="email">
+    <input type="password" placeholder="Senha" id="senha">
+    <button class="btn-primary" onclick="logar()">Entrar</button>
+    <button class="btn-link" onclick="alert('Criar conta')">Criar conta</button>
+  </div>
+</div>
 
-/* Barra superior */
-.top-bar {
-  display: flex;
-  justify-content: space-between;
-  padding: 14px 20px;
-  background: #000;
-  font-size: 14px;
-  border-bottom: 1px solid #1a1a1a;
-}
+<!-- TELA HOME -->
+<div id="homePage" class="container hidden">
+  <header>
+    <div class="logo">CHANEL STORE</div>
+    <button class="menu-btn" onclick="toggleMenu()">⋮</button>
+  </header>
+  
+  <div class="menu-dropdown" id="menuDropdown">
+    <button onclick="fecharAba()">Fechar</button>
+    <button onclick="irCategorias()">Categorias</button>
+    <button onclick="window.open('https://instagram.com/chanelff__', '_blank')">Rede social</button>
+    <button onclick="abrirAdmin()">Painel Admin</button>
+  </div>
 
-.top-bar.sair {
-  color: var(--tema);
-  cursor: pointer;
-  text-decoration: underline;
-}
+  <div class="banner">Entrega instantânea</div>
 
-/* Header: ☰ | LV PREMIUM | ❤️ */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px 20px;
-  border-bottom: 2px solid var(--roxo-neon);
-  background: #000;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
+  <div class="info-bar">
+    <span>✅ 500+ Clientes</span>
+    <span>✅ 99% Satisfeitos</span>
+    <span>✅ Entrega instantânea</span>
+  </div>
 
-.btn-menu {
-  color: var(--tema);
-  font-size: 24px;
-  cursor: pointer;
-  filter: drop-shadow(0 0 10px var(--tema));
-}
+  <h3 id="categoriasTitulo">Compre com segurança</h3>
+  <div class="categorias">
+    <div class="cat-card">Skin Rara #1</div>
+    <div class="cat-card">Skin Rara #2</div>
+    <div class="cat-card">Pacote Premium</div>
+    <div class="cat-card">Item Exclusivo</div>
+  </div>
 
-.lv-premium {
-  color: var(--dourado);
-  font-weight: 800;
-  font-size: 15px;
-  letter-spacing: 1.5px;
-  text-shadow: 0 0 15px var(--dourado);
-}
+  <div class="seguro">
+    <p><b>100% seguro ✅</b></p>
+    <p>Pague via Pix - 98984853563</p>
+    <p>Suporte - 98984853563</p>
+  </div>
+</div>
 
-.btn-heart {
-  color: var(--vermelho-neon);
-  font-size: 24px;
-  cursor: pointer;
-  filter: drop-shadow(0 0 15px var(--vermelho-neon));
-}
+<!-- TELA ADMIN -->
+<div id="adminPage" class="container hidden">
+  <header>
+    <div class="logo">Painel Admin</div>
+    <button class="menu-btn" onclick="voltarHome()">←</button>
+  </header>
 
-.container {
-  padding: 20px;
-  max-width: 480px;
-  margin: 0 auto;
-}
+  <div class="admin">
+    <div class="card">
+      <h3>Dashboard de Vendas</h3>
+      <ul>
+        <li>Relatórios em tempo real: vendas, faturamento, ticket médio</li>
+        <li>Filtros: por data, produto, cliente, forma de pagamento</li>
+        <li>Gráficos: produto mais vendido, horário de pico, lucro</li>
+      </ul>
+    </div>
 
-/* Sistema de ABAS */
-.aba {
-  display: none;
-}
+    <div class="card">
+      <h3>Gestão de Produtos</h3>
+      <ul>
+        <li>Editar preço: clica no produto > altera valor > salva</li>
+        <li>Editar descrição e remover produto</li>
+        <li>Estoque: aumenta/diminui quantidade, ativa "esgotado" automático</li>
+        <li>Promoções: criar descontos % ou valor fixo</li>
+      </ul>
+      <input type="text" placeholder="Nome do produto" id="nomeProd">
+      <input type="number" placeholder="Novo preço" id="precoProd">
+      <button class="btn-primary" style="margin-top:8px" onclick="salvarProd()">Salvar alteração</button>
+    </div>
+  </div>
+</div>
 
-.aba.ativa {
-  display: block;
-}
+<script>
+  const loginPage = document.getElementById('loginPage');
+  const homePage = document.getElementById('homePage');
+  const adminPage = document.getElementById('adminPage');
+  const menu = document.getElementById('menuDropdown');
 
-/* Trocado: Total de compras → Contas do site */
-.titulo-principal {
-  color: var(--tema);
-  font-size: 26px;
-  font-weight: 800;
-  margin-bottom: 6px;
-  text-shadow: 0 0 20px var(--tema);
-}
+  function logar() {
+    // Sem "bem vindo" e sem Google como pediu
+    loginPage.classList.add('hidden');
+    homePage.classList.remove('hidden');
+  }
 
-.info-contato {
-  color: #888;
-  font-size: 13px;
-  margin-bottom: 20px;
-}
+  function toggleMenu() {
+    menu.classList.toggle('active');
+  }
 
-.info-contato.link {
-  color: #4a9eff;
-}
+  function fecharAba() {
+    window.close(); // Só funciona se a aba foi aberta via script
+    alert('Comando para fechar aba enviado');
+  }
 
-.card-oie {
-  border-left: 4px solid var(--tema);
-  background: #0f0f0f;
-  border-radius: 10px;
-  padding: 18px;
-  margin-bottom: 20px;
-  box-shadow: 0 0 25px -8px var(--tema);
-}
+  function irCategorias() {
+    document.getElementById('categoriasTitulo').scrollIntoView({behavior: 'smooth'});
+    toggleMenu();
+  }
 
-.card-oie h2 {
-  color: var(--tema);
-  font-size: 20px;
-  margin-bottom: 6px;
-}
+  function abrirAdmin() {
+    homePage.classList.add('hidden');
+    adminPage.classList.remove('hidden');
+    toggleMenu();
+  }
 
-.btn-impulsionar {
-  width: 100%;
-  padding: 16px;
-  background: #1a1a1a;
-  border: 1px solid #2a2a2a;
-  color: #555;
-  border-radius: 12px;
-  font-size: 15px;
-  margin-bottom: 25px;
-  cursor: not-allowed;
-}
+  function voltarHome() {
+    adminPage.classList.add('hidden');
+    homePage.classList.remove('hidden');
+  }
 
-.btn-voltar {
-  background: transparent;
-  border: 2px solid var(--roxo-neon);
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 10px;
-  font-size: 14px;
-  margin-bottom: 20px;
-  cursor: pointer;
-  width: 100%;
-}
+  function salvarProd() {
+    const nome = document.getElementById('nomeProd').value;
+    const preco = document.getElementById('precoProd').value;
+    if(nome && preco) {
+      alert(`Produto ${nome} atualizado para R$ ${preco}. Log salvo.`);
+      console.log(`ADMIN LOG: Alterou ${nome} para ${preco}`);
+    }
+  }
 
-/* MENU LATERAL */
-.menu-lateral {
-  position: fixed;
-  top: 0;
-  left: -100%;
-  width: 85%;
-  max-width: 320px;
-  height: 100vh;
-  background
+  // Fecha menu se clicar fora
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.menu-btn') && !e.target.closest('.menu-dropdown')) {
+      menu.classList.remove('active');
+    }
+  });
+</script>
+
+</body>
+</html>
