@@ -3,73 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chanel Store - Free Fire Shop</title>
+  <title>Loja FF Rosa</title>
   <style>
-    :root {
-      --bg: #0d0609;
-      --card: #1a0b13;
-      --primary: #FF2D95;
-      --primary-light: #FF9ECB;
-      --text: #fff;
-      --shadow: 0 0 15px #FF2D95;
-    }
-    
-    [data-theme="roxo"] {
-      --bg: #0a0613;
-      --card: #150b26;
-      --primary: #A855F7;
-      --primary-light: #D8B4FE;
-      --shadow: 0 0 15px #A855F7;
-    }
-    
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
-    body { background: var(--bg); color: var(--text); min-height: 100vh; transition: 0.3s; }
+    body { 
+      background: #1a0b13; 
+      color: #fff; 
+      min-height: 100vh;
+    }
     
-    .hidden { display: none !important; }
-    .neon { box-shadow: var(--shadow); }
+    /* Borda rosa suave, sem neon exagerado */
+    .borda-rosa {
+      border: 1px solid #FF2D95;
+    }
     
-    /* LOGIN/CADASTRO */
-    #auth-screen {
+    /* LOGIN E CADASTRO */
+    #login-screen, #cadastro-screen {
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      padding: 20px;
+      background: #0d0609;
     }
-    .auth-box {
-      background: var(--card);
-      border: 2px solid var(--primary);
-      border-radius: 15px;
+    #cadastro-screen { display: none; }
+    .login-box {
+      background: #1a0b13;
+      border: 1px solid #FF2D95;
+      border-radius: 12px;
       padding: 30px 25px;
-      width: 100%;
-      max-width: 380px;
+      width: 90%;
+      max-width: 350px;
+      text-align: center;
     }
-    .auth-box h2 { color: var(--primary); text-align: center; margin-bottom: 25px; }
-    .auth-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-    .auth-tab {
-      flex: 1;
-      padding: 10px;
-      background: transparent;
-      border: 1px solid var(--primary);
-      color: var(--primary);
-      border-radius: 8px;
-      cursor: pointer;
+    .login-box h2 { 
+      color: #FF2D95; 
+      margin-bottom: 25px; 
+      font-size: 20px;
     }
-    .auth-tab.active { background: var(--primary); color: white; }
-    .auth-box input {
+    .login-box input {
       width: 100%;
       padding: 12px;
       margin: 8px 0;
-      background: var(--bg);
-      border: 1px solid var(--primary);
+      background: #2d1520;
+      border: 1px solid #FF2D95;
       border-radius: 8px;
       color: white;
       outline: none;
     }
-    .btn {
+    .btn-pink {
       width: 100%;
       padding: 12px;
-      background: var(--primary);
+      background: #FF2D95;
       border: none;
       border-radius: 8px;
       color: white;
@@ -78,122 +62,106 @@
       cursor: pointer;
       transition: 0.3s;
     }
-    .btn:hover { opacity: 0.9; }
-    .erro { color: #FF4D6D; font-size: 13px; margin-top: 8px; display: none; }
+    .btn-pink:hover { background: #E02684; }
+    .btn-white {
+      width: 100%;
+      padding: 12px;
+      background: white;
+      color: #1a0b13;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .login-box a { 
+      color: #FF9ECB; 
+      font-size: 13px; 
+      text-decoration: none; 
+      display: block;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    .erro {
+      color: #FF4D6D;
+      font-size: 13px;
+      margin-top: 8px;
+      display: none;
+    }
     
-    /* HEADER */
-    header {
-      background: var(--card);
-      padding: 15px 20px;
-      border-bottom: 1px solid var(--primary);
+    /* LOJA */
+    #store-screen { display: none; }
+    .header {
+      background: #1a0b13;
+      padding: 15px;
+      border-bottom: 1px solid #FF2D95;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
     }
-    .logo {
+    .header span { color: #FF2D95; cursor: pointer; font-size: 14px; }
+    .menu-icons {
       display: flex;
+      gap: 15px;
       align-items: center;
-      gap: 10px;
-      font-weight: bold;
     }
-    .logo-icon {
-      background: var(--primary);
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
+    .carrinho {
+      position: relative;
+      cursor: pointer;
+      font-size: 22px;
+    }
+    .carrinho-badge {
+      position: absolute;
+      top: -5px;
+      right: -8px;
+      background: #FF2D95;
+      color: white;
+      font-size: 11px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
-      cursor: pointer;
     }
-    .header-actions { display: flex; gap: 15px; align-items: center; }
-    .header-actions span { cursor: pointer; color: var(--primary-light); }
     
-    /* BANNER */
     .banner {
-      background: linear-gradient(135deg, var(--card), var(--bg));
-      padding: 40px 20px;
+      background: linear-gradient(135deg, #2d1520, #1a0b13);
+      padding: 30px 20px;
+      text-align: center;
+      border: 1px solid #FF2D95;
       margin: 15px;
-      border-radius: 15px;
-      border: 1px solid var(--primary);
-      text-align: left;
+      border-radius: 12px;
     }
-    .tag {
-      display: inline-block;
-      background: var(--card);
-      border: 1px solid var(--primary);
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      margin-bottom: 15px;
+    .banner h1 { 
+      font-size: 24px; 
+      color: #FF9ECB; 
+      line-height: 1.2;
     }
-    .banner h1 {
-      font-size: 36px;
-      line-height: 1.1;
-      margin-bottom: 15px;
-    }
-    .banner h1 span { color: var(--primary-light); }
-    .banner p { color: #ccc; font-size: 14px; margin-bottom: 25px; }
-    
     .stats {
       display: flex;
-      gap: 30px;
-      margin: 25px 0;
-    }
-    .stat h3 { font-size: 24px; color: var(--text); }
-    .stat p { font-size: 11px; color: var(--primary-light); margin: 0; }
-    
-    .features {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      justify-content: space-around;
       margin: 20px 15px;
-    }
-    .feature {
-      background: var(--card);
-      border: 1px solid var(--primary);
-      border-radius: 12px;
-      padding: 15px;
       text-align: center;
     }
-    .feature h4 { font-size: 13px; margin: 8px 0 4px; }
-    .feature p { font-size: 11px; color: #aaa; }
+    .stat h3 { color: #FF2D95; font-size: 20px; }
+    .stat p { font-size: 12px; color: #FF9ECB; }
     
-    /* CATEGORIAS */
-    .categorias {
-      padding: 0 15px;
-      margin: 25px 0;
-    }
-    .cat-title {
-      color: var(--primary);
-      font-size: 18px;
-      margin-bottom: 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .cat-tabs {
+    .tabs {
       display: flex;
       gap: 10px;
-      overflow-x: auto;
-      padding-bottom: 10px;
+      padding: 0 15px;
+      margin: 20px 0;
     }
-    .cat-tab {
+    .tab {
       padding: 8px 16px;
-      background: var(--card);
-      border: 1px solid var(--primary);
+      background: #2d1520;
+      border: 1px solid #FF2D95;
       border-radius: 20px;
       font-size: 14px;
       cursor: pointer;
-      white-space: nowrap;
     }
-    .cat-tab.active { background: var(--primary); color: white; }
+    .tab.active { background: #FF2D95; }
     
-    /* PRODUTOS */
     .products {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -201,14 +169,14 @@
       padding: 0 15px 30px;
     }
     .card {
-      background: var(--card);
-      border: 1px solid var(--primary);
+      background: #2d1520;
+      border: 1px solid #FF2D95;
       border-radius: 12px;
       padding: 15px;
       text-align: center;
     }
-    .card .selo {
-      background: var(--primary);
+    .card .tag {
+      background: #FF2D95;
       color: white;
       font-size: 10px;
       padding: 3px 8px;
@@ -217,348 +185,397 @@
       margin-bottom: 8px;
     }
     .card h4 { font-size: 14px; margin: 8px 0; }
-    .card .price { color: var(--primary); font-weight: bold; margin: 8px 0; }
+    .card .price { 
+      color: #FF2D95; 
+      font-weight: bold; 
+      margin: 8px 0; 
+    }
     
-    /* MENU ADMIN */
-    #admin-menu {
-      position: fixed;
-      top: 70px;
-      left: 20px;
-      background: var(--card);
-      border: 2px solid var(--primary);
+    /* SUPORTE */
+    .suporte {
+      background: #2d1520;
+      border: 1px solid #FF2D95;
       border-radius: 12px;
+      margin: 15px;
       padding: 15px;
-      width: 250px;
-      z-index: 200;
-      display: none;
+      text-align: center;
     }
-    #admin-menu h3 { color: var(--primary); margin-bottom: 15px; }
-    #admin-menu button {
-      width: 100%;
-      text-align: left;
-      padding: 10px;
-      background: var(--bg);
-      border: 1px solid var(--primary);
-      color: var(--text);
-      border-radius: 8px;
-      margin: 5px 0;
-      cursor: pointer;
+    .suporte p { font-size: 13px; margin: 5px 0; }
+    .suporte .pix { 
+      color: #FF2D95; 
+      font-weight: bold;
+      font-size: 15px;
     }
-    #admin-menu button:hover { background: var(--primary); }
     
-    /* PAINEL ADMIN */
-    #admin-panel {
-      padding: 20px;
-      display: none;
+    /* ADMIN */
+    #admin-screen { display: none; padding: 15px; }
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
     }
+    .admin-header .sair { color: #FF2D95; cursor: pointer; }
     .admin-box {
-      background: var(--card);
-      border-left: 4px solid var(--primary);
+      background: #2d1520;
+      border-left: 3px solid #FF2D95;
       padding: 20px;
       border-radius: 8px;
       margin: 15px 0;
     }
-    .admin-box h3 { color: var(--primary); margin-bottom: 10px; }
+    .admin-box h3 { color: #FF2D95; margin-bottom: 10px; }
+    .admin-menu {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .admin-card {
+      background: #2d1520;
+      border: 1px solid #FF2D95;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .admin-card:hover { background: #3a1c2a; }
+    
+    /* MODAL ADMIN LOGIN */
+    #admin-login-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+    
+    /* CARRINHO MODAL */
+    #carrinho-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+    .carrinho-box {
+      background: #1a0b13;
+      border: 1px solid #FF2D95;
+      border-radius: 12px;
+      padding: 25px;
+      width: 90%;
+      max-width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .carrinho-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #2d1520;
+    }
   </style>
 </head>
-<body data-theme="rosa">
+<body>
 
-  <!-- TELA LOGIN/CADASTRO -->
-  <div id="auth-screen">
-    <div class="auth-box neon">
-      <h2>⚡ CHANEL STORE</h2>
-      <div class="auth-tabs">
-        <button class="auth-tab active" onclick="trocarTab('login')">Login</button>
-        <button class="auth-tab" onclick="trocarTab('cadastro')">Cadastro</button>
-      </div>
-      
-      <!-- LOGIN -->
-      <div id="login-form">
-        <input type="text" placeholder="Email ou Usuário" id="login-user">
-        <input type="password" placeholder="Senha" id="login-senha">
-        <p class="erro" id="erro-login"></p>
-        <button class="btn" onclick="fazerLogin()">Entrar</button>
-      </div>
-      
-      <!-- CADASTRO -->
-      <div id="cadastro-form" class="hidden">
-        <input type="text" placeholder="Nome completo" id="cad-nome">
-        <input type="email" placeholder="Email" id="cad-email">
-        <input type="password" placeholder="Senha" id="cad-senha">
-        <p class="erro" id="erro-cadastro"></p>
-        <button class="btn" onclick="fazerCadastro()">Criar conta</button>
-      </div>
+  <!-- TELA LOGIN -->
+  <div id="login-screen">
+    <div class="login-box">
+      <h2>⚡ LOGIN</h2>
+      <input type="email" placeholder="Email" id="email">
+      <input type="password" placeholder="Senha" id="senha">
+      <p class="erro" id="erro-login">Email ou senha incorretos</p>
+      <button class="btn-pink" onclick="fazerLogin()">Entrar</button>
+      <p style="margin: 10px 0; font-size: 12px;">OU</p>
+      <button class="btn-white" onclick="fazerLogin()">Entrar com Google</button>
+      <a onclick="mostrarCadastro()">Criar conta</a>
+      <a onclick="abrirAdminLogin()">Painel Admin</a>
     </div>
   </div>
 
-  <!-- MENU ADMIN -->
-  <div id="admin-menu" class="neon">
-    <h3>🎮 Painel Admin</h3>
-    <button onclick="abrirPainelAdmin()">📊 Ver Dashboard</button>
-    <button onclick="mudarTema()">🎨 Mudar Tema: <span id="tema-atual">Rosa</span></button>
-    <button onclick="gerenciarProdutos()">📦 Gerenciar Produtos</button>
-    <button onclick="fecharAdminMenu()">❌ Fechar Menu</button>
+  <!-- TELA CADASTRO -->
+  <div id="cadastro-screen">
+    <div class="login-box">
+      <h2>✨ CRIAR CONTA</h2>
+      <input type="text" placeholder="Nome" id="nome-cadastro">
+      <input type="email" placeholder="Email" id="email-cadastro">
+      <input type="password" placeholder="Senha" id="senha-cadastro">
+      <p class="erro" id="erro-cadastro">Preencha todos os campos</p>
+      <button class="btn-pink" onclick="criarConta()">Cadastrar</button>
+      <a onclick="voltarLogin()">Já tenho conta</a>
+    </div>
   </div>
 
-  <!-- LOJA -->
-  <div id="store-screen" class="hidden">
-    <header>
-      <div class="logo">
-        <div class="logo-icon" onclick="abrirMenuAdmin()">🎮</div>
-        <div>
-          <div>CHANEL STORE</div>
-          <div style="font-size:11px; color:var(--primary-light);">FREE FIRE SHOP</div>
-        </div>
-      </div>
-      <div class="header-actions">
-        <span id="user-nome"></span>
+  <!-- MODAL LOGIN ADMIN -->
+  <div id="admin-login-modal">
+    <div class="login-box">
+      <h2>🔒 ADMIN</h2>
+      <input type="text" placeholder="Usuário Admin" id="user-admin">
+      <input type="password" placeholder="Senha Admin" id="senha-admin">
+      <p class="erro" id="erro-admin">Acesso negado</p>
+      <button class="btn-pink" onclick="loginAdmin()">Entrar como Admin</button>
+      <a onclick="fecharAdminLogin()" style="margin-top:15px;">Voltar</a>
+    </div>
+  </div>
+
+  <!-- MODAL CARRINHO -->
+  <div id="carrinho-modal">
+    <div class="carrinho-box">
+      <h2 style="color:#FF2D95; margin-bottom:15px;">🎮 Seu Carrinho</h2>
+      <div id="carrinho-itens"></div>
+      <p style="margin:15px 0; font-weight:bold;">Total: R$ <span id="carrinho-total">0</span></p>
+      <button class="btn-pink" onclick="finalizarCompra()">Finalizar no WhatsApp</button>
+      <button class="btn-white" onclick="fecharCarrinho()" style="margin-top:10px;">Continuar comprando</button>
+    </div>
+  </div>
+
+  <!-- TELA LOJA -->
+  <div id="store-screen">
+    <div class="header">
+      <span id="user-logado"></span>
+      <div class="menu-icons">
+        <span id="btn-admin" onclick="abrirAdminLogin()" style="display:none;">Dashboard</span>
+        <span class="carrinho" onclick="abrirCarrinho()">🎮<span class="carrinho-badge" id="badge-carrinho">0</span></span>
         <span onclick="logout()">Sair</span>
-        <span>🛒</span>
-      </div>
-    </header>
-
-    <div class="banner neon">
-      <div class="tag">⚡ ENTREGA IMEDIATA</div>
-      <h1>A MELHOR<br>LOJA <span>FF</span><br>DO BRASIL</h1>
-      <p>Diamantes, contas raras e muito mais. Entrega rápida via ID, segurança garantida e sem risco de ban.</p>
-      
-      <div class="stats">
-        <div class="stat"><h3>12K+</h3><p>CLIENTES</p></div>
-        <div class="stat"><h3>99%</h3><p>SATISFAÇÃO</p></div>
-        <div class="stat"><h3>5MIN</h3><p>ENTREGA</p></div>
       </div>
     </div>
-
-    <div class="features">
-      <div class="feature">
-        <div>🛡️</div>
-        <h4>100% Seguro</h4>
-        <p>Sem risco de ban</p>
-      </div>
-      <div class="feature">
-        <div>💎</div>
-        <h4>Pague com PIX</h4>
-        <p>Aprovação instantânea</p>
-      </div>
-      <div class="feature">
-        <div>🎧</div>
-        <h4>Suporte 24h</h4>
-        <p>Atendimento via chat</p>
-      </div>
+    
+    <div class="banner borda-rosa">
+      <p style="font-size:12px; color:#FF9ECB; margin-bottom:8px;">⚡ ENTREGA IMEDIATA</p>
+      <h1>A MELHOR<br>LOJA FF<br>DO BRASIL</h1>
+      <p style="font-size:12px; margin-top:10px; color:#ddd;">Diamantes, contas raras e muito mais. Entrega rápida via ID, segurança garantida e sem risco de ban.</p>
     </div>
 
-    <div class="categorias">
-      <div class="cat-title">
-        Categorias
-      </div>
-      <div class="cat-tabs">
-        <div class="cat-tab active" onclick="filtrarCategoria('todos')">TODOS</div>
-        <div class="cat-tab" onclick="filtrarCategoria('diamantes')">DIAMANTES</div>
-        <div class="cat-tab" onclick="filtrarCategoria('passes')">PASSES</div>
-        <div class="cat-tab" onclick="filtrarCategoria('contas')">CONTAS</div>
-        <div class="cat-tab" onclick="filtrarCategoria('recargas')">RECARGAS</div>
-      </div>
+    <div class="stats">
+      <div class="stat"><h3>12K+</h3><p>CLIENTES</p></div>
+      <div class="stat"><h3>99%</h3><p>SATISFAÇÃO</p></div>
+      <div class="stat"><h3>5MIN</h3><p>ENTREGA</p></div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active">TODOS</div>
+      <div class="tab">FREE FIRE</div>
+      <div class="tab">CONTAS</div>
     </div>
 
     <div class="products" id="lista-produtos">
       <!-- Produtos gerados via JS -->
     </div>
-  </div>
 
-  <!-- PAINEL ADMIN -->
-  <div id="admin-panel">
-    <header>
-      <div class="logo">
-        <div class="logo-icon" onclick="voltarLoja()">🎮</div>
-        <div>PAINEL ADMIN</div>
-      </div>
-      <span onclick="logout()" style="cursor:pointer; color:var(--primary);">Sair</span>
-    </header>
-    
-    <div style="padding:20px;">
-      <h2 style="color:var(--primary);">Dashboard Chanel Store</h2>
-      <p>Logado como: <b style="color:var(--primary);">Lorrannyh.179</b></p>
-      
-      <div class="admin-box">
-        <h3>📊 Total de vendas</h3>
-        <p style="font-size:24px; font-weight:bold;">R$ 1.247,00</p>
-        <p style="font-size:13px; color:#aaa;">23 pedidos este mês</p>
-      </div>
-      
-      <div class="admin-box">
-        <h3>📦 Pedidos Pendentes</h3>
-        <p><b>3</b> pedidos aguardando envio</p>
-      </div>
-      
-      <div class="admin-box">
-        <h3>👥 Clientes</h3>
-        <p><b>156</b> contas cadastradas</p>
-      </div>
-      
-      <button class="btn" onclick="voltarLoja()">Voltar pra Loja</button>
+    <div class="suporte">
+      <h3 style="color:#FF2D95; margin-bottom:10px;">💬 Suporte Admin</h3>
+      <p>Pague com PIX:</p>
+      <p class="pix">(98) 98984-8535-63</p>
+      <button class="btn-pink" style="margin-top:10px;" onclick="chamarSuporte()">Chamar no WhatsApp</button>
     </div>
   </div>
 
+  <!-- TELA ADMIN -->
+  <div id="admin-screen">
+    <div class="admin-header">
+      <span>Logado: <b style="color:#FF2D95;">Lorrannyh.16</b></span>
+      <span class="sair" onclick="logout()">Sair</span>
+    </div>
+    
+    <h2 style="color:#FF2D95; margin:20px 0;">Dashboard Admin</h2>
+    
+    <div class="admin-box">
+      <h3>Oie, Admin!</h3>
+      <p>Vendas hoje: <b>R$ 247,00</b></p>
+      <p>Pedidos pendentes: <b id="pedidos-count">3</b></p>
+      <p>Total de clientes: <b>1.247</b></p>
+    </div>
+
+    <div class="admin-menu">
+      <div class="admin-card" onclick="alert('Gerenciar produtos em breve')">
+        <h4>📦 Produtos</h4>
+        <p style="font-size:12px;">Adicionar/Editar</p>
+      </div>
+      <div class="admin-card" onclick="alert('Ver pedidos em breve')">
+        <h4>📋 Pedidos</h4>
+        <p style="font-size:12px;">3 pendentes</p>
+      </div>
+    </div>
+    
+    <button class="btn-pink" onclick="voltarLoja()">Voltar pra Loja</button>
+  </div>
+
 <script>
-  // DADOS
-  const ADMIN_USER = 'Lorrannyh.179';
-  const ADMIN_PASS = 'Lorrannyh.170';
-  let usuarioLogado = null;
-  let isAdmin = false;
-  
-  const produtos = [
-    {nome: '100 Diamantes FF', preco: 'R$5', cat: 'diamantes', tag: 'MAIS VENDIDO', emoji: '💎'},
-    {nome: '310 Diamantes FF', preco: 'R$15', cat: 'diamantes', tag: 'EM ALTA', emoji: '💎'},
-    {nome: '520 Diamantes FF', preco: 'R$25', cat: 'diamantes', tag: '', emoji: '💎'},
-    {nome: 'Passe Booyah', preco: 'R$10', cat: 'passes', tag: '', emoji: '🎟️'},
-    {nome: 'Passe Elite', preco: 'R$30', cat: 'passes', tag: '', emoji: '🎟️'},
-    {nome: 'Conta Veterana', preco: 'R$150', cat: 'contas', tag: 'RARA', emoji: '👤'},
-    {nome: 'Recarga Semanal', preco: 'R$8', cat: 'recargas', tag: '', emoji: '📱'},
-    {nome: 'Recarga Mensal', preco: 'R$25', cat: 'recargas', tag: '', emoji: '📱'}
+  let tipoUser = '';
+  let carrinho = [];
+  let usuarios = [
+    {email: "cliente@teste.com", senha: "1234", nome: "Cliente"}
   ];
   
-  // INICIAR
-  window.onload = () => {
-    let users = JSON.parse(localStorage.getItem('users') || '[]');
-    if(!users.find(u => u.user === ADMIN_USER)) {
-      users.push({nome: 'Admin', email: ADMIN_USER, senha: ADMIN_PASS, tipo: 'admin'});
-      localStorage.setItem('users', JSON.stringify(users));
+  let produtos = [
+    {id: 1, nome: "100 Diamantes FF", preco: 5, tag: "MAIS VENDIDO", emoji: "💎"},
+    {id: 2, nome: "310 Diamantes FF", preco: 15, tag: "EM ALTA", emoji: "💎", tagColor: "#FF6B35"},
+    {id: 3, nome: "Passe Premium", preco: 10, emoji: "🎫"},
+    {id: 4, nome: "Tokens 25", preco: 15, emoji: "🪙"}
+  ];
+
+  function renderizarProdutos() {
+    const lista = document.getElementById('lista-produtos');
+    lista.innerHTML = '';
+    produtos.forEach(p => {
+      lista.innerHTML += `
+        <div class="card">
+          ${p.tag ? `<span class="tag" ${p.tagColor ? `style="background:${p.tagColor}"` : ''}>${p.tag}</span>` : ''}
+          <div style="font-size:40px; margin:10px 0;">${p.emoji}</div>
+          <h4>${p.nome}</h4>
+          <div class="price">R$ ${p.preco}</div>
+          <button class="btn-pink" style="margin-top:10px; padding:8px;" onclick="addCarrinho(${p.id})">Add ao carrinho</button>
+        </div>
+      `;
+    });
+  }
+
+  function fazerLogin() {
+    let email = document.getElementById('email').value;
+    let senha = document.getElementById('senha').value;
+    let erro = document.getElementById('erro-login');
+    let user = usuarios.find(u => u.email === email && u.senha === senha);
+    
+    if(user) {
+      tipoUser = 'cliente';
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('store-screen').style.display = 'block';
+      document.getElementById('user-logado').innerText = user.nome;
+      document.getElementById('btn-admin').style.display = 'none';
+      erro.style.display = 'none';
+      renderizarProdutos();
+    } else {
+      erro.style.display = 'block';
     }
-    renderizarProdutos('todos');
-  };
-  
-  // AUTH
-  function trocarTab(tab) {
-    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-    event.target.classList.add('active');
-    document.getElementById('login-form').classList.toggle('hidden', tab !== 'login');
-    document.getElementById('cadastro-form').classList.toggle('hidden', tab !== 'cadastro');
   }
   
-  function fazerCadastro() {
-    let nome = document.getElementById('cad-nome').value;
-    let email = document.getElementById('cad-email').value;
-    let senha = document.getElementById('cad-senha').value;
+  function mostrarCadastro() {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('cadastro-screen').style.display = 'flex';
+  }
+  
+  function voltarLogin() {
+    document.getElementById('cadastro-screen').style.display = 'none';
+    document.getElementById('login-screen').style.display = 'flex';
+  }
+  
+  function criarConta() {
+    let nome = document.getElementById('nome-cadastro').value;
+    let email = document.getElementById('email-cadastro').value;
+    let senha = document.getElementById('senha-cadastro').value;
     let erro = document.getElementById('erro-cadastro');
     
-    if(!nome || !email || !senha) {
-      erro.innerText = 'Preencha todos os campos';
+    if(nome && email && senha) {
+      usuarios.push({email, senha, nome});
+      alert('Conta criada! Faça login.');
+      voltarLogin();
+    } else {
       erro.style.display = 'block';
-      return;
     }
-    if(senha.length < 4) {
-      erro.innerText = 'Senha deve ter 4+ caracteres';
-      erro.style.display = 'block';
-      return;
-    }
-    
-    let users = JSON.parse(localStorage.getItem('users') || '[]');
-    if(users.find(u => u.email === email)) {
-      erro.innerText = 'Email já cadastrado';
-      erro.style.display = 'block';
-      return;
-    }
-    
-    users.push({nome, email, senha, tipo: 'cliente'});
-    localStorage.setItem('users', JSON.stringify(users));
-    alert('Cadastro feito! Faça login.');
-    trocarTab('login');
   }
   
-  function fazerLogin() {
-    let user = document.getElementById('login-user').value;
-    let senha = document.getElementById('login-senha').value;
-    let erro = document.getElementById('erro-login');
+  function abrirAdminLogin() {
+    document.getElementById('admin-login-modal').style.display = 'flex';
+  }
+  
+  function fecharAdminLogin() {
+    document.getElementById('admin-login-modal').style.display = 'none';
+  }
+  
+  function loginAdmin() {
+    let user = document.getElementById('user-admin').value;
+    let senha = document.getElementById('senha-admin').value;
+    let erro = document.getElementById('erro-admin');
     
-    let users = JSON.parse(localStorage.getItem('users') || '[]');
-    let conta = users.find(u => (u.email === user || u.user === user) && u.senha === senha);
-    
-    if(conta) {
-      usuarioLogado = conta;
-      isAdmin = conta.tipo === 'admin';
-      document.getElementById('auth-screen').style.display = 'none';
-      document.getElementById('store-screen').classList.remove('hidden');
-      document.getElementById('user-nome').innerText = conta.nome || conta.email;
+    if(user === "Lorrannyh.16" && senha === "Lorrannyh.16") {
+      tipoUser = 'admin';
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('cadastro-screen').style.display = 'none';
+      document.getElementById('admin-login-modal').style.display = 'none';
+      document.getElementById('admin-screen').style.display = 'block';
       erro.style.display = 'none';
     } else {
-      erro.innerText = 'Usuário ou senha incorretos';
       erro.style.display = 'block';
     }
   }
   
   function logout() {
-    usuarioLogado = null;
-    isAdmin = false;
-    document.getElementById('auth-screen').style.display = 'flex';
-    document.getElementById('store-screen').classList.add('hidden');
-    document.getElementById('admin-panel').style.display = 'none';
-    document.getElementById('admin-menu').style.display = 'none';
-  }
-  
-  // ADMIN
-  function abrirMenuAdmin() {
-    if(!isAdmin) {
-      alert('Acesso apenas para admin');
-      return;
-    }
-    let menu = document.getElementById('admin-menu');
-    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-  }
-  
-  function fecharAdminMenu() {
-    document.getElementById('admin-menu').style.display = 'none';
-  }
-  
-  function abrirPainelAdmin() {
-    document.getElementById('store-screen').classList.add('hidden');
-    document.getElementById('admin-panel').style.display = 'block';
-    fecharAdminMenu();
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('store-screen').style.display = 'none';
+    document.getElementById('admin-screen').style.display = 'none';
+    document.getElementById('cadastro-screen').style.display = 'none';
+    document.getElementById('admin-login-modal').style.display = 'none';
+    document.getElementById('email').value = '';
+    document.getElementById('senha').value = '';
+    carrinho = [];
+    atualizarBadge();
   }
   
   function voltarLoja() {
-    document.getElementById('admin-panel').style.display = 'none';
-    document.getElementById('store-screen').classList.remove('hidden');
+    document.getElementById('admin-screen').style.display = 'none';
+    document.getElementById('store-screen').style.display = 'block';
+    document.getElementById('user-logado').innerText = 'Lorrannyh.16';
+    document.getElementById('btn-admin').style.display = 'inline';
+    renderizarProdutos();
   }
   
-  function mudarTema() {
-    let body = document.body;
-    let tema = body.getAttribute('data-theme');
-    let novo = tema === 'rosa' ? 'roxo' : 'rosa';
-    body.setAttribute('data-theme', novo);
-    document.getElementById('tema-atual').innerText = novo.charAt(0).toUpperCase() + novo.slice(1);
+  function addCarrinho(id) {
+    let produto = produtos.find(p => p.id === id);
+    carrinho.push(produto);
+    atualizarBadge();
+    alert(`${produto.nome} adicionado ao carrinho 🎮`);
   }
   
-  function gerenciarProdutos() {
-    alert('Em breve: adicionar/editar produtos direto pelo painel');
-    fecharAdminMenu();
+  function atualizarBadge() {
+    document.getElementById('badge-carrinho').innerText = carrinho.length;
   }
   
-  // LOJA
-  function renderizarProdutos(categoria) {
-    let lista = document.getElementById('lista-produtos');
-    let filtrados = categoria === 'todos' ? produtos : produtos.filter(p => p.cat === categoria);
+  function abrirCarrinho() {
+    let itens = document.getElementById('carrinho-itens');
+    let total = 0;
+    itens.innerHTML = '';
     
-    lista.innerHTML = filtrados.map(p => `
-      <div class="card">
-        ${p.tag ? `<span class="selo">${p.tag}</span>` : ''}
-        <div style="font-size:40px; margin:10px 0;">${p.emoji}</div>
-        <h4>${p.nome}</h4>
-        <div class="price">${p.preco}</div>
-        <p style="font-size:11px; color:var(--primary-light);">Entrega via ID</p>
-        <button class="btn" style="margin-top:10px; padding:8px;" onclick="comprar('${p.nome}')">Comprar</button>
-      </div>
-    `).join('');
+    if(carrinho.length === 0) {
+      itens.innerHTML = '<p style="text-align:center; color:#FF9ECB;">Carrinho vazio</p>';
+    } else {
+      carrinho.forEach((item, i) => {
+        total += item.preco;
+        itens.innerHTML += `
+          <div class="carrinho-item">
+            <span>${item.emoji} ${item.nome}</span>
+            <span>R$ ${item.preco}</span>
+          </div>
+        `;
+      });
+    }
+    document.getElementById('carrinho-total').innerText = total;
+    document.getElementById('carrinho-modal').style.display = 'flex';
   }
   
-  function filtrarCategoria(cat) {
-    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
-    event.target.classList.add('active');
-    renderizarProdutos(cat);
+  function fecharCarrinho() {
+    document.getElementById('carrinho-modal').style.display = 'none';
   }
   
-  function comprar(produto) {
-    alert(`Pedido de ${produto} iniciado! Chama no WhatsApp pra finalizar.`);
-    window.open('https://wa.me/55999999999?text=Quero comprar: ' + produto, '_blank');
+  function finalizarCompra() {
+    if(carrinho.length === 0) return;
+    let msg = `Olá! Quero finalizar minha compra:%0A`;
+    let total = 0;
+    carrinho.forEach(item => {
+      msg += `- ${item.nome} - R$ ${item.preco}%0A`;
+      total += item.preco;
+    });
+    msg += `%0ATotal: R$ ${total}%0APIX: (98) 98984-8535-63`;
+    window.open(`https://wa.me/5598989848535?text=${msg}`, '_blank');
+  }
+  
+  function chamarSuporte() {
+    let msg = `Olá! Preciso de suporte na Loja FF`;
+    window.open(`https://wa.me/5598989848535?text=${msg}`, '_blank');
   }
 </script>
 
