@@ -11,7 +11,16 @@
       color: #fff;
       min-height: 100vh;
     }
-
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      background: #2d1520;
+      border: 1px solid #FF2D95;
+      border-radius: 8px;
+      color: white;
+      outline: none;
+    }
    .borda-rosa { border: 1px solid #FF2D95; }
 
     /* LOGIN E CADASTRO */
@@ -33,16 +42,6 @@
       text-align: center;
     }
    .login-box h2 { color: #FF2D95; margin-bottom: 25px; font-size: 20px; }
-   .login-box input {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
-      background: #2d1520;
-      border: 1px solid #FF2D95;
-      border-radius: 8px;
-      color: white;
-      outline: none;
-    }
    .btn-pink {
       width: 100%;
       padding: 12px;
@@ -56,6 +55,7 @@
       transition: 0.3s;
     }
    .btn-pink:hover { background: #E02684; }
+   .btn-pink:disabled { background: #5a1f3a; cursor: not-allowed; }
    .btn-white {
       width: 100%;
       padding: 12px;
@@ -91,6 +91,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
    .header span { color: #FF2D95; cursor: pointer; font-size: 14px; }
    .menu-icons { display: flex; gap: 15px; align-items: center; }
@@ -113,7 +116,6 @@
       align-items: center;
       justify-content: center;
     }
-
    .banner {
       background: linear-gradient(135deg, #2d1520, #1a0b13);
       padding: 30px 20px;
@@ -131,7 +133,6 @@
     }
    .stat h3 { color: #FF2D95; font-size: 20px; }
    .stat p { font-size: 12px; color: #FF9ECB; }
-
    .tabs {
       display: flex;
       gap: 10px;
@@ -147,7 +148,6 @@
       cursor: pointer;
     }
    .tab.active { background: #FF2D95; }
-
    .products {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -162,6 +162,13 @@
       text-align: center;
       position: relative;
     }
+   .card img {
+      width: 100%;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin: 8px 0;
+    }
    .card.tag {
       background: #FF2D95;
       color: white;
@@ -173,6 +180,7 @@
     }
    .card h4 { font-size: 14px; margin: 8px 0; }
    .card.price { color: #FF2D95; font-weight: bold; margin: 8px 0; }
+   .card.estoque { font-size: 11px; color: #FF9ECB; margin-bottom: 8px; }
    .admin-actions {
       position: absolute;
       top: 5px;
@@ -190,7 +198,6 @@
       cursor: pointer;
       font-size: 14px;
     }
-
    .suporte {
       background: #2d1520;
       border: 1px solid #FF2D95;
@@ -235,7 +242,7 @@
     }
    .admin-card:hover { background: #3a1c2a; }
 
-    /* MODAIS - CORRIGIDO */
+    /* MODAIS */
    .modal {
       display: none;
       position: fixed;
@@ -263,9 +270,16 @@
       padding: 10px 0;
       border-bottom: 1px solid #2d1520;
       align-items: center;
+      gap: 10px;
     }
-   .produto-form input {
-      margin: 5px 0;
+   .preview-img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #FF2D95;
+      margin: 10px 0;
+      display: none;
     }
   </style>
 </head>
@@ -304,385 +318,4 @@
     <div class="modal-box">
       <h2>🔒 ADMIN</h2>
       <input type="text" placeholder="Usuário Admin" id="user-admin">
-      <input type="password" placeholder="Senha Admin" id="senha-admin">
-      <p class="erro" id="erro-admin">Acesso negado</p>
-      <button class="btn-pink" onclick="loginAdmin()">Entrar como Admin</button>
-      <a onclick="fecharAdminLogin()" style="margin-top:15px; display:block; text-align:center; color:#FF9ECB; cursor:pointer;">Voltar</a>
-    </div>
-  </div>
-
-  <!-- MODAL CARRINHO -->
-  <div id="carrinho-modal" class="modal">
-    <div class="modal-box">
-      <h2>🎮 Seu Carrinho</h2>
-      <div id="carrinho-itens"></div>
-      <p style="margin:15px 0; font-weight:bold;">Total: R$ <span id="carrinho-total">0</span></p>
-      <button class="btn-pink" onclick="finalizarCompra()">Finalizar no WhatsApp</button>
-      <button class="btn-white" onclick="fecharCarrinho()" style="margin-top:10px;">Continuar comprando</button>
-    </div>
-  </div>
-
-  <!-- MODAL GERENCIAR PRODUTOS -->
-  <div id="produtos-modal" class="modal">
-    <div class="modal-box">
-      <h2>📦 Gerenciar Produtos</h2>
-      <button class="btn-pink" onclick="abrirFormProduto()">+ Adicionar Produto</button>
-      <div id="lista-admin-produtos" style="margin-top:15px;"></div>
-      <button class="btn-white" onclick="fecharProdutos()" style="margin-top:15px;">Fechar</button>
-    </div>
-  </div>
-
-  <!-- MODAL FORM PRODUTO -->
-  <div id="form-produto-modal" class="modal">
-    <div class="modal-box produto-form">
-      <h2 id="titulo-form-produto">Novo Produto</h2>
-      <input type="hidden" id="produto-id">
-      <input type="text" placeholder="Nome do produto" id="produto-nome">
-      <input type="number" placeholder="Preço" id="produto-preco">
-      <input type="text" placeholder="Emoji" id="produto-emoji" maxlength="2">
-      <input type="text" placeholder="Tag (opcional)" id="produto-tag">
-      <button class="btn-pink" onclick="salvarProduto()">Salvar</button>
-      <button class="btn-white" onclick="fecharFormProduto()" style="margin-top:10px;">Cancelar</button>
-    </div>
-  </div>
-
-  <!-- TELA LOJA -->
-  <div id="store-screen">
-    <div class="header">
-      <span id="user-logado"></span>
-      <div class="menu-icons">
-        <span id="btn-admin" onclick="abrirAdminLogin()" style="display:none;">Dashboard</span>
-        <span class="carrinho" onclick="abrirCarrinho()">🎮<span class="carrinho-badge" id="badge-carrinho">0</span></span>
-        <span onclick="logout()">Sair</span>
-      </div>
-    </div>
-
-    <div class="banner borda-rosa">
-      <p style="font-size:12px; color:#FF9ECB; margin-bottom:8px;">⚡ ENTREGA IMEDIATA</p>
-      <h1>A MELHOR<br>LOJA FF<br>DO BRASIL</h1>
-      <p style="font-size:12px; margin-top:10px; color:#ddd;">Diamantes, contas raras e muito mais. Entrega rápida via ID, segurança garantida e sem risco de ban.</p>
-    </div>
-
-    <div class="stats">
-      <div class="stat"><h3>12K+</h3><p>CLIENTES</p></div>
-      <div class="stat"><h3>99%</h3><p>SATISFAÇÃO</p></div>
-      <div class="stat"><h3>5MIN</h3><p>ENTREGA</p></div>
-    </div>
-
-    <div class="tabs">
-      <div class="tab active">TODOS</div>
-      <div class="tab">FREE FIRE</div>
-      <div class="tab">CONTAS</div>
-    </div>
-
-    <div class="products" id="lista-produtos"></div>
-
-    <div class="suporte">
-      <h3 style="color:#FF2D95; margin-bottom:10px;">💬 Suporte Admin</h3>
-      <p>Pague com PIX:</p>
-      <p class="pix">(98) 98984-8535-63</p>
-      <button class="btn-pink" style="margin-top:10px;" onclick="chamarSuporte()">Chamar no WhatsApp</button>
-    </div>
-  </div>
-
-  <!-- TELA ADMIN -->
-  <div id="admin-screen">
-    <div class="admin-header">
-      <span>Logado: <b style="color:#FF2D95;">Lorrannyh.16</b></span>
-      <span class="sair" onclick="logout()">Sair</span>
-    </div>
-
-    <h2 style="color:#FF2D95; margin:20px 0;">Dashboard Admin</h2>
-
-    <div class="admin-box">
-      <h3>Oie, Admin!</h3>
-      <p>Vendas hoje: <b>R$ 247,00</b></p>
-      <p>Pedidos pendentes: <b id="pedidos-count">3</b></p>
-      <p>Total de clientes: <b>1.247</b></p>
-    </div>
-
-    <div class="admin-menu">
-      <div class="admin-card" onclick="abrirProdutos()">
-        <h4>📦 Produtos</h4>
-        <p style="font-size:12px;">Adicionar/Editar</p>
-      </div>
-      <div class="admin-card" onclick="alert('3 pedidos pendentes:\n- 100 Diamantes\n- Passe Premium\n- 310 Diamantes')">
-        <h4>📋 Pedidos</h4>
-        <p style="font-size:12px;">3 pendentes</p>
-      </div>
-    </div>
-
-    <button class="btn-pink" onclick="voltarLoja()">Voltar pra Loja</button>
-  </div>
-
-<script>
-  let tipoUser = '';
-  let carrinho = [];
-  let usuarios = [
-    {email: "cliente@teste.com", senha: "1234", nome: "Cliente"}
-  ];
-
-  let produtos = [
-    {id: 1, nome: "100 Diamantes FF", preco: 5, tag: "MAIS VENDIDO", emoji: "💎"},
-    {id: 2, nome: "310 Diamantes FF", preco: 15, tag: "EM ALTA", emoji: "💎", tagColor: "#FF6B35"},
-    {id: 3, nome: "Passe Premium", preco: 10, emoji: "🎫"},
-    {id: 4, nome: "Tokens 25", preco: 15, emoji: "🪙"}
-  ];
-
-  function renderizarProdutos() {
-    const lista = document.getElementById('lista-produtos');
-    lista.innerHTML = '';
-    const isAdmin = tipoUser === 'admin';
-    if(isAdmin) lista.classList.add('admin-mode');
-    else lista.classList.remove('admin-mode');
-
-    produtos.forEach(p => {
-      lista.innerHTML += `
-        <div class="card">
-          <div class="admin-actions">
-            <button class="icon-btn" onclick="editarProduto(${p.id})">✏️</button>
-            <button class="icon-btn" onclick="excluirProduto(${p.id})">🗑️</button>
-          </div>
-          ${p.tag? `<span class="tag" ${p.tagColor? `style="background:${p.tagColor}"` : ''}>${p.tag}</span>` : ''}
-          <div style="font-size:40px; margin:10px 0;">${p.emoji}</div>
-          <h4>${p.nome}</h4>
-          <div class="price">R$ ${p.preco}</div>
-          <button class="btn-pink" style="margin-top:10px; padding:8px;" onclick="addCarrinho(${p.id})">Add ao carrinho</button>
-        </div>
-      `;
-    });
-  }
-
-  function fazerLogin() {
-    let email = document.getElementById('email').value;
-    let senha = document.getElementById('senha').value;
-    let erro = document.getElementById('erro-login');
-    let user = usuarios.find(u => u.email === email && u.senha === senha);
-
-    if(user) {
-      tipoUser = 'cliente';
-      document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('store-screen').style.display = 'block';
-      document.getElementById('user-logado').innerText = user.nome;
-      document.getElementById('btn-admin').style.display = 'none';
-      erro.style.display = 'none';
-      renderizarProdutos();
-    } else {
-      erro.style.display = 'block';
-    }
-  }
-
-  function mostrarCadastro() {
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('cadastro-screen').style.display = 'flex';
-  }
-
-  function voltarLogin() {
-    document.getElementById('cadastro-screen').style.display = 'none';
-    document.getElementById('login-screen').style.display = 'flex';
-  }
-
-  function criarConta() {
-    let nome = document.getElementById('nome-cadastro').value;
-    let email = document.getElementById('email-cadastro').value;
-    let senha = document.getElementById('senha-cadastro').value;
-    let erro = document.getElementById('erro-cadastro');
-
-    if(nome && email && senha) {
-      usuarios.push({email, senha, nome});
-      alert('Conta criada! Faça login.');
-      voltarLogin();
-    } else {
-      erro.style.display = 'block';
-    }
-  }
-
-  function abrirAdminLogin() {
-    document.getElementById('admin-login-modal').style.display = 'flex';
-  }
-
-  function fecharAdminLogin() {
-    document.getElementById('admin-login-modal').style.display = 'none';
-  }
-
-  function loginAdmin() {
-    let user = document.getElementById('user-admin').value;
-    let senha = document.getElementById('senha-admin').value;
-    let erro = document.getElementById('erro-admin');
-
-    if(user === "Lorrannyh.16" && senha === "Lorrannyh.16") {
-      tipoUser = 'admin';
-      document.getElementById('login-screen').style.display = 'none';
-      document.getElementById('cadastro-screen').style.display = 'none';
-      document.getElementById('admin-login-modal').style.display = 'none';
-      document.getElementById('admin-screen').style.display = 'block';
-      erro.style.display = 'none';
-    } else {
-      erro.style.display = 'block';
-    }
-  }
-
-  function logout() {
-    document.getElementById('login-screen').style.display = 'flex';
-    document.getElementById('store-screen').style.display = 'none';
-    document.getElementById('admin-screen').style.display = 'none';
-    document.getElementById('cadastro-screen').style.display = 'none';
-    document.getElementById('admin-login-modal').style.display = 'none';
-    document.getElementById('email').value = '';
-    document.getElementById('senha').value = '';
-    carrinho = [];
-    tipoUser = '';
-    atualizarBadge();
-  }
-
-  function voltarLoja() {
-    document.getElementById('admin-screen').style.display = 'none';
-    document.getElementById('store-screen').style.display = 'block';
-    document.getElementById('user-logado').innerText = 'Lorrannyh.16';
-    document.getElementById('btn-admin').style.display = 'inline';
-    renderizarProdutos();
-  }
-
-  function addCarrinho(id) {
-    let produto = produtos.find(p => p.id === id);
-    carrinho.push(produto);
-    atualizarBadge();
-    alert(`${produto.nome} adicionado ao carrinho 🎮`);
-  }
-
-  function atualizarBadge() {
-    document.getElementById('badge-carrinho').innerText = carrinho.length;
-  }
-
-  function abrirCarrinho() {
-    let itens = document.getElementById('carrinho-itens');
-    let total = 0;
-    itens.innerHTML = '';
-
-    if(carrinho.length === 0) {
-      itens.innerHTML = '<p style="text-align:center; color:#FF9ECB;">Carrinho vazio</p>';
-    } else {
-      carrinho.forEach((item) => {
-        total += item.preco;
-        itens.innerHTML += `
-          <div class="carrinho-item">
-            <span>${item.emoji} ${item.nome}</span>
-            <span>R$ ${item.preco}</span>
-          </div>
-        `;
-      });
-    }
-    document.getElementById('carrinho-total').innerText = total;
-    document.getElementById('carrinho-modal').style.display = 'flex';
-  }
-
-  function fecharCarrinho() {
-    document.getElementById('carrinho-modal').style.display = 'none';
-  }
-
-  function finalizarCompra() {
-    if(carrinho.length === 0) return;
-    let msg = `Olá Lorrannyh! Quero finalizar minha compra:%0A`;
-    let total = 0;
-    carrinho.forEach(item => {
-      msg += `- ${item.nome} - R$ ${item.preco}%0A`;
-      total += item.preco;
-    });
-    msg += `%0ATotal: R$ ${total}%0APIX: (98) 98984-8535-63`;
-    window.open(`https://wa.me/5598989848535?text=${msg}`, '_blank');
-  }
-
-  function chamarSuporte() {
-    let msg = `Olá Lorrannyh! Preciso de suporte na Loja FF`;
-    window.open(`https://wa.me/5598989848535?text=${msg}`, '_blank');
-  }
-
-  // FUNÇÕES ADMIN
-  function abrirProdutos() {
-    renderizarListaAdmin();
-    document.getElementById('produtos-modal').style.display = 'flex';
-  }
-
-  function fecharProdutos() {
-    document.getElementById('produtos-modal').style.display = 'none';
-  }
-
-  function renderizarListaAdmin() {
-    const lista = document.getElementById('lista-admin-produtos');
-    lista.innerHTML = '';
-    produtos.forEach(p => {
-      lista.innerHTML += `
-        <div class="produto-item">
-          <span>${p.emoji} ${p.nome} - R$ ${p.preco}</span>
-          <div>
-            <button class="btn-pink btn-small" onclick="editarProduto(${p.id})">✏️</button>
-            <button class="btn-pink btn-small" onclick="excluirProduto(${p.id})">🗑️</button>
-          </div>
-        </div>
-      `;
-    });
-  }
-
-  function abrirFormProduto() {
-    document.getElementById('titulo-form-produto').innerText = 'Novo Produto';
-    document.getElementById('produto-id').value = '';
-    document.getElementById('produto-nome').value = '';
-    document.getElementById('produto-preco').value = '';
-    document.getElementById('produto-emoji').value = '';
-    document.getElementById('produto-tag').value = '';
-    document.getElementById('form-produto-modal').style.display = 'flex';
-  }
-
-  function fecharFormProduto() {
-    document.getElementById('form-produto-modal').style.display = 'none';
-  }
-
-  function editarProduto(id) {
-    let p = produtos.find(prod => prod.id === id);
-    document.getElementById('titulo-form-produto').innerText = 'Editar Produto';
-    document.getElementById('produto-id').value = p.id;
-    document.getElementById('produto-nome').value = p.nome;
-    document.getElementById('produto-preco').value = p.preco;
-    document.getElementById('produto-emoji').value = p.emoji;
-    document.getElementById('produto-tag').value = p.tag || '';
-    document.getElementById('form-produto-modal').style.display = 'flex';
-    document.getElementById('produtos-modal').style.display = 'none';
-  }
-
-  function salvarProduto() {
-    let id = document.getElementById('produto-id').value;
-    let nome = document.getElementById('produto-nome').value;
-    let preco = parseFloat(document.getElementById('produto-preco').value);
-    let emoji = document.getElementById('produto-emoji').value;
-    let tag = document.getElementById('produto-tag').value;
-
-    if(!nome ||!preco ||!emoji) {
-      alert('Preenche nome, preço e emoji');
-      return;
-    }
-
-    if(id) {
-      let i = produtos.findIndex(p => p.id == id);
-      produtos[i] = {id: parseInt(id), nome, preco, emoji, tag};
-    } else {
-      let novoId = produtos.length? Math.max(...produtos.map(p => p.id)) + 1 : 1;
-      produtos.push({id: novoId, nome, preco, emoji, tag});
-    }
-
-    fecharFormProduto();
-    renderizarListaAdmin();
-    renderizarProdutos();
-    alert('Produto salvo!');
-  }
-
-  function excluirProduto(id) {
-    if(confirm('Tem certeza que quer excluir?')) {
-      produtos = produtos.filter(p => p.id!== id);
-      renderizarListaAdmin();
-      renderizarProdutos();
-    }
-  }
-</script>
-
-</body>
-</html>
+     
