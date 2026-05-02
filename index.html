@@ -1,99 +1,203 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loja FF Rosa</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#1a0b13;color:#fff;min-height:100vh}
-input{width:100%;padding:12px;margin:8px 0;background:#2d1520;border:1px solid #FF2D95;border-radius:8px;color:white}
-#login-screen{display:flex;justify-content:center;align-items:center;height:100vh;background:#0d0609}
-.login-box{background:#1a0b13;border:1px solid #FF2D95;border-radius:12px;padding:30px;width:90%;max-width:350px;text-align:center}
-.login-box h2{color:#FF2D95;margin-bottom:25px}
-.btn-pink{width:100%;padding:12px;background:#FF2D95;border:none;border-radius:8px;color:white;font-weight:bold;margin:10px 0;cursor:pointer}
-#store-screen{display:none}
-.header{background:#1a0b13;padding:15px;border-bottom:1px solid #FF2D95;display:flex;justify-content:space-between;align-items:center}
-.header span{color:#FF2D95;cursor:pointer}
-.products{display:grid;grid-template-columns:1fr 1fr;gap:15px;padding:15px}
-.card{background:#2d1520;border:1px solid #FF2D95;border-radius:12px;padding:15px;text-align:center;position:relative}
-.card img{width:100%;height:80px;object-fit:cover;border-radius:8px;margin:8px 0}
-.card .price{color:#FF2D95;font-weight:bold;margin:8px 0}
-.admin-actions{position:absolute;top:5px;right:5px;display:none;gap:5px}
-.admin-mode .admin-actions{display:flex}
-.icon-btn{background:#FF2D95;border:none;width:28px;height:28px;border-radius:6px;cursor:pointer}
-.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;z-index:999}
-.modal-box{background:#1a0b13;border:1px solid #FF2D95;border-radius:12px;padding:25px;width:90%;max-width:400px}
-.erro{color:#FF4D6D;font-size:13px;margin-top:8px;display:none}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHANEL STORE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0a0e1a;
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+            min-height: 100vh;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: rgba(10, 14, 26, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: #00d4ff;
+            letter-spacing: 2px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid #00d4ff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: #00ff88;
+            border-radius: 50%;
+        }
+        
+        h1 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+        
+        h1 .highlight {
+            background: linear-gradient(90deg, #00d4ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            color: #8b92a8;
+            font-size: 16px;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, #00d4ff, #0099ff);
+            color: #fff;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stats {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .hero-image {
+            width: 400px;
+            height: 400px;
+            margin: 0 auto;
+            background: radial-gradient(circle, rgba(255, 0, 80, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(255, 0, 80, 0.4);
+            box-shadow: 0 0 60px rgba(255, 0, 80, 0.3);
+            overflow: hidden;
+        }
+        
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 32px; }
+            .hero-image { width: 280px; height: 280px; }
+            .buttons { flex-direction: column; align-items: center; }
+            .btn { width: 100%; max-width: 300px; }
+        }
+    </style>
 </head>
 <body>
-
-<div id="login-screen">
-  <div class="login-box">
-    <h2>⚡ LOGIN</h2>
-    <input type="text" placeholder="Usuário" id="user">
-    <input type="password" placeholder="Senha" id="senha">
-    <p class="erro" id="erro-login">Usuário ou senha incorretos</p>
-    <button class="btn-pink" onclick="fazerLogin()">Entrar</button>
-  </div>
-</div>
-
-<div id="store-screen">
-  <div class="header">
-    <span id="user-logado"></span>
-    <span onclick="logout()">Sair</span>
-  </div>
-  <div class="products admin-mode" id="lista-produtos"></div>
-</div>
-
-<script>
-let tipoUser = '';
-let produtos = [
-  {id: 1, nome: "100 Diamantes FF", preco: 5, emoji: "💎", estoque: 50},
-  {id: 2, nome: "310 Diamantes FF", preco: 15, emoji: "💎", estoque: 30}
-];
-
-function renderizarProdutos() {
-  const lista = document.getElementById('lista-produtos');
-  lista.innerHTML = '';
-  produtos.forEach(p => {
-    lista.innerHTML += `
-      <div class="card">
-        <div class="admin-actions">
-          <button class="icon-btn" onclick="alert('Editar ${p.id}')">✏️</button>
-          <button class="icon-btn" onclick="alert('Excluir ${p.id}')">🗑️</button>
+    <header class="header">
+        <div class="logo">CHANEL STORE</div>
+        <div>☰</div>
+    </header>
+    
+    <div class="container">
+        <div class="badge">
+            <div class="badge-dot"></div>
+            SISTEMA ONLINE
         </div>
-        <div style="font-size:40px;margin:10px 0;">${p.emoji}</div>
-        <h4>${p.nome}</h4>
-        <div class="price">R$ ${p.preco}</div>
-        <button class="btn-pink" onclick="alert('Add ${p.nome}')">Add ao carrinho</button>
-      </div>
-    `;
-  });
-}
-
-function fazerLogin() {
-  let user = document.getElementById('user').value;
-  let senha = document.getElementById('senha').value;
-  
-  if(user === "Lorrannyh.16" && senha === "Lorrannyh.16") {
-    tipoUser = 'admin';
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('store-screen').style.display = 'block';
-    document.getElementById('user-logado').innerText = 'Lorrannyh.16';
-    renderizarProdutos();
-  } else {
-    document.getElementById('erro-login').style.display = 'block';
-  }
-}
-
-function logout() {
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('store-screen').style.display = 'none';
-}
-
-renderizarProdutos();
-</script>
+        
+        <h1>
+            Compras <span class="highlight">manualmente</span><br>
+            e com segurança
+        </h1>
+        
+        <p class="subtitle">
+            100% seguro - sem precisar de nem um acesso
+        </p>
+        
+        <div class="buttons">
+            <button class="btn btn-primary">CADASTRAR</button>
+            <button class="btn btn-secondary">ENTRAR</button>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">👥 1.4k+ Usuários</div>
+            <div class="stat">❤️ 100% seguro</div>
+            <div class="stat">⚡ Envio instantâneos</div>
+        </div>
+        
+        <div class="hero-image">
+            <img src="chanel-foto.png" alt="Chanel Store">
+        </div>
+    </div>
 </body>
 </html>
