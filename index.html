@@ -3,459 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHANEL STORE</title>
+    <title>Chanel Store - Seguidores e Diamantes</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #0a0e1a; font-family: 'Arial', sans-serif; color: #fff; min-height: 100vh; }
-      .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(10, 14, 26, 0.8); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; }
-      .logo { font-size: 18px; font-weight: 800; color: #ff0050; letter-spacing: 2px; }
-        #userLogado { font-size: 12px; color: #ff66a3; cursor: pointer; }
-      .header-btns { display: flex; gap: 8px; align-items: center; }
-      .admin-btn { background: rgba(255,0,80,0.2); border: 1px solid #ff0050; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 11px; color: #fff; }
-      .container { max-width: 1200px; margin: 0 auto; padding: 25px 15px 40px; text-align: center; }
-      .badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 0, 80, 0.1); border: 1px solid #ff0050; padding: 6px 14px; border-radius: 20px; font-size: 12px; margin-bottom: 20px; }
-      .badge-dot { width: 6px; height: 6px; background: #ff0050; border-radius: 50%; }
-        h1 { font-size: 28px; font-weight: 800; margin-bottom: 10px; line-height: 1.2; }
-      .highlight { background: linear-gradient(90deg, #ff0050, #ff66a3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-      .subtitle { color: #8b92a8; font-size: 13px; margin-bottom: 25px; max-width: 600px; margin-left: auto; margin-right: auto; }
-      .buttons { display: flex; gap: 10px; justify-content: center; margin-bottom: 25px; flex-wrap: wrap; }
-      .btn { padding: 12px 24px; border-radius: 12px; font-weight: 600; font-size: 14px; cursor: pointer; border: none; transition: 0.3s; }
-      .btn-primary { background: linear-gradient(90deg, #ff0050, #ff3385); color: #fff; }
-      .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255, 0, 80, 0.4); }
-      .btn-secondary { background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 0, 80, 0.3); }
-      .btn-danger { background: rgba(255, 0, 0, 0.2); border: 1px solid #ff0000; color: #ff6666; padding: 6px 10px; font-size: 11px; }
-      .btn-voltar { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,0,80,0.3); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 12px; margin-bottom: 20px; text-align: left; display: inline-block; }
-      .stats { display: flex; gap: 8px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap; }
-      .stat { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 0, 80, 0.2); padding: 6px 12px; border-radius: 10px; font-size: 11px; display: flex; align-items: center; gap: 5px; }
-      .como-funciona { margin-top: 20px; }
-      .como-funciona h2 { font-size: 22px; font-weight: 800; margin-bottom: 30px; background: linear-gradient(90deg, #ff0050, #ff66a3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-      .passos { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-      .passo { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 0, 80, 0.2); border-radius: 16px; padding: 20px 12px; width: 100%; max-width: 280px; text-align: center; position: relative; }
-      .passo-numero { width: 40px; height: 40px; background: linear-gradient(135deg, #ff0050, #ff3385); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; margin: -40px auto 12px; box-shadow: 0 0 30px rgba(255, 0, 80, 0.5); }
-      .passo h3 { font-size: 16px; margin-bottom: 8px; }
-      .passo p { color: #8b92a8; font-size: 12px; line-height: 1.5; }
-      .dashboard { display: none; margin-top: 20px; }
-      .titulo-secao { font-size: 20px; font-weight: 800; margin-bottom: 20px; color: #ff0050; text-align: left; }
-      .jogos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; }
-      .jogo-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 0, 80, 0.2); border-radius: 12px; padding: 8px; cursor: pointer; transition: 0.3s; }
-      .jogo-card:hover { transform: translateY(-3px); border-color: #ff0050; box-shadow: 0 5px 20px rgba(255, 0, 80, 0.3); }
-      .jogo-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; margin-bottom: 6px; background: rgba(255,0,80,0.1); }
-      .jogo-nome { font-size: 11px; color: #fff; text-align: center; line-height: 1.2; font-weight: 600; }
-      .jogo-preco { font-size: 11px; color: #ff0050; text-align: center; font-weight: 700; margin-top: 3px; }
-      .modal { visibility: hidden; opacity: 0; pointer-events: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; z-index: 1000; overflow-y: auto; transition: 0.3s; display: flex; }
-      .modal.ativo { visibility: visible; opacity: 1; pointer-events: all; }
-      .modal-content { background: #1a1f2e; padding: 25px; border-radius: 16px; width: 90%; max-width: 400px; border: 1px solid rgba(255, 0, 80, 0.3); margin: 20px; max-height: 90vh; overflow-y: auto; }
-      .modal-content h2 { margin-bottom: 18px; color: #ff0050; font-size: 20px; }
-      .modal-content input,.modal-content select { width: 100%; padding: 10px; margin: 6px 0; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,0,80,0.2); border-radius: 8px; color: #fff; font-size: 14px; }
-      .modal-content button { width: 100%; margin-top: 14px; }
-      .close { float: right; font-size: 24px; cursor: pointer; color: #8b92a8; }
-      .btn-sair { background: rgba(255,0,80,0.2); border: 1px solid #ff0050; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 12px; margin-top: 20px; }
-      .admin-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,0,80,0.2); padding: 12px; border-radius: 8px; margin-bottom: 10px; text-align: left; }
-      .admin-item-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-      .admin-item b { color: #ff0050; font-size: 14px; }
-      .admin-item span { font-size: 12px; color: #8b92a8; }
-      .admin-item-actions { display: flex; gap: 6px; }
-      .produto-detalhe { text-align: center; }
-      .produto-detalhe img { width: 120px; height: 120px; border-radius: 12px; margin: 0 auto 15px; object-fit: cover; }
-      .produto-detalhe h3 { font-size: 18px; margin-bottom: 8px; }
-      .produto-detalhe.preco { color: #ff0050; font-size: 20px; font-weight: 800; margin-bottom: 15px; }
-        @media (max-width: 768px) {
-            h1 { font-size: 24px; }
-          .subtitle { font-size: 12px; }
-          .como-funciona h2 { font-size: 20px; }
-          .buttons { flex-direction: column; align-items: center; }
-          .btn { width: 100%; max-width: 280px; }
-          .passos { flex-direction: column; align-items: center; }
-          .passo { max-width: 280px; }
-          .jogos-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: #0f0f0f; color: #fff; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .hidden { display: none !important; }
+        
+        /* Login */
+        .auth-box { background: #1a1a1a; padding: 30px; border-radius: 12px; margin-top: 50px; }
+        .auth-box h2 { text-align: center; margin-bottom: 20px; color: #00ff88; }
+        .auth-box input { width: 100%; padding: 12px; margin: 8px 0; background: #2a2a2a; border: 1px solid #333; border-radius: 8px; color: #fff; }
+        .auth-box button { width: 100%; padding: 12px; background: #00ff88; color: #000; border: none; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; }
+        .auth-toggle { text-align: center; margin-top: 15px; color: #00ff88; cursor: pointer; }
+        
+        /* Header */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .header h1 { color: #00ff88; font-size: 24px; }
+        .sair { background: #ff3b3b; padding: 8px 15px; border-radius: 8px; border: none; color: #fff; cursor: pointer; }
+        
+        /* Categorias */
+        .categorias { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        .categoria-card { background: #1a1a1a; padding: 25px 15px; border-radius: 12px; text-align: center; cursor: pointer; border: 2px solid #2a2a2a; }
+        .categoria-card.ativa { border-color: #00ff88; }
+        .categoria-card h3 { font-size: 16px; }
+        
+        /* Produtos */
+        .produtos { display: grid; gap: 15px; }
+        .produto-card { background: #1a1a1a; padding: 20px; border-radius: 12px; border: 1px solid #2a2a2a; }
+        .produto-card h3 { margin-bottom: 8px; }
+        .produto-card p { color: #00ff88; font-size: 20px; font-weight: bold; margin-bottom: 12px; }
+        .produto-card button { width: 100%; padding: 12px; background: #00ff88; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        
+        /* Admin */
+        .admin-panel { background: #1a1a1a; padding: 20px; border-radius: 12px; margin-top: 30px; }
+        .admin-panel h3 { color: #00ff88; margin-bottom: 15px; }
+        .admin-panel input, .admin-panel select { width: 100%; padding: 10px; margin: 5px 0 10px 0; background: #2a2a2a; border: 1px solid #333; border-radius: 8px; color: #fff; }
+        .admin-panel button { padding: 10px 15px; background: #00ff88; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-right: 10px; }
+        
+        .voltar { background: #333; padding: 10px 15px; border-radius: 8px; border: none; color: #fff; margin-bottom: 15px; cursor: pointer; }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="logo">CHANEL STORE</div>
-        <div class="header-btns">
-            <span id="userLogado" onclick="mostrarDashboard()"></span>
-            <button class="admin-btn" onclick="abrirAdmin()">Admin</button>
+    <div class="container">
+        <!-- TELA LOGIN -->
+        <div id="tela-login">
+            <div class="auth-box">
+                <h2 id="auth-titulo">Login</h2>
+                <input type="text" id="auth-nome" placeholder="Nome completo" class="hidden">
+                <input type="email" id="auth-email" placeholder="Email">
+                <input type="password" id="auth-senha" placeholder="Senha">
+                <button onclick="fazerAuth()">Entrar</button>
+                <div class="auth-toggle" onclick="toggleAuth()">Não tem conta? Cadastre-se</div>
+            </div>
         </div>
-    </header>
 
-    <div class="container" id="home">
-        <div class="badge"><div class="badge-dot"></div>SISTEMA ONLINE</div>
-        <h1>Compras <span class="highlight">manualmente</span><br>e com segurança</h1>
-        <p class="subtitle">100% seguro - sem precisar de nem um acesso</p>
-        <div class="buttons">
-            <button class="btn btn-primary" onclick="abrirModal('cadastro')">CADASTRAR</button>
-            <button class="btn btn-secondary" onclick="abrirModal('login')">ENTRAR</button>
-        </div>
-        <div class="stats">
-            <div class="stat">👥 <span id="totalUsers">1.4k+</span> Usuários</div>
-            <div class="stat">❤️ 100% seguro</div>
-            <div class="stat">⚡ Envio instantâneos</div>
-        </div>
-        <div class="como-funciona">
-            <h2>Como Funciona</h2>
-            <div class="passos">
-                <div class="passo"><div class="passo-numero">1</div><h3>Cadastre-se</h3><p>Crie sua conta com nome de usuário e senha.</p></div>
-                <div class="passo"><div class="passo-numero">2</div><h3>Entre no Grupo</h3><p>Participe do nosso grupo exclusivo no WhatsApp.</p></div>
-                <div class="passo"><div class="passo-numero">3</div><h3>Escolha a Categoria</h3><p>Faça login e compre direto no WhatsApp.</p></div>
+        <!-- TELA PRINCIPAL -->
+        <div id="tela-dashboard" class="hidden">
+            <div class="header">
+                <h1>Chanel Store</h1>
+                <button class="sair" onclick="sair()">Sair</button>
+            </div>
+
+            <div id="lista-categorias" class="categorias"></div>
+            
+            <div id="lista-produtos" class="hidden">
+                <button class="voltar" onclick="voltarCategorias()">← Voltar</button>
+                <div class="produtos" id="produtos-container"></div>
+            </div>
+
+            <!-- PAINEL ADMIN -->
+            <div id="admin-panel" class="admin-panel hidden">
+                <h3>Painel Admin</h3>
+                <input type="text" id="nova-categoria" placeholder="Nome da nova categoria">
+                <button onclick="criarCategoria()">Criar Categoria</button>
+                <hr style="margin: 15px 0; border-color: #333;">
+                <select id="select-categoria"></select>
+                <input type="text" id="novo-produto-nome" placeholder="Nome do produto">
+                <input type="number" id="novo-produto-preco" placeholder="Preço">
+                <button onclick="criarProduto()">Criar Produto</button>
             </div>
         </div>
     </div>
 
-    <div class="container dashboard" id="dashboard">
-        <div id="areaCategorias">
-            <h2 class="titulo-secao">Categorias</h2>
-            <div class="jogos-grid" id="jogosGrid"></div>
-        </div>
-        <div id="areaSubcategorias" style="display:none">
-            <button class="btn-voltar" onclick="voltarCategorias()">← Voltar</button>
-            <h2 class="titulo-secao" id="tituloSubcategoria"></h2>
-            <div class="jogos-grid" id="subcategoriasGrid"></div>
-        </div>
-        <button class="btn-sair" onclick="sair()">Sair da Conta</button>
-    </div>
-
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="fecharModal()">&times;</span>
-            <h2 id="modalTitulo">CADASTRAR</h2>
-            <input type="text" id="nome" placeholder="Nome completo">
-            <input type="tel" id="telefone" placeholder="Telefone / WhatsApp">
-            <input type="password" id="senha" placeholder="Criar senha">
-            <button class="btn btn-primary" onclick="salvar()">Confirmar</button>
-        </div>
-    </div>
-
-    <div id="modalAdmin" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="fecharAdmin()">&times;</span>
-            <h2>Painel Admin</h2>
-            <button class="btn btn-primary" onclick="abrirAddJogo()">+ Adicionar Produto</button>
-            <div id="listaJogosAdmin" style="margin-top: 20px;"></div>
-        </div>
-    </div>
-
-    <div id="modalJogo" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="fecharModalJogo()">&times;</span>
-            <h2 id="tituloModalJogo">Adicionar Produto</h2>
-            <input type="hidden" id="editId">
-            <input type="text" id="jogoNome" placeholder="Nome do produto - Ex: 100 seguidores">
-            <select id="jogoCategoria">
-                <option value="">Selecione a Categoria</option>
-            </select>
-            <input type="text" id="jogoPreco" placeholder="Preço - Ex: R$ 6,00">
-            <input type="text" id="jogoImagem" placeholder="URL da imagem">
-            <button class="btn btn-primary" onclick="salvarJogo()">Salvar</button>
-        </div>
-    </div>
-
-    <div id="modalCompra" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="fecharModalCompra()">&times;</span>
-            <div class="produto-detalhe" id="produtoDetalhe"></div>
-        </div>
-    </div>
-
     <script>
-        let tipoAtual = 'cadastro';
+        let modoCadastro = false;
         let usuarioLogado = null;
-        let editandoId = null;
-        let produtoSelecionado = null;
         let categoriaAtual = null;
-        const SEU_NUMERO = '5598984853563';
-        const SENHA_ADMIN = 'Chanel.101225';
+        const NUMERO_WHATSAPP = '5599999999999'; // TROCA PELO TEU NÚMERO
 
-        function initDados() {
-            if(!localStorage.getItem('chanel_produtos')) {
-                localStorage.setItem('chanel_produtos', JSON.stringify([
-                    { id: 1, nome: '100 seguidores', categoria: 'Instagram', preco: 'R$ 6,00', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=Insta+100' },
-                    { id: 2, nome: '200 seguidores', categoria: 'Instagram', preco: 'R$ 12,00', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=Insta+200' },
-                    { id: 3, nome: '110 Diamantes', categoria: 'Free Fire', preco: 'R$ 25,00', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=FF' }
-                ]));
-            }
+        // DADOS INICIAIS
+        function iniciarDados() {
             if(!localStorage.getItem('chanel_categorias')) {
-                localStorage.setItem('chanel_categorias', JSON.stringify(['Free Fire', 'Instagram']));
+                const categoriasIniciais = [
+                    { id: 1, nome: 'Free Fire' },
+                    { id: 2, nome: 'Instagram' }
+                ];
+                const produtosIniciais = [
+                    { id: 1, categoriaId: 2, nome: '100 seguidores', preco: 5 },
+                    { id: 2, categoriaId: 2, nome: '200 seguidores', preco: 9 }
+                ];
+                localStorage.setItem('chanel_categorias', JSON.stringify(categoriasIniciais));
+                localStorage.setItem('chanel_produtos', JSON.stringify(produtosIniciais));
+            }
+            if(!localStorage.getItem('chanel_usuarios')) {
+                localStorage.setItem('chanel_usuarios', JSON.stringify([]));
             }
         }
 
-        function carregarCategorias() {
-            const categorias = JSON.parse(localStorage.getItem('chanel_categorias') || '[]');
-            const produtos = JSON.parse(localStorage.getItem('chanel_produtos') || '[]');
-            const grid = document.getElementById('jogosGrid');
-            grid.innerHTML = '';
-            categorias.forEach(cat => {
-                const primeiro = produtos.find(p => p.categoria === cat);
-                grid.innerHTML += `
-                    <div class="jogo-card" onclick="abrirCategoria('${cat}')">
-                        <img src="${primeiro? primeiro.img : 'https://via.placeholder.com/150/0a0e1a/ff0050?text=' + cat}">
-                        <p class="jogo-nome">${cat}</p>
-                    </div>`;
-            });
-        }
-
-        function abrirCategoria(cat) {
-            categoriaAtual = cat;
-            document.getElementById('areaCategorias').style.display = 'none';
-            document.getElementById('areaSubcategorias').style.display = 'block';
-            document.getElementById('tituloSubcategoria').innerText = cat;
-
-            const prods = JSON.parse(localStorage.getItem('chanel_produtos') || '[]').filter(p => p.categoria === cat);
-            const grid = document.getElementById('subcategoriasGrid');
-            grid.innerHTML = '';
-            prods.forEach(p => {
-                grid.innerHTML += `
-                    <div class="jogo-card" onclick="abrirProduto(${p.id})">
-                        <img src="${p.img}">
-                        <p class="jogo-nome">${p.nome}</p>
-                        <p class="jogo-preco">${p.preco}</p>
-                    </div>`;
-            });
-        }
-
-        function voltarCategorias() {
-            document.getElementById('areaCategorias').style.display = 'block';
-            document.getElementById('areaSubcategorias').style.display = 'none';
-            categoriaAtual = null;
-        }
-
-        function abrirProduto(id) {
-            const p = JSON.parse(localStorage.getItem('chanel_produtos') || '[]').find(j => j.id === id);
-            if(!p) return;
-            produtoSelecionado = p;
-            document.getElementById('produtoDetalhe').innerHTML = `
-                <img src="${p.img}">
-                <h3>${p.categoria} - ${p.nome}</h3>
-                <div class="preco">${p.preco}</div>
-                <button class="btn btn-primary" onclick="finalizarCompra()">COMPRAR ${p.nome}</button>
-            `;
-            document.getElementById('modalCompra').classList.add('ativo');
-        }
-
-        function fecharModalCompra() {
-            document.getElementById('modalCompra').classList.remove('ativo');
-            produtoSelecionado = null;
-        }
-
-        function finalizarCompra() {
-            if(!produtoSelecionado) return;
-            let msg = `Olá! Quero COMPRAR:\n\n*Categoria:* ${produtoSelecionado.categoria}\n*Produto:* ${produtoSelecionado.nome}`;
-            if(produtoSelecionado.preco) msg += `\n*Preço:* ${produtoSelecionado.preco}`;
-            msg += `\n\nMeu nome: ${usuarioLogado.nome}\nTelefone: ${usuarioLogado.telefone}`;
-            window.open(`https://wa.me/${SEU_NUMERO}?text=${encodeURIComponent(msg)}`, '_blank');
-            fecharModalCompra();
-        }
-
-        function atualizarContador() {
-            const users = JSON.parse(localStorage.getItem('chanel_users') || '[]');
-            document.getElementById('totalUsers').innerText = users.length > 0? users.length : '1.4k+';
-        }
-
+        // LOGIN - CORRIGIDO O BUG
         function checarLogin() {
-            const user = JSON.parse(localStorage.getItem('chanel_user_logado'));
-            if(user) {
-                usuarioLogado = user;
-                mostrarDashboard();
+            try {
+                const user = JSON.parse(localStorage.getItem('chanel_user_logado'));
+                if(user && user.nome) {
+                    usuarioLogado = user;
+                    mostrarDashboard();
+                }
+            } catch(e) {
+                console.log('Sem usuário logado');
+                localStorage.removeItem('chanel_user_logado');
             }
         }
 
-        function mostrarDashboard() {
-            if(!usuarioLogado) return;
-            document.getElementById('home').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            document.getElementById('userLogado').innerText = '👤 ' + usuarioLogado.nome;
-            voltarCategorias();
-            carregarCategorias();
+        function toggleAuth() {
+            modoCadastro = !modoCadastro;
+            document.getElementById('auth-titulo').innerText = modoCadastro ? 'Cadastro' : 'Login';
+            document.getElementById('auth-nome').classList.toggle('hidden', !modoCadastro);
+            document.querySelector('#tela-login button').innerText = modoCadastro ? 'Cadastrar' : 'Entrar';
+            document.querySelector('.auth-toggle').innerText = modoCadastro ? 'Já tem conta? Fazer login' : 'Não tem conta? Cadastre-se';
+        }
+
+        function fazerAuth() {
+            const nome = document.getElementById('auth-nome').value;
+            const email = document.getElementById('auth-email').value;
+            const senha = document.getElementById('auth-senha').value;
+            
+            let usuarios = JSON.parse(localStorage.getItem('chanel_usuarios'));
+            
+            if(modoCadastro) {
+                if(usuarios.find(u => u.email === email)) {
+                    alert('Email já cadastrado');
+                    return;
+                }
+                const novoUser = { nome, email, senha, admin: email === 'admin@admin.com' };
+                usuarios.push(novoUser);
+                localStorage.setItem('chanel_usuarios', JSON.stringify(usuarios));
+                localStorage.setItem('chanel_user_logado', JSON.stringify(novoUser));
+                usuarioLogado = novoUser;
+            } else {
+                const user = usuarios.find(u => u.email === email && u.senha === senha);
+                if(!user) {
+                    alert('Email ou senha incorretos');
+                    return;
+                }
+                localStorage.setItem('chanel_user_logado', JSON.stringify(user));
+                usuarioLogado = user;
+            }
+            mostrarDashboard();
         }
 
         function sair() {
             localStorage.removeItem('chanel_user_logado');
             usuarioLogado = null;
-            document.getElementById('home').style.display = 'block';
-            document.getElementById('dashboard').style.display = 'none';
-            document.getElementById('userLogado').innerText = '';
+            document.getElementById('tela-dashboard').classList.add('hidden');
+            document.getElementById('tela-login').classList.remove('hidden');
         }
 
-        function abrirAdmin() {
-            const senha = prompt('Senha de admin:');
-            if(senha!== SENHA_ADMIN) return alert('Senha incorreta');
-            carregarAdminLista();
-            carregarSelectCategorias();
-            document.getElementById('modalAdmin').classList.add('ativo');
+        // DASHBOARD
+        function mostrarDashboard() {
+            document.getElementById('tela-login').classList.add('hidden');
+            document.getElementById('tela-dashboard').classList.remove('hidden');
+            carregarCategorias();
+            
+            if(usuarioLogado.admin) {
+                document.getElementById('admin-panel').classList.remove('hidden');
+                carregarSelectCategorias();
+            }
         }
 
-        function fecharAdmin() {
-            document.getElementById('modalAdmin').classList.remove('ativo');
-        }
-
-        function carregarSelectCategorias() {
-            const categorias = JSON.parse(localStorage.getItem('chanel_categorias') || '[]');
-            const select = document.getElementById('jogoCategoria');
-            select.innerHTML = '<option value="">Selecione a Categoria</option>';
-            categorias.forEach(cat => select.innerHTML += `<option value="${cat}">${cat}</option>`);
-            select.innerHTML += '<option value="nova">+ Criar Nova Categoria</option>';
-        }
-
-        function carregarAdminLista() {
-            const produtos = JSON.parse(localStorage.getItem('chanel_produtos') || '[]');
-            const lista = document.getElementById('listaJogosAdmin');
-            lista.innerHTML = '';
-            produtos.forEach(j => {
-                lista.innerHTML += `
-                    <div class="admin-item">
-                        <div class="admin-item-top">
-                            <div><b>${j.categoria} - ${j.nome}</b><br><span>${j.preco || 'Sem preço'}</span></div>
-                            <div class="admin-item-actions">
-                                <button class="btn btn-secondary" style="padding: 6px 10px; font-size: 11px;" onclick="editarJogo(${j.id})">Editar</button>
-                                <button class="btn btn-danger" onclick="removerJogo(${j.id})">X</button>
-                            </div>
-                        </div>
-                    </div>`;
+        function carregarCategorias() {
+            const categorias = JSON.parse(localStorage.getItem('chanel_categorias'));
+            const container = document.getElementById('lista-categorias');
+            container.innerHTML = '';
+            categorias.forEach(cat => {
+                container.innerHTML += `
+                    <div class="categoria-card" onclick="abrirCategoria(${cat.id})">
+                        <h3>${cat.nome}</h3>
+                    </div>
+                `;
             });
         }
 
-        function abrirAddJogo() {
-            editandoId = null;
-            document.getElementById('tituloModalJogo').innerText = 'Adicionar Produto';
-            document.getElementById('editId').value = '';
-            document.getElementById('jogoNome').value = '';
-            document.getElementById('jogoCategoria').value = '';
-            document.getElementById('jogoPreco').value = '';
-            document.getElementById('jogoImagem').value = '';
-            document.getElementById('modalJogo').classList.add('ativo');
+        function abrirCategoria(id) {
+            categoriaAtual = id;
+            const produtos = JSON.parse(localStorage.getItem('chanel_produtos')).filter(p => p.categoriaId === id);
+            const container = document.getElementById('produtos-container');
+            
+            document.getElementById('lista-categorias').classList.add('hidden');
+            document.getElementById('lista-produtos').classList.remove('hidden');
+            
+            container.innerHTML = '';
+            produtos.forEach(prod => {
+                container.innerHTML += `
+                    <div class="produto-card">
+                        <h3>${prod.nome}</h3>
+                        <p>R$ ${prod.preco.toFixed(2)}</p>
+                        <button onclick="comprar(${prod.id})">COMPRAR ${prod.nome}</button>
+                    </div>
+                `;
+            });
         }
 
-        function editarJogo(id) {
-            const j = JSON.parse(localStorage.getItem('chanel_produtos') || '[]').find(j => j.id === id);
-            if(!j) return;
-            editandoId = id;
-            document.getElementById('tituloModalJogo').innerText = 'Editar Produto';
-            document.getElementById('editId').value = j.id;
-            document.getElementById('jogoNome').value = j.nome;
-            document.getElementById('jogoCategoria').value = j.categoria;
-            document.getElementById('jogoPreco').value = j.preco || '';
-            document.getElementById('jogoImagem').value = j.img;
-            document.getElementById('modalJogo').classList.add('ativo');
+        function voltarCategorias() {
+            document.getElementById('lista-produtos').classList.add('hidden');
+            document.getElementById('lista-categorias').classList.remove('hidden');
         }
 
-        function fecharModalJogo() {
-            document.getElementById('modalJogo').classList.remove('ativo');
+        function comprar(produtoId) {
+            const produtos = JSON.parse(localStorage.getItem('chanel_produtos'));
+            const produto = produtos.find(p => p.id === produtoId);
+            const msg = `Olá! Quero comprar: ${produto.nome} - R$ ${produto.preco.toFixed(2)}`;
+            window.open(`https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        function salvarJogo() {
-            const nome = document.getElementById('jogoNome').value.trim();
-            let categoria = document.getElementById('jogoCategoria').value;
-            const preco = document.getElementById('jogoPreco').value.trim();
-            const img = document.getElementById('jogoImagem').value.trim();
+        // ADMIN
+        function carregarSelectCategorias() {
+            const categorias = JSON.parse(localStorage.getItem('chanel_categorias'));
+            const select = document.getElementById('select-categoria');
+            select.innerHTML = '';
+            categorias.forEach(cat => {
+                select.innerHTML += `<option value="${cat.id}">${cat.nome}</option>`;
+            });
+        }
 
-            if(categoria === 'nova') {
-                categoria = prompt('Nome da nova categoria:');
-                if(!categoria) return;
-                let cats = JSON.parse(localStorage.getItem('chanel_categorias') || '[]');
-                if(!cats.includes(categoria)) {
-                    cats.push(categoria);
-                    localStorage.setItem('chanel_categorias', JSON.stringify(cats));
-                }
-            }
-
-            if(!nome ||!categoria ||!img) return alert('Preenche nome, categoria e imagem');
-
-            let produtos = JSON.parse(localStorage.getItem('chanel_produtos') || '[]');
-            if(editandoId) {
-                const idx = produtos.findIndex(j => j.id === editandoId);
-                if(idx > -1) produtos[idx] = { id: editandoId, nome, categoria, preco, img };
-            } else {
-                const novoId = produtos.length > 0? Math.max(...produtos.map(j => j.id)) + 1 : 1;
-                produtos.push({ id: novoId, nome, categoria, preco, img });
-            }
-            localStorage.setItem('chanel_produtos', JSON.stringify(produtos));
-            fecharModalJogo();
-            carregarAdminLista();
+        function criarCategoria() {
+            const nome = document.getElementById('nova-categoria').value;
+            if(!nome) return;
+            let categorias = JSON.parse(localStorage.getItem('chanel_categorias'));
+            const novoId = categorias.length ? Math.max(...categorias.map(c => c.id)) + 1 : 1;
+            categorias.push({ id: novoId, nome });
+            localStorage.setItem('chanel_categorias', JSON.stringify(categorias));
+            document.getElementById('nova-categoria').value = '';
             carregarCategorias();
             carregarSelectCategorias();
-            if(categoriaAtual) abrirCategoria(categoriaAtual);
         }
 
-        function removerJogo(id) {
-            if(!confirm('Tem certeza que quer remover?')) return;
-            let produtos = JSON.parse(localStorage.getItem('chanel_produtos') || '[]').filter(j => j.id!== id);
+        function criarProduto() {
+            const categoriaId = parseInt(document.getElementById('select-categoria').value);
+            const nome = document.getElementById('novo-produto-nome').value;
+            const preco = parseFloat(document.getElementById('novo-produto-preco').value);
+            if(!nome || !preco) return;
+            
+            let produtos = JSON.parse(localStorage.getItem('chanel_produtos'));
+            const novoId = produtos.length ? Math.max(...produtos.map(p => p.id)) + 1 : 1;
+            produtos.push({ id: novoId, categoriaId, nome, preco });
             localStorage.setItem('chanel_produtos', JSON.stringify(produtos));
-            carregarAdminLista();
-            carregarCategorias();
-            if(categoriaAtual) abrirCategoria(categoriaAtual);
+            
+            document.getElementById('novo-produto-nome').value = '';
+            document.getElementById('novo-produto-preco').value = '';
+            alert('Produto criado!');
         }
 
-        function abrirModal(tipo) {
-            tipoAtual = tipo;
-            document.getElementById('modalTitulo').innerText = tipo === 'cadastro'? 'CADASTRAR' : 'ENTRAR';
-            document.getElementById('nome').style.display = tipo === 'cadastro'? 'block' : 'none';
-            document.getElementById('modal').classList.add('ativo');
-        }
-
-        function fecharModal() {
-            document.getElementById('modal').classList.remove('ativo');
-            document.getElementById('nome').value = '';
-            document.getElementById('telefone').value = '';
-            document.getElementById('senha').value = '';
-        }
-
-        function salvar() {
-            const nome = document.getElementById('nome').value.trim();
-            const tel = document.getElementById('telefone').value.trim();
-            const pass = document.getElementById('senha').value.trim();
-            if(tipoAtual === 'cadastro') {
-                if(!nome ||!tel ||!pass) return alert('Preenche nome, telefone e senha');
-                let users = JSON.parse(localStorage.getItem('chanel_users') || '[]');
-                if(users.find(u => u.telefone === tel)) return alert('Esse telefone já foi cadastrado');
-                const novoUser = { nome, telefone: tel, senha: pass, data: new Date().toLocaleString('pt-BR') };
-                users.push(novoUser);
-                localStorage.setItem('chanel_users', JSON.stringify(users));
-                localStorage.setItem('chanel_user_logado', JSON.stringify(novoUser));
-                usuarioLogado = novoUser;
-                alert('Cadastrado com sucesso!');
-                atualizarContador();
-                fecharModal();
-                mostrarDashboard();
-            } else {
-                if(!tel ||!pass) return alert('Preenche telefone e senha');
-                let users = JSON.parse(localStorage.getItem('chanel_users') || '[]');
-                const user = users.find(u => u.telefone === tel && u.senha === pass);
-                if(user) {
-                    localStorage.setItem('chanel_user_logado', JSON.stringify(user));
-                    usuarioLogado = user;
-                    alert('Login feito! Bem-vindo ' + user.nome);
-                    fecharModal();
-                    mostrarDashboard();
-                } else {
-                    alert('Telefone ou senha errados');
-                }
-            }
-        }
-
-        window.onclick = function(e) {
-            if(e.target.classList.contains('modal')) e.target.classList.remove('ativo');
-        }
-
-        document.getElementById('jogoCategoria').addEventListener('change', function() {
-            if(this.value === 'nova') {
-                const nova = prompt('Nome da nova categoria:');
-                if(nova) {
-                    let cats = JSON.parse(localStorage.getItem('chanel_categorias') || '[]');
-                    if(!cats.includes(nova)) {
-                        cats.push(nova);
-                        localStorage.setItem('chanel_categorias', JSON.stringify(cats));
-                        carregarSelectCategorias();
-                        this.value = nova;
-                    }
-                } else {
-                    this.value = '';
-                }
-            }
-        });
-
-        initDados();
-        atualizarContador();
+        // INICIAR
+        iniciarDados();
         checarLogin();
     </script>
 </body>
