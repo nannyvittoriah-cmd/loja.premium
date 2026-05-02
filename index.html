@@ -24,6 +24,7 @@
 .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255, 0, 80, 0.4); }
 .btn-secondary { background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 0, 80, 0.3); }
 .btn-danger { background: rgba(255, 0, 0, 0.2); border: 1px solid #ff0000; color: #ff6666; padding: 6px 10px; font-size: 11px; }
+.btn-voltar { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,0,80,0.3); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 12px; margin-bottom: 20px; text-align: left; display: inline-block; }
 .stats { display: flex; gap: 8px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap; }
 .stat { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 0, 80, 0.2); padding: 6px 12px; border-radius: 10px; font-size: 11px; display: flex; align-items: center; gap: 5px; }
 .como-funciona { margin-top: 20px; }
@@ -46,7 +47,7 @@
 .modal.ativo { visibility: visible; opacity: 1; pointer-events: all; }
 .modal-content { background: #1a1f2e; padding: 25px; border-radius: 16px; width: 90%; max-width: 400px; border: 1px solid rgba(255, 0, 80, 0.3); margin: 20px; max-height: 90vh; overflow-y: auto; }
 .modal-content h2 { margin-bottom: 18px; color: #ff0050; font-size: 20px; }
-.modal-content input { width: 100%; padding: 10px; margin: 6px 0; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,0,80,0.2); border-radius: 8px; color: #fff; font-size: 14px; }
+.modal-content input,.modal-content select { width: 100%; padding: 10px; margin: 6px 0; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,0,80,0.2); border-radius: 8px; color: #fff; font-size: 14px; }
 .modal-content button { width: 100%; margin-top: 14px; }
 .close { float: right; font-size: 24px; cursor: pointer; color: #8b92a8; }
 .btn-sair { background: rgba(255,0,80,0.2); border: 1px solid #ff0050; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 12px; margin-top: 20px; }
@@ -62,13 +63,13 @@
 .produto-detalhe.categoria { color: #8b92a8; font-size: 12px; margin-bottom: 20px; }
         @media (max-width: 768px) {
             h1 { font-size: 24px; }
-    .subtitle { font-size: 12px; }
-    .como-funciona h2 { font-size: 20px; }
-    .buttons { flex-direction: column; align-items: center; }
-    .btn { width: 100%; max-width: 280px; }
-    .passos { flex-direction: column; align-items: center; }
-    .passo { max-width: 280px; }
-    .jogos-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+   .subtitle { font-size: 12px; }
+   .como-funciona h2 { font-size: 20px; }
+   .buttons { flex-direction: column; align-items: center; }
+   .btn { width: 100%; max-width: 280px; }
+   .passos { flex-direction: column; align-items: center; }
+   .passo { max-width: 280px; }
+   .jogos-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
         }
     </style>
 </head>
@@ -105,8 +106,15 @@
     </div>
 
     <div class="container dashboard" id="dashboard">
-        <h2 class="titulo-secao">Produtos</h2>
-        <div class="jogos-grid" id="jogosGrid"></div>
+        <div id="areaCategorias">
+            <h2 class="titulo-secao">Categorias</h2>
+            <div class="jogos-grid" id="jogosGrid"></div>
+        </div>
+        <div id="areaSubcategorias" style="display:none">
+            <button class="btn-voltar" onclick="voltarCategorias()">← Voltar</button>
+            <h2 class="titulo-secao" id="tituloSubcategoria"></h2>
+            <div class="jogos-grid" id="subcategoriasGrid"></div>
+        </div>
         <button class="btn-sair" onclick="sair()">Sair da Conta</button>
     </div>
 
@@ -135,9 +143,11 @@
             <span class="close" onclick="fecharModalJogo()">&times;</span>
             <h2 id="tituloModalJogo">Adicionar Produto</h2>
             <input type="hidden" id="editId">
-            <input type="text" id="jogoNome" placeholder="Nome do produto">
-            <input type="text" id="jogoCategoria" placeholder="Categoria">
-            <input type="text" id="jogoPreco" placeholder="Preço - Ex: R$ 50,00">
+            <input type="text" id="jogoNome" placeholder="Nome da subcategoria - Ex: 100 seguidores">
+            <select id="jogoCategoria">
+                <option value="">Selecione a Categoria Principal</option>
+            </select>
+            <input type="text" id="jogoPreco" placeholder="Preço - Ex: R$ 6,00">
             <input type="text" id="jogoImagem" placeholder="URL da imagem">
             <button class="btn btn-primary" onclick="salvarJogo()">Salvar</button>
         </div>
@@ -155,72 +165,106 @@
         let usuarioLogado = null;
         let editandoId = null;
         let produtoSelecionado = null;
+        let categoriaAtual = null;
         const SEU_NUMERO = '5598984853563';
         const SENHA_ADMIN = 'Chanel.101225';
-        const jogosPadrao = [
-            { id: 1, nome: '8 Ball Pool', categoria: 'Sinuca', preco: 'R$ 25,00', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=8+Ball' },
-            { id: 2, nome: 'A3: Still Alive', categoria: 'MMORPG', preco: 'R$ 30,00', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=A3' },
-            { id: 3, nome: 'Adventure Quest World', categoria: 'RPG', preco: 'R$ 20,00', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=AQW' },
-            { id: 4, nome: 'Aika', categoria: 'MMORPG', preco: 'R$ 35,00', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=Aika' },
-            { id: 5, nome: 'Aion', categoria: 'MMORPG', preco: 'R$ 40,00', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=Aion' },
-            { id: 6, nome: 'Albion Online', categoria: 'MMORPG', preco: 'R$ 45,00', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=Albion' },
-            { id: 7, nome: 'Apex Legends', categoria: 'FPS', preco: 'R$ 50,00', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=Apex' },
-            { id: 8, nome: 'ARC Raiders', categoria: 'Tiro', preco: 'R$ 55,00', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=ARC' },
-            { id: 9, nome: 'Arena Breakout', categoria: 'FPS', preco: 'R$ 60,00', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=Arena' }
+        const categoriasPadrao = ['Free Fire', 'Instagram', 'TikTok', 'Jogos'];
+        const produtosPadrao = [
+            { id: 1, nome: '100 seguidores', categoria: 'Instagram', preco: 'R$ 6,00', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=Insta+100' },
+            { id: 2, nome: '200 seguidores', categoria: 'Instagram', preco: 'R$ 12,00', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=Insta+200' },
+            { id: 3, nome: 'Diamantes', categoria: 'Free Fire', preco: 'R$ 25,00', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=FF' }
         ];
 
-        function initJogos() {
-            if(!localStorage.getItem('chanel_jogos')) {
-                localStorage.setItem('chanel_jogos', JSON.stringify(jogosPadrao));
+        function initDados() {
+            if(!localStorage.getItem('chanel_produtos')) {
+                localStorage.setItem('chanel_produtos', JSON.stringify(produtosPadrao));
+            }
+            if(!localStorage.getItem('chanel_categorias')) {
+                localStorage.setItem('chanel_categorias', JSON.stringify(categoriasPadrao));
             }
         }
-        function carregarJogos() {
-            const jogos = JSON.parse(localStorage.getItem('chanel_jogos') || '[]');
+
+        function carregarCategorias() {
+            const categorias = JSON.parse(localStorage.getItem('chanel_categorias') || '[]');
+            const produtos = JSON.parse(localStorage.getItem('chanel_produtos') || '[]');
             const grid = document.getElementById('jogosGrid');
             grid.innerHTML = '';
-            jogos.forEach(j => {
+
+            categorias.forEach(cat => {
+                const primeiroProduto = produtos.find(p => p.categoria === cat);
+                const img = primeiroProduto? primeiroProduto.img : 'https://via.placeholder.com/150/0a0e1a/ff0050?text=' + cat;
+
                 grid.innerHTML += `
-                    <div class="jogo-card" onclick="abrirProduto(${j.id})">
-                        <img src="${j.img}" alt="${j.nome}">
-                        <p class="jogo-nome">${j.nome}</p>
-                        ${j.preco? `<p class="jogo-preco">${j.preco}</p>` : ''}
-                        ${j.categoria? `<p class="jogo-categoria">${j.categoria}</p>` : ''}
+                    <div class="jogo-card" onclick="abrirCategoria('${cat}')">
+                        <img src="${img}" alt="${cat}">
+                        <p class="jogo-nome">${cat}</p>
                     </div>
                 `;
             });
         }
+
+        function abrirCategoria(categoria) {
+            categoriaAtual = categoria;
+            document.getElementById('areaCategorias').style.display = 'none';
+            document.getElementById('areaSubcategorias').style.display = 'block';
+            document.getElementById('tituloSubcategoria').innerText = categoria;
+
+            const produtos = JSON.parse(localStorage.getItem('chanel_produtos') || '[]');
+            const subprodutos = produtos.filter(p => p.categoria === categoria);
+            const grid = document.getElementById('subcategoriasGrid');
+            grid.innerHTML = '';
+
+            subprodutos.forEach(p => {
+                grid.innerHTML += `
+                    <div class="jogo-card" onclick="abrirProduto(${p.id})">
+                        <img src="${p.img}" alt="${p.nome}">
+                        <p class="jogo-nome">${p.nome}</p>
+                        ${p.preco? `<p class="jogo-preco">${p.preco}</p>` : ''}
+                    </div>
+                `;
+            });
+        }
+
+        function voltarCategorias() {
+            document.getElementById('areaCategorias').style.display = 'block';
+            document.getElementById('areaSubcategorias').style.display = 'none';
+            categoriaAtual = null;
+        }
+
         function abrirProduto(id) {
-            const jogos = JSON.parse(localStorage.getItem('chanel_jogos') || '[]');
-            produtoSelecionado = jogos.find(j => j.id === id);
+            const produtos = JSON.parse(localStorage.getItem('chanel_produtos') || '[]');
+            produtoSelecionado = produtos.find(j => j.id === id);
             if(!produtoSelecionado) return;
 
             document.getElementById('produtoDetalhe').innerHTML = `
                 <img src="${produtoSelecionado.img}" alt="${produtoSelecionado.nome}">
-                <h3>${produtoSelecionado.nome}</h3>
+                <h3>${produtoSelecionado.categoria} - ${produtoSelecionado.nome}</h3>
                 ${produtoSelecionado.preco? `<div class="preco">${produtoSelecionado.preco}</div>` : ''}
-                ${produtoSelecionado.categoria? `<div class="categoria">${produtoSelecionado.categoria}</div>` : ''}
-                <button class="btn btn-primary" onclick="finalizarCompra()">COMPRAR ${produtoSelecionado.nome}</button>
+                <button class="btn btn-primary" onclick="finalizarCompra()">COMPRAR</button>
             `;
             document.getElementById('modalCompra').classList.add('ativo');
         }
+
         function fecharModalCompra() {
             document.getElementById('modalCompra').classList.remove('ativo');
             produtoSelecionado = null;
         }
+
         function finalizarCompra() {
             if(!produtoSelecionado) return;
-            let msg = `Olá! Quero COMPRAR:\n\n*Produto:* ${produtoSelecionado.nome}`;
-            if(produtoSelecionado.categoria) msg += `\n*Categoria:* ${produtoSelecionado.categoria}`;
+            let msg = `Olá! Quero COMPRAR:\n\n*Categoria:* ${produtoSelecionado.categoria}\n*Produto:* ${produtoSelecionado.nome}`;
             if(produtoSelecionado.preco) msg += `\n*Preço:* ${produtoSelecionado.preco}`;
             msg += `\n\nMeu nome: ${usuarioLogado.nome}\nTelefone: ${usuarioLogado.telefone}`;
             const link = `https://wa.me/${SEU_NUMERO}?text=${encodeURIComponent(msg)}`;
             window.open(link, '_blank');
             fecharModalCompra();
         }
+
         function atualizarContador() {
             const users = JSON.parse(localStorage.getItem('chanel_users') || '[]');
             document.getElementById('totalUsers').innerText = users.length > 0? users.length : '1.4k+';
         }
+
         function checarLogin() {
             const user = JSON.parse(localStorage.getItem('chanel_user_logado'));
             if(user) {
@@ -228,13 +272,16 @@
                 mostrarDashboard();
             }
         }
+
         function mostrarDashboard() {
             if(!usuarioLogado) return;
             document.getElementById('home').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
             document.getElementById('userLogado').innerText = '👤 ' + usuarioLogado.nome;
-            carregarJogos();
+            voltarCategorias();
+            carregarCategorias();
         }
+
         function sair() {
             localStorage.removeItem('chanel_user_logado');
             usuarioLogado = null;
@@ -242,24 +289,38 @@
             document.getElementById('dashboard').style.display = 'none';
             document.getElementById('userLogado').innerText = '';
         }
+
         function abrirAdmin() {
             const senha = prompt('Senha de admin:');
             if(senha!== SENHA_ADMIN) return alert('Senha incorreta');
             carregarAdminLista();
+            carregarSelectCategorias();
             document.getElementById('modalAdmin').classList.add('ativo');
         }
+
         function fecharAdmin() {
             document.getElementById('modalAdmin').classList.remove('ativo');
         }
+
+        function carregarSelectCategorias() {
+            const categorias = JSON.parse(localStorage.getItem('chanel_categorias') || '[]');
+            const select = document.getElementById('jogoCategoria');
+            select.innerHTML = '<option value="">Selecione a Categoria Principal</option>';
+            categorias.forEach(cat => {
+                select.innerHTML += `<option value="${cat}">${cat}</option>`;
+            });
+            select.innerHTML += '<option value="nova">+ Criar Nova Categoria</option>';
+        }
+
         function carregarAdminLista() {
-            const jogos = JSON.parse(localStorage.getItem('chanel_jogos') || '[]');
+            const produtos = JSON.parse(localStorage.getItem('chanel_produtos') || '[]');
             const lista = document.getElementById('listaJogosAdmin');
             lista.innerHTML = '';
-            jogos.forEach(j => {
+            produtos.forEach(j => {
                 lista.innerHTML += `
                     <div class="admin-item">
                         <div class="admin-item-top">
-                            <div><b>${j.nome}</b><br><span>${j.categoria || 'Sem categoria'} ${j.preco? '- ' + j.preco : ''}</span></div>
+                            <div><b>${j.categoria} - ${j.nome}</b><br><span>${j.preco || 'Sem preço'}</span></div>
                             <div class="admin-item-actions">
                                 <button class="btn btn-secondary" style="padding: 6px 10px; font-size: 11px;" onclick="editarJogo(${j.id})">Editar</button>
                                 <button class="btn btn-danger" onclick="removerJogo(${j.id})">X</button>
@@ -269,6 +330,7 @@
                 `;
             });
         }
+
         function abrirAddJogo() {
             editandoId = null;
             document.getElementById('tituloModalJogo').innerText = 'Adicionar Produto';
@@ -279,61 +341,83 @@
             document.getElementById('jogoImagem').value = '';
             document.getElementById('modalJogo').classList.add('ativo');
         }
+
         function editarJogo(id) {
-            const jogos = JSON.parse(localStorage.getItem('chanel_jogos') || '[]');
-            const j = jogos.find(j => j.id === id);
+            const produtos = JSON.parse(localStorage.getItem('chanel_produtos') || '[]');
+            const j = produtos.find(j => j.id === id);
             if(!j) return;
             editandoId = id;
             document.getElementById('tituloModalJogo').innerText = 'Editar Produto';
             document.getElementById('editId').value = j.id;
             document.getElementById('jogoNome').value = j.nome;
-            document.getElementById('jogoCategoria').value = j.categoria || '';
+            document.getElementById('jogoCategoria').value = j.categoria;
             document.getElementById('jogoPreco').value = j.preco || '';
             document.getElementById('jogoImagem').value = j.img;
             document.getElementById('modalJogo').classList.add('ativo');
         }
+
         function fecharModalJogo() {
             document.getElementById('modalJogo').classList.remove('ativo');
         }
+
         function salvarJogo() {
             const nome = document.getElementById('jogoNome').value.trim();
-            const categoria = document.getElementById('jogoCategoria').value.trim();
+            let categoria = document.getElementById('jogoCategoria').value;
             const preco = document.getElementById('jogoPreco').value.trim();
             const img = document.getElementById('jogoImagem').value.trim();
-            if(!nome ||!img) return alert('Preenche nome e imagem');
-            let jogos = JSON.parse(localStorage.getItem('chanel_jogos') || '[]');
-            if(editandoId) {
-                const idx = jogos.findIndex(j => j.id === editandoId);
-                if(idx > -1) jogos[idx] = { id: editandoId, nome, categoria, preco, img };
-            } else {
-                const novoId = jogos.length > 0? Math.max(...jogos.map(j => j.id)) + 1 : 1;
-                jogos.push({ id: novoId, nome, categoria, preco, img });
+
+            if(categoria === 'nova') {
+                categoria = prompt('Nome da nova categoria:');
+                if(!categoria) return;
+                let categorias = JSON.parse(localStorage.getItem('chanel_categorias') || '[]');
+                if(!categorias.includes(categoria)) {
+                    categorias.push(categoria);
+                    localStorage.setItem('chanel_categorias', JSON.stringify(categorias));
+                }
             }
-            localStorage.setItem('chanel_jogos', JSON.stringify(jogos));
+
+            if(!nome ||!categoria ||!img) return alert('Preenche nome, categoria e imagem');
+
+            let produtos = JSON.parse(localStorage.getItem('chanel_produtos') || '[]');
+            if(editandoId) {
+                const idx = produtos.findIndex(j => j.id === editandoId);
+                if(idx > -1) produtos[idx] = { id: editandoId, nome, categoria, preco, img };
+            } else {
+                const novoId = produtos.length > 0? Math.max(...produtos.map(j => j.id)) + 1 : 1;
+                produtos.push({ id: novoId, nome, categoria, preco, img });
+            }
+            localStorage.setItem('chanel_produtos', JSON.stringify(produtos));
             fecharModalJogo();
             carregarAdminLista();
-            carregarJogos();
+            carregarCategorias();
+            carregarSelectCategorias();
+            if(categoriaAtual) abrirCategoria(categoriaAtual);
         }
+
         function removerJogo(id) {
             if(!confirm('Tem certeza que quer remover?')) return;
-            let jogos = JSON.parse(localStorage.getItem('chanel_jogos') || '[]');
-            jogos = jogos.filter(j => j.id!== id);
-            localStorage.setItem('chanel_jogos', JSON.stringify(jogos));
+            let produtos = JSON.parse(localStorage.getItem('chanel_produtos') || '[]');
+            produtos = produtos.filter(j => j.id!== id);
+            localStorage.setItem('chanel_produtos', JSON.stringify(produtos));
             carregarAdminLista();
-            carregarJogos();
+            carregarCategorias();
+            if(categoriaAtual) abrirCategoria(categoriaAtual);
         }
+
         function abrirModal(tipo) {
             tipoAtual = tipo;
             document.getElementById('modalTitulo').innerText = tipo === 'cadastro'? 'CADASTRAR' : 'ENTRAR';
             document.getElementById('nome').style.display = tipo === 'cadastro'? 'block' : 'none';
             document.getElementById('modal').classList.add('ativo');
         }
+
         function fecharModal() {
             document.getElementById('modal').classList.remove('ativo');
             document.getElementById('nome').value = '';
             document.getElementById('telefone').value = '';
             document.getElementById('senha').value = '';
         }
+
         function salvar() {
             const nome = document.getElementById('nome').value.trim();
             const tel = document.getElementById('telefone').value.trim();
@@ -366,12 +450,31 @@
                 }
             }
         }
+
         window.onclick = function(e) {
             if(e.target.classList.contains('modal')) {
                 e.target.classList.remove('ativo');
             }
         }
-        initJogos();
+
+        document.getElementById('jogoCategoria').addEventListener('change', function() {
+            if(this.value === 'nova') {
+                const nova = prompt('Nome da nova categoria:');
+                if(nova) {
+                    let categorias = JSON.parse(localStorage.getItem('chanel_categorias') || '[]');
+                    if(!categorias.includes(nova)) {
+                        categorias.push(nova);
+                        localStorage.setItem('chanel_categorias', JSON.stringify(categorias));
+                        carregarSelectCategorias();
+                        this.value = nova;
+                    }
+                } else {
+                    this.value = '';
+                }
+            }
+        });
+
+        initDados();
         atualizarContador();
         checarLogin();
     </script>
