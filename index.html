@@ -1,276 +1,99 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Loja FF Rosa</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-    body { background: #1a0b13; color: #fff; min-height: 100vh; }
-    input, textarea {
-      width: 100%; padding: 12px; margin: 8px 0; background: #2d1520;
-      border: 1px solid #FF2D95; border-radius: 8px; color: white; outline: none;
-    }
-    button { cursor: pointer; }
-    .borda-rosa { border: 1px solid #FF2D95; }
-
-    /* TELAS */
-    #login-screen, #cadastro-screen {
-      display: flex; justify-content: center; align-items: center; height: 100vh; background: #0d0609;
-    }
-    #cadastro-screen, #store-screen, #admin-screen { display: none; }
-    .login-box {
-      background: #1a0b13; border: 1px solid #FF2D95; border-radius: 12px;
-      padding: 30px 25px; width: 90%; max-width: 350px; text-align: center;
-    }
-    .login-box h2 { color: #FF2D95; margin-bottom: 25px; font-size: 20px; }
-    .btn-pink {
-      width: 100%; padding: 12px; background: #FF2D95; border: none; border-radius: 8px;
-      color: white; font-weight: bold; margin: 10px 0;
-    }
-    .btn-white {
-      width: 100%; padding: 12px; background: white; color: #1a0b13; border: none;
-      border-radius: 8px; font-weight: bold;
-    }
-    .btn-small { padding: 6px 12px; font-size: 12px; width: auto; margin: 0 4px; }
-    .login-box a { color: #FF9ECB; font-size: 13px; text-decoration: none; display: block; margin-top: 10px; cursor: pointer; }
-    .erro { color: #FF4D6D; font-size: 13px; margin-top: 8px; display: none; }
-
-    /* LOJA */
-    .header {
-      background: #1a0b13; padding: 15px; border-bottom: 1px solid #FF2D95;
-      display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10;
-    }
-    .header span { color: #FF2D95; cursor: pointer; font-size: 14px; }
-    .menu-icons { display: flex; gap: 15px; align-items: center; }
-    .carrinho { position: relative; cursor: pointer; font-size: 22px; }
-    .carrinho-badge {
-      position: absolute; top: -5px; right: -8px; background: #FF2D95; color: white;
-      font-size: 11px; width: 18px; height: 18px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .banner {
-      background: linear-gradient(135deg, #2d1520, #1a0b13); padding: 30px 20px;
-      text-align: center; border: 1px solid #FF2D95; margin: 15px; border-radius: 12px;
-    }
-    .banner h1 { font-size: 24px; color: #FF9ECB; line-height: 1.2; }
-    .stats { display: flex; justify-content: space-around; margin: 20px 15px; text-align: center; }
-    .stat h3 { color: #FF2D95; font-size: 20px; }
-    .stat p { font-size: 12px; color: #FF9ECB; }
-    .tabs { display: flex; gap: 10px; padding: 0 15px; margin: 20px 0; }
-    .tab {
-      padding: 8px 16px; background: #2d1520; border: 1px solid #FF2D95;
-      border-radius: 20px; font-size: 14px; cursor: pointer;
-    }
-    .tab.active { background: #FF2D95; }
-    .products {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 15px 30px;
-    }
-    .card {
-      background: #2d1520; border: 1px solid #FF2D95; border-radius: 12px;
-      padding: 15px; text-align: center; position: relative;
-    }
-    .card img { width: 100%; height: 80px; object-fit: cover; border-radius: 8px; margin: 8px 0; }
-    .card .tag {
-      background: #FF2D95; color: white; font-size: 10px; padding: 3px 8px;
-      border-radius: 10px; display: inline-block; margin-bottom: 8px;
-    }
-    .card h4 { font-size: 14px; margin: 8px 0; }
-    .card .price { color: #FF2D95; font-weight: bold; margin: 8px 0; }
-    .card .estoque { font-size: 11px; color: #FF9ECB; margin-bottom: 8px; }
-    .admin-actions {
-      position: absolute; top: 5px; right: 5px; display: flex; gap: 5px;
-    }
-    .icon-btn {
-      background: #FF2D95; border: none; width: 28px; height: 28px;
-      border-radius: 6px; cursor: pointer; font-size: 14px;
-    }
-    .suporte {
-      background: #2d1520; border: 1px solid #FF2D95; border-radius: 12px;
-      margin: 15px; padding: 15px; text-align: center;
-    }
-    .suporte .pix { color: #FF2D95; font-weight: bold; font-size: 15px; }
-
-    /* ADMIN */
-    #admin-screen { padding: 15px; }
-    .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .admin-box {
-      background: #2d1520; border-left: 3px solid #FF2D95; padding: 20px;
-      border-radius: 8px; margin: 15px 0;
-    }
-    .admin-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
-    .admin-card {
-      background: #2d1520; border: 1px solid #FF2D95; border-radius: 10px;
-      padding: 15px; text-align: center; cursor: pointer;
-    }
-
-    /* MODAIS */
-    .modal {
-      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 999;
-    }
-    .modal-box {
-      background: #1a0b13; border: 1px solid #FF2D95; border-radius: 12px;
-      padding: 25px; width: 90%; max-width: 400px; max-height: 80vh; overflow-y: auto;
-    }
-    .carrinho-item, .produto-item {
-      display: flex; justify-content: space-between; padding: 10px 0;
-      border-bottom: 1px solid #2d1520; align-items: center; gap: 10px;
-    }
-    .preview-img {
-      width: 100%; height: 120px; object-fit: cover; border-radius: 8px;
-      border: 1px solid #FF2D95; margin: 10px 0; display: none;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loja FF Rosa</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#1a0b13;color:#fff;min-height:100vh}
+input{width:100%;padding:12px;margin:8px 0;background:#2d1520;border:1px solid #FF2D95;border-radius:8px;color:white}
+#login-screen{display:flex;justify-content:center;align-items:center;height:100vh;background:#0d0609}
+.login-box{background:#1a0b13;border:1px solid #FF2D95;border-radius:12px;padding:30px;width:90%;max-width:350px;text-align:center}
+.login-box h2{color:#FF2D95;margin-bottom:25px}
+.btn-pink{width:100%;padding:12px;background:#FF2D95;border:none;border-radius:8px;color:white;font-weight:bold;margin:10px 0;cursor:pointer}
+#store-screen{display:none}
+.header{background:#1a0b13;padding:15px;border-bottom:1px solid #FF2D95;display:flex;justify-content:space-between;align-items:center}
+.header span{color:#FF2D95;cursor:pointer}
+.products{display:grid;grid-template-columns:1fr 1fr;gap:15px;padding:15px}
+.card{background:#2d1520;border:1px solid #FF2D95;border-radius:12px;padding:15px;text-align:center;position:relative}
+.card img{width:100%;height:80px;object-fit:cover;border-radius:8px;margin:8px 0}
+.card .price{color:#FF2D95;font-weight:bold;margin:8px 0}
+.admin-actions{position:absolute;top:5px;right:5px;display:none;gap:5px}
+.admin-mode .admin-actions{display:flex}
+.icon-btn{background:#FF2D95;border:none;width:28px;height:28px;border-radius:6px;cursor:pointer}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);justify-content:center;align-items:center;z-index:999}
+.modal-box{background:#1a0b13;border:1px solid #FF2D95;border-radius:12px;padding:25px;width:90%;max-width:400px}
+.erro{color:#FF4D6D;font-size:13px;margin-top:8px;display:none}
+</style>
 </head>
 <body>
 
-  <!-- LOGIN -->
-  <div id="login-screen">
-    <div class="login-box">
-      <h2>⚡ LOGIN</h2>
-      <input type="email" placeholder="Email" id="email">
-      <input type="password" placeholder="Senha" id="senha">
-      <p class="erro" id="erro-login">Email ou senha incorretos</p>
-      <button class="btn-pink" onclick="fazerLogin()">Entrar</button>
-      <button class="btn-white" onclick="mostrarCadastro()">Criar conta</button>
-      <a onclick="abrirAdminLogin()">Painel Admin</a>
-    </div>
+<div id="login-screen">
+  <div class="login-box">
+    <h2>⚡ LOGIN</h2>
+    <input type="text" placeholder="Usuário" id="user">
+    <input type="password" placeholder="Senha" id="senha">
+    <p class="erro" id="erro-login">Usuário ou senha incorretos</p>
+    <button class="btn-pink" onclick="fazerLogin()">Entrar</button>
   </div>
+</div>
 
-  <!-- CADASTRO -->
-  <div id="cadastro-screen">
-    <div class="login-box">
-      <h2>✨ CRIAR CONTA</h2>
-      <input type="text" placeholder="Nome" id="nome-cadastro">
-      <input type="email" placeholder="Email" id="email-cadastro">
-      <input type="password" placeholder="Senha" id="senha-cadastro">
-      <p class="erro" id="erro-cadastro">Preencha todos os campos</p>
-      <button class="btn-pink" onclick="criarConta()">Cadastrar</button>
-      <a onclick="voltarLogin()">Já tenho conta</a>
-    </div>
+<div id="store-screen">
+  <div class="header">
+    <span id="user-logado"></span>
+    <span onclick="logout()">Sair</span>
   </div>
-
-  <!-- MODAL ADMIN -->
-  <div id="admin-login-modal" class="modal">
-    <div class="modal-box">
-      <h2 style="color:#FF2D95;margin-bottom:15px;">🔒 ADMIN</h2>
-      <input type="text" placeholder="Usuário Admin" id="user-admin">
-      <input type="password" placeholder="Senha Admin" id="senha-admin">
-      <p class="erro" id="erro-admin">Acesso negado</p>
-      <button class="btn-pink" onclick="loginAdmin()">Entrar como Admin</button>
-      <button class="btn-white" onclick="fecharAdminLogin()" style="margin-top:10px;">Voltar</button>
-    </div>
-  </div>
-
-  <!-- MODAL CARRINHO -->
-  <div id="carrinho-modal" class="modal">
-    <div class="modal-box">
-      <h2 style="color:#FF2D95;margin-bottom:15px;">🎮 Seu Carrinho</h2>
-      <div id="carrinho-itens"></div>
-      <p style="margin:15px 0; font-weight:bold;">Total: R$ <span id="carrinho-total">0</span></p>
-      <button class="btn-pink" onclick="finalizarCompra()">Finalizar no WhatsApp</button>
-      <button class="btn-white" onclick="fecharCarrinho()" style="margin-top:10px;">Continuar comprando</button>
-    </div>
-  </div>
-
-  <!-- MODAL PRODUTOS -->
-  <div id="produtos-modal" class="modal">
-    <div class="modal-box">
-      <h2 style="color:#FF2D95;margin-bottom:15px;">📦 Gerenciar Produtos</h2>
-      <button class="btn-pink" onclick="abrirFormProduto()">+ Adicionar Produto</button>
-      <div id="lista-admin-produtos" style="margin-top:15px;"></div>
-      <button class="btn-white" onclick="fecharProdutos()" style="margin-top:15px;">Fechar</button>
-    </div>
-  </div>
-
-  <!-- MODAL FORM PRODUTO -->
-  <div id="form-produto-modal" class="modal">
-    <div class="modal-box">
-      <h2 id="titulo-form-produto" style="color:#FF2D95;margin-bottom:15px;">Novo Produto</h2>
-      <input type="hidden" id="produto-id">
-      <input type="text" placeholder="Nome do produto" id="produto-nome">
-      <input type="number" placeholder="Preço" id="produto-preco">
-      <input type="number" placeholder="Estoque" id="produto-estoque">
-      <input type="text" placeholder="Tag (opcional)" id="produto-tag">
-      <label style="font-size:13px; color:#FF9ECB; margin-top:10px; display:block;">Imagem:</label>
-      <input type="file" accept="image/*" id="produto-imagem" onchange="previewImagem(event)">
-      <img id="preview" class="preview-img">
-      <button class="btn-pink" onclick="salvarProduto()">Salvar</button>
-      <button class="btn-white" onclick="fecharFormProduto()" style="margin-top:10px;">Cancelar</button>
-    </div>
-  </div>
-
-  <!-- LOJA -->
-  <div id="store-screen">
-    <div class="header">
-      <span id="user-logado"></span>
-      <div class="menu-icons">
-        <span id="btn-dashboard" onclick="abrirDashboard()" style="display:none;">Dashboard</span>
-        <span class="carrinho" onclick="abrirCarrinho()">🎮<span class="carrinho-badge" id="badge-carrinho">0</span></span>
-        <span onclick="logout()">Sair</span>
-      </div>
-    </div>
-
-    <div class="banner borda-rosa">
-      <p style="font-size:12px; color:#FF9ECB; margin-bottom:8px;">⚡ ENTREGA IMEDIATA</p>
-      <h1>A MELHOR<br>LOJA FF<br>DO BRASIL</h1>
-    </div>
-
-    <div class="stats">
-      <div class="stat"><h3>12K+</h3><p>CLIENTES</p></div>
-      <div class="stat"><h3>99%</h3><p>SATISFAÇÃO</p></div>
-      <div class="stat"><h3>5MIN</h3><p>ENTREGA</p></div>
-    </div>
-
-    <div class="products" id="lista-produtos"></div>
-
-    <div class="suporte">
-      <h3 style="color:#FF2D95; margin-bottom:10px;">💬 Suporte Admin</h3>
-      <p>Pague com PIX:</p>
-      <p class="pix">(98) 98984-8535-63</p>
-      <button class="btn-pink" style="margin-top:10px;" onclick="chamarSuporte()">Chamar no WhatsApp</button>
-    </div>
-  </div>
-
-  <!-- ADMIN -->
-  <div id="admin-screen">
-    <div class="admin-header">
-      <span>Logado: <b style="color:#FF2D95;">Lorrannyh.16</b></span>
-      <span style="color:#FF2D95;cursor:pointer;" onclick="logout()">Sair</span>
-    </div>
-
-    <h2 style="color:#FF2D95; margin:20px 0;">Dashboard Admin</h2>
-
-    <div class="admin-box">
-      <h3>Oie, Admin!</h3>
-      <p>Vendas hoje: <b>R$ 247,00</b></p>
-      <p>Pedidos pendentes: <b>3</b></p>
-      <p>Total de clientes: <b>1.247</b></p>
-    </div>
-
-    <div class="admin-menu">
-      <div class="admin-card" onclick="abrirProdutos()">
-        <h4>📦 Produtos</h4>
-        <p style="font-size:12px;">Adicionar/Editar</p>
-      </div>
-      <div class="admin-card" onclick="alert('3 pedidos pendentes')">
-        <h4>📋 Pedidos</h4>
-        <p style="font-size:12px;">3 pendentes</p>
-      </div>
-    </div>
-
-    <button class="btn-pink" onclick="voltarLoja()">Voltar pra Loja</button>
-  </div>
+  <div class="products admin-mode" id="lista-produtos"></div>
+</div>
 
 <script>
-  let tipoUser = '';
-  let carrinho = [];
-  let usuarios = [{email: "cliente@teste.com", senha: "1234", nome: "Cliente"}];
-  let produtos = [
-    {id: 1, nome: "100 Diamantes FF", preco: 5, tag: "MAIS VENDIDO", emoji: "💎", estoque: 50, img: ""},
-    {id: 2, nome: "310 Diamantes FF", preco: 15, tag: "EM ALTA", emoji: "💎", estoque: 30, img: ""},
-    {id: 3, nome: "Passe Premium", preco: 10, emoji: "🎫", estoque: 20, img: ""},
-    {id: 4, nome: "Tokens 25", preco: 15, emoji: "🪙", estoque: 100, img: ""}
-  ];
-  let
+let tipoUser = '';
+let produtos = [
+  {id: 1, nome: "100 Diamantes FF", preco: 5, emoji: "💎", estoque: 50},
+  {id: 2, nome: "310 Diamantes FF", preco: 15, emoji: "💎", estoque: 30}
+];
+
+function renderizarProdutos() {
+  const lista = document.getElementById('lista-produtos');
+  lista.innerHTML = '';
+  produtos.forEach(p => {
+    lista.innerHTML += `
+      <div class="card">
+        <div class="admin-actions">
+          <button class="icon-btn" onclick="alert('Editar ${p.id}')">✏️</button>
+          <button class="icon-btn" onclick="alert('Excluir ${p.id}')">🗑️</button>
+        </div>
+        <div style="font-size:40px;margin:10px 0;">${p.emoji}</div>
+        <h4>${p.nome}</h4>
+        <div class="price">R$ ${p.preco}</div>
+        <button class="btn-pink" onclick="alert('Add ${p.nome}')">Add ao carrinho</button>
+      </div>
+    `;
+  });
+}
+
+function fazerLogin() {
+  let user = document.getElementById('user').value;
+  let senha = document.getElementById('senha').value;
+  
+  if(user === "Lorrannyh.16" && senha === "Lorrannyh.16") {
+    tipoUser = 'admin';
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('store-screen').style.display = 'block';
+    document.getElementById('user-logado').innerText = 'Lorrannyh.16';
+    renderizarProdutos();
+  } else {
+    document.getElementById('erro-login').style.display = 'block';
+  }
+}
+
+function logout() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('store-screen').style.display = 'none';
+}
+
+renderizarProdutos();
+</script>
+</body>
+</html>
