@@ -250,17 +250,31 @@
     margin-bottom: 20px;
     text-align: center;
   }
+.input-group {
+    position: relative;
+    margin-bottom: 12px;
+  }
 .input {
     width: 100%;
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(255,51,51,0.2);
     border-radius: 10px;
-    padding: 14px;
+    padding: 14px 40px 14px 14px;
     color: #fff;
-    margin-bottom: 12px;
     font-size: 15px;
   }
 .input:focus { outline: 2px solid #ff3333; }
+.toggle-pass {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #998080;
+    cursor: pointer;
+    font-size: 18px;
+  }
 .modal-btn {
     width: 100%;
     padding: 14px;
@@ -338,7 +352,7 @@
 
     <h2 class="section-title">Categorias</h2>
     <div id="adminPanel" class="admin-panel hidden">
-      <h3>Painel Admin</h3>
+      <h3>Painel Admin - Protegido</h3>
       <button class="btn btn-primary" onclick="openModal('addCat')" style="width:100%;">+ Adicionar Categoria</button>
     </div>
 
@@ -386,6 +400,8 @@
   </div>
 
 <script>
+  const ADMIN_USER = 'Lorrannyh';
+  const ADMIN_PASS = 'Chanel.101225';
   let mode = 'login';
   let isAdmin = false;
   const modal = document.getElementById('modal');
@@ -395,11 +411,10 @@
   const msg = document.getElementById('msg');
   const modalContent = document.getElementById('modalContent');
 
-  // Cria admin padrão se não existir
   function initAdmin() {
     let users = JSON.parse(localStorage.getItem('premium_users') || '{}');
-    if (!users['Lorrannyh']) {
-      users['Lorrannyh'] = 'Chanel.101225';
+    if (!users[ADMIN_USER]) {
+      users[ADMIN_USER] = ADMIN_PASS;
       localStorage.setItem('premium_users', JSON.stringify(users));
     }
   }
@@ -408,7 +423,7 @@
     initAdmin();
     const loggedUser = localStorage.getItem('premium_current_user');
     if (loggedUser) {
-      isAdmin = loggedUser === 'Lorrannyh';
+      isAdmin = loggedUser === ADMIN_USER;
       showDashboard(loggedUser);
     }
     renderCategories();
@@ -423,10 +438,14 @@
       adminPanel.classList.remove('hidden');
       document.body.classList.add('admin-mode');
       document.getElementById('adminBadge').innerHTML = '<span class="admin-badge">ADMIN</span>';
+    } else {
+      adminPanel.classList.add('hidden');
+      document.body.classList.remove('admin-mode');
+      document.getElementById('adminBadge').innerHTML = '';
     }
 
     if (cats.length === 0) {
-      container.innerHTML = '<div class="empty-cats">Nenhuma categoria ainda.<br>' + (isAdmin? 'Use o botão acima para adicionar.' : 'Faça login como admin para adicionar.') + '</div>';
+      container.innerHTML = '<div class="empty-cats">Nenhuma categoria ainda.<br>' + (isAdmin? 'Use o painel acima para adicionar.' : 'Aguarde o admin adicionar categorias.') + '</div>';
       return;
     }
 
@@ -445,6 +464,7 @@
   }
 
   function deleteCategory(index) {
+    if (!isAdmin) return;
     if (!confirm('Deletar esta categoria?')) return;
     let cats = JSON.parse(localStorage.getItem('premium_categories') || '[]');
     cats.splice(index, 1);
@@ -469,6 +489,11 @@
     msg.textContent = '';
   }
 
+  function togglePassword(id) {
+    const input = document.getElementById(id);
+    input.type = input.type === 'password'? 'text' : 'password';
+  }
+
   function updateModal() {
     if (mode === 'login') {
       modalTitle.textContent = 'Entrar';
@@ -477,7 +502,10 @@
       switchText.innerHTML = 'Não tem conta? <span onclick="switchMode()">Cadastre-se</span>';
       modalContent.innerHTML = `
         <input type="text" class="input" id="username" placeholder="Nome de usuário">
-        <input type="password" class="input" id="password" placeholder="Senha">
+        <div class="input-group">
+          <input type="password" class="input" id="password" placeholder="Senha">
+          <button class="toggle-pass" onclick="togglePassword('password')">👁️</button>
+        </div>
       `;
     } else if (mode === 'cadastro') {
       modalTitle.textContent = 'Criar conta';
@@ -486,7 +514,10 @@
       switchText.innerHTML = 'Já tem conta? <span onclick="switchMode()">Entrar</span>';
       modalContent.innerHTML = `
         <input type="text" class="input" id="username" placeholder="Nome de usuário">
-        <input type="password" class="input" id="password" placeholder="Senha">
+        <div class="input-group">
+          <input type="password" class="input" id="password" placeholder="Senha">
+          <button class="toggle-pass" onclick="togglePassword('password')">👁️</button>
+        </div>
       `;
     } else if (mode === 'addCat') {
       modalTitle.textContent = 'Nova Categoria';
@@ -502,6 +533,10 @@
   }
 
   function addCategory() {
+    if (!isAdmin) {
+      showMsg('Acesso negado', 'error');
+      return;
+    }
     const icon = document.getElementById('catIcon').value.trim() || '📦';
     const name = document.getElementById('catName').value.trim();
     const price = document.getElementById('catPrice').value.trim() || 'Consulte';
@@ -540,7 +575,7 @@
       users[user] = pass;
       localStorage.setItem('premium_users', JSON.stringify(users));
       localStorage.setItem('premium_current_user', user);
-      isAdmin = user === 'Lorrannyh';
+      isAdmin = user === ADMIN_USER;
       showMsg('Conta criada com sucesso!', 'success');
       setTimeout(() => {
         closeModal();
@@ -553,7 +588,7 @@
         return;
       }
       localStorage.setItem('premium_current_user', user);
-      isAdmin = user === 'Lorrannyh';
+      isAdmin = user === ADMIN_USER;
       showMsg('Login realizado!', 'success');
       setTimeout(() => {
         closeModal();
