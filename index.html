@@ -4,228 +4,262 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Premium Store</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
   <style>
-    body { background: #000; margin: 0; }
-    * { font-family: system-ui, -apple-system, sans-serif; }
+    :root{--bg:#0A0A0F;--card:#1A1A24;--rosa:#FF2D75;--texto:#FFF;--texto2:#B4B4C0}
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+    body{background:var(--bg);color:var(--texto)}
+   .hidden{display:none!important}
+   .header{display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid var(--rosa)}
+   .header h1{font-size:20px}.header h1 span{color:var(--rosa)}
+   .header button{background:none;border:1px solid var(--rosa);color:var(--rosa);padding:6px 12px;border-radius:8px;cursor:pointer}
+   .hero{text-align:center;padding:40px 20px}
+   .hero h2{font-size:24px;margin-bottom:8px}.hero p{color:var(--texto2);margin-bottom:24px}
+   .btn-group{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+   .btn-primary{background:var(--rosa);border:none;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer}
+   .btn-outline{background:none;border:1px solid var(--rosa);color:var(--rosa);padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer}
+   .btn-whatsapp{background:#25D366;border:none;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%;margin-top:8px}
+   .container{padding:20px;max-width:600px;margin:0 auto}
+   .title{font-size:22px;margin-bottom:16px}
+   .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+   .card{background:var(--card);border:1px solid var(--rosa);border-radius:12px;padding:16px;text-align:center;cursor:pointer}
+   .card img{width:60px;height:60px;margin-bottom:8px;border:2px solid var(--rosa);border-radius:8px;padding:4px;object-fit:cover}
+   .card h3{font-size:16px;margin-bottom:4px}.card p{color:var(--rosa);font-weight:bold}
+   .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:#000000cc;display:flex;align-items:center;justify-content:center;z-index:100}
+   .modal-content{background:var(--card);border:1px solid var(--rosa);padding:20px;border-radius:12px;width:90%;max-width:400px;position:relative}
+   .modal-content img{width:100%;border-radius:8px;margin-bottom:12px;max-height:200px;object-fit:cover}
+   .close{position:absolute;top:10px;right:15px;font-size:24px;cursor:pointer;color:var(--rosa)}
+   .screen{min-height:100vh}
+   .login-box{max-width:320px;margin:100px auto;background:var(--card);padding:24px;border:1px solid var(--rosa);border-radius:12px}
+   .login-box input,.admin-section input,.admin-section textarea,.admin-section select{width:100%;padding:10px;margin:8px 0;background:var(--bg);border:1px solid var(--rosa);border-radius:8px;color:#fff}
+   .admin-section{background:var(--card);border:1px solid var(--rosa);border-radius:12px;padding:16px;margin-bottom:20px}
+   .item-admin{display:flex;justify-content:space-between;align-items:center;background:var(--bg);padding:8px;margin:6px 0;border-radius:6px}
+   .item-admin button{background:var(--rosa);border:none;color:#fff;padding:4px 8px;border-radius:4px;cursor:pointer;font-size:12px}
+   .badge{display:inline-block;background:var(--card);border:1px solid var(--rosa);padding:4px 8px;border-radius:6px;font-size:12px;margin:4px}
   </style>
 </head>
 <body>
-  <div id="root"></div>
-
-  <script type="text/babel">
-    const { useState, useEffect } = React;
-
-    // TEUS DADOS JÁ ESTÃO AQUI
-    const SENHA_ADMIN = "Lorrannyh.101225"; 
-    const CHAVE_PIX = "98984853563";
-    const WHATSAPP = "5598984853563";
-    const NOME_LOJA = "Premium Store";
-    const NOME_COMPLETO = "Lorrane Vitória Alves Vaz";
-
-    function Loja() {
-      const [admin, setAdmin] = useState(false);
-      const [modal, setModal] = useState(null);
-      const [copiado, setCopiado] = useState(false);
-      const [aba, setAba] = useState("produtos");
-      const [banner, setBanner] = useState(localStorage.getItem("banner") || "");
-      const [categorias, setCategorias] = useState(JSON.parse(localStorage.getItem("categorias")) || [
-        { id: 1, nome: "Pijamas", foto: "https://picsum.photos/300/200" }
-      ]);
-      const [produtos, setProdutos] = useState(JSON.parse(localStorage.getItem("produtos")) || [
-        { id: 1, nome: "Pijama Rosa", preco: 89.9, desc: "100% algodão", foto: "https://picsum.photos/400/400", categoria: "Pijamas", estoque: 5 }
-      ]);
-      const [pedidos, setPedidos] = useState(JSON.parse(localStorage.getItem("pedidos")) || []);
-
-      useEffect(() => {
-        localStorage.setItem("produtos", JSON.stringify(produtos));
-        localStorage.setItem("categorias", JSON.stringify(categorias));
-        localStorage.setItem("pedidos", JSON.stringify(pedidos));
-        localStorage.setItem("banner", banner);
-      }, [produtos, categorias, pedidos, banner]);
-
-      useEffect(() => {
-        if (window.location.hash === "#admin") {
-          const senha = prompt("Senha do admin:");
-          if (senha === SENHA_ADMIN) setAdmin(true);
-          else window.location.hash = "";
-        }
-        lucide.createIcons();
-      }, []);
-
-      useEffect(() => { lucide.createIcons(); });
-
-      const copiarPix = () => {
-        navigator.clipboard.writeText(CHAVE_PIX);
-        setCopiado(true);
-        setTimeout(() => setCopiado(false), 2000);
-      };
-
-      const finalizarWhats = (p) => {
-        const msg = `Olá! Quero comprar: ${p.nome} - R$ ${p.preco.toFixed(2)}`;
-        window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank");
-        setPedidos([...pedidos, {
-          id: Date.now(),
-          cliente: "Cliente WhatsApp",
-          produto: p.nome,
-          total: p.preco,
-          data: new Date().toLocaleString("pt-BR"),
-          status: "Pendente"
-        }]);
-        setProdutos(produtos.map(x => x.id === p.id? {...x, estoque: x.estoque - 1} : x));
-        setModal(null);
-      };
-
-      const addProduto = () => {
-        const nome = prompt("Nome do produto:");
-        const preco = parseFloat(prompt("Preço:") || "0");
-        const desc = prompt("Descrição:");
-        const foto = prompt("URL da foto:");
-        const categoria = prompt("Categoria:") || categorias[0]?.nome;
-        const estoque = parseInt(prompt("Estoque:") || "0");
-        if (nome && preco) {
-          setProdutos([...produtos, { id: Date.now(), nome, preco, desc: desc || "", foto: foto || "", categoria, estoque }]);
-        }
-      };
-
-      const addCategoria = () => {
-        const nome = prompt("Nome da categoria:");
-        const foto = prompt("URL da foto:");
-        if (nome) setCategorias([...categorias, { id: Date.now(), nome, foto: foto || "" }]);
-      };
-
-      const mudarStatus = (id, status) => {
-        setPedidos(pedidos.map(p => p.id === id? {...p, status} : p));
-      };
-
-      if (admin) {
-        return (
-          <div className="min-h-screen bg-black text-white p-4">
-            <div className="max-w-6xl mx-auto">
-              <div className="flex justify-between items-center mb-6">
-                <div>
-                  <h1 className="text-2xl font-bold text-[#FF2D75]">Painel Admin</h1>
-                  <p className="text-sm text-zinc-400">{NOME_COMPLETO}</p>
-                </div>
-                <button onClick={() => { setAdmin(false); window.location.hash = ""; }} className="flex items-center gap-2 bg-zinc-800 px-4 py-2 rounded-lg">
-                  <i data-lucide="log-out" className="w-4 h-4"></i> Sair
-                </button>
-              </div>
-              <div className="flex gap-4 mb-6">
-                <button onClick={() => setAba("produtos")} className={`px-4 py-2 rounded-lg ${aba === "produtos"? "bg-[#FF2D75]" : "bg-zinc-800"}`}>Produtos</button>
-                <button onClick={() => setAba("pedidos")} className={`px-4 py-2 rounded-lg ${aba === "pedidos"? "bg-[#FF2D75]" : "bg-zinc-800"}`}>Pedidos</button>
-                <button onClick={() => setAba("banner")} className={`px-4 py-2 rounded-lg ${aba === "banner"? "bg-[#FF2D75]" : "bg-zinc-800"}`}>Banner</button>
-              </div>
-              {aba === "produtos" && (
-                <>
-                  <div className="flex gap-4 mb-4">
-                    <button onClick={addProduto} className="flex items-center gap-2 bg-[#FF2D75] px-4 py-2 rounded-lg"><i data-lucide="plus" className="w-4 h-4"></i> Produto</button>
-                    <button onClick={addCategoria} className="flex items-center gap-2 bg-zinc-800 px-4 py-2 rounded-lg"><i data-lucide="plus" className="w-4 h-4"></i> Categoria</button>
-                  </div>
-                  <div className="grid gap-4">
-                    {produtos.map(p => (
-                      <div key={p.id} className="bg-zinc-900 p-4 rounded-lg flex justify-between items-center">
-                        <div>
-                          <p className="font-bold">{p.nome}</p>
-                          <p className="text-sm text-zinc-400">R$ {p.preco.toFixed(2)} | Estoque: {p.estoque}</p>
-                        </div>
-                        <button onClick={() => setProdutos(produtos.filter(x => x.id!== p.id))} className="text-red-500"><i data-lucide="trash-2" className="w-4 h-4"></i></button>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
-              {aba === "pedidos" && (
-                <div className="grid gap-4">
-                  {pedidos.length === 0 && <p className="text-zinc-500">Nenhum pedido ainda</p>}
-                  {pedidos.map(p => (
-                    <div key={p.id} className="bg-zinc-900 p-4 rounded-lg">
-                      <div className="flex justify-between mb-2">
-                        <p className="font-bold">{p.produto}</p>
-                        <p className="text-[#FF2D75]">R$ {p.total.toFixed(2)}</p>
-                      </div>
-                      <p className="text-sm text-zinc-400 mb-2">{p.data}</p>
-                      <select value={p.status} onChange={e => mudarStatus(p.id, e.target.value)} className="bg-zinc-800 px-3 py-1 rounded">
-                        <option>Pendente</option>
-                        <option>Pago</option>
-                        <option>Enviado</option>
-                      </select>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {aba === "banner" && (
-                <div>
-                  <input type="text" placeholder="URL da imagem do banner" value={banner} onChange={e => setBanner(e.target.value)} className="w-full bg-zinc-800 p-3 rounded-lg mb-4" />
-                  {banner && <img src={banner} alt="Banner" className="w-full rounded-lg" />}
-                </div>
-              )}
-            </div>
-          </div>
-        );
-      }
-
-      return (
-        <div className="min-h-screen bg-black text-white">
-          {banner && <img src={banner} alt="Banner" className="w-full h-48 object-cover" />}
-          <header className="p-4 flex items-center gap-3 border-b border-zinc-800">
-            <i data-lucide="shopping-bag" className="w-6 h-6 text-[#FF2D75]"></i>
-            <h1 className="text-xl font-bold">{NOME_LOJA}</h1>
-          </header>
-          <div className="p-4">
-            {categorias.map(cat => (
-              <div key={cat.id} className="mb-8">
-                <h2 className="text-lg font-bold mb-3 text-[#FF2D75]">{cat.nome}</h2>
-                <div className="grid grid-cols-2 gap-4">
-                  {produtos.filter(p => p.categoria === cat.nome && p.estoque > 0).map(p => (
-                    <div key={p.id} onClick={() => setModal(p)} className="bg-zinc-900 rounded-lg overflow-hidden cursor-pointer">
-                      <img src={p.foto} alt={p.nome} className="w-full h-40 object-cover" />
-                      <div className="p-3">
-                        <p className="font-bold text-sm">{p.nome}</p>
-                        <p className="text-[#FF2D75] font-bold">R$ {p.preco.toFixed(2)}</p>
-                        <p className="text-xs text-zinc-500">Estoque: {p.estoque}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-          {modal && (
-            <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50" onClick={() => setModal(null)}>
-              <div className="bg-zinc-900 rounded-lg max-w-md w-full p-6" onClick={e => e.stopPropagation()}>
-                <div className="flex justify-between mb-4">
-                  <h3 className="text-xl font-bold">{modal.nome}</h3>
-                  <button onClick={() => setModal(null)}><i data-lucide="x" className="w-6 h-6"></i></button>
-                </div>
-                <img src={modal.foto} alt={modal.nome} className="w-full h-64 object-cover rounded-lg mb-4" />
-                <p className="text-zinc-300 mb-2">{modal.desc}</p>
-                <p className="text-2xl font-bold text-[#FF2D75] mb-4">R$ {modal.preco.toFixed(2)}</p>
-                <div className="bg-zinc-800 p-4 rounded-lg mb-4">
-                  <p className="text-sm mb-1">Pague via Pix para:</p>
-                  <p className="text-xs text-zinc-400 mb-2">{NOME_COMPLETO}</p>
-                  <div className="bg-white p-4 rounded mb-3 flex justify-center">
-                    <img src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020126580014br.gov.bcb.pix0136${CHAVE_PIX}52040000530398654${modal.preco.toFixed(2).replace('.','')}5802BR5919${NOME_COMPLETO.substring(0,25)}6009SAO LUIS62070503***6304`} alt="QR Code" />
-                  </div>
-                  <button onClick={copiarPix} className="w-full bg-zinc-700 py-2 rounded-lg flex items-center justify-center gap-2 mb-2">
-                    {copiado? <><i data-lucide="check" className="w-4 h-4"></i> Copiado!</> : <><i data-lucide="copy" className="w-4 h-4"></i> {CHAVE_PIX}</>}
-                  </button>
-                </div>
-                <button onClick={() => finalizarWhats(modal)} className="w-full bg-[#25D366] py-3 rounded-lg font-bold">
-                  Finalizar no WhatsApp
-                </button>
-              </div>
-            </div>
-          )}
+  <div id="app">
+    <!-- TELA LOGIN -->
+    <div id="login-screen" class="screen">
+      <header class="header">
+        <h1>PREMIUM <span>STORE</span></h1>
+        <button onclick="location.hash='#admin'">Admin</button>
+      </header>
+      <div class="hero">
+        <h2>Compras manualmente e com segurança</h2>
+        <p>100% seguro - sem precisar de nem um acesso</p>
+        <div class="btn-group">
+          <button class="btn-primary" onclick="entrarSite()">CADASTRAR</button>
+          <button class="btn-outline" onclick="entrarSite()">ENTRAR</button>
         </div>
-      );
-    }
+        <div style="margin-top:20px">
+          <span class="badge">✓ 100% seguro</span>
+          <span class="badge">✓ Envio instantâneo</span>
+        </div>
+      </div>
+    </div>
 
-    ReactDOM.render(<Loja />, document.getElementById('root'));
-  </script>
+    <!-- TELA CATEGORIAS -->
+    <div id="categorias-screen" class="screen hidden">
+      <header class="header">
+        <h1>PREMIUM <span>STORE</span></h1>
+        <div>
+          <button onclick="location.hash='#admin'">Admin</button>
+          <button onclick="sair()">Sair</button>
+        </div>
+      </header>
+      <div class="container">
+        <h2 class="title">Categorias</h2>
+        <div id="categorias-grid" class="grid"></div>
+      </div>
+    </div>
+
+    <!-- TELA PRODUTOS -->
+    <div id="produtos-screen" class="screen hidden">
+      <header class="header">
+        <button onclick="voltarCategorias()">← Voltar</button>
+        <h1 id="categoria-titulo"></h1>
+      </header>
+      <div class="container">
+        <div id="produtos-grid" class="grid"></div>
+      </div>
+    </div>
+
+    <!-- MODAL PRODUTO -->
+    <div id="modal" class="modal hidden">
+      <div class="modal-content">
+        <span class="close" onclick="fecharModal()">&times;</span>
+        <img id="modal-img" src="" alt="">
+        <h3 id="modal-nome"></h3>
+        <p id="modal-desc" style="color:var(--texto2);margin:8px 0"></p>
+        <h4 id="modal-preco" style="color:var(--rosa);font-size:20px;margin:12px 0"></h4>
+        <button class="btn-primary" onclick="pagarPix()" style="width:100%">Pagar via Pix</button>
+        <button class="btn-whatsapp" onclick="finalizarWhatsApp()">Finalizar no WhatsApp</button>
+      </div>
+    </div>
+
+    <!-- TELA ADMIN LOGIN -->
+    <div id="admin-login-screen" class="screen hidden">
+      <div class="login-box">
+        <h2 style="text-align:center;margin-bottom:16px">Login Admin</h2>
+        <input type="text" id="admin-user" placeholder="Usuário">
+        <input type="password" id="admin-pass" placeholder="Senha">
+        <button class="btn-primary" style="width:100%" onclick="loginAdmin()">Entrar</button>
+        <button class="btn-outline" style="width:100%;margin-top:8px" onclick="location.hash=''">Voltar ao site</button>
+      </div>
+    </div>
+
+    <!-- TELA PAINEL ADMIN -->
+    <div id="admin-panel-screen" class="screen hidden">
+      <header class="header">
+        <h1>PAINEL <span>ADMIN</span></h1>
+        <button onclick="logoutAdmin()">Sair</button>
+      </header>
+      <div class="container">
+        <div class="admin-section">
+          <h3>Categorias</h3>
+          <input type="text" id="nova-categoria" placeholder="Nome da categoria">
+          <button class="btn-primary" style="width:100%" onclick="addCategoria()">Adicionar Categoria</button>
+          <div id="lista-categorias" style="margin-top:12px"></div>
+        </div>
+        <div class="admin-section">
+          <h3>Produtos</h3>
+          <select id="select-categoria"></select>
+          <input type="text" id="nome-produto" placeholder="Nome do produto">
+          <input type="number" id="preco-produto" placeholder="Preço" step="0.01">
+          <textarea id="desc-produto" placeholder="Descrição do produto" rows="3"></textarea>
+          <input type="file" id="img-produto" accept="image/*">
+          <button class="btn-primary" style="width:100%" onclick="addProduto()">Adicionar Produto</button>
+          <div id="lista-produtos" style="margin-top:12px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+let db = JSON.parse(localStorage.getItem('premiumStore')) || {categorias:[],produtos:[]};
+let produtoAtual = null;
+const WHATSAPP = '5598984853563';
+const ADMIN_USER = 'Lorrannyh.101225';
+const ADMIN_PASS = 'Lorrannyh.101225';
+
+function salvarDB(){localStorage.setItem('premiumStore',JSON.stringify(db))}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));document.getElementById(id).classList.remove('hidden')}
+
+// ROTEAMENTO
+function checkRoute(){
+  if(location.hash==='#admin'){
+    if(sessionStorage.getItem('adminLogado')) showScreen('admin-panel-screen');
+    else showScreen('admin-login-screen');
+  } else {
+    showScreen('login-screen');
+  }
+}
+window.addEventListener('hashchange',checkRoute);
+
+// SITE
+function entrarSite(){showScreen('categorias-screen');renderCategorias()}
+function sair(){showScreen('login-screen')}
+function renderCategorias(){
+  const grid=document.getElementById('categorias-grid');grid.innerHTML='';
+  db.categorias.forEach(cat=>{
+    grid.innerHTML+=`<div class="card" onclick="abrirCategoria('${cat.id}')">
+      <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#FF2D75" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+      <h3>${cat.nome}</h3></div>`;
+  });
+}
+function abrirCategoria(id){
+  const cat=db.categorias.find(c=>c.id==id);
+  document.getElementById('categoria-titulo').innerText=cat.nome;
+  const grid=document.getElementById('produtos-grid');grid.innerHTML='';
+  db.produtos.filter(p=>p.categoriaId==id).forEach(prod=>{
+    grid.innerHTML+=`<div class="card" onclick="abrirProduto('${prod.id}')">
+      <img src="${prod.img}" alt=""><h3>${prod.nome}</h3><p>R$ ${prod.preco.toFixed(2)}</p></div>`;
+  });
+  showScreen('produtos-screen');
+}
+function abrirProduto(id){
+  produtoAtual=db.produtos.find(p=>p.id==id);
+  document.getElementById('modal-img').src=produtoAtual.img;
+  document.getElementById('modal-nome').innerText=produtoAtual.nome;
+  document.getElementById('modal-desc').innerText=produtoAtual.desc;
+  document.getElementById('modal-preco').innerText=`R$ ${produtoAtual.preco.toFixed(2)}`;
+  document.getElementById('modal').classList.remove('hidden');
+}
+function fecharModal(){document.getElementById('modal').classList.add('hidden')}
+function voltarCategorias(){showScreen('categorias-screen')}
+function pagarPix(){alert('Chave Pix: pix@premiumstore.com\nValor: R$ '+produtoAtual.preco.toFixed(2)+'\n\nEnvie o comprovante no WhatsApp para liberação.')}
+function finalizarWhatsApp(){
+  const msg=`Olá! Quero o produto ${produtoAtual.nome} no valor de R$ ${produtoAtual.preco.toFixed(2)}`;
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+// ADMIN
+function loginAdmin(){
+  const user=document.getElementById('admin-user').value;
+  const pass=document.getElementById('admin-pass').value;
+  if(user===ADMIN_USER && pass===ADMIN_PASS){
+    sessionStorage.setItem('adminLogado','true');
+    showScreen('admin-panel-screen');renderAdmin();
+  }else alert('Usuário ou senha incorretos');
+}
+function logoutAdmin(){sessionStorage.removeItem('adminLogado');location.hash='';showScreen('login-screen')}
+function renderAdmin(){
+  const listaCat=document.getElementById('lista-categorias');
+  const selectCat=document.getElementById('select-categoria');
+  listaCat.innerHTML='';selectCat.innerHTML='<option value="">Selecione a categoria</option>';
+  db.categorias.forEach(cat=>{
+    listaCat.innerHTML+=`<div class="item-admin">${cat.nome} <button onclick="delCategoria('${cat.id}')">Apagar</button></div>`;
+    selectCat.innerHTML+=`<option value="${cat.id}">${cat.nome}</option>`;
+  });
+  const listaProd=document.getElementById('lista-produtos');listaProd.innerHTML='';
+  db.produtos.forEach(prod=>{
+    const cat=db.categorias.find(c=>c.id==prod.categoriaId);
+    listaProd.innerHTML+=`<div class="item-admin">${prod.nome} - ${cat?cat.nome:''} - R$${prod.preco} <button onclick="delProduto('${prod.id}')">Apagar</button></div>`;
+  });
+}
+function addCategoria(){
+  const nome=document.getElementById('nova-categoria').value.trim();
+  if(!nome)return alert('Digite o nome da categoria');
+  db.categorias.push({id:Date.now().toString(),nome});salvarDB();renderAdmin();
+  document.getElementById('nova-categoria').value='';
+}
+function addProduto(){
+  const catId=document.getElementById('select-categoria').value;
+  const nome=document.getElementById('nome-produto').value.trim();
+  const preco=parseFloat(document.getElementById('preco-produto').value);
+  const desc=document.getElementById('desc-produto').value.trim();
+  const file=document.getElementById('img-produto').files[0];
+  if(!catId||!nome||!preco||!desc||!file)return alert('Preencha todos os campos e selecione uma imagem');
+  const reader=new FileReader();
+  reader.onload=e=>{
+    db.produtos.push({id:Date.now().toString(),categoriaId:catId,nome,preco,desc,img:e.target.result});
+    salvarDB();renderAdmin();
+    document.getElementById('nome-produto').value='';
+    document.getElementById('preco-produto').value='';
+    document.getElementById('desc-produto').value='';
+    document.getElementById('img-produto').value='';
+  };
+  reader.readAsDataURL(file);
+}
+function delCategoria(id){
+  if(!confirm('Apagar categoria e todos os produtos dela?'))return;
+  db.categorias=db.categorias.filter(c=>c.id!=id);
+  db.produtos=db.produtos.filter(p=>p.categoriaId!=id);
+  salvarDB();renderAdmin();renderCategorias();
+}
+function delProduto(id){
+  db.produtos=db.produtos.filter(p=>p.id!=id);
+  salvarDB();renderAdmin();
+}
+
+// INICIAR
+if(db.categorias.length==0){
+  db.categorias=[{id:'1',nome:'Instagram'}];
+  db.produtos=[{id:'1',categoriaId:'1',nome:'100 Seguidores',preco:6,desc:'Entrega rápida em até 24h. Seguidores brasileiros reais.',img:'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23FF2D75" stroke-width="2" viewBox="0 0 24 24"%3E%3Crect x="2" y="2" width="20" height="20" rx="5"/%3E%3Ccircle cx="12" cy="12" r="4"/%3E%3Ccircle cx="17.5" cy="6.5" r="1.5"/%3E%3C/svg%3E'}];
+  salvarDB();
+}
+checkRoute();
+</script>
 </body>
 </html>
