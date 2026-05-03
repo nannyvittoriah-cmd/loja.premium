@@ -1,4 +1,405 @@
- placeholder="Nome completo">
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo Premium</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #140c0c;
+    color: #fff;
+    min-height: 100vh;
+  }
+ .screen { display: none; padding: 20px; max-width: 480px; margin: 0 auto; }
+ .screen.active { display: block; }
+ .header {
+    background: linear-gradient(135deg, #8b0000, #5a0000);
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(139, 0, 0, 0.4);
+  }
+ .header h1 { font-size: 24px; margin-bottom: 8px; }
+ .header p { color: #d4b8b8; font-size: 14px; }
+ .btn {
+    background: linear-gradient(135deg, #8b0000, #a00000);
+    color: #fff;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    width: 100%;
+    cursor: pointer;
+    margin: 8px 0;
+    transition: all 0.2s;
+  }
+ .btn:active { transform: scale(0.98); }
+ .btn-outline {
+    background: transparent;
+    border: 2px solid #8b0000;
+    color: #8b0000;
+  }
+ .input {
+    background: #1f1414;
+    border: 2px solid #3d2020;
+    color: #fff;
+    padding: 14px;
+    border-radius: 12px;
+    width: 100%;
+    font-size: 16px;
+    margin: 8px 0;
+  }
+ .input:focus { outline: none; border-color: #8b0000; }
+ .textarea { min-height: 100px; resize: vertical; }
+ .input-group { position: relative; }
+ .toggle-pass {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #998080;
+    cursor: pointer;
+    font-size: 18px;
+  }
+ .card {
+    background: #1f1414;
+    border: 1px solid #3d2020;
+    border-radius: 16px;
+    padding: 16px;
+    margin: 12px 0;
+  }
+ .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+  }
+ .cat-card {
+    background: #1f1414;
+    border: 2px solid #3d2020;
+    border-radius: 16px;
+    padding: 20px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+ .cat-card:active { transform: scale(0.95); }
+ .cat-card img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+ .cat-icon { font-size: 40px; margin-bottom: 10px; }
+ .cat-name { font-size: 14px; font-weight: 600; }
+ .cat-count { font-size: 12px; color: #998080; margin-top: 4px; }
+ .delete-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #8b0000;
+    border: none;
+    color: #fff;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 16px;
+    cursor: pointer;
+    display: none;
+  }
+ .admin.delete-btn { display: block; }
+ .product-card {
+    background: #1f1414;
+    border: 1px solid #3d2020;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+  }
+ .product-img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    background: #140c0c;
+  }
+ .product-info { padding: 12px; }
+ .product-name { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+ .product-price { color: #ff6b6b; font-size: 18px; font-weight: 700; }
+ .product-stock { font-size: 12px; color: #998080; margin-top: 4px; }
+ .top-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+ .back-btn {
+    background: #1f1414;
+    border: 2px solid #3d2020;
+    color: #fff;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+ .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    padding: 20px;
+    overflow-y: auto;
+  }
+ .modal.active { display: flex; align-items: center; justify-content: center; }
+ .modal-box {
+    background: #1f1414;
+    border: 2px solid #3d2020;
+    border-radius: 20px;
+    padding: 24px;
+    width: 100%;
+    max-width: 400px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+ .modal-title { font-size: 20px; margin-bottom: 16px; }
+ .close-btn {
+    float: right;
+    background: none;
+    border: none;
+    color: #998080;
+    font-size: 28px;
+    cursor: pointer;
+    line-height: 1;
+  }
+ .file-input { display: none; }
+ .file-label {
+    display: block;
+    background: #140c0c;
+    border: 2px dashed #3d2020;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    margin: 8px 0;
+  }
+ .file-label:active { border-color: #8b0000; }
+ .preview-img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin: 8px 0;
+    display: none;
+  }
+ .select-icon {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin: 8px 0;
+  }
+ .icon-opt {
+    background: #140c0c;
+    border: 2px solid #3d2020;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 28px;
+    text-align: center;
+    cursor: pointer;
+  }
+ .icon-opt.active { border-color: #8b0000; background: #3d2020; }
+ .admin-panel {
+    background: #2a1515;
+    border: 2px solid #8b0000;
+    border-radius: 16px;
+    padding: 16px;
+    margin: 16px 0;
+  }
+ .admin-title { color: #ff6b6b; font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+ .msg { padding: 12px; border-radius: 12px; margin: 8px 0; font-size: 14px; }
+ .msg.error { background: #3d1414; color: #ff6b6b; border: 1px solid #5a2020; }
+ .msg.success { background: #143d14; color: #6bff6b; border: 1px solid #205a20; }
+ .switch-auth {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 14px;
+    color: #998080;
+  }
+ .switch-auth span { color: #ff6b6b; cursor: pointer; font-weight: 600; }
+ .product-detail-img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 16px;
+  }
+ .product-detail h3 { font-size: 22px; margin-bottom: 8px; }
+ .product-detail-price { color: #ff6b6b; font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+ .product-detail-stock { color: #998080; font-size: 14px; margin-bottom: 16px; }
+ .product-detail-desc { color: #d4b8b8; line-height: 1.6; margin-bottom: 20px; }
+ .whatsapp-btn {
+    background: #25D366;
+    color: #fff;
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    width: 100%;
+    cursor: pointer;
+  }
+ .empty { text-align: center; padding: 40px 20px; color: #998080; }
+ .empty-icon { font-size: 48px; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+
+<!-- TELA HOME -->
+<div id="home" class="screen active">
+  <div class="header">
+    <h1>Catálogo Premium</h1>
+    <p>Sua loja digital completa</p>
+  </div>
+  <button class="btn" onclick="openModal('login')">Entrar</button>
+  <button class="btn btn-outline" onclick="openModal('cadastro')">Criar Conta</button>
+</div>
+
+<!-- TELA DASHBOARD -->
+<div id="dashboard" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <div style="flex:1">
+      <h2 style="font-size:20px">Olá, <span id="userName"></span></h2>
+    </div>
+    <button class="back-btn" onclick="logout()">⎋</button>
+  </div>
+
+  <div id="adminPanel" class="admin-panel" style="display:none">
+    <div class="admin-title">🔧 PAINEL ADMIN</div>
+    <button class="btn" onclick="openModal('addCat')">+ Nova Categoria</button>
+  </div>
+
+  <h3 style="margin:20px 0 12px">Categorias</h3>
+  <div id="catGrid" class="grid"></div>
+  <div id="emptyCat" class="empty" style="display:none">
+    <div class="empty-icon">📦</div>
+    <p>Nenhuma categoria ainda</p>
+  </div>
+</div>
+
+<!-- TELA PRODUTOS -->
+<div id="products" class="screen">
+  <div class="top-bar">
+    <button class="back-btn" onclick="goBack()">←</button>
+    <h2 style="flex:1;font-size:20px" id="catTitle"></h2>
+  </div>
+
+  <div id="adminProdBtn" style="display:none;margin-bottom:16px">
+    <button class="btn" onclick="openModal('addProduct')">+ Adicionar Produto</button>
+  </div>
+
+  <div id="prodGrid" class="grid"></div>
+  <div id="emptyProd" class="empty" style="display:none">
+    <div class="empty-icon">🛍️</div>
+    <p>Nenhum produto ainda</p>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="modal">
+  <div class="modal-box">
+    <button class="close-btn" onclick="closeModal()">×</button>
+    <h3 class="modal-title" id="modalTitle"></h3>
+    <div id="modalContent"></div>
+    <div id="msg"></div>
+    <button class="btn" id="modalBtn"></button>
+    <div class="switch-auth" id="switchText"></div>
+  </div>
+</div>
+
+<script>
+  const ADMIN_CONTATO = 'Lorrannyh';
+  const ADMIN_SENHA = 'Chanel.101225';
+  const WHATSAPP_NUM = '5511999999999'; // Troca aqui pro teu número
+
+  let currentUser = localStorage.getItem('premium_current_user');
+  let isAdmin = false;
+  let currentCategory = null;
+  let selectedIcon = '📦';
+  let screenHistory = [];
+
+  const icons = {
+    '📦': 'Caixa', '🛍️': 'Sacola', '👗': 'Vestido', '👠': 'Salto',
+    '💄': 'Maquiagem', '💎': 'Joia', '🎁': 'Presente', '🔥': 'Hot',
+    '⭐': 'Estrela', '💰': 'Dinheiro', '🎮': 'Game', '📱': 'Celular'
+  };
+
+  const modal = document.getElementById('modal');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalContent = document.getElementById('modalContent');
+  const modalBtn = document.getElementById('modalBtn');
+  const switchText = document.getElementById('switchText');
+  const msg = document.getElementById('msg');
+  let mode = '';
+
+  if (currentUser) {
+    isAdmin = currentUser === ADMIN_CONTATO;
+    showScreen('dashboard');
+    showDashboard(currentUser);
+  }
+
+  function showScreen(name) {
+    const current = document.querySelector('.screen.active');
+    if (current && current.id!== name) {
+      screenHistory.push(current.id);
+    }
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(name).classList.add('active');
+  }
+
+  function goBack() {
+    if (screenHistory.length > 0) {
+      const prev = screenHistory.pop();
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(prev).classList.add('active');
+    } else {
+      showScreen('home');
+    }
+  }
+
+  function openModal(type, data) {
+    mode = type;
+    msg.textContent = '';
+    msg.className = '';
+    modal.classList.add('active');
+    updateModal(data);
+  }
+
+  function closeModal() {
+    modal.classList.remove('active');
+    modalContent.innerHTML = '';
+  }
+
+  function updateModal(data) {
+    const actionBtn = modalBtn;
+    actionBtn.style.display = 'block';
+
+    if (mode === 'login' || mode === 'cadastro') {
+      modalTitle.textContent = mode === 'login'? 'Entrar' : 'Criar Conta';
+      actionBtn.textContent = mode === 'login'? 'Entrar' : 'Criar Conta';
+      actionBtn.onclick = handleAuth;
+      switchText.innerHTML = mode === 'login'
+       ? 'Não tem conta? <span onclick="mode=\'cadastro\';updateModal()">Cadastre-se</span>'
+        : 'Já tem conta? <span onclick="mode=\'login\';updateModal()">Entrar</span>';
+      modalContent.innerHTML = `
+        ${mode === 'cadastro'? '<input type="text" class="input" id="nome" placeholder="Nome completo">' : ''}
         <input type="text" class="input" id="contato" placeholder="Contato / Usuário">
         <div class="input-group">
           <input type="password" class="input" id="password" placeholder="Senha">
@@ -64,6 +465,24 @@
   function selectIcon(key) {
     selectedIcon = key;
     renderIconGrid();
+  }
+
+  function togglePassword(id) {
+    const input = document.getElementById(id);
+    input.type = input.type === 'password'? 'text' : 'password';
+  }
+
+  function handleFileUpload(input, previewId) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = document.getElementById(previewId);
+      img.src = e.target.result;
+      img.style.display = 'block';
+      img.dataset.base64 = e.target.result;
+    };
+    reader.readAsDataURL(file);
   }
 
   function handleAuth() {
@@ -170,6 +589,90 @@
       renderProducts();
       renderCategories();
     }, 800);
+  }
+
+  function renderCategories() {
+    const cats = JSON.parse(localStorage.getItem('premium_categories') || '[]');
+    const grid = document.getElementById('catGrid');
+    const empty = document.getElementById('emptyCat');
+    const adminPanel = document.getElementById('adminPanel');
+
+    adminPanel.style.display = isAdmin? 'block' : 'none';
+    document.body.className = isAdmin? 'admin' : '';
+
+    if (cats.length === 0) {
+      grid.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+
+    empty.style.display = 'none';
+    grid.innerHTML = cats.map((cat, i) => `
+      <div class="cat-card" onclick="openCategory(${i})">
+        <button class="delete-btn" onclick="event.stopPropagation();deleteCategory(${i})">×</button>
+        ${cat.image? `<img src="${cat.image}" alt="${cat.name}">` : `<div class="cat-icon">${cat.icon}</div>`}
+        <div class="cat-name">${cat.name}</div>
+        <div class="cat-count">${cat.products?.length || 0} produtos</div>
+      </div>
+    `).join('');
+  }
+
+  function openCategory(index) {
+    currentCategory = index;
+    const cats = JSON.parse(localStorage.getItem('premium_categories') || '[]');
+    document.getElementById('catTitle').textContent = cats[index].name;
+    document.getElementById('adminProdBtn').style.display = isAdmin? 'block' : 'none';
+    showScreen('products');
+    renderProducts();
+  }
+
+  function renderProducts() {
+    const cats = JSON.parse(localStorage.getItem('premium_categories') || '[]');
+    const products = cats[currentCategory]?.products || [];
+    const grid = document.getElementById('prodGrid');
+    const empty = document.getElementById('emptyProd');
+
+    if (products.length === 0) {
+      grid.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+
+    empty.style.display = 'none';
+    grid.innerHTML = products.map((prod, i) => `
+      <div class="product-card" onclick="viewProduct(${i})">
+        <button class="delete-btn" onclick="event.stopPropagation();deleteProduct(${i})">×</button>
+        ${prod.image? `<img src="${prod.image}" class="product-img" alt="${prod.name}">` : `<div class="product-img" style="display:flex;align-items:center;justify-content:center;font-size:48px">📦</div>`}
+        <div class="product-info">
+          <div class="product-name">${prod.name}</div>
+          <div class="product-price">R$ ${prod.price}</div>
+          <div class="product-stock">Estoque: ${prod.stock}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function viewProduct(index) {
+    const cats = JSON.parse(localStorage.getItem('premium_categories') || '[]');
+    const product = cats[currentCategory].products[index];
+    openModal('viewProduct', { product, category: cats[currentCategory].name });
+  }
+
+  function deleteCategory(index) {
+    if (!confirm('Deletar esta categoria?')) return;
+    let cats = JSON.parse(localStorage.getItem('premium_categories') || '[]');
+    cats.splice(index, 1);
+    localStorage.setItem('premium_categories', JSON.stringify(cats));
+    renderCategories();
+  }
+
+  function deleteProduct(index) {
+    if (!confirm('Deletar este produto?')) return;
+    let cats = JSON.parse(localStorage.getItem('premium_categories') || '[]');
+    cats[currentCategory].products.splice(index, 1);
+    localStorage.setItem('premium_categories', JSON.stringify(cats));
+    renderProducts();
+    renderCategories();
   }
 
   function showDashboard(contato) {
