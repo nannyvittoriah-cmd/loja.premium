@@ -70,7 +70,7 @@
     <div id="auth-screen" class="screen hidden">
       <div class="login-box">
         <div class="tabs">
-          <button class="tab" id="tab-login" onclick="setAuthTab('login')">Entrar</button>
+          <button class="tab active" id="tab-login" onclick="setAuthTab('login')">Entrar</button>
           <button class="tab" id="tab-cadastro" onclick="setAuthTab('cadastro')">Cadastrar</button>
         </div>
         <div id="form-login">
@@ -206,8 +206,16 @@ function checkRoute(){
 }
 window.addEventListener('hashchange',checkRoute);
 
-// AUTH
-function showAuth(tipo){showScreen('auth-screen');setAuthTab(tipo)}
+// AUTH CORRIGIDO
+function showAuth(tipo){
+  showScreen('auth-screen');
+  setAuthTab(tipo);
+  // Limpa campos ao abrir
+  document.getElementById('login-user').value='';
+  document.getElementById('login-pass').value='';
+  document.getElementById('cadastro-user').value='';
+  document.getElementById('cadastro-pass').value='';
+}
 function setAuthTab(tipo){
   document.getElementById('tab-login').classList.toggle('active',tipo==='login');
   document.getElementById('tab-cadastro').classList.toggle('active',tipo==='cadastro');
@@ -223,7 +231,7 @@ function fazerCadastro(){
   salvarDB();
   usuarioLogado={user};
   localStorage.setItem('usuarioLogado',JSON.stringify(usuarioLogado));
-  alert('Conta criada! Você já está logado.');
+  alert('Conta criada! Entrando...');
   location.hash='';
   checkRoute();
 }
