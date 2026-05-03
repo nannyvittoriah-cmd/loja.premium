@@ -11,7 +11,7 @@
     background: #0a0404;
     color: #fff;
   }
-.header {
+ .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -21,13 +21,22 @@
     top: 0;
     z-index: 10;
   }
-.logo {
+ .logo {
     font-size: 20px;
     font-weight: 900;
     letter-spacing: 1px;
     color: #ff3333;
   }
-.admin-badge {
+ .back-btn {
+    background: none;
+    border: none;
+    color: #ff3333;
+    font-size: 20px;
+    cursor: pointer;
+    display: none;
+  }
+ .back-btn.active { display: block; }
+ .admin-badge {
     background: rgba(255,51,51,0.2);
     color: #ff3333;
     padding: 4px 10px;
@@ -36,13 +45,13 @@
     font-weight: 700;
     margin-left: 8px;
   }
-.container {
+ .container {
     max-width: 480px;
     margin: 0 auto;
     padding: 20px;
     text-align: center;
   }
-.badge {
+ .badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -55,35 +64,35 @@
     font-weight: 600;
     margin: 20px 0;
   }
-.badge:before {
+ .badge:before {
     content: "";
     width: 6px;
     height: 6px;
     background: #ff0000;
     border-radius: 50%;
   }
-.hero-img {
+ .hero-img {
     width: 100%;
     max-width: 280px;
     margin: 20px auto;
     border-radius: 20px;
     filter: drop-shadow(0 0 40px rgba(255,51,51,0.3));
   }
-.features {
+ .features {
     margin: 24px 0;
   }
-.features li {
+ .features li {
     list-style: none;
     margin-bottom: 10px;
     font-size: 15px;
     color: #d9b8b8;
   }
-.buttons {
+ .buttons {
     display: flex;
     gap: 12px;
     margin: 28px 0;
   }
-.btn {
+ .btn {
     flex: 1;
     padding: 14px;
     border-radius: 12px;
@@ -92,34 +101,34 @@
     cursor: pointer;
     border: none;
   }
-.btn-primary {
+ .btn-primary {
     background: linear-gradient(90deg, #ff3333, #cc0000);
     color: #fff;
   }
-.btn-secondary {
+ .btn-secondary {
     background: rgba(255,255,255,0.05);
     color: #fff;
     border: 1px solid rgba(255,51,51,0.3);
   }
-.stats {
+ .stats {
     display: flex;
     justify-content: center;
     gap: 8px;
     margin: 20px 0 30px;
     flex-wrap: wrap;
   }
-.stat {
+ .stat {
     background: rgba(255,51,51,0.08);
     padding: 8px 12px;
     border-radius: 20px;
     font-size: 12px;
     color: #d9b8b8;
   }
-.stat span {
+ .stat span {
     font-weight: 700;
     color: #ff3333;
   }
-.section-title {
+ .section-title {
     font-size: 22px;
     font-weight: 800;
     margin: 36px 0 20px;
@@ -127,83 +136,153 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-.categories {
+ .categories {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
     margin: 28px 0;
   }
-.category {
+ .category {
     background: transparent;
     border: 1.5px solid rgba(255,51,51,0.3);
     border-radius: 16px;
-    padding: 18px 14px;
+    padding: 0;
     cursor: pointer;
     transition: all 0.2s;
     position: relative;
+    overflow: hidden;
   }
-.category:hover {
+ .category:hover {
     border-color: #ff3333;
-    background: rgba(255,51,51,0.05);
     transform: translateY(-2px);
   }
-.category-icon {
-    width: 28px;
-    height: 28px;
-    margin: 0 auto 8px;
-  }
-.category-icon svg {
+ .category-img {
     width: 100%;
-    height: 100%;
+    height: 100px;
+    object-fit: cover;
+    background: rgba(255,51,51,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+ .category-img svg {
+    width: 40px;
+    height: 40px;
     stroke: #ff3333;
     fill: none;
     stroke-width: 1.8;
   }
-.category h3 {
+ .category-info {
+    padding: 12px;
+  }
+ .category h3 {
     font-size: 13px;
     font-weight: 700;
     margin-bottom: 4px;
   }
-.category p {
+ .category p {
     font-size: 10px;
     color: #998080;
   }
-.delete-cat {
+ .delete-cat {
     position: absolute;
     top: 8px;
     right: 8px;
-    background: rgba(255,0,0,0.3);
+    background: rgba(255,0,0,0.5);
     border: none;
     color: #fff;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 14px;
+    cursor: pointer;
+    display: none;
+    z-index: 2;
+  }
+ .admin-mode.delete-cat { display: block; }
+ .products {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: 28px 0;
+  }
+ .product {
+    background: rgba(255,51,51,0.05);
+    border: 1.5px solid rgba(255,51,51,0.3);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+ .product:hover {
+    border-color: #ff3333;
+    transform: translateY(-2px);
+  }
+ .product-img {
+    width: 100%;
+    height: 90px;
+    object-fit: cover;
+    background: rgba(255,51,51,0.1);
+  }
+ .product-info {
+    padding: 10px;
+  }
+ .product h4 {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+ .product-price {
+    font-size: 14px;
+    font-weight: 800;
+    color: #ff3333;
+    margin-bottom: 4px;
+  }
+ .product-stock {
+    font-size: 10px;
+    color: #998080;
+  }
+ .delete-prod {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: rgba(255,0,0,0.5);
+    border: none;
+    color: #fff;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     font-size: 12px;
     cursor: pointer;
     display: none;
+    z-index: 2;
   }
-.admin-mode.delete-cat { display: block; }
-.empty-cats {
+ .admin-mode.delete-prod { display: block; }
+ .empty-cats {
     grid-column: 1 / -1;
     text-align: center;
     color: #998080;
     font-size: 13px;
     padding: 36px 20px;
   }
-.steps {
+ .steps {
     display: flex;
     flex-direction: column;
     gap: 16px;
     margin-bottom: 40px;
   }
-.step {
+ .step {
     background: rgba(255,51,51,0.05);
     border: 1px solid rgba(255,51,51,0.15);
     border-radius: 16px;
     padding: 18px;
     text-align: left;
   }
-.step-num {
+ .step-num {
     width: 32px;
     height: 32px;
     background: linear-gradient(135deg, #ff3333, #cc0000);
@@ -215,9 +294,9 @@
     margin-bottom: 10px;
     font-size: 14px;
   }
-.step h3 { font-size: 15px; margin-bottom: 6px; }
-.step p { font-size: 12px; color: #998080; line-height: 1.5; }
-.modal {
+ .step h3 { font-size: 15px; margin-bottom: 6px; }
+ .step p { font-size: 12px; color: #998080; line-height: 1.5; }
+ .modal {
     display: none;
     position: fixed;
     inset: 0;
@@ -227,9 +306,10 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
+    overflow-y: auto;
   }
-.modal.active { display: flex; }
-.modal-box {
+ .modal.active { display: flex; }
+ .modal-box {
     background: #140a0a;
     border: 1px solid rgba(255,51,51,0.2);
     border-radius: 18px;
@@ -237,8 +317,10 @@
     width: 100%;
     max-width: 340px;
     position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
   }
-.close {
+ .close {
     position: absolute;
     top: 14px;
     right: 14px;
@@ -248,27 +330,31 @@
     font-size: 22px;
     cursor: pointer;
   }
-.modal-title {
+ .modal-title {
     font-size: 20px;
     font-weight: 800;
     margin-bottom: 16px;
     text-align: center;
   }
-.input-group {
+ .input-group {
     position: relative;
     margin-bottom: 10px;
   }
-.input {
+ .input {
     width: 100%;
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(255,51,51,0.2);
     border-radius: 10px;
-    padding: 12px 38px 12px 12px;
+    padding: 12px;
     color: #fff;
     font-size: 14px;
   }
-.input:focus { outline: 2px solid #ff3333; }
-.toggle-pass {
+ .input:focus { outline: 2px solid #ff3333; }
+ .textarea {
+    min-height: 80px;
+    resize: vertical;
+  }
+ .toggle-pass {
     position: absolute;
     right: 10px;
     top: 50%;
@@ -279,7 +365,36 @@
     cursor: pointer;
     font-size: 16px;
   }
-.modal-btn {
+ .file-input {
+    display: none;
+  }
+ .file-label {
+    display: block;
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px dashed rgba(255,51,51,0.3);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 13px;
+    color: #998080;
+    margin-bottom: 10px;
+  }
+ .file-label:hover {
+    border-color: #ff3333;
+    background: rgba(255,51,51,0.05);
+  }
+ .preview-img {
+    width: 100%;
+    max-height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: none;
+  }
+ .preview-img.show { display: block; }
+ .modal-btn {
     width: 100%;
     padding: 12px;
     border-radius: 10px;
@@ -291,51 +406,52 @@
     margin-top: 6px;
     cursor: pointer;
   }
-.switch {
+ .switch {
     text-align: center;
     margin-top: 14px;
     font-size: 13px;
     color: #998080;
   }
-.switch span { color: #ff3333; cursor: pointer; font-weight: 600; }
-.msg {
+ .switch span { color: #ff3333; cursor: pointer; font-weight: 600; }
+ .msg {
     text-align: center;
     margin-top: 10px;
     font-size: 13px;
     min-height: 18px;
   }
-.msg.error { color: #ff4757; }
-.msg.success { color: #00ff88; }
-.dashboard {
+ .msg.error { color: #ff4757; }
+ .msg.success { color: #00ff88; }
+ .screen {
     display: none;
     padding: 20px;
   }
-.dashboard-header {
+ .screen.active { display: block; }
+ .screen-header {
     text-align: center;
     margin-bottom: 24px;
   }
-.dashboard-header h2 {
+ .screen-header h2 {
     font-size: 24px;
     margin-bottom: 8px;
   }
-.dashboard-header p {
+ .screen-header p {
     color: #998080;
     font-size: 14px;
   }
-.hidden { display: none!important; }
-.admin-panel {
+ .hidden { display: none!important; }
+ .admin-panel {
     background: rgba(255,51,51,0.1);
     border: 1px solid rgba(255,51,51,0.3);
     border-radius: 16px;
     padding: 14px;
     margin-bottom: 20px;
   }
-.admin-panel h3 {
+ .admin-panel h3 {
     font-size: 15px;
     margin-bottom: 10px;
     color: #ff3333;
   }
-.select-icon {
+ .select-icon {
     display: grid;
     grid-template-columns: repeat(4,1fr);
     gap: 8px;
@@ -343,98 +459,153 @@
     max-height: 140px;
     overflow-y: auto;
   }
-.icon-opt {
+ .icon-opt {
     border: 1px solid rgba(255,51,51,0.2);
     border-radius: 10px;
     padding: 10px;
     cursor: pointer;
     background: transparent;
   }
-.icon-opt.active {
+ .icon-opt.active {
     border-color: #ff3333;
     background: rgba(255,51,51,0.1);
   }
-.icon-opt svg {
+ .icon-opt svg {
     width: 20px;
     height: 20px;
     stroke: #ff3333;
     fill: none;
     stroke-width: 1.8;
   }
-.logout-btn {
+ .logout-btn {
     max-width: 200px;
     margin: 30px auto 0;
+  }
+ .product-detail {
+    text-align: left;
+  }
+ .product-detail-img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 16px;
+  }
+ .product-detail h3 {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+ .product-detail-price {
+    font-size: 26px;
+    font-weight: 900;
+    color: #ff3333;
+    margin-bottom: 8px;
+  }
+ .product-detail-stock {
+    font-size: 13px;
+    color: #998080;
+    margin-bottom: 16px;
+  }
+ .product-detail-desc {
+    font-size: 14px;
+    color: #d9b8b8;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+ .whatsapp-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    background: #25D366;
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
   }
 </style>
 </head>
 <body>
   <div class="header">
+    <button class="back-btn" id="backBtn" onclick="goBack()">←</button>
     <div class="logo">PREMIUM STORE <span id="adminBadge"></span></div>
     <div id="userArea"></div>
   </div>
 
-  <!-- TELA 1: HOME LIMPA -->
-  <div id="home" class="container">
-    <div class="badge">Sitesma online & ativo</div>
-
-    <img src="https://i.postimg.cc/RhdX01FL/IMG-4105.jpg" alt="App" class="hero-img">
-
-    <ul class="features">
-      <li>✓ engajamento e segurança</li>
-      <li>✓ Compras instantâneas e reais</li>
-      <li>✓ 100% seguro - sem precisar de senha</li>
-    </ul>
-
-    <div class="buttons">
-      <button class="btn btn-primary" onclick="openModal('cadastro')">CADASTRAR GRÁTIS</button>
-      <button class="btn btn-secondary" onclick="openModal('login')">ENTRAR</button>
-    </div>
-
-    <div class="stats">
-      <div class="stat"><span>2.3k+</span> usuários</div>
-      <div class="stat"><span>100%</span> seguro</div>
-      <div class="stat"><span>envio</span> instantaneamente</div>
-    </div>
-
-    <h2 class="section-title">Como Funciona</h2>
-
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <h3>Cadastre-se</h3>
-        <p>Crie sua conta com contato, nome e senha.</p>
+  <div id="home" class="screen active">
+    <div class="container">
+      <div class="badge">Site online & ativo</div>
+      <img src="https://i.postimg.cc/RhdX01FL/IMG-4105.jpg" alt="App" class="hero-img">
+      <ul class="features">
+        <li>✓ Engajamento e segurança</li>
+        <li>✓ Compras instantâneas e reais</li>
+        <li>✓ 100% seguro sem precisar de senha</li>
+      </ul>
+      <div class="buttons">
+        <button class="btn btn-primary" onclick="openModal('cadastro')">CADASTRAR GRÁTIS</button>
+        <button class="btn btn-secondary" onclick="openModal('login')">ENTRAR</button>
       </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <h3>Faça Login</h3>
-        <p>Entre com seu contato e senha.</p>
+      <div class="stats">
+        <div class="stat"><span>2.3k+</span> usuários</div>
+        <div class="stat"><span>100%</span> seguro</div>
+        <div class="stat"><span>envio</span> instantâneo</div>
       </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <h3>Acesse as Categorias</h3>
-        <p>Escolha o serviço e receba na hora após pagamento.</p>
+      <h2 class="section-title">Como Funciona</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Cadastre-se</h3>
+          <p>Crie sua conta com contato, nome e senha.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Faça Login</h3>
+          <p>Entre com seu contato e senha.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Compre Agora</h3>
+          <p>Escolha o produto e receba na hora via WhatsApp.</p>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- TELA 2: DASHBOARD COM CATEGORIAS -->
-  <div id="dashboard" class="dashboard">
-    <div class="dashboard-header">
-      <h2>Olá, <span id="userName"></span>!</h2>
-      <p>Bem-vindo à sua área Premium</p>
+  <div id="dashboard" class="screen">
+    <div class="container">
+      <div class="screen-header">
+        <h2>Olá, <span id="userName"></span>!</h2>
+        <p>Escolha uma categoria</p>
+      </div>
+      <div id="adminPanel" class="admin-panel hidden">
+        <h3>Painel Admin</h3>
+        <button class="btn btn-primary" onclick="openModal('addCat')" style="width:100%;">+ Adicionar Categoria</button>
+      </div>
+      <div class="categories" id="categoriesContainer">
+        <div class="empty-cats">Nenhuma categoria ainda.<br>Aguarde o admin adicionar categorias.</div>
+      </div>
+      <button class="btn btn-secondary logout-btn" onclick="logout()">Sair da conta</button>
     </div>
+  </div>
 
-    <div id="adminPanel" class="admin-panel hidden">
-      <h3>Painel Admin - Protegido</h3>
-      <button class="btn btn-primary" onclick="openModal('addCat')" style="width:100%;">+ Adicionar Categoria</button>
+  <div id="productsScreen" class="screen">
+    <div class="container">
+      <div class="screen-header">
+        <h2 id="categoryTitle">Categoria</h2>
+        <p>Escolha um produto</p>
+      </div>
+      <div id="adminProductPanel" class="admin-panel hidden">
+        <h3>Painel Admin</h3>
+        <button class="btn btn-primary" onclick="openModal('addProduct')" style="width:100%;">+ Adicionar Produto</button>
+      </div>
+      <div class="products" id="productsContainer">
+        <div class="empty-cats">Nenhum produto ainda.</div>
+      </div>
     </div>
-
-    <h2 class="section-title">Categorias</h2>
-    <div class="categories" id="categoriesContainer">
-      <div class="empty-cats">Nenhuma categoria ainda.<br>Aguarde o admin adicionar categorias.</div>
-    </div>
-
-    <button class="btn btn-secondary logout-btn" onclick="logout()">Sair da conta</button>
   </div>
 
   <div id="modal" class="modal">
@@ -451,22 +622,27 @@
 <script>
   const ADMIN_CONTATO = 'Lorrannyh';
   const ADMIN_PASS = 'Chanel.101225';
+  const WHATSAPP_NUM = '5511999999999';
+
   let mode = 'login';
   let isAdmin = false;
   let selectedIcon = 'heart';
+  let currentCategory = null;
+  let currentScreen = 'home';
+  let screenHistory = [];
 
   const icons = {
     heart: '<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 0 0 0 0-7.78z"></path></svg>',
     users: '<svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
-    eye: '<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>',
+    eye: '<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>',
     message: '<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>',
     diamond: '<svg viewBox="0 0 24 24"><path d="M6 3h12l4 6-10 12L2 9z"></path></svg>',
     zap: '<svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
     cart: '<svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>',
     star: '<svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>',
-    fire: '<svg viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6.5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>',
+    fire: '<svg viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 0 0 0 2.5z"></path></svg>',
     check: '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>',
-    config: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0.33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 0 0 0-1.82-.33 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 0 0 0.33-1.82 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 0 0 0 4.6 9a1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 0 0 1-2 2h-.09a1.65 0 0 0-1.51 1z"></path></svg>',
+    config: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0.33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 0 0 0.33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 0 0 0-1.51 1z"></path></svg>',
     shield: '<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>'
   };
 
@@ -476,8 +652,8 @@
   const switchText = document.getElementById('switchText');
   const msg = document.getElementById('msg');
   const modalContent = document.getElementById('modalContent');
+  const backBtn = document.getElementById('backBtn');
 
-  // FORÇA RESET DO ADMIN SE TIVER BUGADO
   function initAdmin() {
     let users = JSON.parse(localStorage.getItem('premium_users') || '{}');
     if (!users[ADMIN_CONTATO] || users[ADMIN_CONTATO].senha!== ADMIN_PASS) {
@@ -491,7 +667,26 @@
     const loggedUser = localStorage.getItem('premium_current_user');
     if (loggedUser) {
       isAdmin = loggedUser === ADMIN_CONTATO;
+      showScreen('dashboard');
       showDashboard(loggedUser);
+    }
+  }
+
+  function showScreen(screen) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screen).classList.add('active');
+    currentScreen = screen;
+    if (screenHistory[screenHistory.length - 1]!== screen) {
+      screenHistory.push(screen);
+    }
+    backBtn.classList.toggle('active', screenHistory.length > 1 && screen!== 'home');
+  }
+
+  function goBack() {
+    if (screenHistory.length > 1) {
+      screenHistory.pop();
+      const prevScreen = screenHistory[screenHistory.length - 1];
+      showScreen(prevScreen);
     }
   }
 
@@ -516,31 +711,82 @@
     }
 
     container.innerHTML = cats.map((cat, i) => `
-      <div class="category" onclick="selectCategory('${cat.name}')">
+      <div class="category" onclick="openCategory(${i})">
         <button class="delete-cat" onclick="event.stopPropagation(); deleteCategory(${i})">×</button>
-        <div class="category-icon">${icons[cat.icon] || icons.heart}</div>
-        <h3>${cat.name}</h3>
-        <p>${cat.price}</p>
+        ${cat.image? `<img src="${cat.image}" class="category-img" alt="${cat.name}">` : `<div class="category-img">${icons[cat.icon] || icons.heart}</div>`}
+        <div class="category-info">
+          <h3>${cat.name}</h3>
+          <p>${cat.products? cat.products.length : 0} produtos</p>
+        </div>
       </div>
     `).join('');
   }
 
-  function selectCategory(cat) {
-    alert('Categoria: ' + cat + '\nPágina de pacotes em construção');
+  function openCategory(index) {
+    const cats = JSON.parse(localStorage.getItem('premium_categories') || '[]');
+    currentCategory = index;
+    document.getElementById('categoryTitle').textContent = cats[index].name;
+    showScreen('productsScreen');
+    renderProducts();
+  }
+
+  function renderProducts() {
+    const cats = JSON.parse(localStorage.getItem('premium_categories') || '[]');
+    const products = cats[currentCategory]?.products || [];
+    const container = document.getElementById('productsContainer');
+    const adminPanel = document.getElementById('adminProductPanel');
+
+    if (isAdmin) {
+      adminPanel.classList.remove('hidden');
+    } else {
+      adminPanel.classList.add('hidden');
+    }
+
+    if (products.length === 0) {
+      container.innerHTML = '<div class="empty-cats">Nenhum produto ainda.<br>' + (isAdmin? 'Use o painel acima para adicionar.' : 'Aguarde o admin adicionar produtos.') + '</div>';
+      return;
+    }
+
+    container.innerHTML = products.map((prod, i) => `
+      <div class="product" onclick="openProduct(${i})">
+        <button class="delete-prod" onclick="event.stopPropagation(); deleteProduct(${i})">×</button>
+        ${prod.image? `<img src="${prod.image}" class="product-img" alt="${prod.name}">` : `<div class="product-img" style="display:flex;align-items:center;justify-content:center;"><svg width="40" height="40" viewBox="0 0 24 24" stroke="#ff3333" fill="none" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></div>`}
+        <div class="product-info">
+          <h4>${prod.name}</h4>
+          <div class="product-price">R$ ${prod.price}</div>
+          <div class="product-stock">Estoque: ${prod.stock}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function openProduct(index) {
+    const cats = JSON.parse(localStorage.getItem('premium_categories') || '[]');
+    const prod = cats[currentCategory].products[index];
+    openModal('viewProduct', {product: prod, category: cats[currentCategory].name});
   }
 
   function deleteCategory(index) {
     if (!isAdmin) return;
-    if (!confirm('Deletar esta categoria?')) return;
+    if (!confirm('Deletar esta categoria e todos os produtos?')) return;
     let cats = JSON.parse(localStorage.getItem('premium_categories') || '[]');
     cats.splice(index, 1);
     localStorage.setItem('premium_categories', JSON.stringify(cats));
     renderCategories();
   }
 
-  function openModal(type) {
+  function deleteProduct(index) {
+    if (!isAdmin) return;
+    if (!confirm('Deletar este produto?')) return;
+    let cats = JSON.parse(localStorage.getItem('premium_categories') || '[]');
+    cats[currentCategory].products.splice(index, 1);
+    localStorage.setItem('premium_categories', JSON.stringify(cats));
+    renderProducts();
+  }
+
+  function openModal(type, data = null) {
     mode = type;
-    updateModal();
+    updateModal(data);
     modal.classList.add('active');
     msg.textContent = '';
   }
@@ -560,166 +806,23 @@
     input.type = input.type === 'password'? 'text' : 'password';
   }
 
-  function updateModal() {
+  function handleFileUpload(input, previewId) {
+    const file = input.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const preview = document.getElementById(previewId);
+        preview.src = e.target.result;
+        preview.classList.add('show');
+        preview.dataset.base64 = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function updateModal(data = null) {
     if (mode === 'login') {
       modalTitle.textContent = 'Entrar';
       actionBtn.textContent = 'Entrar';
       actionBtn.onclick = handleAuth;
       switchText.innerHTML = 'Não tem conta? <span onclick="switchMode()">Cadastre-se</span>';
-      modalContent.innerHTML = `
-        <input type="text" class="input" id="contato" placeholder="Contato / Usuário">
-        <div class="input-group">
-          <input type="password" class="input" id="password" placeholder="Senha">
-          <button class="toggle-pass" onclick="togglePassword('password')">👁️</button>
-        </div>
-      `;
-    } else if (mode === 'cadastro') {
-      modalTitle.textContent = 'Criar conta';
-      actionBtn.textContent = 'Cadastrar';
-      actionBtn.onclick = handleAuth;
-      switchText.innerHTML = 'Já tem conta? <span onclick="switchMode()">Entrar</span>';
-      modalContent.innerHTML = `
-        <input type="text" class="input" id="contato" placeholder="Contato / WhatsApp">
-        <input type="text" class="input" id="nome" placeholder="Nome completo">
-        <div class="input-group">
-          <input type="password" class="input" id="password" placeholder="Senha">
-          <button class="toggle-pass" onclick="togglePassword('password')">👁️</button>
-        </div>
-      `;
-    } else if (mode === 'addCat') {
-      modalTitle.textContent = 'Nova Categoria';
-      actionBtn.textContent = 'Adicionar';
-      actionBtn.onclick = addCategory;
-      switchText.innerHTML = '';
-      modalContent.innerHTML = `
-        <div class="select-icon">
-          ${Object.keys(icons).map(k => `<button class="icon-opt ${k===selectedIcon?'active':''}" onclick="selectIcon('${k}')">${icons[k]}</button>`).join('')}
-        </div>
-        <input type="text" class="input" id="catName" placeholder="Nome da categoria">
-        <input type="text" class="input" id="catPrice" placeholder="Preço ex: A partir de R$1,99">
-      `;
-    }
-  }
-
-  function selectIcon(icon) {
-    selectedIcon = icon;
-    document.querySelectorAll('.icon-opt').forEach(el => el.classList.remove('active'));
-    event.target.closest('.icon-opt').classList.add('active');
-  }
-
-  function addCategory() {
-    if (!isAdmin) {
-      showMsg('Acesso negado', 'error');
-      return;
-    }
-    const name = document.getElementById('catName').value.trim();
-    const price = document.getElementById('catPrice').value.trim() || 'Consulte';
-
-    if (!name) {
-      showMsg('Nome da categoria é obrigatório', 'error');
-      return;
-    }
-
-    let cats = JSON.parse(localStorage.getItem('premium_categories') || '[]');
-    cats.push({ icon: selectedIcon, name, price });
-    localStorage.setItem('premium_categories', JSON.stringify(cats));
-    showMsg('Categoria adicionada!', 'success');
-    setTimeout(() => {
-      closeModal();
-      renderCategories();
-    }, 800);
-  }
-
-  function handleAuth() {
-    const contato = document.getElementById('contato').value.trim();
-
-    if (!contato) {
-      showMsg('Preencha o contato', 'error');
-      return;
-    }
-
-    let users = JSON.parse(localStorage.getItem('premium_users') || '{}');
-
-    if (mode === 'cadastro') {
-      const nome = document.getElementById('nome').value.trim();
-      const pass = document.getElementById('password').value.trim();
-
-      if (!nome ||!pass) {
-        showMsg('Preencha todos os campos', 'error');
-        return;
-      }
-
-      if (users[contato]) {
-        showMsg('Contato já cadastrado', 'error');
-        return;
-      }
-
-      users[contato] = { nome: nome, senha: pass };
-      localStorage.setItem('premium_users', JSON.stringify(users));
-      localStorage.setItem('premium_current_user', contato);
-      isAdmin = contato === ADMIN_CONTATO;
-      showMsg('Conta criada com sucesso!', 'success');
-      setTimeout(() => {
-        closeModal();
-        showDashboard(contato);
-      }, 800);
-
-    } else {
-      const pass = document.getElementById('password').value.trim();
-
-      if (!pass) {
-        showMsg('Preencha a senha', 'error');
-        return;
-      }
-
-      // RESET ADMIN SE TIVER BUGADO
-      if (contato === ADMIN_CONTATO && (!users[contato] || users[contato].senha!== ADMIN_PASS)) {
-        users[contato] = { nome: 'Lorrannyh Admin', senha: ADMIN_PASS };
-        localStorage.setItem('premium_users', JSON.stringify(users));
-      }
-
-      if (!users[contato] || users[contato].senha!== pass) {
-        showMsg('Contato ou senha incorretos', 'error');
-        return;
-      }
-
-      localStorage.setItem('premium_current_user', contato);
-      isAdmin = contato === ADMIN_CONTATO;
-      showMsg('Login realizado!', 'success');
-      setTimeout(() => {
-        closeModal();
-        showDashboard(contato);
-      }, 800);
-    }
-  }
-
-  function showMsg(text, type) {
-    msg.textContent = text;
-    msg.className = 'msg ' + type;
-  }
-
-  function showDashboard(contato) {
-    let users = JSON.parse(localStorage.getItem('premium_users') || '{}');
-    document.getElementById('home').classList.add('hidden');
-    document.getElementById('dashboard').style.display = 'block';
-    document.getElementById('userName').textContent = users[contato]?.nome || contato;
-    document.getElementById('userArea').innerHTML = `<span style="font-size:14px; color:#998080;">Olá, ${users[contato]?.nome || contato}</span>`;
-    renderCategories();
-  }
-
-  function logout() {
-    localStorage.removeItem('premium_current_user');
-    isAdmin = false;
-    document.getElementById('home').classList.remove('hidden');
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('userArea').innerHTML = '';
-    document.getElementById('adminBadge').innerHTML = '';
-    document.body.classList.remove('admin-mode');
-  }
-
-  modal.onclick = (e) => {
-    if (e.target === modal) closeModal();
-  }
-</script>
-</body>
-</html>
