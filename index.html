@@ -1,385 +1,217 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHANEL STORE</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #0a0e1a; font-family: 'Arial', sans-serif; color: #fff; min-height: 100vh; }
-    .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: rgba(10, 14, 26, 0.8); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; }
-    .logo { font-size: 18px; font-weight: 800; color: #ff0050; letter-spacing: 2px; }
-        #userLogado { font-size: 12px; color: #ff66a3; cursor: pointer; }
-    .header-btns { display: flex; gap: 8px; align-items: center; }
-    .admin-btn { background: rgba(255,0,80,0.2); border: 1px solid #ff0050; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 11px; color: #fff; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 25px 15px 40px; text-align: center; }
-    .badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255, 0, 80, 0.1); border: 1px solid #ff0050; padding: 6px 14px; border-radius: 20px; font-size: 12px; margin-bottom: 20px; }
-    .badge-dot { width: 6px; height: 6px; background: #ff0050; border-radius: 50%; }
-        h1 { font-size: 28px; font-weight: 800; margin-bottom: 10px; line-height: 1.2; }
-    .highlight { background: linear-gradient(90deg, #ff0050, #ff66a3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .subtitle { color: #8b92a8; font-size: 13px; margin-bottom: 25px; max-width: 600px; margin-left: auto; margin-right: auto; }
-    .buttons { display: flex; gap: 10px; justify-content: center; margin-bottom: 25px; flex-wrap: wrap; }
-    .btn { padding: 12px 24px; border-radius: 12px; font-weight: 600; font-size: 14px; cursor: pointer; border: none; transition: 0.3s; }
-    .btn-primary { background: linear-gradient(90deg, #ff0050, #ff3385); color: #fff; }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255, 0, 80, 0.4); }
-    .btn-secondary { background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 0, 80, 0.3); }
-    .btn-danger { background: rgba(255, 0, 0, 0.2); border: 1px solid #ff0000; color: #ff6666; padding: 6px 10px; font-size: 11px; }
-    .stats { display: flex; gap: 8px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap; }
-    .stat { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 0, 80, 0.2); padding: 6px 12px; border-radius: 10px; font-size: 11px; display: flex; align-items: center; gap: 5px; }
-
-    .como-funciona { margin-top: 20px; }
-    .como-funciona h2 { font-size: 22px; font-weight: 800; margin-bottom: 30px; background: linear-gradient(90deg, #ff0050, #ff66a3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .passos { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-    .passo { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 0, 80, 0.2); border-radius: 16px; padding: 20px 12px; width: 100%; max-width: 280px; text-align: center; position: relative; }
-    .passo-numero { width: 40px; height: 40px; background: linear-gradient(135deg, #ff0050, #ff3385); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; margin: -40px auto 12px; box-shadow: 0 0 30px rgba(255, 0, 80, 0.5); }
-    .passo h3 { font-size: 16px; margin-bottom: 8px; }
-    .passo p { color: #8b92a8; font-size: 12px; line-height: 1.5; }
-
-    .dashboard { display: none; margin-top: 20px; }
-    .titulo-secao { font-size: 20px; font-weight: 800; margin-bottom: 20px; color: #ff0050; text-align: left; }
-    .jogos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; }
-    .jogo-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 0, 80, 0.2); border-radius: 12px; padding: 8px; cursor: pointer; transition: 0.3s; position: relative; }
-    .jogo-card:hover { transform: translateY(-3px); border-color: #ff0050; box-shadow: 0 5px 20px rgba(255, 0, 80, 0.3); }
-    .jogo-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; margin-bottom: 6px; background: rgba(255,0,80,0.1); }
-    .jogo-nome { font-size: 11px; color: #fff; text-align: center; line-height: 1.2; font-weight: 600; }
-    .jogo-categoria { font-size: 9px; color: #8b92a8; text-align: center; margin-top: 3px; }
-
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; z-index: 1000; overflow-y: auto; }
-    .modal-content { background: #1a1f2e; padding: 25px; border-radius: 16px; width: 90%; max-width: 400px; border: 1px solid rgba(255, 0, 80, 0.3); margin: 20px; max-height: 90vh; overflow-y: auto; }
-    .modal-content h2 { margin-bottom: 18px; color: #ff0050; font-size: 20px; }
-    .modal-content input { width: 100%; padding: 10px; margin: 6px 0; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,0,80,0.2); border-radius: 8px; color: #fff; font-size: 14px; }
-    .modal-content button { width: 100%; margin-top: 14px; }
-    .close { float: right; font-size: 24px; cursor: pointer; color: #8b92a8; }
-    .btn-sair { background: rgba(255,0,80,0.2); border: 1px solid #ff0050; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 12px; margin-top: 20px; }
-
-    .admin-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,0,80,0.2); padding: 12px; border-radius: 8px; margin-bottom: 10px; text-align: left; }
-    .admin-item-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    .admin-item b { color: #ff0050; font-size: 14px; }
-    .admin-item span { font-size: 12px; color: #8b92a8; }
-    .admin-item-actions { display: flex; gap: 6px; }
-
-        @media (max-width: 768px) {
-            h1 { font-size: 24px; }
-        .subtitle { font-size: 12px; }
-        .como-funciona h2 { font-size: 20px; }
-        .buttons { flex-direction: column; align-items: center; }
-        .btn { width: 100%; max-width: 280px; }
-        .passos { flex-direction: column; align-items: center; }
-        .passo { max-width: 280px; }
-        .jogos-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PREMIUM STORE</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+  body{
+    background:#0a0e27;color:#fff;min-height:100vh;
+    background-image:radial-gradient(circle at 20% 20%,#1a2b6d 0%,transparent 50%),
+                     radial-gradient(circle at 80% 80%,#0f1b4d 0%,transparent 50%)
+  }
+ .container{max-width:1100px;margin:0 auto;padding:40px 20px;text-align:center}
+ .hidden{display:none!important}
+ .badge{display:inline-block;background:rgba(0,255,136,.15);border:1px solid #00ff88;color:#00ff88;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:20px;box-shadow:0 0 15px rgba(0,255,136,.3)}
+  h1{font-size:48px;margin:10px 0;text-shadow:0 0 20px rgba(0,174,255,.6)}
+  h1 span{color:#00aeff}
+ .sub{color:#a8b2d1;font-size:18px;margin-bottom:30px}
+ .btns{display:flex;gap:15px;justify-content:center;margin:30px 0;flex-wrap:wrap}
+ .btn{padding:14px 32px;border-radius:8px;font-weight:700;text-decoration:none;transition:.3s;cursor:pointer;border:none;font-size:16px}
+ .btn-primary{background:linear-gradient(135deg,#00aeff,#0080ff);color:#fff;box-shadow:0 0 25px rgba(0,174,255,.5)}
+ .btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 35px rgba(0,174,255,.8)}
+ .btn-secondary{background:rgba(255,255,255,.05);border:1px solid rgba(0,174,255,.5);color:#00aeff}
+ .btn-secondary:hover{background:rgba(0,174,255,.1)}
+ .btn-danger{background:rgba(255,0,0,.1);border:1px solid #ff4444;color:#ff4444}
+ .stats{display:flex;gap:20px;justify-content:center;margin:40px 0;flex-wrap:wrap}
+ .stat{background:rgba(255,255,255,.03);border:1px solid rgba(0,174,255,.2);padding:12px 24px;border-radius:8px;font-size:14px}
+ .stat strong{color:#00aeff;display:block;font-size:18px}
+ .como-funciona{margin-top:80px}
+ .como-funciona h2{font-size:36px;margin-bottom:40px;color:#00aeff}
+ .steps{display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+ .step{background:rgba(255,255,255,.03);border:1px solid rgba(0,174,255,.2);border-radius:12px;padding:30px 20px;width:300px;position:relative}
+ .step-num{position:absolute;top:-15px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#00aeff,#0080ff);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;box-shadow:0 0 20px rgba(0,174,255,.6)}
+ .step h3{margin:15px 0 10px;font-size:20px}
+ .step p{color:#a8b2d1;font-size:14px;line-height:1.5}
+ .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;z-index:1000}
+ .modal-content{background:#0f1b4d;border:1px solid rgba(0,174,255,.3);padding:30px;border-radius:12px;width:90%;max-width:400px;box-shadow:0 0 40px rgba(0,174,255,.3)}
+ .modal-content h3{margin-bottom:20px;color:#00aeff}
+ .input-group{margin-bottom:15px;text-align:left}
+ .input-group label{display:block;margin-bottom:5px;color:#a8b2d1;font-size:14px}
+ .input-group input{width:100%;padding:12px;background:rgba(255,255,255,.05);border:1px solid rgba(0,174,255,.3);border-radius:6px;color:#fff;font-size:16px}
+ .input-group input:focus{outline:none;border-color:#00aeff;box-shadow:0 0 10px rgba(0,174,255,.3)}
+ .error{color:#ff4444;font-size:14px;margin-top:10px}
+ .success{color:#00ff88;font-size:14px;margin-top:10px}
+ .user-bar{background:rgba(255,255,255,.03);border:1px solid rgba(0,174,255,.2);padding:15px;border-radius:8px;margin-bottom:30px;display:flex;justify-content:space-between;align-items:center}
+  @media(max-width:768px){h1{font-size:32px}.como-funciona h2{font-size:28px}}
+</style>
 </head>
 <body>
-    <header class="header">
-        <div class="logo">CHANEL STORE</div>
-        <div class="header-btns">
-            <span id="userLogado" onclick="mostrarDashboard()"></span>
-            <button class="admin-btn" onclick="abrirAdmin()">Admin</button>
+  <div class="container">
+    <!-- TELA PRINCIPAL -->
+    <div id="landing">
+      <div class="badge">SISTEMA ONLINE & ATIVO</div>
+      <h1><span>PREMIUM</span> STORE</h1>
+      <h1>Engajamento e segurança</h1>
+      <p class="sub">Compras instantâneas e reais. 100% seguro - sem precisar de senha</p>
+      
+      <div class="btns">
+        <button class="btn btn-primary" onclick="abrirModal('cadastro')">CADASTRAR</button>
+        <button class="btn btn-secondary" onclick="abrirModal('login')">ENTRAR</button>
+      </div>
+      
+      <div class="stats">
+        <div class="stat"><strong>2.3k+</strong> usuários</div>
+        <div class="stat"><strong>100%</strong> seguro</div>
+        <div class="stat"><strong>envio</strong> instantaneamente</div>
+      </div>
+      
+      <div class="como-funciona">
+        <h2>Como Funciona</h2>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <h3>Cadastre-se</h3>
+            <p>Crie sua conta com nome de usuário e senha.</p>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <h3>Entre no Grupo</h3>
+            <p>Participe do nosso grupo exclusivo no WhatsApp.</p>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <h3>Acesse o Dashboard</h3>
+            <p>Faça login e acesse sua área de usuário.</p>
+          </div>
         </div>
-    </header>
-
-    <div class="container" id="home">
-        <div class="badge"><div class="badge-dot"></div>SISTEMA ONLINE</div>
-        <h1>Compras <span class="highlight">manualmente</span><br>e com segurança</h1>
-        <p class="subtitle">100% seguro - sem precisar de nem um acesso</p>
-
-        <div class="buttons">
-            <button class="btn btn-primary" onclick="abrirModal('cadastro')">CADASTRAR</button>
-            <button class="btn btn-secondary" onclick="abrirModal('login')">ENTRAR</button>
-        </div>
-
-        <div class="stats">
-            <div class="stat">👥 <span id="totalUsers">1.4k+</span> Usuários</div>
-            <div class="stat">❤️ 100% seguro</div>
-            <div class="stat">⚡ Envio instantâneos</div>
-        </div>
-
-        <div class="como-funciona">
-            <h2>Como Funciona</h2>
-            <div class="passos">
-                <div class="passo">
-                    <div class="passo-numero">1</div>
-                    <h3>Cadastre-se</h3>
-                    <p>Crie sua conta com nome de usuário e senha.</p>
-                </div>
-                <div class="passo">
-                    <div class="passo-numero">2</div>
-                    <h3>Entre no Grupo</h3>
-                    <p>Participe do nosso grupo exclusivo no WhatsApp.</p>
-                </div>
-                <div class="passo">
-                    <div class="passo-numero">3</div>
-                    <h3>Escolha a Categoria</h3>
-                    <p>Faça login e compre direto no WhatsApp.</p>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
 
-    <div class="container dashboard" id="dashboard">
-        <h2 class="titulo-secao">Categorias</h2>
-        <div class="jogos-grid" id="jogosGrid"></div>
-        <button class="btn-sair" onclick="sair()">Sair da Conta</button>
+    <!-- DASHBOARD LOGADO -->
+    <div id="dashboard" class="hidden">
+      <div class="user-bar">
+        <div>Logado como: <strong id="nomeUsuario"></strong></div>
+        <button class="btn btn-danger" onclick="logout()">SAIR</button>
+      </div>
+      <h1>Bem-vindo à <span>PREMIUM</span> STORE</h1>
+      <p class="sub">Seu painel está pronto. Em breve seus serviços aqui.</p>
+      <div class="stats">
+        <div class="stat"><strong>0</strong> Pedidos ativos</div>
+        <div class="stat"><strong>R$ 0,00</strong> Saldo</div>
+        <div class="stat"><strong>Bronze</strong> Nível</div>
+      </div>
     </div>
+  </div>
 
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="fecharModal()">&times;</span>
-            <h2 id="modalTitulo">CADASTRAR</h2>
-            <input type="text" id="nome" placeholder="Nome completo">
-            <input type="tel" id="telefone" placeholder="Telefone / WhatsApp">
-            <input type="password" id="senha" placeholder="Criar senha">
-            <button class="btn btn-primary" onclick="salvar()">Confirmar</button>
-        </div>
+  <!-- MODAL LOGIN/CADASTRO -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <h3 id="modalTitle">Entrar</h3>
+      <div class="input-group">
+        <label>Usuário</label>
+        <input type="text" id="inputUser" placeholder="Digite seu usuário">
+      </div>
+      <div class="input-group">
+        <label>Senha</label>
+        <input type="password" id="inputPass" placeholder="Digite sua senha">
+      </div>
+      <div id="msg" class="error"></div>
+      <div class="btns">
+        <button class="btn btn-primary" id="btnAction">ENTRAR</button>
+        <button class="btn btn-secondary" onclick="fecharModal()">CANCELAR</button>
+      </div>
     </div>
+  </div>
 
-    <div id="modalAdmin" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="fecharAdmin()">&times;</span>
-            <h2>Painel Admin</h2>
-            <button class="btn btn-primary" onclick="abrirAddJogo()">+ Adicionar Jogo</button>
-            <div id="listaJogosAdmin" style="margin-top: 20px;"></div>
-        </div>
-    </div>
-
-    <div id="modalJogo" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="fecharModalJogo()">&times;</span>
-            <h2 id="tituloModalJogo">Adicionar Jogo</h2>
-            <input type="hidden" id="editId">
-            <input type="text" id="jogoNome" placeholder="Nome do jogo">
-            <input type="text" id="jogoCategoria" placeholder="Categoria (opcional)">
-            <input type="text" id="jogoImagem" placeholder="URL da imagem">
-            <button class="btn btn-primary" onclick="salvarJogo()">Salvar</button>
-        </div>
-    </div>
-
-    <script>
-        let tipoAtual = 'cadastro';
-        let usuarioLogado = null;
-        let editandoId = null;
-
-        const SEU_NUMERO = '5598984853563';
-        const SENHA_ADMIN = 'Chanel.101225';
-
-        const jogosPadrao = [
-            { id: 1, nome: '8 Ball Pool', categoria: 'Sinuca', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=8+Ball' },
-            { id: 2, nome: 'A3: Still Alive', categoria: 'MMORPG', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=A3' },
-            { id: 3, nome: 'Adventure Quest World', categoria: 'RPG', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=AQW' },
-            { id: 4, nome: 'Aika', categoria: 'MMORPG', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=Aika' },
-            { id: 5, nome: 'Aion', categoria: 'MMORPG', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=Aion' },
-            { id: 6, nome: 'Albion Online', categoria: 'MMORPG', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=Albion' },
-            { id: 7, nome: 'Apex Legends', categoria: 'FPS', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=Apex' },
-            { id: 8, nome: 'ARC Raiders', categoria: 'Tiro', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=ARC' },
-            { id: 9, nome: 'Arena Breakout', categoria: 'FPS', img: 'https://via.placeholder.com/150/0a0e1a/ff0050?text=Arena' }
-        ];
-
-        function initJogos() {
-            if(!localStorage.getItem('chanel_jogos')) {
-                localStorage.setItem('chanel_jogos', JSON.stringify(jogosPadrao));
-            }
-        }
-
-        function carregarJogos() {
-            const jogos = JSON.parse(localStorage.getItem('chanel_jogos') || '[]');
-            const grid = document.getElementById('jogosGrid');
-            grid.innerHTML = '';
-            jogos.forEach(j => {
-                grid.innerHTML += `
-                    <div class="jogo-card" onclick="comprarJogo('${j.nome}', '${j.categoria || ''}')">
-                        <img src="${j.img}" alt="${j.nome}">
-                        <p class="jogo-nome">${j.nome}</p>
-                        ${j.categoria? `<p class="jogo-categoria">${j.categoria}</p>` : ''}
-                    </div>
-                `;
-            });
-        }
-
-        function atualizarContador() {
-            const users = JSON.parse(localStorage.getItem('chanel_users') || '[]');
-            document.getElementById('totalUsers').innerText = users.length > 0? users.length : '1.4k+';
-        }
-
-        function checarLogin() {
-            const user = JSON.parse(localStorage.getItem('chanel_user_logado'));
-            if(user) {
-                usuarioLogado = user;
-                mostrarDashboard();
-            }
-        }
-
-        function mostrarDashboard() {
-            if(!usuarioLogado) return;
-            document.getElementById('home').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            document.getElementById('userLogado').innerText = '👤 ' + usuarioLogado.nome;
-            carregarJogos();
-        }
-
-        function sair() {
-            localStorage.removeItem('chanel_user_logado');
-            usuarioLogado = null;
-            document.getElementById('home').style.display = 'block';
-            document.getElementById('dashboard').style.display = 'none';
-            document.getElementById('userLogado').innerText = '';
-        }
-
-        function comprarJogo(jogo, categoria) {
-            const msg = `Olá! Quero comprar conta/créditos:\n\n*Jogo:* ${jogo}${categoria? `\n*Categoria:* ${categoria}` : ''}\n\nMeu nome: ${usuarioLogado.nome}\nTelefone: ${usuarioLogado.telefone}`;
-            const link = `https://wa.me/${SEU_NUMERO}?text=${encodeURIComponent(msg)}`;
-            window.open(link, '_blank');
-        }
-
-        function abrirAdmin() {
-            const senha = prompt('Senha de admin:');
-            if(senha!== SENHA_ADMIN) return alert('Senha incorreta');
-            carregarAdminLista();
-            document.getElementById('modalAdmin').style.display = 'flex';
-        }
-
-        function fecharAdmin() {
-            document.getElementById('modalAdmin').style.display = 'none';
-        }
-
-        function carregarAdminLista() {
-            const jogos = JSON.parse(localStorage.getItem('chanel_jogos') || '[]');
-            const lista = document.getElementById('listaJogosAdmin');
-            lista.innerHTML = '';
-            jogos.forEach(j => {
-                lista.innerHTML += `
-                    <div class="admin-item">
-                        <div class="admin-item-top">
-                            <div>
-                                <b>${j.nome}</b><br>
-                                <span>${j.categoria || 'Sem categoria'}</span>
-                            </div>
-                            <div class="admin-item-actions">
-                                <button class="btn btn-secondary" style="padding: 6px 10px; font-size: 11px;" onclick="editarJogo(${j.id})">Editar</button>
-                                <button class="btn btn-danger" onclick="removerJogo(${j.id})">X</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function abrirAddJogo() {
-            editandoId = null;
-            document.getElementById('tituloModalJogo').innerText = 'Adicionar Jogo';
-            document.getElementById('editId').value = '';
-            document.getElementById('jogoNome').value = '';
-            document.getElementById('jogoCategoria').value = '';
-            document.getElementById('jogoImagem').value = '';
-            document.getElementById('modalJogo').style.display = 'flex';
-        }
-
-        function editarJogo(id) {
-            const jogos = JSON.parse(localStorage.getItem('chanel_jogos') || '[]');
-            const j = jogos.find(j => j.id === id);
-            if(!j) return;
-            editandoId = id;
-            document.getElementById('tituloModalJogo').innerText = 'Editar Jogo';
-            document.getElementById('editId').value = j.id;
-            document.getElementById('jogoNome').value = j.nome;
-            document.getElementById('jogoCategoria').value = j.categoria || '';
-            document.getElementById('jogoImagem').value = j.img;
-            document.getElementById('modalJogo').style.display = 'flex';
-        }
-
-        function fecharModalJogo() {
-            document.getElementById('modalJogo').style.display = 'none';
-        }
-
-        function salvarJogo() {
-            const nome = document.getElementById('jogoNome').value.trim();
-            const categoria = document.getElementById('jogoCategoria').value.trim();
-            const img = document.getElementById('jogoImagem').value.trim();
-            if(!nome ||!img) return alert('Preenche nome e imagem');
-
-            let jogos = JSON.parse(localStorage.getItem('chanel_jogos') || '[]');
-
-            if(editandoId) {
-                const idx = jogos.findIndex(j => j.id === editandoId);
-                if(idx > -1) {
-                    jogos[idx] = { id: editandoId, nome, categoria, img };
-                }
-            } else {
-                const novoId = jogos.length > 0? Math.max(...jogos.map(j => j.id)) + 1 : 1;
-                jogos.push({ id: novoId, nome, categoria, img });
-            }
-
-            localStorage.setItem('chanel_jogos', JSON.stringify(jogos));
-            fecharModalJogo();
-            carregarAdminLista();
-            carregarJogos();
-        }
-
-        function removerJogo(id) {
-            if(!confirm('Tem certeza que quer remover?')) return;
-            let jogos = JSON.parse(localStorage.getItem('chanel_jogos') || '[]');
-            jogos = jogos.filter(j => j.id!== id);
-            localStorage.setItem('chanel_jogos', JSON.stringify(jogos));
-            carregarAdminLista();
-            carregarJogos();
-        }
-
-        function abrirModal(tipo) {
-            tipoAtual = tipo;
-            document.getElementById('modalTitulo').innerText = tipo === 'cadastro'? 'CADASTRAR' : 'ENTRAR';
-            document.getElementById('nome').style.display = tipo === 'cadastro'? 'block' : 'none';
-            document.getElementById('modal').style.display = 'flex';
-        }
-
-        function fecharModal() {
-            document.getElementById('modal').style.display = 'none';
-            document.getElementById('nome').value = '';
-            document.getElementById('telefone').value = '';
-            document.getElementById('senha').value = '';
-        }
-
-        function salvar() {
-            const nome = document.getElementById('nome').value.trim();
-            const tel = document.getElementById('telefone').value.trim();
-            const pass = document.getElementById('senha').value.trim();
-            if(tipoAtual === 'cadastro') {
-                if(!nome ||!tel ||!pass) return alert('Preenche nome, telefone e senha');
-                let users = JSON.parse(localStorage.getItem('chanel_users') || '[]');
-                if(users.find(u => u.telefone === tel)) return alert('Esse telefone já foi cadastrado');
-                const novoUser = { nome, telefone: tel, senha: pass, data: new Date().toLocaleString('pt-BR') };
-                users.push(novoUser);
-                localStorage.setItem('chanel_users', JSON.stringify(users));
-                localStorage.setItem('chanel_user_logado', JSON.stringify(novoUser));
-                usuarioLogado = novoUser;
-                alert('Cadastrado com sucesso!');
-                atualizarContador();
-                fecharModal();
-                mostrarDashboard();
-            } else {
-                if(!tel ||!pass) return alert('Preenche telefone e senha');
-                let users = JSON.parse(localStorage.getItem('chanel_users') || '[]');
-                const user = users.find(u => u.telefone === tel && u.senha === pass);
-                if(user) {
-                    localStorage.setItem('chanel_user_logado', JSON.stringify(user));
-                    usuarioLogado = user;
-                    alert('Login feito! Bem-vindo ' + user.nome);
-                    fecharModal();
-                    mostrarDashboard();
-                } else {
-                    alert('Telefone ou senha errados');
-                }
-            }
-        }
-
-        window.onclick = function(e) {
-            if(e.target == document.getElementById('modal')) fecharModal();
-            if(e.target == document.getElementById('modalAdmin')) fecharAdmin();
-            if(e.target == document.getElementById('modalJogo')) fecharModalJogo();
-        }
-
-        initJogos();
-        atualizarContador();
-        checarLogin();
-    </script>
+<script>
+  let modoAtual = 'login';
+  
+  // Checa se já tá logado ao abrir o site
+  window.onload = () => {
+    const usuarioLogado = localStorage.getItem('premium_user');
+    if(usuarioLogado) {
+      mostrarDashboard(usuarioLogado);
+    }
+  }
+  
+  function abrirModal(modo) {
+    modoAtual = modo;
+    document.getElementById('modal').classList.remove('hidden');
+    document.getElementById('modalTitle').innerText = modo === 'login'? 'Entrar' : 'Cadastrar';
+    document.getElementById('btnAction').innerText = modo === 'login'? 'ENTRAR' : 'CADASTRAR';
+    document.getElementById('btnAction').onclick = modo === 'login'? fazerLogin : fazerCadastro;
+    document.getElementById('msg').innerText = '';
+    document.getElementById('inputUser').value = '';
+    document.getElementById('inputPass').value = '';
+  }
+  
+  function fecharModal() {
+    document.getElementById('modal').classList.add('hidden');
+  }
+  
+  function fazerCadastro() {
+    const user = document.getElementById('inputUser').value.trim();
+    const pass = document.getElementById('inputPass').value.trim();
+    const msg = document.getElementById('msg');
+    
+    if(!user ||!pass) {
+      msg.innerText = 'Preencha todos os campos';
+      return;
+    }
+    
+    // Verifica se usuário já existe
+    const usuarios = JSON.parse(localStorage.getItem('premium_users') || '{}');
+    if(usuarios[user]) {
+      msg.innerText = 'Usuário já existe. Faça login.';
+      return;
+    }
+    
+    // Salva novo usuário
+    usuarios[user] = pass;
+    localStorage.setItem('premium_users', JSON.stringify(usuarios));
+    localStorage.setItem('premium_user', user); // Login automático
+    
+    msg.className = 'success';
+    msg.innerText = 'Cadastrado com sucesso!';
+    setTimeout(() => {
+      fecharModal();
+      mostrarDashboard(user);
+    }, 800);
+  }
+  
+  function fazerLogin() {
+    const user = document.getElementById('inputUser').value.trim();
+    const pass = document.getElementById('inputPass').value.trim();
+    const msg = document.getElementById('msg');
+    
+    const usuarios = JSON.parse(localStorage.getItem('premium_users') || '{}');
+    
+    if(usuarios[user] && usuarios[user] === pass) {
+      localStorage.setItem('premium_user', user); // Salva sessão permanente
+      msg.className = 'success';
+      msg.innerText = 'Login realizado!';
+      setTimeout(() => {
+        fecharModal();
+        mostrarDashboard(user);
+      }, 500);
+    } else {
+      msg.innerText = 'Usuário ou senha incorretos';
+    }
+  }
+  
+  function mostrarDashboard(user) {
+    document.getElementById('landing').classList.add('hidden');
+    document.getElementById('dashboard').classList.remove('hidden');
+    document.getElementById('nomeUsuario').innerText = user;
+  }
+  
+  function logout() {
+    localStorage.removeItem('premium_user'); // Só remove ao clicar em sair
+    document.getElementById('dashboard').classList.add('hidden');
+    document.getElementById('landing').classList.remove('hidden');
+  }
+</script>
 </body>
 </html>
