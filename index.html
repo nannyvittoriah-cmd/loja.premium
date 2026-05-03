@@ -10,28 +10,30 @@
     font-family: 'Inter', -apple-system, sans-serif;
     background: #070b16;
     color: #fff;
-    padding-bottom: 40px;
   }
-  .header {
+ .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 16px 20px;
     background: #0d1221;
+    position: sticky;
+    top: 0;
+    z-index: 10;
   }
-  .logo {
+ .logo {
     font-size: 20px;
     font-weight: 900;
     letter-spacing: 1px;
     color: #00d4ff;
   }
-  .container {
+ .container {
     max-width: 480px;
     margin: 0 auto;
     padding: 20px;
     text-align: center;
   }
-  .badge {
+ .badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -44,34 +46,35 @@
     font-weight: 600;
     margin: 20px 0;
   }
-  .badge:before {
+ .badge:before {
     content: "";
     width: 6px;
     height: 6px;
     background: #00ff88;
     border-radius: 50%;
   }
-  .logo-main {
-    font-size: 28px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
+ .hero-img {
+    width: 100%;
+    max-width: 280px;
+    margin: 20px auto;
+    border-radius: 20px;
+    filter: drop-shadow(0 0 40px rgba(0,212,255,0.3));
   }
-  .features {
+ .features {
     margin: 24px 0;
   }
-  .features li {
+ .features li {
     list-style: none;
     margin-bottom: 10px;
     font-size: 15px;
     color: #b8c1d9;
   }
-  .buttons {
+ .buttons {
     display: flex;
     gap: 12px;
     margin: 28px 0;
   }
-  .btn {
+ .btn {
     flex: 1;
     padding: 14px;
     border-radius: 12px;
@@ -80,40 +83,34 @@
     cursor: pointer;
     border: none;
   }
-  .btn-primary {
+ .btn-primary {
     background: linear-gradient(90deg, #00d4ff, #0099ff);
     color: #000;
   }
-  .btn-secondary {
+ .btn-secondary {
     background: rgba(255,255,255,0.05);
     color: #fff;
     border: 1px solid rgba(255,255,255,0.1);
   }
-  .stats {
+ .stats {
     display: flex;
     justify-content: center;
     gap: 8px;
     margin: 20px 0 30px;
     flex-wrap: wrap;
   }
-  .stat {
+ .stat {
     background: rgba(255,255,255,0.05);
     padding: 8px 12px;
     border-radius: 20px;
     font-size: 12px;
     color: #b8c1d9;
   }
-  .stat span {
+ .stat span {
     font-weight: 700;
     color: #00d4ff;
   }
-  .hero-img {
-    width: 100%;
-    max-width: 280px;
-    margin: 20px auto;
-    filter: drop-shadow(0 0 40px rgba(0,212,255,0.3));
-  }
-  .section-title {
+ .section-title {
     font-size: 24px;
     font-weight: 800;
     margin: 40px 0 24px;
@@ -121,19 +118,20 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-  .steps {
+ .steps {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    margin-bottom: 40px;
   }
-  .step {
+ .step {
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: 16px;
     padding: 20px;
     text-align: left;
   }
-  .step-num {
+ .step-num {
     width: 36px;
     height: 36px;
     background: linear-gradient(135deg, #00d4ff, #0099ff);
@@ -144,27 +142,103 @@
     font-weight: 800;
     margin-bottom: 12px;
   }
-  .step h3 {
-    font-size: 16px;
-    margin-bottom: 8px;
+ .step h3 { font-size: 16px; margin-bottom: 8px; }
+ .step p { font-size: 13px; color: #7a8499; line-height: 1.5; }
+
+  /* MODAL LOGIN/CADASTRO */
+ .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
   }
-  .step p {
-    font-size: 13px;
+ .modal.active { display: flex; }
+ .modal-box {
+    background: #0d1221;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 28px 24px;
+    width: 100%;
+    max-width: 380px;
+    position: relative;
+  }
+ .close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
     color: #7a8499;
-    line-height: 1.5;
+    font-size: 24px;
+    cursor: pointer;
   }
+ .modal-title {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+ .input {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 14px;
+    color: #fff;
+    margin-bottom: 12px;
+    font-size: 15px;
+  }
+ .input:focus { outline: 2px solid #00d4ff; }
+ .modal-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(90deg, #00d4ff, #0099ff);
+    color: #000;
+    font-weight: 700;
+    font-size: 15px;
+    margin-top: 8px;
+    cursor: pointer;
+  }
+ .switch {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 14px;
+    color: #7a8499;
+  }
+ .switch span { color: #00d4ff; cursor: pointer; font-weight: 600; }
+ .msg { 
+    text-align: center; 
+    margin-top: 12px; 
+    font-size: 14px;
+    min-height: 20px;
+  }
+ .msg.error { color: #ff4757; }
+ .msg.success { color: #00ff88; }
+ .dashboard {
+    display: none;
+    text-align: center;
+    padding: 40px 20px;
+  }
+ .hidden { display: none!important; }
 </style>
 </head>
 <body>
   <div class="header">
     <div class="logo">PREMIUM STORE</div>
-    <div>☰</div>
+    <div id="userArea"></div>
   </div>
 
-  <div class="container">
+  <div id="home" class="container">
     <div class="badge">Sitesma online & ativo</div>
     
-    <img src="https://i.postimg.cc/ncvGTYQt/IMG-4105.png" alt="App" class="hero-img">
+    <img src="https://i.postimg.cc/RhdX01FL/IMG-4105.jpg" alt="App" class="hero-img">
     
     <ul class="features">
       <li>✓ engajamento e segurança</li>
@@ -173,8 +247,8 @@
     </ul>
     
     <div class="buttons">
-      <button class="btn btn-primary">CADASTRAR GRÁTIS</button>
-      <button class="btn btn-secondary">ENTRAR</button>
+      <button class="btn btn-primary" onclick="openModal('cadastro')">CADASTRAR GRÁTIS</button>
+      <button class="btn btn-secondary" onclick="openModal('login')">ENTRAR</button>
     </div>
     
     <div class="stats">
@@ -203,5 +277,134 @@
       </div>
     </div>
   </div>
+
+  <div id="dashboard" class="dashboard">
+    <h2 style="font-size:28px; margin-bottom:12px;">Bem-vindo, <span id="userName"></span>!</h2>
+    <p style="color:#7a8499; margin-bottom:24px;">Você está logado na PREMIUM STORE</p>
+    <button class="btn btn-secondary" style="max-width:200px;" onclick="logout()">Sair da conta</button>
+  </div>
+
+  <!-- MODAL -->
+  <div id="modal" class="modal">
+    <div class="modal-box">
+      <button class="close" onclick="closeModal()">×</button>
+      <h2 class="modal-title" id="modalTitle">Entrar</h2>
+      <input type="text" class="input" id="username" placeholder="Nome de usuário">
+      <input type="password" class="input" id="password" placeholder="Senha">
+      <button class="modal-btn" id="actionBtn" onclick="handleAuth()">Entrar</button>
+      <div class="msg" id="msg"></div>
+      <div class="switch" id="switchText">
+        Não tem conta? <span onclick="switchMode()">Cadastre-se</span>
+      </div>
+    </div>
+  </div>
+
+<script>
+  let mode = 'login';
+  const modal = document.getElementById('modal');
+  const modalTitle = document.getElementById('modalTitle');
+  const actionBtn = document.getElementById('actionBtn');
+  const switchText = document.getElementById('switchText');
+  const msg = document.getElementById('msg');
+
+  // Verifica se já está logado
+  window.onload = () => {
+    const loggedUser = localStorage.getItem('premium_current_user');
+    if (loggedUser) showDashboard(loggedUser);
+  }
+
+  function openModal(type) {
+    mode = type;
+    updateModal();
+    modal.classList.add('active');
+    msg.textContent = '';
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+  }
+
+  function closeModal() {
+    modal.classList.remove('active');
+  }
+
+  function switchMode() {
+    mode = mode === 'login'? 'cadastro' : 'login';
+    updateModal();
+    msg.textContent = '';
+  }
+
+  function updateModal() {
+    if (mode === 'login') {
+      modalTitle.textContent = 'Entrar';
+      actionBtn.textContent = 'Entrar';
+      switchText.innerHTML = 'Não tem conta? <span onclick="switchMode()">Cadastre-se</span>';
+    } else {
+      modalTitle.textContent = 'Criar conta';
+      actionBtn.textContent = 'Cadastrar';
+      switchText.innerHTML = 'Já tem conta? <span onclick="switchMode()">Entrar</span>';
+    }
+  }
+
+  function handleAuth() {
+    const user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value.trim();
+    
+    if (!user ||!pass) {
+      showMsg('Preencha todos os campos', 'error');
+      return;
+    }
+
+    let users = JSON.parse(localStorage.getItem('premium_users') || '{}');
+
+    if (mode === 'cadastro') {
+      if (users[user]) {
+        showMsg('Usuário já existe', 'error');
+        return;
+      }
+      users[user] = pass;
+      localStorage.setItem('premium_users', JSON.stringify(users));
+      localStorage.setItem('premium_current_user', user);
+      showMsg('Conta criada com sucesso!', 'success');
+      setTimeout(() => {
+        closeModal();
+        showDashboard(user);
+      }, 800);
+    } else {
+      if (!users[user] || users[user]!== pass) {
+        showMsg('Usuário ou senha incorretos', 'error');
+        return;
+      }
+      localStorage.setItem('premium_current_user', user);
+      showMsg('Login realizado!', 'success');
+      setTimeout(() => {
+        closeModal();
+        showDashboard(user);
+      }, 800);
+    }
+  }
+
+  function showMsg(text, type) {
+    msg.textContent = text;
+    msg.className = 'msg ' + type;
+  }
+
+  function showDashboard(user) {
+    document.getElementById('home').classList.add('hidden');
+    document.getElementById('dashboard').style.display = 'block';
+    document.getElementById('userName').textContent = user;
+    document.getElementById('userArea').innerHTML = `<span style="font-size:14px; color:#7a8499;">Olá, ${user}</span>`;
+  }
+
+  function logout() {
+    localStorage.removeItem('premium_current_user');
+    document.getElementById('home').classList.remove('hidden');
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('userArea').innerHTML = '';
+  }
+
+  // Fecha modal clicando fora
+  modal.onclick = (e) => {
+    if (e.target === modal) closeModal();
+  }
+</script>
 </body>
 </html>
