@@ -26,8 +26,8 @@
 .card{background:var(--card);border:1px solid var(--rosa);border-radius:12px;padding:16px;text-align:center;cursor:pointer}
 .card img{width:100%;height:80px;margin-bottom:8px;border:2px solid var(--rosa);border-radius:8px;padding:4px;object-fit:cover}
 .card h3{font-size:16px;margin-bottom:4px}.card p{color:var(--rosa);font-weight:bold}
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:#000000cc;display:flex;align-items:center;justify-content:center;z-index:100}
-.modal-content{background:var(--card);border:1px solid var(--rosa);padding:20px;border-radius:12px;width:90%;max-width:400px;position:relative}
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:#000000cc;display:flex;align-items:center;justify-content:center;z-index:100;overflow-y:auto;padding:20px 0}
+.modal-content{background:var(--card);border:1px solid var(--rosa);padding:20px;border-radius:12px;width:90%;max-width:400px;position:relative;margin:auto}
 .modal-content img{width:100%;border-radius:8px;margin-bottom:12px;max-height:200px;object-fit:cover}
 .close{position:absolute;top:10px;right:15px;font-size:24px;cursor:pointer;color:var(--rosa)}
 .screen{min-height:100vh}
@@ -42,6 +42,8 @@
 .tabs{display:flex;gap:8px;margin-bottom:16px}
 .tab{flex:1;padding:10px;background:var(--bg);border:1px solid var(--rosa);color:var(--texto2);border-radius:8px;cursor:pointer}
 .tab.active{background:var(--rosa);color:#fff}
+.qr-box{text-align:center;margin:12px 0}
+.qr-box img{width:180px;height:180px;border:2px solid var(--rosa);border-radius:8px;background:#fff;padding:8px}
   </style>
 </head>
 <body>
@@ -114,7 +116,7 @@
       </div>
     </div>
 
-    <!-- MODAL PRODUTO -->
+    <!-- MODAL PRODUTO COM QR CODE -->
     <div id="modal" class="modal hidden">
       <div class="modal-content">
         <span class="close" onclick="fecharModal()">&times;</span>
@@ -125,7 +127,10 @@
         <div class="pix-box">
           <p><strong>Chave Pix:</strong> (98) 98485-3563</p>
           <p><strong>Nome:</strong> Lorrane Vitória Alves Vaz</p>
-          <p style="font-size:12px;color:var(--texto2)">Copie a chave e pague no seu banco. Envie o comprovante no WhatsApp.</p>
+          <div class="qr-box">
+            <img id="qr-pix" src="" alt="QR Code Pix">
+            <p style="font-size:12px;color:var(--texto2);margin-top:4px">Aponte a câmera e pague</p>
+          </div>
         </div>
         <button class="btn-primary" onclick="copiarPix()" style="width:100%">Copiar Chave Pix</button>
         <button class="btn-whatsapp" onclick="finalizarWhatsApp()">Finalizar no WhatsApp</button>
@@ -172,7 +177,7 @@
   </div>
 
 <script>
-// BANCO EM MEMÓRIA - NÃO TRAVA MAIS
+// BANCO EM MEMÓRIA
 let db = {
   categorias:[{id:'1',nome:'Instagram',img:'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23FF2D75" stroke-width="2" viewBox="0 0 24 24"%3E%3Crect x="2" y="2" width="20" height="20" rx="5"/%3E%3Ccircle cx="12" cy="12" r="4"/%3E%3Ccircle cx="17.5" cy="6.5" r="1.5"/%3E%3C/svg%3E'}],
   produtos:[{id:'1',categoriaId:'1',nome:'100 Seguidores',preco:6,desc:'Entrega rápida em até 24h. Seguidores brasileiros reais.',img:'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23FF2D75" stroke-width="2" viewBox="0 0 24 24"%3E%3Crect x="2" y="2" width="20" height="20" rx="5"/%3E%3Ccircle cx="12" cy="12" r="4"/%3E%3Ccircle cx="17.5" cy="6.5" r="1.5"/%3E%3C/svg%3E'}],
@@ -186,7 +191,7 @@ const ADMIN_PASS = 'Lorrannyh.101225';
 const PIX_KEY = '(98) 98485-3563';
 const PIX_NOME = 'Lorrane Vitória Alves Vaz';
 
-// Tenta carregar do localStorage se existir, mas não quebra se não der
+// Tenta carregar do localStorage se existir
 try{
   const saved = localStorage.getItem('premiumStore');
   if(saved) db = JSON.parse(saved);
@@ -200,6 +205,13 @@ function salvarDB(){
 }
 
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));document.getElementById(id).classList.remove('hidden')}
+
+// GERAR QR CODE PIX
+function gerarQRCodePix(valor){
+  // Payload Pix simples com chave + valor
+  const payload = `00020126580014br.gov.bcb.pix0136${PIX_KEY.replace(/\D/g,'')}52040000530398654${valor.toFixed(2).length.toString().padStart(2,'0')}${valor.toFixed(2)}5802BR5917${PIX_NOME}6009SAO LUIS62070503***6304`;
+  return `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(payload)}`;
+}
 
 // ROTEAMENTO
 function checkRoute(){
@@ -222,7 +234,7 @@ function checkRoute(){
 }
 window.addEventListener('hashchange',checkRoute);
 
-// AUTH SEM BUG
+// AUTH
 function showAuth(tipo){
   showScreen('auth-screen');
   setAuthTab(tipo);
@@ -299,6 +311,8 @@ function abrirProduto(id){
   document.getElementById('modal-nome').innerText=produtoAtual.nome;
   document.getElementById('modal-desc').innerText=produtoAtual.desc;
   document.getElementById('modal-preco').innerText=`R$ ${produtoAtual.preco.toFixed(2)}`;
+  // GERA QR CODE COM VALOR DO PRODUTO
+  document.getElementById('qr-pix').src=gerarQRCodePix(produtoAtual.preco);
   document.getElementById('modal').classList.remove('hidden');
 }
 function fecharModal(){document.getElementById('modal').classList.add('hidden')}
