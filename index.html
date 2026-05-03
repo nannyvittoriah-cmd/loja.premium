@@ -182,7 +182,7 @@
     cursor: pointer;
     display: none;
   }
-.admin-mode .delete-cat { display: block; }
+.admin-mode.delete-cat { display: block; }
 .empty-cats {
     grid-column: 1 / -1;
     text-align: center;
@@ -308,8 +308,19 @@
 .msg.success { color: #00ff88; }
 .dashboard {
     display: none;
+    padding: 20px;
+  }
+.dashboard-header {
     text-align: center;
-    padding: 40px 20px;
+    margin-bottom: 24px;
+  }
+.dashboard-header h2 {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+.dashboard-header p {
+    color: #998080;
+    font-size: 14px;
   }
 .hidden { display: none!important; }
 .admin-panel {
@@ -350,6 +361,10 @@
     fill: none;
     stroke-width: 1.8;
   }
+.logout-btn {
+    max-width: 200px;
+    margin: 30px auto 0;
+  }
 </style>
 </head>
 <body>
@@ -380,41 +395,44 @@
       <div class="stat"><span>envio</span> instantaneamente</div>
     </div>
 
-    <h2 class="section-title">Categorias</h2>
-    <div id="adminPanel" class="admin-panel hidden">
-      <h3>Painel Admin - Protegido</h3>
-      <button class="btn btn-primary" onclick="openModal('addCat')" style="width:100%;">+ Adicionar Categoria</button>
-    </div>
-
-    <div class="categories" id="categoriesContainer">
-      <div class="empty-cats">Nenhuma categoria ainda.<br>Faça login como admin para adicionar.</div>
-    </div>
-
     <h2 class="section-title">Como Funciona</h2>
 
     <div class="steps">
       <div class="step">
         <div class="step-num">1</div>
         <h3>Cadastre-se</h3>
-        <p>Crie sua conta com nome de usuário e senha.</p>
+        <p>Crie sua conta com contato, nome e senha.</p>
       </div>
       <div class="step">
         <div class="step-num">2</div>
-        <h3>Escolha a Categoria</h3>
-        <p>Selecione o serviço que deseja comprar.</p>
+        <h3>Faça Login</h3>
+        <p>Entre com seu contato e senha.</p>
       </div>
       <div class="step">
         <div class="step-num">3</div>
-        <h3>Receba na Hora</h3>
-        <p>Entrega instantânea após confirmação do pagamento.</p>
+        <h3>Escolha e Receba</h3>
+        <p>Selecione a categoria e receba na hora após pagamento.</p>
       </div>
     </div>
   </div>
 
   <div id="dashboard" class="dashboard">
-    <h2 style="font-size:26px; margin-bottom:10px;">Bem-vindo, <span id="userName"></span>!</h2>
-    <p style="color:#998080; margin-bottom:20px; font-size:14px;">Você está logado na PREMIUM STORE</p>
-    <button class="btn btn-secondary" style="max-width:200px;" onclick="logout()">Sair da conta</button>
+    <div class="dashboard-header">
+      <h2>Olá, <span id="userName"></span>!</h2>
+      <p>Bem-vindo à sua área Premium</p>
+    </div>
+
+    <div id="adminPanel" class="admin-panel hidden">
+      <h3>Painel Admin - Protegido</h3>
+      <button class="btn btn-primary" onclick="openModal('addCat')" style="width:100%;">+ Adicionar Categoria</button>
+    </div>
+
+    <h2 class="section-title">Categorias</h2>
+    <div class="categories" id="categoriesContainer">
+      <div class="empty-cats">Nenhuma categoria ainda.<br>Aguarde o admin adicionar categorias.</div>
+    </div>
+
+    <button class="btn btn-secondary logout-btn" onclick="logout()">Sair da conta</button>
   </div>
 
   <div id="modal" class="modal">
@@ -429,14 +447,14 @@
   </div>
 
 <script>
-  const ADMIN_USER = 'Lorrannyh';
+  const ADMIN_CONTATO = 'Lorrannyh';
   const ADMIN_PASS = 'Chanel.101225';
   let mode = 'login';
   let isAdmin = false;
   let selectedIcon = 'heart';
 
   const icons = {
-    heart: '<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 0 0 0 0-7.78z"></path></svg>',
+    heart: '<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>',
     users: '<svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
     eye: '<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>',
     message: '<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>',
@@ -444,9 +462,9 @@
     zap: '<svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>',
     cart: '<svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>',
     star: '<svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>',
-    fire: '<svg viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5z"></path></svg>',
+    fire: '<svg viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6.5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5z"></path></svg>',
     check: '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>',
-    config: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>',
+    config: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 0 0 0.33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 0 0 0.33-1.82 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 0 0 0-1.51 1z"></path></svg>',
     shield: '<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>'
   };
 
@@ -459,8 +477,8 @@
 
   function initAdmin() {
     let users = JSON.parse(localStorage.getItem('premium_users') || '{}');
-    if (!users[ADMIN_USER]) {
-      users[ADMIN_USER] = ADMIN_PASS;
+    if (!users[ADMIN_CONTATO]) {
+      users[ADMIN_CONTATO] = { nome: 'Lorrannyh Admin', senha: ADMIN_PASS };
       localStorage.setItem('premium_users', JSON.stringify(users));
     }
   }
@@ -469,10 +487,9 @@
     initAdmin();
     const loggedUser = localStorage.getItem('premium_current_user');
     if (loggedUser) {
-      isAdmin = loggedUser === ADMIN_USER;
+      isAdmin = loggedUser === ADMIN_CONTATO;
       showDashboard(loggedUser);
     }
-    renderCategories();
   }
 
   function renderCategories() {
@@ -547,7 +564,7 @@
       actionBtn.onclick = handleAuth;
       switchText.innerHTML = 'Não tem conta? <span onclick="switchMode()">Cadastre-se</span>';
       modalContent.innerHTML = `
-        <input type="text" class="input" id="username" placeholder="Nome de usuário">
+        <input type="text" class="input" id="contato" placeholder="Contato / Usuário">
         <div class="input-group">
           <input type="password" class="input" id="password" placeholder="Senha">
           <button class="toggle-pass" onclick="togglePassword('password')">👁️</button>
@@ -559,7 +576,8 @@
       actionBtn.onclick = handleAuth;
       switchText.innerHTML = 'Já tem conta? <span onclick="switchMode()">Entrar</span>';
       modalContent.innerHTML = `
-        <input type="text" class="input" id="username" placeholder="Nome de usuário">
+        <input type="text" class="input" id="contato" placeholder="Contato / WhatsApp">
+        <input type="text" class="input" id="nome" placeholder="Nome completo">
         <div class="input-group">
           <input type="password" class="input" id="password" placeholder="Senha">
           <button class="toggle-pass" onclick="togglePassword('password')">👁️</button>
@@ -610,43 +628,58 @@
   }
 
   function handleAuth() {
-    const user = document.getElementById('username').value.trim();
-    const pass = document.getElementById('password').value.trim();
+    const contato = document.getElementById('contato').value.trim();
 
-    if (!user ||!pass) {
-      showMsg('Preencha todos os campos', 'error');
+    if (!contato) {
+      showMsg('Preencha o contato', 'error');
       return;
     }
 
     let users = JSON.parse(localStorage.getItem('premium_users') || '{}');
 
     if (mode === 'cadastro') {
-      if (users) {
-        showMsg('Usuário já existe', 'error');
+      const nome = document.getElementById('nome').value.trim();
+      const pass = document.getElementById('password').value.trim();
+
+      if (!nome ||!pass) {
+        showMsg('Preencha todos os campos', 'error');
         return;
       }
-      users = pass;
+
+      if (users[contato]) {
+        showMsg('Contato já cadastrado', 'error');
+        return;
+      }
+
+      users[contato] = { nome: nome, senha: pass };
       localStorage.setItem('premium_users', JSON.stringify(users));
-      localStorage.setItem('premium_current_user', user);
-      isAdmin = user === ADMIN_USER;
+      localStorage.setItem('premium_current_user', contato);
+      isAdmin = contato === ADMIN_CONTATO;
       showMsg('Conta criada com sucesso!', 'success');
       setTimeout(() => {
         closeModal();
-        showDashboard(user);
-        renderCategories();
+        showDashboard(contato);
       }, 800);
+
     } else {
-      if (!users || users!== pass) {
-        showMsg('Usuário ou senha incorretos', 'error');
+      const pass = document.getElementById('password').value.trim();
+
+      if (!pass) {
+        showMsg('Preencha a senha', 'error');
         return;
       }
-      localStorage.setItem('premium_current_user', user);
-      isAdmin = user === ADMIN_USER;
+
+      if (!users[contato] || users[contato].senha!== pass) {
+        showMsg('Contato ou senha incorretos', 'error');
+        return;
+      }
+
+      localStorage.setItem('premium_current_user', contato);
+      isAdmin = contato === ADMIN_CONTATO;
       showMsg('Login realizado!', 'success');
       setTimeout(() => {
         closeModal();
-        showDashboard(user);
-        renderCategories();
+        showDashboard(contato);
       }, 800);
     }
   }
@@ -656,11 +689,13 @@
     msg.className = 'msg ' + type;
   }
 
-  function showDashboard(user) {
+  function showDashboard(contato) {
+    let users = JSON.parse(localStorage.getItem('premium_users') || '{}');
     document.getElementById('home').classList.add('hidden');
     document.getElementById('dashboard').style.display = 'block';
-    document.getElementById('userName').textContent = user;
-    document.getElementById('userArea').innerHTML = `<span style="font-size:14px; color:#998080;">Olá, ${user}</span>`;
+    document.getElementById('userName').textContent = users[contato]?.nome || contato;
+    document.getElementById('userArea').innerHTML = `<span style="font-size:14px; color:#998080;">Olá, ${users[contato]?.nome || contato}</span>`;
+    renderCategories();
   }
 
   function logout() {
@@ -670,9 +705,7 @@
     document.getElementById('dashboard').style.display = 'none';
     document.getElementById('userArea').innerHTML = '';
     document.getElementById('adminBadge').innerHTML = '';
-    document.getElementById('adminPanel').classList.add('hidden');
     document.body.classList.remove('admin-mode');
-    renderCategories();
   }
 
   modal.onclick = (e) => {
