@@ -74,13 +74,13 @@
           <button class="tab" id="tab-cadastro" onclick="setAuthTab('cadastro')">Cadastrar</button>
         </div>
         <div id="form-login">
-          <input type="text" id="login-user" placeholder="Usuário">
-          <input type="password" id="login-pass" placeholder="Senha">
+          <input type="text" id="login-user" placeholder="Usuário" autocomplete="off">
+          <input type="password" id="login-pass" placeholder="Senha" autocomplete="off">
           <button class="btn-primary" style="width:100%" onclick="fazerLogin()">Entrar</button>
         </div>
         <div id="form-cadastro" class="hidden">
-          <input type="text" id="cadastro-user" placeholder="Criar usuário">
-          <input type="password" id="cadastro-pass" placeholder="Criar senha">
+          <input type="text" id="cadastro-user" placeholder="Criar usuário" autocomplete="off">
+          <input type="password" id="cadastro-pass" placeholder="Criar senha" autocomplete="off">
           <button class="btn-primary" style="width:100%" onclick="fazerCadastro()">Criar Conta</button>
         </div>
         <button class="btn-outline" style="width:100%;margin-top:8px" onclick="voltarInicio()">Voltar</button>
@@ -172,17 +172,33 @@
   </div>
 
 <script>
-// INICIALIZA BANCO
-let db = JSON.parse(localStorage.getItem('premiumStore') || '{"categorias":[],"produtos":[],"usuarios":[]}');
+// BANCO EM MEMÓRIA - NÃO TRAVA MAIS
+let db = {
+  categorias:[{id:'1',nome:'Instagram',img:'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23FF2D75" stroke-width="2" viewBox="0 0 24 24"%3E%3Crect x="2" y="2" width="20" height="20" rx="5"/%3E%3Ccircle cx="12" cy="12" r="4"/%3E%3Ccircle cx="17.5" cy="6.5" r="1.5"/%3E%3C/svg%3E'}],
+  produtos:[{id:'1',categoriaId:'1',nome:'100 Seguidores',preco:6,desc:'Entrega rápida em até 24h. Seguidores brasileiros reais.',img:'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23FF2D75" stroke-width="2" viewBox="0 0 24 24"%3E%3Crect x="2" y="2" width="20" height="20" rx="5"/%3E%3Ccircle cx="12" cy="12" r="4"/%3E%3Ccircle cx="17.5" cy="6.5" r="1.5"/%3E%3C/svg%3E'}],
+  usuarios:[]
+};
 let produtoAtual = null;
-let usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado') || 'null');
+let usuarioLogado = null;
 const WHATSAPP = '5598984853563';
 const ADMIN_USER = 'Lorrannyh.101225';
 const ADMIN_PASS = 'Lorrannyh.101225';
 const PIX_KEY = '(98) 98485-3563';
 const PIX_NOME = 'Lorrane Vitória Alves Vaz';
 
-function salvarDB(){localStorage.setItem('premiumStore',JSON.stringify(db))}
+// Tenta carregar do localStorage se existir, mas não quebra se não der
+try{
+  const saved = localStorage.getItem('premiumStore');
+  if(saved) db = JSON.parse(saved);
+  const savedUser = localStorage.getItem('usuarioLogado');
+  if(savedUser) usuarioLogado = JSON.parse(savedUser);
+}catch(e){}
+
+function salvarDB(){
+  try{localStorage.setItem('premiumStore',JSON.stringify(db))}catch(e){}
+  try{localStorage.setItem('usuarioLogado',JSON.stringify(usuarioLogado))}catch(e){}
+}
+
 function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.add('hidden'));document.getElementById(id).classList.remove('hidden')}
 
 // ROTEAMENTO
@@ -206,7 +222,7 @@ function checkRoute(){
 }
 window.addEventListener('hashchange',checkRoute);
 
-// AUTH CORRIGIDO
+// AUTH SEM BUG
 function showAuth(tipo){
   showScreen('auth-screen');
   setAuthTab(tipo);
@@ -227,9 +243,8 @@ function fazerCadastro(){
   if(!user||!pass)return alert('Preencha usuário e senha');
   if(db.usuarios.some(u=>u.user===user))return alert('Usuário já existe');
   db.usuarios.push({user,pass});
-  salvarDB();
   usuarioLogado={user};
-  localStorage.setItem('usuarioLogado',JSON.stringify(usuarioLogado));
+  salvarDB();
   alert('Conta criada! Entrando...');
   location.hash='';
   checkRoute();
@@ -240,13 +255,13 @@ function fazerLogin(){
   const achou=db.usuarios.find(u=>u.user===user&&u.pass===pass);
   if(!achou)return alert('Usuário ou senha incorretos');
   usuarioLogado={user};
-  localStorage.setItem('usuarioLogado',JSON.stringify(usuarioLogado));
+  salvarDB();
   location.hash='';
   checkRoute();
 }
 function logout(){
   usuarioLogado=null;
-  localStorage.removeItem('usuarioLogado');
+  salvarDB();
   showScreen('inicio-screen');
 }
 function voltarInicio(){showScreen('inicio-screen')}
@@ -364,11 +379,6 @@ function delProduto(id){
 }
 
 // INICIAR
-if(db.categorias.length==0){
-  db.categorias=[{id:'1',nome:'Instagram',img:'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23FF2D75" stroke-width="2" viewBox="0 0 24 24"%3E%3Crect x="2" y="2" width="20" height="20" rx="5"/%3E%3Ccircle cx="12" cy="12" r="4"/%3E%3Ccircle cx="17.5" cy="6.5" r="1.5"/%3E%3C/svg%3E'}];
-  db.produtos=[{id:'1',categoriaId:'1',nome:'100 Seguidores',preco:6,desc:'Entrega rápida em até 24h. Seguidores brasileiros reais.',img:'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23FF2D75" stroke-width="2" viewBox="0 0 24 24"%3E%3Crect x="2" y="2" width="20" height="20" rx="5"/%3E%3Ccircle cx="12" cy="12" r="4"/%3E%3Ccircle cx="17.5" cy="6.5" r="1.5"/%3E%3C/svg%3E'}];
-  salvarDB();
-}
 checkRoute();
 </script>
 </body>
