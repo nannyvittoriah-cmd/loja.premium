@@ -127,8 +127,6 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-
-  /* CATEGORIAS COM SVG OUTLINE */
 .categories {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -184,7 +182,7 @@
     cursor: pointer;
     display: none;
   }
-.admin-mode .delete-cat { display: block; }
+.admin-mode.delete-cat { display: block; }
 .empty-cats {
     grid-column: 1 / -1;
     text-align: center;
@@ -192,7 +190,6 @@
     font-size: 13px;
     padding: 36px 20px;
   }
-
 .steps {
     display: flex;
     flex-direction: column;
@@ -220,8 +217,6 @@
   }
 .step h3 { font-size: 15px; margin-bottom: 6px; }
 .step p { font-size: 12px; color: #998080; line-height: 1.5; }
-
-  /* MODAL MENOR */
 .modal {
     display: none;
     position: fixed;
@@ -420,7 +415,6 @@
     <button class="btn btn-secondary" style="max-width:200px;" onclick="logout()">Sair da conta</button>
   </div>
 
-  <!-- MODAL -->
   <div id="modal" class="modal">
     <div class="modal-box">
       <button class="close" onclick="closeModal()">×</button>
@@ -438,11 +432,11 @@
   let mode = 'login';
   let isAdmin = false;
   let selectedIcon = 'heart';
-  
+
   const icons = {
-    heart: '<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 0 0 0 0-7.78z"></path></svg>',
+    heart: '<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0-7.78z"></path></svg>',
     users: '<svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
-    eye: '<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>',
+    eye: '<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>',
     message: '<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>',
     diamond: '<svg viewBox="0 0 24 24"><path d="M6 3h12l4 6-10 12L2 9z"></path></svg>',
     zap: '<svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>'
@@ -619,11 +613,11 @@
     let users = JSON.parse(localStorage.getItem('premium_users') || '{}');
 
     if (mode === 'cadastro') {
-      if (users) {
+      if (users[user]) {
         showMsg('Usuário já existe', 'error');
         return;
       }
-      users = pass;
+      users[user] = pass;
       localStorage.setItem('premium_users', JSON.stringify(users));
       localStorage.setItem('premium_current_user', user);
       isAdmin = user === ADMIN_USER;
@@ -634,7 +628,7 @@
         renderCategories();
       }, 800);
     } else {
-      if (!users || users!== pass) {
+      if (!users[user] || users[user]!== pass) {
         showMsg('Usuário ou senha incorretos', 'error');
         return;
       }
