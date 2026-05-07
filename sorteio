@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sorteio Pro | Chanel Store</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+  :root {
+    --bg: #0D0D0D; --card: #151515; --text: #F5F5F5; --text-muted: #8A8A8A;
+    --border: #2A2A2A; --accent: #FFFFFF; --danger: #E53935; --whatsapp: #25D366; --success: #4CAF50;
+  }
+  [data-theme="light"] {
+    --bg: #F5F5F5; --card: #FFFFFF; --text: #0D0D0D; --text-muted: #666;
+    --border: #E0E0E0; --accent: #0D0D0D;
+  }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; padding: 15px; transition: 0.3s; }
+.container { max-width: 700px; margin: 0 auto; }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo img { width: 40px; height: 40px; border-radius: 8px; background: var(--card); border: 1px solid var(--border); }
+.logo h1 { font-size: 18px; font-weight: 900; color: var(--accent); }
+.logo span { font-size: 10px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; display: block; }
+.header-actions { display: flex; gap: 8px; }
+.icon-btn { background: var(--card); border: 1px solid var(--border); color: var(--accent); width: 38px; height: 38px; border-radius: 8px; cursor: pointer; font-size: 16px; }
+.menu-dropdown { display: none; position: absolute; right: 15px; top: 60px; background: var(--card); border: 1px solid var(--border); min-width: 200px; z-index: 10; border-radius: 12px; overflow: hidden; }
+.menu-dropdown button { width: 100%; background: none; border: none; color: var(--text); padding: 14px 16px; text-align: left; cursor: pointer; border-bottom: 1px solid var(--border); font-weight: 600; font-size: 14px; }
+.menu-dropdown button:hover { background: var(--bg); }
+.show { display: block; }
+
+.stats-bar { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 20px; }
+.stat { background: var(--card); border: 1px solid var(--border); padding: 12px; border-radius: 12px; text-align: center; }
+.stat h3 { font-size: 20px; font-weight: 900; color: var(--accent); }
+.stat p { font-size: 10px; color: var(--text-muted); text-transform: uppercase; margin-top: 4px; }
+
+.countdown { background: var(--danger); color: #fff; padding: 12px; border-radius: 12px; text-align: center; margin-bottom: 16px; font-weight: 700; font-size: 14px; }
+.progress-wrap { background: var(--card); border: 1px solid var(--border); padding: 16px; border-radius: 12px; margin-bottom: 16px; }
+.progress-info { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; font-weight: 600; }
+.progress-bar { height: 8px; background: var(--bg); border-radius: 8px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--accent); transition: width 0.5s; }
+.alerta-fim { color: var(--danger); font-weight: 700; animation: piscar 1s infinite; }
+  @keyframes piscar { 0%,100%{ opacity: 1; } 50%{ opacity: 0.5; } }
+
+.abas-sorteio { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); overflow-x: auto; }
+.aba { padding: 10px 16px; cursor: pointer; font-weight: 600; font-size: 13px; color: var(--text-muted); border-bottom: 2px solid transparent; white-space: nowrap; }
+.aba.ativa { color: var(--accent); border-bottom-color: var(--accent); }
+
+.banner-premio { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 16px; margin-bottom: 16px; text-align: center; }
+.banner-premio h2 { font-size: 28px; font-weight: 900; color: var(--accent); margin-bottom: 8px; }
+.banner-premio p { font-size: 12px; color: var(--text-muted); }
+.selo { display: inline-block; background: var(--success); color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; margin-top: 8px; }
+
+.card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 16px; margin-bottom: 16px; }
+.titulo-sorteio { text-align: center; margin-bottom: 16px; font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
+.bolinhas { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; }
+.bolinha { width: 100%; aspect-ratio: 1; border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: var(--bg); cursor: pointer; transition: 0.2s; position: relative; }
+.bolinha:hover { border-color: var(--accent); }
+.bolinha.vendida { background: var(--accent); color: #000; border-color: var(--accent); animation: vender 0.4s; }
+  @keyframes vender { 0%{ transform: scale(1); } 50%{ transform: scale(1.2); } 100%{ transform: scale(1); } }
+.bolinha.sorteada { background: var(--danger); color: #fff; border-color: var(--danger); animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{ transform: scale(1); } 50%{ transform: scale(1.08); } }
+
+.controles { text-align: center; }
+.btn { background: var(--accent); color: #000; border: none; padding: 16px; font-size: 14px; font-weight: 700; cursor: pointer; border-radius: 12px; width: 100%; text-transform: uppercase; letter-spacing: 0.5px; margin: 8px 0; }
+.btn:disabled { background: #2A2A2A; color: #555; cursor: not-allowed; }
+.btn-whatsapp { background: var(--whatsapp); color: #fff; display: none; text-decoration: none; }
+.btn-whatsapp.show { display: block; }
+.btn-secundario { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+.btn-danger { background: var(--danger); color: #fff; }
+  #resultado { font-size: 26px; margin: 16px 0; font-weight: 900; color: var(--accent); min-height: 60px; }
+  #timer { font-size: 18px; margin: 12px 0; color: var(--text-muted); font-weight: 600; min-height: 25px; }
+
+.combo-box { background: var(--bg); border: 1px dashed var(--border); padding: 12px; border-radius: 12px; margin: 16px 0; font-size: 13px; }
+.ranking { font-size: 12px; margin-top: 12px; }
+.ranking div { padding: 8px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
+
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
+.modal-content { background: var(--card); border: 1px solid var(--border); padding: 24px; max-width: 450px; width: 100%; max-height: 85vh; overflow-y: auto; border-radius: 16px; }
+.modal h2 { margin-bottom: 16px; font-weight: 700; font-size: 18px; color: var(--accent); }
+.modal label { display: block; font-size: 12px; color: var(--text-muted); margin: 12px 0 6px; font-weight: 600; }
+.modal input,.modal select,.modal textarea { width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border); color: var(--text); border-radius: 8px; font-weight: 600; font-size: 14px; }
+.close { float: right; font-size: 24px; cursor: pointer; color: var(--text-muted); }
+.qrcode-wrap { text-align: center; padding: 16px; background: #fff; border-radius: 12px; margin: 16px 0; }
+  #qrcode { display: inline-block; }
+.pix-code { background: var(--bg); padding: 12px; border-radius: 8px; font-size: 11px; word-break: break-all; margin: 12px 0; border: 1px solid var(--border); }
+.termos { font-size: 11px; color: var(--text-muted); line-height: 1.6; max-height: 300px; overflow-y: auto; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="logo">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='70' font-size='70'%3E💎%3C/text%3E%3C/svg%3E" alt="Logo">
+      <div>
+        <h1>SORTEIO PRO</h1>
+        <span>CHANEL STORE</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" onclick="toggleTheme()" title="Tema">🌓</button>
+      <button class="icon-btn" onclick="toggleMenu()">⋮</button>
+    </div>
+    <div id="menuDropdown" class="menu-dropdown">
+      <button onclick="abrirDono()">👑 Painel Admin</button>
+      <button onclick="abrirTermos()">📜 Regras do Sorteio</button>
+      <button onclick="abrirHistoricoPublico()">🏆 Ganhadores</button>
+      <button onclick="exportarPDF()">📄 Baixar Comprovante</button>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat"><h3 id="statVendido">R$0</h3><p>Arrecadado</p></div>
+    <div class="stat"><h3 id="statLucro">R$0</h3><p>Lucro Atual</p></div>
+    <div class="stat"><h3 id="statCompradores">0</h3><p>Compradores</p></div>
+  </div>
+
+  <div class="countdown" id="countdown">Sorteio encerra em: Carregando...</div>
+
+  <div class="progress-wrap">
+    <div class="progress-info">
+      <span id="progressText">0/100 vendidas</span>
+      <span id="progressFalta"></span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+
+  <div class="abas-sorteio" id="abasSorteio"></div>
+
+  <div class="banner-premio">
+    <p>Prêmio desta edição</p>
+    <h2 id="bannerPremio">R$100 NO PIX</h2>
+    <div class="selo">✓ SORTEIO AUDITADO #<span id="hashSorteio"></span></div>
+  </div>
+
+  <div class="card">
+    <div class="titulo-sorteio">Escolha sua bolinha • R$5 cada</div>
+    <div class="bolinhas" id="gridBolinhas"></div>
+    <div class="combo-box">
+      <b>🔥 COMBO PROMO:</b> 3 bolinhas por R$12 • 5 bolinhas por R$20
+    </div>
+    <div class="ranking" id="rankingCompradores"></div>
+  </div>
+
+  <div class="card controles">
+    <div id="timer"></div>
+    <div id="resultado"></div>
+    <a id="btnWhatsapp" class="btn btn-whatsapp" target="_blank">Contatar Ganhador no WhatsApp</a>
+    <button class="btn" id="btnSortear" onclick="iniciarSorteio()">Iniciar Sorteio Ao Vivo</button>
+    <button class="btn btn-secundario" onclick="abrirComprar()">Comprar Bolinha via Pix</button>
+    <div style="font-size:11px;color:var(--text-muted);margin-top:12px;">Gravação automática ativada • <a onclick="abrirTermos()" style="color:var(--accent);cursor:pointer;">Ver regras</a></div>
+  </div>
+</div>
+
+<!-- Modal Comprar -->
+<div id="modalComprar" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="fecharModal('modalComprar')">&times;</span>
+    <h2>Comprar Bolinha</h2>
+    <label>Seu nome completo</label>
+    <input type="text" id="compNome" placeholder="Nome e sobrenome">
+    <label>WhatsApp com DDD</label>
+    <input type="tel" id="compTel" placeholder="11987654321">
+    <label>Quantidade de bolinhas</label>
+    <select id="compQtd" onchange="calcularTotal()">
+      <option value="1">1 bolinha - R$5</option>
+      <option value="3">3 bolinhas - R$12 COMBO</option>
+      <option value="5">5 bolinhas - R$20 COMBO</option>
+    </select>
+    <div id="compTotal" style="text-align:center;margin:16px 0;font-size:20px;font-weight:900;">Total: R$5</div>
+    <button onclick="gerarPix()">Gerar Pix Copia e Cola</button>
+    <div id="pixArea" style="display:none;">
+      <div class="qrcode-wrap"><div id="qrcode"></div></div>
+      <div class="pix-code" id="pixCode"></div>
+      <button onclick="copiarPix()">📋 Copiar Código Pix</button>
+      <label>ID da Transação Pix</label>
+      <input type="text" id="idTransacao" placeholder="Cole aqui após pagar">
+      <button onclick="confirmarPagamento()">Confirmar Pagamento</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Dono -->
+<div id="modalDono" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="fecharModal('modalDono')">&times;</span>
+    <h2>Painel Administrativo</h2>
+    <div id="loginDono">
+      <label>Senha de acesso</label>
+      <input type="password" id="senhaInput" placeholder="Digite a senha">
+      <button onclick="loginDono()">Acessar</button>
+    </div>
+    <div id="painelDono" style="display:none;">
+      <label>Sorteio</label>
+      <select id="selectSorteio"></select>
+      <label>Prêmio</label>
+      <input type="text" id="nomePremio">
+      <label>Data/Hora do Sorteio</label>
+      <input type="datetime-local" id="dataSorteio">
+      <button onclick="salvarConfig()">Salvar Configurações</button>
+      <div style="height:1px;background:var(--border);margin:20px 0;"></div>
+      <button onclick="verHistorico()" class="btn-secundario">Ver Histórico Completo</button>
+      <button onclick="aprovarPendentes()" class="btn-secundario">Aprovar Pagamentos (<span id="numPendentes">0</span>)</button>
+      <button onclick="zerarSorteio()" class="btn-danger">Zerar Sorteio Atual</button>
+      <button onclick="logoutDono()" class="btn-secundario">Sair</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Histórico -->
+<div id="modalHistorico" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="fecharModal('modalHistorico')">&times;</span>
+    <h2>Histórico de Compradores</h2>
+    <div id="listaHistorico" style="font-size:13px;"></div>
+  </div>
+</div>
+
+<!-- Modal Termos -->
+<div id="modalTermos" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="fecharModal('modalTermos')">&times;</span>
+    <h2>Regras do Sorteio</h2>
+    <div class="termos">
+      <p><b>1. Participação:</b> Ao comprar números, você concorda com estas regras.</p>
+      <p><b>2. Pagamento:</b> Só serão válidos números com pagamento confirmado via Pix.</p>
+      <p><b>3. Sorteio:</b> Realizado ao vivo na data marcada, usando sistema auditável.</p>
+      <p><b>4. Prêmio:</b> Pago via Pix em até 24h após o sorteio para o WhatsApp cadastrado.</p>
+      <p><b>5. Reembolso:</b> Não há reembolso após confirmação da compra.</p>
+      <p><b>6. Fraude:</b> Tentativas de fraude resultam em desclassificação sem reembolso.</p>
+      <p><b>7. Responsabilidade:</b> Sorteio de caráter recreativo entre amigos.</p>
+    </div>
+  </div>
+</div>
+
+<audio id="somRoleta" preload="auto">
+  <source src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=" type="audio/wav">
+</audio>
+
+<script>
+const SENHA = "Lorrannyh.101225";
+const CHAVE_PIX = "seu-email@pix.com";
+let sorteios = JSON.parse(localStorage.getItem('sorteiosPro')) || [
+  { premio: "R$100 NO PIX", data: "2026-05-10T20:00", jogadores: {}, pendentes: [], hash: gerarHash() },
+  { premio: "R$50 NO PIX", data: "2026-05-15T20:00", jogadores: {}, pendentes: [], hash: gerarHash() }
+];
+let sorteioAtual = 0, logado = false;
+
+function gerarHash() { return Math.random().toString(36).substring(2,10).toUpperCase(); }
+function salvar() { localStorage.setItem('sorteiosPro', JSON.stringify(sorteios)); }
+function toggleTheme() {
+  const t = document.body.getAttribute('data-theme') === 'light'? '' : 'light';
+  document.body.setAttribute('data-theme', t);
+  localStorage.setItem('theme', t);
+}
+if(localStorage.getItem('theme')) document.body.setAttribute('data-theme', localStorage.getItem('theme'));
+
+function criarAbas() {
+  const abas = document.getElementById('abasSorteio');
+  abas.innerHTML = '';
+  sorteios.forEach((s, i) => {
+    const aba = document.createElement('div');
+    aba.className = 'aba' + (i === sorteioAtual? ' ativa' : '');
+    aba.textContent = `Sorteio ${i+1}`;
+    aba.onclick = () => trocarSorteio(i);
+    abas.appendChild(aba);
+  });
+}
+function trocarSorteio(i) { sorteioAtual = i; criarAbas(); atualizarTela(); }
+
+function atualizarTela() {
+  const s = sorteios[sorteioAtual];
+  document.getElementById('bannerPremio').textContent = s.premio;
+  document.getElementById('hashSorteio').textContent = s.hash;
+  criarBolinhas();
+  atualizarStats();
+  atualizarCountdown();
+  document.getElementById('resultado').innerHTML = '';
+  document.getElementById('btnWhatsapp').classList.remove('show');
+}
+
+function criarBolinhas() {
+  const grid = document.getElementById('gridBolinhas');
+  grid.innerHTML = '';
+  const j = sorteios[sorteioAtual].jogadores;
+  for(let i = 1; i <= 100; i++) {
+    const div = document.createElement('div');
+    div.className = 'bolinha';
+    div.textContent = i;
+    if(j[i]) div.classList.add('vendida');
+    grid.appendChild(div);
+  }
+}
+
+function atualizarStats() {
+  const s = sorteios[sorteioAtual];
+  const qtd = Object.keys(s.jogadores).length;
+  const arrecadado = qtd * 5;
+  const premio = parseInt(s.premio.replace(/\D/g,'')) || 0;
+  document.getElementById('statVendido').textContent = `R$${arrecadado}`;
+  document.getElementById('statLucro').textContent = `R$${Math.max(0, arrecadado - premio)}`;
+  document.getElementById('statCompradores').textContent = new Set(Object.values(s.jogadores).map(j=>j.tel)).size;
+  document.getElementById('progressText').textContent = `${qtd}/100 vendidas`;
+  document.getElementById('progressFill').style.width = qtd + '%';
+  const falta = 100 - qtd;
+  document.getElementById('progressFalta').innerHTML = falta <= 10? `<span class="alerta-fim">SÓ FALTAM ${falta}!</span>` : `Faltam ${falta}`;
+
+  const ranking = {};
+  Object.values(s.jogadores).forEach(j => { ranking[j.nome] = (ranking[j.nome] || 0) + 1; });
+  const top = Object.entries(ranking).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  document.getElementById('rankingCompradores').innerHTML = top.length? '<b>🏆 Top Compradores:</b>' + top.map(([n,q])=>`<div><span>${n}</span><span>${q} bolinhas</span></div>`).join('') : '';
+}
+
+function atualizarCountdown() {
+  const data = new Date(sorteios[sorteioAtual].data);
+  const agora = new Date();
+  const diff = data - agora;
+  if(diff <= 0) {
+    document.getElementById('countdown').textContent = 'SORTEIO ENCERRADO';
+    document.getElementById('countdown').style.background = '#444';
+    return;
+  }
+  const d = Math.floor(diff/86400000), h = Math.floor(diff%86400000/3600000), m = Math.floor(diff%3600000/60000);
+  document.getElementById('countdown').textContent = `Encerra em: ${d}d ${h}h ${m}min`;
+}
+setInterval(atualizarCountdown, 60000);
+
+function toggleMenu() { document.getElementById('menuDropdown').classList.toggle('show'); }
+function abrirComprar() { document.getElementById('modalComprar').style.display = 'flex'; }
+function abrirDono() { document.getElementById('modalDono').style.display = 'flex'; toggleMenu(); }
+function abrirTermos() { document.getElementById('modalTermos').style.display = 'flex'; toggleMenu(); }
+function abrirHistoricoPublico() { alert('Em breve: página pública de ganhadores'); toggleMenu(); }
+function fecharModal(id) { document.getElementById(id).style.display = 'none'; }
+
+function calcularTotal() {
+  const qtd = parseInt(document.getElementById('compQtd').value);
+  const preco = qtd === 3? 12 : qtd === 5? 20 : 5;
+  document.getElementById('compTotal').textContent = `Total: R$${preco}`;
+}
+
+function gerarPix() {
+  const nome = document.getElementById('compNome').value.trim();
+  const tel = document.getElementById('compTel').value.trim();
+  if(!nome ||!tel) { alert('Preencha nome e WhatsApp'); return; }
+  const qtd = parseInt(document.getElementById('compQtd').value);
+  const valor = qtd === 3? 12 : qtd === 5? 20 : 5;
+  const payload = `00020126580014BR.GOV.BCB.PIX0136${CHAVE_PIX}52040000530398654${valor.toString().padStart(2,'0')}5802BR5925${nome.substring(0,25)}6009SAO PAULO62070503***6304`;
+  document.getElementById('pixArea').style.display = 'block';
+  document.getElementById('pixCode').textContent = payload;
+  document.getElementById('qrcode').innerHTML = '';
+  new QRCode(document.getElementById('qrcode'), { text: payload, width: 200, height: 200 });
+}
+
+function copiarPix() {
+  navigator.clipboard.writeText(document.getElementById('pixCode').textContent);
+  alert('Código Pix copiado!');
+}
+
+function confirmarPagamento() {
+  const nome = document.getElementById('compNome').value.trim();
+  const tel = document.getElementById('compTel').value.trim().replace(/\D/g,'');
+  const qtd = parseInt(document.getElementById('compQtd').value);
+  const idTx = document.getElementById('idTransacao').value.trim();
+  if(!idTx) { alert('Cole o ID da transação Pix'); return; }
+  sorteios[sorteioAtual].pendentes.push({ nome, tel, qtd, idTx, data: new Date().toISOString() });
+  salvar();
+  alert('Pagamento enviado para aprovação! Você receberá confirmação em breve.');
+  fecharModal('modalComprar');
+  document.getElementById('compNome').value = '';
+  document.getElementById('compTel').value = '';
+  document.getElementById('idTransacao').value = '';
+  document.getElementById('pixArea').style.display = 'none';
+}
+
+function loginDono() {
+  if(document.getElementById('senhaInput').value === SENHA) {
+    logado = true;
+    document.getElementById('loginDono').style.display = 'none';
+    document.getElementById('painelDono').style.display = 'block';
+    const select = document.getElementById('selectSorteio');
+    select.innerHTML = '';
+    sorteios.forEach((s, i) => {
+      const opt = document.createElement('option');
+      opt.value = i; opt.textContent = `Sorteio ${i+1}`;
+      select.appendChild(opt);
+    });
+    select.value = sorteioAtual;
+    document.getElementById('nomePremio').value = sorteios[sorteioAtual].premio;
+    document.getElementById('dataSorteio').value = sorteios[sorteioAtual].data;
+    document.getElementById('numPendentes').textContent = sorteios[sorteioAtual].pendentes.length;
+  } else alert('Senha incorreta');
+}
+
+function salvarConfig() {
+  const i = parseInt(document.getElementById('selectSorteio').value);
+  sorteios[i].premio = document.getElementById('nomePremio').value.trim();
+  sorteios[i].data = document.getElementById('dataSorteio').value;
+  salvar();
+  if(i === sorteioAtual) atualizarTela();
+  alert('Configurações salvas');
+}
+
+function aprovarPendentes() {
+  const s = sorteios[sorteioAtual];
+  if(s.pendentes.length === 0) { alert('Nenhum pagamento pendente'); return; }
+  let aprovados = 0;
+  s.pendentes.forEach(p => {
+    for(let i = 0; i < p.qtd; i++) {
+      const num = Object.keys(s.jogadores).length + 1;
+      if(num <= 100) {
+        s.jogadores[num] = { nome: p.nome, tel: p.tel };
+        aprovados++;
+      }
+    }
+  });
+  s.pendentes = [];
+  salvar();
+  criarBolinhas();
+  atualizarStats();
+  document.getElementById('numPendentes').textContent = '0';
+  alert(`${aprovados} bolinhas aprovadas e registradas!`);
+}
+
+function zerarSorteio() {
+  if(confirm('Zerar todos os dados deste sorteio?')) {
+    sorteios[sorteioAtual].jogadores = {};
+    sorteios[sorteioAtual].pendentes = [];
+    sorteios[sorteioAtual].hash = gerarHash();
+    salvar();
+    atualizarTela();
+    alert('Sorteio zerado');
+  }
+}
+
+function verHistorico() {
+  const lista = document.getElementById('listaHistorico');
+  lista.innerHTML = '';
+  const j = sorteios[sorteioAtual].jogadores;
+  if(Object.keys(j).length === 0) { lista.innerHTML = '<div>Nenhuma venda</div>'; return; }
+  for(let num in j) {
+    lista.innerHTML += `<div><b>Bolinha ${num}</b><br>${j[num].nome}<br>${j[num].tel}</div>`;
+  }
+  document.getElementById('modalHistorico').style.display = 'flex';
+}
+
+function iniciarSorteio() {
+  const nums = Object.keys(sorteios[sorteioAtual].jogadores).map(Number);
+  if(nums.length === 0) { alert('Nenhuma bolinha vendida'); return; }
+  const btn = document.getElementById('btnSortear');
+  btn.disabled = true;
+  document.getElementById('btnWhatsapp').classList.remove('show');
+  const audio = document.getElementById('somRoleta');
+  let tempo = 10;
+  document.getElementById('timer').textContent = `Preparar... ${tempo}`;
+  const interval = setInterval(() => {
+    tempo--;
+    audio.currentTime = 0;
+    audio.play().catch(()=>{});
+    document.getElementById('timer').textContent = tempo > 0? `Sorteando em ${tempo}s` : 'Revelando ganhador...';
+    if(tempo <= 0) {
+      clearInterval(interval);
+      sortear(nums);
+      btn.disabled = false;
+      document.getElementById('timer').textContent = '';
+    }
+  }, 1000);
+}
+
+function sortear(lista) {
+  const sorteado = lista[Math.floor(Math.random() * lista.length)];
+  const j = sorteios[sorteioAtual].jogadores[sorteado];
+  document.getElementById('resultado').innerHTML = `Nº ${sorteado}<br><span style="font-size:16px">${j.nome}</span>`;
+  document.querySelectorAll('.bolinha').forEach((b,i) => { if(i+1===sorteado) b.classList.add('sorteada'); });
+
+  const tel = j.tel.startsWith('55')? j.tel : '55' + j.tel;
+  const msg = encodeURIComponent(`Parabéns ${j.nome}! Você ganhou ${sorteios[sorteioAtual].premio} no Sorteio Oficial com a bolinha Nº ${sorteado}. Responda esta mensagem para receber seu prêmio.`);
+  const btnWpp = document.getElementById('btnWhatsapp');
+  btnWpp.href = `https://wa.me/${tel}?text=${msg}`;
+  btnWpp.classList.add('show');
+}
+
+function exportarPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const s = sorteios[sorteioAtual];
+  doc.setFontSize(18);
+  doc.text('Comprovante Sorteio Oficial', 105, 20, { align: 'center' });
+  doc.setFontSize(12);
+  doc.text(`Prêmio: ${s.premio}`, 20, 35);
+  doc.text(`Hash: ${s.hash}`, 20, 42);
+  doc.text(`Data: ${new Date(s.data).toLocaleString('pt-BR')}`, 20, 49);
+  let y = 60;
+  doc.text('Lista de Compradores:', 20, y);
+  y += 10;
+  Object.entries(s.jogadores).forEach(([num, j]) => {
+    if(y > 270) { doc.addPage(); y = 20; }
+    doc.text(`Nº ${num} - ${j.nome} - ${j.tel}`, 20, y);
+    y += 7;
+  });
+  doc.save(`sorteio-${sorteioAtual+1}-comprovante.pdf`);
+}
+
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const diff = touchStartX - e.changedTouches[0].clientX;
+  if(Math.abs(diff) > 50) {
+    if(diff > 0 && sorteioAtual < sorteios.length - 1) trocarSorteio(sorteioAtual + 1);
+    if(diff < 0 && sorteioAtual > 0) trocarSorteio(sorteioAtual - 1);
+  }
+});
+window.onclick = e => { if(!e.target.matches('.icon-btn')) { document.getElementById('menuDropdown').classList.remove('show'); } }
+
+criarAbas();
+atualizarTela();
+</script>
+</body>
+</html>
