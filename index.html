@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>prime store</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600&display=swap');
 :root {
   --bg: #000;
   --bg-card: #0f0f0f;
@@ -24,7 +24,6 @@ body { margin: 0; background: var(--bg); color: var(--text); font-size: 11px; }
 .tela { display: none; width: 100%; min-height: 100vh; }
 .tela.ativa { display: block; }
 
-/* TELA 1: HERO */
 #tela-hero {
   display: none; align-items: center; justify-content: center; text-align: center;
   padding: 20px; background: radial-gradient(circle at 50% 30%, var(--accent-glow), transparent 70%);
@@ -55,7 +54,6 @@ body { margin: 0; background: var(--bg); color: var(--text); font-size: 11px; }
 }
 .btn-hero:hover { filter: brightness(1.15); transform: scale(1.03); }
 
-/* TELA 2 E 3: LOJA */
 header {
   padding: 15px 30px; border-bottom: 1px solid var(--border);
   display: flex; justify-content: space-between; align-items: center;
@@ -84,7 +82,6 @@ button.ghost:hover { border-color: var(--accent); color: var(--accent); }
 }
 .voltar { margin-bottom: 25px; }
 
-/* CATEGORIAS - 3 COLUNAS */
 .grid-cat {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px;
 }
@@ -102,7 +99,6 @@ button.ghost:hover { border-color: var(--accent); color: var(--accent); }
   text-transform: uppercase; letter-spacing: 1.5px;
 }
 
-/* PRODUTOS - 4 COLUNAS */
 .grid-prod {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
 }
@@ -133,7 +129,6 @@ button.ghost:hover { border-color: var(--accent); color: var(--accent); }
 .btn-group a { flex: 1; }
 .btn-group button { width: 100%; padding: 9px; font-size: 9px; }
 
-/* ADMIN */
 .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000f; display: none; align-items: center; justify-content: center; z-index: 100; }
 .modal.ativa { display: flex; }
 .modal-content { background: #111; padding: 30px; width: 90%; max-width: 500px; border-radius: 12px; border: 1px solid var(--border); }
@@ -167,7 +162,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 25px 0; }
 </head>
 <body>
 
-<!-- TELA 1: SÓ APRESENTAÇÃO -->
 <div id="tela-hero" class="tela ativa">
   <div class="hero-box">
     <h1>prime store</h1>
@@ -186,7 +180,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 25px 0; }
   </div>
 </div>
 
-<!-- TELA 2: LOJA COM CATEGORIAS -->
 <div id="tela-loja" class="tela">
   <header>
     <h1>prime store</h1>
@@ -201,7 +194,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 25px 0; }
   </div>
 </div>
 
-<!-- TELA 3: PRODUTOS -->
 <div id="tela-produtos" class="tela">
   <header>
     <h1>prime store</h1>
@@ -218,7 +210,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 25px 0; }
   </div>
 </div>
 
-<!-- ADMIN -->
 <div id="admin-modal" class="modal">
   <div class="modal-content">
     <h3 id="admin-titulo">Acesso Administrativo</h3>
@@ -264,6 +255,7 @@ function carregar() {
 function mostrarTela(id) {
   document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
   document.getElementById(id).classList.add('ativa');
+  window.scrollTo(0,0);
 }
 function irParaLoja() {
   mostrarTela('tela-loja');
@@ -274,7 +266,16 @@ function voltarCategorias() {
 }
 function trocarTema() { document.body.classList.toggle('theme-blue'); }
 function abrirAdmin() { document.getElementById('admin-modal').classList.add('ativa'); }
-function fecharAdmin() { document.getElementById('admin-modal').classList.remove('ativa'); }
+function fecharAdmin() {
+  document.getElementById('admin-modal').classList.remove('ativa');
+  document.getElementById('admin-login').style.display = 'block';
+  document.getElementById('admin-painel').style.display = 'none';
+  document.getElementById('admin-user').value = '';
+  document.getElementById('admin-pass').value = '';
+}
+document.getElementById('admin-modal').addEventListener('click', function(e) {
+  if(e.target === this) fecharAdmin();
+});
 function fazerLogin() {
   let u = document.getElementById('admin-user').value;
   let p = document.getElementById('admin-pass').value;
