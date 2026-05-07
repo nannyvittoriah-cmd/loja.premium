@@ -5,43 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>prime store</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@600&display=swap');
 :root {
-  --bg: #000;
-  --bg-card: #0f0f0f;
-  --text: #f5f5f5;
-  --text-2: #888;
-  --accent: #ff2d95;
-  --accent-glow: #ff2d9540;
-  --border: #222;
+  --bg: #000; --bg2: #0f0f0f; --text: #f5f5f5; --text2: #888;
+  --accent: #ff2d95; --accent2: #ff2d9540; --border: #222;
 }
-body.theme-blue {
-  --accent: #00bfff;
-  --accent-glow: #00bfff40;
-}
-* { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-body { margin: 0; background: var(--bg); color: var(--text); font-size: 11px; }
-.tela { display: none; width: 100%; min-height: 100vh; }
+body.blue { --accent: #00bfff; --accent2: #00bfff40; }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+body { background: var(--bg); color: var(--text); font-size: 11px; }
+.tela { display: none; }
 .tela.ativa { display: block; }
 
-#tela-hero {
-  display: none; align-items: center; justify-content: center; text-align: center;
-  padding: 20px; background: radial-gradient(circle at 50% 30%, var(--accent-glow), transparent 70%);
+/* TELA 1: HERO - SÓ ISSO APARECE PRIMEIRO */
+#hero {
+  min-height: 100vh; display: none; align-items: center; justify-content: center;
+  text-align: center; padding: 20px;
+  background: radial-gradient(circle at 50% 30%, var(--accent2), transparent 70%);
 }
-#tela-hero.ativa { display: flex; }
-.hero-box { max-width: 650px; }
-#tela-hero h1 {
-  font-size: 56px; color: var(--accent); margin: 0 0 15px;
+#hero.ativa { display: flex; }
+#hero h1 {
+  font-size: 56px; color: var(--accent); margin-bottom: 15px;
   font-weight: 600; letter-spacing: 5px; font-family: 'Playfair Display', serif;
 }
-.subtitulo {
-  font-size: 12px; color: var(--text-2); text-transform: uppercase;
-  letter-spacing: 4px; margin-bottom: 35px;
-}
-.descricao {
-  color: var(--text-2); line-height: 1.9; margin: 0 auto 20px; font-weight: 300; font-size: 12px;
-}
-.selo {
+#hero.sub { font-size: 12px; color: var(--text2); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 35px; }
+#hero.desc { color: var(--text2); line-height: 1.9; margin: 0 auto 20px; font-weight: 300; font-size: 12px; max-width: 650px; }
+#hero.selo {
   display: inline-flex; align-items: center; gap: 8px; margin: 30px 0;
   padding: 10px 20px; border: 1px solid var(--accent); border-radius: 50px;
   font-size: 10px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px;
@@ -54,17 +42,18 @@ body { margin: 0; background: var(--bg); color: var(--text); font-size: 11px; }
 }
 .btn-hero:hover { filter: brightness(1.15); transform: scale(1.03); }
 
+/* TELAS 2 E 3: LOJA */
 header {
   padding: 15px 30px; border-bottom: 1px solid var(--border);
   display: flex; justify-content: space-between; align-items: center;
-  background: rgba(0,0,0,0.9); backdrop-filter: blur(12px);
+  background: rgba(0,0,0,0.95); backdrop-filter: blur(12px);
   position: sticky; top: 0; z-index: 50;
 }
 header h1 {
-  margin: 0; font-size: 22px; color: var(--accent);
-  font-weight: 600; letter-spacing: 2px; font-family: 'Playfair Display', serif;
+  font-size: 22px; color: var(--accent); font-weight: 600;
+  letter-spacing: 2px; font-family: 'Playfair Display', serif;
 }
-.header-btns { display: flex; gap: 12px; }
+.btns { display: flex; gap: 12px; }
 button {
   background: var(--accent); color: #000; border: none;
   padding: 9px 18px; cursor: pointer; font-size: 10px;
@@ -72,101 +61,81 @@ button {
   text-transform: uppercase; letter-spacing: 0.5px;
 }
 button:hover { filter: brightness(1.1); }
-button.ghost { background: transparent; color: var(--text-2); border: 1px solid var(--border); }
+button.ghost { background: transparent; color: var(--text2); border: 1px solid var(--border); }
 button.ghost:hover { border-color: var(--accent); color: var(--accent); }
 
-.container { padding: 35px 30px; max-width: 1400px; margin: auto; }
-.titulo-pagina {
-  font-size: 20px; font-weight: 500; margin: 0 0 30px; color: var(--text);
+.wrap { padding: 35px 30px; max-width: 1400px; margin: auto; }
+.titulo {
+  font-size: 20px; font-weight: 500; margin-bottom: 30px;
   letter-spacing: 1.5px; text-transform: uppercase;
 }
 .voltar { margin-bottom: 25px; }
 
-.grid-cat {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px;
-}
+/* CATEGORIAS - 3 COLUNAS */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
 .card-cat {
-  background: var(--bg-card); border-radius: 10px; overflow: hidden;
+  background: var(--bg2); border-radius: 10px; overflow: hidden;
   border: 1px solid var(--border); transition: 0.3s; cursor: pointer;
 }
-.card-cat:hover {
-  transform: translateY(-5px); border-color: var(--accent);
-  box-shadow: 0 10px 30px var(--accent-glow);
-}
+.card-cat:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 10px 30px var(--accent2); }
 .card-cat img { width: 100%; height: 260px; object-fit: cover; display: block; }
-.card-cat.nome {
-  padding: 20px; text-align: center; font-weight: 500; font-size: 14px;
-  text-transform: uppercase; letter-spacing: 1.5px;
-}
+.card-cat.nome { padding: 20px; text-align: center; font-weight: 500; font-size: 14px; text-transform: uppercase; letter-spacing: 1.5px; }
 
-.grid-prod {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
-}
+/* PRODUTOS - 4 COLUNAS */
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
 .card-prod {
-  background: var(--bg-card); border-radius: 10px; overflow: hidden;
-  border: 1px solid var(--border); transition: 0.3s;
-  display: flex; flex-direction: column;
+  background: var(--bg2); border-radius: 10px; overflow: hidden;
+  border: 1px solid var(--border); transition: 0.3s; display: flex; flex-direction: column;
 }
 .card-prod:hover { border-color: var(--accent); }
-.card-prod.promo { border: 1px solid var(--accent); box-shadow: 0 0 25px var(--accent-glow); }
+.card-prod.promo { border: 1px solid var(--accent); box-shadow: 0 0 25px var(--accent2); }
 .card-prod img { width: 100%; height: 220px; object-fit: cover; }
-.prod-info { padding: 14px; flex-grow: 1; display: flex; flex-direction: column; }
-.tag-promo {
-  background: var(--accent); color: #000; font-size: 9px;
-  padding: 4px 9px; border-radius: 3px; font-weight: 700;
-  display: inline-block; margin-bottom: 10px; align-self: flex-start;
-}
-.prod-info b { font-weight: 600; font-size: 13px; margin-bottom: 6px; }
-.prod-info.desc { color: var(--text-2); font-size: 10px; line-height: 1.6; flex-grow: 1; margin-bottom: 12px; }
-.prod-meta {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 12px; padding-top: 10px; border-top: 1px solid var(--border);
-}
+.info { padding: 14px; flex-grow: 1; display: flex; flex-direction: column; }
+.tag { background: var(--accent); color: #000; font-size: 9px; padding: 4px 9px; border-radius: 3px; font-weight: 700; display: inline-block; margin-bottom: 10px; align-self: flex-start; }
+.info b { font-weight: 600; font-size: 13px; margin-bottom: 6px; }
+.info.desc { color: var(--text2); font-size: 10px; line-height: 1.6; flex-grow: 1; margin-bottom: 12px; }
+.meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-top: 10px; border-top: 1px solid var(--border); }
 .preco { font-size: 16px; font-weight: 600; color: var(--accent); }
-.estoque { font-size: 10px; color: var(--text-2); }
+.estoque { font-size: 10px; color: var(--text2); }
 .estoque.baixo { color: #ff4d4d; font-weight: 600; }
-.btn-group { display: flex; gap: 8px; }
-.btn-group a { flex: 1; }
-.btn-group button { width: 100%; padding: 9px; font-size: 9px; }
+.btns-prod { display: flex; gap: 8px; }
+.btns-prod a { flex: 1; }
+.btns-prod button { width: 100%; padding: 9px; font-size: 9px; }
 
+/* ADMIN */
 .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000f; display: none; align-items: center; justify-content: center; z-index: 100; }
-.modal.ativa { display: flex; }
-.modal-content { background: #111; padding: 30px; width: 90%; max-width: 500px; border-radius: 12px; border: 1px solid var(--border); }
-.modal-content h3 { margin: 0 0 25px; color: var(--accent); font-weight: 500; font-size: 18px; }
-.modal-content h4 { font-size: 12px; color: var(--text-2); font-weight: 400; margin: 25px 0 12px; text-transform: uppercase; letter-spacing: 1px; }
-input, textarea, select {
-  width: 100%; margin: 6px 0 14px; padding: 11px; background: var(--bg);
-  border: 1px solid var(--border); color: var(--text); font-size: 11px; border-radius: 6px;
-}
+.modal.ativo { display: flex; }
+.modal-box { background: #111; padding: 30px; width: 90%; max-width: 500px; border-radius: 12px; border: 1px solid var(--border); }
+.modal-box h3 { margin-bottom: 25px; color: var(--accent); font-weight: 500; font-size: 18px; }
+.modal-box h4 { font-size: 12px; color: var(--text2); font-weight: 400; margin: 25px 0 12px; text-transform: uppercase; letter-spacing: 1px; }
+input, textarea, select { width: 100%; margin: 6px 0 14px; padding: 11px; background: var(--bg); border: 1px solid var(--border); color: var(--text); font-size: 11px; border-radius: 6px; }
 input:focus, textarea:focus { outline: none; border-color: var(--accent); }
-label { font-size: 10px; color: var(--text-2); display: block; margin-bottom: 14px; }
+label { font-size: 10px; color: var(--text2); display: block; margin-bottom: 14px; }
 hr { border: none; border-top: 1px solid var(--border); margin: 25px 0; }
 
-#online-toast {
-  position: fixed; top: 25px; right: 25px; background: var(--accent); color: #000;
-  padding: 12px 18px; border-radius: 6px; font-weight: 600; display: none; z-index: 200; font-size: 11px;
-}
+#toast { position: fixed; top: 25px; right: 25px; background: var(--accent); color: #000; padding: 12px 18px; border-radius: 6px; font-weight: 600; display: none; z-index: 200; font-size: 11px; }
 
-@media (max-width: 1200px) {.grid-prod { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 1200px) {.grid-4 { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 900px) {
-.grid-cat { grid-template-columns: repeat(2, 1fr); }
-.grid-prod { grid-template-columns: repeat(2, 1fr); }
-  #tela-hero h1 { font-size: 40px; }
+.grid-3 { grid-template-columns: repeat(2, 1fr); }
+.grid-4 { grid-template-columns: repeat(2, 1fr); }
+  #hero h1 { font-size: 40px; }
 }
 @media (max-width: 600px) {
-.grid-cat,.grid-prod { grid-template-columns: 1fr; }
+.grid-3,.grid-4 { grid-template-columns: 1fr; }
   header { padding: 12px 18px; }
-.container { padding: 25px 18px; }
+.wrap { padding: 25px 18px; }
 }
 </style>
 </head>
 <body>
 
-<div id="tela-hero" class="tela ativa">
-  <div class="hero-box">
+<!-- TELA 1 -->
+<div id="hero" class="tela ativa">
+  <div>
     <h1>prime store</h1>
-    <p class="subtitulo">Exclusividade & Segurança</p>
-    <p class="descricao">
+    <p class="sub">Exclusividade & Segurança</p>
+    <p class="desc">
       A Prime Store nasceu com um propósito: oferecer produtos selecionados com curadoria manual e proteção total de dados.
       Não utilizamos bancos de dados externos. Cada operação é gerenciada individualmente para garantir que suas informações
       jamais sejam expostas. Transparência, segurança e atendimento direto no WhatsApp.
@@ -176,206 +145,199 @@ hr { border: none; border-top: 1px solid var(--border); margin: 25px 0; }
       Plataforma 100% Segura
     </div>
     <br>
-    <button class="btn-hero" onclick="irParaLoja()">acessar loja</button>
+    <button class="btn-hero" onclick="entrar()">acessar loja</button>
   </div>
 </div>
 
-<div id="tela-loja" class="tela">
+<!-- TELA 2 -->
+<div id="loja" class="tela">
   <header>
     <h1>prime store</h1>
-    <div class="header-btns">
-      <button class="ghost" onclick="trocarTema()">Temas</button>
-      <button class="ghost" onclick="abrirAdmin()">Admin</button>
+    <div class="btns">
+      <button class="ghost" onclick="tema()">Temas</button>
+      <button class="ghost" onclick="abreAdmin()">Admin</button>
     </div>
   </header>
-  <div class="container">
-    <h2 class="titulo-pagina">Nossas Categorias</h2>
-    <div id="lista-categorias" class="grid-cat"></div>
+  <div class="wrap">
+    <h2 class="titulo">Nossas Categorias</h2>
+    <div id="cats" class="grid-3"></div>
   </div>
 </div>
 
-<div id="tela-produtos" class="tela">
+<!-- TELA 3 -->
+<div id="prods" class="tela">
   <header>
     <h1>prime store</h1>
-    <div class="header-btns">
-      <button class="ghost" onclick="voltarCategorias()">Categorias</button>
-      <button class="ghost" onclick="trocarTema()">Temas</button>
-      <button class="ghost" onclick="abrirAdmin()">Admin</button>
+    <div class="btns">
+      <button class="ghost" onclick="voltaCat()">Categorias</button>
+      <button class="ghost" onclick="tema()">Temas</button>
+      <button class="ghost" onclick="abreAdmin()">Admin</button>
     </div>
   </header>
-  <div class="container">
-    <button class="ghost voltar" onclick="voltarCategorias()">← Voltar para Categorias</button>
-    <h2 id="titulo-cat" class="titulo-pagina"></h2>
-    <div id="lista-produtos" class="grid-prod"></div>
+  <div class="wrap">
+    <button class="ghost voltar" onclick="voltaCat()">← Voltar para Categorias</button>
+    <h2 id="tit-cat" class="titulo"></h2>
+    <div id="lista-prod" class="grid-4"></div>
   </div>
 </div>
 
-<div id="admin-modal" class="modal">
-  <div class="modal-content">
-    <h3 id="admin-titulo">Acesso Administrativo</h3>
-    <div id="admin-login">
-      <input id="admin-user" placeholder="Usuário">
-      <input id="admin-pass" type="password" placeholder="Senha">
-      <button onclick="fazerLogin()">Entrar</button>
-      <button class="ghost" onclick="fecharAdmin()">Fechar</button>
+<!-- ADMIN -->
+<div id="modal" class="modal">
+  <div class="modal-box">
+    <h3 id="tit-admin">Acesso Administrativo</h3>
+    <div id="login">
+      <input id="user" placeholder="Usuário">
+      <input id="pass" type="password" placeholder="Senha">
+      <button onclick="logar()">Entrar</button>
+      <button class="ghost" onclick="fechaAdmin()">Fechar</button>
     </div>
-    <div id="admin-painel" style="display:none">
+    <div id="painel" style="display:none">
       <h4>Criar Nova Categoria</h4>
-      <input id="nova-cat-nome" placeholder="Nome da categoria">
-      <input type="file" id="nova-cat-img" accept="image/*">
-      <button onclick="addCategoria()">Adicionar Categoria</button>
+      <input id="nome-cat" placeholder="Nome da categoria">
+      <input type="file" id="img-cat" accept="image/*">
+      <button onclick="addCat()">Adicionar Categoria</button>
       <hr>
       <h4>Adicionar Novo Produto</h4>
-      <select id="produto-cat"></select>
-      <input id="produto-nome" placeholder="Nome do produto">
-      <input id="produto-preco" placeholder="Preço" type="number" step="0.01">
-      <input id="produto-estoque" placeholder="Quantidade em estoque" type="number">
-      <textarea id="produto-desc" placeholder="Descrição detalhada" rows="3"></textarea>
-      <input type="file" id="produto-img" accept="image/*">
-      <label><input type="checkbox" id="produto-promo"> Destacar como promoção</label>
-      <button onclick="addProduto()">Adicionar Produto</button>
-      <button class="ghost" onclick="fecharAdmin()" style="margin-top:18px">Sair do Painel</button>
+      <select id="sel-cat"></select>
+      <input id="nome-prod" placeholder="Nome do produto">
+      <input id="preco-prod" placeholder="Preço" type="number" step="0.01">
+      <input id="estoque-prod" placeholder="Quantidade em estoque" type="number">
+      <textarea id="desc-prod" placeholder="Descrição detalhada" rows="3"></textarea>
+      <input type="file" id="img-prod" accept="image/*">
+      <label><input type="checkbox" id="promo-prod"> Destacar como promoção</label>
+      <button onclick="addProd()">Adicionar Produto</button>
+      <button class="ghost" onclick="fechaAdmin()" style="margin-top:18px">Sair do Painel</button>
     </div>
   </div>
 </div>
 
-<div id="online-toast">Lorrannyh está online</div>
+<div id="toast">Lorrannyh está online</div>
 
 <script>
-let dados = { categorias: [] };
+let db = { cat: [] };
 let catAtual = null;
 const zap = '5598984853563';
 
-function salvar() { localStorage.setItem('primestore', JSON.stringify(dados)); }
-function carregar() {
-  let d = localStorage.getItem('primestore');
-  if(d) dados = JSON.parse(d);
-  renderCategorias();
+function salva() { localStorage.setItem('ps', JSON.stringify(db)); }
+function carrega() {
+  let d = localStorage.getItem('ps');
+  if(d) db = JSON.parse(d);
+  desenhaCat();
 }
-function mostrarTela(id) {
+function tela(id) {
   document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
   document.getElementById(id).classList.add('ativa');
   window.scrollTo(0,0);
 }
-function irParaLoja() {
-  mostrarTela('tela-loja');
-  mostrarOnline();
+function entrar() { tela('loja'); toast(); }
+function voltaCat() { tela('loja'); }
+function tema() { document.body.classList.toggle('blue'); }
+function abreAdmin() { document.getElementById('modal').classList.add('ativo'); }
+function fechaAdmin() {
+  document.getElementById('modal').classList.remove('ativo');
+  document.getElementById('login').style.display = 'block';
+  document.getElementById('painel').style.display = 'none';
+  document.getElementById('user').value = '';
+  document.getElementById('pass').value = '';
 }
-function voltarCategorias() {
-  mostrarTela('tela-loja');
-}
-function trocarTema() { document.body.classList.toggle('theme-blue'); }
-function abrirAdmin() { document.getElementById('admin-modal').classList.add('ativa'); }
-function fecharAdmin() {
-  document.getElementById('admin-modal').classList.remove('ativa');
-  document.getElementById('admin-login').style.display = 'block';
-  document.getElementById('admin-painel').style.display = 'none';
-  document.getElementById('admin-user').value = '';
-  document.getElementById('admin-pass').value = '';
-}
-document.getElementById('admin-modal').addEventListener('click', function(e) {
-  if(e.target === this) fecharAdmin();
-});
-function fazerLogin() {
-  let u = document.getElementById('admin-user').value;
-  let p = document.getElementById('admin-pass').value;
-  if(u === 'Lorrannyh.101225' && p === 'Lorrannnyh') {
-    document.getElementById('admin-login').style.display = 'none';
-    document.getElementById('admin-painel').style.display = 'block';
-    document.getElementById('admin-titulo').innerText = 'Painel de Controle';
-    atualizarSelectCat();
+document.getElementById('modal').onclick = function(e) { if(e.target === this) fechaAdmin(); };
+function logar() {
+  if(document.getElementById('user').value === 'Lorrannyh.101225' && document.getElementById('pass').value === 'Lorrannnyh') {
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('painel').style.display = 'block';
+    document.getElementById('tit-admin').innerText = 'Painel de Controle';
+    attSelCat();
   } else alert('Credenciais inválidas');
 }
-function atualizarSelectCat() {
-  let sel = document.getElementById('produto-cat');
-  sel.innerHTML = dados.categorias.map((c,i) => `<option value="${i}">${c.nome}</option>`).join('');
+function attSelCat() {
+  document.getElementById('sel-cat').innerHTML = db.cat.map((c,i) => `<option value="${i}">${c.nome}</option>`).join('');
 }
-function addCategoria() {
-  let nome = document.getElementById('nova-cat-nome').value;
-  let file = document.getElementById('nova-cat-img').files[0];
+function addCat() {
+  let nome = document.getElementById('nome-cat').value;
+  let file = document.getElementById('img-cat').files[0];
   if(!nome ||!file) return alert('Preencha nome e imagem');
-  let reader = new FileReader();
-  reader.onload = e => {
-    dados.categorias.push({ nome, img: e.target.result, produtos: [] });
-    salvar(); renderCategorias(); atualizarSelectCat();
-    document.getElementById('nova-cat-nome').value = '';
-    document.getElementById('nova-cat-img').value = '';
+  let r = new FileReader();
+  r.onload = e => {
+    db.cat.push({ nome, img: e.target.result, prods: [] });
+    salva(); desenhaCat(); attSelCat();
+    document.getElementById('nome-cat').value = '';
+    document.getElementById('img-cat').value = '';
   };
-  reader.readAsDataURL(file);
+  r.readAsDataURL(file);
 }
-function addProduto() {
-  let catIdx = document.getElementById('produto-cat').value;
-  let nome = document.getElementById('produto-nome').value;
-  let preco = parseFloat(document.getElementById('produto-preco').value);
-  let estoque = parseInt(document.getElementById('produto-estoque').value);
-  let desc = document.getElementById('produto-desc').value;
-  let promo = document.getElementById('produto-promo').checked;
-  let file = document.getElementById('produto-img').files[0];
-  if(catIdx === '' ||!nome || isNaN(preco) || isNaN(estoque) ||!file) return alert('Preencha todos os campos corretamente');
-  let reader = new FileReader();
-  reader.onload = e => {
-    dados.categorias[catIdx].produtos.push({ nome, preco: preco.toFixed(2), estoque, desc, promo, img: e.target.result });
-    salvar();
-    alert('Produto cadastrado com sucesso!');
-    document.getElementById('produto-nome').value = '';
-    document.getElementById('produto-preco').value = '';
-    document.getElementById('produto-estoque').value = '';
-    document.getElementById('produto-desc').value = '';
-    document.getElementById('produto-img').value = '';
-    document.getElementById('produto-promo').checked = false;
+function addProd() {
+  let i = document.getElementById('sel-cat').value;
+  let nome = document.getElementById('nome-prod').value;
+  let preco = parseFloat(document.getElementById('preco-prod').value);
+  let estoque = parseInt(document.getElementById('estoque-prod').value);
+  let desc = document.getElementById('desc-prod').value;
+  let promo = document.getElementById('promo-prod').checked;
+  let file = document.getElementById('img-prod').files[0];
+  if(i === '' ||!nome || isNaN(preco) || isNaN(estoque) ||!file) return alert('Preencha todos os campos');
+  let r = new FileReader();
+  r.onload = e => {
+    db.cat[i].prods.push({ nome, preco: preco.toFixed(2), estoque, desc, promo, img: e.target.result });
+    salva();
+    alert('Produto cadastrado!');
+    document.getElementById('nome-prod').value = '';
+    document.getElementById('preco-prod').value = '';
+    document.getElementById('estoque-prod').value = '';
+    document.getElementById('desc-prod').value = '';
+    document.getElementById('img-prod').value = '';
+    document.getElementById('promo-prod').checked = false;
   };
-  reader.readAsDataURL(file);
+  r.readAsDataURL(file);
 }
-function renderCategorias() {
-  let div = document.getElementById('lista-categorias');
-  if(dados.categorias.length === 0) {
-    div.innerHTML = '<p style="color:var(--text-2); grid-column: 1/-1; text-align:center;">Nenhuma categoria cadastrada. Acesse o Admin para começar.</p>'; return;
+function desenhaCat() {
+  let div = document.getElementById('cats');
+  if(db.cat.length === 0) {
+    div.innerHTML = '<p style="color:var(--text2); grid-column: 1/-1; text-align:center;">Nenhuma categoria. Acesse o Admin.</p>'; return;
   }
-  div.innerHTML = dados.categorias.map((c,i) => `
-    <div class="card-cat" onclick="abrirCategoria(${i})">
-      <img src="${c.img}" alt="${c.nome}">
+  div.innerHTML = db.cat.map((c,i) => `
+    <div class="card-cat" onclick="abreCat(${i})">
+      <img src="${c.img}">
       <div class="nome">${c.nome}</div>
     </div>`).join('');
 }
-function abrirCategoria(i) {
+function abreCat(i) {
   catAtual = i;
-  let c = dados.categorias[i];
-  document.getElementById('titulo-cat').innerText = c.nome;
-  let div = document.getElementById('lista-produtos');
-  if(c.produtos.length === 0) {
-    div.innerHTML = '<p style="color:var(--text-2); grid-column: 1/-1; text-align:center;">Nenhum produto nesta categoria.</p>';
+  let c = db.cat[i];
+  document.getElementById('tit-cat').innerText = c.nome;
+  let div = document.getElementById('lista-prod');
+  if(c.prods.length === 0) {
+    div.innerHTML = '<p style="color:var(--text2); grid-column: 1/-1; text-align:center;">Nenhum produto nesta categoria.</p>';
   } else {
-    div.innerHTML = c.produtos.map(p => {
-      let msg = encodeURIComponent(`Olá, tenho interesse no produto: ${p.nome} - R$ ${p.preco}`);
-      let msgComp = encodeURIComponent(`Olá, realizei a compra de: ${p.nome} - R$ ${p.preco}. Segue comprovante para envio:`);
-      let estoqueClass = p.estoque < 5? 'baixo' : '';
+    div.innerHTML = c.prods.map(p => {
+      let msg = encodeURIComponent(`Olá, tenho interesse: ${p.nome} - R$ ${p.preco}`);
+      let msg2 = encodeURIComponent(`Olá, comprei: ${p.nome} - R$ ${p.preco}. Segue comprovante:`);
+      let baixo = p.estoque < 5? 'baixo' : '';
       return `
       <div class="card-prod ${p.promo? 'promo' : ''}">
-        <img src="${p.img}" alt="${p.nome}">
-        <div class="prod-info">
-          ${p.promo? '<span class="tag-promo">PROMO</span>' : ''}
+        <img src="${p.img}">
+        <div class="info">
+          ${p.promo? '<span class="tag">PROMO</span>' : ''}
           <b>${p.nome}</b>
           <p class="desc">${p.desc}</p>
-          <div class="prod-meta">
+          <div class="meta">
             <span class="preco">R$ ${p.preco}</span>
-            <span class="estoque ${estoqueClass}">Estoque: ${p.estoque}</span>
+            <span class="estoque ${baixo}">Estoque: ${p.estoque}</span>
           </div>
-          <div class="btn-group">
+          <div class="btns-prod">
             <a href="https://wa.me/${zap}?text=${msg}" target="_blank"><button>comprar</button></a>
-            <a href="https://wa.me/${zap}?text=${msgComp}" target="_blank"><button class="ghost">comprovante</button></a>
+            <a href="https://wa.me/${zap}?text=${msg2}" target="_blank"><button class="ghost">comprovante</button></a>
           </div>
         </div>
       </div>`;
     }).join('');
   }
-  mostrarTela('tela-produtos');
+  tela('prods');
 }
-function mostrarOnline() {
-  let t = document.getElementById('online-toast');
+function toast() {
+  let t = document.getElementById('toast');
   t.style.display = 'block';
   setTimeout(() => t.style.display = 'none', 4000);
 }
-carregar();
+carrega();
 </script>
 </body>
-</html
+</html>
