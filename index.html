@@ -5,127 +5,107 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>prime store</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Playfair+Display:wght@600&display=swap');
-:root {
-  --bg: #000; --bg2: #0f0f0f; --text: #f5f5f5; --text2: #888;
-  --accent: #ff2d95; --accent2: #ff2d9540; --border: #222;
-}
-body.blue { --accent: #00bfff; --accent2: #00bfff40; }
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-body { background: var(--bg); color: var(--text); font-size: 11px; }
-.tela { display: none; }
-.tela.ativa { display: block; }
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@600&display=swap');
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #000; color: #f5f5f5; font-family: 'Poppins', sans-serif; font-size: 11px; }
 
-#hero {
-  min-height: 100vh; display: none; align-items: center; justify-content: center;
-  text-align: center; padding: 20px;
-  background: radial-gradient(circle at 50% 30%, var(--accent2), transparent 70%);
-}
-#hero.ativa { display: flex; }
-#hero h1 {
-  font-size: 56px; color: var(--accent); margin-bottom: 15px;
-  font-weight: 600; letter-spacing: 5px; font-family: 'Playfair Display', serif;
-}
-#hero.sub { font-size: 12px; color: var(--text2); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 35px; }
-#hero.desc { color: var(--text2); line-height: 1.9; margin: 0 auto 20px; font-weight: 300; font-size: 12px; max-width: 650px; }
-#hero.selo {
-  display: inline-flex; align-items: center; gap: 8px; margin: 30px 0;
-  padding: 10px 20px; border: 1px solid var(--accent); border-radius: 50px;
-  font-size: 10px; color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px;
-}
-.btn-hero {
-  background: var(--accent); color: #000; border: none;
-  padding: 14px 40px; cursor: pointer; font-size: 11px;
-  font-weight: 700; border-radius: 5px; transition: 0.2s;
-  text-transform: uppercase; letter-spacing: 1px; margin-top: 15px;
-}
-.btn-hero:hover { filter: brightness(1.15); transform: scale(1.03); }
+/* ESCONDE TUDO POR PADRÃO */
+.page { display: none; min-height: 100vh; }
+/* SÓ MOSTRA QUANDO TEM A CLASSE SHOW */
+.page.show { display: block; }
 
-header {
-  padding: 15px 30px; border-bottom: 1px solid var(--border);
-  display: flex; justify-content: space-between; align-items: center;
-  background: rgba(0,0,0,0.95); backdrop-filter: blur(12px);
-  position: sticky; top: 0; z-index: 50;
+/* PÁGINA 1: SÓ HERO */
+#page-hero {
+  display: none; align-items: center; justify-content: center; text-align: center;
+  background: radial-gradient(circle at 50% 30%, #ff2d9540, transparent 70%); padding: 20px;
 }
-header h1 {
-  font-size: 22px; color: var(--accent); font-weight: 600;
-  letter-spacing: 2px; font-family: 'Playfair Display', serif;
+#page-hero.show { display: flex; }
+#page-hero h1 {
+  font-size: 56px; color: #ff2d95; margin-bottom: 15px; font-weight: 600;
+  letter-spacing: 5px; font-family: 'Playfair Display', serif;
 }
-.btns { display: flex; gap: 12px; }
-button {
-  background: var(--accent); color: #000; border: none;
-  padding: 9px 18px; cursor: pointer; font-size: 10px;
-  font-weight: 600; border-radius: 4px; transition: 0.2s;
-  text-transform: uppercase; letter-spacing: 0.5px;
+#page-hero.sub { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 35px; }
+#page-hero.desc { color: #888; line-height: 1.9; margin: 0 auto 20px; font-weight: 300; font-size: 12px; max-width: 650px; }
+#page-hero.selo {
+  display: inline-flex; align-items: center; gap: 8px; margin: 30px 0; padding: 10px 20px;
+  border: 1px solid #ff2d95; border-radius: 50px; font-size: 10px; color: #ff2d95;
+  text-transform: uppercase; letter-spacing: 1.5px;
 }
-button:hover { filter: brightness(1.1); }
-button.ghost { background: transparent; color: var(--text2); border: 1px solid var(--border); }
-button.ghost:hover { border-color: var(--accent); color: var(--accent); }
+.btn-main {
+  background: #ff2d95; color: #000; border: none; padding: 14px 40px; cursor: pointer;
+  font-size: 11px; font-weight: 700; border-radius: 5px; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px;
+}
 
-.wrap { padding: 35px 30px; max-width: 1400px; margin: auto; }
-.titulo {
-  font-size: 20px; font-weight: 500; margin-bottom: 30px;
-  letter-spacing: 1.5px; text-transform: uppercase;
+/* PÁGINA 2 E 3: LOJA */
+.header {
+  padding: 15px 30px; border-bottom: 1px solid #222; display: flex; justify-content: space-between;
+  align-items: center; background: rgba(0,0,0,0.95); position: sticky; top: 0; z-index: 50;
 }
-.voltar { margin-bottom: 25px; }
+.header h1 { font-size: 22px; color: #ff2d95; font-weight: 600; letter-spacing: 2px; font-family: 'Playfair Display', serif; }
+.btn { background: #ff2d95; color: #000; border: none; padding: 9px 18px; cursor: pointer; font-size: 10px; font-weight: 600; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.btn-ghost { background: transparent; color: #888; border: 1px solid #222; }
+.btn-ghost:hover { border-color: #ff2d95; color: #ff2d95; }
+.container { padding: 35px 30px; max-width: 1400px; margin: auto; }
+.titulo { font-size: 20px; font-weight: 500; margin-bottom: 30px; letter-spacing: 1.5px; text-transform: uppercase; }
 
-.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+/* CATEGORIAS - 3 COLUNAS */
+.grid-cats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
 .card-cat {
-  background: var(--bg2); border-radius: 10px; overflow: hidden;
-  border: 1px solid var(--border); transition: 0.3s; cursor: pointer;
+  background: #0f0f0f; border-radius: 10px; overflow: hidden; border: 1px solid #222;
+  cursor: pointer; transition: 0.3s;
 }
-.card-cat:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 10px 30px var(--accent2); }
+.card-cat:hover { transform: translateY(-5px); border-color: #ff2d95; box-shadow: 0 10px 30px #ff2d9540; }
 .card-cat img { width: 100%; height: 260px; object-fit: cover; display: block; }
 .card-cat.nome { padding: 20px; text-align: center; font-weight: 500; font-size: 14px; text-transform: uppercase; letter-spacing: 1.5px; }
 
-.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+/* PRODUTOS - 4 COLUNAS */
+.grid-prods { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
 .card-prod {
-  background: var(--bg2); border-radius: 10px; overflow: hidden;
-  border: 1px solid var(--border); transition: 0.3s; display: flex; flex-direction: column;
+  background: #0f0f0f; border-radius: 10px; overflow: hidden; border: 1px solid #222;
+  display: flex; flex-direction: column;
 }
-.card-prod:hover { border-color: var(--accent); }
-.card-prod.promo { border: 1px solid var(--accent); box-shadow: 0 0 25px var(--accent2); }
+.card-prod.promo { border: 1px solid #ff2d95; box-shadow: 0 0 25px #ff2d9540; }
 .card-prod img { width: 100%; height: 220px; object-fit: cover; }
-.info { padding: 14px; flex-grow: 1; display: flex; flex-direction: column; }
-.tag { background: var(--accent); color: #000; font-size: 9px; padding: 4px 9px; border-radius: 3px; font-weight: 700; display: inline-block; margin-bottom: 10px; align-self: flex-start; }
-.info b { font-weight: 600; font-size: 13px; margin-bottom: 6px; }
-.info.desc { color: var(--text2); font-size: 10px; line-height: 1.6; flex-grow: 1; margin-bottom: 12px; }
-.meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-top: 10px; border-top: 1px solid var(--border); }
-.preco { font-size: 16px; font-weight: 600; color: var(--accent); }
-.estoque { font-size: 10px; color: var(--text2); }
+.prod-info { padding: 14px; flex-grow: 1; display: flex; flex-direction: column; }
+.tag-promo { background: #ff2d95; color: #000; font-size: 9px; padding: 4px 9px; border-radius: 3px; font-weight: 700; display: inline-block; margin-bottom: 10px; align-self: flex-start; }
+.prod-info b { font-weight: 600; font-size: 13px; margin-bottom: 6px; }
+.prod-info.desc { color: #888; font-size: 10px; line-height: 1.6; flex-grow: 1; margin-bottom: 12px; }
+.prod-footer { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-top: 10px; border-top: 1px solid #222; }
+.preco { font-size: 16px; font-weight: 600; color: #ff2d95; }
+.estoque { font-size: 10px; color: #888; }
 .estoque.baixo { color: #ff4d4d; font-weight: 600; }
 .btns-prod { display: flex; gap: 8px; }
 .btns-prod a { flex: 1; }
 .btns-prod button { width: 100%; padding: 9px; font-size: 9px; }
 
-.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000f; display: none; align-items: center; justify-content: center; z-index: 100; }
-.modal.ativo { display: flex; }
-.modal-box { background: #111; padding: 30px; width: 90%; max-width: 500px; border-radius: 12px; border: 1px solid var(--border); }
-.modal-box h3 { margin-bottom: 25px; color: var(--accent); font-weight: 500; font-size: 18px; }
-.modal-box h4 { font-size: 12px; color: var(--text2); font-weight: 400; margin: 25px 0 12px; text-transform: uppercase; letter-spacing: 1px; }
-input, textarea, select { width: 100%; margin: 6px 0 14px; padding: 11px; background: var(--bg); border: 1px solid var(--border); color: var(--text); font-size: 11px; border-radius: 6px; }
-input:focus, textarea:focus { outline: none; border-color: var(--accent); }
-label { font-size: 10px; color: var(--text2); display: block; margin-bottom: 14px; }
-hr { border: none; border-top: 1px solid var(--border); margin: 25px 0; }
+/* ADMIN */
+#modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000f; display: none; align-items: center; justify-content: center; z-index: 100; }
+#modal.show { display: flex; }
+.modal-box { background: #111; padding: 30px; width: 90%; max-width: 500px; border-radius: 12px; border: 1px solid #222; }
+.modal-box h3 { margin-bottom: 25px; color: #ff2d95; font-weight: 500; font-size: 18px; }
+.modal-box h4 { font-size: 12px; color: #888; font-weight: 400; margin: 25px 0 12px; text-transform: uppercase; letter-spacing: 1px; }
+input, textarea, select { width: 100%; margin: 6px 0 14px; padding: 11px; background: #000; border: 1px solid #222; color: #f5f5f5; font-size: 11px; border-radius: 6px; }
+input:focus, textarea:focus { outline: none; border-color: #ff2d95; }
+label { font-size: 10px; color: #888; display: block; margin-bottom: 14px; }
+hr { border: none; border-top: 1px solid #222; margin: 25px 0; }
 
-#toast { position: fixed; top: 25px; right: 25px; background: var(--accent); color: #000; padding: 12px 18px; border-radius: 6px; font-weight: 600; display: none; z-index: 200; font-size: 11px; }
-
-@media (max-width: 1200px) {.grid-4 { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 1200px) {.grid-prods { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 900px) {
-.grid-3 { grid-template-columns: repeat(2, 1fr); }
-.grid-4 { grid-template-columns: repeat(2, 1fr); }
-  #hero h1 { font-size: 40px; }
+.grid-cats { grid-template-columns: repeat(2, 1fr); }
+.grid-prods { grid-template-columns: repeat(2, 1fr); }
+  #page-hero h1 { font-size: 40px; }
 }
 @media (max-width: 600px) {
-.grid-3,.grid-4 { grid-template-columns: 1fr; }
-  header { padding: 12px 18px; }
-.wrap { padding: 25px 18px; }
+.grid-cats,.grid-prods { grid-template-columns: 1fr; }
+ .header { padding: 12px 18px; }
+.container { padding: 25px 18px; }
 }
 </style>
 </head>
 <body>
 
-<div id="hero" class="tela ativa">
+<!-- PÁGINA 1: SÓ HERO -->
+<div id="page-hero" class="page show">
   <div>
     <h1>prime store</h1>
     <p class="sub">Exclusividade & Segurança</p>
@@ -139,196 +119,200 @@ hr { border: none; border-top: 1px solid var(--border); margin: 25px 0; }
       Plataforma 100% Segura
     </div>
     <br>
-    <button class="btn-hero" onclick="entrar()">acessar loja</button>
+    <button class="btn-main" onclick="irLoja()">acessar loja</button>
   </div>
 </div>
 
-<div id="loja" class="tela">
-  <header>
+<!-- PÁGINA 2: CATEGORIAS -->
+<div id="page-cats" class="page">
+  <div class="header">
     <h1>prime store</h1>
-    <div class="btns">
-      <button class="ghost" onclick="tema()">Temas</button>
-      <button class="ghost" onclick="abreAdmin()">Admin</button>
+    <div>
+      <button class="btn btn-ghost" onclick="abreAdmin()">Admin</button>
     </div>
-  </header>
-  <div class="wrap">
+  </div>
+  <div class="container">
     <h2 class="titulo">Nossas Categorias</h2>
-    <div id="cats" class="grid-3"></div>
+    <div id="lista-cats" class="grid-cats"></div>
   </div>
 </div>
 
-<div id="prods" class="tela">
-  <header>
+<!-- PÁGINA 3: PRODUTOS -->
+<div id="page-prods" class="page">
+  <div class="header">
     <h1>prime store</h1>
-    <div class="btns">
-      <button class="ghost" onclick="voltaCat()">Categorias</button>
-      <button class="ghost" onclick="tema()">Temas</button>
-      <button class="ghost" onclick="abreAdmin()">Admin</button>
+    <div>
+      <button class="btn btn-ghost" onclick="voltaCats()">Categorias</button>
+      <button class="btn btn-ghost" onclick="abreAdmin()">Admin</button>
     </div>
-  </header>
-  <div class="wrap">
-    <button class="ghost voltar" onclick="voltaCat()">← Voltar para Categorias</button>
-    <h2 id="tit-cat" class="titulo"></h2>
-    <div id="lista-prod" class="grid-4"></div>
+  <div class="container">
+    <button class="btn btn-ghost" onclick="voltaCats()" style="margin-bottom:25px">← Voltar para Categorias</button>
+    <h2 id="nome-cat" class="titulo"></h2>
+    <div id="lista-prods" class="grid-prods"></div>
   </div>
 </div>
 
-<div id="modal" class="modal">
+<!-- ADMIN -->
+<div id="modal">
   <div class="modal-box">
     <h3 id="tit-admin">Acesso Administrativo</h3>
-    <div id="login">
-      <input id="user" placeholder="Usuário">
-      <input id="pass" type="password" placeholder="Senha">
-      <button onclick="logar()">Entrar</button>
-      <button class="ghost" onclick="fechaAdmin()">Fechar</button>
+    <div id="admin-login">
+      <input id="admin-user" placeholder="Usuário">
+      <input id="admin-pass" type="password" placeholder="Senha">
+      <button class="btn" onclick="login()">Entrar</button>
+      <button class="btn btn-ghost" onclick="fechaAdmin()">Fechar</button>
     </div>
-    <div id="painel" style="display:none">
+    <div id="admin-painel" style="display:none">
       <h4>Criar Nova Categoria</h4>
-      <input id="nome-cat" placeholder="Nome da categoria">
-      <input type="file" id="img-cat" accept="image/*">
-      <button onclick="addCat()">Adicionar Categoria</button>
+      <input id="input-nome-cat" placeholder="Nome da categoria">
+      <input type="file" id="input-img-cat" accept="image/*">
+      <button class="btn" onclick="addCat()">Adicionar Categoria</button>
       <hr>
       <h4>Adicionar Novo Produto</h4>
-      <select id="sel-cat"></select>
-      <input id="nome-prod" placeholder="Nome do produto">
-      <input id="preco-prod" placeholder="Preço" type="number" step="0.01">
-      <input id="estoque-prod" placeholder="Quantidade em estoque" type="number">
-      <textarea id="desc-prod" placeholder="Descrição detalhada" rows="3"></textarea>
-      <input type="file" id="img-prod" accept="image/*">
-      <label><input type="checkbox" id="promo-prod"> Destacar como promoção</label>
-      <button onclick="addProd()">Adicionar Produto</button>
-      <button class="ghost" onclick="fechaAdmin()" style="margin-top:18px">Sair do Painel</button>
+      <select id="select-cat"></select>
+      <input id="input-nome-prod" placeholder="Nome do produto">
+      <input id="input-preco-prod" placeholder="Preço" type="number" step="0.01">
+      <input id="input-estoque-prod" placeholder="Quantidade em estoque" type="number">
+      <textarea id="input-desc-prod" placeholder="Descrição detalhada" rows="3"></textarea>
+      <input type="file" id="input-img-prod" accept="image/*">
+      <label><input type="checkbox" id="input-promo-prod"> Destacar como promoção</label>
+      <button class="btn" onclick="addProd()">Adicionar Produto</button>
+      <button class="btn btn-ghost" onclick="fechaAdmin()" style="margin-top:18px">Sair do Painel</button>
     </div>
   </div>
 </div>
 
-<div id="toast">Lorrannyh está online</div>
-
 <script>
-let db = { cat: [] };
-let catAtual = null;
-const zap = '5598984853563';
+let db = { cats: [] };
+let catIndex = null;
+const ZAP = '5598984853563';
 
-function salva() { localStorage.setItem('ps', JSON.stringify(db)); }
-function carrega() {
-  let d = localStorage.getItem('ps');
+function save() { localStorage.setItem('psv2', JSON.stringify(db)); }
+function load() {
+  let d = localStorage.getItem('psv2');
   if(d) db = JSON.parse(d);
-  desenhaCat();
+  renderCats();
 }
-function tela(id) {
-  document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
-  document.getElementById(id).classList.add('ativa');
+
+// MOSTRA SÓ 1 PÁGINA POR VEZ
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('show'));
+  document.getElementById(id).classList.add('show');
   window.scrollTo(0,0);
 }
-function entrar() { tela('loja'); toast(); }
-function voltaCat() { tela('loja'); }
-function tema() { document.body.classList.toggle('blue'); }
-function abreAdmin() { document.getElementById('modal').classList.add('ativo'); }
+
+function irLoja() { showPage('page-cats'); }
+function voltaCats() { showPage('page-cats'); }
+
+function abreAdmin() { document.getElementById('modal').classList.add('show'); }
 function fechaAdmin() {
-  document.getElementById('modal').classList.remove('ativo');
-  document.getElementById('login').style.display = 'block';
-  document.getElementById('painel').style.display = 'none';
-  document.getElementById('user').value = '';
-  document.getElementById('pass').value = '';
+  document.getElementById('modal').classList.remove('show');
+  document.getElementById('admin-login').style.display = 'block';
+  document.getElementById('admin-painel').style.display = 'none';
+  document.getElementById('admin-user').value = '';
+  document.getElementById('admin-pass').value = '';
 }
-document.getElementById('modal').onclick = function(e) { if(e.target === this) fechaAdmin(); };
-function logar() {
-  if(document.getElementById('user').value === 'Lorrannyh.101225' && document.getElementById('pass').value === 'Lorrannnyh') {
-    document.getElementById('login').style.display = 'none';
-    document.getElementById('painel').style.display = 'block';
+document.getElementById('modal').onclick = e => { if(e.target.id === 'modal') fechaAdmin(); };
+
+function login() {
+  if(document.getElementById('admin-user').value === 'Lorrannyh.101225' &&
+     document.getElementById('admin-pass').value === 'Lorrannnyh') {
+    document.getElementById('admin-login').style.display = 'none';
+    document.getElementById('admin-painel').style.display = 'block';
     document.getElementById('tit-admin').innerText = 'Painel de Controle';
-    attSelCat();
+    updateSelectCat();
   } else alert('Credenciais inválidas');
 }
-function attSelCat() {
-  document.getElementById('sel-cat').innerHTML = db.cat.map((c,i) => `<option value="${i}">${c.nome}</option>`).join('');
+
+function updateSelectCat() {
+  document.getElementById('select-cat').innerHTML = db.cats.map((c,i) => `<option value="${i}">${c.nome}</option>`).join('');
 }
+
 function addCat() {
-  let nome = document.getElementById('nome-cat').value;
-  let file = document.getElementById('img-cat').files[0];
+  let nome = document.getElementById('input-nome-cat').value;
+  let file = document.getElementById('input-img-cat').files[0];
   if(!nome ||!file) return alert('Preencha nome e imagem');
   let r = new FileReader();
   r.onload = e => {
-    db.cat.push({ nome, img: e.target.result, prods: [] });
-    salva(); desenhaCat(); attSelCat();
-    document.getElementById('nome-cat').value = '';
-    document.getElementById('img-cat').value = '';
+    db.cats.push({ nome, img: e.target.result, prods: [] });
+    save(); renderCats(); updateSelectCat();
+    document.getElementById('input-nome-cat').value = '';
+    document.getElementById('input-img-cat').value = '';
   };
   r.readAsDataURL(file);
 }
+
 function addProd() {
-  let i = document.getElementById('sel-cat').value;
-  let nome = document.getElementById('nome-prod').value;
-  let preco = parseFloat(document.getElementById('preco-prod').value);
-  let estoque = parseInt(document.getElementById('estoque-prod').value);
-  let desc = document.getElementById('desc-prod').value;
-  let promo = document.getElementById('promo-prod').checked;
-  let file = document.getElementById('img-prod').files[0];
+  let i = document.getElementById('select-cat').value;
+  let nome = document.getElementById('input-nome-prod').value;
+  let preco = parseFloat(document.getElementById('input-preco-prod').value);
+  let estoque = parseInt(document.getElementById('input-estoque-prod').value);
+  let desc = document.getElementById('input-desc-prod').value;
+  let promo = document.getElementById('input-promo-prod').checked;
+  let file = document.getElementById('input-img-prod').files[0];
   if(i === '' ||!nome || isNaN(preco) || isNaN(estoque) ||!file) return alert('Preencha todos os campos');
   let r = new FileReader();
   r.onload = e => {
-    db.cat[i].prods.push({ nome, preco: preco.toFixed(2), estoque, desc, promo, img: e.target.result });
-    salva();
-    alert('Produto cadastrado!');
-    document.getElementById('nome-prod').value = '';
-    document.getElementById('preco-prod').value = '';
-    document.getElementById('estoque-prod').value = '';
-    document.getElementById('desc-prod').value = '';
-    document.getElementById('img-prod').value = '';
-    document.getElementById('promo-prod').checked = false;
+    db.cats[i].prods.push({ nome, preco: preco.toFixed(2), estoque, desc, promo, img: e.target.result });
+    save(); alert('Produto cadastrado!');
+    document.getElementById('input-nome-prod').value = '';
+    document.getElementById('input-preco-prod').value = '';
+    document.getElementById('input-estoque-prod').value = '';
+    document.getElementById('input-desc-prod').value = '';
+    document.getElementById('input-img-prod').value = '';
+    document.getElementById('input-promo-prod').checked = false;
   };
   r.readAsDataURL(file);
 }
-function desenhaCat() {
-  let div = document.getElementById('cats');
-  if(db.cat.length === 0) {
-    div.innerHTML = '<p style="color:var(--text2); grid-column: 1/-1; text-align:center;">Nenhuma categoria. Acesse o Admin.</p>'; return;
+
+function renderCats() {
+  let div = document.getElementById('lista-cats');
+  if(db.cats.length === 0) {
+    div.innerHTML = '<p style="color:#888; grid-column: 1/-1; text-align:center;">Nenhuma categoria. Acesse o Admin.</p>';
+    return;
   }
-  div.innerHTML = db.cat.map((c,i) => `
+  div.innerHTML = db.cats.map((c,i) => `
     <div class="card-cat" onclick="abreCat(${i})">
       <img src="${c.img}">
       <div class="nome">${c.nome}</div>
     </div>`).join('');
 }
+
 function abreCat(i) {
-  catAtual = i;
-  let c = db.cat[i];
-  document.getElementById('tit-cat').innerText = c.nome;
-  let div = document.getElementById('lista-prod');
+  catIndex = i;
+  let c = db.cats[i];
+  document.getElementById('nome-cat').innerText = c.nome;
+  let div = document.getElementById('lista-prods');
   if(c.prods.length === 0) {
-    div.innerHTML = '<p style="color:var(--text2); grid-column: 1/-1; text-align:center;">Nenhum produto nesta categoria.</p>';
+    div.innerHTML = '<p style="color:#888; grid-column: 1/-1; text-align:center;">Nenhum produto nesta categoria.</p>';
   } else {
     div.innerHTML = c.prods.map(p => {
-      let msg = encodeURIComponent(`Olá, tenho interesse: ${p.nome} - R$ ${p.preco}`);
+      let msg1 = encodeURIComponent(`Olá, tenho interesse: ${p.nome} - R$ ${p.preco}`);
       let msg2 = encodeURIComponent(`Olá, comprei: ${p.nome} - R$ ${p.preco}. Segue comprovante:`);
       let baixo = p.estoque < 5? 'baixo' : '';
       return `
       <div class="card-prod ${p.promo? 'promo' : ''}">
         <img src="${p.img}">
-        <div class="info">
-          ${p.promo? '<span class="tag">PROMO</span>' : ''}
+        <div class="prod-info">
+          ${p.promo? '<span class="tag-promo">PROMO</span>' : ''}
           <b>${p.nome}</b>
           <p class="desc">${p.desc}</p>
-          <div class="meta">
+          <div class="prod-footer">
             <span class="preco">R$ ${p.preco}</span>
             <span class="estoque ${baixo}">Estoque: ${p.estoque}</span>
           </div>
           <div class="btns-prod">
-            <a href="https://wa.me/${zap}?text=${msg}" target="_blank"><button>comprar</button></a>
-            <a href="https://wa.me/${zap}?text=${msg2}" target="_blank"><button class="ghost">comprovante</button></a>
+            <a href="https://wa.me/${ZAP}?text=${msg1}" target="_blank"><button class="btn">comprar</button></a>
+            <a href="https://wa.me/${ZAP}?text=${msg2}" target="_blank"><button class="btn btn-ghost">comprovante</button></a>
           </div>
         </div>
       </div>`;
     }).join('');
   }
-  tela('prods');
+  showPage('page-prods');
 }
-function toast() {
-  let t = document.getElementById('toast');
-  t.style.display = 'block';
-  setTimeout(() => t.style.display = 'none', 4000);
-}
-carrega();
+
+load();
 </script>
 </body>
 </html>
