@@ -5,63 +5,113 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>prime store</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 :root {
-  --bg: #000;
-  --text: #fff;
-  --accent: #ff1493;
-  --card: #111;
-  --font: 12px;
+  --bg: #0a0a0a;
+  --bg-card: #141414;
+  --text: #f5f5f5;
+  --text-2: #a1a1a1;
+  --accent: #ff2d95;
+  --accent-glow: #ff2d9555;
+  --font: 11px;
 }
 body.theme-blue {
-  --accent: #1e90ff;
+  --accent: #00bfff;
+  --accent-glow: #00bfff55;
 }
-* { box-sizing: border-box; font-family: Arial, sans-serif; }
+* { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 body { margin: 0; background: var(--bg); color: var(--text); font-size: var(--font); }
-header { padding: 10px; text-align: center; border-bottom: 1px solid var(--accent); }
-header h1 { margin: 0; font-size: 16px; color: var(--accent); }
-.nav { display: flex; justify-content: center; gap: 10px; padding: 8px; }
-button { background: var(--accent); color: #000; border: none; padding: 6px 10px; cursor: pointer; font-size: var(--font); font-weight: bold; }
-button.ghost { background: var(--card); color: var(--text); border: 1px solid var(--accent); }
-.aba { display: none; padding: 15px; max-width: 600px; margin: auto; }
+.hide { display: none!important; }
+
+header {
+  padding: 12px 20px;
+  border-bottom: 1px solid #222;
+  display: flex; justify-content: space-between; align-items: center;
+}
+header h1 { margin: 0; font-size: 18px; color: var(--accent); font-weight: 600; letter-spacing: 1px; }
+.header-btns { display: flex; gap: 8px; }
+button {
+  background: var(--accent); color: #000; border: none;
+  padding: 7px 14px; cursor: pointer; font-size: var(--font);
+  font-weight: 600; border-radius: 4px; transition: 0.2s;
+}
+button:hover { opacity: 0.8; }
+button.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+
+.aba { display: none; padding: 25px 15px; max-width: 1100px; margin: auto; animation: fade 0.3s; }
 .aba.active { display: block; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
-.card { background: var(--card); padding: 8px; border: 1px solid #222; text-align: center; }
-.card img { width: 100%; height: 100px; object-fit: cover; }
-.card.promo { border: 2px solid var(--accent); box-shadow: 0 0 8px var(--accent); }
-input, textarea { width: 100%; margin: 4px 0; padding: 4px; background: #222; border: 1px solid #333; color: #fff; font-size: var(--font); }
-.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000c; display: none; align-items: center; justify-content: center; }
+@keyframes fade { from {opacity: 0} to {opacity: 1} }
+
+#inicio { text-align: center; padding-top: 60px; }
+#inicio h1 { font-size: 40px; color: var(--accent); margin: 0 0 15px; font-weight: 300; letter-spacing: 3px; }
+#inicio p { color: var(--text-2); max-width: 400px; margin: 0 auto 25px; line-height: 1.6; }
+#inicio button { padding: 10px 30px; font-size: 12px; }
+
+.titulo-secao { font-size: 16px; font-weight: 400; margin: 0 0 20px; color: var(--text-2); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+.card {
+  background: var(--bg-card); border-radius: 6px; overflow: hidden;
+  border: 1px solid #222; transition: 0.2s; cursor: pointer;
+}
+.card:hover { transform: translateY(-3px); border-color: var(--accent); }
+.card img { width: 100%; height: 140px; object-fit: cover; display: block; }
+.card-body { padding: 10px; }
+.card-body b { font-weight: 600; font-size: 12px; display: block; margin-bottom: 4px; }
+.card-body p { margin: 2px 0; color: var(--text-2); font-size: 10px; }
+.card.promo { border: 1px solid var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
+.card.promo.tag-promo {
+  background: var(--accent); color: #000; font-size: 9px;
+  padding: 2px 6px; border-radius: 3px; font-weight: 600; display: inline-block; margin-bottom: 5px;
+}
+.card.btn-group { display: flex; gap: 5px; margin-top: 8px; }
+.card.btn-group a { flex: 1; }
+.card.btn-group button { width: 100%; padding: 6px; font-size: 10px; }
+
+.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000d; display: none; align-items: center; justify-content: center; z-index: 100; }
 .modal.active { display: flex; }
-.modal-content { background: var(--card); padding: 15px; width: 90%; max-width: 400px; }
-#online-toast { position: fixed; top: 10px; right: 10px; background: var(--accent); color: #000; padding: 8px; display: none; font-weight: bold; }
+.modal-content { background: var(--bg-card); padding: 20px; width: 90%; max-width: 450px; border-radius: 8px; border: 1px solid #222; }
+.modal-content h3 { margin: 0 0 15px; color: var(--accent); font-weight: 400; }
+input, textarea, select {
+  width: 100%; margin: 5px 0 10px; padding: 8px; background: var(--bg);
+  border: 1px solid #222; color: var(--text); font-size: var(--font); border-radius: 4px;
+}
+label { font-size: 10px; color: var(--text-2); display: block; margin-bottom: 10px; }
+
+#online-toast {
+  position: fixed; top: 15px; right: 15px; background: var(--accent); color: #000;
+  padding: 8px 12px; border-radius: 4px; font-weight: 600; display: none; z-index: 200;
+}
 </style>
 </head>
 <body>
 <div id="online-toast">Lorrannyh está online</div>
-<header>
-  <h1>prime store</h1>
-  <div class="nav">
-    <button class="ghost" onclick="trocarAba('inicio')">Início</button>
-    <button class="ghost" onclick="trocarAba('categorias')">Categorias</button>
-    <button class="ghost" onclick="trocarTema()">Temas</button>
-    <button class="ghost" onclick="abrirAdmin()">Admin</button>
-  </div>
-</header>
 
 <div id="inicio" class="aba active">
-  <h2>Bem-vinda à prime store</h2>
-  <p>Este site é gerenciado manualmente para manter seus dados 100% seguros. Nada fica salvo em bancos de dados externos. Todas as compras são confirmadas direto com a vendedora pelo WhatsApp.</p>
-  <button onclick="trocarAba('categorias')">entrar</button>
+  <h1>prime store</h1>
+  <p>Loja gerenciada manualmente para garantir segurança total dos seus dados. Sem bancos de dados externos. Atendimento e confirmação direto no WhatsApp.</p>
+  <button onclick="mostrarApp()">entrar</button>
 </div>
 
-<div id="categorias" class="aba">
-  <h2>Categorias</h2>
-  <div id="lista-categorias" class="grid"></div>
-</div>
+<div id="app" class="hide">
+  <header>
+    <h1>prime store</h1>
+    <div class="header-btns">
+      <button class="ghost" onclick="trocarAba('categorias')">Categorias</button>
+      <button class="ghost" onclick="trocarTema()">Temas</button>
+      <button class="ghost" onclick="abrirAdmin()">Admin</button>
+    </div>
+  </header>
 
-<div id="subcategorias" class="aba">
-  <h2 id="titulo-sub"></h2>
-  <button class="ghost" onclick="trocarAba('categorias')">Voltar</button>
-  <div id="lista-produtos" class="grid"></div>
+  <div id="categorias" class="aba active">
+    <h2 class="titulo-secao">Categorias</h2>
+    <div id="lista-categorias" class="grid"></div>
+  </div>
+
+  <div id="subcategorias" class="aba">
+    <button class="ghost" onclick="trocarAba('categorias')" style="margin-bottom:15px">← Voltar</button>
+    <h2 id="titulo-sub" class="titulo-secao"></h2>
+    <div id="lista-produtos" class="grid"></div>
+  </div>
 </div>
 
 <div id="admin-modal" class="modal">
@@ -78,6 +128,7 @@ input, textarea { width: 100%; margin: 4px 0; padding: 4px; background: #222; bo
       <input id="nova-cat-nome" placeholder="Nome da categoria">
       <input type="file" id="nova-cat-img" accept="image/*">
       <button onclick="addCategoria()">Adicionar Categoria</button>
+      <hr style="border-color:#222; margin:15px 0">
       <h4>Adicionar Produto</h4>
       <select id="produto-cat"></select>
       <input id="produto-nome" placeholder="Nome do produto">
@@ -87,7 +138,7 @@ input, textarea { width: 100%; margin: 4px 0; padding: 4px; background: #222; bo
       <input type="file" id="produto-img" accept="image/*">
       <label><input type="checkbox" id="produto-promo"> Marcar como promoção</label>
       <button onclick="addProduto()">Adicionar Produto</button>
-      <button class="ghost" onclick="fecharAdmin()">Sair</button>
+      <button class="ghost" onclick="fecharAdmin()" style="margin-top:10px">Sair do Painel</button>
     </div>
   </div>
 </div>
@@ -95,6 +146,7 @@ input, textarea { width: 100%; margin: 4px 0; padding: 4px; background: #222; bo
 <script>
 let dados = { categorias: [] };
 let catAtual = null;
+const zap = '5598984853563';
 
 function salvar() { localStorage.setItem('primestore', JSON.stringify(dados)); }
 function carregar() {
@@ -102,19 +154,19 @@ function carregar() {
   if(d) dados = JSON.parse(d);
   renderCategorias();
 }
+function mostrarApp() {
+  document.getElementById('inicio').classList.remove('active');
+  document.getElementById('app').classList.remove('hide');
+  trocarAba('categorias');
+  mostrarOnline();
+}
 function trocarAba(id) {
-  document.querySelectorAll('.aba').forEach(a => a.classList.remove('active'));
+  document.querySelectorAll('#app.aba').forEach(a => a.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-function trocarTema() {
-  document.body.classList.toggle('theme-blue');
-}
-function abrirAdmin() {
-  document.getElementById('admin-modal').classList.add('active');
-}
-function fecharAdmin() {
-  document.getElementById('admin-modal').classList.remove('active');
-}
+function trocarTema() { document.body.classList.toggle('theme-blue'); }
+function abrirAdmin() { document.getElementById('admin-modal').classList.add('active'); }
+function fecharAdmin() { document.getElementById('admin-modal').classList.remove('active'); }
 function fazerLogin() {
   let u = document.getElementById('admin-user').value;
   let p = document.getElementById('admin-pass').value;
@@ -127,66 +179,83 @@ function fazerLogin() {
 }
 function atualizarSelectCat() {
   let sel = document.getElementById('produto-cat');
-  sel.innerHTML = '';
-  dados.categorias.forEach((c,i) => sel.innerHTML += `<option value="${i}">${c.nome}</option>`);
+  sel.innerHTML = dados.categorias.map((c,i) => `<option value="${i}">${c.nome}</option>`).join('');
 }
 function addCategoria() {
   let nome = document.getElementById('nova-cat-nome').value;
   let file = document.getElementById('nova-cat-img').files[0];
-  if(!nome ||!file) return alert('Preencha tudo');
+  if(!nome ||!file) return alert('Preencha nome e imagem');
   let reader = new FileReader();
   reader.onload = e => {
     dados.categorias.push({ nome, img: e.target.result, produtos: [] });
     salvar(); renderCategorias(); atualizarSelectCat();
     document.getElementById('nova-cat-nome').value = '';
+    document.getElementById('nova-cat-img').value = '';
   };
   reader.readAsDataURL(file);
 }
 function addProduto() {
   let catIdx = document.getElementById('produto-cat').value;
   let nome = document.getElementById('produto-nome').value;
-  let preco = document.getElementById('produto-preco').value;
+  let preco = parseFloat(document.getElementById('produto-preco').value).toFixed(2);
   let estoque = document.getElementById('produto-estoque').value;
   let desc = document.getElementById('produto-desc').value;
   let promo = document.getElementById('produto-promo').checked;
   let file = document.getElementById('produto-img').files[0];
-  if(catIdx === '' ||!nome ||!preco ||!estoque ||!file) return alert('Preencha tudo');
+  if(catIdx === '' ||!nome ||!preco ||!estoque ||!file) return alert('Preencha todos os campos');
   let reader = new FileReader();
   reader.onload = e => {
     dados.categorias[catIdx].produtos.push({ nome, preco, estoque, desc, promo, img: e.target.result });
     salvar();
     if(catAtual == catIdx) abrirCategoria(catIdx);
-    alert('Produto adicionado');
+    alert('Produto adicionado!');
+    document.getElementById('produto-nome').value = '';
+    document.getElementById('produto-preco').value = '';
+    document.getElementById('produto-estoque').value = '';
+    document.getElementById('produto-desc').value = '';
+    document.getElementById('produto-img').value = '';
+    document.getElementById('produto-promo').checked = false;
   };
   reader.readAsDataURL(file);
 }
 function renderCategorias() {
   let div = document.getElementById('lista-categorias');
-  div.innerHTML = '';
-  dados.categorias.forEach((c,i) => {
-    div.innerHTML += `<div class="card" onclick="abrirCategoria(${i})">
-      <img src="${c.img}"><p>${c.nome}</p></div>`;
-  });
+  if(dados.categorias.length === 0) {
+    div.innerHTML = '<p style="color:var(--text-2)">Nenhuma categoria. Entre no Admin para adicionar.</p>'; return;
+  }
+  div.innerHTML = dados.categorias.map((c,i) => `
+    <div class="card" onclick="abrirCategoria(${i})">
+      <img src="${c.img}">
+      <div class="card-body"><b>${c.nome}</b></div>
+    </div>`).join('');
 }
 function abrirCategoria(i) {
   catAtual = i;
   let c = dados.categorias[i];
   document.getElementById('titulo-sub').innerText = c.nome;
   let div = document.getElementById('lista-produtos');
-  div.innerHTML = '';
-  c.produtos.forEach(p => {
-    let msg = encodeURIComponent(`Olá, quero comprar: ${p.nome} - R$${p.preco}`);
-    let msgComp = encodeURIComponent(`Olá, comprei ${p.nome} - R$${p.preco}. Segue comprovante:`);
-    div.innerHTML += `<div class="card ${p.promo? 'promo' : ''}">
-      <img src="${p.img}">
-      <b>${p.nome}</b>
-      <p>R$ ${p.preco} | Estoque: ${p.estoque}</p>
-      <p>${p.desc}</p>
-      ${p.promo? '<p style="color:var(--accent)">PROMOÇÃO</p>' : ''}
-      <a href="https://wa.me/5598984853563?text=${msg}" target="_blank"><button>comprar</button></a>
-      <a href="https://wa.me/5598984853563?text=${msgComp}" target="_blank"><button class="ghost">comprar e enviar comprovante</button></a>
-    </div>`;
-  });
+  if(c.produtos.length === 0) {
+    div.innerHTML = '<p style="color:var(--text-2)">Nenhum produto nesta categoria.</p>';
+  } else {
+    div.innerHTML = c.produtos.map(p => {
+      let msg = encodeURIComponent(`Olá, quero comprar: ${p.nome} - R$ ${p.preco}`);
+      let msgComp = encodeURIComponent(`Olá, comprei ${p.nome} - R$ ${p.preco}. Segue comprovante:`);
+      return `
+      <div class="card ${p.promo? 'promo' : ''}">
+        <img src="${p.img}">
+        <div class="card-body">
+          ${p.promo? '<span class="tag-promo">PROMO</span>' : ''}
+          <b>${p.nome}</b>
+          <p>R$ ${p.preco} | Estoque: ${p.estoque}</p>
+          <p>${p.desc}</p>
+          <div class="btn-group">
+            <a href="https://wa.me/${zap}?text=${msg}" target="_blank"><button>comprar</button></a>
+            <a href="https://wa.me/${zap}?text=${msgComp}" target="_blank"><button class="ghost">comprovante</button></a>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
   trocarAba('subcategorias');
 }
 function mostrarOnline() {
@@ -195,7 +264,6 @@ function mostrarOnline() {
   setTimeout(() => t.style.display = 'none', 4000);
 }
 carregar();
-mostrarOnline();
 </script>
 </body>
 </html>
