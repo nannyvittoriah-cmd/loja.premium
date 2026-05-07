@@ -23,8 +23,42 @@ body.theme-blue {
 }
 * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 body { margin: 0; background: var(--bg); color: var(--text); font-size: var(--font-base); }
-.hide { display: none!important; }
 
+.tela { display: none; min-height: 100vh; }
+.tela.ativa { display: block; }
+
+/* TELA 1 - APRESENTAÇÃO */
+#tela-inicio {
+  align-items: center; justify-content: center; text-align: center; padding: 40px 20px;
+  background: radial-gradient(circle at 50% 30%, var(--accent-glow), transparent 60%);
+}
+#tela-inicio.ativa { display: flex; }
+.hero-content { max-width: 600px; }
+#tela-inicio h1 {
+  font-size: 52px; color: var(--accent); margin: 0 0 10px;
+  font-weight: 600; letter-spacing: 4px; font-family: 'Playfair Display', serif;
+}
+.subtitulo {
+  font-size: 12px; color: var(--text-2); text-transform: uppercase;
+  letter-spacing: 3px; margin-bottom: 30px;
+}
+.descricao {
+  color: var(--text-2); line-height: 1.8; margin: 0 auto 15px; font-weight: 300;
+}
+.selo {
+  display: inline-flex; align-items: center; gap: 8px; margin: 25px 0;
+  padding: 8px 16px; border: 1px solid var(--accent); border-radius: 50px;
+  font-size: 10px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px;
+}
+#tela-inicio button {
+  background: var(--accent); color: #000; border: none;
+  padding: 12px 35px; cursor: pointer; font-size: 11px;
+  font-weight: 600; border-radius: 4px; transition: 0.2s;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-top: 10px;
+}
+#tela-inicio button:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+/* TELA 2 - APP */
 header {
   padding: 14px 25px; border-bottom: 1px solid var(--border);
   display: flex; justify-content: space-between; align-items: center;
@@ -46,37 +80,11 @@ button:hover { filter: brightness(1.1); transform: translateY(-1px); }
 button.ghost { background: transparent; color: var(--text-2); border: 1px solid var(--border); }
 button.ghost:hover { border-color: var(--accent); color: var(--accent); }
 
-.aba { display: none; max-width: 1300px; margin: auto; animation: fade 0.4s; }
-.aba.active { display: block; }
+.conteudo-app { padding: 30px 25px; max-width: 1300px; margin: auto; }
+.aba { display: none; animation: fade 0.4s; }
+.aba.ativa { display: block; }
 @keyframes fade { from {opacity: 0; transform: translateY(5px)} to {opacity: 1; transform: translateY(0)} }
 
-/* INÍCIO - HERO FORMAL */
-#inicio {
-  min-height: 100vh; display: flex; align-items: center; justify-content: center;
-  text-align: center; padding: 40px 20px;
-  background: radial-gradient(circle at 50% 30%, var(--accent-glow), transparent 60%);
-}
-.hero-content { max-width: 600px; }
-#inicio h1 {
-  font-size: 52px; color: var(--accent); margin: 0 0 10px;
-  font-weight: 600; letter-spacing: 4px; font-family: 'Playfair Display', serif;
-}
-#inicio.subtitulo {
-  font-size: 12px; color: var(--text-2); text-transform: uppercase;
-  letter-spacing: 3px; margin-bottom: 30px;
-}
-#inicio.descricao {
-  color: var(--text-2); line-height: 1.8; margin: 0 auto 15px; font-weight: 300;
-}
-.selo {
-  display: inline-flex; align-items: center; gap: 8px; margin: 25px 0;
-  padding: 8px 16px; border: 1px solid var(--accent); border-radius: 50px;
-  font-size: 10px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px;
-}
-#inicio button { padding: 12px 35px; font-size: 11px; margin-top: 10px; }
-
-/* CONTEÚDO APP */
-#app.conteudo { padding: 30px 25px; }
 .titulo-secao {
   font-size: 18px; font-weight: 500; margin: 0 0 25px; color: var(--text);
   letter-spacing: 1px; text-transform: uppercase;
@@ -134,7 +142,7 @@ button.ghost:hover { border-color: var(--accent); color: var(--accent); }
 
 /* MODAL ADMIN */
 .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000e; display: none; align-items: center; justify-content: center; z-index: 100; }
-.modal.active { display: flex; }
+.modal.ativa { display: flex; }
 .modal-content { background: var(--bg-card-2); padding: 25px; width: 90%; max-width: 480px; border-radius: 10px; border: 1px solid var(--border); }
 .modal-content h3 { margin: 0 0 20px; color: var(--accent); font-weight: 500; font-size: 16px; }
 .modal-content h4 { font-size: 12px; color: var(--text-2); font-weight: 400; margin: 20px 0 10px; text-transform: uppercase; letter-spacing: 1px; }
@@ -151,24 +159,23 @@ hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
   padding: 10px 16px; border-radius: 6px; font-weight: 600; display: none; z-index: 200; font-size: 11px;
 }
 
-/* RESPONSIVO */
 @media (max-width: 1024px) {.grid-produtos { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 768px) {
- .grid-categorias { grid-template-columns: repeat(2, 1fr); }
- .grid-produtos { grid-template-columns: repeat(2, 1fr); }
-  #inicio h1 { font-size: 36px; }
+.grid-categorias { grid-template-columns: repeat(2, 1fr); }
+.grid-produtos { grid-template-columns: repeat(2, 1fr); }
+  #tela-inicio h1 { font-size: 36px; }
 }
 @media (max-width: 480px) {
- .grid-categorias,.grid-produtos { grid-template-columns: 1fr; }
+.grid-categorias,.grid-produtos { grid-template-columns: 1fr; }
   header { padding: 12px 15px; }
-  #app.conteudo { padding: 20px 15px; }
+ .conteudo-app { padding: 20px 15px; }
 }
 </style>
 </head>
 <body>
-<div id="online-toast">Lorrannyh está online</div>
 
-<div id="inicio" class="aba active">
+<!-- TELA 1: APRESENTAÇÃO -->
+<div id="tela-inicio" class="tela ativa">
   <div class="hero-content">
     <h1>prime store</h1>
     <p class="subtitulo">Exclusividade & Segurança</p>
@@ -182,29 +189,32 @@ hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
       Dados Protegidos
     </div>
     <br>
-    <button onclick="mostrarApp()">acessar loja</button>
+    <button onclick="entrarLoja()">acessar loja</button>
   </div>
 </div>
 
-<div id="app" class="hide">
+<!-- TELA 2: LOJA -->
+<div id="tela-app" class="tela">
   <header>
     <h1>prime store</h1>
     <div class="header-btns">
-      <button class="ghost" onclick="trocarAba('categorias')">Categorias</button>
+      <button class="ghost" onclick="mostrarAba('categorias')">Categorias</button>
       <button class="ghost" onclick="trocarTema()">Temas</button>
       <button class="ghost" onclick="abrirAdmin()">Admin</button>
     </div>
   </header>
 
-  <div id="categorias" class="aba active conteudo">
-    <h2 class="titulo-secao">Nossas Categorias</h2>
-    <div id="lista-categorias" class="grid-categorias"></div>
-  </div>
+  <div class="conteudo-app">
+    <div id="categorias" class="aba ativa">
+      <h2 class="titulo-secao">Nossas Categorias</h2>
+      <div id="lista-categorias" class="grid-categorias"></div>
+    </div>
 
-  <div id="subcategorias" class="aba conteudo">
-    <button class="ghost voltar" onclick="trocarAba('categorias')">← Voltar para Categorias</button>
-    <h2 id="titulo-sub" class="titulo-secao"></h2>
-    <div id="lista-produtos" class="grid-produtos"></div>
+    <div id="subcategorias" class="aba">
+      <button class="ghost voltar" onclick="mostrarAba('categorias')">← Voltar para Categorias</button>
+      <h2 id="titulo-sub" class="titulo-secao"></h2>
+      <div id="lista-produtos" class="grid-produtos"></div>
+    </div>
   </div>
 </div>
 
@@ -237,6 +247,8 @@ hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
   </div>
 </div>
 
+<div id="online-toast">Lorrannyh está online</div>
+
 <script>
 let dados = { categorias: [] };
 let catAtual = null;
@@ -248,19 +260,19 @@ function carregar() {
   if(d) dados = JSON.parse(d);
   renderCategorias();
 }
-function mostrarApp() {
-  document.getElementById('inicio').classList.remove('active');
-  document.getElementById('app').classList.remove('hide');
-  trocarAba('categorias');
+function entrarLoja() {
+  document.getElementById('tela-inicio').classList.remove('ativa');
+  document.getElementById('tela-app').classList.add('ativa');
+  mostrarAba('categorias');
   mostrarOnline();
 }
-function trocarAba(id) {
-  document.querySelectorAll('#app.aba').forEach(a => a.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+function mostrarAba(id) {
+  document.querySelectorAll('#tela-app.aba').forEach(a => a.classList.remove('ativa'));
+  document.getElementById(id).classList.add('ativa');
 }
 function trocarTema() { document.body.classList.toggle('theme-blue'); }
-function abrirAdmin() { document.getElementById('admin-modal').classList.add('active'); }
-function fecharAdmin() { document.getElementById('admin-modal').classList.remove('active'); }
+function abrirAdmin() { document.getElementById('admin-modal').classList.add('ativa'); }
+function fecharAdmin() { document.getElementById('admin-modal').classList.remove('ativa'); }
 function fazerLogin() {
   let u = document.getElementById('admin-user').value;
   let p = document.getElementById('admin-pass').value;
@@ -354,7 +366,7 @@ function abrirCategoria(i) {
       </div>`;
     }).join('');
   }
-  trocarAba('subcategorias');
+  mostrarAba('subcategorias');
 }
 function mostrarOnline() {
   let t = document.getElementById('online-toast');
