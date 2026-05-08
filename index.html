@@ -5,294 +5,300 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Premium Store</title>
 <style>
-:root{--rosa:#FF1B8D;--preto:#0A0A0F;--card:#141419;--branco:#fff;--azul:#1B8DFF;--cinza:#8A8A8A}
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
-body{background:var(--preto);color:var(--branco);min-height:100vh}
-
-/* HEADER IGUAL PRINT */
-.header{display:flex;justify-content:space-between;align-items:center;padding:16px 5%;background:var(--preto)}
-.logo{font-size:26px;font-weight:800;color:var(--rosa);letter-spacing:1px}
-.header-right{display:flex;align-items:center;gap:12px}
-.user{display:flex;align-items:center;gap:6px;color:var(--branco)}
-.admin-btn{background:transparent;border:2px solid var(--rosa);color:var(--branco);padding:6px 16px;border-radius:8px;cursor:pointer;font-weight:600}
-
-/* TELA APRESENTAÇÃO */
-.hero{text-align:center;padding:60px 5% 40px;background:linear-gradient(180deg,var(--preto) 0%,#1a0a15 100%)}
-.hero h1{font-size:42px;color:var(--rosa);margin-bottom:16px;font-weight:900}
-.hero p{color:var(--cinza);font-size:18px;margin-bottom:30px}
-.btn-hero{background:var(--rosa);color:var(--branco);border:none;padding:14px 40px;border-radius:8px;font-weight:700;font-size:16px;cursor:pointer}
-
-.btn{background:var(--rosa);color:var(--branco);border:none;padding:12px 24px;border-radius:8px;font-weight:600;cursor:pointer;margin:4px 0;width:100%}
-.btn-outline{background:transparent;border:2px solid var(--rosa);color:var(--azul);padding:10px 24px;border-radius:8px;font-weight:600;cursor:pointer}
-.container{padding:20px 4%}
-h2{margin-bottom:20px;color:var(--rosa);font-size:28px;font-weight:700}
-.voltar-btn{background:transparent;border:2px solid var(--rosa);color:var(--azul);padding:8px 20px;border-radius:8px;margin-bottom:20px;cursor:pointer}
-
-/* GRID 3 COLUNAS QUADRADO IGUAL PRINT */
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-@media(max-width:768px){.grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:480px){.grid{grid-template-columns:repeat(2,1fr);gap:10px}}
-
-/* CARD QUADRADO IDÊNTICO AO PRINT */
-.card{background:transparent;border-radius:12px;padding:8px;text-align:center;cursor:pointer;border:2px solid var(--rosa);transition:.2s}
-.card:hover{background:rgba(255,27,141,.1)}
-.img-box{width:100%;aspect-ratio:1/1;background:var(--card);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;overflow:hidden}
-.img-box img{width:70%;height:70%;object-fit:contain}
-.card.nome{color:var(--branco);font-size:15px;font-weight:700;margin:6px 0}
-.card.numero{color:var(--rosa);font-size:18px;font-weight:800;margin:2px 0}
-.card.desc{color:var(--cinza);font-size:13px}
-
-.sair-conta{display:block;margin:40px auto 20px;background:transparent;border:2px solid var(--rosa);color:var(--azul);padding:10px 30px;border-radius:8px;font-weight:600;cursor:pointer}
-
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.95);display:none;align-items:center;justify-content:center;padding:20px;z-index:100;overflow-y:auto}
-.modal.active{display:flex}
-.modal-content{background:var(--card);padding:24px;border-radius:12px;max-width:500px;width:100%;border:2px solid var(--rosa);margin:auto}
-.input,.select{width:100%;padding:12px;margin:8px 0;background:var(--preto);border:2px solid #333;color:var(--branco);border-radius:8px;font-size:15px}
-.input:focus{border-color:var(--rosa);outline:none}
-.hide{display:none}
-.file-input{display:none}
-.file-label{display:block;padding:12px;background:var(--preto);border:2px dashed var(--rosa);border-radius:8px;text-align:center;cursor:pointer;margin:8px 0}
-.preview{width:100%;aspect-ratio:1/1;object-fit:contain;border:2px solid var(--branco);border-radius:8px;margin:8px 0;background:var(--preto)}
-.tabs{display:flex;gap:8px;margin-bottom:20px}
-.tab{padding:10px 20px;background:var(--preto);border:2px solid #333;border-radius:8px;cursor:pointer;font-weight:600}
-.tab.active{border-color:var(--rosa);color:var(--rosa)}
+:root {
+  --rosa: #ff2d95;
+  --preto: #0a0a0a;
+  --cinza: #1a1a1a;
+  --branco: #ffffff;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+body { background: var(--preto); color: var(--branco); }
+body.tema-azul { --rosa: #2d9bff; }
+.header {
+  background: var(--cinza); padding: 15px; display: flex;
+  justify-content: space-between; align-items: center; border-bottom: 2px solid var(--rosa);
+}
+.logo { font-size: 24px; font-weight: bold; color: var(--rosa); }
+.btn {
+  background: var(--rosa); color: var(--branco); border: none; padding: 10px 20px;
+  border-radius: 8px; cursor: pointer; font-weight: bold; margin: 5px;
+}
+.btn:hover { opacity: 0.8; }
+.btn-admin { background: transparent; border: 1px solid var(--rosa); }
+.container { padding: 20px; max-width: 1200px; margin: auto; }
+.hero { text-align: center; padding: 40px 20px; }
+.hero h1 { color: var(--rosa); margin-bottom: 15px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-top: 20px; }
+.card {
+  background: var(--cinza); border: 2px solid var(--rosa); border-radius: 12px;
+  padding: 10px; text-align: center; cursor: pointer; transition: 0.3s;
+}
+.card:hover { transform: scale(1.05); }
+.card img {
+  width: 100%; height: 120px; object-fit: cover; border-radius: 8px;
+  border: 2px solid var(--branco); background: transparent;
+}
+.modal {
+  display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.9); justify-content: center; align-items: center; z-index: 100;
+}
+.modal-content {
+  background: var(--cinza); padding: 20px; border-radius: 12px;
+  border: 2px solid var(--rosa); width: 90%; max-width: 400px; text-align: center;
+}
+.modal-content img {
+  width: 100%; max-height: 250px; object-fit: contain;
+  border: 2px solid var(--branco); border-radius: 8px; margin-bottom: 10px;
+}
+input, textarea, select {
+  width: 100%; padding: 8px; margin: 5px 0; background: var(--preto);
+  border: 1px solid var(--rosa); color: var(--branco); border-radius: 6px;
+}
+.hidden { display: none; }
+.pix-box { background: var(--preto); padding: 15px; border-radius: 8px; margin: 10px 0; border: 1px dashed var(--rosa); }
+.label { color: var(--rosa); font-weight: bold; margin-top: 10px; display: block; }
 </style>
 </head>
 <body>
-
 <div class="header">
-  <div class="logo">PREMIUM STORE</div>
-  <div class="header-right">
-    <div class="user">👤 Vittoria</div>
-    <button class="admin-btn" onclick="showLogin()">Admin</button>
-  </div>
+  <div class="logo">Premium Store</div>
+  <button class="btn btn-admin" onclick="abrirAdmin()">Admin</button>
 </div>
 
-<!-- TELA DE APRESENTAÇÃO -->
-<div id="home">
+<div id="inicio" class="container">
   <div class="hero">
-    <h1>PREMIUM STORE</h1>
-    <p>Seguidores, contas e serviços para turbinar suas redes</p>
-    <button class="btn-hero" onclick="showCategories()">Entrar na Loja</button>
+    <h1>Bem-vinda à Premium Store</h1>
+    <p>Por que nosso atendimento é manual? Pra garantir que cada pedido seja tratado com cuidado, estoque 100% real e zero risco de golpes. Aqui você fala direto comigo!</p>
+    <button class="btn" onclick="mostrarCategorias()">Entrar</button>
   </div>
 </div>
 
-<div id="categorias" class="container hide">
+<div id="categorias" class="container hidden">
   <h2>Categorias</h2>
-  <div id="catGrid" class="grid"></div>
-  <button class="sair-conta" onclick="logout()">Sair da Conta</button>
+  <div id="gridCategorias" class="grid"></div>
 </div>
 
-<div id="produtos" class="container hide">
-  <button class="voltar-btn" onclick="showCategories()">← Voltar</button>
-  <h2 id="catTitle">Produtos</h2>
-  <div id="prodGrid" class="grid"></div>
-  <button class="sair-conta" onclick="logout()">Sair da Conta</button>
+<div id="produtos" class="container hidden">
+  <button class="btn" onclick="voltarCategorias()">← Voltar</button>
+  <h2 id="nomeCategoria"></h2>
+  <div id="gridProdutos" class="grid"></div>
 </div>
 
-<div id="produtoModal" class="modal">
+<!-- Modal Produto -->
+<div id="modalProduto" class="modal">
   <div class="modal-content">
-    <div class="img-box" style="margin-bottom:16px"><img id="prodImg"></div>
-    <h3 id="prodNome" style="font-size:22px;margin-bottom:8px"></h3>
-    <div id="prodNumero" class="numero" style="font-size:24px"></div>
-    <p id="prodDesc" style="margin:8px 0;color:var(--cinza)"></p>
-    <p style="margin:12px 0"><b>Estoque:</b> <span id="prodEstoque" style="color:var(--rosa)"></span></p>
-    <button class="btn" onclick="pagarPix()">Pagar com Pix</button>
-    <button class="btn-outline" style="width:100%;margin-top:8px" onclick="comprarZap()">Comprar no WhatsApp</button>
-    <button class="btn-outline" style="width:100%;margin-top:8px" onclick="closeModal()">Fechar</button>
+    <img id="imgProduto" src="">
+    <h3 id="tituloProduto"></h3>
+    <p id="descProduto"></p>
+    <p><b>Estoque:</b> <span id="estoqueProduto"></span></p>
+    <p><b>Valor:</b> R$ <span id="valorProduto"></span></p>
+    <button class="btn" onclick="abrirPix()">Pagar com Pix</button>
+    <button class="btn" onclick="comprarWhats()">Comprar no WhatsApp</button>
+    <button class="btn btn-admin" onclick="fecharModal('modalProduto')">Fechar</button>
   </div>
 </div>
 
-<div id="pixModal" class="modal">
-  <div class="modal-content" style="text-align:center">
-    <h3 style="color:var(--rosa)">Chave Pix</h3>
-    <p style="margin:16px 0;font-size:20px;font-weight:700">98994853563</p>
-    <p>Nome: Lorrane Vitórias Alves Vaz</p>
-    <div id="qrcode" style="margin:20px auto"></div>
-    <button class="btn-outline" onclick="closeModal()">Fechar</button>
+<!-- Modal Pix -->
+<div id="modalPix" class="modal">
+  <div class="modal-content">
+    <h3>Pagamento via Pix</h3>
+    <div class="pix-box">
+      <p><b>Chave Pix (Celular):</b></p>
+      <p id="chavePix">(98) 98485-3563</p>
+      <p><b>Nome:</b></p>
+      <p>Lorrane Vitórias Alves Vaz</p>
+    </div>
+    <p>Após pagar, envie o comprovante no WhatsApp</p>
+    <button class="btn" onclick="copiarPix()">Copiar Chave</button>
+    <button class="btn btn-admin" onclick="fecharModal('modalPix')">Fechar</button>
   </div>
 </div>
 
-<div id="loginModal" class="modal">
+<!-- Modal Admin Login -->
+<div id="modalLogin" class="modal">
   <div class="modal-content">
-    <h3 style="color:var(--rosa);margin-bottom:16px">Login Admin</h3>
-    <input id="user" class="input" placeholder="Usuário">
-    <input id="pass" type="password" class="input" placeholder="Senha">
+    <h3>Login Admin</h3>
+    <input type="text" id="usuario" placeholder="Usuário">
+    <input type="password" id="senha" placeholder="Senha">
     <button class="btn" onclick="login()">Entrar</button>
+    <button class="btn btn-admin" onclick="fecharModal('modalLogin')">Cancelar</button>
   </div>
 </div>
 
-<div id="adminPanel" class="container hide">
-  <h2>Painel Admin</h2>
-  <div class="tabs">
-    <div class="tab active" onclick="adminTab('cat')">Categorias</div>
-    <div class="tab" onclick="adminTab('prod')">Produtos</div>
-  </div>
+<!-- Modal Painel Admin -->
+<div id="modalAdmin" class="modal">
+  <div class="modal-content" style="max-width:600px; max-height:90vh; overflow-y:auto;">
+    <h3>Painel Admin</h3>
+    <label class="label">Tema do Site:</label>
+    <select onchange="trocarTema(this.value)">
+      <option value="rosa">Rosa + Preto</option>
+      <option value="azul">Azul + Preto</option>
+    </select>
 
-  <div id="adminCat">
-    <h3 style="margin-bottom:12px">Nova Categoria</h3>
-    <input id="catNome" class="input" placeholder="Nome: Instagram, Free Fire, TikTok...">
-    <label class="file-label" for="catImg">Escolher da Galeria</label>
-    <input type="file" id="catImg" class="file-input" accept="image/*" onchange="previewImg(this,'catPreview')">
-    <img id="catPreview" class="preview hide">
-    <button class="btn" onclick="addCategoria()">Salvar Categoria</button>
-  </div>
+    <label class="label">Nova Categoria:</label>
+    <input type="text" id="nomeCat" placeholder="Nome da categoria">
+    <input type="file" id="imgCat" accept="image/*">
+    <button class="btn" onclick="addCategoria()">Adicionar Categoria</button>
 
-  <div id="adminProd" class="hide">
-    <h3 style="margin-bottom:12px">Novo Produto</h3>
-    <select id="prodCatSelect" class="select"></select>
-    <input id="prodNome" class="input" placeholder="Nome: Instagram">
-    <input id="prodNumero" class="input" placeholder="Número destaque: 6, 12, 100" type="number">
-    <input id="prodDesc" class="input" placeholder="Descrição: 100 seguidores">
-    <input id="prodPreco" class="input" placeholder="Preço: 6.00" type="number" step="0.01">
-    <input id="prodEstoque" class="input" placeholder="Estoque: 13" type="number">
-    <label class="file-label" for="prodImgInput">Escolher da Galeria</label>
-    <input type="file" id="prodImgInput" class="file-input" accept="image/*" onchange="previewImg(this,'prodPreview')">
-    <img id="prodPreview" class="preview hide">
-    <button class="btn" onclick="addProduto()">Salvar Produto</button>
-  </div>
+    <label class="label">Novo Produto:</label>
+    <select id="selectCat"></select>
+    <input type="text" id="nomeProd" placeholder="Nome do produto">
+    <textarea id="descProd" placeholder="Descrição"></textarea>
+    <input type="number" id="precoProd" placeholder="Preço">
+    <input type="number" id="estoqueProd" placeholder="Estoque">
+    <input type="file" id="imgProd" accept="image/*">
+    <button class="btn" onclick="addProduto()">Adicionar Produto</button>
 
-  <button class="btn-outline" style="margin-top:30px" onclick="logout()">Sair do Admin</button>
+    <label class="label">Gerenciar Estoque:</label>
+    <div id="listaEstoque"></div>
+
+    <button class="btn btn-admin" onclick="fecharModal('modalAdmin')">Sair</button>
+  </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-let data = JSON.parse(localStorage.getItem('premiumStore')) || {categorias:[]};
-let currentCatIndex = 0, currentProd = null;
+let dados = JSON.parse(localStorage.getItem('loja')) || { categorias: [], tema: 'rosa' };
+let produtoAtual = null;
+let categoriaAtual = null;
 
-function saveData(){ localStorage.setItem('premiumStore', JSON.stringify(data)); }
+if(dados.tema === 'azul') document.body.classList.add('tema-azul');
 
-function showCategories(){
-  esconderTudo();
-  document.getElementById('categorias').classList.remove('hide');
-  let html = '';
-  data.categorias.forEach((c,i)=>{
-    html += `<div class="card" onclick="showProdutos(${i})">
-      <div class="img-box"><img src="${c.img}"></div>
-      <div class="nome">${c.nome}</div>
-    </div>`;
-  });
-  document.getElementById('catGrid').innerHTML = html || '<p style="grid-column:1/-1;text-align:center;color:#aaa">Adicione categorias no Admin</p>';
+function salvar() { localStorage.setItem('loja', JSON.stringify(dados)); }
+function mostrarCategorias() {
+  document.getElementById('inicio').classList.add('hidden');
+  document.getElementById('categorias').classList.remove('hidden');
+  renderCategorias();
 }
-
-function showProdutos(catIndex){
-  currentCatIndex = catIndex;
-  esconderTudo();
-  document.getElementById('produtos').classList.remove('hide');
-  document.getElementById('catTitle').innerText = data.categorias[catIndex].nome;
-  let prods = data.categorias[catIndex].produtos || [];
-  let html = '';
-  prods.forEach((p)=>{
-    html += `<div class="card" onclick='openProd(${JSON.stringify(p).replace(/'/g,"&apos;")})'>
-      <div class="img-box"><img src="${p.img}"></div>
-      <div class="nome">${p.nome}</div>
-      <div class="numero">${p.numero || ''}</div>
-      <div class="desc">${p.desc || ''}</div>
-    </div>`;
-  });
-  document.getElementById('prodGrid').innerHTML = html || '<p style="grid-column:1/-1;text-align:center;color:#aaa">Nenhum produto</p>';
-}
-
-function openProd(p){
-  currentProd = p;
-  document.getElementById('prodImg').src = p.img;
-  document.getElementById('prodNome').innerText = p.nome;
-  document.getElementById('prodNumero').innerText = p.numero || '';
-  document.getElementById('prodDesc').innerText = p.desc || '';
-  document.getElementById('prodEstoque').innerText = p.estoque;
-  document.getElementById('produtoModal').classList.add('active');
-}
-
-function pagarPix(){
-  closeModal();
-  document.getElementById('pixModal').classList.add('active');
-  document.getElementById('qrcode').innerHTML = "";
-  new QRCode(document.getElementById("qrcode"), {
-    text: `00020126580014BR.GOV.BCB.PIX013698994853563520400005303986540${currentProd.preco}5802BR5925Lorrane Vitorias Alves Vaz6009SAO PAULO62070503***6304`,
-    width:200, height:200, colorDark:"#FF1B8D", colorLight:"#0A0A0F"
+function renderCategorias() {
+  const grid = document.getElementById('gridCategorias');
+  grid.innerHTML = '';
+  dados.categorias.forEach((cat, i) => {
+    grid.innerHTML += `
+      <div class="card" onclick="abrirCategoria(${i})">
+        <img src="${cat.img || ''}" style="background:#000">
+        <p>${cat.nome}</p>
+      </div>`;
   });
 }
-
-function comprarZap(){
-  let cat = data.categorias[currentCatIndex].nome;
-  let msg = `Olá! Quero comprar: *${currentProd.nome}* ${currentProd.numero || ''} | Categoria: *${cat}* | Valor: R$ ${parseFloat(currentProd.preco).toFixed(2)}`;
-  window.open(`https://wa.me/5598994853563?text=${encodeURIComponent(msg)}`,'_blank');
+function abrirCategoria(i) {
+  categoriaAtual = i;
+  document.getElementById('categorias').classList.add('hidden');
+  document.getElementById('produtos').classList.remove('hidden');
+  document.getElementById('nomeCategoria').innerText = dados.categorias[i].nome;
+  renderProdutos();
 }
-
-function showLogin(){document.getElementById('loginModal').classList.add('active');}
-function closeModal(){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('active'));}
-function esconderTudo(){
-  ['home','categorias','produtos','adminPanel'].forEach(id=>document.getElementById(id).classList.add('hide'));
+function renderProdutos() {
+  const grid = document.getElementById('gridProdutos');
+  grid.innerHTML = '';
+  dados.categorias[categoriaAtual].produtos?.forEach((prod, j) => {
+    grid.innerHTML += `
+      <div class="card" onclick="abrirProduto(${j})">
+        <img src="${prod.img || ''}" style="background:#000">
+        <p>${prod.nome}</p>
+        <p>R$ ${prod.preco}</p>
+        <p>Estoque: ${prod.estoque}</p>
+      </div>`;
+  });
 }
-
-function login(){
-  if(document.getElementById('user').value==="Lorrannyh" && document.getElementById('pass').value==="Lorrannyh.10122"){
-    closeModal(); esconderTudo();
-    document.getElementById('adminPanel').classList.remove('hide');
-    updateSelects();
-  } else alert("Usuário ou senha incorretos");
+function voltarCategorias() {
+  document.getElementById('produtos').classList.add('hidden');
+  document.getElementById('categorias').classList.remove('hidden');
 }
-
-function logout(){
-  esconderTudo();
-  document.getElementById('home').classList.remove('hide');
+function abrirProduto(j) {
+  produtoAtual = dados.categorias[categoriaAtual].produtos[j];
+  document.getElementById('imgProduto').src = produtoAtual.img;
+  document.getElementById('tituloProduto').innerText = produtoAtual.nome;
+  document.getElementById('descProduto').innerText = produtoAtual.desc;
+  document.getElementById('estoqueProduto').innerText = produtoAtual.estoque;
+  document.getElementById('valorProduto').innerText = produtoAtual.preco;
+  document.getElementById('modalProduto').style.display = 'flex';
 }
-
-function adminTab(tab){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  event.target.classList.add('active');
-  ['adminCat','adminProd'].forEach(id=>document.getElementById(id).classList.add('hide'));
-  document.getElementById('admin'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.remove('hide');
+function abrirPix() { document.getElementById('modalPix').style.display = 'flex'; }
+function copiarPix() {
+  navigator.clipboard.writeText('98984853563');
+  alert('Chave Pix copiada!');
 }
-
-function previewImg(input,previewId){
-  const file = input.files[0];
-  if(file){
-    const reader = new FileReader();
-    reader.onload = e => {
-      document.getElementById(previewId).src = e.target.result;
-      document.getElementById(previewId).classList.remove('hide');
-    }
-    reader.readAsDataURL(file);
-  }
+function comprarWhats() {
+  const msg = `Olá! Quero comprar: ${produtoAtual.nome} - R$${produtoAtual.preco} - Categoria: ${dados.categorias[categoriaAtual].nome}`;
+  window.open(`https://wa.me/5598984853563?text=${encodeURIComponent(msg)}`, '_blank');
 }
-
-function addCategoria(){
-  const nome = document.getElementById('catNome').value;
-  const img = document.getElementById('catPreview').src;
-  if(!nome ||!img || img.includes('undefined')){alert('Preencha nome e imagem');return}
-  data.categorias.push({nome, img, produtos:[]});
-  saveData(); updateSelects();
-  document.getElementById('catNome').value=''; 
-  document.getElementById('catPreview').classList.add('hide');
-  document.getElementById('catImg').value='';
-  alert('Categoria adicionada!');
-  showCategories();
+function abrirAdmin() { document.getElementById('modalLogin').style.display = 'flex'; }
+function fecharModal(id) { document.getElementById(id).style.display = 'none'; }
+function login() {
+  const u = document.getElementById('usuario').value;
+  const s = document.getElementById('senha').value;
+  if(u === 'Lorrannyh' && s === 'Lorrannyh.101225') {
+    fecharModal('modalLogin');
+    document.getElementById('modalAdmin').style.display = 'flex';
+    carregarAdmin();
+  } else alert('Usuário ou senha incorretos');
 }
-
-function addProduto(){
-  const catIdx = document.getElementById('prodCatSelect').value;
-  const nome = document.getElementById('prodNome').value;
-  const numero = document.getElementById('prodNumero').value;
-  const desc = document.getElementById('prodDesc').value;
-  const preco = document.getElementById('prodPreco').value;
-  const estoque = document.getElementById('prodEstoque').value;
-  const img = document.getElementById('prodPreview').src;
-  if(!nome||!preco||!estoque||!img || img.includes('undefined')){alert('Preencha nome, preço, estoque e imagem');return}
-  if(!data.categorias[catIdx].produtos) data.categorias[catIdx].produtos = [];
-  data.categorias[catIdx].produtos.push({nome,numero,desc,preco,estoque,img});
-  saveData();
-  ['prodNome','prodNumero','prodDesc','prodPreco','prodEstoque'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('prodPreview').classList.add('hide');
-  document.getElementById('prodImgInput').value='';
-  alert('Produto adicionado!');
+function carregarAdmin() {
+  const select = document.getElementById('selectCat');
+  select.innerHTML = '';
+  dados.categorias.forEach((cat, i) => {
+    select.innerHTML += `<option value="${i}">${cat.nome}</option>`;
+  });
+  listarEstoque();
 }
-
-function updateSelects(){
-  let catHtml = '';
-  data.categorias.forEach((c,i)=>{catHtml += `<option value="${i}">${c.nome}</option>`});
-  document.getElementById('prodCatSelect').innerHTML = catHtml;
+function trocarTema(cor) {
+  dados.tema = cor;
+  if(cor === 'azul') document.body.classList.add('tema-azul');
+  else document.body.classList.remove('tema-azul');
+  salvar();
 }
+function addCategoria() {
+  const nome = document.getElementById('nomeCat').value;
+  const file = document.getElementById('imgCat').files[0];
+  if(!nome) return alert('Coloque o nome');
+  const reader = new FileReader();
+  reader.onload = e => {
+    dados.categorias.push({ nome, img: e.target.result, produtos: [] });
+    salvar(); renderCategorias(); carregarAdmin();
+    document.getElementById('nomeCat').value = '';
+  };
+  if(file) reader.readAsDataURL(file);
+  else { dados.categorias.push({ nome, img: '', produtos: [] }); salvar(); renderCategorias(); carregarAdmin(); }
+}
+function addProduto() {
+  const catIndex = document.getElementById('selectCat').value;
+  const nome = document.getElementById('nomeProd').value;
+  const desc = document.getElementById('descProd').value;
+  const preco = document.getElementById('precoProd').value;
+  const estoque = document.getElementById('estoqueProd').value;
+  const file = document.getElementById('imgProd').files[0];
+  if(!dados.categorias[catIndex]) return alert('Crie uma categoria primeiro');
+  const reader = new FileReader();
+  reader.onload = e => {
+    dados.categorias[catIndex].produtos.push({ nome, desc, preco, estoque, img: e.target.result });
+    salvar(); listarEstoque();
+  };
+  if(file) reader.readAsDataURL(file);
+  else dados.categorias[catIndex].produtos.push({ nome, desc, preco, estoque, img: '' });
+}
+function listarEstoque() {
+  const div = document.getElementById('listaEstoque');
+  div.innerHTML = '';
+  dados.categorias.forEach((cat, i) => {
+    cat.produtos?.forEach((prod, j) => {
+      div.innerHTML += `
+        <div style="border:1px solid var(--rosa); padding:10px; margin:5px; border-radius:6px;">
+          <b>${prod.nome}</b> - ${cat.nome}<br>
+          Estoque: <input type="number" value="${prod.estoque}" onchange="atualizarEstoque(${i},${j},this.value)" style="width:60px">
+          <button class="btn" onclick="deletarProd(${i},${j})">Excluir</button>
+        </div>`;
+    });
+  });
+}
+function atualizarEstoque(i, j, val) {
+  dados.categorias[i].produtos[j].estoque = val;
+  salvar();
+}
+function deletarProd(i, j) {
+  dados.categorias[i].produtos.splice(j, 1);
+  salvar(); listarEstoque();
+}
+renderCategorias();
 </script>
 </body>
 </html>
