@@ -5,34 +5,44 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Premium Store</title>
 <style>
-:root{--rosa:#FF1B8D;--preto:#0A0A0A;--card:#1A1A1A;--branco:#fff;--azul:#1B8DFF}
+:root{--rosa:#FF1B8D;--preto:#0A0A0F;--card:#141419;--branco:#fff;--azul:#1B8DFF;--cinza:#8A8A8A}
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
 body{background:var(--preto);color:var(--branco);min-height:100vh}
+
+/* HEADER IGUAL PRINT */
 .header{display:flex;justify-content:space-between;align-items:center;padding:16px 5%;background:var(--preto)}
-.logo{font-size:28px;font-weight:800;color:var(--rosa);letter-spacing:2px}
-.admin-btn{background:transparent;border:2px solid var(--rosa);color:var(--branco);padding:8px 20px;border-radius:8px;cursor:pointer;font-weight:600}
+.logo{font-size:26px;font-weight:800;color:var(--rosa);letter-spacing:1px}
+.header-right{display:flex;align-items:center;gap:12px}
+.user{display:flex;align-items:center;gap:6px;color:var(--branco)}
+.admin-btn{background:transparent;border:2px solid var(--rosa);color:var(--branco);padding:6px 16px;border-radius:8px;cursor:pointer;font-weight:600}
+
+/* TELA APRESENTAÇÃO */
+.hero{text-align:center;padding:60px 5% 40px;background:linear-gradient(180deg,var(--preto) 0%,#1a0a15 100%)}
+.hero h1{font-size:42px;color:var(--rosa);margin-bottom:16px;font-weight:900}
+.hero p{color:var(--cinza);font-size:18px;margin-bottom:30px}
+.btn-hero{background:var(--rosa);color:var(--branco);border:none;padding:14px 40px;border-radius:8px;font-weight:700;font-size:16px;cursor:pointer}
+
 .btn{background:var(--rosa);color:var(--branco);border:none;padding:12px 24px;border-radius:8px;font-weight:600;cursor:pointer;margin:4px 0;width:100%}
 .btn-outline{background:transparent;border:2px solid var(--rosa);color:var(--azul);padding:10px 24px;border-radius:8px;font-weight:600;cursor:pointer}
-.container{padding:20px 5%}
-h2{margin-bottom:20px;color:var(--rosa);font-size:32px;font-weight:700}
+.container{padding:20px 4%}
+h2{margin-bottom:20px;color:var(--rosa);font-size:28px;font-weight:700}
 .voltar-btn{background:transparent;border:2px solid var(--rosa);color:var(--azul);padding:8px 20px;border-radius:8px;margin-bottom:20px;cursor:pointer}
 
-/* CATEGORIAS: 3 COLUNAS IGUAL PRINT 1 */
-.grid-categorias{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-@media(max-width:768px){.grid-categorias{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:480px){.grid-categorias{grid-template-columns:1fr}}
+/* GRID 3 COLUNAS QUADRADO IGUAL PRINT */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:768px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.grid{grid-template-columns:repeat(2,1fr);gap:10px}}
 
-/* PRODUTOS: 4 COLUNAS IGUAL PRINT 2 */
-.grid-produtos{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-@media(max-width:1024px){.grid-produtos{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:768px){.grid-produtos{grid-template-columns:repeat(2,1fr)}}
+/* CARD QUADRADO IDÊNTICO AO PRINT */
+.card{background:transparent;border-radius:12px;padding:8px;text-align:center;cursor:pointer;border:2px solid var(--rosa);transition:.2s}
+.card:hover{background:rgba(255,27,141,.1)}
+.img-box{width:100%;aspect-ratio:1/1;background:var(--card);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;overflow:hidden}
+.img-box img{width:70%;height:70%;object-fit:contain}
+.card.nome{color:var(--branco);font-size:15px;font-weight:700;margin:6px 0}
+.card.numero{color:var(--rosa);font-size:18px;font-weight:800;margin:2px 0}
+.card.desc{color:var(--cinza);font-size:13px}
 
-.card{background:var(--card);border-radius:12px;padding:16px;text-align:center;cursor:pointer;border:2px solid var(--rosa);transition:.2s}
-.card:hover{transform:scale(1.03);box-shadow:0 0 15px rgba(255,27,141,.3)}
-.card img{width:100%;height:120px;object-fit:contain;border-radius:8px;background:var(--preto);margin-bottom:12px}
-.card.nome{color:var(--branco);font-size:16px;font-weight:600;margin-top:8px}
-.card.preco{color:var(--rosa);font-size:18px;font-weight:700;margin-top:4px}
-.card.estoque{color:#aaa;font-size:14px}
+.sair-conta{display:block;margin:40px auto 20px;background:transparent;border:2px solid var(--rosa);color:var(--azul);padding:10px 30px;border-radius:8px;font-weight:600;cursor:pointer}
 
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.95);display:none;align-items:center;justify-content:center;padding:20px;z-index:100;overflow-y:auto}
 .modal.active{display:flex}
@@ -40,48 +50,53 @@ h2{margin-bottom:20px;color:var(--rosa);font-size:32px;font-weight:700}
 .input,.select{width:100%;padding:12px;margin:8px 0;background:var(--preto);border:2px solid #333;color:var(--branco);border-radius:8px;font-size:15px}
 .input:focus{border-color:var(--rosa);outline:none}
 .hide{display:none}
-.center{text-align:center;padding-top:15vh}
 .file-input{display:none}
 .file-label{display:block;padding:12px;background:var(--preto);border:2px dashed var(--rosa);border-radius:8px;text-align:center;cursor:pointer;margin:8px 0}
-.preview{width:100%;max-height:180px;object-fit:contain;border:2px solid var(--branco);border-radius:8px;margin:8px 0;background:var(--preto)}
+.preview{width:100%;aspect-ratio:1/1;object-fit:contain;border:2px solid var(--branco);border-radius:8px;margin:8px 0;background:var(--preto)}
 .tabs{display:flex;gap:8px;margin-bottom:20px}
 .tab{padding:10px 20px;background:var(--preto);border:2px solid #333;border-radius:8px;cursor:pointer;font-weight:600}
 .tab.active{border-color:var(--rosa);color:var(--rosa)}
-.sair-conta{display:block;margin:30px auto 0;width:fit-content}
 </style>
 </head>
 <body>
 
 <div class="header">
   <div class="logo">PREMIUM STORE</div>
-  <button class="admin-btn" onclick="showLogin()">Admin</button>
+  <div class="header-right">
+    <div class="user">👤 Vittoria</div>
+    <button class="admin-btn" onclick="showLogin()">Admin</button>
+  </div>
 </div>
 
-<div id="home" class="container center">
-  <h1 style="color:var(--rosa);margin-bottom:30px;font-size:36px">Bem-vinda à Premium Store</h1>
-  <button class="btn-outline" style="width:200px" onclick="showCategories()">Entrar</button>
+<!-- TELA DE APRESENTAÇÃO -->
+<div id="home">
+  <div class="hero">
+    <h1>PREMIUM STORE</h1>
+    <p>Seguidores, contas e serviços para turbinar suas redes</p>
+    <button class="btn-hero" onclick="showCategories()">Entrar na Loja</button>
+  </div>
 </div>
 
 <div id="categorias" class="container hide">
   <h2>Categorias</h2>
-  <div id="catGrid" class="grid-categorias"></div>
-  <button class="btn-outline sair-conta" onclick="logout()">Sair da Conta</button>
+  <div id="catGrid" class="grid"></div>
+  <button class="sair-conta" onclick="logout()">Sair da Conta</button>
 </div>
 
 <div id="produtos" class="container hide">
   <button class="voltar-btn" onclick="showCategories()">← Voltar</button>
-  <h2 id="catTitle"></h2>
-  <div id="prodGrid" class="grid-produtos"></div>
-  <button class="btn-outline sair-conta" onclick="logout()">Sair da Conta</button>
+  <h2 id="catTitle">Produtos</h2>
+  <div id="prodGrid" class="grid"></div>
+  <button class="sair-conta" onclick="logout()">Sair da Conta</button>
 </div>
 
 <div id="produtoModal" class="modal">
   <div class="modal-content">
-    <img id="prodImg" style="width:100%;height:220px;object-fit:contain;border:2px solid var(--branco);border-radius:8px;margin-bottom:16px;background:var(--preto)">
-    <h3 id="prodNome" style="font-size:24px;margin-bottom:8px"></h3>
-    <p id="prodDesc" style="margin:8px 0;color:#aaa"></p>
-    <p style="margin:8px 0"><b>Estoque:</b> <span id="prodEstoque" style="color:var(--rosa)"></span></p>
-    <p style="margin:8px 0;font-size:20px"><b>Valor:</b> <span id="prodPreco" style="color:var(--rosa);font-weight:700"></span></p>
+    <div class="img-box" style="margin-bottom:16px"><img id="prodImg"></div>
+    <h3 id="prodNome" style="font-size:22px;margin-bottom:8px"></h3>
+    <div id="prodNumero" class="numero" style="font-size:24px"></div>
+    <p id="prodDesc" style="margin:8px 0;color:var(--cinza)"></p>
+    <p style="margin:12px 0"><b>Estoque:</b> <span id="prodEstoque" style="color:var(--rosa)"></span></p>
     <button class="btn" onclick="pagarPix()">Pagar com Pix</button>
     <button class="btn-outline" style="width:100%;margin-top:8px" onclick="comprarZap()">Comprar no WhatsApp</button>
     <button class="btn-outline" style="width:100%;margin-top:8px" onclick="closeModal()">Fechar</button>
@@ -89,7 +104,7 @@ h2{margin-bottom:20px;color:var(--rosa);font-size:32px;font-weight:700}
 </div>
 
 <div id="pixModal" class="modal">
-  <div class="modal-content center">
+  <div class="modal-content" style="text-align:center">
     <h3 style="color:var(--rosa)">Chave Pix</h3>
     <p style="margin:16px 0;font-size:20px;font-weight:700">98994853563</p>
     <p>Nome: Lorrane Vitórias Alves Vaz</p>
@@ -116,23 +131,21 @@ h2{margin-bottom:20px;color:var(--rosa);font-size:32px;font-weight:700}
 
   <div id="adminCat">
     <h3 style="margin-bottom:12px">Nova Categoria</h3>
-    <input id="catNome" class="input" placeholder="Nome: Free Fire, Instagram, TikTok...">
+    <input id="catNome" class="input" placeholder="Nome: Instagram, Free Fire, TikTok...">
     <label class="file-label" for="catImg">Escolher da Galeria</label>
     <input type="file" id="catImg" class="file-input" accept="image/*" onchange="previewImg(this,'catPreview')">
     <img id="catPreview" class="preview hide">
     <button class="btn" onclick="addCategoria()">Salvar Categoria</button>
-    
-    <h3 style="margin:30px 0 12px">Categorias Cadastradas</h3>
-    <div id="listaCat"></div>
   </div>
 
   <div id="adminProd" class="hide">
     <h3 style="margin-bottom:12px">Novo Produto</h3>
     <select id="prodCatSelect" class="select"></select>
-    <input id="prodNome" class="input" placeholder="Nome: 100 seguidores">
+    <input id="prodNome" class="input" placeholder="Nome: Instagram">
+    <input id="prodNumero" class="input" placeholder="Número destaque: 6, 12, 100" type="number">
+    <input id="prodDesc" class="input" placeholder="Descrição: 100 seguidores">
     <input id="prodPreco" class="input" placeholder="Preço: 6.00" type="number" step="0.01">
     <input id="prodEstoque" class="input" placeholder="Estoque: 13" type="number">
-    <input id="prodDesc" class="input" placeholder="Descrição">
     <label class="file-label" for="prodImgInput">Escolher da Galeria</label>
     <input type="file" id="prodImgInput" class="file-input" accept="image/*" onchange="previewImg(this,'prodPreview')">
     <img id="prodPreview" class="preview hide">
@@ -155,7 +168,7 @@ function showCategories(){
   let html = '';
   data.categorias.forEach((c,i)=>{
     html += `<div class="card" onclick="showProdutos(${i})">
-      <img src="${c.img}">
+      <div class="img-box"><img src="${c.img}"></div>
       <div class="nome">${c.nome}</div>
     </div>`;
   });
@@ -171,22 +184,22 @@ function showProdutos(catIndex){
   let html = '';
   prods.forEach((p)=>{
     html += `<div class="card" onclick='openProd(${JSON.stringify(p).replace(/'/g,"&apos;")})'>
-      <img src="${p.img}">
+      <div class="img-box"><img src="${p.img}"></div>
       <div class="nome">${p.nome}</div>
-      <div class="preco">R$ ${parseFloat(p.preco).toFixed(2)}</div>
-      <div class="estoque">Estoque: ${p.estoque}</div>
+      <div class="numero">${p.numero || ''}</div>
+      <div class="desc">${p.desc || ''}</div>
     </div>`;
   });
-  document.getElementById('prodGrid').innerHTML = html || '<p style="grid-column:1/-1;text-align:center;color:#aaa">Nenhum produto nessa categoria</p>';
+  document.getElementById('prodGrid').innerHTML = html || '<p style="grid-column:1/-1;text-align:center;color:#aaa">Nenhum produto</p>';
 }
 
 function openProd(p){
   currentProd = p;
   document.getElementById('prodImg').src = p.img;
   document.getElementById('prodNome').innerText = p.nome;
+  document.getElementById('prodNumero').innerText = p.numero || '';
   document.getElementById('prodDesc').innerText = p.desc || '';
   document.getElementById('prodEstoque').innerText = p.estoque;
-  document.getElementById('prodPreco').innerText = `R$ ${parseFloat(p.preco).toFixed(2)}`;
   document.getElementById('produtoModal').classList.add('active');
 }
 
@@ -196,13 +209,13 @@ function pagarPix(){
   document.getElementById('qrcode').innerHTML = "";
   new QRCode(document.getElementById("qrcode"), {
     text: `00020126580014BR.GOV.BCB.PIX013698994853563520400005303986540${currentProd.preco}5802BR5925Lorrane Vitorias Alves Vaz6009SAO PAULO62070503***6304`,
-    width:200, height:200, colorDark:"#FF1B8D", colorLight:"#0A0A0A"
+    width:200, height:200, colorDark:"#FF1B8D", colorLight:"#0A0A0F"
   });
 }
 
 function comprarZap(){
   let cat = data.categorias[currentCatIndex].nome;
-  let msg = `Olá! Quero comprar: *${currentProd.nome}* | Categoria: *${cat}* | Valor: R$ ${parseFloat(currentProd.preco).toFixed(2)}`;
+  let msg = `Olá! Quero comprar: *${currentProd.nome}* ${currentProd.numero || ''} | Categoria: *${cat}* | Valor: R$ ${parseFloat(currentProd.preco).toFixed(2)}`;
   window.open(`https://wa.me/5598994853563?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
@@ -216,7 +229,7 @@ function login(){
   if(document.getElementById('user').value==="Lorrannyh" && document.getElementById('pass').value==="Lorrannyh.10122"){
     closeModal(); esconderTudo();
     document.getElementById('adminPanel').classList.remove('hide');
-    updateSelects(); listarCategorias();
+    updateSelects();
   } else alert("Usuário ou senha incorretos");
 }
 
@@ -249,7 +262,7 @@ function addCategoria(){
   const img = document.getElementById('catPreview').src;
   if(!nome ||!img || img.includes('undefined')){alert('Preencha nome e imagem');return}
   data.categorias.push({nome, img, produtos:[]});
-  saveData(); updateSelects(); listarCategorias();
+  saveData(); updateSelects();
   document.getElementById('catNome').value=''; 
   document.getElementById('catPreview').classList.add('hide');
   document.getElementById('catImg').value='';
@@ -260,15 +273,16 @@ function addCategoria(){
 function addProduto(){
   const catIdx = document.getElementById('prodCatSelect').value;
   const nome = document.getElementById('prodNome').value;
+  const numero = document.getElementById('prodNumero').value;
+  const desc = document.getElementById('prodDesc').value;
   const preco = document.getElementById('prodPreco').value;
   const estoque = document.getElementById('prodEstoque').value;
-  const desc = document.getElementById('prodDesc').value;
   const img = document.getElementById('prodPreview').src;
-  if(!nome||!preco||!estoque||!img || img.includes('undefined')){alert('Preencha todos os campos e imagem');return}
+  if(!nome||!preco||!estoque||!img || img.includes('undefined')){alert('Preencha nome, preço, estoque e imagem');return}
   if(!data.categorias[catIdx].produtos) data.categorias[catIdx].produtos = [];
-  data.categorias[catIdx].produtos.push({nome,preco,estoque,desc,img});
+  data.categorias[catIdx].produtos.push({nome,numero,desc,preco,estoque,img});
   saveData();
-  ['prodNome','prodPreco','prodEstoque','prodDesc'].forEach(id=>document.getElementById(id).value='');
+  ['prodNome','prodNumero','prodDesc','prodPreco','prodEstoque'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('prodPreview').classList.add('hide');
   document.getElementById('prodImgInput').value='';
   alert('Produto adicionado!');
@@ -278,24 +292,6 @@ function updateSelects(){
   let catHtml = '';
   data.categorias.forEach((c,i)=>{catHtml += `<option value="${i}">${c.nome}</option>`});
   document.getElementById('prodCatSelect').innerHTML = catHtml;
-}
-
-function listarCategorias(){
-  let html = '';
-  data.categorias.forEach((c,i)=>{
-    html += `<div style="background:var(--preto);padding:12px;border-radius:8px;margin:8px 0;border:1px solid #333">
-      <b>${c.nome}</b> - ${c.produtos?.length || 0} produtos
-      <button onclick="delCategoria(${i})" style="float:right;background:#ff0000;border:none;color:white;padding:4px 12px;border-radius:4px;cursor:pointer">Excluir</button>
-    </div>`;
-  });
-  document.getElementById('listaCat').innerHTML = html || '<p style="color:#aaa">Nenhuma categoria</p>';
-}
-
-function delCategoria(i){
-  if(confirm('Excluir essa categoria e todos os produtos?')){
-    data.categorias.splice(i,1);
-    saveData(); listarCategorias(); updateSelects(); showCategories();
-  }
 }
 </script>
 </body>
