@@ -1,524 +1,185 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Prime Store</title>
 
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial;
-}
-
-:root{
---tema:#ff4fd8;
-}
-
-body{
-background:#000;
-color:#fff;
-overflow-x:hidden;
-font-size:12px;
-}
-
-/* TOPO */
-
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+:root{--t:#ff4fd8}
+body{background:#000;color:#fff;font-size:11px}
 .topo{
-width:100%;
-height:65px;
-background:#050505;
-border-bottom:2px solid var(--tema);
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 15px;
-position:sticky;
-top:0;
-z-index:999;
+height:50px;background:#050505;border-bottom:1px solid var(--t);
+display:flex;align-items:center;justify-content:space-between;
+padding:0 10px;position:sticky;top:0;z-index:99
 }
-
-.logo{
-font-size:21px;
-font-weight:bold;
-letter-spacing:1px;
+.logo{font-size:16px;font-weight:bold}
+.menuBtn{
+width:35px;height:35px;border-radius:8px;
+border:1px solid var(--t);background:#0b0b0b;
+color:#fff;font-size:18px
 }
-
-.menu-btn{
-width:42px;
-height:42px;
-border-radius:10px;
-border:1px solid var(--tema);
-background:#0d0d0d;
-color:#fff;
-font-size:20px;
-cursor:pointer;
-}
-
-/* MENU */
-
 .menu{
-position:fixed;
-top:0;
-right:-280px;
-width:260px;
-height:100%;
-background:#050505;
-border-left:2px solid var(--tema);
-z-index:9999;
-padding:20px;
-transition:.3s;
-overflow:auto;
+position:fixed;right:-260px;top:0;width:250px;height:100%;
+background:#050505;border-left:1px solid var(--t);
+padding:12px;transition:.3s;overflow:auto;z-index:999
 }
-
-.menu.ativo{
-right:0;
+.menu.on{right:0}
+.box{
+background:#0d0d0d;border:1px solid var(--t);
+padding:10px;border-radius:10px;margin-bottom:10px
 }
-
-.menu-topo{
-display:flex;
-align-items:center;
-justify-content:space-between;
-margin-bottom:25px;
+.box h3{margin-bottom:8px;font-size:12px}
+input,textarea{
+width:100%;padding:9px;margin-top:7px;
+background:#000;border:1px solid var(--t);
+border-radius:8px;color:#fff;font-size:11px
 }
-
-.menu-topo h2{
-font-size:18px;
+button{
+cursor:pointer;border:none
 }
-
-.fechar{
-background:none;
-border:none;
-color:#fff;
-font-size:22px;
-cursor:pointer;
+.btn{
+width:100%;padding:10px;margin-top:7px;
+border-radius:8px;background:var(--t);
+color:#fff;font-weight:bold;font-size:11px
 }
-
-.menu-box{
-background:#0d0d0d;
-border:1px solid var(--tema);
-padding:15px;
-border-radius:14px;
-margin-bottom:15px;
+.pg{display:none;padding:10px}
+.on{display:block}
+.ap{
+background:#0d0d0d;border:1px solid var(--t);
+padding:15px;border-radius:12px;text-align:center
 }
-
-.menu-box h3{
-margin-bottom:12px;
-font-size:13px;
-}
-
-.tema-btn,
-.admin-btn{
-width:100%;
-padding:12px;
-margin-top:8px;
-border:none;
-border-radius:10px;
-background:var(--tema);
-color:#fff;
-font-weight:bold;
-cursor:pointer;
-font-size:12px;
-}
-
-.admin-input{
-width:100%;
-padding:12px;
-margin-top:10px;
-background:#000;
-border:1px solid var(--tema);
-border-radius:10px;
-color:#fff;
-font-size:12px;
-outline:none;
-}
-
-/* PAGINAS */
-
-.pagina{
-display:none;
-padding:15px;
-animation:fade .3s;
-}
-
-.ativa{
-display:block;
-}
-
-@keyframes fade{
-from{
-opacity:0;
-transform:translateY(10px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
-
-/* APRESENTAÇÃO */
-
-.apresentacao{
-background:#0d0d0d;
-border:1px solid var(--tema);
-padding:20px;
-border-radius:16px;
-margin-top:20px;
-text-align:center;
-}
-
-.apresentacao h2{
-font-size:20px;
-margin-bottom:15px;
-}
-
-.apresentacao p{
-color:#ccc;
-line-height:1.7;
-}
-
-.entrar{
-margin-top:20px;
-padding:13px 25px;
-background:var(--tema);
-border:none;
-border-radius:10px;
-color:#fff;
-font-weight:bold;
-cursor:pointer;
-}
-
-/* ONLINE */
-
+.ap h2{font-size:16px;margin-bottom:10px}
+.ap p{color:#bbb;line-height:1.5}
 .online{
-margin-top:20px;
-background:#071107;
-border:1px solid #00ff66;
-padding:12px;
-border-radius:12px;
-color:#00ff66;
-font-weight:bold;
+margin-top:12px;padding:10px;
+background:#061106;border:1px solid #00ff66;
+border-radius:10px;color:#00ff66
 }
-
-.numero{
-margin-top:12px;
-color:#aaa;
-}
-
-/* NOTIFICAÇÃO */
-
-.notificacao{
-position:fixed;
-top:20px;
-right:20px;
-background:#00ff66;
-color:#000;
-padding:12px;
-border-radius:10px;
-font-weight:bold;
-z-index:999999;
-animation:sumir 5s forwards;
-}
-
-@keyframes sumir{
-0%{opacity:1;}
-80%{opacity:1;}
-100%{opacity:0;}
-}
-
-/* CATEGORIAS */
-
-.grid-categorias{
+.grid3{
 display:grid;
 grid-template-columns:repeat(3,1fr);
-gap:10px;
-margin-top:20px;
+gap:7px;margin-top:12px
 }
-
-.categoria{
-background:#0d0d0d;
-border:1px solid var(--tema);
-border-radius:14px;
-padding:8px;
-cursor:pointer;
-}
-
-.categoria img{
-width:100%;
-height:90px;
-object-fit:cover;
-border-radius:10px;
-}
-
-.categoria p{
-text-align:center;
-margin-top:6px;
-}
-
-/* PRODUTOS */
-
-.grid-produtos{
+.grid4{
 display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:10px;
-margin-top:20px;
-}
-
-.produto{
-background:#0d0d0d;
-border:1px solid var(--tema);
-border-radius:14px;
-padding:8px;
-position:relative;
-}
-
-.produto img{
-width:100%;
-height:110px;
-object-fit:cover;
-border-radius:10px;
-}
-
-.produto h3{
-margin-top:6px;
-font-size:12px;
-}
-
-.preco{
-color:#00ff66;
-margin-top:4px;
-font-weight:bold;
-}
-
-.estoque{
-color:#ffcc00;
-margin-top:4px;
-}
-
-.descricao{
-color:#ccc;
-margin-top:5px;
-font-size:11px;
-}
-
-.botoes{
-display:flex;
-flex-direction:column;
-gap:6px;
-margin-top:10px;
-}
-
-.botoes button{
-padding:10px;
-border:none;
-border-radius:10px;
-font-size:11px;
-font-weight:bold;
-cursor:pointer;
-}
-
-.comprar{
-background:#00bb55;
-color:#fff;
-}
-
-.comprovante{
-background:#006eff;
-color:#fff;
-}
-
-/* PROMOÇÃO */
-
-.promocao{
-position:absolute;
-top:8px;
-left:8px;
-background:red;
-padding:4px 8px;
-border-radius:8px;
-font-size:10px;
-font-weight:bold;
-}
-
-/* ADMIN */
-
-.painel-admin{
-display:none;
-margin-top:15px;
-}
-
-.admin-card{
-background:#0d0d0d;
-border:1px solid var(--tema);
-padding:15px;
-border-radius:14px;
-margin-top:15px;
-}
-
-.admin-card h3{
-margin-bottom:10px;
-}
-
-.admin-card input,
-.admin-card textarea{
-width:100%;
-padding:12px;
-margin-top:10px;
-background:#000;
-border:1px solid var(--tema);
-border-radius:10px;
-color:#fff;
-font-size:12px;
-}
-
-.salvar{
-width:100%;
-padding:12px;
-margin-top:12px;
-border:none;
-border-radius:10px;
-background:var(--tema);
-color:#fff;
-font-weight:bold;
-cursor:pointer;
-}
-
-/* RESPONSIVO */
-
-@media(max-width:900px){
-
-.grid-produtos{
 grid-template-columns:repeat(2,1fr);
+gap:7px;margin-top:12px
 }
-
+.card{
+background:#0d0d0d;border:1px solid var(--t);
+border-radius:10px;padding:6px;position:relative
 }
-
+.card img{
+width:100%;height:80px;
+object-fit:cover;border-radius:8px
+}
+.card p,.card h4{margin-top:4px}
+.preco{color:#00ff66;font-weight:bold}
+.est{color:#ffd000}
+.desc{color:#bbb;font-size:10px}
+.bts{
+display:flex;flex-direction:column;
+gap:5px;margin-top:7px
+}
+.comp{background:#00aa55;color:#fff;padding:8px;border-radius:8px;font-size:10px}
+.comp2{background:#006eff;color:#fff;padding:8px;border-radius:8px;font-size:10px}
+.pro{
+position:absolute;
+top:5px;left:5px;
+background:red;color:#fff;
+padding:3px 6px;border-radius:6px;
+font-size:9px
+}
+.not{
+position:fixed;top:10px;right:10px;
+background:#00ff66;color:#000;
+padding:10px;border-radius:8px;
+font-weight:bold;font-size:11px;
+z-index:9999;
+animation:s 5s forwards
+}
+@keyframes s{
+80%{opacity:1}
+100%{opacity:0}
+}
+@media(max-width:700px){
+.grid3{grid-template-columns:repeat(3,1fr)}
+.grid4{grid-template-columns:repeat(2,1fr)}
+}
 </style>
 </head>
 
 <body>
 
-<div class="notificacao">
-🟢 Atendimento online agora
+<div class="not">
+🟢 Você está online
 </div>
-
-<!-- TOPO -->
 
 <div class="topo">
+<div class="logo">Prime Store</div>
 
-<div class="logo">
-Prime Store
-</div>
-
-<button class="menu-btn" onclick="abrirMenu()">
-☰
-</button>
-
+<button class="menuBtn" onclick="menu()">☰</button>
 </div>
 
 <!-- MENU -->
 
 <div class="menu" id="menu">
 
-<div class="menu-topo">
-
-<h2>Menu</h2>
-
-<button class="fechar" onclick="fecharMenu()">
-×
-</button>
-
-</div>
-
-<!-- TEMAS -->
-
-<div class="menu-box">
-
+<div class="box">
 <h3>Temas</h3>
 
-<button class="tema-btn" onclick="temaRosa()">
-Tema Rosa + Preto
+<button class="btn" onclick="rosa()">
+Rosa + Preto
 </button>
 
-<button class="tema-btn" onclick="temaAzul()">
-Tema Azul + Preto
+<button class="btn" onclick="azul()">
+Azul + Preto
 </button>
-
 </div>
 
-<!-- ADMIN -->
-
-<div class="menu-box">
+<div class="box">
 
 <h3>Admin</h3>
 
-<input type="text" id="user" class="admin-input" placeholder="Usuário">
+<input id="u" placeholder="Usuário">
+<input id="s" type="password" placeholder="Senha">
 
-<input type="password" id="senha" class="admin-input" placeholder="Senha">
-
-<button class="admin-btn" onclick="loginAdmin()">
+<button class="btn" onclick="login()">
 Entrar
 </button>
 
-<div class="painel-admin" id="painelAdmin">
+<div id="adm" style="display:none">
 
-<div class="admin-card">
-
-<h3>Editar Produto</h3>
-
-<input type="text" placeholder="Nome produto">
-
-<input type="number" placeholder="Valor">
-
-<input type="number" placeholder="Estoque">
-
+<input placeholder="Nome produto">
+<input placeholder="Preço">
+<input placeholder="Estoque">
 <textarea placeholder="Descrição"></textarea>
-
 <input type="file" accept="image/*">
 
-<button class="salvar">
+<button class="btn">
 Salvar produto
 </button>
 
-</div>
+<hr style="margin:10px 0;border-color:#222">
 
-<div class="admin-card">
-
-<h3>Categorias</h3>
-
-<input type="text" placeholder="Nova categoria">
-
+<input placeholder="Nova categoria">
 <input type="file" accept="image/*">
 
-<button class="salvar">
+<button class="btn">
 Adicionar categoria
 </button>
 
-</div>
-
-<div class="admin-card">
-
-<h3>Subcategorias</h3>
-
-<input type="text" placeholder="Nova subcategoria">
-
+<input placeholder="Nova subcategoria">
 <input type="file" accept="image/*">
 
-<button class="salvar">
+<button class="btn">
 Adicionar subcategoria
 </button>
 
-</div>
-
-<div class="admin-card">
-
-<h3>Promoção</h3>
-
-<button class="salvar">
-Destacar produto em promoção
+<button class="btn">
+Ativar promoção
 </button>
 
 </div>
@@ -527,57 +188,54 @@ Destacar produto em promoção
 
 </div>
 
-</div>
+<!-- INICIO -->
 
-<!-- PAGINA 1 -->
+<div class="pg on" id="i">
 
-<div class="pagina ativa" id="inicio">
+<div class="ap">
 
-<div class="apresentacao">
-
-<h2>Bem-vindo(a) à Prime Store</h2>
+<h2>Prime Store</h2>
 
 <p>
-Nosso sistema funciona manualmente para garantir mais segurança nos dados dos clientes.
-Todas as compras são verificadas manualmente para evitar fraudes, erros e problemas nos pedidos.
+Sistema manual para garantir segurança dos dados, evitar erros e confirmar pedidos corretamente.
 </p>
 
-<button class="entrar" onclick="entrarLoja()">
+<button class="btn" onclick="entrar()">
 ENTRAR
 </button>
 
 <div class="online">
-🟢 Estamos online agora
+🟢 Atendimento online agora
 </div>
 
-<div class="numero">
-Contato: (98) 98485-3563
-</div>
+<p style="margin-top:8px;color:#aaa">
+(98) 98485-3563
+</p>
 
 </div>
 
 </div>
 
-<!-- PAGINA 2 -->
+<!-- CATEGORIAS -->
 
-<div class="pagina" id="categorias">
+<div class="pg" id="c">
 
-<h2>Categorias</h2>
+<h3>Categorias</h3>
 
-<div class="grid-categorias">
+<div class="grid3">
 
-<div class="categoria" onclick="abrirSubcategoria('Passe')">
-<img src="" alt="">
+<div class="card" onclick="sub('Passe')">
+<img src="">
 <p>Passe</p>
 </div>
 
-<div class="categoria" onclick="abrirSubcategoria('Contas')">
-<img src="" alt="">
+<div class="card" onclick="sub('Contas')">
+<img src="">
 <p>Contas</p>
 </div>
 
-<div class="categoria" onclick="abrirSubcategoria('Promoções')">
-<img src="" alt="">
+<div class="card" onclick="sub('Promoções')">
+<img src="">
 <p>Promoções</p>
 </div>
 
@@ -585,46 +243,44 @@ Contato: (98) 98485-3563
 
 </div>
 
-<!-- PAGINA 3 -->
+<!-- SUB -->
 
-<div class="pagina" id="subcategoria">
+<div class="pg" id="p">
 
-<h2 id="tituloSub">
-Produtos
-</h2>
+<h3 id="tt">Produtos</h3>
 
-<div class="grid-produtos">
+<div class="grid4">
 
-<div class="produto">
+<div class="card">
 
-<div class="promocao">
-PROMOÇÃO
+<div class="pro">
+PROMO
 </div>
 
-<img src="" alt="">
+<img src="">
 
-<h3>Passe Premium</h3>
+<h4>Passe Premium</h4>
 
-<div class="preco">
-R$ 10,00
-</div>
+<p class="preco">
+R$10
+</p>
 
-<div class="estoque">
+<p class="est">
 Estoque: 50
-</div>
+</p>
 
-<div class="descricao">
-Passe premium completo disponível.
-</div>
+<p class="desc">
+Passe premium completo.
+</p>
 
-<div class="botoes">
+<div class="bts">
 
-<button class="comprar">
+<button class="comp">
 Comprar
 </button>
 
-<button class="comprovante">
-Comprar e enviar comprovante
+<button class="comp2">
+Enviar comprovante
 </button>
 
 </div>
@@ -637,65 +293,43 @@ Comprar e enviar comprovante
 
 <script>
 
-/* MENU */
-
-function abrirMenu(){
-document.getElementById("menu").classList.add("ativo");
+function menu(){
+document.getElementById("menu").classList.toggle("on")
 }
 
-function fecharMenu(){
-document.getElementById("menu").classList.remove("ativo");
+function rosa(){
+document.documentElement.style.setProperty('--t','#ff4fd8')
 }
 
-/* TEMAS */
-
-function temaRosa(){
-document.documentElement.style.setProperty('--tema','#ff4fd8');
+function azul(){
+document.documentElement.style.setProperty('--t','#009dff')
 }
 
-function temaAzul(){
-document.documentElement.style.setProperty('--tema','#009dff');
+function entrar(){
+i.classList.remove("on")
+c.classList.add("on")
 }
 
-/* ENTRAR */
-
-function entrarLoja(){
-
-document.getElementById("inicio").classList.remove("ativa");
-
-document.getElementById("categorias").classList.add("ativa");
-
+function sub(t){
+c.classList.remove("on")
+p.classList.add("on")
+tt.innerText=t
 }
 
-/* SUBCATEGORIA */
+function login(){
 
-function abrirSubcategoria(nome){
+let u=document.getElementById("u").value
+let s=document.getElementById("s").value
 
-document.getElementById("categorias").classList.remove("ativa");
+if(u=="Lorrannyh.101225"&&s=="Lorrannnyh"){
 
-document.getElementById("subcategoria").classList.add("ativa");
+alert("Admin liberado")
 
-document.getElementById("tituloSub").innerText = nome;
-
-}
-
-/* LOGIN ADMIN */
-
-function loginAdmin(){
-
-let usuario = document.getElementById("user").value;
-
-let senha = document.getElementById("senha").value;
-
-if(usuario === "Lorrannyh.101225" && senha === "Lorrannnyh"){
-
-alert("Painel admin liberado");
-
-document.getElementById("painelAdmin").style.display="block";
+document.getElementById("adm").style.display="block"
 
 }else{
 
-alert("Dados inválidos");
+alert("Dados inválidos")
 
 }
 
