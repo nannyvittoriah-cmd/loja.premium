@@ -13,23 +13,38 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:var(--preto);color:var(--branco);min-height:100vh}
-/* Tema: troca --rosa por #1b8dff pra ficar azul+preto */
 .header{display:flex;justify-content:space-between;align-items:center;padding:16px 5%;background:var(--cinza);border-bottom:2px solid var(--rosa)}
 .logo{font-size:24px;font-weight:800;color:var(--rosa)}
 .admin-btn{background:transparent;border:1px solid var(--rosa);color:var(--rosa);padding:6px 12px;border-radius:6px;cursor:pointer}
 .btn{background:var(--rosa);color:var(--branco);border:none;padding:12px 24px;border-radius:8px;font-weight:600;cursor:pointer}
 .btn-outline{background:transparent;border:2px solid var(--rosa);color:var(--rosa)}
 .container{padding:20px 5%}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;margin-top:20px}
+h2{margin-bottom:16px;color:var(--rosa)}
+
+/* CATEGORIAS: 3 COLUNAS */
+.grid-categorias{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+@media(max-width:768px){.grid-categorias{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.grid-categorias{grid-template-columns:1fr}}
+
+/* SUBCATEGORIAS/PRODUTOS: 4 COLUNAS */
+.grid-produtos{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:20px}
+@media(max-width:1024px){.grid-produtos{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:768px){.grid-produtos{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.grid-produtos{grid-template-columns:1fr}}
+
 .card{background:var(--cinza);border-radius:12px;padding:12px;text-align:center;cursor:pointer;border:1px solid #2a2a2a}
 .card:hover{border-color:var(--rosa)}
-.card img{width:100%;height:120px;object-fit:contain;border:2px solid var(--branco);border-radius:8px;background:var(--preto)}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;padding:20px}
+.card img{width:100%;height:140px;object-fit:contain;border:2px solid var(--branco);border-radius:8px;background:var(--preto)}
+.card p{margin-top:8px;font-weight:600}
+.card span{color:var(--rosa);font-size:14px}
+
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;padding:20px;z-index:100}
 .modal.active{display:flex}
-.modal-content{background:var(--cinza);padding:24px;border-radius:12px;max-width:400px;width:100%;border:1px solid var(--rosa)}
+.modal-content{background:var(--cinza);padding:24px;border-radius:12px;max-width:420px;width:100%;border:1px solid var(--rosa)}
 .input{width:100%;padding:10px;margin:6px 0;background:var(--preto);border:1px solid #333;color:var(--branco);border-radius:6px}
 .hide{display:none}
 .center{text-align:center;padding-top:20vh}
+.voltar{margin-bottom:16px}
 </style>
 </head>
 <body>
@@ -46,18 +61,24 @@ body{background:var(--preto);color:var(--branco);min-height:100vh}
 
 <div id="categorias" class="container hide">
   <h2>Categorias</h2>
-  <div id="catGrid" class="grid"></div>
+  <div id="catGrid" class="grid-categorias"></div>
+</div>
+
+<div id="subcategorias" class="container hide">
+  <button class="btn-outline voltar" onclick="showCategories()">< Voltar</button>
+  <h2 id="catTitle"></h2>
+  <div id="subGrid" class="grid-produtos"></div>
 </div>
 
 <div id="produtos" class="container hide">
-  <button class="btn-outline" onclick="showCategories()">< Voltar</button>
+  <button class="btn-outline voltar" onclick="voltarSubcat()">< Voltar</button>
   <h2 id="subcatTitle"></h2>
-  <div id="prodGrid" class="grid"></div>
+  <div id="prodGrid" class="grid-produtos"></div>
 </div>
 
 <div id="produtoModal" class="modal">
   <div class="modal-content">
-    <img id="prodImg" style="width:100%;border:2px solid var(--branco);border-radius:8px;margin-bottom:12px">
+    <img id="prodImg" style="width:100%;height:200px;object-fit:contain;border:2px solid var(--branco);border-radius:8px;margin-bottom:12px;background:var(--preto)">
     <h3 id="prodNome"></h3>
     <p id="prodDesc" style="margin:8px 0;color:#aaa"></p>
     <p><b>Estoque:</b> <span id="prodEstoque"></span></p>
@@ -84,62 +105,101 @@ body{background:var(--preto);color:var(--branco);min-height:100vh}
     <input id="user" class="input" placeholder="Usuário">
     <input id="pass" type="password" class="input" placeholder="Senha">
     <button class="btn" style="width:100%;margin-top:8px" onclick="login()">Entrar</button>
-    <button class="btn-outline" style="width:100%;margin-top:8px" onclick="closeModal()">Cancelar</button>
   </div>
 </div>
 
 <div id="adminPanel" class="container hide">
   <h2>Painel Admin</h2>
-  <p>Aqui você vai adicionar categorias, produtos, imagens da galeria, editar estoque/preço...</p>
-  <p style="color:var(--rosa)">Próximo passo: conectar com banco de dados pra salvar de verdade.</p>
-  <button class="btn-outline" onclick="logout()">Sair</button>
+  <p style="color:#aaa;margin-bottom:16px">Próxima versão: adicionar/editar categorias, produtos e imagens da galeria direto aqui.</p>
+  <button class="btn-outline" onclick="logout()">Sair do Admin</button>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-// Dados de exemplo - depois a gente liga no banco
+// Estrutura: Categoria > Subcategoria > Produto
 let data = {
   categorias: [
-    {nome:"Roupas", img:"https://via.placeholder.com/150/ff1b8d/000?text=Roupas", subs:[
-      {nome:"Camisetas", produtos:[
-        {nome:"Camiseta Premium", preco:"59.90", estoque:10, desc:"100% algodão", img:"https://via.placeholder.com/300/ff1b8d/000?text=Produto"}
-      ]}
-    ]}
+    {
+      nome:"Roupas",
+      img:"https://via.placeholder.com/300/ff1b8d/000?text=Roupas",
+      subs:[
+        {nome:"Camisetas", produtos:[
+          {nome:"Camiseta Premium", preco:"59.90", estoque:10, desc:"100% algodão fio 30.1", img:"https://via.placeholder.com/300/ff1b8d/000?text=Produto1"},
+          {nome:"Baby Look", preco:"49.90", estoque:15, desc:"Modelagem feminina", img:"https://via.placeholder.com/300/ff1b8d/000?text=Produto2"},
+          {nome:"Oversized", preco:"69.90", estoque:8, desc:"Estilo street", img:"https://via.placeholder.com/300/ff1b8d/000?text=Produto3"},
+          {nome:"Regata", preco:"39.90", estoque:20, desc:"Para treino", img:"https://via.placeholder.com/300/ff1b8d/000?text=Produto4"}
+        ]},
+        {nome:"Calças", produtos:[
+          {nome:"Jeans Skinny", preco:"129.90", estoque:5, desc:"Cintura alta", img:"https://via.placeholder.com/300/ff1b8d/000?text=Produto5"}
+        ]}
+      ]
+    },
+    {
+      nome:"Acessórios",
+      img:"https://via.placeholder.com/300/ff1b8d/000?text=Acessorios",
+      subs:[]
+    },
+    {
+      nome:"Calçados",
+      img:"https://via.placeholder.com/300/ff1b8d/000?text=Calcados",
+      subs:[]
+    }
   ]
 };
+
+let currentCatIndex = 0;
+let currentSubIndex = 0;
 let currentProd = null;
-let currentCat = "";
 
 function showCategories(){
-  document.getElementById('home').classList.add('hide');
-  document.getElementById('produtos').classList.add('hide');
-  document.getElementById('adminPanel').classList.add('hide');
+  esconderTudo();
   document.getElementById('categorias').classList.remove('hide');
   let html = '';
   data.categorias.forEach((c,i)=>{
-    html += `<div class="card" onclick="showSubcats(${i})">
-      <img src="${c.img}"><p style="margin-top:8px">${c.nome}</p>
+    html += `<div class="card" onclick="showSubcategorias(${i})">
+      <img src="${c.img}"><p>${c.nome}</p>
     </div>`;
   });
   document.getElementById('catGrid').innerHTML = html;
 }
 
-function showSubcats(catIndex){
-  currentCat = data.categorias[catIndex].nome;
+function showSubcategorias(catIndex){
+  currentCatIndex = catIndex;
+  esconderTudo();
+  document.getElementById('subcategorias').classList.remove('hide');
+  document.getElementById('catTitle').innerText = data.categorias[catIndex].nome;
   let subs = data.categorias[catIndex].subs;
-  document.getElementById('categorias').classList.add('hide');
-  document.getElementById('produtos').classList.remove('hide');
-  document.getElementById('subcatTitle').innerText = currentCat;
   let html = '';
-  subs.forEach(s=>{
-    s.produtos.forEach((p)=>{
-      html += `<div class="card" onclick='openProd(${JSON.stringify(p)})'>
-        <img src="${p.img}"><p style="margin-top:8px">${p.nome}</p><b>R$ ${p.preco}</b>
+  if(subs.length === 0){
+    html = `<p style="grid-column:1/-1;text-align:center;color:#aaa">Nenhuma subcategoria cadastrada ainda.</p>`;
+  } else {
+    subs.forEach((s,i)=>{
+      html += `<div class="card" onclick="showProdutos(${i})">
+        <img src="${s.produtos[0]?.img || 'https://via.placeholder.com/300/ff1b8d/000?text=Sem+Foto'}">
+        <p>${s.nome}</p>
+        <span>${s.produtos.length} produtos</span>
       </div>`;
-    })
+    });
+  }
+  document.getElementById('subGrid').innerHTML = html;
+}
+
+function showProdutos(subIndex){
+  currentSubIndex = subIndex;
+  esconderTudo();
+  document.getElementById('produtos').classList.remove('hide');
+  let sub = data.categorias[currentCatIndex].subs[subIndex];
+  document.getElementById('subcatTitle').innerText = sub.nome;
+  let html = '';
+  sub.produtos.forEach((p)=>{
+    html += `<div class="card" onclick='openProd(${JSON.stringify(p)})'>
+      <img src="${p.img}"><p>${p.nome}</p><span>R$ ${p.preco}</span>
+    </div>`;
   });
   document.getElementById('prodGrid').innerHTML = html;
 }
+
+function voltarSubcat(){ showSubcategorias(currentCatIndex); }
 
 function openProd(p){
   currentProd = p;
@@ -152,28 +212,37 @@ function openProd(p){
 }
 
 function pagarPix(){
-  document.getElementById('produtoModal').classList.remove('active');
+  closeModal();
   document.getElementById('pixModal').classList.add('active');
   document.getElementById('qrcode').innerHTML = "";
-  new QRCode(document.getElementById("qrcode"), "00020126580014BR.GOV.BCB.PIX0136989948535635204000053039865405"+currentProd.preco+"5802BR5925Lorrane Vitorias Alves Vaz6009SAO PAULO62070503***6304");
+  new QRCode(document.getElementById("qrcode"), {
+    text: `00020126580014BR.GOV.BCB.PIX013698994853563520400005303986540${currentProd.preco}5802BR5925Lorrane Vitorias Alves Vaz6009SAO PAULO62070503***6304`,
+    width:180, height:180, colorDark:"#ff1b8d", colorLight:"#0a0a0a"
+  });
 }
 
 function comprarZap(){
-  let msg = `Olá! Quero comprar: *${currentProd.nome}* | Categoria: *${currentCat}* | Valor: R$ ${currentProd.preco}`;
+  let cat = data.categorias[currentCatIndex].nome;
+  let msg = `Olá! Quero comprar: *${currentProd.nome}* | Categoria: *${cat}* | Valor: R$ ${currentProd.preco}`;
   window.open(`https://wa.me/5598994853563?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
 function showLogin(){document.getElementById('loginModal').classList.add('active');}
 function closeModal(){document.querySelectorAll('.modal').forEach(m=>m.classList.remove('active'));}
+function esconderTudo(){
+  document.getElementById('home').classList.add('hide');
+  document.getElementById('categorias').classList.add('hide');
+  document.getElementById('subcategorias').classList.add('hide');
+  document.getElementById('produtos').classList.add('hide');
+  document.getElementById('adminPanel').classList.add('hide');
+}
 function login(){
   if(document.getElementById('user').value==="Lorrannyh" && document.getElementById('pass').value==="Lorrannyh.10122"){
-    closeModal();
-    document.getElementById('home').classList.add('hide');
-    document.getElementById('categorias').classList.add('hide');
+    closeModal(); esconderTudo();
     document.getElementById('adminPanel').classList.remove('hide');
   } else alert("Usuário ou senha incorretos");
 }
-function logout(){document.getElementById('adminPanel').classList.add('hide');showCategories();}
+function logout(){showCategories();}
 </script>
 </body>
 </html>
