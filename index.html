@@ -3,332 +3,525 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>prime store</title>
+<title>Lorrannyh Store</title>
+
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  background: #000;
-  color: #fff;
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.5px;
-}
-.tela { display: none; min-height: 100vh; }
-.tela.on { display: block; }
 
-#t1 {
-  display: none; align-items: center; justify-content: center; text-align: center;
-}
-#t1.on { display: flex; }
-.hero-box { max-width: 600px; padding: 80px 24px; }
-.logo {
-  font-size: 32px; color: #fff; font-weight: 400;
-  letter-spacing: 8px; margin-bottom: 16px; text-transform: uppercase;
-}
-.tagline {
-  font-size: 10px; color: #666; text-transform: uppercase;
-  letter-spacing: 4px; margin-bottom: 40px; font-weight: 400;
-}
-.desc {
-  color: #666; line-height: 2; margin: 0 auto 48px;
-  font-weight: 400; font-size: 12px; max-width: 480px;
-}
-.btn-luxo {
-  background: #fff; color: #000; border: none;
-  padding: 16px 48px; font-size: 10px; font-weight: 500;
-  text-transform: uppercase; letter-spacing: 2px; cursor: pointer;
-  transition: opacity 0.2s;
-}
-.btn-luxo:hover { opacity: 0.8; }
-
-.header {
-  padding: 24px 48px; border-bottom: 1px solid #1a1a1a;
-  display: flex; justify-content: space-between; align-items: center;
-  background: #000; position: sticky; top: 0; z-index: 50;
-}
-.header h1 {
-  font-size: 18px; color: #fff; font-weight: 400;
-  letter-spacing: 4px; text-transform: uppercase;
-}
-.btn {
-  background: #fff; color: #000; border: none;
-  padding: 12px 24px; font-size: 9px; font-weight: 500;
-  text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer;
-  transition: opacity 0.2s;
-}
-.btn:hover { opacity: 0.8; }
-.btn-ghost {
-  background: transparent; color: #666; border: 1px solid #1a1a1a;
-}
-.btn-ghost:hover { border-color: #fff; color: #fff; }
-
-.container { padding: 64px 48px; max-width: 1440px; margin: auto; }
-.titulo {
-  font-size: 16px; font-weight: 400; margin-bottom: 48px;
-  letter-spacing: 3px; text-transform: uppercase; color: #fff;
+:root{
+--rosa:#ff4fd8;
+--azul:#00bfff;
+--preto:#060606;
+--card:#111;
+--branco:#fff;
 }
 
-.grid-cats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-.cat {
-  background: #000; border: 1px solid #1a1a1a;
-  cursor: pointer; transition: border 0.2s;
-}
-.cat:hover { border-color: #fff; }
-.cat img { width: 100%; height: 320px; object-fit: cover; display: block; }
-.cat div {
-  padding: 24px; text-align: center; font-weight: 400;
-  font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #fff;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
 }
 
-.grid-prods { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-.prod {
-  background: #000; border: 1px solid #1a1a1a;
-  display: flex; flex-direction: column; transition: border 0.2s;
+body{
+background:var(--preto);
+color:var(--branco);
 }
-.prod:hover { border-color: #333; }
-.prod img { width: 100%; height: 280px; object-fit: cover; }
-.prod-box { padding: 24px; flex: 1; display: flex; flex-direction: column; }
-.prod-box b {
-  font-weight: 400; font-size: 13px; margin-bottom: 8px;
-  letter-spacing: 0.5px; color: #fff; text-transform: uppercase;
-}
-.prod-box p { color: #666; font-size: 11px; line-height: 1.7; flex: 1; margin-bottom: 16px; font-weight: 400; }
-.prod-bot {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 16px; padding-top: 16px; border-top: 1px solid #1a1a1a;
-}
-.preco { color: #fff; font-weight: 400; font-size: 16px; }
-.estoque { color: #666; font-size: 10px; font-weight: 400; }
-.btns { display: flex; gap: 8px; }
-.btns a { flex: 1; text-decoration: none; }
-.btns button { width: 100%; padding: 12px; font-size: 9px; }
 
-#admin {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.98); display: none; align-items: center; justify-content: center; z-index: 100;
+.topo{
+width:100%;
+padding:18px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#0b0b0b;
+border-bottom:2px solid var(--azul);
+position:sticky;
+top:0;
+z-index:999;
 }
-#admin.on { display: flex; }
-.admin-box {
-  background: #000; padding: 48px; width: 90%; max-width: 560px; border: 1px solid #1a1a1a;
-}
-.admin-box h3 { color: #fff; margin-bottom: 32px; font-size: 18px; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; }
-.admin-box h4 { font-size: 10px; color: #666; font-weight: 500; margin: 32px 0 16px; text-transform: uppercase; letter-spacing: 2px; }
-.admin-box input,.admin-box textarea,.admin-box select {
-  width: 100%; margin: 8px 0 24px; padding: 14px; background: #0a0a0a;
-  border: 1px solid #1a1a1a; color: #fff; font-size: 11px; font-family: Helvetica, Arial, sans-serif;
-}
-.admin-box input:focus,.admin-box textarea:focus { outline: none; border-color: #333; }
-.admin-box label { font-size: 10px; color: #666; display: block; margin-bottom: 24px; }
-hr { border: none; border-top: 1px solid #1a1a1a; margin: 32px 0; }
 
-@media (max-width: 1200px) {.grid-prods { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 900px) {
-.grid-cats { grid-template-columns: repeat(2, 1fr); }
-.grid-prods { grid-template-columns: repeat(2, 1fr); }
-.header { padding: 20px 24px; }
-.container { padding: 48px 24px; }
-.logo { font-size: 28px; letter-spacing: 6px; }
+.logo{
+font-size:24px;
+font-weight:bold;
+color:var(--azul);
+text-shadow:0 0 15px var(--azul);
 }
-@media (max-width: 600px) {
-.grid-cats,.grid-prods { grid-template-columns: 1fr; }
-.logo { font-size: 24px; letter-spacing: 4px; }
+
+.temas{
+display:flex;
+gap:10px;
 }
+
+.temas button{
+padding:10px 15px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+transition:.3s;
+}
+
+.azul{
+background:var(--azul);
+color:#000;
+}
+
+.rosa{
+background:var(--rosa);
+color:#000;
+}
+
+.banner{
+padding:35px;
+text-align:center;
+}
+
+.banner h1{
+font-size:35px;
+margin-bottom:15px;
+}
+
+.banner p{
+max-width:700px;
+margin:auto;
+line-height:1.7;
+color:#ccc;
+}
+
+.aba{
+padding:25px;
+}
+
+.titulo{
+font-size:28px;
+margin-bottom:25px;
+color:var(--azul);
+}
+
+.grid-categorias{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:20px;
+}
+
+.grid-sub{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:20px;
+}
+
+.card{
+background:var(--card);
+border:2px solid var(--azul);
+border-radius:15px;
+overflow:hidden;
+transition:.3s;
+box-shadow:0 0 10px rgba(0,191,255,.4);
+}
+
+.card:hover{
+transform:scale(1.03);
+}
+
+.card img{
+width:100%;
+height:200px;
+object-fit:cover;
+}
+
+.info{
+padding:15px;
+}
+
+.nome{
+font-size:20px;
+margin-bottom:10px;
+font-weight:bold;
+}
+
+.valor{
+color:lime;
+font-size:19px;
+margin-bottom:10px;
+}
+
+.estoque{
+color:orange;
+margin-bottom:10px;
+}
+
+.descricao{
+font-size:14px;
+color:#ccc;
+line-height:1.5;
+}
+
+.botao{
+margin-top:15px;
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+font-weight:bold;
+cursor:pointer;
+background:var(--azul);
+color:#000;
+}
+
+.admin{
+margin:30px;
+background:#111;
+padding:25px;
+border-radius:15px;
+border:2px solid var(--azul);
+}
+
+.admin h2{
+margin-bottom:20px;
+}
+
+.admin input,
+.admin textarea{
+width:100%;
+padding:12px;
+margin-bottom:12px;
+background:#000;
+border:1px solid #333;
+color:#fff;
+border-radius:10px;
+}
+
+.admin button{
+padding:12px;
+border:none;
+border-radius:10px;
+background:var(--azul);
+font-weight:bold;
+cursor:pointer;
+width:100%;
+}
+
+.login{
+margin:30px;
+background:#111;
+padding:25px;
+border-radius:15px;
+border:2px solid var(--azul);
+max-width:500px;
+margin:auto;
+margin-top:30px;
+}
+
+.login h2{
+margin-bottom:20px;
+}
+
+.login input{
+width:100%;
+padding:12px;
+margin-bottom:12px;
+border-radius:10px;
+border:none;
+background:#000;
+color:#fff;
+}
+
+.login button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+background:var(--azul);
+font-weight:bold;
+cursor:pointer;
+}
+
+#painelAdmin{
+display:none;
+}
+
+@media(max-width:900px){
+
+.grid-categorias{
+grid-template-columns:repeat(2,1fr);
+}
+
+.grid-sub{
+grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+@media(max-width:600px){
+
+.grid-categorias{
+grid-template-columns:1fr;
+}
+
+.grid-sub{
+grid-template-columns:1fr;
+}
+
+}
+
 </style>
 </head>
 <body>
 
-<div id="t1" class="tela on">
-  <div class="hero-box">
-    <h1 class="logo">prime store</h1>
-    <p class="tagline">Exclusividade & Segurança</p>
-    <span class="desc">
-      Curadoria manual. Sem bancos de dados externos.
-      Cada operação é individual para garantir proteção total.
-      Transparência, segurança e atendimento direto no WhatsApp.
-    </span>
-    <br>
-    <button class="btn-luxo" onclick="vai(2)">Acessar</button>
-  </div>
+<div class="topo">
+
+<div class="logo">
+Lorrannyh Store
 </div>
 
-<div id="t2" class="tela">
-  <div class="header">
-    <h1>prime store</h1>
-    <button class="btn btn-ghost" onclick="abreAdmin()">Admin</button>
-  </div>
-  <div class="container">
-    <h2 class="titulo">Coleções</h2>
-    <div id="cats" class="grid-cats"></div>
-  </div>
+<div class="temas">
+<button class="azul" onclick="temaAzul()">Azul</button>
+<button class="rosa" onclick="temaRosa()">Rosa</button>
 </div>
 
-<div id="t3" class="tela">
-  <div class="header">
-    <h1>prime store</h1>
-    <div style="display:flex; gap:16px;">
-      <button class="btn btn-ghost" onclick="vai(2)">Coleções</button>
-      <button class="btn btn-ghost" onclick="abreAdmin()">Admin</button>
-    </div>
-  </div>
-  <div class="container">
-    <button class="btn btn-ghost" onclick="vai(2)" style="margin-bottom:48px">← Voltar</button>
-    <h2 id="nome-cat" class="titulo"></h2>
-    <div id="prods" class="grid-prods"></div>
-  </div>
 </div>
 
-<div id="admin">
-  <div class="admin-box">
-    <h3 id="tit-admin">Admin</h3>
-    <div id="login">
-      <input id="user" placeholder="Usuário">
-      <input id="pass" type="password" placeholder="Senha">
-      <button class="btn" onclick="entrar()">Entrar</button>
-      <button class="btn btn-ghost" onclick="fechaAdmin()" style="margin-top:16px">Fechar</button>
-    </div>
-    <div id="painel" style="display:none">
-      <h4>Nova Coleção</h4>
-      <input id="nome-cat-input" placeholder="Nome">
-      <input type="file" id="img-cat-input" accept="image/*">
-      <button class="btn" onclick="addCat()">Criar</button>
-      <hr>
-      <h4>Novo Produto</h4>
-      <select id="select-cat"></select>
-      <input id="nome-prod" placeholder="Nome">
-      <input id="preco-prod" placeholder="Preço" type="number" step="0.01">
-      <input id="estoque-prod" placeholder="Estoque" type="number">
-      <textarea id="desc-prod" placeholder="Descrição" rows="3"></textarea>
-      <input type="file" id="img-prod" accept="image/*">
-      <button class="btn" onclick="addProd()">Criar</button>
-      <button class="btn btn-ghost" onclick="fechaAdmin()" style="margin-top:24px">Sair</button>
-    </div>
-  </div>
+<!-- ABA 1 -->
+
+<section class="banner">
+
+<h1>Painel Manual Premium</h1>
+
+<p>
+Nosso sistema funciona totalmente manual para garantir mais segurança,
+controle dos pedidos e atendimento personalizado. 
+Todos os produtos, estoques e entregas podem ser organizados diretamente pelo administrador,
+evitando erros automáticos e permitindo suporte rápido.
+</p>
+
+</section>
+
+<!-- LOGIN ADMIN -->
+
+<div class="login">
+
+<h2>Login Admin</h2>
+
+<input type="text" id="user" placeholder="Usuário">
+<input type="password" id="senha" placeholder="Senha">
+
+<button onclick="login()">Entrar</button>
+
 </div>
+
+<!-- PAINEL ADMIN -->
+
+<div class="admin" id="painelAdmin">
+
+<h2>Painel Admin</h2>
+
+<input type="text" id="nomeProduto" placeholder="Nome do produto">
+
+<input type="text" id="imgProduto" placeholder="Link da imagem">
+
+<input type="text" id="valorProduto" placeholder="Valor">
+
+<input type="text" id="estoqueProduto" placeholder="Estoque">
+
+<textarea id="descricaoProduto" placeholder="Descrição"></textarea>
+
+<button onclick="adicionarProduto()">
+Adicionar Produto
+</button>
+
+</div>
+
+<!-- ABA 2 -->
+
+<section class="aba">
+
+<h2 class="titulo">
+Categorias
+</h2>
+
+<div class="grid-categorias">
+
+<div class="card">
+
+<img src="https://i.imgur.com/7b1M5bR.jpeg">
+
+<div class="info">
+
+<div class="nome">
+Passe Premium
+</div>
+
+<button class="botao">
+Abrir
+</button>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<img src="https://i.imgur.com/3M7QZ9W.jpeg">
+
+<div class="info">
+
+<div class="nome">
+Caixa Misteriosa
+</div>
+
+<button class="botao">
+Abrir
+</button>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<img src="https://i.imgur.com/y6XG6iS.jpeg">
+
+<div class="info">
+
+<div class="nome">
+Itens Exclusivos
+</div>
+
+<button class="botao">
+Abrir
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ABA 3 -->
+
+<section class="aba">
+
+<h2 class="titulo">
+Subcategorias
+</h2>
+
+<div class="grid-sub" id="produtos">
+
+<div class="card">
+
+<img src="https://i.imgur.com/7b1M5bR.jpeg">
+
+<div class="info">
+
+<div class="nome">
+Passe VIP
+</div>
+
+<div class="valor">
+R$ 20
+</div>
+
+<div class="estoque">
+Estoque: 18
+</div>
+
+<div class="descricao">
+Passe premium com acesso completo.
+</div>
+
+<button class="botao">
+Comprar
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
 
 <script>
-let dados = [];
-let catAtual = 0;
-const ZAP = '5598984853563';
 
-function load() {
-  let d = localStorage.getItem('storeclean');
-  if(d) dados = JSON.parse(d);
-  renderCats();
+const adminUser = "Lorrannyh";
+const adminSenha = "Lorrannyh.101224";
+
+function login(){
+
+let user = document.getElementById("user").value;
+let senha = document.getElementById("senha").value;
+
+if(user === adminUser && senha === adminSenha){
+
+document.getElementById("painelAdmin").style.display = "block";
+
+alert("Painel liberado!");
+
+}else{
+
+alert("Usuário ou senha incorretos.");
+
 }
 
-function vai(n) {
-  document.querySelectorAll('.tela').forEach(t => t.classList.remove('on'));
-  document.getElementById('t'+n).classList.add('on');
-  window.scrollTo(0,0);
 }
 
-function abreAdmin() { document.getElementById('admin').classList.add('on'); }
-function fechaAdmin() {
-  document.getElementById('admin').classList.remove('on');
-  document.getElementById('login').style.display = 'block';
-  document.getElementById('painel').style.display = 'none';
-  document.getElementById('user').value = '';
-  document.getElementById('pass').value = '';
-}
-document.getElementById('admin').onclick = e => { if(e.target.id === 'admin') fechaAdmin(); };
+function adicionarProduto(){
 
-function entrar() {
-  if(document.getElementById('user').value === 'Lorrannyh.101225' &&
-     document.getElementById('pass').value === 'Lorrannnyh') {
-    document.getElementById('login').style.display = 'none';
-    document.getElementById('painel').style.display = 'block';
-    document.getElementById('tit-admin').innerText = 'Painel';
-    updateSelect();
-  } else alert('Login inválido');
-}
+let nome = document.getElementById("nomeProduto").value;
+let img = document.getElementById("imgProduto").value;
+let valor = document.getElementById("valorProduto").value;
+let estoque = document.getElementById("estoqueProduto").value;
+let descricao = document.getElementById("descricaoProduto").value;
 
-function updateSelect() {
-  document.getElementById('select-cat').innerHTML = dados.map((c,i) => `<option value="${i}">${c.nome}</option>`).join('');
-}
+let produtos = document.getElementById("produtos");
 
-function addCat() {
-  let nome = document.getElementById('nome-cat-input').value;
-  let file = document.getElementById('img-cat-input').files[0];
-  if(!nome ||!file) return alert('Preencha tudo');
-  let r = new FileReader();
-  r.onload = e => {
-    dados.push({ nome, img: e.target.result, prods: [] });
-    localStorage.setItem('storeclean', JSON.stringify(dados));
-    renderCats(); updateSelect();
-    document.getElementById('nome-cat-input').value = '';
-    document.getElementById('img-cat-input').value = '';
-  };
-  r.readAsDataURL(file);
-}
+produtos.innerHTML += `
 
-function addProd() {
-  let i = document.getElementById('select-cat').value;
-  let nome = document.getElementById('nome-prod').value;
-  let preco = parseFloat(document.getElementById('preco-prod').value);
-  let estoque = parseInt(document.getElementById('estoque-prod').value);
-  let desc = document.getElementById('desc-prod').value;
-  let file = document.getElementById('img-prod').files[0];
-  if(i === '' ||!nome ||!preco ||!estoque ||!file) return alert('Preencha tudo');
-  let r = new FileReader();
-  r.onload = e => {
-    dados[i].prods.push({ nome, preco: preco.toFixed(2), estoque, desc, img: e.target.result });
-    localStorage.setItem('storeclean', JSON.stringify(dados));
-    alert('Criado');
-    document.getElementById('nome-prod').value = '';
-    document.getElementById('preco-prod').value = '';
-    document.getElementById('estoque-prod').value = '';
-    document.getElementById('desc-prod').value = '';
-    document.getElementById('img-prod').value = '';
-  };
-  r.readAsDataURL(file);
+<div class="card">
+
+<img src="${img}">
+
+<div class="info">
+
+<div class="nome">${nome}</div>
+
+<div class="valor">R$ ${valor}</div>
+
+<div class="estoque">Estoque: ${estoque}</div>
+
+<div class="descricao">${descricao}</div>
+
+<button class="botao">
+Comprar
+</button>
+
+<button class="botao" onclick="this.parentElement.parentElement.remove()">
+Remover
+</button>
+
+</div>
+
+</div>
+
+`;
+
 }
 
-function renderCats() {
-  let div = document.getElementById('cats');
-  if(dados.length === 0) {
-    div.innerHTML = '<p style="color:#666; grid-column:1/-1; text-align:center; padding:80px 0;">Sem coleções. Admin para criar.</p>';
-    return;
-  }
-  div.innerHTML = dados.map((c,i) => `
-    <div class="cat" onclick="abreCat(${i})">
-      <img src="${c.img}">
-      <div>${c.nome}</div>
-    </div>`).join('');
+function temaRosa(){
+
+document.documentElement.style.setProperty('--azul','#ff4fd8');
+
 }
 
-function abreCat(i) {
-  catAtual = i;
-  document.getElementById('nome-cat').innerText = dados[i].nome;
-  let div = document.getElementById('prods');
-  if(dados[i].prods.length === 0) {
-    div.innerHTML = '<p style="color:#666; grid-column:1/-1; text-align:center; padding:80px 0;">Sem produtos.</p>';
-  } else {
-    div.innerHTML = dados[i].prods.map(p => {
-      let msg1 = encodeURIComponent(`Interesse: ${p.nome} - R$ ${p.preco}`);
-      let msg2 = encodeURIComponent(`Comprei: ${p.nome} - R$ ${p.preco}. Comprovante:`);
-      return `
-      <div class="prod">
-        <img src="${p.img}">
-        <div class="prod-box">
-          <b>${p.nome}</b>
-          <p>${p.desc}</p>
-          <div class="prod-bot">
-            <span class="preco">R$ ${p.preco}</span>
-            <span class="estoque">Estoque: ${p.estoque}</span>
-          </div>
-          <div class="btns">
-            <a href="https://wa.me/${ZAP}?text=${msg1}" target="_blank"><button class="btn">Comprar</button></a>
-            <a href="https://wa.me/${ZAP}?text=${msg2}" target="_blank"><button class="btn btn-ghost">Comprovante</button></a>
-          </div>
-        </div>
-      </div>`;
-    }).join('');
-  }
-  vai(3);
+function temaAzul(){
+
+document.documentElement.style.setProperty('--azul','#00bfff');
+
 }
 
-load();
 </script>
+
 </body>
 </html>
