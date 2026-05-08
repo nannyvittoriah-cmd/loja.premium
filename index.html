@@ -1,543 +1,549 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Prime Stores</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Prime Store</title>
 
 <style>
-
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family:Arial;
 }
 
 body{
 background:#000;
 color:#fff;
+font-size:13px;
+overflow-x:hidden;
 }
 
-/* TOPO */
+:root{
+--rosa:#ff4fd8;
+--azul:#009dff;
+--preto:#050505;
+--card:#111;
+}
 
 .topo{
 width:100%;
 padding:15px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:#080808;
-border-bottom:1px solid #1d1d1d;
+text-align:center;
+background:#090909;
+border-bottom:2px solid var(--rosa);
 position:sticky;
 top:0;
 z-index:999;
 }
 
-.logo{
-font-size:28px;
-font-weight:bold;
+.topo h1{
+font-size:22px;
+letter-spacing:1px;
 }
 
-.admin{
-background:#8b0000;
-border:none;
-padding:10px 18px;
-border-radius:12px;
-color:#fff;
-font-weight:bold;
-cursor:pointer;
-}
-
-/* ENTRADA */
-
-.entrada{
-padding:20px;
+.temas{
 display:flex;
-flex-direction:column;
-align-items:center;
+justify-content:center;
+gap:10px;
+margin-top:10px;
 }
 
-.banner{
-width:100%;
-max-width:450px;
-height:500px;
-background:#111;
-border-radius:20px;
-overflow:hidden;
-border:1px solid #222;
+.temas button{
+padding:7px 14px;
+border:none;
+cursor:pointer;
+border-radius:8px;
+font-size:12px;
+font-weight:bold;
 }
 
-.banner img{
-width:100%;
-height:100%;
-object-fit:cover;
+.rosa{
+background:var(--rosa);
+color:#fff;
+}
+
+.azul{
+background:var(--azul);
+color:#fff;
+}
+
+.admin-btn{
+background:#fff;
+color:#000;
+}
+
+.pagina{
+display:none;
+padding:15px;
+animation:fade .3s;
+}
+
+.ativa{
+display:block;
+}
+
+@keyframes fade{
+from{
+opacity:0;
+transform:translateY(10px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
 }
 
 .apresentacao{
-margin-top:20px;
-max-width:450px;
+margin-top:30px;
 background:#111;
-padding:18px;
-border-radius:15px;
-line-height:1.6;
-text-align:center;
+padding:20px;
+border-radius:14px;
 border:1px solid #222;
+text-align:center;
 }
 
-.entrar{
+.apresentacao h2{
+margin-bottom:15px;
+font-size:20px;
+}
+
+.apresentacao p{
+line-height:1.7;
+color:#ccc;
+}
+
+.entrar-btn{
 margin-top:20px;
-width:100%;
-max-width:450px;
-padding:18px;
+padding:12px 25px;
+background:var(--rosa);
 border:none;
-border-radius:15px;
-background:#8b0000;
 color:#fff;
-font-size:22px;
 font-weight:bold;
+border-radius:10px;
 cursor:pointer;
 }
 
-/* CATEGORIAS */
-
-.categorias{
-display:none;
-padding:20px;
-}
-
-.titulo{
-font-size:32px;
-margin-bottom:20px;
+.notificacao{
+position:fixed;
+top:20px;
+right:20px;
+background:#0f0;
+color:#000;
+padding:12px;
+border-radius:10px;
 font-weight:bold;
+z-index:99999;
+animation:sumir 5s forwards;
 }
 
-.grid{
+@keyframes sumir{
+0%{opacity:1;}
+80%{opacity:1;}
+100%{opacity:0; display:none;}
+}
+
+.grid-categorias{
 display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:15px;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-top:20px;
 }
 
-.card{
+.categoria{
 background:#111;
-border-radius:18px;
-overflow:hidden;
-border:1px solid #222;
+padding:8px;
+border-radius:10px;
 cursor:pointer;
-transition:0.3s;
-}
-
-.card:hover{
-transform:scale(1.03);
-border-color:#8b0000;
-}
-
-.card img{
-width:100%;
-height:140px;
-object-fit:cover;
-}
-
-.card h3{
-padding:15px;
+border:1px solid #222;
 text-align:center;
 }
 
-/* PRODUTOS */
+.categoria img{
+width:100%;
+height:90px;
+object-fit:cover;
+border-radius:8px;
+}
 
-.produtos{
-display:none;
-padding:20px;
+.categoria p{
+margin-top:6px;
+font-size:12px;
+}
+
+.grid-produtos{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
+margin-top:20px;
 }
 
 .produto{
 background:#111;
-border-radius:18px;
-padding:15px;
-margin-bottom:20px;
+padding:8px;
+border-radius:10px;
 border:1px solid #222;
+position:relative;
 }
 
 .produto img{
 width:100%;
-height:220px;
+height:110px;
 object-fit:cover;
-border-radius:15px;
-margin-bottom:15px;
+border-radius:8px;
 }
 
-.produto h2{
-margin-bottom:10px;
+.produto h3{
+font-size:12px;
+margin-top:5px;
 }
 
 .produto p{
-margin-bottom:10px;
+font-size:11px;
+margin-top:3px;
 color:#ccc;
 }
 
-.valor{
-font-size:24px;
+.preco{
+color:#0f0 !important;
 font-weight:bold;
-color:#fff;
-margin-bottom:15px;
+}
+
+.estoque{
+color:#ffcc00 !important;
+}
+
+.botoes{
+display:flex;
+flex-direction:column;
+gap:6px;
+margin-top:8px;
+}
+
+.botoes button{
+padding:8px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:11px;
+font-weight:bold;
 }
 
 .comprar{
-width:100%;
-padding:15px;
-border:none;
-border-radius:15px;
-background:#8b0000;
+background:#00cc66;
 color:#fff;
-font-size:18px;
-font-weight:bold;
-cursor:pointer;
 }
 
-/* ADMIN */
+.comprovante{
+background:#009dff;
+color:#fff;
+}
 
-.adminPainel{
+.promocao{
+position:absolute;
+top:8px;
+left:8px;
+background:red;
+padding:4px 8px;
+font-size:10px;
+border-radius:8px;
+font-weight:bold;
+}
+
+.admin-painel{
 display:none;
 position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:#000;
+inset:0;
+background:#000000f2;
+z-index:999999;
 overflow:auto;
 padding:20px;
-z-index:9999;
 }
 
-.fechar{
-background:#8b0000;
-padding:10px 18px;
-border:none;
-border-radius:10px;
-color:#fff;
-margin-bottom:20px;
-cursor:pointer;
-}
-
-.input{
-width:100%;
-padding:15px;
-margin-bottom:15px;
-border:none;
-border-radius:12px;
+.admin-box{
 background:#111;
+padding:20px;
+border-radius:14px;
+max-width:500px;
+margin:auto;
+border:1px solid #333;
+}
+
+.admin-box h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+input, textarea{
+width:100%;
+padding:10px;
+margin-top:10px;
+background:#000;
+border:1px solid #333;
 color:#fff;
+border-radius:8px;
+font-size:12px;
 }
 
 .salvar{
 width:100%;
-padding:15px;
+margin-top:15px;
+padding:12px;
 border:none;
-border-radius:12px;
-background:#8b0000;
+background:var(--rosa);
 color:#fff;
-font-size:18px;
+border-radius:10px;
 font-weight:bold;
 cursor:pointer;
 }
 
-.info{
-margin-top:20px;
+.fechar{
+margin-top:10px;
+background:red;
+}
+
+.online{
+margin-top:15px;
 background:#111;
-padding:15px;
-border-radius:15px;
-line-height:1.6;
+padding:12px;
+border-radius:10px;
+border:1px solid #222;
+text-align:center;
+color:#00ff66;
+font-weight:bold;
 }
 
-/* RESPONSIVO */
+.numero{
+margin-top:10px;
+text-align:center;
+color:#ccc;
+}
 
-@media(max-width:600px){
+@media(max-width:900px){
 
-.grid{
+.grid-produtos{
 grid-template-columns:repeat(2,1fr);
-}
-
-.logo{
-font-size:24px;
 }
 
 }
 
 </style>
 </head>
+
 <body>
 
-<!-- TOPO -->
+<div class="notificacao">
+🟢 Atendimento online agora
+</div>
 
 <div class="topo">
+<h1>Prime Store</h1>
 
-<div class="logo">
-Prime Stores
+<div class="temas">
+<button class="rosa" onclick="temaRosa()">Tema Rosa</button>
+<button class="azul" onclick="temaAzul()">Tema Azul</button>
+<button class="admin-btn" onclick="abrirAdmin()">Admin</button>
+</div>
 </div>
 
-<button class="admin" onclick="abrirAdmin()">
-ADMIN
-</button>
-
-</div>
-
-<!-- ENTRADA -->
-
-<section class="entrada" id="entrada">
-
-<div class="banner">
-<img id="bannerEntrada" src="https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=1200">
-</div>
+<!-- PAGINA 1 -->
+<div class="pagina ativa" id="inicio">
 
 <div class="apresentacao">
-Nosso sistema funciona manualmente para garantir mais controle, segurança e organização nos pedidos.
-</div>
+<h2>Bem-vindo(a) à Prime Store</h2>
 
-<button class="entrar" onclick="entrarSite()">
+<p>
+Nosso sistema funciona manualmente para manter mais segurança nos dados dos clientes e garantir um atendimento mais organizado.
+Todas as compras são verificadas manualmente para evitar erros, fraudes e problemas no envio.
+</p>
+
+<button class="entrar-btn" onclick="entrarLoja()">
 ENTRAR
 </button>
 
-</section>
-
-<!-- CATEGORIAS -->
-
-<section class="categorias" id="categorias">
-
-<div class="titulo">
-Categorias
+<div class="online">
+🟢 Estamos online agora
 </div>
 
-<div class="grid">
-
-<div class="card" onclick="abrirProdutos('Instagram')">
-<img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png">
-<h3>Instagram</h3>
-</div>
-
-<div class="card" onclick="abrirProdutos('TikTok')">
-<img src="https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg">
-<h3>TikTok</h3>
-</div>
-
-<div class="card" onclick="abrirProdutos('Kwai')">
-<img src="https://cdn-icons-png.flaticon.com/512/3669/3669986.png">
-<h3>Kwai</h3>
-</div>
-
-<div class="card" onclick="abrirProdutos('Free Fire')">
-<img src="https://wallpapers.com/images/featured/free-fire-logo-pictures-oycfyb8v13hx24uh.jpg">
-<h3>Free Fire</h3>
+<div class="numero">
+Contato: (98) 98485-3563
 </div>
 
 </div>
 
-</section>
-
-<!-- PRODUTOS -->
-
-<section class="produtos" id="produtos">
-
-<div class="titulo" id="tituloProdutos">
-Produtos
 </div>
+
+<!-- PAGINA 2 -->
+<div class="pagina" id="categorias">
+
+<h2>Categorias</h2>
+
+<div class="grid-categorias" id="listaCategorias">
+
+<div class="categoria" onclick="abrirSubcategoria('Passe')">
+<img src="" id="img1">
+<p>Passe</p>
+</div>
+
+<div class="categoria" onclick="abrirSubcategoria('Contas')">
+<img src="" id="img2">
+<p>Contas</p>
+</div>
+
+<div class="categoria" onclick="abrirSubcategoria('Promoções')">
+<img src="" id="img3">
+<p>Promoções</p>
+</div>
+
+</div>
+
+</div>
+
+<!-- PAGINA 3 -->
+<div class="pagina" id="subcategoria">
+
+<h2 id="tituloSub">Produtos</h2>
+
+<div class="grid-produtos" id="listaProdutos">
 
 <div class="produto">
 
-<img src="https://images.unsplash.com/photo-1611162616475-46b635cb6868?q=80&w=1200">
+<div class="promocao">
+PROMOÇÃO
+</div>
 
-<h2>Seguidores Premium</h2>
+<img src="" id="produto1">
+
+<h3>Passe Premium</h3>
+
+<p class="preco">R$ 10,00</p>
+
+<p class="estoque">Estoque: 50</p>
 
 <p>
-Entrega manual e rápida.
+Passe premium completo.
 </p>
 
-<div class="valor">
-R$ 10,00
-</div>
-
-<button class="comprar" onclick="comprarProduto('Seguidores Premium','10')">
-COMPRAR
+<div class="botoes">
+<button class="comprar">
+Comprar
 </button>
 
-</div>
-
-<div class="produto">
-
-<img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200">
-
-<h2>Curtidas Reais</h2>
-
-<p>
-Sistema seguro e organizado.
-</p>
-
-<div class="valor">
-R$ 20,00
-</div>
-
-<button class="comprar" onclick="comprarProduto('Curtidas Reais','20')">
-COMPRAR
+<button class="comprovante">
+Comprar e enviar comprovante
 </button>
+</div>
 
 </div>
 
-</section>
+</div>
+
+</div>
 
 <!-- ADMIN -->
+<div class="admin-painel" id="admin">
 
-<section class="adminPainel" id="adminPainel">
+<div class="admin-box">
 
-<button class="fechar" onclick="fecharAdmin()">
-FECHAR
-</button>
+<h2>Painel Admin</h2>
 
-<h1 style="margin-bottom:20px;">
-Painel Admin
-</h1>
+<input type="text" id="user" placeholder="Usuário">
 
-<input type="text" class="input" id="usuario" placeholder="Usuário">
-
-<input type="password" class="input" id="senha" placeholder="Senha">
+<input type="password" id="senha" placeholder="Senha">
 
 <button class="salvar" onclick="loginAdmin()">
-ENTRAR NO PAINEL
+Entrar
 </button>
 
-<div id="painelReal" style="display:none; margin-top:30px;">
+<div id="painelEdit" style="display:none;">
 
-<h2 style="margin-bottom:20px;">
-Alterar Foto de Entrada
-</h2>
+<input type="text" placeholder="Nome produto">
 
-<input type="file" class="input" id="novaFoto">
+<input type="number" placeholder="Preço">
 
-<button class="salvar" onclick="trocarFoto()">
-SALVAR FOTO
+<input type="number" placeholder="Estoque">
+
+<textarea placeholder="Descrição"></textarea>
+
+<input type="file" accept="image/*">
+
+<button class="salvar">
+Salvar alterações
 </button>
 
-<div class="info">
+<button class="salvar">
+Adicionar categoria
+</button>
 
-<p>
-<strong>PIX:</strong> (98) 98485-3564
-</p>
+<button class="salvar">
+Adicionar subcategoria
+</button>
 
-<p>
-<strong>Nome:</strong> Lorrane Vitória Alves Vaz
-</p>
+<button class="salvar">
+Destacar promoção
+</button>
 
-<p>
-Você pode alterar produtos, imagens, banners e estoque futuramente neste painel.
-</p>
+</div>
+
+<button class="salvar fechar" onclick="fecharAdmin()">
+Fechar
+</button>
 
 </div>
 
 </div>
-
-</section>
 
 <script>
 
-function entrarSite(){
-
-document.getElementById("entrada").style.display="none";
-document.getElementById("categorias").style.display="block";
-
+function entrarLoja(){
+document.getElementById("inicio").classList.remove("ativa");
+document.getElementById("categorias").classList.add("ativa");
 }
 
-function abrirProdutos(nome){
-
-document.getElementById("categorias").style.display="none";
-document.getElementById("produtos").style.display="block";
-
-document.getElementById("tituloProdutos").innerText=nome;
-
+function abrirSubcategoria(nome){
+document.getElementById("categorias").classList.remove("ativa");
+document.getElementById("subcategoria").classList.add("ativa");
+document.getElementById("tituloSub").innerText = nome;
 }
 
-function comprarProduto(produto,valor){
+function temaRosa(){
+document.querySelector(".topo").style.borderBottom = "2px solid #ff4fd8";
+document.querySelectorAll(".salvar").forEach(btn=>{
+btn.style.background="#ff4fd8";
+});
+document.querySelector(".entrar-btn").style.background="#ff4fd8";
+}
 
-let mensagem=
-`Olá, quero comprar:
-
-Produto: ${produto}
-Valor: R$ ${valor}
-
-PIX:
-(98) 98485-3564
-
-Nome:
-Lorrane Vitória Alves Vaz`;
-
-window.open(
-`https://wa.me/5598984853564?text=${encodeURIComponent(mensagem)}`
-);
-
+function temaAzul(){
+document.querySelector(".topo").style.borderBottom = "2px solid #009dff";
+document.querySelectorAll(".salvar").forEach(btn=>{
+btn.style.background="#009dff";
+});
+document.querySelector(".entrar-btn").style.background="#009dff";
 }
 
 function abrirAdmin(){
-
-document.getElementById("adminPainel").style.display="block";
-
+document.getElementById("admin").style.display="block";
 }
 
 function fecharAdmin(){
-
-document.getElementById("adminPainel").style.display="none";
-
+document.getElementById("admin").style.display="none";
 }
 
 function loginAdmin(){
 
-let user=document.getElementById("usuario").value;
-let senha=document.getElementById("senha").value;
+let usuario = document.getElementById("user").value;
+let senha = document.getElementById("senha").value;
 
-if(user==="Lorrannyh" && senha==="Lorrannyh.101224"){
+if(usuario === "Lorrannyh.101225" && senha === "Lorrannnyh"){
 
-document.getElementById("painelReal").style.display="block";
+alert("Login realizado");
 
-alert("Login realizado!");
+document.getElementById("painelEdit").style.display="block";
 
 }else{
-
-alert("Usuário ou senha incorretos!");
-
-}
-
-}
-
-function trocarFoto(){
-
-let arquivo=document.getElementById("novaFoto").files[0];
-
-if(arquivo){
-
-let leitor=new FileReader();
-
-leitor.onload=function(e){
-
-document.getElementById("bannerEntrada").src=e.target.result;
-
-localStorage.setItem(
-"bannerEntrada",
-e.target.result
-);
-
-}
-
-leitor.readAsDataURL(arquivo);
-
-}
-
-}
-
-window.onload=function(){
-
-let fotoSalva=localStorage.getItem("bannerEntrada");
-
-if(fotoSalva){
-
-document.getElementById("bannerEntrada").src=fotoSalva;
-
+alert("Dados inválidos");
 }
 
 }
