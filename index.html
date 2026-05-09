@@ -9,12 +9,15 @@
             --primary: #ff007f;
             --primary-hover: #e6006f;
             --card-bg: #1a0d1a;
+            --bg: #0a0a0a;
+            --card-border: #2a1a2a;
         }
         
         .theme-blue {
             --primary: #0088ff;
             --primary-hover: #0077ee;
             --card-bg: #0d1a2a;
+            --card-border: #1a2a3a;
         }
         
         * {
@@ -28,7 +31,7 @@
         }
         
         body {
-            background-color: #0a0a0a;
+            background-color: var(--bg);
             color: #fff;
             font-family: 'Segoe UI', Arial, sans-serif;
             min-height: 100vh;
@@ -43,7 +46,7 @@
             border-bottom: 2px solid var(--primary);
             position: sticky;
             top: 0;
-            background: #0a0a0a;
+            background: var(--bg);
             z-index: 100;
         }
         
@@ -79,6 +82,14 @@
             max-width: 600px;
             margin: 32px auto;
             padding: 0 16px;
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
         }
         
         .hero {
@@ -168,13 +179,7 @@
             transform: scale(1.05);
         }
         
-        /* Seção Categorias */
-        #produtos {
-            margin-top: 50px;
-            padding-top: 20px;
-        }
-        
-        #produtos h2 {
+        .page-title {
             color: var(--primary);
             font-size: 24px;
             margin-bottom: 20px;
@@ -188,26 +193,22 @@
             margin-bottom: 24px;
         }
         
-        .category-card {
+        .category-card, .product-card {
             background: var(--card-bg);
-            border: 2px solid #2a1a2a;
+            border: 2px solid var(--card-border);
             border-radius: 10px;
-            padding: 16px 8px;
+            padding: 12px 8px;
             text-align: center;
             cursor: pointer;
             transition: 0.3s;
         }
         
-        .theme-blue .category-card {
-            border: 2px solid #1a2a3a;
-        }
-        
-        .category-card:hover {
+        .category-card:hover, .product-card:hover {
             border-color: var(--primary);
             transform: translateY(-3px);
         }
         
-        .category-icon {
+        .category-icon, .product-img {
             width: 50px;
             height: 50px;
             background: #2a1a2a;
@@ -219,9 +220,25 @@
             font-size: 24px;
         }
         
-        .category-card p {
+        .product-img {
+            background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+        }
+        
+        .category-card p, .product-info p {
             font-size: 13px;
             font-weight: 600;
+            line-height: 1.3;
+        }
+        
+        .product-price {
+            color: var(--primary);
+            font-size: 13px;
+            font-weight: bold;
+            margin-top: 4px;
+        }
+        
+        .btn-back {
+            margin-bottom: 20px;
         }
         
         .btn-logout {
@@ -234,11 +251,10 @@
             font-weight: 600;
             font-size: 13px;
             display: block;
-            margin: 0 auto;
+            margin: 30px auto 0;
             transition: 0.3s;
         }
         
-        /* Modal Admin */
         .modal {
             display: none;
             position: fixed;
@@ -300,56 +316,120 @@
     </header>
     
     <main>
-        <section class="hero">
-            <h1>Premium Store</h1>
-            <p class="subtitle">Loja virtual com atendimento direto no WhatsApp ⚡</p>
-            
-            <div class="card">
-                <h2>Como comprar na Premium Store:</h2>
-                <ol>
-                    <li>Clique em "Ver Produtos" e escolha sua categoria</li>
-                    <li>Selecione o produto que você gostou</li>
-                    <li>Escolha: "Fazer Pagamento" via Pix ou "Comprar no WhatsApp"</li>
-                    <li>No WhatsApp você fala direto comigo: <a href="https://wa.me/5598984853563">(98) 98485-3563</a></li>
-                </ol>
+        <!-- PÁGINA INICIAL -->
+        <div id="home" class="page active">
+            <section class="hero">
+                <h1>Premium Store</h1>
+                <p class="subtitle">Loja virtual com atendimento direto no WhatsApp ⚡</p>
                 
-                <div class="security-box">
-                    <h3>🔒 Compra 100% Manual e Segura</h3>
-                    <p>Todas as vendas são confirmadas diretamente no WhatsApp pra sua segurança. Sem cartão cadastrado, sem risco.</p>
+                <div class="card">
+                    <h2>Como comprar na Premium Store:</h2>
+                    <ol>
+                        <li>Clique em "Ver Produtos" e escolha sua categoria</li>
+                        <li>Selecione o produto que você gostou</li>
+                        <li>Escolha: "Fazer Pagamento" via Pix ou "Comprar no WhatsApp"</li>
+                        <li>No WhatsApp você fala direto comigo: <a href="https://wa.me/5598984853563">(98) 98485-3563</a></li>
+                    </ol>
+                    
+                    <div class="security-box">
+                        <h3>🔒 Compra 100% Manual e Segura</h3>
+                        <p>Todas as vendas são confirmadas diretamente no WhatsApp pra sua segurança. Sem cartão cadastrado, sem risco.</p>
+                    </div>
                 </div>
-            </div>
-            
-            <button class="btn-primary" onclick="document.getElementById('produtos').scrollIntoView()">Ver Produtos</button>
-        </section>
+                
+                <button class="btn-primary" onclick="showPage('categorias')">Ver Produtos</button>
+            </section>
+        </div>
 
-        <!-- Seção Categorias -->
-        <section id="produtos">
-            <h2>Categorias</h2>
+        <!-- PÁGINA CATEGORIAS -->
+        <div id="categorias" class="page">
+            <h2 class="page-title">Categorias</h2>
             <div class="categories-grid">
-                <div class="category-card" onclick="openCategory('freefire')">
-                    <div class="category-icon">🔥</div>
-                    <p>Free Fire</p>
-                </div>
-                <div class="category-card" onclick="openCategory('instagram')">
+                <div class="category-card" onclick="showPage('instagram')">
                     <div class="category-icon">📸</div>
                     <p>Instagram</p>
                 </div>
-                <div class="category-card" onclick="openCategory('tiktok')">
+                <div class="category-card" onclick="showPage('freefire')">
+                    <div class="category-icon">🔥</div>
+                    <p>Free Fire</p>
+                </div>
+                <div class="category-card" onclick="showPage('tiktok')">
                     <div class="category-icon">🎵</div>
                     <p>TikTok</p>
                 </div>
-                <div class="category-card" onclick="openCategory('jogos')">
+                <div class="category-card" onclick="showPage('jogos')">
                     <div class="category-icon">🎮</div>
                     <p>Jogos</p>
                 </div>
-                <div class="category-card" onclick="openCategory('kwai')">
+                <div class="category-card" onclick="showPage('kwai')">
                     <div class="category-icon">📹</div>
                     <p>Kwai</p>
                 </div>
             </div>
-            
-            <button class="btn-logout">Sair da Conta</button>
-        </section>
+            <button class="btn-logout" onclick="showPage('home')">Voltar ao Início</button>
+        </div>
+
+        <!-- PÁGINA INSTAGRAM -->
+        <div id="instagram" class="page">
+            <button class="btn-outline btn-back" onclick="showPage('categorias')">← Voltar</button>
+            <h2 class="page-title">Instagram</h2>
+            <div class="categories-grid">
+                <div class="product-card" onclick="buyProduct('100 Seguidores Instagram', '6.00')">
+                    <div class="product-img">📸</div>
+                    <div class="product-info">
+                        <p>100<br>seguidores</p>
+                        <div class="product-price">R$ 6,00</div>
+                    </div>
+                </div>
+                <div class="product-card" onclick="buyProduct('200 Seguidores Instagram', '12.00')">
+                    <div class="product-img">📸</div>
+                    <div class="product-info">
+                        <p>200<br>seguidores</p>
+                        <div class="product-price">R$ 12,00</div>
+                    </div>
+                </div>
+                <div class="product-card" onclick="buyProduct('300 Seguidores Instagram', '13.00')">
+                    <div class="product-img">📸</div>
+                    <div class="product-info">
+                        <p>300<br>seguidores</p>
+                        <div class="product-price">R$ 13,00</div>
+                    </div>
+                </div>
+                <div class="product-card" onclick="buyProduct('400 Seguidores Instagram', '14.00')">
+                    <div class="product-img">📸</div>
+                    <div class="product-info">
+                        <p>400<br>Seguidores</p>
+                        <div class="product-price">R$ 14,00</div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn-logout" onclick="showPage('home')">Sair da Conta</button>
+        </div>
+
+        <!-- PÁGINAS EM BREVE -->
+        <div id="freefire" class="page">
+            <button class="btn-outline btn-back" onclick="showPage('categorias')">← Voltar</button>
+            <h2 class="page-title">Free Fire</h2>
+            <p style="text-align:center; color:#bbb; margin-top:40px;">Produtos em breve...</p>
+        </div>
+
+        <div id="tiktok" class="page">
+            <button class="btn-outline btn-back" onclick="showPage('categorias')">← Voltar</button>
+            <h2 class="page-title">TikTok</h2>
+            <p style="text-align:center; color:#bbb; margin-top:40px;">Produtos em breve...</p>
+        </div>
+
+        <div id="jogos" class="page">
+            <button class="btn-outline btn-back" onclick="showPage('categorias')">← Voltar</button>
+            <h2 class="page-title">Jogos</h2>
+            <p style="text-align:center; color:#bbb; margin-top:40px;">Produtos em breve...</p>
+        </div>
+
+        <div id="kwai" class="page">
+            <button class="btn-outline btn-back" onclick="showPage('categorias')">← Voltar</button>
+            <h2 class="page-title">Kwai</h2>
+            <p style="text-align:center; color:#bbb; margin-top:40px;">Produtos em breve...</p>
+        </div>
     </main>
 
     <!-- Modal Admin -->
@@ -366,6 +446,13 @@
     </div>
 
     <script>
+        // Navegação entre páginas
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+        
         // Tema Rosa/Azul
         function toggleTheme() {
             document.body.classList.toggle('theme-blue');
@@ -397,10 +484,11 @@
             }
         }
         
-        // Categorias
-        function openCategory(cat) {
-            alert('Abrindo categoria: ' + cat + '. Aqui você vai listar os produtos dessa categoria.');
-            // window.location.href = `/categoria/${cat}`;
+        // Comprar produto - Abre WhatsApp
+        function buyProduct(nome, preco) {
+            const msg = `Olá! Quero comprar: ${nome} - R$ ${preco}`;
+            const link = `https://wa.me/5598984853563?text=${encodeURIComponent(msg)}`;
+            window.open(link, '_blank');
         }
         
         window.onclick = function(event) {
