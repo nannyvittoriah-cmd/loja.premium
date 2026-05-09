@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Premium Store</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+--bg:#070707;
+--card:#101010;
+--border:#262626;
+--theme:#ff2f92;
+--text:#fff;
+--sub:#b6b6b6;
+}
+
+body.blue{
+--theme:#3b82f6;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:var(--bg);
+color:white;
+}
+
+header{
+width:100%;
+padding:18px 25px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-bottom:2px solid var(--theme);
+position:sticky;
+top:0;
+background:#070707;
+z-index:999;
+}
+
+.logo{
+font-size:28px;
+font-weight:800;
+}
+
+.logo span{
+color:var(--theme);
+}
+
+.header-right{
+display:flex;
+gap:10px;
+}
+
+.header-btn{
+padding:12px 16px;
+border-radius:12px;
+border:2px solid var(--theme);
+background:none;
+color:var(--theme);
+font-size:12px;
+font-weight:700;
+cursor:pointer;
+}
+
+.page{
+display:none;
+padding:30px;
+}
+
+.active{
+display:block;
+}
+
+.home{
+min-height:90vh;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+text-align:center;
+}
+
+.home h1{
+font-size:75px;
+margin-bottom:15px;
+}
+
+.home h1 span{
+color:var(--theme);
+}
+
+.home p{
+max-width:750px;
+line-height:32px;
+color:#ddd;
+margin-bottom:30px;
+}
+
+.security-box{
+border:2px solid #25D366;
+padding:20px;
+border-radius:20px;
+max-width:700px;
+margin-bottom:35px;
+}
+
+.main-btn{
+padding:18px 45px;
+border:none;
+border-radius:18px;
+background:var(--theme);
+color:white;
+font-size:15px;
+font-weight:700;
+cursor:pointer;
+}
+
+.title{
+font-size:30px;
+color:var(--theme);
+margin-bottom:25px;
+}
+
+.grid-3{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:25px;
+}
+
+.grid-4{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:20px;
+}
+
+.card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:22px;
+overflow:hidden;
+}
+
+.card img{
+width:100%;
+height:240px;
+object-fit:cover;
+}
+
+.card-content{
+padding:15px;
+}
+
+.card-title{
+font-size:14px;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.price{
+font-size:15px;
+font-weight:700;
+color:var(--theme);
+margin-bottom:8px;
+}
+
+.stock{
+font-size:11px;
+color:#6dff8d;
+margin-bottom:8px;
+}
+
+.desc{
+font-size:11px;
+color:var(--sub);
+line-height:20px;
+}
+
+.promo{
+display:inline-block;
+background:var(--theme);
+padding:6px 10px;
+border-radius:999px;
+font-size:10px;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.card-btn{
+width:100%;
+padding:12px;
+border:none;
+border-radius:12px;
+margin-top:10px;
+cursor:pointer;
+font-size:12px;
+font-weight:700;
+}
+
+.whatsapp{
+background:#25D366;
+color:white;
+}
+
+.pix{
+background:var(--theme);
+color:white;
+}
+
+.input{
+width:100%;
+padding:15px;
+border:none;
+border-radius:14px;
+background:#181818;
+color:white;
+margin-bottom:15px;
+}
+
+.admin{
+max-width:1000px;
+margin:auto;
+background:var(--card);
+padding:30px;
+border-radius:25px;
+}
+
+.manage-item{
+background:#151515;
+padding:15px;
+border-radius:18px;
+margin-top:15px;
+}
+
+.manage-buttons{
+display:flex;
+gap:10px;
+margin-top:10px;
+}
+
+.save-btn{
+padding:12px 18px;
+border:none;
+border-radius:12px;
+background:var(--theme);
+color:white;
+font-weight:700;
+cursor:pointer;
+}
+
+.delete-btn{
+padding:12px 18px;
+border:none;
+border-radius:12px;
+background:#dc2626;
+color:white;
+font-weight:700;
+cursor:pointer;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+margin-bottom:30px;
+}
+
+.stats div{
+background:#151515;
+padding:20px;
+border-radius:18px;
+}
+
+@media(max-width:900px){
+
+.grid-3,
+.grid-4,
+.stats{
+grid-template-columns:1fr;
+}
+
+.home h1{
+font-size:50px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+Premium <span>Store</span>
+</div>
+
+<div class="header-right">
+
+<button class="header-btn" onclick="toggleTheme()">
+Tema
+</button>
+
+<button class="header-btn" onclick="adminLogin()">
+Admin
+</button>
+
+</div>
+
+</header>
+
+<!-- HOME -->
+
+<section class="page active" id="homePage">
+
+<div class="home">
+
+<h1>
+Premium <span>Store</span>
+</h1>
+
+<p>
+
+Como comprar na Premium Store:
+
+<br><br>
+
+1. Clique em explorar.
+
+<br><br>
+
+2. Escolha categoria e produto.
+
+<br><br>
+
+3. Escolha WhatsApp ou Pix.
+
+<br><br>
+
+4. Envie o comprovante no WhatsApp.
+
+</p>
+
+<div class="security-box">
+
+<h3>
+🔒 Compra Manual e Segura
+</h3>
+
+<p>
+Todas as compras são feitas manualmente para proteger seus dados.
+</p>
+
+</div>
+
+<button class="main-btn"
+onclick="showPage('categoriesPage')">
+
+Explorar Site
+
+</button>
+
+</div>
+
+</section>
+
+<!-- CATEGORIAS -->
+
+<section class="page" id="categoriesPage">
+
+<h2 class="title">
+Categorias
+</h2>
+
+<div class="grid-3" id="categoriesGrid"></div>
+
+</section>
+
+<!-- PRODUTOS -->
+
+<section class="page" id="productsPage">
+
+<input type="text"
+class="input"
+id="searchInput"
+placeholder="Buscar produto...">
+
+<h2 class="title" id="productsTitle">
+Produtos
+</h2>
+
+<div class="grid-4" id="productsGrid"></div>
+
+</section>
+
+<!-- PRODUTO -->
+
+<section class="page" id="productPage">
+
+<div id="productContent"></div>
+
+</section>
+
+<!-- ADMIN -->
+
+<section class="page" id="adminPage">
+
+<div class="admin">
+
+<div class="stats">
+
+<div>
+<h3>Produtos</h3>
+<p id="totalProducts">0</p>
+</div>
+
+<div>
+<h3>Categorias</h3>
+<p id="totalCategories">0</p>
+</div>
+
+<div>
+<h3>Promoções</h3>
+<p id="promoProducts">0</p>
+</div>
+
+<div>
+<h3>Sem estoque</h3>
+<p id="outStock">0</p>
+</div>
+
+</div>
+
+<h2 class="title">
+Painel Admin
+</h2>
+
+<input type="text"
+class="input"
+id="catName"
+placeholder="Nome categoria">
+
+<input type="file"
+class="input"
+id="catImage">
+
+<button class="save-btn"
+onclick="addCategory()">
+
+Salvar Categoria
+
+</button>
+
+<hr style="margin:30px 0; border-color:#222;">
+
+<input type="text"
+class="input"
+id="prodName"
+placeholder="Nome produto">
+
+<input type="number"
+class="input"
+id="prodPrice"
+placeholder="Preço">
+
+<input type="text"
+class="input"
+id="prodStock"
+placeholder="Estoque">
+
+<select class="input"
+id="prodCategory"></select>
+
+<input type="text"
+class="input"
+id="prodSub"
+placeholder="Subcategoria">
+
+<textarea
+class="input"
+id="prodDesc"
+placeholder="Descrição"></textarea>
+
+<input type="file"
+class="input"
+id="prodImages"
+multiple>
+
+<label style="display:flex; gap:10px; margin-bottom:20px;">
+<input type="checkbox" id="prodPromo">
+Promoção
+</label>
+
+<button class="save-btn"
+onclick="addProduct()">
+
+Salvar Produto
+
+</button>
+
+<div id="manageProducts"></div>
+
+<div id="manageCategories"></div>
+
+</div>
+
+</section>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+addDoc,
+getDocs,
+deleteDoc,
+doc,
+updateDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getStorage,
+ref,
+uploadBytes,
+getDownloadURL
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+/* FIREBASE */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
+  authDomain: "premium-store-aa58b.firebaseapp.com",
+  projectId: "premium-store-aa58b",
+  storageBucket: "premium-store-aa58b.firebasestorage.app",
+  messagingSenderId: "462239500057",
+  appId: "1:462239500057:web:f1b7cea162ed308a866788",
+  measurementId: "G-CN88J28WRX"
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+const storage = getStorage(app);
+
+/* FIXOS */
+
+const WHATSAPP = "5598984853563";
+
+const PIX = "98984853563";
+
+/* TEMA */
+
+window.toggleTheme = function(){
+
+document.body.classList.toggle("blue");
+
+}
+
+/* PAGE */
+
+window.showPage = function(id){
+
+document.querySelectorAll(".page")
+.forEach(p=>p.classList.remove("active"));
+
+document.getElementById(id)
+.classList.add("active");
+
+}
+
+/* LOGIN */
+
+window.adminLogin = function(){
+
+let user = prompt("Usuário:");
+let pass = prompt("Senha:");
+
+if(
+user === "Lorrannyh"
+&&
+pass === "Lorrannyh.101225"
+){
+
+showPage("adminPage");
+
+}else{
+
+alert("Login inválido");
+
+}
+
+}
+
+/* ADD CATEGORY */
+
+window.addCategory = async function(){
+
+try{
+
+let name =
+document.getElementById("catName").value;
+
+let image =
+document.getElementById("catImage").files[0];
+
+if(!name || !image){
+
+alert("Preencha tudo");
+
+return;
+
+}
+
+const storageRef =
+ref(storage,"categories/"+Date.now()+image.name);
+
+await uploadBytes(storageRef,image);
+
+const imageUrl =
+await getDownloadURL(storageRef);
+
+await addDoc(
+collection(db,"categories"),
+{
+name,
+image:imageUrl
+}
+);
+
+alert("Categoria salva!");
+
+document.getElementById("catName").value="";
+document.getElementById("catImage").value="";
+
+loadCategories();
+loadManageCategories();
+loadStats();
+
+}catch(e){
+
+console.log(e);
+
+alert("Erro ao salvar categoria");
+
+}
+
+}
+
+/* LOAD CATEGORIES */
+
+async function loadCategories(){
+
+const grid =
+document.getElementById("categoriesGrid");
+
+grid.innerHTML="";
+
+const select =
+document.getElementById("prodCategory");
+
+select.innerHTML="";
+
+const querySnapshot =
+await getDocs(collection(db,"categories"));
+
+querySnapshot.forEach((docu)=>{
+
+const data = docu.data();
+
+grid.innerHTML += `
+
+<div class="card">
+
+<img src="${data.image}">
+
+<div class="card-content">
+
+<div class="card-title">
+${data.name}
+</div>
+
+<button class="card-btn pix"
+onclick="openCategory('${data.name}')">
+
+Ver Categoria
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+select.innerHTML += `
+<option value="${data.name}">
+${data.name}
+</option>
+`;
+
+});
+
+}
+
+/* ADD PRODUCT */
+
+window.addProduct = async function(){
+
+try{
+
+let name =
+document.getElementById("prodName").value;
+
+let price =
+document.getElementById("prodPrice").value;
+
+let stock =
+document.getElementById("prodStock").value;
+
+let category =
+document.getElementById("prodCategory").value;
+
+let sub =
+document.getElementById("prodSub").value;
+
+let desc =
+document.getElementById("prodDesc").value;
+
+let promo =
+document.getElementById("prodPromo").checked;
+
+let files =
+document.getElementById("prodImages").files;
+
+let images = [];
+
+for(let file of files){
+
+const storageRef =
+ref(storage,"products/"+Date.now()+file.name);
+
+await uploadBytes(storageRef,file);
+
+const imageUrl =
+await getDownloadURL(storageRef);
+
+images.push(imageUrl);
+
+}
+
+await addDoc(
+collection(db,"products"),
+{
+name,
+price,
+stock,
+category,
+subcategory:sub,
+desc,
+promo,
+images
+}
+);
+
+alert("Produto salvo!");
+
+loadManageProducts();
+loadStats();
+
+}catch(e){
+
+console.log(e);
+
+alert("Erro ao salvar produto");
+
+}
+
+}
+
+/* OPEN CATEGORY */
+
+window.openCategory = async function(category){
+
+showPage("productsPage");
+
+document.getElementById("productsTitle")
+.innerText = category;
+
+const grid =
+document.getElementById("productsGrid");
+
+grid.innerHTML="";
+
+const querySnapshot =
+await getDocs(collection(db,"products"));
+
+querySnapshot.forEach((docu)=>{
+
+const data = docu.data();
+
+if(data.category === category){
+
+grid.innerHTML += `
+
+<div class="card product-card">
+
+<img src="${data.images[0]}">
+
+<div class="card-content">
+
+${data.promo ? `
+<div class="promo">
+PROMOÇÃO
+</div>
+` : ""}
+
+<div class="card-title">
+${data.name}
+</div>
+
+<div class="price">
+R$ ${data.price}
+</div>
+
+<div class="stock">
+Estoque: ${data.stock}
+</div>
+
+<div class="desc">
+${data.desc}
+</div>
+
+<button class="card-btn pix"
+onclick='openProduct(${JSON.stringify(JSON.stringify(data))})'>
+
+Ver Produto
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+});
+
+}
+
+/* OPEN PRODUCT */
+
+window.openProduct = function(data){
+
+const product = JSON.parse(data);
+
+showPage("productPage");
+
+document.getElementById("productContent")
+.innerHTML = `
+
+<div class="card" style="padding:20px;">
+
+${product.promo ? `
+<div class="promo">
+PROMOÇÃO
+</div>
+` : ""}
+
+<h2 style="margin-bottom:15px;">
+${product.name}
+</h2>
+
+<div class="grid-4">
+
+${product.images.map(img=>`
+<img src="${img}" style="height:250px; border-radius:18px;">
+`).join("")}
+
+</div>
+
+<br>
+
+<p class="price">
+Preço: R$ ${product.price}
+</p>
+
+<p class="stock">
+Estoque: ${product.stock}
+</p>
+
+<p class="desc">
+${product.desc}
+</p>
+
+<button class="card-btn whatsapp"
+onclick="window.open('https://wa.me/${WHATSAPP}?text=Olá,%20quero%20comprar%20${product.name}')">
+
+Comprar direto do WhatsApp
+
+</button>
+
+<button class="card-btn pix"
+onclick="copyPix()">
+
+Pix Direto
+
+</button>
+
+</div>
+
+`;
+
+}
+
+/* PIX */
+
+window.copyPix = function(){
+
+navigator.clipboard.writeText(PIX);
+
+alert(
+
+`Pix copiado!
+
+Chave:
+(98) 98485-3563
+
+Banco:
+Lorrane Vitória Alves Vaz
+
+Envie o comprovante no WhatsApp.`
+
+);
+
+}
+
+/* BUSCA */
+
+document.getElementById("searchInput")
+.addEventListener("input",()=>{
+
+const value =
+document.getElementById("searchInput")
+.value.toLowerCase();
+
+document.querySelectorAll(".product-card")
+.forEach(card=>{
+
+card.style.display =
+card.innerText.toLowerCase()
+.includes(value)
+? "block"
+: "none";
+
+});
+
+});
+
+/* STATS */
+
+async function loadStats(){
+
+const products =
+await getDocs(collection(db,"products"));
+
+const categories =
+await getDocs(collection(db,"categories"));
+
+document.getElementById("totalProducts")
+.innerText = products.size;
+
+document.getElementById("totalCategories")
+.innerText = categories.size;
+
+let promo = 0;
+let stock = 0;
+
+products.forEach((docu)=>{
+
+const data = docu.data();
+
+if(data.promo) promo++;
+
+if(data.stock == 0) stock++;
+
+});
+
+document.getElementById("promoProducts")
+.innerText = promo;
+
+document.getElementById("outStock")
+.innerText = stock;
+
+}
+
+/* MANAGE PRODUCTS */
+
+async function loadManageProducts(){
+
+const wrap =
+document.getElementById("manageProducts");
+
+wrap.innerHTML =
+"<h2 class='title'>Gerenciar Produtos</h2>";
+
+const querySnapshot =
+await getDocs(collection(db,"products"));
+
+querySnapshot.forEach((docu)=>{
+
+const data = docu.data();
+
+wrap.innerHTML += `
+
+<div class="manage-item">
+
+<strong>
+${data.name}
+</strong>
+
+<div class="manage-buttons">
+
+<button class="save-btn"
+onclick="editProduct('${docu.id}')">
+
+Editar
+
+</button>
+
+<button class="delete-btn"
+onclick="deleteProduct('${docu.id}')">
+
+Excluir
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+/* EDIT PRODUCT */
+
+window.editProduct = async function(id){
+
+const novoNome = prompt("Novo nome:");
+const novoPreco = prompt("Novo preço:");
+const novoStock = prompt("Novo estoque:");
+const novaDesc = prompt("Nova descrição:");
+
+await updateDoc(
+doc(db,"products",id),
+{
+name:novoNome,
+price:novoPreco,
+stock:novoStock,
+desc:novaDesc
+}
+);
+
+alert("Produto editado!");
+
+loadManageProducts();
+
+}
+
+/* DELETE PRODUCT */
+
+window.deleteProduct = async function(id){
+
+await deleteDoc(doc(db,"products",id));
+
+alert("Produto excluído!");
+
+loadManageProducts();
+loadStats();
+
+}
+
+/* MANAGE CATEGORY */
+
+async function loadManageCategories(){
+
+const wrap =
+document.getElementById("manageCategories");
+
+wrap.innerHTML =
+"<h2 class='title'>Gerenciar Categorias</h2>";
+
+const querySnapshot =
+await getDocs(collection(db,"categories"));
+
+querySnapshot.forEach((docu)=>{
+
+const data = docu.data();
+
+wrap.innerHTML += `
+
+<div class="manage-item">
+
+<strong>
+${data.name}
+</strong>
+
+<div class="manage-buttons">
+
+<button class="save-btn"
+onclick="editCategory('${docu.id}')">
+
+Editar
+
+</button>
+
+<button class="delete-btn"
+onclick="deleteCategory('${docu.id}')">
+
+Excluir
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+/* EDIT CATEGORY */
+
+window.editCategory = async function(id){
+
+const novoNome =
+prompt("Novo nome:");
+
+await updateDoc(
+doc(db,"categories",id),
+{
+name:novoNome
+}
+);
+
+alert("Categoria editada!");
+
+loadCategories();
+loadManageCategories();
+
+}
+
+/* DELETE CATEGORY */
+
+window.deleteCategory = async function(id){
+
+await deleteDoc(
+doc(db,"categories",id)
+);
+
+alert("Categoria excluída!");
+
+loadCategories();
+loadManageCategories();
+loadStats();
+
+}
+
+/* START */
+
+loadCategories();
+loadManageProducts();
+loadManageCategories();
+loadStats();
+
+</script>
+
+</body>
+</html>
