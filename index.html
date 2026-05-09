@@ -57,7 +57,6 @@ input, textarea, select {
 .hidden { display: none; }
 .pix-box { background: var(--preto); padding: 15px; border-radius: 8px; margin: 10px 0; border: 1px dashed var(--rosa); }
 .label { color: var(--rosa); font-weight: bold; margin-top: 10px; display: block; }
-.small { font-size: 12px; opacity: 0.8; }
 </style>
 </head>
 <body>
@@ -131,7 +130,7 @@ input, textarea, select {
   <div class="modal-content" style="max-width:600px; max-height:90vh; overflow-y:auto;">
     <h3>Painel Admin</h3>
     <label class="label">Tema do Site:</label>
-    <select onchange="trocarTema(this.value)" id="selectTema">
+    <select onchange="trocarTema(this.value)">
       <option value="rosa">Rosa + Preto</option>
       <option value="azul">Azul + Preto</option>
     </select>
@@ -150,16 +149,8 @@ input, textarea, select {
     <input type="file" id="imgProd" accept="image/*">
     <button class="btn" onclick="addProduto()">Adicionar Produto</button>
 
-    <label class="label">Gerenciar Categorias:</label>
-    <div id="listaCategorias"></div>
-
-    <label class="label">Gerenciar Produtos:</label>
+    <label class="label">Gerenciar Estoque:</label>
     <div id="listaEstoque"></div>
-
-    <label class="label">Backup:</label>
-    <button class="btn" onclick="exportarDados()">Exportar Dados</button>
-    <input type="file" id="importFile" accept=".json" onchange="importarDados(this)" style="display:none">
-    <button class="btn" onclick="document.getElementById('importFile').click()">Importar Dados</button>
 
     <button class="btn btn-admin" onclick="fecharModal('modalAdmin')">Sair</button>
   </div>
@@ -170,19 +161,14 @@ let dados = JSON.parse(localStorage.getItem('loja')) || { categorias: [], tema: 
 let produtoAtual = null;
 let categoriaAtual = null;
 
-if(dados.tema === 'azul') {
-  document.body.classList.add('tema-azul');
-  document.getElementById('selectTema').value = 'azul';
-}
+if(dados.tema === 'azul') document.body.classList.add('tema-azul');
 
 function salvar() { localStorage.setItem('loja', JSON.stringify(dados)); }
-
 function mostrarCategorias() {
   document.getElementById('inicio').classList.add('hidden');
   document.getElementById('categorias').classList.remove('hidden');
   renderCategorias();
 }
-
 function renderCategorias() {
   const grid = document.getElementById('gridCategorias');
   grid.innerHTML = '';
@@ -194,7 +180,6 @@ function renderCategorias() {
       </div>`;
   });
 }
-
 function abrirCategoria(i) {
   categoriaAtual = i;
   document.getElementById('categorias').classList.add('hidden');
@@ -202,7 +187,6 @@ function abrirCategoria(i) {
   document.getElementById('nomeCategoria').innerText = dados.categorias[i].nome;
   renderProdutos();
 }
-
 function renderProdutos() {
   const grid = document.getElementById('gridProdutos');
   grid.innerHTML = '';
@@ -216,12 +200,10 @@ function renderProdutos() {
       </div>`;
   });
 }
-
 function voltarCategorias() {
   document.getElementById('produtos').classList.add('hidden');
   document.getElementById('categorias').classList.remove('hidden');
 }
-
 function abrirProduto(j) {
   produtoAtual = dados.categorias[categoriaAtual].produtos[j];
   document.getElementById('imgProduto').src = produtoAtual.img;
@@ -231,22 +213,17 @@ function abrirProduto(j) {
   document.getElementById('valorProduto').innerText = produtoAtual.preco;
   document.getElementById('modalProduto').style.display = 'flex';
 }
-
 function abrirPix() { document.getElementById('modalPix').style.display = 'flex'; }
-
 function copiarPix() {
   navigator.clipboard.writeText('98984853563');
   alert('Chave Pix copiada!');
 }
-
 function comprarWhats() {
   const msg = `Olá! Quero comprar: ${produtoAtual.nome} - R$${produtoAtual.preco} - Categoria: ${dados.categorias[categoriaAtual].nome}`;
   window.open(`https://wa.me/5598984853563?text=${encodeURIComponent(msg)}`, '_blank');
 }
-
 function abrirAdmin() { document.getElementById('modalLogin').style.display = 'flex'; }
 function fecharModal(id) { document.getElementById(id).style.display = 'none'; }
-
 function login() {
   const u = document.getElementById('usuario').value;
   const s = document.getElementById('senha').value;
@@ -256,24 +233,20 @@ function login() {
     carregarAdmin();
   } else alert('Usuário ou senha incorretos');
 }
-
 function carregarAdmin() {
   const select = document.getElementById('selectCat');
   select.innerHTML = '';
   dados.categorias.forEach((cat, i) => {
     select.innerHTML += `<option value="${i}">${cat.nome}</option>`;
   });
-  listarCategorias();
   listarEstoque();
 }
-
 function trocarTema(cor) {
   dados.tema = cor;
   if(cor === 'azul') document.body.classList.add('tema-azul');
   else document.body.classList.remove('tema-azul');
   salvar();
 }
-
 function addCategoria() {
   const nome = document.getElementById('nomeCat').value;
   const file = document.getElementById('imgCat').files[0];
@@ -283,12 +256,10 @@ function addCategoria() {
     dados.categorias.push({ nome, img: e.target.result, produtos: [] });
     salvar(); renderCategorias(); carregarAdmin();
     document.getElementById('nomeCat').value = '';
-    document.getElementById('imgCat').value = '';
   };
   if(file) reader.readAsDataURL(file);
   else { dados.categorias.push({ nome, img: '', produtos: [] }); salvar(); renderCategorias(); carregarAdmin(); }
 }
-
 function addProduto() {
   const catIndex = document.getElementById('selectCat').value;
   const nome = document.getElementById('nomeProd').value;
@@ -297,69 +268,14 @@ function addProduto() {
   const estoque = document.getElementById('estoqueProd').value;
   const file = document.getElementById('imgProd').files[0];
   if(!dados.categorias[catIndex]) return alert('Crie uma categoria primeiro');
-  if(!nome ||!preco ||!estoque) return alert('Preencha nome, preço e estoque');
-
-  const novoProd = { nome, desc, preco, estoque, img: '' };
   const reader = new FileReader();
   reader.onload = e => {
-    novoProd.img = e.target.result;
-    dados.categorias[catIndex].produtos.push(novoProd);
+    dados.categorias[catIndex].produtos.push({ nome, desc, preco, estoque, img: e.target.result });
     salvar(); listarEstoque();
-    document.getElementById('nomeProd').value = '';
-    document.getElementById('descProd').value = '';
-    document.getElementById('precoProd').value = '';
-    document.getElementById('estoqueProd').value = '';
-    document.getElementById('imgProd').value = '';
   };
   if(file) reader.readAsDataURL(file);
-  else { dados.categorias[catIndex].produtos.push(novoProd); salvar(); listarEstoque(); }
+  else dados.categorias[catIndex].produtos.push({ nome, desc, preco, estoque, img: '' });
 }
-
-function listarCategorias() {
-  const div = document.getElementById('listaCategorias');
-  div.innerHTML = '';
-  dados.categorias.forEach((cat, i) => {
-    div.innerHTML += `
-      <div style="border:1px solid var(--rosa); padding:10px; margin:5px; border-radius:6px;">
-        <b>${cat.nome}</b><br>
-        <button class="btn" onclick="editarCategoria(${i})">Editar</button>
-        <button class="btn" onclick="deletarCategoria(${i})">Excluir</button>
-      </div>`;
-  });
-}
-
-function editarCategoria(i) {
-  const novoNome = prompt('Novo nome da categoria:', dados.categorias[i].nome);
-  if(novoNome === null) return;
-  if(novoNome) dados.categorias[i].nome = novoNome;
-
-  const trocarImg = confirm('Quer trocar a imagem também?');
-  if(trocarImg) {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = e => {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onload = ev => {
-        dados.categorias[i].img = ev.target.result;
-        salvar(); renderCategorias(); listarCategorias();
-      };
-      reader.readAsDataURL(file);
-    };
-    input.click();
-  } else {
-    salvar(); renderCategorias(); listarCategorias();
-  }
-}
-
-function deletarCategoria(i) {
-  if(confirm(`Excluir a categoria "${dados.categorias[i].nome}" e todos os produtos?`)) {
-    dados.categorias.splice(i, 1);
-    salvar(); renderCategorias(); carregarAdmin();
-  }
-}
-
 function listarEstoque() {
   const div = document.getElementById('listaEstoque');
   div.innerHTML = '';
@@ -367,87 +283,22 @@ function listarEstoque() {
     cat.produtos?.forEach((prod, j) => {
       div.innerHTML += `
         <div style="border:1px solid var(--rosa); padding:10px; margin:5px; border-radius:6px;">
-          <b>${prod.nome}</b> <span class="small">- ${cat.nome}</span><br>
+          <b>${prod.nome}</b> - ${cat.nome}<br>
           Estoque: <input type="number" value="${prod.estoque}" onchange="atualizarEstoque(${i},${j},this.value)" style="width:60px">
-          <button class="btn" onclick="editarProduto(${i},${j})">Editar</button>
           <button class="btn" onclick="deletarProd(${i},${j})">Excluir</button>
         </div>`;
     });
   });
 }
-
-function editarProduto(i, j) {
-  const p = dados.categorias[i].produtos[j];
-  const nome = prompt('Nome do produto:', p.nome);
-  if(nome === null) return;
-  const desc = prompt('Descrição:', p.desc);
-  if(desc === null) return;
-  const preco = prompt('Preço:', p.preco);
-  if(preco === null) return;
-  const estoque = prompt('Estoque:', p.estoque);
-  if(estoque === null) return;
-
-  p.nome = nome; p.desc = desc; p.preco = preco; p.estoque = estoque;
-
-  const trocarImg = confirm('Quer trocar a imagem também?');
-  if(trocarImg) {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = e => {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onload = ev => {
-        p.img = ev.target.result;
-        salvar(); listarEstoque();
-      };
-      reader.readAsDataURL(file);
-    };
-    input.click();
-  } else {
-    salvar(); listarEstoque();
-  }
-}
-
 function atualizarEstoque(i, j, val) {
   dados.categorias[i].produtos[j].estoque = val;
   salvar();
 }
-
 function deletarProd(i, j) {
-  if(confirm('Excluir este produto?')) {
-    dados.categorias[i].produtos.splice(j, 1);
-    salvar(); listarEstoque();
-  }
+  dados.categorias[i].produtos.splice(j, 1);
+  salvar(); listarEstoque();
 }
-
-function exportarDados() {
-  const blob = new Blob([JSON.stringify(dados, null, 2)], {type: 'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'premium-store-backup.json';
-  a.click();
-}
-
-function importarDados(input) {
-  const file = input.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      dados = JSON.parse(e.target.result);
-      salvar();
-      alert('Dados importados com sucesso!');
-      location.reload();
-    } catch(err) {
-      alert('Arquivo inválido');
-    }
-  };
-  reader.readAsText(file);
-}
-
 renderCategorias();
 </script>
 </body>
-</html
+</html>
