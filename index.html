@@ -2,699 +2,564 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Prime Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Prime Store ADM</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&display=swap');
 
-  :root{
-    --bg:#000;
-    --card:#121212;
-    --purple:#8b5cf6;
-    --purple-light:#a78bfa;
-    --text:#fff;
-    --text-dim:#9ca3af;
-    --border:#1f1f1f;
-    --danger:#ef4444;
-  }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
 
-  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  body{
-    font-family:'Montserrat',sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    padding-bottom:70px;
-  }
+body{
+background:#050505;
+color:#fff;
+padding-bottom:120px;
+}
 
-  /* Header */
-  header{
-    position:sticky;top:0;z-index:100;
-    background:var(--bg);
-    padding:14px 16px;
-    display:flex;align-items:center;justify-content:space-between;
-    border-bottom:1px solid var(--border);
-  }
-.header-left,.header-right{display:flex;align-items:center;gap:16px}
-.logo{text-align:center}
-.logo-text{font-weight:900;font-size:16px}
-.logo-text span{color:var(--purple)}
-.logo-sub{font-size:9px;color:var(--purple);letter-spacing:2px}
+:root{
+--bg:#050505;
+--card:#111111;
+--purple:#a855f7;
+--purple2:#c084fc;
+--border:#7e22ce;
+}
 
-  /* Pages */
-.page{display:none}
-.page.active{display:block}
+header{
+position:sticky;
+top:0;
+z-index:999;
+background:#080808;
+border-bottom:1px solid #2a0c42;
+padding:18px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+}
 
-  /* Home */
-.hero{
-    position:relative;
-    height:45vh;
-    background:radial-gradient(circle at 50% 20%,rgba(139,92,246,0.4) 0%,rgba(0,0,0,0.9) 70%);
-    display:flex;flex-direction:column;justify-content:flex-end;align-items:center;
-    text-align:center;padding:0 20px 30px;
-    overflow:hidden;
-  }
-.hero-overlay{
-    position:absolute;
-    top:45%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    width:70%;
-    max-width:320px;
-    z-index:1;
-    filter:drop-shadow(0 0 20px rgba(139,92,246,0.8));
-  }
-.hero h1,.hero p{position:relative;z-index:2}
-.hero h1{font-size:28px;font-weight:900;margin-bottom:8px;text-shadow:0 0 20px rgba(139,92,246,0.8)}
-.hero p{font-size:11px;color:var(--text-dim);letter-spacing:1px}
+.logo{
+font-size:24px;
+font-weight:800;
+color:var(--purple2);
+}
 
-.section{padding:20px 16px}
-.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.section-title{font-size:14px;font-weight:800}
-.see-all{font-size:11px;color:var(--purple);font-weight:700;cursor:pointer}
+.logo span{
+display:block;
+font-size:12px;
+letter-spacing:4px;
+color:#fff;
+margin-top:-5px;
+}
 
-.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.cat-card{
-    background:var(--card);border:1.5px solid var(--purple);
-    border-radius:12px;padding:16px 8px;text-align:center;
-    transition:0.2s;cursor:pointer;
-  }
-.cat-card:active{transform:scale(0.95);border-color:var(--purple-light)}
-.cat-card svg{width:28px;height:28px;margin-bottom:8px;stroke:var(--purple)}
-.cat-card p{font-size:10px;font-weight:700}
+.menu-btn{
+font-size:24px;
+cursor:pointer;
+color:var(--purple2);
+}
 
-.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.prod-card{background:var(--card);border-radius:12px;overflow:hidden;cursor:pointer}
-.prod-card img{width:100%;aspect-ratio:1;object-fit:cover}
-.prod-card.info{padding:8px}
-.prod-card h4{font-size:10px;font-weight:700;margin-bottom:4px}
-.prod-card p{font-size:11px;color:var(--purple);font-weight:800}
+.menu{
+position:fixed;
+top:0;
+left:-100%;
+width:80%;
+height:100%;
+background:#0b0b0b;
+border-right:1px solid var(--border);
+padding:25px;
+transition:.4s;
+z-index:99999;
+overflow:auto;
+}
 
-  /* Store */
-.search-box{
-    margin:16px;padding:12px;background:var(--card);
-    border-radius:10px;display:flex;align-items:center;gap:10px;
-    border:1px solid var(--border);
-  }
-.search-box input{
-    background:none;border:none;color:var(--text);
-    flex:1;font-size:14px;outline:none;
-  }
+.menu.active{
+left:0;
+}
 
-.tabs{
-    display:flex;gap:20px;padding:0 16px 12px;
-    overflow-x:auto;border-bottom:1px solid var(--border);
-  }
-.tab{
-    font-size:12px;font-weight:700;color:var(--text-dim);
-    white-space:nowrap;padding-bottom:8px;cursor:pointer;
-  }
-.tab.active{color:var(--purple);border-bottom:2px solid var(--purple)}
+.menu h2{
+margin-bottom:25px;
+color:var(--purple2);
+}
 
-.product-list{padding:16px}
-.product-item{
-    display:flex;gap:12px;background:var(--card);
-    padding:12px;border-radius:12px;margin-bottom:12px;
-    cursor:pointer;
-  }
-.product-item img{width:60px;height:60px;border-radius:8px;object-fit:cover}
-.product-info{flex:1}
-.product-info h4{font-size:13px;font-weight:700;margin-bottom:4px}
-.product-info.tag{
-    display:inline-block;background:rgba(139,92,246,0.2);
-    color:var(--purple);padding:2px 6px;border-radius:4px;
-    font-size:9px;font-weight:700;margin-bottom:6px;
-  }
-.product-info.price{font-size:15px;font-weight:800;color:var(--purple)}
-.cart-btn{
-    width:40px;height:40px;background:var(--card);
-    border:1.5px solid var(--purple);border-radius:10px;
-    display:flex;align-items:center;justify-content:center;
-  }
-.cart-btn svg{width:20px;height:20px;stroke:var(--purple)}
+.menu a{
+display:block;
+padding:15px 0;
+text-decoration:none;
+color:#fff;
+border-bottom:1px solid #1a1a1a;
+font-size:15px;
+}
 
-  /* Product Detail */
-.product-detail img{width:100%;height:45vh;object-fit:cover}
-.detail-content{padding:20px 16px}
-.detail-content h2{font-size:20px;font-weight:800;margin-bottom:4px}
-.detail-content.tag{color:var(--purple);font-size:12px;font-weight:700;margin-bottom:8px}
-.stars{color:#fbbf24;font-size:14px;margin-bottom:12px}
-.price-big{font-size:24px;font-weight:900;color:var(--purple);margin-bottom:4px}
-.installment{font-size:12px;color:var(--text-dim);margin-bottom:20px}
+.container{
+padding:15px;
+}
 
-.desc-title{font-size:13px;font-weight:700;margin-bottom:8px;border-top:1px solid var(--border);padding-top:16px}
-.desc-text{font-size:13px;color:var(--text-dim);line-height:1.6;margin-bottom:20px}
+.card{
+background:#101010;
+border:1px solid var(--border);
+padding:18px;
+margin-bottom:18px;
+box-shadow:0 0 20px #6d28d91f;
+}
 
-.qty-control{display:flex;align-items:center;gap:12px;margin-bottom:20px}
-.qty-btn{
-    width:36px;height:36px;background:var(--card);
-    border:1.5px solid var(--border);border-radius:8px;
-    display:flex;align-items:center;justify-content:center;
-    font-size:20px;cursor:pointer;
-  }
-.qty-num{font-size:16px;font-weight:700;width:40px;text-align:center}
+.card h2{
+font-size:18px;
+margin-bottom:15px;
+color:#d8b4fe;
+}
 
-.btn-buy{
-    width:100%;background:var(--purple);color:#fff;
-    border:none;padding:16px;border-radius:12px;
-    font-size:15px;font-weight:800;display:flex;
-    align-items:center;justify-content:center;gap:8px;
-    cursor:pointer;box-shadow:0 0 20px rgba(139,92,246,0.4);
-  }
+.stats{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
 
-  /* Cart */
-.page-title{padding:20px 16px;font-size:18px;font-weight:800}
-.cart-item{
-    background:var(--card);margin:0 16px 12px;
-    padding:14px;border-radius:12px;display:flex;gap:12px;
-  }
-.cart-item img{width:60px;height:60px;border-radius:8px;object-fit:cover}
-.cart-info{flex:1}
-.cart-info h4{font-size:13px;font-weight:700;margin-bottom:4px}
-.cart-info p{font-size:12px;color:var(--purple);font-weight:700}
-.qty-control-cart{display:flex;align-items:center;gap:8px;margin-top:8px}
-.qty-btn-cart{
-    width:28px;height:28px;background:var(--bg);
-    border:1px solid var(--border);border-radius:6px;
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;font-size:16px;
-  }
-.qty-num-cart{font-size:13px;font-weight:700;width:30px;text-align:center}
-.delete-btn{color:var(--danger);cursor:pointer}
+.stat-box{
+background:#0b0b0b;
+border:1px solid var(--border);
+padding:18px;
+text-align:center;
+}
 
-.summary{
-    margin:20px 16px;background:var(--card);
-    padding:16px;border-radius:12px;
-  }
-.summary-row{
-    display:flex;justify-content:space-between;
-    margin-bottom:12px;font-size:13px;
-  }
-.summary-row.total{
-    font-size:16px;font-weight:800;color:var(--purple);
-    border-top:1px solid var(--border);padding-top:12px;
-  }
-.btn-primary{
-    width:calc(100% - 32px);margin:0 16px;
-    background:var(--purple);color:#fff;border:none;
-    padding:16px;border-radius:12px;font-size:15px;
-    font-weight:800;display:flex;align-items:center;
-    justify-content:center;gap:8px;cursor:pointer;
-  }
+.stat-box h3{
+font-size:22px;
+color:var(--purple2);
+margin-bottom:6px;
+}
 
-  /* Payment */
-.steps{
-    display:flex;justify-content:space-between;
-    padding:0 16px 20px;margin:0 16px;
-    border-bottom:1px solid var(--border);
-  }
-.step{text-align:center;font-size:10px;color:var(--text-dim)}
-.step.active{color:var(--purple)}
-.step-num{
-    width:28px;height:28px;border-radius:50%;
-    background:var(--card);border:2px solid var(--border);
-    display:flex;align-items:center;justify-content:center;
-    margin:0 auto 6px;font-weight:800;
-  }
-.step.active.step-num{
-    background:var(--purple);border-color:var(--purple);
-    color:#fff;
-  }
+.stat-box p{
+font-size:13px;
+color:#bbb;
+}
 
-.payment-box{
-    margin:16px;background:var(--card);
-    padding:16px;border-radius:12px;
-  }
-.payment-title{font-size:13px;font-weight:800;margin-bottom:8px;color:var(--purple)}
-.payment-text{font-size:12px;color:var(--text-dim);line-height:1.5;margin-bottom:12px}
-.pix-key{
-    background:var(--bg);padding:12px;border-radius:8px;
-    display:flex;justify-content:space-between;align-items:center;
-    margin-bottom:16px;border:1px solid var(--border);
-  }
-.pix-key span{font-size:14px;font-weight:700}
-.copy-btn{
-    background:var(--purple);border:none;color:#fff;
-    padding:6px 12px;border-radius:6px;font-size:11px;
-    font-weight:700;cursor:pointer;
-  }
-.qr-code{width:160px;height:160px;margin:0 auto 16px;background:#fff;padding:10px;border-radius:12px}
-.alert{
-    background:rgba(245,158,11,0.1);border:1px solid #f59e0b;
-    padding:12px;border-radius:8px;display:flex;gap:8px;
-    font-size:11px;color:#fbbf24;margin-bottom:16px;
-  }
+.input{
+width:100%;
+background:#0b0b0b;
+border:1px solid var(--border);
+padding:14px;
+margin-bottom:12px;
+color:#fff;
+outline:none;
+font-size:14px;
+}
 
-  /* Support */
-.support-text{
-    padding:0 16px 20px;font-size:13px;color:var(--text-dim);
-    text-align:center;line-height:1.5;
-  }
-.btn-whatsapp{
-    margin:0 16px 24px;background:var(--purple);
-    color:#fff;border:none;padding:16px;border-radius:12px;
-    font-size:14px;font-weight:800;width:calc(100% - 32px);
-    display:flex;align-items:center;justify-content:center;
-    gap:8px;cursor:pointer;
-  }
-.support-channel{
-    margin:0 16px 12px;background:var(--card);
-    padding:14px;border-radius:12px;display:flex;
-    align-items:center;gap:12px;
-  }
-.support-channel svg{width:20px;height:20px;color:var(--purple)}
-.support-channel div{flex:1}
-.support-channel h4{font-size:13px;font-weight:700;margin-bottom:2px}
-.support-channel p{font-size:12px;color:var(--text-dim)}
+textarea.input{
+height:120px;
+resize:none;
+}
 
-  /* Bottom Nav */
+.btn{
+width:100%;
+padding:15px;
+border:none;
+background:linear-gradient(90deg,#9333ea,#c084fc);
+color:#fff;
+font-weight:700;
+font-size:14px;
+cursor:pointer;
+}
+
+.product{
+background:#0b0b0b;
+border:1px solid var(--border);
+padding:14px;
+margin-top:12px;
+}
+
+.product img{
+width:100%;
+height:160px;
+object-fit:cover;
+margin-bottom:10px;
+border:1px solid var(--border);
+}
+
+.product h3{
+font-size:16px;
+margin-bottom:6px;
+}
+
+.price{
+font-size:20px;
+font-weight:700;
+color:var(--purple2);
+margin-bottom:6px;
+}
+
+.stock{
+font-size:13px;
+color:#aaa;
+margin-bottom:12px;
+}
+
+.product-buttons{
+display:flex;
+gap:10px;
+}
+
+.small-btn{
+flex:1;
+padding:12px;
+border:none;
+font-weight:700;
+cursor:pointer;
+}
+
+.edit{
+background:#9333ea;
+color:#fff;
+}
+
+.delete{
+background:#2b0b40;
+color:#fff;
+border:1px solid var(--border);
+}
+
+.category-list{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.category{
+background:#0b0b0b;
+border:1px solid var(--border);
+padding:16px;
+text-align:center;
+}
+
+.settings-item{
+background:#0b0b0b;
+border:1px solid var(--border);
+padding:14px;
+margin-bottom:10px;
+}
+
 .bottom-nav{
-    position:fixed;bottom:0;left:0;right:0;
-    background:var(--bg);border-top:1px solid var(--border);
-    display:flex;justify-content:space-around;padding:10px 0;
-    z-index:50;
-  }
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:#080808;
+border-top:1px solid var(--border);
+display:flex;
+justify-content:space-around;
+padding:12px 0;
+z-index:999;
+}
+
 .nav-item{
-    display:flex;flex-direction:column;align-items:center;
-    gap:4px;color:var(--text-dim);font-size:10px;
-    cursor:pointer;
-  }
-.nav-item.active{color:var(--purple)}
-.nav-item svg{width:22px;height:22px}
-.nav-item.badge{
-    position:absolute;background:var(--purple);
-    color:#fff;font-size:9px;font-weight:800;
-    padding:2px 5px;border-radius:10px;
-    margin-left:12px;margin-top:-4px;
-  }
+text-align:center;
+font-size:12px;
+color:#c084fc;
+}
+
+.nav-item span{
+display:block;
+font-size:22px;
+margin-bottom:4px;
+}
+
+.login{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#050505;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:999999;
+padding:20px;
+}
+
+.login-box{
+width:100%;
+background:#101010;
+border:1px solid var(--border);
+padding:25px;
+}
+
+.login-box h1{
+text-align:center;
+margin-bottom:20px;
+color:#c084fc;
+}
+
+.hidden{
+display:none;
+}
+
 </style>
 </head>
+
 <body>
 
-<!-- PAGE 1: HOME -->
-<div class="page active" id="page-home">
-  <header>
-    <div class="header-left">
-      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
-    </div>
-    <div class="logo">
-      <div class="logo-text">👑 PRIME <span>STORE</span></div>
-      <div class="logo-sub">PIX</div>
-    </div>
-    <div class="header-right">
-      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h10v10H7z"/></svg>
-    </div>
-  </header>
+<div class="login" id="login">
 
-  <div class="hero">
-    <img src="https://i.postimg.cc/C5KWcT5z/be50f798-9fdd-49a3-99aa-7b4abaf24030.jpg" class="hero-overlay">
-    <h1>PRIME STORE</h1>
-    <p>QUALIDADE • CONFIANÇA • SEGURANÇA</p>
-  </div>
+<div class="login-box">
 
-  <div class="section">
-    <div class="section-header">
-      <div class="section-title">CATEGORIAS</div>
-      <div class="see-all" onclick="goTo('store')">VER TODAS</div>
-    </div>
-    <div class="cat-grid">
-      <div class="cat-card" onclick="goTo('store')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><p>DIAMANTES</p></div>
-      <div class="cat-card" onclick="goTo('store')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><p>CONTAS</p></div>
-      <div class="cat-card" onclick="goTo('store')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><p>PASSES</p></div>
-      <div class="cat-card" onclick="goTo('store')"><svg fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="10" rx="2"/><path d="M16 2v4M8 2v4"/></svg><p>ASSINATURAS</p></div>
-      <div class="cat-card" onclick="goTo('store')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M8 21l8-7-8-7v14z"/></svg><p>PRÊMIOS</p></div>
-      <div class="cat-card" onclick="goTo('store')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><p>TREINAMENTOS</p></div>
-    </div>
-  </div>
+<h1>PRIME STORE ADM</h1>
 
-  <div class="section">
-    <div class="section-header">
-      <div class="section-title">PRODUTOS EM DESTAQUE</div>
-      <div class="see-all" onclick="goTo('store')">VER TODOS</div>
-    </div>
-    <div class="prod-grid">
-      <div class="prod-card" onclick="goToProduct(1)"><img src="https://i.imgur.com/8Km9tLL.png"><div class="info"><h4>110 DIAMANTES</h4><p>R$ 4,99</p></div></div>
-      <div class="prod-card" onclick="goToProduct(4)"><img src="https://i.imgur.com/7Y8i5iP.png"><div class="info"><h4>PASSE BOOYAH</h4><p>R$ 14,90</p></div></div>
-      <div class="prod-card" onclick="goToProduct(6)"><img src="https://i.imgur.com/3Z3jU6P.png"><div class="info"><h4>NETFLIX PREMIUM</h4><p>R$ 21,90</p></div></div>
-    </div>
-  </div>
+<input type="text" class="input" id="user" placeholder="Usuário">
+
+<input type="password" class="input" id="pass" placeholder="Senha">
+
+<button class="btn" onclick="login()">ENTRAR</button>
+
 </div>
 
-<!-- PAGE 2: STORE -->
-<div class="page" id="page-store">
-  <header>
-    <div class="header-left" onclick="goTo('home')"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></div>
-    <div class="logo"><div class="logo-text">👑 PRIME <span>STORE</span></div><div class="logo-sub">PIX</div></div>
-    <div class="header-right"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h10v10H7z"/></svg></div>
-  </header>
-
-  <div style="padding:16px;font-size:14px;font-weight:800">LOJA</div>
-
-  <div class="search-box">
-    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input type="text" placeholder="Buscar produtos...">
-  </div>
-
-  <div class="tabs">
-    <div class="tab active">TODOS</div>
-    <div class="tab">DIAMANTES</div>
-    <div class="tab">PASSES</div>
-    <div class="tab">CONTAS</div>
-    <div class="tab">MAIS</div>
-  </div>
-
-  <div class="product-list" id="product-list"></div>
 </div>
 
-<!-- PAGE 3: PRODUCT DETAIL -->
-<div class="page" id="page-product">
-  <header>
-    <div class="header-left" onclick="goTo('store')"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></div>
-    <div class="logo"><div class="logo-text">👑 PRIME <span>STORE</span></div><div class="logo-sub">PIX</div></div>
-    <div class="header-right"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h10v10H7z"/></svg></div>
-  </header>
-  <div class="product-detail" id="product-detail"></div>
+<div class="menu" id="menu">
+
+<h2>MENU ADM</h2>
+
+<a href="#">🏠 Dashboard</a>
+<a href="#">📦 Produtos</a>
+<a href="#">💎 Categorias</a>
+<a href="#">📊 Estoque</a>
+<a href="#">🔥 Promoções</a>
+<a href="#">⚙ Configurações</a>
+<a href="#">📞 Suporte</a>
+
 </div>
 
-<!-- PAGE 4: CART -->
-<div class="page" id="page-cart">
-  <header>
-    <div class="header-left" onclick="goTo('product')"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></div>
-    <div class="logo"><div class="logo-text">👑 PRIME <span>STORE</span></div><div class="logo-sub">PIX</div></div>
-    <div style="width:24px"></div>
-  </header>
+<header>
 
-  <div class="page-title">CARRINHO</div>
-  <div id="cart-items"></div>
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
 
-  <div class="summary">
-    <div class="summary-row"><span>SUBTOTAL</span><span id="subtotal">R$ 0,00</span></div>
-    <div class="summary-row"><span>TAXA</span><span>R$ 0,00</span></div>
-    <div class="summary-row total"><span>TOTAL</span><span id="total">R$ 0,00</span></div>
-  </div>
-
-  <button class="btn-primary" onclick="goTo('payment')">FINALIZAR COMPRA →</button>
+<div class="logo">
+PRIME
+<span>STORE ADM</span>
 </div>
 
-<!-- PAGE 5: PAYMENT -->
-<div class="page" id="page-payment">
-  <header>
-    <div class="header-left" onclick="goTo('cart')"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></div>
-    <div class="logo"><div class="logo-text">👑 PRIME <span>STORE</span></div><div class="logo-sub">PIX</div></div>
-    <div style="width:24px"></div>
-  </header>
+<div class="menu-btn">⚙</div>
 
-  <div class="page-title">PAGAMENTO</div>
+</header>
 
-  <div class="steps">
-    <div class="step"><div class="step-num">1</div>Carrinho</div>
-    <div class="step active"><div class="step-num">2</div>Pagamento</div>
-    <div class="step"><div class="step-num">3</div>Confirmação</div>
-  </div>
+<div class="container">
 
-  <div class="payment-box">
-    <div class="payment-title">PAGAMENTO MANUAL</div>
-    <div class="payment-text">Realize o pagamento via PIX e envie o comprovante no WhatsApp.</div>
-    <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px">CHAVE PIX</div>
-    <div class="pix-key">
-      <span id="pix-key">(98)98485-3563</span>
-      <button class="copy-btn" onclick="copyPix()">COPIAR</button>
-    </div>
+<div class="card">
 
-    <div class="qr-code">
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=00020126580014br.gov.bcb.pix0136(98)98485-356352040000530398654041.785802BR5913PRIME STORE6009SAO PAULO62070503***6304" style="width:100%">
-    </div>
+<h2>Dashboard</h2>
 
-    <div class="summary-row" style="margin-bottom:16px">
-      <span style="font-weight:700">VALOR A PAGAR</span>
-      <span id="pay-total" style="font-weight:800;color:var(--purple);font-size:16px">R$ 0,00</span>
-    </div>
+<div class="stats">
 
-    <div class="alert">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9l3 3-3 3"/><path d="M4 12h8"/></svg>
-      <span>Após realizar o pagamento, envie seu comprovante no WhatsApp abaixo.</span>
-    </div>
-
-    <button class="btn-primary" onclick="goTo('support')">📱 ENVIAR COMPROVANTE</button>
-  </div>
+<div class="stat-box">
+<h3>28</h3>
+<p>Produtos</p>
 </div>
 
-<!-- PAGE 6: SUPPORT -->
-<div class="page" id="page-support">
-  <header>
-    <div class="header-left" onclick="goTo('payment')"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></div>
-    <div class="logo"><div class="logo-text">👑 PRIME <span>STORE</span></div><div class="logo-sub">PIX</div></div>
-    <div style="width:24px"></div>
-  </header>
-
-  <div class="page-title">SUPORTE</div>
-
-  <div class="support-text">Nos chame no WhatsApp para qualquer dúvida ou para enviar seu comprovante.</div>
-
-  <button class="btn-whatsapp" onclick="openWhatsApp()">📱 ABRIR WHATSAPP</button>
-
-  <div style="padding:0 16px 12px;font-size:12px;font-weight:700;color:var(--text-dim)">OUTROS CANAIS</div>
-
-  <div class="support-channel"><svg fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><path d="M17.5 6.5h.01"/></svg><div><h4>Instagram</h4><p>@primestore</p></div></div>
-  <div class="support-channel"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg><div><h4>TikTok</h4><p>@primestore</p></div></div>
-  <div class="support-channel"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2.9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg><div><h4>E-mail</h4><p>suporte@primestore.com</p></div></div>
-  <div class="support-channel"><svg fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><div><h4>Horário de atendimento</h4><p>08:00h às 23:00h</p></div></div>
+<div class="stat-box">
+<h3>999</h3>
+<p>Estoque</p>
 </div>
 
-<!-- BOTTOM NAV -->
+<div class="stat-box">
+<h3>12</h3>
+<p>Promoções</p>
+</div>
+
+<div class="stat-box">
+<h3>57</h3>
+<p>Pedidos</p>
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Adicionar Produto</h2>
+
+<input class="input" placeholder="Nome do Produto">
+
+<textarea class="input" placeholder="Descrição"></textarea>
+
+<input class="input" placeholder="Preço">
+
+<input class="input" placeholder="Estoque">
+
+<select class="input">
+<option>Diamantes</option>
+<option>Assinaturas</option>
+<option>Treinamentos</option>
+<option>Premiações</option>
+<option>Contas</option>
+</select>
+
+<input type="file" class="input">
+
+<button class="btn">
+PUBLICAR PRODUTO
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Produtos Publicados</h2>
+
+<div class="product">
+
+<img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop">
+
+<h3>110 Diamantes Free Fire</h3>
+
+<div class="price">R$ 4,99</div>
+
+<div class="stock">
+Estoque: 999
+</div>
+
+<div class="product-buttons">
+
+<button class="small-btn edit">
+EDITAR
+</button>
+
+<button class="small-btn delete">
+APAGAR
+</button>
+
+</div>
+
+</div>
+
+<div class="product">
+
+<img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200&auto=format&fit=crop">
+
+<h3>Passe Booyah</h3>
+
+<div class="price">R$ 14,90</div>
+
+<div class="stock">
+Estoque: 99
+</div>
+
+<div class="product-buttons">
+
+<button class="small-btn edit">
+EDITAR
+</button>
+
+<button class="small-btn delete">
+APAGAR
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Categorias</h2>
+
+<div class="category-list">
+
+<div class="category">💎 Diamantes</div>
+
+<div class="category">👑 Assinaturas</div>
+
+<div class="category">🎮 Jogos</div>
+
+<div class="category">🏆 Premiações</div>
+
+<div class="category">📚 Treinamentos</div>
+
+<div class="category">🔥 Contas</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Configurações</h2>
+
+<div class="settings-item">
+🏪 Nome da Loja: PRIME STORE
+</div>
+
+<div class="settings-item">
+📞 WhatsApp: (98) 984853563
+</div>
+
+<div class="settings-item">
+💰 Chave Pix: (98) 984853563
+</div>
+
+<div class="settings-item">
+🎨 Tema: Preto + Lilás
+</div>
+
+<div class="settings-item">
+👤 ADM: Lorrannyh.101225
+</div>
+
+</div>
+
+</div>
+
 <div class="bottom-nav">
-  <div class="nav-item active" onclick="goTo('home')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg><span>INÍCIO</span></div>
-  <div class="nav-item" onclick="goTo('store')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 7H4L5 9z"/></svg><span>LOJA</span></div>
-  <div class="nav-item" onclick="goTo('support')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><span>SUPORTE</span></div>
-  <div class="nav-item" onclick="goTo('cart')"><div style="position:relative"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><div class="badge" id="cart-badge">0</div></div><span>CARRINHO</span></div>
+
+<div class="nav-item">
+<span>🏠</span>
+Home
+</div>
+
+<div class="nav-item">
+<span>📦</span>
+Produtos
+</div>
+
+<div class="nav-item">
+<span>⚙</span>
+Config
+</div>
+
+<div class="nav-item">
+<span>📞</span>
+Suporte
+</div>
+
 </div>
 
 <script>
-const products = [
-  {id:1,name:"110 DIAMANTES",cat:"FREE FIRE",price:4.99,img:"https://i.imgur.com/8Km9tLL.png",desc:"Recarga de 110 diamantes no Free Fire. Entrega manual via ID."},
-  {id:2,name:"310 DIAMANTES",cat:"FREE FIRE",price:11.90,img:"https://i.imgur.com/8Km9tLL.png",desc:"Recarga de 310 diamantes no Free Fire. Entrega manual via ID."},
-  {id:3,name:"520 DIAMANTES",cat:"FREE FIRE",price:16.90,img:"https://i.imgur.com/8Km9tLL.png",desc:"Recarga de 520 diamantes no Free Fire. Entrega manual via ID."},
-  {id:4,name:"PASSE BOOYAH",cat:"FREE FIRE",price:14.90,img:"https://i.imgur.com/7Y8i5iP.png",desc:"Passe Booyah do mês atual. Ativação instantânea."},
-  {id:5,name:"CONTA FF VETERANA",cat:"FREE FIRE",price:89.90,img:"https://i.imgur.com/7Y8i5iP.png",desc:"Conta veterana com skins raras. Acesso imediato."},
-  {id:6,name:"NETFLIX PREMIUM",cat:"NETFLIX",price:21.90,img:"https://i.imgur.com/3Z3jU6P.png",desc:"Acesso 1 mês. Tela 4K + 4 telas simultâneas."}
-];
 
-let cart = [];
-let currentProduct = null;
-let quantity = 1;
-const WHATSAPP = "5598984853563";
-
-function goTo(page){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+page).classList.add('active');
-
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  if(page==='home')document.querySelectorAll('.nav-item')[0].classList.add('active');
-  if(page==='store')document.querySelectorAll('.nav-item')[1].classList.add('active');
-  if(page==='support')document.querySelectorAll('.nav-item')[2].classList.add('active');
-  if(page==='cart')document.querySelectorAll('.nav-item')[3].classList.add('active');
-
-  if(page==='store')renderProducts();
-  if(page==='cart')renderCart();
-  if(page==='payment')updatePaymentTotal();
+function toggleMenu(){
+document.getElementById("menu").classList.toggle("active");
 }
 
-function goToProduct(id){
-  currentProduct = products.find(p=>p.id===id);
-  quantity=1;
-  renderProductDetail();
-  goTo('product');
+function login(){
+
+let user = document.getElementById("user").value;
+let pass = document.getElementById("pass").value;
+
+if(user === "Lorrannyh.101225" && pass === "101225"){
+
+document.getElementById("login").classList.add("hidden");
+
+}else{
+
+alert("Usuário ou senha incorretos");
+
 }
 
-function renderProducts(){
-  const list=document.getElementById('product-list');
-  list.innerHTML='';
-  products.forEach(p=>{
-    list.innerHTML+=`
-      <div class="product-item" onclick="goToProduct(${p.id})">
-        <img src="${p.img}">
-        <div class="product-info">
-          <h4>${p.name}</h4>
-          <div class="tag">${p.cat}</div>
-          <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
-        </div>
-        <div class="cart-btn" onclick="event.stopPropagation();addToCart(${p.id})">
-          <svg fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-        </div>
-      function addToCart(id){
-  const prod = products.find(p=>p.id===id);
-  const existing = cart.find(i=>i.id===id);
-  
-  if(existing){
-    existing.qty += 1;
-  } else {
-    cart.push({...prod, qty: 1});
-  }
-  
-  updateCartBadge();
-  
-  // Feedback visual
-  const btn = event.currentTarget;
-  btn.style.background = 'var(--purple)';
-  setTimeout(()=>{btn.style.background = 'var(--card)'}, 200);
 }
 
-function goToProduct(id){
-  currentProduct = products.find(p=>p.id===id);
-  quantity=1;
-  renderProductDetail();
-  goTo('product');
-}
-
-function renderProducts(){
-  const list=document.getElementById('product-list');
-  list.innerHTML='';
-  products.forEach(p=>{
-    list.innerHTML+=`
-      <div class="product-item" onclick="goToProduct(${p.id})">
-        <img src="${p.img}">
-        <div class="product-info">
-          <h4>${p.name}</h4>
-          <div class="tag">${p.cat}</div>
-          <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
-        </div>
-        <div class="cart-btn" onclick="event.stopPropagation();addToCart(${p.id})">
-          <svg fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-        </div>
-      </div>
-    `;
-  });
-}
-
-function renderProductDetail(){
-  const p=currentProduct;
-  document.getElementById('product-detail').innerHTML=`
-    <img src="${p.img}">
-    <div class="detail-content">
-      <h2>${p.name}</h2>
-      <div class="tag">${p.cat}</div>
-      <div class="stars">★★☆ (4.8)</div>
-      <div class="price-big">R$ ${p.price.toFixed(2).replace('.',',')}</div>
-      <div class="installment">ou 12x de R$ ${(p.price/12).toFixed(2).replace('.',',')}</div>
-
-      <div class="desc-title">DESCRIÇÃO</div>
-      <div class="desc-text">${p.desc}</div>
-
-      <div class="desc-title">QUANTIDADE</div>
-      <div class="qty-control">
-        <div class="qty-btn" onclick="changeQty(-1)">−</div>
-        <div class="qty-num" id="qty">${quantity}</div>
-        <div class="qty-btn" onclick="changeQty(1)">+</div>
-      </div>
-
-      <button class="btn-buy" onclick="buyNow()">
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-        COMPRAR AGORA
-      </button>
-    </div>
-  `;
-}
-
-function changeQty(v){
-  quantity=Math.max(1,quantity+v);
-  document.getElementById('qty').textContent=quantity;
-}
-
-function buyNow(){
-  // Adiciona ao carrinho com a quantidade selecionada
-  const existing = cart.find(i=>i.id===currentProduct.id);
-  if(existing){
-    existing.qty += quantity;
-  } else {
-    cart.push({...currentProduct, qty: quantity});
-  }
-  updateCartBadge();
-  goTo('cart');
-}
-
-function renderCart(){
-  const container=document.getElementById('cart-items');
-  container.innerHTML='';
-  let subtotal=0;
-
-  if(cart.length === 0){
-    container.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">Carrinho vazio</div>';
-    document.getElementById('subtotal').textContent='R$ 0,00';
-    document.getElementById('total').textContent='R$ 0,00';
-    updateCartBadge();
-    return;
-  }
-
-  cart.forEach((item,index)=>{
-    subtotal+=item.price*item.qty;
-    container.innerHTML+=`
-      <div class="cart-item">
-        <img src="${item.img}">
-        <div class="cart-info">
-          <h4>${item.name}</h4>
-          <p>${item.cat}</p>
-          <p style="color:var(--purple);font-weight:800">R$ ${(item.price*item.qty).toFixed(2).replace('.',',')}</p>
-          <div class="qty-control-cart">
-            <div class="qty-btn-cart" onclick="changeCartQty(${index},-1)">−</div>
-            <div class="qty-num-cart">${item.qty}</div>
-            <div class="qty-btn-cart" onclick="changeCartQty(${index},1)">+</div>
-            <div style="flex:1"></div>
-            <div class="delete-btn" onclick="removeItem(${index})">
-              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-  });
-
-  document.getElementById('subtotal').textContent=`R$ ${subtotal.toFixed(2).replace('.',',')}`;
-  document.getElementById('total').textContent=`R$ ${subtotal.toFixed(2).replace('.',',')}`;
-  updateCartBadge();
-}
-
-function changeCartQty(index,change){
-  cart[index].qty=Math.max(1,cart[index].qty+change);
-  renderCart();
-}
-
-function removeItem(index){
-  cart.splice(index,1);
-  renderCart();
-}
-
-function updateCartBadge(){
-  const totalQty = cart.reduce((sum,item)=>sum+item.qty,0);
-  document.getElementById('cart-badge').textContent=totalQty;
-  document.getElementById('cart-badge').style.display = totalQty > 0 ? 'block' : 'none';
-}
-
-function updatePaymentTotal(){
-  const total=cart.reduce((sum,item)=>sum+item.price*item.qty,0);
-  document.getElementById('pay-total').textContent=`R$ ${total.toFixed(2).replace('.',',')}`;
-}
-
-function copyPix(){
-  navigator.clipboard.writeText("(98)98485-3563");
-  alert("Chave PIX copiada!");
-}
-
-function openWhatsApp(){
-  const total=cart.reduce((sum,item)=>sum+item.price*item.qty,0);
-  const items = cart.map(i=>`${i.qty}x ${i.name}`).join(', ');
-  const msg=encodeURIComponent(`Olá! Acabei de fazer um pagamento de R$ ${total.toFixed(2)}.\nProdutos: ${items}\nSegue o comprovante.`);
-  window.open(`https://wa.me/${WHATSAPP}?text=${msg}`,'_blank');
-}
-
-// Evita zoom duplo no mobile
-let lastTouch=0;
-document.addEventListener('touchend',e=>{
-  const now=Date.now();
-  if(now-lastTouch<=300)e.preventDefault();
-  lastTouch=now;
-},{passive:false});
-
-// Inicializa badge do carrinho
-updateCartBadge();
 </script>
 
 </body>
