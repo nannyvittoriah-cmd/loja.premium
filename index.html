@@ -3,400 +3,303 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prime Store - Admin</title>
+<title>Prime Store</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#000;
-  --card:#111;
-  --border:#2a2a2a;
-  --primary:#8A28E2;
-  --secondary:#FF00FF;
-  --text:#FFFFFF;
-  --text-sec:#a3a3a3;
-  --danger:#ff3b3b;
-  --success:#22c55e;
-  --warn:#f59e0b;
+  --bg:#000;--card:#111;--border:#2a2a2a;--primary:#8A28E2;--secondary:#FF00FF;
+  --text:#FFFFFF;--text-sec:#a3a3a3;--danger:#ff3b3b;--success:#22c55e;
 }
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
-body{background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+body{background:var(--bg);color:var(--text);}
 .hidden{display:none !important;}
-input,select,textarea{background:var(--card);border:1px solid var(--border);color:var(--text);padding:12px;border-radius:8px;width:100%;outline:none;font-size:14px;}
-input:focus,select:focus,textarea:focus{border-color:var(--primary);}
-.btn{background:var(--primary);color:white;border:none;padding:12px 20px;border-radius:8px;font-weight:600;cursor:pointer;transition:0.2s;font-size:14px;}
+input,select,textarea{background:var(--card);border:1px solid var(--border);color:var(--text);padding:12px;border-radius:8px;width:100%;outline:none;}
+.btn{background:var(--primary);color:white;border:none;padding:12px 20px;border-radius:8px;font-weight:600;cursor:pointer;}
 .btn:hover{filter:brightness(1.15);}
 .btn-sec{background:var(--card);border:1px solid var(--border);}
-.btn-danger{background:var(--danger);}
-.btn-sm{padding:8px 14px;font-size:13px;}
 .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;}
 .grid{display:grid;gap:16px;}
 .flex{display:flex;gap:12px;align-items:center;}
-.space-between{justify-content:space-between;}
-.table{width:100%;border-collapse:collapse;font-size:14px;}
-.table th,.table td{padding:14px;text-align:left;border-bottom:1px solid var(--border);}
-.table th{color:var(--text-sec);font-weight:500;font-size:13px;}
-.badge{padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;display:inline-block;}
-.badge-on{background:var(--success);}
-.badge-off{background:var(--danger);}
-.badge-pend{background:var(--warn);}
-.toggle{width:44px;height:24px;background:var(--border);border-radius:12px;position:relative;cursor:pointer;transition:0.2s;}
+.grid-3{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}
+.product{cursor:pointer;transition:0.2s;}
+.product:hover{border-color:var(--primary);}
+.badge{padding:4px 10px;border-radius:20px;font-size:12px;background:var(--primary);}
+.sidebar{width:240px;background:var(--card);border-right:1px solid var(--border);height:100vh;position:fixed;left:0;top:0;padding:20px;}
+.main{margin-left:240px;padding:30px;}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;}
+.toggle{width:44px;height:24px;background:var(--border);border-radius:12px;position:relative;cursor:pointer;}
 .toggle.active{background:var(--primary);}
 .toggle::after{content:'';width:18px;height:18px;background:white;border-radius:50%;position:absolute;top:3px;left:3px;transition:0.2s;}
 .toggle.active::after{left:23px;}
-.sidebar{width:240px;background:var(--card);border-right:1px solid var(--border);height:100vh;position:fixed;left:0;top:0;padding:20px;z-index:10;}
-.sidebar a{display:block;padding:12px;border-radius:8px;color:var(--text-sec);text-decoration:none;margin-bottom:6px;font-size:14px;transition:0.2s;cursor:pointer;}
-.sidebar a.active,.sidebar a:hover{background:var(--primary);color:white;}
-.main{margin-left:240px;padding:30px;min-height:100vh;}
-.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;}
-.icon-btn{background:transparent;border:1px solid var(--border);padding:10px;border-radius:8px;cursor:pointer;color:var(--text);}
-.icon-btn:hover{border-color:var(--primary);}
-.logo-box{width:100%;height:80px;border:1px dashed var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--card);}
-.color-box{width:40px;height:40px;border-radius:6px;border:1px solid var(--border);}
-.stat-card{padding:20px;}
-.stat-card p{color:var(--text-sec);font-size:13px;margin-bottom:8px;}
-.stat-card h2{font-size:28px;font-weight:700;}
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:100;}
-.modal-content{width:500px;max-width:90%;max-height:90vh;overflow-y:auto;}
-.menu-btn{display:none;}
-@media(max-width:768px){
-  .sidebar{transform:translateX(-100%);transition:0.3s;}
-  .sidebar.open{transform:translateX(0);}
-  .main{margin-left:0;padding:20px;}
-  .menu-btn{display:block;}
-  .grid-2{grid-template-columns:1fr !important;}
-}
 </style>
 </head>
 <body>
 
-<!-- TELA 1: LOGIN -->
-<div id="login" class="flex" style="justify-content:center;align-items:center;height:100vh;padding:20px;">
-  <div class="card" style="width:400px;">
-    <div style="text-align:center;margin-bottom:30px;">
-      <h2 style="font-size:28px;">PRIME STORE</h2>
-      <p style="color:var(--text-sec);margin-top:8px;">Painel Administrativo</p>
-    </div>
-    <div class="grid">
-      <input type="email" placeholder="E-mail" id="email" value="admin@prime.com">
-      <input type="password" placeholder="Senha" id="password" value="123456">
-      <button class="btn" onclick="login()">Entrar</button>
-    </div>
-  </div>
-</div>
-
-<!-- APP -->
-<div id="app" class="hidden">
-  <button class="menu-btn icon-btn" onclick="toggleMenu()" style="position:fixed;top:20px;left:20px;z-index:11;">☰</button>
-  
-  <div class="sidebar" id="sidebar">
-    <h3 style="margin-bottom:30px;">PRIME STORE</h3>
-    <a class="active" onclick="show('dashboard', this)">Dashboard</a>
-    <a onclick="show('products', this)">Produtos</a>
-    <a onclick="show('categories', this)">Categorias</a>
-    <a onclick="show('subcategories', this)">Subcategorias</a>
-    <a onclick="show('orders', this)">Pedidos</a>
-    <a onclick="show('settings', this)">Configurações</a>
-  </div>
-
-  <div class="main">
-    <div class="header">
-      <h2 id="page-title">Dashboard</h2>
-      <div class="flex">
-        <button class="icon-btn" onclick="logout()">Sair</button>
-      </div>
-    </div>
-
-    <!-- TELA 2: DASHBOARD -->
-    <div id="dashboard" class="page">
-      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
-        <div class="card stat-card">
-          <p>Vendas Hoje</p>
-          <h2>R$ 1.240,00</h2>
-        </div>
-        <div class="card stat-card">
-          <p>Pedidos</p>
-          <h2>18</h2>
-        </div>
-        <div class="card stat-card">
-          <p>Produtos</p>
-          <h2>42</h2>
-        </div>
-        <div class="card stat-card">
-          <p>Usuários</p>
-          <h2>156</h2>
+<!-- LOJA PÚBLICA -->
+<div id="store">
+  <!-- TELA 1: HOME -->
+  <div id="home" class="page">
+    <div style="padding:20px;">
+      <div class="flex" style="justify-content:space-between;margin-bottom:30px;">
+        <h2>PRIME STORE</h2>
+        <div class="flex">
+          <button class="btn-sec" onclick="show('cart')">Carrinho <span id="cart-count">0</span></button>
+          <button class="btn-sec" onclick="show('admin-login')">ADM</button>
         </div>
       </div>
+      
+      <h3 style="margin-bottom:16px;">Categorias</h3>
+      <div class="flex" style="overflow-x:auto;margin-bottom:30px;">
+        <button class="btn-sec" onclick="filterCat('all')">Todos</button>
+        <button class="btn-sec" onclick="filterCat('streaming')">Streaming</button>
+        <button class="btn-sec" onclick="filterCat('vpn')">VPN</button>
+      </div>
+
+      <h3 style="margin-bottom:16px;">Produtos em Destaque</h3>
+      <div class="grid grid-3" id="products-grid">
+        <!-- Produtos gerados via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- TELA 2: LISTA PRODUTOS -->
+  <div id="products" class="page hidden">
+    <div style="padding:20px;">
+      <button class="btn-sec" onclick="show('home')">← Voltar</button>
+      <input placeholder="Buscar produto..." style="margin:20px 0;" onkeyup="searchProd(this.value)">
+      <div class="grid grid-3" id="products-list"></div>
+    </div>
+  </div>
+
+  <!-- TELA 3: PRODUTO -->
+  <div id="product-detail" class="page hidden">
+    <div style="padding:20px;max-width:800px;margin:auto;">
+      <button class="btn-sec" onclick="show('products')">← Voltar</button>
       <div class="card" style="margin-top:20px;">
-        <h4 style="margin-bottom:16px;">Últimos Pedidos</h4>
-        <table class="table">
-          <tr><td>#1023</td><td>João Silva</td><td>Netflix</td><td>R$ 29,90</td><td><span class="badge badge-on">Pago</span></td></tr>
-          <tr><td>#1022</td><td>Maria Souza</td><td>Spotify</td><td>R$ 19,90</td><td><span class="badge badge-pend">Pendente</span></td></tr>
-        </table>
+        <img id="prod-img" style="width:100%;height:200px;object-fit:cover;border-radius:8px;margin-bottom:16px;">
+        <h2 id="prod-name"></h2>
+        <p id="prod-desc" style="color:var(--text-sec);margin:12px 0;"></p>
+        <h3 id="prod-price" style="color:var(--primary);margin:16px 0;"></h3>
+        <button class="btn" onclick="addToCart()">Comprar</button>
       </div>
     </div>
-
-    <!-- TELA 3-4: PRODUTOS + LISTA -->
-    <div id="products" class="page hidden">
-      <div class="flex space-between" style="margin-bottom:20px;">
-        <h3>Produtos</h3>
-        <button class="btn" onclick="show('add-product', null)">+ Adicionar</button>
-      </div>
-      <div class="card">
-        <table class="table">
-          <thead><tr><th>Produto</th><th>Preço</th><th>Estoque</th><th>Status</th><th>Ações</th></tr></thead>
-          <tbody id="products-list">
-            <tr>
-              <td>Netflix Premium 1 Mês</td><td>R$ 29,90</td><td>50</td>
-              <td><span class="badge badge-on">Ativo</span></td>
-              <td class="flex"><button class="btn-sec btn-sm" onclick="show('edit-product', null)">Editar</button><button class="btn-danger btn-sm">Excluir</button></td>
-            </tr>
-            <tr>
-              <td>Spotify Premium 1 Mês</td><td>R$ 19,90</td><td>32</td>
-              <td><span class="badge badge-on">Ativo</span></td>
-              <td class="flex"><button class="btn-sec btn-sm" onclick="show('edit-product', null)">Editar</button><button class="btn-danger btn-sm">Excluir</button></td>
-            </tr>
-            <tr>
-              <td>VPN 30 Dias</td><td>R$ 15,00</td><td>0</td>
-              <td><span class="badge badge-off">Inativo</span></td>
-              <td class="flex"><button class="btn-sec btn-sm" onclick="show('edit-product', null)">Editar</button><button class="btn-danger btn-sm">Excluir</button></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- TELA 5: ADICIONAR PRODUTO -->
-    <div id="add-product" class="page hidden">
-      <h3 style="margin-bottom:20px;">Adicionar Produto</h3>
-      <div class="card grid">
-        <input placeholder="Nome do Produto">
-        <textarea placeholder="Descrição" rows="4"></textarea>
-        <div class="grid grid-2" style="grid-template-columns:1fr 1fr;">
-          <input placeholder="Preço" type="number" step="0.01">
-          <input placeholder="Estoque" type="number">
-        </div>
-        <div class="grid grid-2" style="grid-template-columns:1fr 1fr;">
-          <select><option>Categoria</option><option>Streaming</option><option>VPN</option></select>
-          <select><option>Subcategoria</option><option>Netflix</option><option>Spotify</option></select>
-        </div>
-        <input placeholder="URL da Imagem">
-        <div class="flex">
-          <label class="flex"><div class="toggle active"></div> Produto Ativo</label>
-        </div>
-        <div class="flex"><button class="btn">Salvar Produto</button><button class="btn-sec" onclick="show('products', null)">Cancelar</button></div>
-      </div>
-    </div>
-
-    <!-- TELA 6: EDITAR PRODUTO -->
-    <div id="edit-product" class="page hidden">
-      <h3 style="margin-bottom:20px;">Editar Produto</h3>
-      <div class="card grid">
-        <input value="Netflix Premium 1 Mês">
-        <textarea rows="4">Conta premium individual, acesso por 30 dias</textarea>
-        <div class="grid grid-2" style="grid-template-columns:1fr 1fr;">
-          <input value="29.90" type="number" step="0.01">
-          <input value="50" type="number">
-        </div>
-        <div class="grid grid-2" style="grid-template-columns:1fr 1fr;">
-          <select><option>Streaming</option></select>
-          <select><option>Netflix</option></select>
-        </div>
-        <input value="https://imagem.com/netflix.jpg">
-        <div class="flex">
-          <label class="flex"><div class="toggle active"></div> Produto Ativo</label>
-        </div>
-        <div class="flex"><button class="btn">Salvar Alterações</button><button class="btn-sec" onclick="show('products', null)">Cancelar</button></div>
-      </div>
-    </div>
-
-    <!-- TELA 7-8: CATEGORIAS -->
-    <div id="categories" class="page hidden">
-      <div class="flex space-between" style="margin-bottom:20px;">
-        <h3>Categorias</h3>
-        <button class="btn" onclick="openModal('add-cat')">+ Nova Categoria</button>
-      </div>
-      <div class="card">
-        <table class="table">
-          <thead><tr><th>Nome</th><th>Produtos</th><th>Status</th><th>Ações</th></tr></thead>
-          <tr><td>Streaming</td><td>12</td><td><div class="toggle active"></div></td><td><button class="btn-sec btn-sm">Editar</button></td></tr>
-          <tr><td>VPN</td><td>8</td><td><div class="toggle"></div></td><td><button class="btn-sec btn-sm">Editar</button></td></tr>
-          <tr><td>Contas</td><td>22</td><td><div class="toggle active"></div></td><td><button class="btn-sec btn-sm">Editar</button></td></tr>
-        </table>
-      </div>
-    </div>
-
-    <!-- TELA 9-10: SUBCATEGORIAS -->
-    <div id="subcategories" class="page hidden">
-      <div class="flex space-between" style="margin-bottom:20px;">
-        <h3>Subcategorias</h3>
-        <button class="btn" onclick="openModal('add-subcat')">+ Nova Subcategoria</button>
-      </div>
-      <div class="card">
-        <table class="table">
-          <thead><tr><th>Nome</th><th>Categoria</th><th>Status</th><th>Ações</th></tr></thead>
-          <tr><td>Netflix</td><td>Streaming</td><td><div class="toggle active"></div></td><td><button class="btn-sec btn-sm">Editar</button></td></tr>
-          <tr><td>Spotify</td><td>Streaming</td><td><div class="toggle active"></div></td><td><button class="btn-sec btn-sm">Editar</button></td></tr>
-          <tr><td>NordVPN</td><td>VPN</td><td><div class="toggle"></div></td><td><button class="btn-sec btn-sm">Editar</button></td></tr>
-        </table>
-      </div>
-    </div>
-
-    <!-- TELA 11-12: PEDIDOS -->
-    <div id="orders" class="page hidden">
-      <h3 style="margin-bottom:20px;">Pedidos</h3>
-      <div class="card">
-        <table class="table">
-          <thead><tr><th>ID</th><th>Cliente</th><th>Produto</th><th>Valor</th><th>Data</th><th>Status</th><th>Ação</th></tr></thead>
-          <tbody>
-            <tr><td>#1023</td><td>João Silva</td><td>Netflix</td><td>R$ 29,90</td><td>04/10</td><td><span class="badge badge-on">Pago</span></td><td><button class="btn-sec btn-sm" onclick="show('order-detail', null)">Ver</button></td></tr>
-            <tr><td>#1022</td><td>Maria Souza</td><td>Spotify</td><td>R$ 19,90</td><td>04/10</td><td><span class="badge badge-pend">Pendente</span></td><td><button class="btn-sec btn-sm" onclick="show('order-detail', null)">Ver</button></td></tr>
-            <tr><td>#1021</td><td>Carlos Lima</td><td>VPN</td><td>R$ 15,00</td><td>03/10</td><td><span class="badge badge-off">Cancelado</span></td><td><button class="btn-sec btn-sm" onclick="show('order-detail', null)">Ver</button></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- TELA 13: DETALHES DO PEDIDO -->
-    <div id="order-detail" class="page hidden">
-      <h3 style="margin-bottom:20px;">Pedido #1023</h3>
-      <div class="grid grid-2" style="grid-template-columns:2fr 1fr;">
-        <div class="card grid">
-          <h4>Informações do Pedido</h4>
-          <p><b>Cliente:</b> João Silva</p>
-          <p><b>Email:</b> joao@email.com</p>
-          <p><b>Produto:</b> Netflix Premium 1 Mês</p>
-          <p><b>Valor:</b> R$ 29,90</p>
-          <p><b>Data:</b> 04/10/2026 14:30</p>
-          <p><b>Status:</b> <span class="badge badge-on">Pago</span></p>
-        </div>
-        <div class="card grid">
-          <h4>Ações</h4>
-          <button class="btn">Confirmar Pagamento</button>
-          <button class="btn-sec">Enviar Credenciais</button>
-          <button class="btn-danger">Cancelar Pedido</button>
-          <button class="btn-sec" onclick="show('orders', null)">Voltar</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- TELA 14-20: CONFIGURAÇÕES -->
-    <div id="settings" class="page hidden">
-      <div class="grid grid-2" style="grid-template-columns:1fr 1fr;">
-        <!-- CONFIG GERAIS -->
-        <div class="card grid">
-          <h4>CONFIGURAÇÕES GERAIS</h4>
-          <input placeholder="NOME DA LOJA" value="Prime Store">
-          <input placeholder="SLOGAN" value="Qualidade • Confiança • Segurança">
-          <div class="grid grid-2" style="grid-template-columns:1fr auto;">
-            <div class="logo-box"><b>PRIME STORE</b></div>
-            <button class="icon-btn">🗑️</button>
-          </div>
-          <div class="grid grid-2" style="grid-template-columns:1fr auto;">
-            <div class="logo-box"><span style="font-size:28px;">👑</span></div>
-            <button class="icon-btn">🗑️</button>
-          </div>
-          <input placeholder="E-MAIL DE SUPORTE" value="suporte@primestore.com">
-          <input placeholder="TELEFONE WHATSAPP" value="(98) 98485-3563">
-          <select><option>R$ - Real (BRL)</option><option>USD - Dólar</option></select>
-          <select><option>(GMT-03:00) Brasília</option></select>
-          <button class="btn">SALVAR ALTERAÇÕES</button>
-        </div>
-
-        <!-- APARÊNCIA -->
-        <div class="card grid">
-          <h4>APARÊNCIA</h4>
-          <div class="grid grid-2" style="grid-template-columns:auto 1fr;">
-            <div class="color-box" style="background:#8A28E2"></div><input value="#8A28E2">
-          </div>
-          <div class="grid grid-2" style="grid-template-columns:auto 1fr;">
-            <div class="color-box" style="background:#FF00FF"></div><input value="#FF00FF">
-          </div>
-          <div class="grid grid-2" style="grid-template-columns:auto 1fr;">
-            <div class="color-box" style="background:#000"></div><input value="#000">
-          </div>
-          <div class="grid grid-2" style="grid-template-columns:auto 1fr;">
-            <div class="color-box" style="background:#FFFFFF"></div><input value="#FFFFFF">
-          </div>
-          <select><option>Poppins</option><option>Roboto</option><option>Inter</option></select>
-          <div class="flex">
-            <label class="flex"><input type="radio" name="theme"> Claro</label>
-            <label class="flex"><input type="radio" name="theme" checked> Escuro</label>
-          </div>
-          <button class="btn">SALVAR ALTERAÇÕES</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- BOTÃO SUPORTE WHATSAPP -->
-    <a href="https://wa.me/5598984853563" target="_blank" 
-      style="position:fixed;bottom:20px;right:20px;background:var(--primary);color:white;padding:14px 20px;border-radius:50px;text-decoration:none;font-weight:600;box-shadow:0 4px 20px rgba(138,40,226,0.4);z-index:50;">
-      Suporte WhatsApp
-    </a>
   </div>
-</div>
 
-<!-- MODAL ADD CATEGORIA -->
-<div id="add-cat" class="modal hidden">
-  <div class="modal-content card">
-    <h4 style="margin-bottom:16px;">Nova Categoria</h4>
-    <div class="grid">
-      <input placeholder="Nome da Categoria">
-      <div class="flex">
-        <button class="btn">Salvar</button>
-        <button class="btn-sec" onclick="closeModal('add-cat')">Cancelar</button>
+  <!-- TELA 4: CARRINHO -->
+  <div id="cart" class="page hidden">
+    <div style="padding:20px;max-width:600px;margin:auto;">
+      <h3>Seu Carrinho</h3>
+      <div id="cart-items" class="grid" style="margin:20px 0;"></div>
+      <h3 id="cart-total"></h3>
+      <button class="btn" onclick="show('checkout')" style="margin-top:20px;width:100%;">Finalizar Compra</button>
+    </div>
+  </div>
+
+  <!-- TELA 5: CHECKOUT -->
+  <div id="checkout" class="page hidden">
+    <div style="padding:20px;max-width:600px;margin:auto;">
+      <h3>Finalizar Compra</h3>
+      <div class="card" style="margin:20px 0;">
+        <p><b>Chave PIX:</b> sua-chave-pix-aqui</p>
+        <p style="color:var(--text-sec);margin:12px 0;">Faça o PIX e envie o comprovante abaixo</p>
+        <input type="file" accept="image/*">
+        <button class="btn" onclick="show('support')" style="margin-top:12px;width:100%;">Enviar Comprovante</button>
       </div>
+    </div>
+  </div>
+
+  <!-- TELA 6: SUPORTE -->
+  <div id="support" class="page hidden">
+    <div style="padding:20px;max-width:600px;margin:auto;text-align:center;">
+      <h3>Compra em análise</h3>
+      <p style="color:var(--text-sec);margin:20px 0;">Em breve enviaremos suas credenciais no WhatsApp</p>
+      <a href="https://wa.me/5598984853563" class="btn" style="display:inline-block;text-decoration:none;">Falar no WhatsApp</a>
+      <button class="btn-sec" onclick="show('home')" style="margin-top:12px;">Voltar para Home</button>
     </div>
   </div>
 </div>
 
-<!-- MODAL ADD SUBCATEGORIA -->
-<div id="add-subcat" class="modal hidden">
-  <div class="modal-content card">
-    <h4 style="margin-bottom:16px;">Nova Subcategoria</h4>
-    <div class="grid">
-      <input placeholder="Nome da Subcategoria">
-      <select><option>Selecione a Categoria</option><option>Streaming</option><option>VPN</option></select>
-      <div class="flex">
-        <button class="btn">Salvar</button>
-        <button class="btn-sec" onclick="closeModal('add-subcat')">Cancelar</button>
+<!-- ADMIN -->
+<div id="admin" class="hidden">
+  <!-- TELA 7: LOGIN ADM -->
+  <div id="admin-login" class="page flex" style="justify-content:center;align-items:center;height:100vh;">
+    <div class="card" style="width:400px;">
+      <h2 style="text-align:center;margin-bottom:20px;">LOGIN ADMIN</h2>
+      <div class="grid">
+        <input type="email" value="admin@prime.com">
+        <input type="password" value="Lorrannyh.101225">
+        <button class="btn" onclick="loginAdmin()">Entrar</button>
+        <button class="btn-sec" onclick="show('home')">Voltar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAINEL ADM -->
+  <div id="admin-panel" class="hidden">
+    <div class="sidebar">
+      <h3>PRIME STORE</h3>
+      <a onclick="showAdmin('dashboard')">Dashboard</a>
+      <a onclick="showAdmin('adm-products')">Produtos</a>
+      <a onclick="showAdmin('adm-categories')">Categorias</a>
+      <a onclick="showAdmin('adm-orders')">Pedidos</a>
+      <a onclick="showAdmin('adm-settings')">Configurações</a>
+      <a onclick="logoutAdmin()">Sair</a>
+    </div>
+    <div class="main">
+      <!-- DASHBOARD -->
+      <div id="dashboard" class="adm-page">
+        <h2>Dashboard</h2>
+        <div class="grid" style="grid-template-columns:repeat(4,1fr);margin-top:20px;">
+          <div class="card"><p>Vendas</p><h2>R$ 1.240</h2></div>
+          <div class="card"><p>Pedidos</p><h2>18</h2></div>
+          <div class="card"><p>Produtos</p><h2>42</h2></div>
+          <div class="card"><p>Usuários</p><h2>156</h2></div>
+        </div>
+      </div>
+
+      <!-- PRODUTOS ADM -->
+      <div id="adm-products" class="adm-page hidden">
+        <div class="flex" style="justify-content:space-between;margin-bottom:20px;">
+          <h2>Produtos</h2>
+          <button class="btn" onclick="showAdmin('add-product')">+ Adicionar</button>
+        </div>
+        <div class="card">
+          <table style="width:100%;">
+            <tr><th>Produto</th><th>Preço</th><th>Status</th><th>Ações</th></tr>
+            <tr><td>Netflix Premium</td><td>R$ 29,90</td><td><div class="toggle active"></div></td><td><button class="btn-sec">Editar</button></td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- ADD PRODUTO -->
+      <div id="add-product" class="adm-page hidden">
+        <h2>Adicionar Produto</h2>
+        <div class="card grid" style="margin-top:20px;">
+          <input placeholder="Nome">
+          <textarea placeholder="Descrição"></textarea>
+          <input placeholder="Preço" type="number">
+          <div class="flex"><div class="toggle active"></div> Ativo</div>
+          <button class="btn">Salvar</button>
+        </div>
+      </div>
+
+      <!-- CATEGORIAS -->
+      <div id="adm-categories" class="adm-page hidden">
+        <h2>Categorias</h2>
+        <div class="card" style="margin-top:20px;">
+          <p>Streaming <button class="btn-sec">Editar</button></p>
+          <p>VPN <button class="btn-sec">Editar</button></p>
+        </div>
+      </div>
+
+      <!-- PEDIDOS -->
+      <div id="adm-orders" class="adm-page hidden">
+        <h2>Pedidos</h2>
+        <div class="card" style="margin-top:20px;">
+          <p>#1023 - João Silva - R$ 29,90 - <span class="badge">Pago</span></p>
+        </div>
+      </div>
+
+      <!-- CONFIGURAÇÕES -->
+      <div id="adm-settings" class="adm-page hidden">
+        <h2>Configurações</h2>
+        <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:20px;">
+          <div class="card grid">
+            <h4>Geral</h4>
+            <input value="Prime Store">
+            <input value="suporte@primestore.com">
+            <input value="(98) 98485-3563">
+            <button class="btn">Salvar</button>
+          </div>
+          <div class="card grid">
+            <h4>Aparência</h4>
+            <input value="#8A28E2">
+            <input value="#FF00FF">
+            <input value="#000">
+            <button class="btn">Salvar</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-function login(){
-  document.getElementById('login').classList.add('hidden');
-  document.getElementById('app').classList.remove('hidden');
-}
-function logout(){
-  document.getElementById('login').classList.remove('hidden');
-  document.getElementById('app').classList.add('hidden');
-}
-function show(page, el){
+let cart = [];
+let products = [
+  {id:1,name:'Netflix Premium',price:29.90,cat:'streaming',desc:'Conta premium 1 mês',img:'https://via.placeholder.com/400x200'},
+  {id:2,name:'Spotify Premium',price:19.90,cat:'streaming',desc:'Conta premium 1 mês',img:'https://via.placeholder.com/400x200'},
+  {id:3,name:'NordVPN',price:15.00,cat:'vpn',desc:'VPN 30 dias',img:'https://via.placeholder.com/400x200'}
+];
+
+function show(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
   document.getElementById(page).classList.remove('hidden');
-  if(el){
-    document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('active'));
-    el.classList.add('active');
-    document.getElementById('page-title').innerText = el.innerText;
-  }
-  if(window.innerWidth < 768) document.getElementById('sidebar').classList.remove('open');
+  if(page=='products') loadProducts();
+  if(page=='cart') loadCart();
 }
-function toggleMenu(){
-  document.getElementById('sidebar').classList.toggle('open');
+
+function showAdmin(page){
+  document.querySelectorAll('.adm-page').forEach(p=>p.classList.add('hidden'));
+  document.getElementById(page).classList.remove('hidden');
 }
-function openModal(id){
-  document.getElementById(id).classList.remove('hidden');
+
+function loadProducts(){
+  let html = products.map(p=>`
+    <div class="card product" onclick="openProduct(${p.id})">
+      <img src="${p.img}" style="width:100%;height:140px;object-fit:cover;border-radius:8px;">
+      <h4 style="margin-top:12px;">${p.name}</h4>
+      <p style="color:var(--primary);font-weight:600;">R$ ${p.price.toFixed(2)}</p>
+    </div>
+  `).join('');
+  document.getElementById('products-grid').innerHTML = html;
+  document.getElementById('products-list').innerHTML = html;
 }
-function closeModal(id){
-  document.getElementById(id).classList.add('hidden');
+
+function openProduct(id){
+  let p = products.find(x=>x.id==id);
+  document.getElementById('prod-name').innerText = p.name;
+  document.getElementById('prod-desc').innerText = p.desc;
+  document.getElementById('prod-price').innerText = 'R$ '+p.price.toFixed(2);
+  document.getElementById('prod-img').src = p.img;
+  show('product-detail');
 }
-document.querySelectorAll('.toggle').forEach(t=>{
-  t.onclick = ()=>t.classList.toggle('active');
-});
-document.getElementById('add-cat').onclick = (e)=>{if(e.target.id==='add-cat')closeModal('add-cat')}
-document.getElementById('add-subcat').onclick = (e)=>{if(e.target.id==='add-subcat')closeModal('add-subcat')}
+
+function addToCart(){
+  let name = document.getElementById('prod-name').innerText;
+  cart.push(name);
+  document.getElementById('cart-count').innerText = cart.length;
+  alert('Adicionado ao carrinho!');
+  show('cart');
+}
+
+function loadCart(){
+  let html = cart.map(i=>`<div class="card">${i}</div>`).join('');
+  document.getElementById('cart-items').innerHTML = html || '<p>Carrinho vazio</p>';
+  document.getElementById('cart-total').innerText = 'Total: R$ '+(cart.length*29.90).toFixed(2);
+}
+
+function filterCat(cat){
+  show('products');
+  // filtro simples, você pode melhorar
+}
+
+function searchProd(val){
+  // busca simples
+}
+
+function loginAdmin(){
+  document.getElementById('admin-login').classList.add('hidden');
+  document.getElementById('admin-panel').classList.remove('hidden');
+  showAdmin('dashboard');
+}
+
+function logoutAdmin(){
+  document.getElementById('admin-panel').classList.add('hidden');
+  document.getElementById('admin-login').classList.remove('hidden');
+}
+
+loadProducts();
 </script>
 </body>
 </html>
