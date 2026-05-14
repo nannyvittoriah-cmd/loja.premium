@@ -3,553 +3,400 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prime Store</title>
+<title>Prime Store - Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0a0f;
-    --card: #15151d;
-    --purple: #8b5cf6;
-    --purple-dark: #7c3aed;
-    --text: #ffffff;
-    --text-muted: #9ca3af;
-    --border: #2a2a35;
-    --green: #10b981;
-    --red: #ef4444;
-  }
-  
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-  
-  body {
-    font-family: system-ui, -apple-system, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-  }
-  
-  .screen {
-    display: none;
-    min-height: 100vh;
-    padding-bottom: 80px;
-  }
-  
-  .screen.active { display: block; }
-  
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-  
-  .logo { font-weight: 700; font-size: 18px; }
-  .logo span { color: var(--purple); }
-  
-  .icon-btn {
-    background: none;
-    border: none;
-    color: var(--text);
-    font-size: 24px;
-    cursor: pointer;
-  }
-  
-  .hero {
-    height: 280px;
-    background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-  
-  .hero h1 { font-size: 32px; font-weight: 800; }
-  
-  .section { padding: 20px 16px; }
-  
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
-  
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-  }
-  
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px 12px;
-    text-align: center;
-    cursor: pointer;
-  }
-  
-  .card-icon { font-size: 32px; margin-bottom: 8px; }
-  
-  .bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--card);
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content: space-around;
-    padding: 12px 0;
-  }
-  
-  .nav-item {
-    text-align: center;
-    color: var(--text-muted);
-    cursor: pointer;
-    font-size: 12px;
-  }
-  
-  .nav-item.active { color: var(--purple); }
-  
-  .nav-icon { font-size: 24px; display: block; margin-bottom: 4px; }
-  
-  .menu-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    z-index: 20;
-  }
-  
-  .menu-overlay.active { display: block; }
-  
-  .menu {
-    position: fixed;
-    left: -280px;
-    top: 0;
-    width: 280px;
-    height: 100vh;
-    background: var(--card);
-    transition: 0.3s;
-    padding: 20px;
-  }
-  
-  .menu.active { left: 0; }
-  
-  .menu-item {
-    padding: 16px 0;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  
-  .btn {
-    background: var(--purple);
-    color: white;
-    border: none;
-    padding: 14px;
-    border-radius: 8px;
-    width: 100%;
-    font-weight: 600;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 16px;
-  }
-  
-  .btn-green { background: var(--green); }
-  .btn-red { background: var(--red); }
-  
-  .input {
-    width: 100%;
-    padding: 12px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    margin-top: 8px;
-  }
-  
-  .list-item {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .status {
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-  }
-  
-  .status.pending { background: #f59e0b20; color: #f59e0b; }
-  .status.paid { background: #10b98120; color: #10b981; }
-  
-  .coming-soon {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--text-muted);
-  }
-  
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    padding: 16px;
-  }
+:root{
+  --bg:#000;
+  --card:#111;
+  --border:#2a2a2a;
+  --primary:#8A28E2;
+  --secondary:#FF00FF;
+  --text:#FFFFFF;
+  --text-sec:#a3a3a3;
+  --danger:#ff3b3b;
+  --success:#22c55e;
+  --warn:#f59e0b;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+.hidden{display:none !important;}
+input,select,textarea{background:var(--card);border:1px solid var(--border);color:var(--text);padding:12px;border-radius:8px;width:100%;outline:none;font-size:14px;}
+input:focus,select:focus,textarea:focus{border-color:var(--primary);}
+.btn{background:var(--primary);color:white;border:none;padding:12px 20px;border-radius:8px;font-weight:600;cursor:pointer;transition:0.2s;font-size:14px;}
+.btn:hover{filter:brightness(1.15);}
+.btn-sec{background:var(--card);border:1px solid var(--border);}
+.btn-danger{background:var(--danger);}
+.btn-sm{padding:8px 14px;font-size:13px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.grid{display:grid;gap:16px;}
+.flex{display:flex;gap:12px;align-items:center;}
+.space-between{justify-content:space-between;}
+.table{width:100%;border-collapse:collapse;font-size:14px;}
+.table th,.table td{padding:14px;text-align:left;border-bottom:1px solid var(--border);}
+.table th{color:var(--text-sec);font-weight:500;font-size:13px;}
+.badge{padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;display:inline-block;}
+.badge-on{background:var(--success);}
+.badge-off{background:var(--danger);}
+.badge-pend{background:var(--warn);}
+.toggle{width:44px;height:24px;background:var(--border);border-radius:12px;position:relative;cursor:pointer;transition:0.2s;}
+.toggle.active{background:var(--primary);}
+.toggle::after{content:'';width:18px;height:18px;background:white;border-radius:50%;position:absolute;top:3px;left:3px;transition:0.2s;}
+.toggle.active::after{left:23px;}
+.sidebar{width:240px;background:var(--card);border-right:1px solid var(--border);height:100vh;position:fixed;left:0;top:0;padding:20px;z-index:10;}
+.sidebar a{display:block;padding:12px;border-radius:8px;color:var(--text-sec);text-decoration:none;margin-bottom:6px;font-size:14px;transition:0.2s;cursor:pointer;}
+.sidebar a.active,.sidebar a:hover{background:var(--primary);color:white;}
+.main{margin-left:240px;padding:30px;min-height:100vh;}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;}
+.icon-btn{background:transparent;border:1px solid var(--border);padding:10px;border-radius:8px;cursor:pointer;color:var(--text);}
+.icon-btn:hover{border-color:var(--primary);}
+.logo-box{width:100%;height:80px;border:1px dashed var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--card);}
+.color-box{width:40px;height:40px;border-radius:6px;border:1px solid var(--border);}
+.stat-card{padding:20px;}
+.stat-card p{color:var(--text-sec);font-size:13px;margin-bottom:8px;}
+.stat-card h2{font-size:28px;font-weight:700;}
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:100;}
+.modal-content{width:500px;max-width:90%;max-height:90vh;overflow-y:auto;}
+.menu-btn{display:none;}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);transition:0.3s;}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0;padding:20px;}
+  .menu-btn{display:block;}
+  .grid-2{grid-template-columns:1fr !important;}
+}
 </style>
 </head>
 <body>
 
-<!-- MENU OVERLAY -->
-<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
-<div class="menu" id="menu">
-  <div class="menu-header" style="display:flex;justify-content:space-between;margin-bottom:30px;">
-    <h3>MENU</h3>
-    <button class="icon-btn" onclick="toggleMenu()">✕</button>
-  </div>
-  <div class="menu-item" onclick="showScreen('home')">🏠 Início</div>
-  <div class="menu-item" onclick="showScreen('loja')">🛍️ Loja</div>
-  <div class="menu-item" onclick="showScreen('categorias')">📂 Categorias</div>
-  <div class="menu-item" onclick="showScreen('pedidos')">📋 Pedidos</div>
-  <div class="menu-item" onclick="showScreen('suporte')">💬 Suporte</div>
-  <div class="menu-item" onclick="showScreen('admin')">⚙️ Painel Admin</div>
-</div>
-
-<!-- 1. HOME -->
-<div class="screen active" id="home">
-  <header>
-    <button class="icon-btn" onclick="toggleMenu()">☰</button>
-    <div class="logo">👑 <span>PRIME</span> STORE</div>
-    <div></div>
-  </header>
-  
-  <div class="hero">
-    <div>
-      <h1>PRIME STORE</h1>
-      <p>QUALIDADE • CONFIANÇA • SEGURANÇA</p>
-    </div>
-  </div>
-  
-  <div class="section">
-    <div class="section-header">
-      <div>CATEGORIAS</div>
-      <div style="color:var(--purple);cursor:pointer;">VER TODAS</div>
+<!-- TELA 1: LOGIN -->
+<div id="login" class="flex" style="justify-content:center;align-items:center;height:100vh;padding:20px;">
+  <div class="card" style="width:400px;">
+    <div style="text-align:center;margin-bottom:30px;">
+      <h2 style="font-size:28px;">PRIME STORE</h2>
+      <p style="color:var(--text-sec);margin-top:8px;">Painel Administrativo</p>
     </div>
     <div class="grid">
-      <div class="card"><div class="card-icon">💎</div><div>DIAMANTES</div></div>
-      <div class="card"><div class="card-icon">👤</div><div>CONTAS</div></div>
-      <div class="card"><div class="card-icon">⭐</div><div>PASSES</div></div>
+      <input type="email" placeholder="E-mail" id="email" value="admin@prime.com">
+      <input type="password" placeholder="Senha" id="password" value="123456">
+      <button class="btn" onclick="login()">Entrar</button>
     </div>
-  </div>
-  
-  <div class="section">
-    <div class="section-header">
-      <div>PRODUTOS EM DESTAQUE</div>
-    </div>
-    <div class="coming-soon">
-      <h3>Em breve</h3>
-    </div>
-  </div>
-  
-  <div class="bottom-nav">
-    <div class="nav-item active"><div class="nav-icon">🏠</div>INÍCIO</div>
-    <div class="nav-item" onclick="showScreen('loja')"><div class="nav-icon">🛍️</div>LOJA</div>
-    <div class="nav-item" onclick="showScreen('suporte')"><div class="nav-icon">💬</div>SUPORTE</div>
-    <div class="nav-item" onclick="showScreen('carrinho')"><div class="nav-icon">🛒</div>CARRINHO</div>
   </div>
 </div>
 
-<!-- 2. LOJA -->
-<div class="screen" id="loja">
-  <header>
-    <button class="icon-btn" onclick="showScreen('home')">←</button>
-    <div class="logo">LOJA</div>
-    <div></div>
-  </header>
+<!-- APP -->
+<div id="app" class="hidden">
+  <button class="menu-btn icon-btn" onclick="toggleMenu()" style="position:fixed;top:20px;left:20px;z-index:11;">☰</button>
   
-  <div style="padding:16px;">
-    <input class="input" placeholder="Buscar produtos..." style="margin-bottom:16px;">
-    <div class="list-item" onclick="showScreen('produto')">
-      <div>
-        <div style="font-weight:600;">110 DIAMANTES</div>
-        <div style="color:var(--text-muted);font-size:14px;">FREE FIRE</div>
-        <div style="color:var(--purple);margin-top:4px;">R$ 4,99</div>
-      </div>
-      <div style="font-size:24px;">🛒</div>
-    </div>
+  <div class="sidebar" id="sidebar">
+    <h3 style="margin-bottom:30px;">PRIME STORE</h3>
+    <a class="active" onclick="show('dashboard', this)">Dashboard</a>
+    <a onclick="show('products', this)">Produtos</a>
+    <a onclick="show('categories', this)">Categorias</a>
+    <a onclick="show('subcategories', this)">Subcategorias</a>
+    <a onclick="show('orders', this)">Pedidos</a>
+    <a onclick="show('settings', this)">Configurações</a>
   </div>
-  
-  <div class="bottom-nav">
-    <div class="nav-item" onclick="showScreen('home')"><div class="nav-icon">🏠</div>INÍCIO</div>
-    <div class="nav-item active"><div class="nav-icon">🛍️</div>LOJA</div>
-    <div class="nav-item" onclick="showScreen('suporte')"><div class="nav-icon">💬</div>SUPORTE</div>
-    <div class="nav-item" onclick="showScreen('carrinho')"><div class="nav-icon">🛒</div>CARRINHO</div>
-  </div>
-</div>
 
-<!-- 3. PRODUTO -->
-<div class="screen" id="produto">
-  <header>
-    <button class="icon-btn" onclick="showScreen('loja')">←</button>
-    <div class="logo">110 DIAMANTES</div>
-    <div></div>
-  </header>
-  
-  <div style="padding:20px;">
-    <div style="text-align:center;font-size:80px;margin:40px 0;">💎</div>
-    <h2>110 DIAMANTES</h2>
-    <p style="color:var(--text-muted);margin:8px 0;">FREE FIRE</p>
-    <h3 style="color:var(--purple);font-size:28px;margin:16px 0;">R$ 4,99</h3>
-    
-    <div style="margin:20px 0;">
-      <div style="color:var(--text-muted);margin-bottom:8px;">QUANTIDADE</div>
-      <div style="display:flex;gap:12px;align-items:center;">
-        <button class="btn" style="width:auto;padding:8px 16px;">-</button>
-        <span>1</span>
-        <button class="btn" style="width:auto;padding:8px 16px;">+</button>
+  <div class="main">
+    <div class="header">
+      <h2 id="page-title">Dashboard</h2>
+      <div class="flex">
+        <button class="icon-btn" onclick="logout()">Sair</button>
       </div>
     </div>
-    
-    <button class="btn" onclick="showScreen('carrinho')">🛒 COMPRAR AGORA</button>
-  </div>
-</div>
 
-<!-- 4. CARRINHO -->
-<div class="screen" id="carrinho">
-  <header>
-    <button class="icon-btn" onclick="showScreen('loja')">←</button>
-    <div class="logo">CARRINHO</div>
-    <div></div>
-  </header>
-  
-  <div style="padding:16px;">
-    <div class="list-item">
-      <div>
-        <div style="font-weight:600;">110 DIAMANTES</div>
-        <div style="color:var(--purple);">R$ 4,99</div>
+    <!-- TELA 2: DASHBOARD -->
+    <div id="dashboard" class="page">
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
+        <div class="card stat-card">
+          <p>Vendas Hoje</p>
+          <h2>R$ 1.240,00</h2>
+        </div>
+        <div class="card stat-card">
+          <p>Pedidos</p>
+          <h2>18</h2>
+        </div>
+        <div class="card stat-card">
+          <p>Produtos</p>
+          <h2>42</h2>
+        </div>
+        <div class="card stat-card">
+          <p>Usuários</p>
+          <h2>156</h2>
+        </div>
       </div>
-      <div>Qtd: 1</div>
-    </div>
-    
-    <div style="margin-top:30px;border-top:1px solid var(--border);padding-top:16px;">
-      <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
-        <span>TOTAL</span>
-        <span style="font-weight:700;font-size:20px;">R$ 4,99</span>
+      <div class="card" style="margin-top:20px;">
+        <h4 style="margin-bottom:16px;">Últimos Pedidos</h4>
+        <table class="table">
+          <tr><td>#1023</td><td>João Silva</td><td>Netflix</td><td>R$ 29,90</td><td><span class="badge badge-on">Pago</span></td></tr>
+          <tr><td>#1022</td><td>Maria Souza</td><td>Spotify</td><td>R$ 19,90</td><td><span class="badge badge-pend">Pendente</span></td></tr>
+        </table>
       </div>
-      <button class="btn" onclick="showScreen('pagamento')">FINALIZAR COMPRA →</button>
     </div>
-  </div>
-</div>
 
-<!-- 5. PAGAMENTO -->
-<div class="screen" id="pagamento">
-  <header>
-    <button class="icon-btn" onclick="showScreen('carrinho')">←</button>
-    <div class="logo">PAGAMENTO</div>
-    <div></div>
-  </header>
-  
-  <div style="padding:20px;">
-    <div style="background:var(--card);padding:20px;border-radius:12px;text-align:center;">
-      <p style="color:var(--text-muted);">Realize o pagamento via PIX e envie o comprovante no WhatsApp</p>
-      <div style="margin:20px 0;font-weight:700;font-size:20px;">VALOR: R$ 4,99</div>
-      <button class="btn" onclick="showScreen('comprovante')">ENVIAR COMPROVANTE</button>
-    </div>
-  </div>
-</div>
-
-<!-- 6. COMPROVANTE -->
-<div class="screen" id="comprovante">
-  <header>
-    <button class="icon-btn" onclick="showScreen('pagamento')">←</button>
-    <div class="logo">COMPROVANTE</div>
-    <div></div>
-  </header>
-  
-  <div style="padding:20px;text-align:center;">
-    <h3>Envie seu comprovante</h3>
-    <button class="btn" onclick="openWhatsApp()">💬 ABRIR WHATSAPP</button>
-  </div>
-</div>
-
-<!-- 7. SUPORTE -->
-<div class="screen" id="suporte">
-  <header>
-    <button class="icon-btn" onclick="showScreen('home')">←</button>
-    <div class="logo">SUPORTE</div>
-    <div></div>
-  </header>
-  
-  <div style="padding:20px;">
-    <div style="background:var(--card);padding:24px;border-radius:12px;text-align:center;">
-      <h3>Nos chame no WhatsApp</h3>
-      <p style="color:var(--text-muted);margin:12px 0;">Para dúvidas ou enviar comprovante</p>
-      <button class="btn" onclick="openWhatsApp()">💬 ABRIR WHATSAPP</button>
-    </div>
-  </div>
-</div>
-
-<!-- 8. ADMIN DASHBOARD -->
-<div class="screen" id="admin">
-  <header>
-    <button class="icon-btn" onclick="showScreen('home')">←</button>
-    <div class="logo">PAINEL ADMIN</div>
-    <div></div>
-  </header>
-  
-  <div class="cards-grid">
-    <div class="card" onclick="showScreen('admin-produtos')">
-      <div class="card-icon">📦</div>
-      <div>Produtos</div>
-      <div style="font-size:24px;font-weight:700;margin-top:8px;">128</div>
-    </div>
-    <div class="card" onclick="showScreen('admin-pedidos')">
-      <div class="card-icon">📋</div>
-      <div>Pedidos</div>
-      <div style="font-size:24px;font-weight:700;margin-top:8px;">15</div>
-    </div>
-    <div class="card" onclick="showScreen('admin-usuarios')">
-      <div class="card-icon">👥</div>
-      <div>Usuários</div>
-      <div style="font-size:24px;font-weight:700;margin-top:8px;">124</div>
-    </div>
-    <div class="card">
-      <div class="card-icon">💰</div>
-      <div>Receita</div>
-      <div style="font-size:24px;font-weight:700;margin-top:8px;">R$ 1.278</div>
-    </div>
-  </div>
-  
-  <div style="padding:16px;">
-    <div class="menu-item" onclick="showScreen('admin-produtos')">📦 Produtos</div>
-    <div class="menu-item" onclick="showScreen('admin-categorias')">📂 Categorias</div>
-    <div class="menu-item" onclick="showScreen('admin-cupons')">🎟️ Cupons</div>
-    <div class="menu-item" onclick="showScreen('admin-banner')">🖼️ Slider/Banners</div>
-    <div class="menu-item" onclick="showScreen('admin-config')">⚙️ Configurações</div>
-    <div class="menu-item" onclick="showScreen('admin-relatorios')">📊 Relatórios</div>
-    <div class="menu-item" onclick="showScreen('admin-suporte')">💬 Suporte</div>
-    <div class="menu-item" onclick="showScreen('admin-sistema')">📋 Logs do Sistema</div>
-    <div class="menu-item" onclick="showScreen('home')">🚪 Sair</div>
-  </div>
-</div>
-
-<!-- 9. ADMIN PRODUTOS -->
-<div class="screen" id="admin-produtos">
-  <header>
-    <button class="icon-btn" onclick="showScreen('admin')">←</button>
-    <div class="logo">PRODUTOS</div>
-    <button class="btn" style="width:auto;padding:8px 16px;" onclick="showScreen('admin-add-produto')">+ ADICIONAR</button>
-  </header>
-  
-  <div style="padding:16px;">
-    <div class="list-item">
-      <div>
-        <div>110 Diamantes</div>
-        <div style="color:var(--text-muted);font-size:14px;">R$ 4,99</div>
+    <!-- TELA 3-4: PRODUTOS + LISTA -->
+    <div id="products" class="page hidden">
+      <div class="flex space-between" style="margin-bottom:20px;">
+        <h3>Produtos</h3>
+        <button class="btn" onclick="show('add-product', null)">+ Adicionar</button>
       </div>
-      <div style="color:var(--green);">● Ativo</div>
+      <div class="card">
+        <table class="table">
+          <thead><tr><th>Produto</th><th>Preço</th><th>Estoque</th><th>Status</th><th>Ações</th></tr></thead>
+          <tbody id="products-list">
+            <tr>
+              <td>Netflix Premium 1 Mês</td><td>R$ 29,90</td><td>50</td>
+              <td><span class="badge badge-on">Ativo</span></td>
+              <td class="flex"><button class="btn-sec btn-sm" onclick="show('edit-product', null)">Editar</button><button class="btn-danger btn-sm">Excluir</button></td>
+            </tr>
+            <tr>
+              <td>Spotify Premium 1 Mês</td><td>R$ 19,90</td><td>32</td>
+              <td><span class="badge badge-on">Ativo</span></td>
+              <td class="flex"><button class="btn-sec btn-sm" onclick="show('edit-product', null)">Editar</button><button class="btn-danger btn-sm">Excluir</button></td>
+            </tr>
+            <tr>
+              <td>VPN 30 Dias</td><td>R$ 15,00</td><td>0</td>
+              <td><span class="badge badge-off">Inativo</span></td>
+              <td class="flex"><button class="btn-sec btn-sm" onclick="show('edit-product', null)">Editar</button><button class="btn-danger btn-sm">Excluir</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TELA 5: ADICIONAR PRODUTO -->
+    <div id="add-product" class="page hidden">
+      <h3 style="margin-bottom:20px;">Adicionar Produto</h3>
+      <div class="card grid">
+        <input placeholder="Nome do Produto">
+        <textarea placeholder="Descrição" rows="4"></textarea>
+        <div class="grid grid-2" style="grid-template-columns:1fr 1fr;">
+          <input placeholder="Preço" type="number" step="0.01">
+          <input placeholder="Estoque" type="number">
+        </div>
+        <div class="grid grid-2" style="grid-template-columns:1fr 1fr;">
+          <select><option>Categoria</option><option>Streaming</option><option>VPN</option></select>
+          <select><option>Subcategoria</option><option>Netflix</option><option>Spotify</option></select>
+        </div>
+        <input placeholder="URL da Imagem">
+        <div class="flex">
+          <label class="flex"><div class="toggle active"></div> Produto Ativo</label>
+        </div>
+        <div class="flex"><button class="btn">Salvar Produto</button><button class="btn-sec" onclick="show('products', null)">Cancelar</button></div>
+      </div>
+    </div>
+
+    <!-- TELA 6: EDITAR PRODUTO -->
+    <div id="edit-product" class="page hidden">
+      <h3 style="margin-bottom:20px;">Editar Produto</h3>
+      <div class="card grid">
+        <input value="Netflix Premium 1 Mês">
+        <textarea rows="4">Conta premium individual, acesso por 30 dias</textarea>
+        <div class="grid grid-2" style="grid-template-columns:1fr 1fr;">
+          <input value="29.90" type="number" step="0.01">
+          <input value="50" type="number">
+        </div>
+        <div class="grid grid-2" style="grid-template-columns:1fr 1fr;">
+          <select><option>Streaming</option></select>
+          <select><option>Netflix</option></select>
+        </div>
+        <input value="https://imagem.com/netflix.jpg">
+        <div class="flex">
+          <label class="flex"><div class="toggle active"></div> Produto Ativo</label>
+        </div>
+        <div class="flex"><button class="btn">Salvar Alterações</button><button class="btn-sec" onclick="show('products', null)">Cancelar</button></div>
+      </div>
+    </div>
+
+    <!-- TELA 7-8: CATEGORIAS -->
+    <div id="categories" class="page hidden">
+      <div class="flex space-between" style="margin-bottom:20px;">
+        <h3>Categorias</h3>
+        <button class="btn" onclick="openModal('add-cat')">+ Nova Categoria</button>
+      </div>
+      <div class="card">
+        <table class="table">
+          <thead><tr><th>Nome</th><th>Produtos</th><th>Status</th><th>Ações</th></tr></thead>
+          <tr><td>Streaming</td><td>12</td><td><div class="toggle active"></div></td><td><button class="btn-sec btn-sm">Editar</button></td></tr>
+          <tr><td>VPN</td><td>8</td><td><div class="toggle"></div></td><td><button class="btn-sec btn-sm">Editar</button></td></tr>
+          <tr><td>Contas</td><td>22</td><td><div class="toggle active"></div></td><td><button class="btn-sec btn-sm">Editar</button></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- TELA 9-10: SUBCATEGORIAS -->
+    <div id="subcategories" class="page hidden">
+      <div class="flex space-between" style="margin-bottom:20px;">
+        <h3>Subcategorias</h3>
+        <button class="btn" onclick="openModal('add-subcat')">+ Nova Subcategoria</button>
+      </div>
+      <div class="card">
+        <table class="table">
+          <thead><tr><th>Nome</th><th>Categoria</th><th>Status</th><th>Ações</th></tr></thead>
+          <tr><td>Netflix</td><td>Streaming</td><td><div class="toggle active"></div></td><td><button class="btn-sec btn-sm">Editar</button></td></tr>
+          <tr><td>Spotify</td><td>Streaming</td><td><div class="toggle active"></div></td><td><button class="btn-sec btn-sm">Editar</button></td></tr>
+          <tr><td>NordVPN</td><td>VPN</td><td><div class="toggle"></div></td><td><button class="btn-sec btn-sm">Editar</button></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- TELA 11-12: PEDIDOS -->
+    <div id="orders" class="page hidden">
+      <h3 style="margin-bottom:20px;">Pedidos</h3>
+      <div class="card">
+        <table class="table">
+          <thead><tr><th>ID</th><th>Cliente</th><th>Produto</th><th>Valor</th><th>Data</th><th>Status</th><th>Ação</th></tr></thead>
+          <tbody>
+            <tr><td>#1023</td><td>João Silva</td><td>Netflix</td><td>R$ 29,90</td><td>04/10</td><td><span class="badge badge-on">Pago</span></td><td><button class="btn-sec btn-sm" onclick="show('order-detail', null)">Ver</button></td></tr>
+            <tr><td>#1022</td><td>Maria Souza</td><td>Spotify</td><td>R$ 19,90</td><td>04/10</td><td><span class="badge badge-pend">Pendente</span></td><td><button class="btn-sec btn-sm" onclick="show('order-detail', null)">Ver</button></td></tr>
+            <tr><td>#1021</td><td>Carlos Lima</td><td>VPN</td><td>R$ 15,00</td><td>03/10</td><td><span class="badge badge-off">Cancelado</span></td><td><button class="btn-sec btn-sm" onclick="show('order-detail', null)">Ver</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TELA 13: DETALHES DO PEDIDO -->
+    <div id="order-detail" class="page hidden">
+      <h3 style="margin-bottom:20px;">Pedido #1023</h3>
+      <div class="grid grid-2" style="grid-template-columns:2fr 1fr;">
+        <div class="card grid">
+          <h4>Informações do Pedido</h4>
+          <p><b>Cliente:</b> João Silva</p>
+          <p><b>Email:</b> joao@email.com</p>
+          <p><b>Produto:</b> Netflix Premium 1 Mês</p>
+          <p><b>Valor:</b> R$ 29,90</p>
+          <p><b>Data:</b> 04/10/2026 14:30</p>
+          <p><b>Status:</b> <span class="badge badge-on">Pago</span></p>
+        </div>
+        <div class="card grid">
+          <h4>Ações</h4>
+          <button class="btn">Confirmar Pagamento</button>
+          <button class="btn-sec">Enviar Credenciais</button>
+          <button class="btn-danger">Cancelar Pedido</button>
+          <button class="btn-sec" onclick="show('orders', null)">Voltar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TELA 14-20: CONFIGURAÇÕES -->
+    <div id="settings" class="page hidden">
+      <div class="grid grid-2" style="grid-template-columns:1fr 1fr;">
+        <!-- CONFIG GERAIS -->
+        <div class="card grid">
+          <h4>CONFIGURAÇÕES GERAIS</h4>
+          <input placeholder="NOME DA LOJA" value="Prime Store">
+          <input placeholder="SLOGAN" value="Qualidade • Confiança • Segurança">
+          <div class="grid grid-2" style="grid-template-columns:1fr auto;">
+            <div class="logo-box"><b>PRIME STORE</b></div>
+            <button class="icon-btn">🗑️</button>
+          </div>
+          <div class="grid grid-2" style="grid-template-columns:1fr auto;">
+            <div class="logo-box"><span style="font-size:28px;">👑</span></div>
+            <button class="icon-btn">🗑️</button>
+          </div>
+          <input placeholder="E-MAIL DE SUPORTE" value="suporte@primestore.com">
+          <input placeholder="TELEFONE WHATSAPP" value="(98) 98485-3563">
+          <select><option>R$ - Real (BRL)</option><option>USD - Dólar</option></select>
+          <select><option>(GMT-03:00) Brasília</option></select>
+          <button class="btn">SALVAR ALTERAÇÕES</button>
+        </div>
+
+        <!-- APARÊNCIA -->
+        <div class="card grid">
+          <h4>APARÊNCIA</h4>
+          <div class="grid grid-2" style="grid-template-columns:auto 1fr;">
+            <div class="color-box" style="background:#8A28E2"></div><input value="#8A28E2">
+          </div>
+          <div class="grid grid-2" style="grid-template-columns:auto 1fr;">
+            <div class="color-box" style="background:#FF00FF"></div><input value="#FF00FF">
+          </div>
+          <div class="grid grid-2" style="grid-template-columns:auto 1fr;">
+            <div class="color-box" style="background:#000"></div><input value="#000">
+          </div>
+          <div class="grid grid-2" style="grid-template-columns:auto 1fr;">
+            <div class="color-box" style="background:#FFFFFF"></div><input value="#FFFFFF">
+          </div>
+          <select><option>Poppins</option><option>Roboto</option><option>Inter</option></select>
+          <div class="flex">
+            <label class="flex"><input type="radio" name="theme"> Claro</label>
+            <label class="flex"><input type="radio" name="theme" checked> Escuro</label>
+          </div>
+          <button class="btn">SALVAR ALTERAÇÕES</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTÃO SUPORTE WHATSAPP -->
+    <a href="https://wa.me/5598984853563" target="_blank" 
+      style="position:fixed;bottom:20px;right:20px;background:var(--primary);color:white;padding:14px 20px;border-radius:50px;text-decoration:none;font-weight:600;box-shadow:0 4px 20px rgba(138,40,226,0.4);z-index:50;">
+      Suporte WhatsApp
+    </a>
+  </div>
+</div>
+
+<!-- MODAL ADD CATEGORIA -->
+<div id="add-cat" class="modal hidden">
+  <div class="modal-content card">
+    <h4 style="margin-bottom:16px;">Nova Categoria</h4>
+    <div class="grid">
+      <input placeholder="Nome da Categoria">
+      <div class="flex">
+        <button class="btn">Salvar</button>
+        <button class="btn-sec" onclick="closeModal('add-cat')">Cancelar</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- 10. ADMIN ADD PRODUTO -->
-<div class="screen" id="admin-add-produto">
-  <header>
-    <button class="icon-btn" onclick="showScreen('admin-produtos')">←</button>
-    <div class="logo">ADICIONAR PRODUTO</div>
-    <div></div>
-  </header>
-  
-  <div style="padding:20px;">
-    <div style="margin-bottom:16px;">
-      <label>Nome do Produto</label>
-      <input class="input" placeholder="Ex: 110 Diamantes">
+<!-- MODAL ADD SUBCATEGORIA -->
+<div id="add-subcat" class="modal hidden">
+  <div class="modal-content card">
+    <h4 style="margin-bottom:16px;">Nova Subcategoria</h4>
+    <div class="grid">
+      <input placeholder="Nome da Subcategoria">
+      <select><option>Selecione a Categoria</option><option>Streaming</option><option>VPN</option></select>
+      <div class="flex">
+        <button class="btn">Salvar</button>
+        <button class="btn-sec" onclick="closeModal('add-subcat')">Cancelar</button>
+      </div>
     </div>
-    <div style="margin-bottom:16px;">
-      <label>Preço</label>
-      <input class="input" placeholder="R$ 0,00">
-    </div>
-    <div style="margin-bottom:16px;">
-      <label>Descrição</label>
-      <textarea class="input" rows="4"></textarea>
-    </div>
-    <button class="btn">SALVAR PRODUTO</button>
   </div>
-</div>
-
-<!-- OUTRAS TELAS ADMIN - Estrutura pronta -->
-<div class="screen" id="admin-categorias">
-  <header><button class="icon-btn" onclick="showScreen('admin')">←</button><div class="logo">CATEGORIAS</div><button class="btn" style="width:auto;padding:8px 16px;">+ ADICIONAR</button></header>
-  <div class="coming-soon"><h3>Gerenciar Categorias</h3></div>
-</div>
-
-<div class="screen" id="admin-pedidos">
-  <header><button class="icon-btn" onclick="showScreen('admin')">←</button><div class="logo">PEDIDOS</div><div></div></header>
-  <div class="coming-soon"><h3>Lista de Pedidos</h3></div>
-</div>
-
-<div class="screen" id="admin-usuarios">
-  <header><button class="icon-btn" onclick="showScreen('admin')">←</button><div class="logo">USUÁRIOS</div><div></div></header>
-  <div class="coming-soon"><h3>Usuários Cadastrados</h3></div>
-</div>
-
-<div class="screen" id="admin-cupons">
-  <header><button class="icon-btn" onclick="showScreen('admin')">←</button><div class="logo">CUPONS</div><button class="btn" style="width:auto;padding:8px 16px;">+ ADICIONAR</button></header>
-  <div class="coming-soon"><h3>Gerenciar Cupons</h3></div>
-</div>
-
-<div class="screen" id="admin-banner">
-  <header><button class="icon-btn" onclick="showScreen('admin')">←</button><div class="logo">BANNERS</div><button class="btn" style="width:auto;padding:8px 16px;">+ ADICIONAR</button></header>
-  <div class="coming-soon"><h3>Gerenciar Banners</h3></div>
-</div>
-
-<div class="screen" id="admin-config">
-  <header><button class="icon-btn" onclick="showScreen('admin')">←</button><div class="logo">CONFIGURAÇÕES</div><div></div></header>
-  <div class="coming-soon"><h3>Configurações Gerais</h3></div>
-</div>
-
-<div class="screen" id="admin-relatorios">
-  <header><button class="icon-btn" onclick="showScreen('admin')">←</button><div class="logo">RELATÓRIOS</div><div></div></header>
-  <div class="coming-soon"><h3>Relatórios de Vendas</h3></div>
-</div>
-
-<div class="screen" id="admin-suporte">
-  <header><button class="icon-btn" onclick="showScreen('admin')">←</button><div class="logo">SUPORTE</div><div></div></header>
-  <div class="coming-soon"><h3>Mensagens de Suporte</h3></div>
-</div>
-
-<div class="screen" id="admin-sistema">
-  <header><button class="icon-btn" onclick="showScreen('admin')">←</button><div class="logo">SISTEMA</div><div></div></header>
-  <div class="coming-soon"><h3>Logs do Sistema</h3></div>
 </div>
 
 <script>
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  toggleMenu();
-  window.scrollTo(0, 0);
+function login(){
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
 }
-
-function toggleMenu() {
-  document.getElementById('menu').classList.toggle('active');
-  document.getElementById('menuOverlay').classList.toggle('active');
+function logout(){
+  document.getElementById('login').classList.remove('hidden');
+  document.getElementById('app').classList.add('hidden');
 }
-
-function openWhatsApp() {
-  window.open('https://wa.me/5598984853563', '_blank');
+function show(page, el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
+  document.getElementById(page).classList.remove('hidden');
+  if(el){
+    document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('page-title').innerText = el.innerText;
+  }
+  if(window.innerWidth < 768) document.getElementById('sidebar').classList.remove('open');
 }
+function toggleMenu(){
+  document.getElementById('sidebar').classList.toggle('open');
+}
+function openModal(id){
+  document.getElementById(id).classList.remove('hidden');
+}
+function closeModal(id){
+  document.getElementById(id).classList.add('hidden');
+}
+document.querySelectorAll('.toggle').forEach(t=>{
+  t.onclick = ()=>t.classList.toggle('active');
+});
+document.getElementById('add-cat').onclick = (e)=>{if(e.target.id==='add-cat')closeModal('add-cat')}
+document.getElementById('add-subcat').onclick = (e)=>{if(e.target.id==='add-subcat')closeModal('add-subcat')}
 </script>
-
 </body>
 </html>
