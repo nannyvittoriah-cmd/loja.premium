@@ -1,685 +1,886 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Prime Store</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&display=swap');
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Poppins',sans-serif;
-}
+  :root{
+    --bg:#000;
+    --card:#121212;
+    --purple:#8b5cf6;
+    --purple-light:#a78bfa;
+    --text:#fff;
+    --text-dim:#9ca3af;
+    --border:#1f1f1f;
+    --danger:#ef4444;
+    --success:#22c55e;
+  }
 
-body{
-background:#050505;
-color:#fff;
-overflow-x:hidden;
-padding-bottom:90px;
-}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{
+    font-family:'Montserrat',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    padding-bottom:70px;
+  }
 
-:root{
---purple:#a855f7;
---purple2:#c084fc;
---bg:#0a0a0a;
---card:#101010;
---border:#7e22ce;
-}
+  header{
+    position:sticky;top:0;z-index:100;
+    background:var(--bg);
+    padding:14px 16px;
+    display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid var(--border);
+  }
+.logo{text-align:center}
+.logo-text{font-weight:900;font-size:16px}
+.logo-text span{color:var(--purple)}
+.logo-sub{font-size:9px;color:var(--purple);letter-spacing:2px}
 
-::-webkit-scrollbar{
-width:0;
-}
+.page{display:none}
+.page.active{display:block}
 
-header{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:70px;
-background:rgba(0,0,0,.95);
-backdrop-filter:blur(10px);
-border-bottom:1px solid #3b0764;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 18px;
-z-index:999;
-}
+/* Sidebar */
+.sidebar{
+    position:fixed;top:0;left:-100%;width:80%;max-width:280px;height:100%;
+    background:var(--card);z-index:200;transition:0.3s;padding:20px;
+    border-right:1px solid var(--border);
+  }
+.sidebar.active{left:0}
+.sidebar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
+.sidebar-item{
+    display:flex;align-items:center;gap:12px;padding:12px;
+    border-radius:8px;color:var(--text-dim);cursor:pointer;
+    margin-bottom:8px;
+  }
+.sidebar-item:active{background:var(--bg)}
+.sidebar-item svg{width:20px;height:20px}
+.overlay{
+    position:fixed;top:0;left:0;width:100%;height:100%;
+    background:rgba(0,0,0,0.7);z-index:199;display:none;
+  }
+.overlay.active{display:block}
 
-.logo{
-font-size:28px;
-font-weight:800;
-color:#fff;
-letter-spacing:1px;
-}
-
-.logo span{
-color:var(--purple2);
-}
-
-.top-icons{
-display:flex;
-gap:18px;
-font-size:22px;
-color:#d8b4fe;
-}
-
-.menu{
-position:fixed;
-top:0;
-left:-100%;
-width:78%;
-height:100%;
-background:#070707;
-border-right:1px solid var(--border);
-z-index:99999;
-padding:25px;
-transition:.4s;
-overflow:auto;
-}
-
-.menu.active{
-left:0;
-}
-
-.menu-top{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:35px;
-}
-
-.menu-top h2{
-color:#d8b4fe;
-font-size:25px;
-}
-
-.close{
-font-size:26px;
-color:#c084fc;
-}
-
-.menu a{
-display:flex;
-align-items:center;
-gap:14px;
-padding:16px;
-margin-bottom:10px;
-background:#0d0d0d;
-border:1px solid #2a0c42;
-text-decoration:none;
-color:#fff;
-font-size:15px;
-}
-
-.banner{
-margin:90px 15px 20px;
-border:1px solid var(--border);
-overflow:hidden;
-background:#0b0b0b;
-box-shadow:0 0 25px #6d28d933;
-}
-
-.banner img{
-width:100%;
-display:block;
-}
-
-.search{
-padding:0 15px;
-margin-bottom:18px;
-}
-
-.search input{
-width:100%;
-height:52px;
-background:#101010;
-border:1px solid #3b0764;
-padding:0 15px;
-color:#fff;
-outline:none;
-font-size:15px;
-}
-
-.section-title{
-padding:0 15px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:14px;
-}
-
-.section-title h2{
-font-size:18px;
-}
-
-.section-title span{
-color:#c084fc;
-font-size:13px;
-}
-
-.categories{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px;
-padding:0 15px;
-margin-bottom:28px;
-}
-
-.cat{
-background:#0d0d0d;
-border:1px solid #3b0764;
-padding:18px 8px;
-text-align:center;
-box-shadow:0 0 12px #6d28d91f;
-}
-
-.cat i{
-display:block;
-font-style:normal;
-font-size:28px;
-margin-bottom:10px;
-color:#d8b4fe;
-}
-
-.cat p{
-font-size:12px;
-}
-
-.products{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-padding:0 15px;
-}
-
-.product{
-background:#0d0d0d;
-border:1px solid #3b0764;
-overflow:hidden;
-box-shadow:0 0 15px #6d28d922;
-}
-
-.product img{
-width:100%;
-height:130px;
-object-fit:cover;
-}
-
-.product-content{
-padding:12px;
-}
-
-.product-title{
-font-size:14px;
-margin-bottom:8px;
-min-height:38px;
-}
-
-.product-price{
-font-size:20px;
-font-weight:700;
-color:#d8b4fe;
-margin-bottom:12px;
-}
-
-.buy-btn{
-width:100%;
-height:44px;
-border:none;
-background:linear-gradient(90deg,#9333ea,#c084fc);
-color:#fff;
-font-weight:700;
-font-size:14px;
-}
-
-.support{
-margin:25px 15px;
-background:#0d0d0d;
-border:1px solid #3b0764;
-padding:18px;
-}
-
-.support h2{
-margin-bottom:12px;
-color:#d8b4fe;
-}
-
-.support p{
-font-size:14px;
-color:#aaa;
-margin-bottom:18px;
-line-height:1.6;
-}
-
-.support button{
-width:100%;
-height:50px;
-background:linear-gradient(90deg,#9333ea,#c084fc);
-border:none;
-color:#fff;
-font-weight:700;
-font-size:15px;
-}
-
-.admin{
-margin:25px 15px;
-background:#0d0d0d;
-border:1px solid #3b0764;
-padding:18px;
-}
-
-.admin h2{
-margin-bottom:18px;
-color:#d8b4fe;
-}
-
-.admin-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-}
-
-.admin-card{
-background:#080808;
-border:1px solid #3b0764;
-padding:18px 10px;
-text-align:center;
-}
-
-.admin-card h3{
-font-size:22px;
-color:#d8b4fe;
-margin-bottom:6px;
-}
-
-.admin-card p{
-font-size:12px;
-color:#999;
-}
-
-.bottom-nav{
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-height:72px;
-background:rgba(0,0,0,.96);
-backdrop-filter:blur(12px);
-border-top:1px solid #3b0764;
-display:flex;
-justify-content:space-around;
-align-items:center;
-z-index:999;
-}
-
-.nav-item{
-text-align:center;
-font-size:11px;
-color:#d8b4fe;
-}
-
-.nav-item i{
-display:block;
-font-style:normal;
-font-size:22px;
-margin-bottom:4px;
-}
-
-.footer{
-padding:30px 20px 120px;
-text-align:center;
-color:#777;
-font-size:13px;
-}
-
-.login-screen{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:#050505;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:20px;
-z-index:999999;
-display:none;
-}
-
+  /* Login Admin */
+.login-container{
+    min-height:100vh;display:flex;align-items:center;justify-content:center;
+    padding:20px;
+  }
 .login-box{
-width:100%;
-background:#0d0d0d;
-border:1px solid #3b0764;
-padding:25px;
-}
-
-.login-box h1{
-text-align:center;
-margin-bottom:25px;
-color:#d8b4fe;
-}
-
-.input{
-width:100%;
-height:50px;
-background:#080808;
-border:1px solid #3b0764;
-padding:0 15px;
-color:#fff;
-margin-bottom:14px;
-outline:none;
-}
-
+    width:100%;max-width:380px;background:var(--card);
+    border:1px solid var(--border);border-radius:16px;padding:30px;
+    text-align:center;
+  }
+.login-icon{
+    width:60px;height:60px;margin:0 auto 20px;
+    background:rgba(139,92,246,0.1);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+  }
+.login-icon svg{width:30px;height:30px;color:var(--purple)}
+.login-box h2{font-size:20px;font-weight:800;margin-bottom:8px}
+.login-box p{font-size:12px;color:var(--text-dim);margin-bottom:24px}
+.input-group{text-align:left;margin-bottom:16px}
+.input-group label{font-size:12px;color:var(--text-dim);display:block;margin-bottom:6px}
+.input-group input{
+    width:100%;padding:12px;background:var(--bg);
+    border:1px solid var(--border);border-radius:8px;
+    color:var(--text);font-size:14px;outline:none;
+  }
+.input-group input:focus{border-color:var(--purple)}
+.password-wrapper{position:relative}
+.password-toggle{
+    position:absolute;right:12px;top:50%;transform:translateY(-50%);
+    cursor:pointer;color:var(--text-dim);
+  }
 .login-btn{
-width:100%;
-height:50px;
-background:linear-gradient(90deg,#9333ea,#c084fc);
-border:none;
-color:#fff;
-font-weight:700;
-}
+    width:100%;background:var(--purple);color:#fff;
+    border:none;padding:14px;border-radius:8px;
+    font-size:14px;font-weight:800;cursor:pointer;margin-top:8px;
+  }
+.login-footer{margin-top:20px;font-size:11px;color:var(--text-dim)}
+.error-msg{color:var(--danger);font-size:12px;margin-top:8px;display:none}
 
+  /* Admin Dashboard */
+.admin-header{
+    padding:16px;display:flex;justify-content:space-between;align-items:center;
+    border-bottom:1px solid var(--border);
+  }
+.stats-grid{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:12px;
+    padding:16px;
+  }
+.stat-card{
+    background:var(--card);padding:16px;border-radius:12px;
+    border:1px solid var(--border);
+  }
+.stat-card-title{font-size:11px;color:var(--text-dim);margin-bottom:8px}
+.stat-card-value{font-size:20px;font-weight:800}
+.stat-card-value.purple{color:var(--purple)}
+.stat-card-value.green{color:var(--success)}
+
+.orders-section{padding:16px}
+.orders-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.order-item{
+    background:var(--card);padding:12px;border-radius:8px;
+    margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;
+  }
+.order-status{
+    font-size:11px;padding:4px 8px;border-radius:4px;font-weight:700;
+  }
+.status-pago{background:rgba(34,197,94,0.2);color:var(--success)}
+.status-pendente{background:rgba(245,158,11,0.2);color:#f59e0b}
+.btn-admin{
+    width:calc(100% - 32px);margin:16px;
+    background:var(--purple);color:#fff;border:none;
+    padding:14px;border-radius:12px;font-size:14px;
+    font-weight:800;cursor:pointer;
+  }
+
+  /* Home */
+.hero{
+    position:relative;height:45vh;
+    background:radial-gradient(circle at 50% 20%,rgba(139,92,246,0.4) 0%,rgba(0,0,0,0.9) 70%);
+    display:flex;flex-direction:column;justify-content:flex-end;align-items:center;
+    text-align:center;padding:0 20px 30px;overflow:hidden;
+  }
+.hero-overlay{
+    position:absolute;top:45%;left:50%;transform:translate(-50%,-50%);
+    width:70%;max-width:320px;z-index:1;
+    filter:drop-shadow(0 0 20px rgba(139,92,246,0.8));
+  }
+.hero h1,.hero p{position:relative;z-index:2}
+.hero h1{font-size:28px;font-weight:900;margin-bottom:8px;text-shadow:0 0 20px rgba(139,92,246,0.8)}
+.hero p{font-size:11px;color:var(--text-dim);letter-spacing:1px}
+
+.section{padding:20px 16px}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.section-title{font-size:14px;font-weight:800}
+.see-all{font-size:11px;color:var(--purple);font-weight:700;cursor:pointer}
+
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cat-card{
+    background:var(--card);border:1.5px solid var(--purple);
+    border-radius:12px;padding:16px 8px;text-align:center;
+    cursor:pointer;
+  }
+.cat-card svg{width:28px;height:28px;margin-bottom:8px;stroke:var(--purple)}
+.cat-card p{font-size:10px;font-weight:700}
+
+.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.prod-card{background:var(--card);border-radius:12px;overflow:hidden;cursor:pointer}
+.prod-card img{width:100%;aspect-ratio:1;object-fit:cover}
+.prod-card.info{padding:8px}
+.prod-card h4{font-size:10px;font-weight:700;margin-bottom:4px}
+.prod-card p{font-size:11px;color:var(--purple);font-weight:800}
+
+  /* Store */
+.search-box{
+    margin:16px;padding:12px;background:var(--card);
+    border-radius:10px;display:flex;align-items:center;gap:10px;
+    border:1px solid var(--border);
+  }
+.search-box input{
+    background:none;border:none;color:var(--text);
+    flex:1;font-size:14px;outline:none;
+  }
+
+.tabs{display:flex;gap:20px;padding:0 16px 12px;overflow-x:auto;border-bottom:1px solid var(--border)}
+.tab{
+    font-size:12px;font-weight:700;color:var(--text-dim);
+    white-space:nowrap;padding-bottom:8px;cursor:pointer;
+  }
+.tab.active{color:var(--purple);border-bottom:2px solid var(--purple)}
+
+.product-list{padding:16px}
+.product-item{
+    display:flex;gap:12px;background:var(--card);
+    padding:12px;border-radius:12px;margin-bottom:12px;
+    cursor:pointer;
+  }
+.product-item img{width:60px;height:60px;border-radius:8px;object-fit:cover}
+.product-info{flex:1}
+.product-info h4{font-size:13px;font-weight:700;margin-bottom:4px}
+.product-info.tag{
+    display:inline-block;background:rgba(139,92,246,0.2);
+    color:var(--purple);padding:2px 6px;border-radius:4px;
+    font-size:9px;font-weight:700;margin-bottom:6px;
+  }
+.product-info.price{font-size:15px;font-weight:800;color:var(--purple)}
+.cart-btn{
+    width:40px;height:40px;background:var(--card);
+    border:1.5px solid var(--purple);border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  /* Product Detail */
+.product-detail img{width:100%;height:45vh;object-fit:cover}
+.detail-content{padding:20px 16px}
+.detail-content h2{font-size:20px;font-weight:800;margin-bottom:4px}
+.detail-content.tag{color:var(--purple);font-size:12px;font-weight:700;margin-bottom:8px}
+.stars{color:#fbbf24;font-size:14px;margin-bottom:12px}
+.price-big{font-size:24px;font-weight:900;color:var(--purple);margin-bottom:4px}
+.installment{font-size:12px;color:var(--text-dim);margin-bottom:20px}
+.desc-title{font-size:13px;font-weight:700;margin-bottom:8px;border-top:1px solid var(--border);padding-top:16px}
+.desc-text{font-size:13px;color:var(--text-dim);line-height:1.6;margin-bottom:20px}
+
+.qty-control{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.qty-btn{
+    width:36px;height:36px;background:var(--card);
+    border:1.5px solid var(--border);border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;cursor:pointer;
+  }
+.qty-num{font-size:16px;font-weight:700;width:40px;text-align:center}
+
+  /* Cart */
+.page-title{padding:20px 16px;font-size:18px;font-weight:800}
+.cart-item{
+    background:var(--card);margin:0 16px 12px;
+    padding:14px;border-radius:12px;display:flex;gap:12px;
+  }
+.cart-item img{width:60px;height:60px;border-radius:8px;object-fit:cover}
+.cart-info{flex:1}
+.cart-info h4{font-size:13px;font-weight:700;margin-bottom:4px}
+.cart-info p{font-size:12px;color:var(--purple);font-weight:700}
+.qty-control-cart{display:flex;align-items:center;gap:8px;margin-top:8px}
+.qty-btn-cart{
+    width:28px;height:28px;background:var(--bg);
+    border:1px solid var(--border);border-radius:6px;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-size:16px;
+  }
+.qty-num-cart{font-size:13px;font-weight:700;width:30px;text-align:center}
+.delete-btn{color:var(--danger);cursor:pointer}
+
+.summary{margin:20px 16px;background:var(--card);padding:16px;border-radius:12px}
+.summary-row{display:flex;justify-content:space-between;margin-bottom:12px;font-size:13px}
+.summary-row.total{font-size:16px;font-weight:800;color:var(--purple);border-top:1px solid var(--border);padding-top:12px}
+.btn-primary{
+    width:calc(100% - 32px);margin:0 16px;
+    background:var(--purple);color:#fff;border:none;
+    padding:16px;border-radius:12px;font-size:15px;
+    font-weight:800;display:flex;align-items:center;
+    justify-content:center;gap:8px;cursor:pointer;
+  }
+
+  /* Payment */
+.steps{display:flex;justify-content:space-between;padding:0 16px 20px;margin:0 16px;border-bottom:1px solid var(--border)}
+.step{text-align:center;font-size:10px;color:var(--text-dim)}
+.step.active{color:var(--purple)}
+.step-num{
+    width:28px;height:28px;border-radius:50%;
+    background:var(--card);border:2px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 6px;font-weight:800;
+  }
+.step.active.step-num{background:var(--purple);border-color:var(--purple);color:#fff}
+
+.payment-box{margin:16px;background:var(--card);padding:16px;border-radius:12px}
+.payment-title{font-size:13px;font-weight:800;margin-bottom:8px;color:var(--purple)}
+.payment-text{font-size:12px;color:var(--text-dim);line-height:1.5;margin-bottom:12px}
+.pix-key{
+    background:var(--bg);padding:12px;border-radius:8px;
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:16px;border:1px solid var(--border);
+  }
+.pix-key span{font-size:14px;font-weight:700}
+.copy-btn{
+    background:var(--purple);border:none;color:#fff;
+    padding:6px 12px;border-radius:6px;font-size:11px;
+    font-weight:700;cursor:pointer;
+  }
+.qr-code{width:160px;height:160px;margin:0 auto 16px;background:#fff;padding:10px;border-radius:12px}
+.alert{
+    background:rgba(245,158,11,0.1);border:1px solid #f59e0b;
+    padding:12px;border-radius:8px;display:flex;gap:8px;
+    font-size:11px;color:#fbbf24;margin-bottom:16px;
+  }
+
+  /* Support */
+.support-text{padding:0 16px 20px;font-size:13px;color:var(--text-dim);text-align:center;line-height:1.5}
+.btn-whatsapp{
+    margin:0 16px 24px;background:var(--purple);
+    color:#fff;border:none;padding:16px;border-radius:12px;
+    font-size:14px;font-weight:800;width:calc(100% - 32px);
+    display:flex;align-items:center;justify-content:center;
+    gap:8px;cursor:pointer;
+  }
+.support-channel{
+    margin:0 16px 12px;background:var(--card);
+    padding:14px;border-radius:12px;display:flex;
+    align-items:center;gap:12px;
+  }
+.support-channel svg{width:20px;height:20px;color:var(--purple)}
+.support-channel div{flex:1}
+.support-channel h4{font-size:13px;font-weight:700;margin-bottom:2px}
+.support-channel p{font-size:12px;color:var(--text-dim)}
+
+  /* Bottom Nav */
+.bottom-nav{
+    position:fixed;bottom:0;left:0;right:0;
+    background:var(--bg);border-top:1px solid var(--border);
+    display:flex;justify-content:space-around;padding:10px 0;
+    z-index:50;
+  }
+.nav-item{
+    display:flex;flex-direction:column;align-items:center;
+    gap:4px;color:var(--text-dim);font-size:10px;
+    cursor:pointer;
+  }
+.nav-item.active{color:var(--purple)}
+.nav-item svg{width:22px;height:22px}
+.nav-item.badge{
+    position:absolute;background:var(--purple);
+    color:#fff;font-size:9px;font-weight:800;
+    padding:2px 5px;border-radius:10px;
+    margin-left:12px;margin-top:-4px;
+  }
 </style>
 </head>
-
 <body>
 
-<div class="menu" id="menu">
-
-<div class="menu-top">
-<h2>MENU</h2>
-<div class="close" onclick="closeMenu()">✕</div>
+<!-- SIDEBAR -->
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div style="font-weight:800">MENU</div>
+    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" onclick="toggleSidebar()" style="cursor:pointer"><path d="M6 18L18 6M6 6l12 12"/></svg>
+  </div>
+  <div class="sidebar-item" onclick="goTo('home');toggleSidebar()">
+    <svg fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3"/></svg>
+    Início
+  </div>
+  <div class="sidebar-item" onclick="goTo('store');toggleSidebar()">
+    <svg fill="none" stroke="currentColor" stroke-width="2"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 7H4L5 9z"/></svg>
+    Loja
+  </div>
+  <div class="sidebar-item" onclick="goTo('store');toggleSidebar()">
+    <svg fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    Categorias
+  </div>
+  <div class="sidebar-item" onclick="goTo('cart');toggleSidebar()">
+    <svg fill="none" stroke="currentColor" stroke-width="2"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 7H4L5 9z"/></svg>
+    Meus Pedidos
+  </div>
+  <div class="sidebar-item" onclick="goTo('support');toggleSidebar()">
+    <svg fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg>
+    Suporte
+  </div>
+  <div class="sidebar-item" onclick="goTo('admin-login');toggleSidebar()">
+    <svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2T6 9v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+    Painel Admin
+  </div>
 </div>
 
-<a href="#"><span>🏠</span> Início</a>
-<a href="#"><span>🛒</span> Loja</a>
-<a href="#"><span>💎</span> Diamantes</a>
-<a href="#"><span>👑</span> Assinaturas</a>
-<a href="#"><span>🏆</span> Premiações</a>
-<a href="#"><span>📚</span> Treinamentos</a>
-<a href="#"><span>📞</span> Suporte</a>
-<a href="#" onclick="openAdmin()"><span>⚙</span> Painel ADM</a>
+<!-- PAGE 1: HOME -->
+<div class="page active" id="page-home">
+  <header>
+    <div class="header-left" onclick="toggleSidebar()">
+      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+    </div>
+    <div class="logo">
+      <div class="logo-text">👑 PRIME <span>STORE</span></div>
+      <div class="logo-sub">PIX</div>
+    </div>
+    <div class="header-right"></div>
+  </header>
 
+  <div class="hero">
+    <img src="https://i.postimg.cc/C5KWcT5z/be50f798-9fdd-49a3-99aa-7b4abaf24030.jpg" class="hero-overlay">
+    <h1>PRIME STORE</h1>
+    <p>QUALIDADE • CONFIANÇA • SEGURANÇA</p>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">CATEGORIAS</div>
+      <div class="see-all" onclick="goTo('store')">VER TODAS</div>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card" onclick="goTo('store')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><p>DIAMANTES</p></div>
+      <div class="cat-card" onclick="goTo('store')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><p>CONTAS</p></div>
+      <div class="cat-card" onclick="goTo('store')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><p>PASSES</p></div>
+      <div class="cat-card" onclick="goTo('store')"><svg fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="10" rx="2"/><path d="M16 2v4M8 2v4"/></svg><p>ASSINATURAS</p></div>
+      <div class="cat-card" onclick="goTo('store')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M8 21l8-7-8-7v14z"/></svg><p>PRÊMIOS</p></div>
+      <div class="cat-card" onclick="goTo('store')"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><p>TREINAMENTOS</p></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">PRODUTOS EM DESTAQUE</div>
+      <div class="see-all" onclick="goTo('store')">VER TODOS</div>
+    </div>
+    <div class="prod-grid" id="featured"></div>
+  </div>
 </div>
 
-<div class="login-screen" id="admin">
-
-<div class="login-box">
-
-<h1>PAINEL ADM</h1>
-
-<input type="text" class="input" placeholder="Usuário">
-
-<input type="password" class="input" placeholder="Senha">
-
-<button class="login-btn">
-ENTRAR
-</button>
-
+<!-- PAGE 2: STORE -->
+<div class="page" id="page-store">
+  <header>
+    <div class="header-left" onclick="goTo('home')"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></div>
+    <div class="logo"><div class="logo-text">👑 PRIME <span>STORE</span></div><div class="logo-sub">PIX</div></div>
+    <div class="header-right"></div>
+  </header>
+  <div style="padding:16px;font-size:14px;font-weight:800">LOJA</div>
+  <div class="search-box">
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" placeholder="Buscar produtos...">
+  </div>
+  <div class="tabs">
+    <div class="tab active">TODOS</div>
+    <div class="tab">DIAMANTES</div>
+    <div class="tab">PASSES</div>
+    <div class="tab">CONTAS</div>
+    <div class="tab">MAIS</div>
+  </div>
+  <div class="product-list" id="product-list"></div>
 </div>
 
+<!-- PAGE 3: PRODUCT DETAIL -->
+<div class="page" id="page-product">
+  <header>
+    <div class="header-left" onclick="goTo('store')"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></div>
+    <div class="logo"><div class="logo-text">👑 PRIME <span>STORE</span></div><div class="logo-sub">PIX</div></div>
+    <div class="header-right"></div>
+  </header>
+  <div class="product-detail" id="product-detail"></div>
 </div>
 
-<header>
-
-<div class="top-icons">
-<div onclick="openMenu()">☰</div>
+<!-- PAGE 4: CART -->
+<div class="page" id="page-cart">
+  <header>
+    <div class="header-left" onclick="goTo('product')"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></div>
+    <div class="logo"><div class="logo-text">👑 PRIME <span>STORE</span></div><div class="logo-sub">PIX</div></div>
+    <div style="width:24px"></div>
+  </header>
+  <div class="page-title">CARRINHO</div>
+  <div id="cart-items"></div>
+  <div class="summary">
+    <div class="summary-row"><span>SUBTOTAL</span><span id="subtotal">R$ 0,00</span></div>
+    <div class="summary-row"><span>TAXA</span><span>R$ 0,00</span></div>
+    <div class="summary-row total"><span>TOTAL</span><span id="total">R$ 0,00</span></div>
+  </div>
+  <button class="btn-primary" onclick="goTo('payment')">FINALIZAR COMPRA →</button>
 </div>
 
-<div class="logo">
-PRIME <span>STORE</span>
+<!-- PAGE 5: PAYMENT -->
+<div class="page" id="page-payment">
+  <header>
+    <div class="header-left" onclick="goTo('cart')"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></div>
+    <div class="logo"><div class="logo-text">👑 PRIME <span>STORE</span></div><div class="logo-sub">PIX</div></div>
+    <div style="width:24px"></div>
+  </header>
+  <div class="page-title">PAGAMENTO</div>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div>Carrinho</div>
+    <div class="step active"><div class="step-num">2</div>Pagamento</div>
+    <div class="step"><div class="step-num">3</div>Confirmação</div>
+  </div>
+  <div class="payment-box">
+    <div class="payment-title">PAGAMENTO MANUAL</div>
+    <div class="payment-text">Realize o pagamento via PIX e envie o comprovante no WhatsApp.</div>
+    <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px">CHAVE PIX</div>
+    <div class="pix-key">
+      <span id="pix-key">(98)98485-3563</span>
+      <button class="copy-btn" onclick="copyPix()">COPIAR</button>
+    </div>
+    <div class="qr-code">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=00020126580014br.gov.bcb.pix0136(98)98485-356352040000530398654041.785802BR5913PRIME STORE6009SAO PAULO62070503***6304" style="width:100%">
+    </div>
+    <div class="summary-row" style="margin-bottom:16px">
+      <span style="font-weight:700">VALOR A PAGAR</span>
+      <span id="pay-total" style="font-weight:800;color:var(--purple);font-size:16px">R$ 0,00</span>
+    </div>
+    <div class="alert">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9l3 3-3 3"/><path d="M4 12h8"/></svg>
+      <span>Após realizar o pagamento, envie seu comprovante no WhatsApp abaixo.</span>
+    </div>
+    <button class="btn-primary" onclick="goTo('support')">📱 ENVIAR COMPROVANTE</button>
+  </div>
 </div>
 
-<div class="top-icons">
-<div>⌕</div>
+<!-- PAGE 6: SUPPORT -->
+<div class="page" id="page-support">
+  <header>
+    <div class="header-left" onclick="goTo('payment')"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></div>
+    <div class="logo"><div class="logo-text">👑 PRIME <span>STORE</span></div><div class="logo-sub">PIX</div></div>
+    <div style="width:24px"></div>
+  </header>
+  <div class="page-title">SUPORTE</div>
+  <div class="support-text">Nos chame no WhatsApp para qualquer dúvida ou para enviar seu comprovante.</div>
+  <button class="btn-whatsapp" onclick="openWhatsApp()">📱 ABRIR WHATSAPP</button>
+  <div style="padding:0 16px 12px;font-size:12px;font-weight:700;color:var(--text-dim)">OUTROS CANAIS</div>
+  <div class="support-channel"><svg fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><path d="M17.5 6.5h.01"/></svg><div><h4>Instagram</h4><p>@primestore</p></div></div>
+  <div class="support-channel"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg><div><h4>TikTok</h4><p>@primestore</p></div></div>
+  <div class="support-channel"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2.9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg><div><h4>E-mail</h4><p>suporte@primestore.com</p></div></div>
+  <div class="support-channel"><svg fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><div><h4>Horário de atendimento</h4><p>08:00h às 23:00h</p></div></div>
 </div>
 
-</header>
-
-<div class="banner">
-<img src="https://i.imgur.com/AtJ0ZpD.jpeg">
+<!-- PAGE 7: ADMIN LOGIN -->
+<div class="page" id="page-admin-login">
+  <div class="login-container">
+    <div class="login-box">
+      <div class="login-icon">
+        <svg fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      </div>
+      <h2>ACESSO ADMINISTRATIVO</h2>
+      <p>Área restrita. Faça login para continuar.</p>
+      <div class="input-group">
+        <label>Usuário</label>
+        <input type="text" id="admin-user" placeholder="Digite seu usuário">
+      </div>
+      <div class="input-group">
+        <label>Senha</label>
+        <div class="password-wrapper">
+          <input type="password" id="admin-pass" placeholder="Digite sua senha">
+          <div class="password-toggle" onclick="togglePass()">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+        </div>
+        <div class="error-msg" id="error-msg">Usuário ou senha incorretos</div>
+      <div class="input-group">
+        <label>Senha</label>
+        <div class="password-wrapper">
+          <input type="password" id="admin-pass" placeholder="Digite sua senha">
+          <div class="password-toggle" onclick="togglePass()">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </div>
+        </div>
+        <div class="error-msg" id="error-msg">Usuário ou senha incorretos</div>
+      </div>
+      <button class="login-btn" onclick="loginAdmin()">ENTRAR</button>
+      <div class="login-footer">Acesso não autorizado é proibido.<br>Prime Store © 2024</div>
+    </div>
+  </div>
 </div>
 
-<div class="search">
-<input type="text" placeholder="Buscar produtos...">
+<!-- PAGE 8: ADMIN DASHBOARD -->
+<div class="page" id="page-admin-dashboard">
+  <div class="admin-header">
+    <div style="font-weight:800">PAINEL ADMIN</div>
+    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" onclick="logoutAdmin()" style="cursor:pointer"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-card-title">TOTAL PRODUTOS</div>
+      <div class="stat-card-value purple" id="stat-products">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-title">PEDIDOS</div>
+      <div class="stat-card-value" id="stat-orders">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-title">USUÁRIOS</div>
+      <div class="stat-card-value" id="stat-users">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-card-title">FATURAMENTO</div>
+      <div class="stat-card-value green" id="stat-revenue">R$ 0,00</div>
+    </div>
+  </div>
+
+  <div class="orders-section">
+    <div class="orders-header">
+      <div style="font-weight:800">PEDIDOS RECENTES</div>
+      <div style="font-size:12px;color:var(--purple);cursor:pointer">Ver todos</div>
+    </div>
+    <div id="recent-orders"></div>
+  </div>
+
+  <button class="btn-admin" onclick="alert('Função de gerenciar produtos será adicionada')">GERENCIAR PRODUTOS</button>
 </div>
 
-<div class="section-title">
-<h2>Categorias</h2>
-<span>VER TODAS</span>
-</div>
-
-<div class="categories">
-
-<div class="cat">
-<i>💎</i>
-<p>Diamantes</p>
-</div>
-
-<div class="cat">
-<i>👑</i>
-<p>Assinaturas</p>
-</div>
-
-<div class="cat">
-<i>🏆</i>
-<p>Premiações</p>
-</div>
-
-<div class="cat">
-<i>📚</i>
-<p>Treinamentos</p>
-</div>
-
-<div class="cat">
-<i>🎮</i>
-<p>Jogos</p>
-</div>
-
-<div class="cat">
-<i>🔥</i>
-<p>Contas</p>
-</div>
-
-</div>
-
-<div class="section-title">
-<h2>Produtos em destaque</h2>
-<span>VER TODOS</span>
-</div>
-
-<div class="products">
-
-<div class="product">
-
-<img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop">
-
-<div class="product-content">
-
-<div class="product-title">
-110 Diamantes Free Fire
-</div>
-
-<div class="product-price">
-R$ 4,99
-</div>
-
-<button class="buy-btn"
-onclick="window.open('https://wa.me/5598984853563?text=Olá,%20quero%20comprar%20110%20Diamantes')">
-COMPRAR
-</button>
-
-</div>
-
-</div>
-
-<div class="product">
-
-<img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200&auto=format&fit=crop">
-
-<div class="product-content">
-
-<div class="product-title">
-Passe Booyah
-</div>
-
-<div class="product-price">
-R$ 14,90
-</div>
-
-<button class="buy-btn">
-COMPRAR
-</button>
-
-</div>
-
-</div>
-
-<div class="product">
-
-<img src="https://i.imgur.com/7rlxZqU.jpeg">
-
-<div class="product-content">
-
-<div class="product-title">
-Netflix Premium
-</div>
-
-<div class="product-price">
-R$ 21,90
-</div>
-
-<button class="buy-btn">
-COMPRAR
-</button>
-
-</div>
-
-</div>
-
-<div class="product">
-
-<img src="https://images.unsplash.com/photo-1603481588273-2f908a9a7a1b?q=80&w=1200&auto=format&fit=crop">
-
-<div class="product-content">
-
-<div class="product-title">
-Conta Free Fire Veterana
-</div>
-
-<div class="product-price">
-R$ 89,90
-</div>
-
-<button class="buy-btn">
-COMPRAR
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="support">
-
-<h2>SUPORTE</h2>
-
-<p>
-Atendimento manual via WhatsApp.
-Pagamento por Pix manual.
-</p>
-
-<button onclick="window.open('https://wa.me/5598984853563')">
-ABRIR WHATSAPP
-</button>
-
-</div>
-
-<div class="admin">
-
-<h2>PAINEL PRIME STORE</h2>
-
-<div class="admin-grid">
-
-<div class="admin-card">
-<h3>28</h3>
-<p>Produtos</p>
-</div>
-
-<div class="admin-card">
-<h3>12</h3>
-<p>Pedidos</p>
-</div>
-
-<div class="admin-card">
-<h3>999</h3>
-<p>Estoque</p>
-</div>
-
-<div class="admin-card">
-<h3>R$ 1.280</h3>
-<p>Vendas</p>
-</div>
-
-</div>
-
-</div>
-
-<div class="footer">
-
-PRIME STORE © 2026<br><br>
-Qualidade • Segurança • Confiança
-
-</div>
-
+<!-- BOTTOM NAV -->
 <div class="bottom-nav">
-
-<div class="nav-item">
-<i>⌂</i>
-Início
-</div>
-
-<div class="nav-item">
-<i>🛒</i>
-Loja
-</div>
-
-<div class="nav-item">
-<i>📞</i>
-Suporte
-</div>
-
-<div class="nav-item" onclick="openAdmin()">
-<i>⚙</i>
-ADM
-</div>
-
+  <div class="nav-item active" onclick="goTo('home')">
+    <svg fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+    <span>INÍCIO</span>
+  </div>
+  <div class="nav-item" onclick="goTo('store')">
+    <svg fill="none" stroke="currentColor" stroke-width="2"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 7H4L5 9z"/></svg>
+    <span>LOJA</span>
+  </div>
+  <div class="nav-item" onclick="goTo('support')">
+    <svg fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+    <span>SUPORTE</span>
+  </div>
+  <div class="nav-item" onclick="goTo('cart')">
+    <div style="position:relative">
+      <svg fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <div class="badge" id="cart-badge">0</div>
+    </div>
+    <span>CARRINHO</span>
+  </div>
 </div>
 
 <script>
+const products = [
+  {id:1,name:"110 DIAMANTES",cat:"FREE FIRE",price:4.99,img:"https://i.imgur.com/8Km9tLL.png",desc:"Recarga de 110 diamantes no Free Fire. Entrega manual via ID."},
+  {id:2,name:"310 DIAMANTES",cat:"FREE FIRE",price:11.90,img:"https://i.imgur.com/8Km9tLL.png",desc:"Recarga de 310 diamantes no Free Fire. Entrega manual via ID."},
+  {id:3,name:"520 DIAMANTES",cat:"FREE FIRE",price:16.90,img:"https://i.imgur.com/8Km9tLL.png",desc:"Recarga de 520 diamantes no Free Fire. Entrega manual via ID."},
+  {id:4,name:"PASSE BOOYAH",cat:"FREE FIRE",price:14.90,img:"https://i.imgur.com/7Y8i5iP.png",desc:"Passe Booyah do mês atual. Ativação instantânea."},
+  {id:5,name:"CONTA FF VETERANA",cat:"FREE FIRE",price:89.90,img:"https://i.imgur.com/7Y8i5iP.png",desc:"Conta veterana com skins raras. Acesso imediato."},
+  {id:6,name:"NETFLIX PREMIUM",cat:"NETFLIX",price:21.90,img:"https://i.imgur.com/3Z3jU6P.png",desc:"Acesso 1 mês. Tela 4K + 4 telas simultâneas."}
+];
 
-function openMenu(){
-document.getElementById("menu").classList.add("active");
+let cart = [];
+let currentProduct = null;
+let quantity = 1;
+const WHATSAPP = "5598984853563";
+
+// Admin credentials
+const ADMIN_USER = "Lorrannyh";
+const ADMIN_PASS = "Lorrannyh.102225";
+
+// Demo orders for admin panel
+const demoOrders = [
+  {id:1001,status:"Pago",amount:14.90},
+  {id:1002,status:"Pendente",amount:21.90},
+  {id:1003,status:"Pago",amount:4.99},
+  {id:1004,status:"Pendente",amount:89.90}
+];
+
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('active');
+  document.getElementById('overlay').classList.toggle('active');
 }
 
-function closeMenu(){
-document.getElementById("menu").classList.remove("active");
+function goTo(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(page==='home')document.querySelectorAll('.nav-item')[0].classList.add('active');
+  if(page==='store')document.querySelectorAll('.nav-item')[1].classList.add('active');
+  if(page==='support')document.querySelectorAll('.nav-item')[2].classList.add('active');
+  if(page==='cart')document.querySelectorAll('.nav-item')[3].classList.add('active');
+
+  if(page==='store')renderProducts();
+  if(page==='cart')renderCart();
+  if(page==='payment')updatePaymentTotal();
+  if(page==='admin-dashboard')renderAdminDashboard();
 }
 
-function openAdmin(){
-document.getElementById("admin").style.display="flex";
+function goToProduct(id){
+  currentProduct = products.find(p=>p.id===id);
+  quantity=1;
+  renderProductDetail();
+  goTo('product');
 }
 
+function renderFeatured(){
+  const el=document.getElementById('featured');
+  el.innerHTML='';
+  products.slice(0,3).forEach(p=>{
+    el.innerHTML+=`<div class="prod-card" onclick="goToProduct(${p.id})">
+      <img src="${p.img}"><div class="info"><h4>${p.name}</h4><p>R$ ${p.price.toFixed(2).replace('.',',')}</p></div>
+    </div>`;
+  });
+}
+
+function renderProducts(){
+  const list=document.getElementById('product-list');
+  list.innerHTML='';
+  products.forEach(p=>{
+    list.innerHTML+=`
+      <div class="product-item" onclick="goToProduct(${p.id})">
+        <img src="${p.img}">
+        <div class="product-info">
+          <h4>${p.name}</h4>
+          <div class="tag">${p.cat}</div>
+          <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
+        </div>
+        <div class="cart-btn" onclick="event.stopPropagation();addToCart(${p.id})">
+          <svg fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function renderProductDetail(){
+  const p=currentProduct;
+  document.getElementById('product-detail').innerHTML=`
+    <img src="${p.img}">
+    <div class="detail-content">
+      <h2>${p.name}</h2>
+      <div class="tag">${p.cat}</div>
+      <div class="stars">★★☆ (4.8)</div>
+      <div class="price-big">R$ ${p.price.toFixed(2).replace('.',',')}</div>
+      <div class="installment">ou 12x de R$ ${(p.price/12).toFixed(2).replace('.',',')}</div>
+      <div class="desc-title">DESCRIÇÃO</div>
+      <div class="desc-text">${p.desc}</div>
+      <div class="desc-title">QUANTIDADE</div>
+      <div class="qty-control">
+        <div class="qty-btn" onclick="changeQty(-1)">−</div>
+        <div class="qty-num" id="qty">${quantity}</div>
+        <div class="qty-btn" onclick="changeQty(1)">+</div>
+      </div>
+      <button class="btn-buy" onclick="buyNow()">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        COMPRAR AGORA
+      </button>
+    </div>
+  `;
+}
+
+function changeQty(v){
+  quantity=Math.max(1,quantity+v);
+  document.getElementById('qty').textContent=quantity;
+}
+
+function addToCart(id){
+  const prod = products.find(p=>p.id===id);
+  const existing = cart.find(i=>i.id===id);
+  if(existing) existing.qty++;
+  else cart.push({...prod,qty:1});
+  updateBadge();
+}
+
+function buyNow(){
+  const existing = cart.find(i=>i.id===currentProduct.id);
+  if(existing) existing.qty += quantity;
+  else cart.push({...currentProduct,qty:quantity});
+  updateBadge();
+  goTo('cart');
+}
+
+function renderCart(){
+  const container=document.getElementById('cart-items');
+  container.innerHTML='';
+  let subtotal=0;
+
+  if(cart.length===0){
+    container.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim)">Carrinho vazio</div>';
+    document.getElementById('subtotal').textContent='R$ 0,00';
+    document.getElementById('total').textContent='R$ 0,00';
+    updateBadge();
+    return;
+  }
+
+  cart.forEach((item,index)=>{
+    subtotal+=item.price*item.qty;
+    container.innerHTML+=`
+      <div class="cart-item">
+        <img src="${item.img}">
+        <div class="cart-info">
+          <h4>${item.name}</h4>
+          <p>${item.cat}</p>
+          <p style="color:var(--purple);font-weight:800">R$ ${(item.price*item.qty).toFixed(2).replace('.',',')}</p>
+          <div class="qty-control-cart">
+            <div class="qty-btn-cart" onclick="changeCartQty(${index},-1)">−</div>
+            <div class="qty-num-cart">${item.qty}</div>
+            <div class="qty-btn-cart" onclick="changeCartQty(${index},1)">+</div>
+            <div style="flex:1"></div>
+            <div class="delete-btn" onclick="removeItem(${index})">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  document.getElementById('subtotal').textContent=`R$ ${subtotal.toFixed(2).replace('.',',')}`;
+  document.getElementById('total').textContent=`R$ ${subtotal.toFixed(2).replace('.',',')}`;
+  updateBadge();
+}
+
+function changeCartQty(index,change){
+  cart[index].qty=Math.max(1,cart[index].qty+change);
+  renderCart();
+}
+
+function removeItem(index){
+  cart.splice(index,1);
+  renderCart();
+}
+
+function updateBadge(){
+  const qty=cart.reduce((sum,item)=>sum+item.qty,0);
+  document.getElementById('cart-badge').textContent=qty;
+  document.getElementById('cart-badge').style.display=qty>0?'block':'none';
+}
+
+function updatePaymentTotal(){
+  const total=cart.reduce((sum,item)=>sum+item.price*item.qty,0);
+  document.getElementById('pay-total').textContent=`R$ ${total.toFixed(2).replace('.',',')}`;
+}
+
+function copyPix(){
+  navigator.clipboard.writeText("(98)98485-3563");
+  alert("Chave PIX copiada!");
+}
+
+function openWhatsApp(){
+  const total=cart.reduce((sum,item)=>sum+item.price*item.qty,0);
+  const items=cart.map(i=>`${i.qty}x ${i.name}`).join(', ');
+  const msg=encodeURIComponent(`Olá! Paguei R$ ${total.toFixed(2)}. Produtos: ${items}. Segue comprovante.`);
+  window.open(`https://wa.me/${WHATSAPP}?text=${msg}`,'_blank');
+}
+
+// Admin functions
+function togglePass(){
+  const input=document.getElementById('admin-pass');
+  input.type=input.type==='password'?'text':'password';
+}
+
+function loginAdmin(){
+  const user=document.getElementById('admin-user').value;
+  const pass=document.getElementById('admin-pass').value;
+
+  if(user===ADMIN_USER && pass===ADMIN_PASS){
+    document.getElementById('error-msg').style.display='none';
+    goTo('admin-dashboard');
+  }else{
+    document.getElementById('error-msg').style.display='block';
+  }
+}
+
+function logoutAdmin(){
+  goTo('home');
+  document.getElementById('admin-user').value='';
+  document.getElementById('admin-pass').value='';
+}
+
+function renderAdminDashboard(){
+  document.getElementById('stat-products').textContent=products.length;
+  document.getElementById('stat-orders').textContent=demoOrders.length;
+  document.getElementById('stat-users').textContent='124';
+
+  const revenue=demoOrders.reduce((sum,o)=>sum+o.amount,0);
+  document.getElementById('stat-revenue').textContent=`R$ ${revenue.toFixed(2).replace('.',',')}`;
+
+  const ordersEl=document.getElementById('recent-orders');
+  ordersEl.innerHTML='';
+  demoOrders.forEach(o=>{
+    ordersEl.innerHTML+=`
+      <div class="order-item">
+        <div>
+          <div style="font-weight:700;font-size:13px">#${o.id}</div>
+          <div class="order-status ${o.status==='Pago'?'status-pago':'status-pendente'}">${o.status}</div>
+        </div>
+        <div style="font-weight:800">R$ ${o.amount.toFixed(2).replace('.',',')}</div>
+      </div>
+    `;
+  });
+}
+
+// Prevent zoom
+let lastTouch=0;
+document.addEventListener('touchend',e=>{
+  const now=Date.now();
+  if(now-lastTouch<=300)e.preventDefault();
+  lastTouch=now;
+},{passive:false});
+
+// Init
+renderFeatured();
+updateBadge();
 </script>
-
 </body>
 </html>
