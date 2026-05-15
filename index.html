@@ -4,110 +4,146 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>NEXUS STORE</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300,0,0"/>
 <style>
 :root{
---bg:#0a0a0f;--card:#14141c;--border:#25252f;--purple:#8b5cf6;
---text:#fff;--text-muted:#9ca3af;--green:#22c55e;--red:#ef4444;
+--bg:#070709;--card:#121218;--border:#2a2a3a;--purple:#a855f7;
+--gold:#fbbf24;--text:#fff;--text-muted:#a1a1aa;--glow:0 0 20px rgba(168,85,247,0.4);
 }
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent;}
-body{background:var(--bg);color:var(--text);font-size:14px;}
-.page{display:none;min-height:100vh;padding-bottom:80px;}
-.page.active{display:block;}
+body{background:var(--bg);color:var(--text);font-size:13px;overflow-x:hidden;}
+.page{display:none;min-height:100vh;padding-bottom:75px;opacity:0;transition:opacity 0.3s;}
+.page.active{display:block;opacity:1;}
 button,input{outline:none;border:none;font-family:inherit;}
 button{cursor:pointer;}
-img{max-width:100%;display:block;}
+
+/* LOADING SCREEN */
+.loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;}
+.loading.hide{display:none;}
+.loading span{font-size:40px;color:var(--purple);animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(1.1);}}
 
 /* LOGIN */
-.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
-.login-box{width:100%;max-width:380px;}
-.login-logo{display:flex;align-items:center;gap:8px;margin-bottom:40px;justify-content:center;}
-.login-logo span{font-size:32px;color:var(--purple);}
-.input-box{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0 14px;height:48px;margin-bottom:16px;}
-.input-box input{background:transparent;color:var(--text);flex:1;font-size:14px;}
-.btn-primary{width:100%;height:48px;background:var(--purple);border-radius:10px;color:#fff;font-weight:700;font-size:15px;margin-top:8px;}
-.btn-google{width:100%;height:48px;background:var(--card);border:1px solid var(--border);border-radius:10px;color:#fff;font-weight:600;font-size:14px;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:10px;}
+.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 50% 0%,rgba(168,85,247,0.15),transparent 50%);}
+.login-box{width:100%;max-width:360px;}
+.login-logo{display:flex;align-items:center;gap:8px;margin-bottom:32px;justify-content:center;}
+.login-logo span{font-size:28px;color:var(--gold);filter:drop-shadow(0 0 10px rgba(251,191,36,0.5));}
+.input-box{display:flex;align-items:center;gap:10px;background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:0 14px;height:46px;margin-bottom:14px;transition:0.3s;}
+.input-box:focus-within{border-color:var(--purple);box-shadow:var(--glow);}
+.input-box input{background:transparent;color:var(--text);flex:1;font-size:13px;}
+.btn-primary{width:100%;height:46px;background:linear-gradient(135deg,var(--purple),#7c3aed);border-radius:12px;color:#fff;font-weight:700;font-size:14px;box-shadow:var(--glow);transition:0.3s;}
+.btn-primary:active{transform:scale(0.98);}
+.btn-outline{width:100%;height:46px;background:transparent;border:1px solid var(--purple);border-radius:12px;color:var(--purple);font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;transition:0.3s;}
+.btn-outline:hover{background:rgba(168,85,247,0.1);}
 
 /* LAYOUT */
-.header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;position:sticky;top:0;background:var(--bg);z-index:50;border-bottom:1px solid var(--border);}
-.section{padding:0 16px;margin-bottom:24px;}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-.list-item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px;cursor:pointer;}
-.list-item img{width:48px;height:48px;border-radius:10px;object-fit:cover;}
+.header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;position:sticky;top:0;background:rgba(7,7,9,0.8);backdrop-filter:blur(10px);z-index:50;border-bottom:1px solid var(--border);}
+.section{padding:0 16px;margin-bottom:20px;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+
+/* CARDS PEQUENOS */
+.card-sm{background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:10px;padding:10px;cursor:pointer;transition:0.3s;}
+.card-sm:hover{border-color:var(--purple);box-shadow:var(--glow);transform:translateY(-2px);}
+.card-sm img{width:40px;height:40px;border-radius:8px;object-fit:cover;margin-bottom:6px;}
+.card-sm h4{font-size:12px;font-weight:600;margin-bottom:2px;}
+.card-sm.price{font-size:14px;font-weight:700;color:var(--gold);}
+.card-sm.sub{font-size:10px;color:var(--purple);font-weight:600;}
+
+/* LIST ITEM */
+.list-item{display:flex;align-items:center;gap:10px;background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:8px;cursor:pointer;transition:0.3s;}
+.list-item:hover{border-color:var(--purple);}
+.list-item img{width:42px;height:42px;border-radius:8px;object-fit:cover;}
 .list-item-info{flex:1;}
-.list-item-info h4{font-size:14px;font-weight:600;}
-.list-item-info.price{font-size:16px;font-weight:700;color:var(--purple);}
-.btn-cart{width:40px;height:40px;background:var(--purple);border-radius:10px;display:flex;align-items:center;justify-content:center;}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#0f0f17;border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:8px 0;z-index:100;}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:#666;}
+.list-item-info h4{font-size:12px;font-weight:600;}
+.list-item-info.sub{font-size:10px;color:var(--purple);font-weight:600;margin:2px 0;}
+.list-item-info.price{font-size:15px;font-weight:700;color:var(--gold);}
+
+/* BOTÕES TRANSPARENTES */
+.btn-ghost{background:transparent;border:1px solid var(--purple);border-radius:8px;color:var(--purple);padding:8px 12px;font-size:12px;font-weight:600;transition:0.3s;}
+.btn-ghost:hover{background:rgba(168,85,247,0.1);}
+.btn-cart{width:36px;height:36px;background:transparent;border:1px solid var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--gold);transition:0.3s;}
+.btn-cart:hover{background:rgba(251,191,36,0.1);}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(15,15,23,0.9);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:6px 0;z-index:100;}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;color:#666;transition:0.3s;}
 .nav-item.active{color:var(--purple);}
-.nav-item span{font-size:22px;}
-.nav-item p{font-size:10px;font-weight:600;}
-.banner{margin:16px;border-radius:16px;background:linear-gradient(135deg,#1e1b4b,#4c1d95);padding:20px;}
-.btn-buy{width:100%;height:48px;background:var(--purple);border-radius:10px;color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px;}
-.summary{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin:16px;}
-.summary-row{display:flex;justify-content:space-between;margin-bottom:10px;font-size:13px;}
-.summary-row.total{font-size:16px;font-weight:700;}
-.tabs{display:flex;gap:20px;padding:0 16px 12px;overflow-x:auto;border-bottom:1px solid var(--border);}
-.tab{font-size:13px;font-weight:600;color:var(--text-muted);white-space:nowrap;padding-bottom:8px;cursor:pointer;}
+.nav-item span{font-size:20px;}
+.nav-item p{font-size:9px;font-weight:600;}
+
+/* BANNER LUXO */
+.banner{margin:16px;border-radius:16px;background:linear-gradient(135deg,rgba(168,85,247,0.2),rgba(251,191,36,0.1));border:1px solid rgba(168,85,247,0.3);padding:18px;position:relative;overflow:hidden;}
+.banner::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(251,191,36,0.2),transparent 50%);}
+
+/* TIPOGRAFIA MENOR */
+h4{font-size:13px;font-weight:600;}
+p{font-size:11px;color:var(--text-muted);}
+.small{font-size:10px;}
+
+/* TABS */
+.tabs{display:flex;gap:16px;padding:0 16px 10px;overflow-x:auto;border-bottom:1px solid var(--border);}
+.tab{font-size:12px;font-weight:600;color:var(--text-muted);white-space:nowrap;padding-bottom:6px;cursor:pointer;transition:0.3s;}
 .tab.active{color:var(--purple);border-bottom:2px solid var(--purple);}
-.admin-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin:16px;}
-.table{width:100%;border-collapse:collapse;font-size:12px;}
-.table th{text-align:left;padding:10px;color:var(--text-muted);border-bottom:1px solid var(--border);}
-.table td{padding:10px;border-bottom:1px solid var(--border);}
-.status{display:inline-block;padding:4px 8px;border-radius:6px;font-size:11px;font-weight:600;}
-.status.done{background:rgba(34,197,94,0.2);color:var(--green);}
-.status.pending{background:rgba(234,179,8,0.2);color:#eab308;}
 </style>
 </head>
 <body>
 
-<section class="page active" id="login">
+<div class="loading" id="loading">
+<span class="material-symbols-outlined">diamond</span>
+</div>
+
+<section class="page" id="login">
 <div class="login-page">
 <div class="login-box">
 <div class="login-logo">
 <span class="material-symbols-outlined">diamond</span>
-<h1>NEXUS STORE</h1>
+<h1 style="font-size:22px;font-weight:800;">NEXUS STORE</h1>
 </div>
-<h2>Bem-vindo de volta!</h2>
+<h2 style="font-size:20px;font-weight:700;margin-bottom:6px;">Bem-vindo de volta!</h2>
+<p class="small" style="margin-bottom:24px;">Faça login para continuar</p>
 <div class="input-box">
-<span class="material-symbols-outlined">mail</span>
-<input type="email" id="loginEmail" placeholder="E-mail">
+<span class="material-symbols-outlined" style="font-size:20px;">mail</span>
+<input type="email" id="loginEmail" placeholder="seu@email.com">
 </div>
 <div class="input-box">
-<span class="material-symbols-outlined">lock</span>
-<input type="password" id="loginPass" placeholder="Senha">
+<span class="material-symbols-outlined" style="font-size:20px;">lock</span>
+<input type="password" id="loginPass" placeholder="••••">
 </div>
 <button class="btn-primary" onclick="loginEmail()">Entrar</button>
-<button class="btn-google" onclick="loginGoogle()">Entrar com Google</button>
+<button class="btn-outline" onclick="loginGoogle()">Entrar com Google</button>
 </div>
 </div>
 </section>
 
 <section class="page" id="home">
 <div class="header">
-<div>Olá, <span id="userName">Usuário</span></div>
-<div onclick="showPage('cart')"><span class="material-symbols-outlined">shopping_cart</span></div>
+<div style="font-size:12px;color:var(--text-muted)">Olá, <span id="userName" style="color:var(--text);font-weight:600;">Usuário</span></div>
+<div onclick="showPage('cart')" style="cursor:pointer;"><span class="material-symbols-outlined" style="font-size:22px;">shopping_cart</span></div>
 </div>
 <div class="banner">
-<h2>MEGA PROMO<br>ATÉ 50% OFF</h2>
-<button class="btn-buy" style="width:auto;padding:10px 20px;" onclick="showPage('shop')">COMPRAR AGORA</button>
+<h2 style="font-size:18px;font-weight:800;margin-bottom:4px;position:relative;">MEGA PROMO<br>ATÉ 50% OFF</h2>
+<p class="small" style="position:relative;margin-bottom:12px;">Produtos selecionados</p>
+<button class="btn-ghost" style="position:relative;padding:8px 18px;" onclick="showPage('shop')">COMPRAR AGORA</button>
 </div>
 <div class="section">
-<h4 style="margin-bottom:12px;">Categorias</h4>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+<h4>Categorias</h4>
+<span style="font-size:11px;color:var(--purple);cursor:pointer;" onclick="showPage('categories')">Ver todas</span>
+</div>
 <div class="grid-3" id="homeCategories"></div>
 </div>
 <div class="section">
-<h4 style="margin-bottom:12px;">Destaques</h4>
+<h4 style="margin-bottom:10px;">Destaques</h4>
 <div class="grid-3" id="homeProducts"></div>
 </div>
 </section>
 
 <section class="page" id="categories">
 <div class="header">
-<span class="material-symbols-outlined" onclick="showPage('home')">arrow_back</span>
-<h3>Categorias</h3>
+<span class="material-symbols-outlined" onclick="showPage('home')" style="cursor:pointer;">arrow_back</span>
+<h3 style="font-size:14px;">Categorias</h3>
 <div></div>
 </div>
 <div id="categoriesList"></div>
@@ -115,8 +151,8 @@ img{max-width:100%;display:block;}
 
 <section class="page" id="shop">
 <div class="header">
-<span class="material-symbols-outlined" onclick="showPage('home')">arrow_back</span>
-<h3 id="shopTitle">Produtos</h3>
+<span class="material-symbols-outlined" onclick="showPage('home')" style="cursor:pointer;">arrow_back</span>
+<h3 id="shopTitle" style="font-size:14px;">Produtos</h3>
 <div></div>
 </div>
 <div class="tabs" id="shopTabs"></div>
@@ -125,8 +161,8 @@ img{max-width:100%;display:block;}
 
 <section class="page" id="product">
 <div class="header">
-<span class="material-symbols-outlined" onclick="goBack()">arrow_back</span>
-<h3>Produto</h3>
+<span class="material-symbols-outlined" onclick="goBack()" style="cursor:pointer;">arrow_back</span>
+<h3 style="font-size:14px;">Produto</h3>
 <div></div>
 </div>
 <div id="productDetail"></div>
@@ -134,56 +170,56 @@ img{max-width:100%;display:block;}
 
 <section class="page" id="cart">
 <div class="header">
-<span class="material-symbols-outlined" onclick="goBack()">arrow_back</span>
-<h3>Carrinho</h3>
-<span onclick="clearCart()" style="color:var(--red)">Limpar</span>
+<span class="material-symbols-outlined" onclick="goBack()" style="cursor:pointer;">arrow_back</span>
+<h3 style="font-size:14px;">Carrinho</h3>
+<span onclick="clearCart()" style="color:var(--red);font-size:12px;cursor:pointer;">Limpar</span>
 </div>
 <div id="cartItems"></div>
 <div class="summary">
 <div class="summary-row total">
 <span>Total</span>
-<span id="cartTotal">R$ 0,00</span>
+<span id="cartTotal" style="color:var(--gold);">R$ 0,00</span>
 </div>
-<button class="btn-buy" onclick="checkout()">Finalizar compra</button>
+<button class="btn-primary" onclick="checkout()">Finalizar compra</button>
 </div>
 </section>
 
 <section class="page" id="orders">
 <div class="header">
-<span class="material-symbols-outlined" onclick="showPage('home')">arrow_back</span>
-<h3>Meus Pedidos</h3>
+<span class="material-symbols-outlined" onclick="showPage('home')" style="cursor:pointer;">arrow_back</span>
+<h3 style="font-size:14px;">Meus Pedidos</h3>
 <div></div>
 </div>
 <div class="section" id="ordersList"></div>
 </section>
 
 <section class="page" id="profile">
-<div class="header"><h3>Perfil</h3><div></div></div>
-<div style="text-align:center;padding:32px 16px;">
-<img id="userAvatar" src="https://i.pravatar.cc/100" style="width:80px;height:80px;border-radius:50%;margin:auto;">
-<h3 id="profileName">Usuário</h3>
-<p id="profileEmail" style="color:var(--text-muted);font-size:13px;"></p>
+<div class="header"><h3 style="font-size:14px;">Perfil</h3><div></div></div>
+<div style="text-align:center;padding:24px 16px;">
+<img id="userAvatar" src="https://i.pravatar.cc/100" style="width:70px;height:70px;border-radius:50%;margin:auto;border:2px solid var(--purple);">
+<h3 id="profileName" style="font-size:15px;margin-top:10px;">Usuário</h3>
+<p id="profileEmail" class="small"></p>
 </div>
 <div class="section">
-<div class="list-item" onclick="logout()"><span class="material-symbols-outlined" style="color:var(--red)">logout</span><h4 style="color:var(--red)">Sair da conta</h4></div>
+<div class="list-item" onclick="logout()"><span class="material-symbols-outlined" style="color:var(--red);font-size:20px;">logout</span><h4 style="color:var(--red)">Sair da conta</h4></div>
 </div>
 </section>
 
 <section class="page" id="admin">
 <div class="header">
-<h3>Admin</h3>
-<span class="material-symbols-outlined" onclick="logout()">logout</span>
+<h3 style="font-size:14px;">Admin</h3>
+<span class="material-symbols-outlined" onclick="logout()" style="cursor:pointer;">logout</span>
 </div>
 <div class="admin-card">
-<h4>Adicionar Produto</h4>
-<input id="prodName" placeholder="Nome" style="width:100%;margin:8px 0;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;">
-<input id="prodPrice" placeholder="Preço 18.90" type="number" style="width:100%;margin:8px 0;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;">
-<input id="prodCat" placeholder="Categoria: Free Fire" style="width:100%;margin:8px 0;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;">
-<input id="prodImg" placeholder="URL da imagem" style="width:100%;margin:8px 0;padding:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;">
+<h4 style="font-size:13px;margin-bottom:10px;">Adicionar Produto</h4>
+<input id="prodName" placeholder="Nome" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
+<input id="prodPrice" placeholder="Preço 18.90" type="number" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
+<input id="prodCat" placeholder="Categoria: Free Fire" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
+<input id="prodImg" placeholder="URL da imagem" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
 <button class="btn-primary" onclick="addProduct()">Salvar Produto</button>
 </div>
 <div class="admin-card">
-<h4>Pedidos</h4>
+<h4 style="font-size:13px;margin-bottom:10px;">Pedidos</h4>
 <table class="table" id="adminOrdersTable"></table>
 </div>
 </section>
@@ -240,6 +276,7 @@ window.loginGoogle=async()=>{try{await signInWithPopup(auth,provider);}catch(e){
 window.logout=async()=>{await signOut(auth);showPage('login');}
 
 onAuthStateChanged(auth,(user)=>{
+  document.getElementById('loading').classList.add('hide');
   if(user){
     currentUser=user;
     isAdmin=user.email===ADMIN_EMAIL;
@@ -298,26 +335,26 @@ window.checkout=async()=>{
 }
 
 function renderHome(){
-  document.getElementById('homeCategories').innerHTML=categories.slice(0,6).map(c=>`<div class="list-item" onclick="openCategory('${c}')"><span class="material-symbols-outlined">category</span><h4>${c}</h4></div>`).join('');
-  document.getElementById('homeProducts').innerHTML=products.slice(0,6).map(p=>`<div class="list-item" onclick="openProduct('${p.id}')"><img src="${p.img||'https://via.placeholder.com/100'}"><div class="list-item-info"><h4>${p.name}</h4><div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div></div></div>`).join('');
+  document.getElementById('homeCategories').innerHTML=categories.slice(0,6).map(c=>`<div class="card-sm" onclick="openCategory('${c}')"><span class="material-symbols-outlined" style="font-size:24px;color:var(--purple);">category</span><h4>${c}</h4></div>`).join('');
+  document.getElementById('homeProducts').innerHTML=products.slice(0,6).map(p=>`<div class="card-sm" onclick="openProduct('${p.id}')"><img src="${p.img||'https://via.placeholder.com/100'}"><h4>${p.name}</h4><div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div></div>`).join('');
 }
 
 function renderCategories(){
-  document.getElementById('categoriesList').innerHTML=categories.map(c=>`<div class="list-item" onclick="openCategory('${c}')"><span class="material-symbols-outlined">category</span><div class="list-item-info"><h4>${c}</h4></div><span class="material-symbols-outlined">chevron_right</span></div>`).join('');
+  document.getElementById('categoriesList').innerHTML=categories.map(c=>`<div class="list-item" onclick="openCategory('${c}')"><span class="material-symbols-outlined" style="font-size:22px;color:var(--purple);">category</span><div class="list-item-info"><h4>${c}</h4></div><span class="material-symbols-outlined" style="font-size:20px;">chevron_right</span></div>`).join('');
 }
 
 function openCategory(cat){selectedTab=cat;showPage('shop');renderShop();}
 
 function renderShop(){
   document.getElementById('shopTabs').innerHTML='<div class="tab active" onclick="setTab(this,\'all\')">Todos</div>'+categories.map(c=>`<div class="tab" onclick="setTab(this,'${c}')">${c}</div>`).join('');
-  document.getElementById('shopProducts').innerHTML=products.filter(p=>selectedTab=='all'||p.category==selectedTab).map(p=>`<div class="list-item"><img src="${p.img}"><div class="list-item-info"><h4>${p.name}</h4><div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div></div><button class="btn-cart" onclick="addToCart('${p.id}')"><span class="material-symbols-outlined">shopping_cart</span></button></div>`).join('');
+  document.getElementById('shopProducts').innerHTML=products.filter(p=>selectedTab=='all'||p.category==selectedTab).map(p=>`<div class="list-item"><img src="${p.img}"><div class="list-item-info"><h4>${p.name}</h4><div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div></div><button class="btn-cart" onclick="addToCart('${p.id}')"><span class="material-symbols-outlined" style="font-size:20px;">shopping_cart</span></button></div>`).join('');
 }
 
 function setTab(el,tab){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');selectedTab=tab;renderShop();}
 
 function openProduct(id){
   selectedProduct=products.find(p=>p.id==id);
-  document.getElementById('productDetail').innerHTML=`<div style="padding:16px;"><img src="${selectedProduct.img}" style="width:100%;border-radius:12px;"><h2 style="margin-top:12px;">${selectedProduct.name}</h2><h3 style="color:var(--purple);font-size:24px;margin:12px 0;">R$ ${selectedProduct.price.toFixed(2).replace('.',',')}</h3><button class="btn-buy" onclick="addToCart('${selectedProduct.id}')">Comprar agora</button></div>`;
+  document.getElementById('productDetail').innerHTML=`<div style="padding:16px;"><img src="${selectedProduct.img}" style="width:100%;border-radius:12px;border:1px solid var(--border);"><h2 style="margin-top:12px;font-size:16px;">${selectedProduct.name}</h2><h3 style="color:var(--gold);font-size:22px;margin:12px 0;">R$ ${selectedProduct.price.toFixed(2).replace('.',',')}</h3><button class="btn-primary" onclick="addToCart('${selectedProduct.id}')">Comprar agora</button></div>`;
   showPage('product');
 }
 
