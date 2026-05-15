@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Prime Store</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
 
 <style>
 
@@ -23,22 +26,30 @@ color:#fff;
 overflow-x:hidden;
 }
 
+:root{
+--roxo:#b026ff;
+--roxo2:#7d00ff;
+--bg:#050505;
+--card:#0f0f14;
+--border:#892dff;
+}
+
 a{
 text-decoration:none;
 color:inherit;
 }
 
 img{
-max-width:100%;
+width:100%;
 display:block;
 }
 
-:root{
---roxo:#a020ff;
---roxo2:#7a00ff;
---bg:#070707;
---card:#0f0f14;
---border:#8c2bff;
+.material-symbols-outlined{
+font-variation-settings:
+'FILL' 0,
+'wght' 300,
+'GRAD' 0,
+'opsz' 24;
 }
 
 .container{
@@ -56,7 +67,6 @@ margin-bottom:20px;
 .logo{
 font-size:28px;
 font-weight:800;
-color:#fff;
 letter-spacing:2px;
 }
 
@@ -65,55 +75,60 @@ color:var(--roxo);
 }
 
 .icon{
-font-size:26px;
-cursor:pointer;
+font-size:30px;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 
 .banner{
-position:relative;
 height:220px;
-border:1px solid rgba(160,32,255,.5);
+border-radius:22px;
 overflow:hidden;
-border-radius:18px;
-margin-bottom:25px;
-background:url('https://images.unsplash.com/photo-1542751110-97427bbecf20?q=80&w=1200&auto=format&fit=crop') center/cover;
+position:relative;
+border:1px solid rgba(176,38,255,.4);
+margin-bottom:30px;
 }
 
-.banner::before{
+.banner img{
+height:100%;
+object-fit:cover;
+}
+
+.banner::after{
 content:'';
 position:absolute;
 inset:0;
-background:linear-gradient(90deg,#000 20%,rgba(0,0,0,.3));
+background:linear-gradient(to top,rgba(0,0,0,.8),transparent);
 }
 
 .banner-content{
 position:absolute;
+bottom:25px;
 left:20px;
-top:50%;
-transform:translateY(-50%);
 z-index:2;
 }
 
 .banner h1{
-font-size:34px;
-line-height:36px;
+font-size:32px;
+line-height:34px;
 margin-bottom:10px;
 }
 
 .banner p{
 font-size:13px;
+color:#d1d1d1;
 margin-bottom:18px;
-color:#ccc;
 }
 
 .btn{
-background:linear-gradient(90deg,var(--roxo),#d000ff);
+height:48px;
+padding:0 24px;
 border:none;
-padding:13px 20px;
+border-radius:14px;
+background:linear-gradient(90deg,var(--roxo),#d000ff);
 color:#fff;
-font-weight:600;
-border-radius:12px;
-cursor:pointer;
+font-weight:700;
 }
 
 .section-title{
@@ -141,22 +156,18 @@ margin-bottom:30px;
 
 .cat{
 background:var(--card);
-border:1px solid rgba(160,32,255,.4);
-padding:20px 10px;
-border-radius:16px;
-text-align:center;
-transition:.3s;
+border:1px solid rgba(176,38,255,.3);
+border-radius:18px;
+padding:22px 10px;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:10px;
 }
 
-.cat:hover{
-transform:translateY(-5px);
-border-color:var(--roxo);
-}
-
-.cat i{
-font-size:30px;
-margin-bottom:10px;
-display:block;
+.cat .material-symbols-outlined{
+font-size:32px;
 color:var(--roxo);
 }
 
@@ -167,30 +178,22 @@ font-size:13px;
 .produtos{
 display:grid;
 grid-template-columns:repeat(2,1fr);
-gap:14px;
+gap:15px;
 }
 
 .produto{
 background:var(--card);
+border:1px solid rgba(176,38,255,.3);
 border-radius:18px;
 overflow:hidden;
-border:1px solid rgba(160,32,255,.3);
-transition:.3s;
-}
-
-.produto:hover{
-transform:translateY(-5px);
-border-color:var(--roxo);
 }
 
 .produto-img{
 height:140px;
-background:#111;
 overflow:hidden;
 }
 
 .produto-img img{
-width:100%;
 height:100%;
 object-fit:cover;
 }
@@ -205,21 +208,23 @@ margin-bottom:8px;
 }
 
 .preco{
-font-size:20px;
+font-size:22px;
 font-weight:700;
-color:#fff;
-margin-bottom:12px;
+margin-bottom:14px;
 }
 
 .comprar{
 width:100%;
-padding:12px;
-background:linear-gradient(90deg,var(--roxo),#d000ff);
+height:45px;
 border:none;
-border-radius:10px;
+border-radius:12px;
+background:linear-gradient(90deg,var(--roxo),#d000ff);
 color:#fff;
-font-weight:600;
-cursor:pointer;
+font-weight:700;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:8px;
 }
 
 .bottom{
@@ -227,9 +232,9 @@ position:fixed;
 bottom:0;
 left:0;
 width:100%;
-height:75px;
-background:#0a0a0f;
-border-top:1px solid rgba(160,32,255,.3);
+height:78px;
+background:#0b0b10;
+border-top:1px solid rgba(176,38,255,.2);
 display:flex;
 justify-content:space-around;
 align-items:center;
@@ -240,225 +245,71 @@ z-index:999;
 display:flex;
 flex-direction:column;
 align-items:center;
-font-size:12px;
-color:#aaa;
+gap:5px;
+font-size:11px;
+color:#888;
 }
 
 .bottom a.active{
 color:var(--roxo);
 }
 
-.bottom i{
-font-size:22px;
-margin-bottom:4px;
-}
-
-.loja-page{
-display:none;
-}
-
-.search{
-display:flex;
-gap:10px;
-margin-bottom:20px;
-}
-
-.search input{
-flex:1;
-height:50px;
-background:#111;
-border:1px solid rgba(160,32,255,.4);
-border-radius:12px;
-padding:0 15px;
-outline:none;
-color:#fff;
-}
-
-.filtro{
-width:50px;
-height:50px;
-border-radius:12px;
-background:#111;
-display:flex;
-align-items:center;
-justify-content:center;
-border:1px solid rgba(160,32,255,.4);
-}
-
-.lista-produtos{
-display:flex;
-flex-direction:column;
-gap:15px;
-}
-
-.item{
-display:flex;
-gap:14px;
-background:#111;
-padding:12px;
-border-radius:16px;
-border:1px solid rgba(160,32,255,.3);
-}
-
-.item img{
-width:100px;
-height:100px;
-object-fit:cover;
-border-radius:12px;
-}
-
-.item-info{
-flex:1;
-}
-
-.item-info h3{
-font-size:15px;
-margin-bottom:6px;
-}
-
-.item-info p{
-font-size:12px;
-color:#999;
-margin-bottom:8px;
-}
-
-.item-info span{
-font-size:22px;
-font-weight:700;
-}
-
-.add{
-width:50px;
-height:50px;
-background:linear-gradient(90deg,var(--roxo),#d000ff);
-border-radius:12px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:24px;
-}
-
-.carrinho{
-display:none;
-}
-
-.cart-item{
-display:flex;
-gap:12px;
-background:#111;
-padding:12px;
-border-radius:15px;
-margin-bottom:15px;
-border:1px solid rgba(160,32,255,.3);
-}
-
-.cart-item img{
-width:90px;
-height:90px;
-border-radius:12px;
-object-fit:cover;
-}
-
-.cart-info{
-flex:1;
-}
-
-.total-box{
-margin-top:25px;
-background:#111;
-padding:18px;
-border-radius:18px;
-border:1px solid rgba(160,32,255,.3);
-}
-
-.total-line{
-display:flex;
-justify-content:space-between;
-margin-bottom:10px;
-}
-
-.total{
-font-size:24px;
-font-weight:700;
-}
-
-.finalizar{
-margin-top:20px;
-width:100%;
-height:55px;
-border:none;
-border-radius:14px;
-background:linear-gradient(90deg,var(--roxo),#d000ff);
-color:#fff;
-font-size:16px;
-font-weight:700;
-}
-
-.perfil{
-display:none;
-}
-
-.profile-card{
-background:#111;
-padding:20px;
-border-radius:18px;
-border:1px solid rgba(160,32,255,.3);
-margin-bottom:20px;
-}
-
-.avatar{
-width:70px;
-height:70px;
-border-radius:50%;
-border:2px solid var(--roxo);
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:30px;
-margin-bottom:12px;
-}
-
-.menu{
-display:flex;
-flex-direction:column;
-gap:12px;
-}
-
-.menu-item{
-background:#111;
-padding:16px;
-border-radius:14px;
-border:1px solid rgba(160,32,255,.2);
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-::-webkit-scrollbar{
-width:0;
+.bottom .material-symbols-outlined{
+font-size:25px;
 }
 
 </style>
 </head>
 <body>
 
-<!-- HOME -->
-
-<section class="container">
+<div class="container">
 
 <div class="topo">
-<div class="icon">☰</div>
-<div class="logo">PRIME <span>STORE</span></div>
-<div class="icon">🛒</div>
+
+<div class="icon">
+<span class="material-symbols-outlined">
+menu
+</span>
 </div>
 
+<div class="logo">
+PRIME <span>STORE</span>
+</div>
+
+<div class="icon">
+<span class="material-symbols-outlined">
+shopping_cart
+</span>
+</div>
+
+</div>
+
+<!-- BANNER -->
+
 <div class="banner">
+
+<img src="https://i.postimg.cc/C5KWcT5z/be50f798-9fdd-49a3-99aa-7b4abaf24030.jpg">
+
 <div class="banner-content">
-<h1>RECARGA<br>FREE FIRE</h1>
-<p>Os melhores preços você encontra aqui.</p>
-<button class="btn">COMPRE AGORA</button>
+
+<h1>PRIME<br>STORE</h1>
+
+<p>
+Os melhores produtos você encontra aqui.
+</p>
+
+<button class="btn">
+<span class="material-symbols-outlined">
+bolt
+</span>
+COMPRAR
+</button>
+
 </div>
+
 </div>
+
+<!-- CATEGORIAS -->
 
 <div class="section-title">
 <h2>Categorias</h2>
@@ -468,36 +319,50 @@ width:0;
 <div class="categorias">
 
 <div class="cat">
-<i>💎</i>
+<span class="material-symbols-outlined">
+diamond
+</span>
 <span>Diamantes</span>
 </div>
 
 <div class="cat">
-<i>🎮</i>
+<span class="material-symbols-outlined">
+sports_esports
+</span>
 <span>Jogos</span>
 </div>
 
 <div class="cat">
-<i>👑</i>
-<span>Assinaturas</span>
+<span class="material-symbols-outlined">
+workspace_premium
+</span>
+<span>Premium</span>
 </div>
 
 <div class="cat">
-<i>🏆</i>
+<span class="material-symbols-outlined">
+military_tech
+</span>
 <span>Prêmios</span>
 </div>
 
 <div class="cat">
-<i>🎓</i>
-<span>Treinamentos</span>
+<span class="material-symbols-outlined">
+school
+</span>
+<span>Cursos</span>
 </div>
 
 <div class="cat">
-<i>•••</i>
+<span class="material-symbols-outlined">
+apps
+</span>
 <span>Outros</span>
 </div>
 
 </div>
+
+<!-- PRODUTOS -->
 
 <div class="section-title">
 <h2>Produtos em destaque</h2>
@@ -507,242 +372,163 @@ width:0;
 <div class="produtos">
 
 <div class="produto">
+
 <div class="produto-img">
-<img src="https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=1200&auto=format&fit=crop">
+<img src="https://i.postimg.cc/C5KWcT5z/be50f798-9fdd-49a3-99aa-7b4abaf24030.jpg">
 </div>
 
 <div class="produto-info">
-<h3>110 Diamantes</h3>
-<div class="preco">R$ 4,99</div>
-<button class="comprar">Comprar</button>
-</div>
-</div>
 
-<div class="produto">
-<div class="produto-img">
-<img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop">
+<h3>Produto Premium</h3>
+
+<div class="preco">
+R$ 4,99
 </div>
 
-<div class="produto-info">
-<h3>Passe Booyah</h3>
-<div class="preco">R$ 14,90</div>
-<button class="comprar">Comprar</button>
-</div>
-</div>
+<button class="comprar">
 
-<div class="produto">
-<div class="produto-img">
-<img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200&auto=format&fit=crop">
-</div>
+<span class="material-symbols-outlined">
+shopping_cart
+</span>
 
-<div class="produto-info">
-<h3>Netflix Premium</h3>
-<div class="preco">R$ 21,90</div>
-<button class="comprar">Comprar</button>
-</div>
-</div>
+Comprar
 
-<div class="produto">
-<div class="produto-img">
-<img src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?q=80&w=1200&auto=format&fit=crop">
-</div>
-
-<div class="produto-info">
-<h3>Conta FF</h3>
-<div class="preco">R$ 89,90</div>
-<button class="comprar">Comprar</button>
-</div>
-</div>
-
-</div>
-
-</section>
-
-<!-- LOJA -->
-
-<section class="container loja-page">
-
-<div class="topo">
-<div class="icon">←</div>
-<div class="logo">LOJA</div>
-<div class="icon">🛒</div>
-</div>
-
-<div class="search">
-<input type="text" placeholder="Buscar produtos...">
-<div class="filtro">⚙️</div>
-</div>
-
-<div class="lista-produtos">
-
-<div class="item">
-
-<img src="https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=1200&auto=format&fit=crop">
-
-<div class="item-info">
-<h3>110 DIAMANTES</h3>
-<p>FREE FIRE</p>
-<span>R$ 4,99</span>
-</div>
-
-<div class="add">+</div>
-
-</div>
-
-<div class="item">
-
-<img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop">
-
-<div class="item-info">
-<h3>PASSE BOOYAH</h3>
-<p>FREE FIRE</p>
-<span>R$ 14,90</span>
-</div>
-
-<div class="add">+</div>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- CARRINHO -->
-
-<section class="container carrinho">
-
-<div class="topo">
-<div class="icon">←</div>
-<div class="logo">CARRINHO</div>
-<div class="icon">🛒</div>
-</div>
-
-<div class="cart-item">
-
-<img src="https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=1200&auto=format&fit=crop">
-
-<div class="cart-info">
-<h3>110 DIAMANTES</h3>
-<p>FREE FIRE</p>
-<h2>R$ 4,99</h2>
-</div>
-
-</div>
-
-<div class="cart-item">
-
-<img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200&auto=format&fit=crop">
-
-<div class="cart-info">
-<h3>NETFLIX PREMIUM</h3>
-<p>1 MÊS</p>
-<h2>R$ 21,90</h2>
-</div>
-
-</div>
-
-<div class="total-box">
-
-<div class="total-line">
-<span>Subtotal</span>
-<span>R$ 26,89</span>
-</div>
-
-<div class="total-line">
-<span>Taxa</span>
-<span>R$ 0,00</span>
-</div>
-
-<hr style="margin:15px 0;border-color:#222;">
-
-<div class="total-line total">
-<span>Total</span>
-<span>R$ 26,89</span>
-</div>
-
-<button class="finalizar">
-FINALIZAR COMPRA
 </button>
 
 </div>
 
-</section>
-
-<!-- PERFIL -->
-
-<section class="container perfil">
-
-<div class="topo">
-<div class="icon">←</div>
-<div class="logo">PERFIL</div>
-<div class="icon">🔔</div>
 </div>
 
-<div class="profile-card">
+<div class="produto">
 
-<div class="avatar">👤</div>
-
-<h2>Prime Player</h2>
-
-<p style="color:#999;margin-top:5px;">
-primeplayer@gmail.com
-</p>
-
+<div class="produto-img">
+<img src="https://i.postimg.cc/C5KWcT5z/be50f798-9fdd-49a3-99aa-7b4abaf24030.jpg">
 </div>
 
-<div class="menu">
+<div class="produto-info">
 
-<div class="menu-item">
-<span>Dados pessoais</span>
-<span>›</span>
+<h3>Produto Exclusivo</h3>
+
+<div class="preco">
+R$ 14,90
 </div>
 
-<div class="menu-item">
-<span>Endereços</span>
-<span>›</span>
-</div>
+<button class="comprar">
 
-<div class="menu-item">
-<span>Métodos de pagamento</span>
-<span>›</span>
-</div>
+<span class="material-symbols-outlined">
+shopping_cart
+</span>
 
-<div class="menu-item">
-<span>Segurança</span>
-<span>›</span>
-</div>
+Comprar
 
-<div class="menu-item">
-<span>Sair da conta</span>
-<span>›</span>
+</button>
+
 </div>
 
 </div>
 
-</section>
+<div class="produto">
+
+<div class="produto-img">
+<img src="https://i.postimg.cc/C5KWcT5z/be50f798-9fdd-49a3-99aa-7b4abaf24030.jpg">
+</div>
+
+<div class="produto-info">
+
+<h3>Conta Premium</h3>
+
+<div class="preco">
+R$ 89,90
+</div>
+
+<button class="comprar">
+
+<span class="material-symbols-outlined">
+shopping_cart
+</span>
+
+Comprar
+
+</button>
+
+</div>
+
+</div>
+
+<div class="produto">
+
+<div class="produto-img">
+<img src="https://i.postimg.cc/C5KWcT5z/be50f798-9fdd-49a3-99aa-7b4abaf24030.jpg">
+</div>
+
+<div class="produto-info">
+
+<h3>Assinatura VIP</h3>
+
+<div class="preco">
+R$ 21,90
+</div>
+
+<button class="comprar">
+
+<span class="material-symbols-outlined">
+shopping_cart
+</span>
+
+Comprar
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
 
 <!-- MENU -->
 
 <div class="bottom">
 
 <a class="active">
-<div>🏠</div>
+
+<span class="material-symbols-outlined">
+home
+</span>
+
 <span>Início</span>
+
 </a>
 
 <a>
-<div>📦</div>
+
+<span class="material-symbols-outlined">
+widgets
+</span>
+
 <span>Categorias</span>
+
 </a>
 
 <a>
-<div>🛒</div>
+
+<span class="material-symbols-outlined">
+shopping_cart
+</span>
+
 <span>Carrinho</span>
+
 </a>
 
 <a>
-<div>👤</div>
+
+<span class="material-symbols-outlined">
+person
+</span>
+
 <span>Perfil</span>
+
 </a>
 
 </div>
