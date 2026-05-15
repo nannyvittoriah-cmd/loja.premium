@@ -11,15 +11,15 @@
 body{background:#050505;color:#fff;overflow-x:hidden;}
 :root{--roxo:#b026ff;--border:rgba(176,38,255,.18);--card:#111;}
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;}
-.page{display:none;max-width:430px;margin:auto;min-height:100vh;padding:12px;padding-bottom:85px;}
+.page{display:none;max-width:430px;margin:auto;min-height:100vh;padding:12px;padding-bottom:85px;position:relative;z-index:1;}
 .page.active{display:block;}
 .topo{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
 .logo{font-size:20px;font-weight:800;}
 .logo span{color:var(--roxo);}
-.top-btn{width:34px;height:34px;background:#111;border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
-.menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;z-index:999;}
+.top-btn{width:34px;height:34px;background:#111;border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;z-index:2;}
+.menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;z-index:998;}
 .menu-overlay.active{display:block;}
-.side-menu{position:fixed;top:0;left:-280px;width:280px;height:100%;background:#080808;border-right:1px solid var(--border);padding:16px;z-index:1000;transition:.3s;}
+.side-menu{position:fixed;top:0;left:-280px;width:280px;height:100%;background:#080808;border-right:1px solid var(--border);padding:16px;z-index:999;transition:.3s;}
 .side-menu.active{left:0;}
 .menu-title{font-size:18px;font-weight:700;margin-bottom:20px;}
 .menu-list{display:flex;flex-direction:column;gap:10px;}
@@ -41,15 +41,15 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 .produto-info{padding:10px;}
 .produto-info h3{font-size:11px;margin-bottom:7px;}
 .preco{font-size:16px;font-weight:800;margin-bottom:10px;}
-.comprar{width:100%;height:34px;border:none;border-radius:10px;background:linear-gradient(90deg,#7a00ff,#d000ff);color:#fff;font-size:10px;font-weight:700;cursor:pointer;}
+.comprar{width:100%;height:34px;border:none;border-radius:10px;background:linear-gradient(90deg,#7a00ff,#d000ff);color:#fff;font-size:10px;font-weight:700;cursor:pointer;position:relative;z-index:2;}
 .lista{display:flex;flex-direction:column;gap:10px;}
-.item{display:flex;gap:10px;background:#111;padding:10px;border-radius:14px;border:1px solid var(--border);align-items:center;}
+.item{display:flex;gap:10px;background:#111;padding:10px;border-radius:14px;border:1px solid var(--border);align-items:center;position:relative;z-index:2;}
 .item img{width:75px;height:75px;border-radius:10px;object-fit:cover;}
 .item-info{flex:1;cursor:pointer;}
 .item-info h3{font-size:11px;margin-bottom:5px;}
 .item-info p{font-size:9px;color:#999;margin-bottom:6px;}
 .item-info span{font-size:16px;font-weight:700;}
-.add{width:38px;height:38px;border-radius:10px;background:linear-gradient(90deg,#7a00ff,#d000ff);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.add{width:38px;height:38px;border-radius:10px;background:linear-gradient(90deg,#7a00ff,#d000ff);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;z-index:2;}
 .cart-list{display:flex;flex-direction:column;gap:10px;}
 .cart-item{background:#111;padding:10px;border-radius:14px;display:flex;gap:10px;border:1px solid var(--border);}
 .total-box{margin-top:14px;background:#111;padding:14px;border-radius:14px;border:1px solid var(--border);}
@@ -61,7 +61,7 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 .tabs{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;}
 .tab{padding:8px 14px;background:#111;border:1px solid var(--border);border-radius:10px;font-size:11px;white-space:nowrap;cursor:pointer;}
 .tab.active{background:var(--roxo);border-color:var(--roxo);}
-.bottom{position:fixed;bottom:0;left:0;width:100%;height:65px;background:#0a0a0f;border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;z-index:998;}
+.bottom{position:fixed;bottom:0;left:0;width:100%;height:65px;background:#0a0a0f;border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;z-index:997;}
 .bottom a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9px;color:#777;width:100%;height:100%;cursor:pointer;}
 .bottom a.active{color:var(--roxo);}
 .toggle{position:relative;width:44px;height:24px;}
@@ -72,7 +72,7 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 .toggle input:checked + span:before{transform:translateX(20px);}
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:2000;align-items:center;justify-content:center;padding:20px;}
 .modal.active{display:flex;}
-.modal-box{background:#111;border:1px solid var(--border);border-radius:16px;padding:16px;width:100%;max-width:380px;}
+.modal-box{background:#111;border:1px solid var(--border);border-radius:16px;padding:16px;width:100%;max-width:380px;position:relative;z-index:2001;}
 </style>
 </head>
 <body>
@@ -637,7 +637,8 @@ const cat = document.getElementById("filtroCategoria").value;
 area.innerHTML = "";
 subcategoriasAdm.filter(s=>s.categoria==cat).forEach((s,i)=>{
 const qtdProd = produtosAdm.filter(p=>p.sub==s.nome).length;
-const img = s.imagem?`<img src="${s.imagem}">`:`<span class="material-symbols-outlined">folder</span>`;
+const img = s.imagem?`<img src="${s.imagem}" style="width:40px;height:40px;border-radius:8px;object-fit:cover;">`
+:`<span class="material-symbols-outlined">folder</span>`;
 area.innerHTML += `
 <div class="item">
 ${img}
@@ -709,15 +710,6 @@ renderSubcategorias();
 }
 }
 
-function carregarConfigGeral(){
-document.getElementById("confNomeLoja").value = configGeral.nome||"";
-document.getElementById("confCor").value = configGeral.cor||"#7c3aed";
-document.getElementById("confMoeda").value = configGeral.moeda||"BRL";
-document.getElementById("confTaxa").value = configGeral.taxa||"";
-}
-
-function salvarConfigGeral(){
-const file = document.getElementById("confLogo").files[0];
 function salvarConfigGeral(){
 const file = document.getElementById("confLogo").files[0];
 const salvar = (logo)=>{
