@@ -256,6 +256,22 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 <div class="lista" id="listaSubcategorias"></div>
 </section>
 
+<!-- MODAL SUBCATEGORIA -->
+<div class="modal" id="modalSubcategoria">
+<div class="modal-box">
+<h3 style="margin-bottom:12px;" id="modalSubTitulo">Nova Subcategoria</h3>
+<div class="login-box" style="margin-top:0;">
+<input type="hidden" id="subEditIndex">
+<input type="text" id="subNome" placeholder="Nome da subcategoria">
+<input type="file" id="subImagem" accept="image/*">
+<div style="display:flex;gap:10px;">
+<button onclick="salvarSubcategoria()">SALVAR</button>
+<button style="background:#333;" onclick="fecharModalSubcategoria()">CANCELAR</button>
+</div>
+</div>
+</div>
+</div>
+
 <!-- ADM CONFIG -->
 <section class="page" id="admConfig">
 <div class="topo">
@@ -521,6 +537,7 @@ function editarProd(index){
 const p = produtosAdm[index];
 document.getElementById("editIndex").value=index;
 document.getElementById("addTitulo").innerText="EDITAR";
+carregarSelects();
 document.getElementById("produtoNome").value=p.nome;
 document.getElementById("produtoCategoria").value=p.categoria;
 document.getElementById("produtoSub").value=p.sub;
@@ -608,7 +625,7 @@ renderHomeCategorias();
 }
 
 function abrirSubcategorias(cat){
-document.getElementById("subTitulo").innerText="SUB: "+cat;
+document.getElementById("subTitulo").innerText="Categoria: "+cat;
 document.getElementById("filtroCategoria").innerHTML=`<option>${cat}</option>`;
 showPage('admSubcategorias');
 renderSubcategorias();
@@ -620,13 +637,16 @@ const cat = document.getElementById("filtroCategoria").value;
 area.innerHTML = "";
 subcategoriasAdm.filter(s=>s.categoria==cat).forEach((s,i)=>{
 const qtdProd = produtosAdm.filter(p=>p.sub==s.nome).length;
+const img = s.imagem?`<img src="${s.imagem}">`:`<span class="material-symbols-outlined">folder</span>`;
 area.innerHTML += `
 <div class="item">
+${img}
 <div class="item-info">
 <h3>${s.nome}</h3>
 <p>${qtdProd} produtos</p>
 </div>
-<div>
+<div style="display:flex;gap:10px;">
+<span class="material-symbols-outlined" onclick="editarSub(${i})">edit</span>
 <span class="material-symbols-outlined" onclick="deletarSub(${i})">delete</span>
 </div>
 </div>`;
@@ -634,12 +654,59 @@ area.innerHTML += `
 }
 
 function abrirModalSubcategoria(){
+document.getElementById("modalSubTitulo").innerText="Nova Subcategoria";
+document.getElementById("subEditIndex").value="";
+document.getElementById("subNome").value="";
+document.getElementById("subImagem").value="";
+document.getElementById("modalSubcategoria").classList.add("active");
+}
+
+function fecharModalSubcategoria(){
+document.getElementById("modalSubcategoria").classList.remove("active");
+}
+
+function salvarSubcategoria(){
+const idx = document.getElementById("subEditIndex").value;
+const nome = document.getElementById("subNome").value;
 const cat = document.getElementById("filtroCategoria").value;
-const nome = prompt("Nome da subcategoria:");
-if(!nome) return;
-subcategoriasAdm.push({categoria:cat,nome});
+const file = document.getElementById("subImagem").files[0];
+if(!nome)return;
+
+const salvar = (img)=>{
+const obj = {categoria:cat,nome,imagem:img};
+if(idx===""){
+subcategoriasAdm.push(obj);
+}else{
+subcategoriasAdm[idx]=obj;
+}
 localStorage.setItem("subcategoriasAdm",JSON.stringify(subcategoriasAdm));
 renderSubcategorias();
+fecharModalSubcategoria();
+}
+
+if(file){
+const reader = new FileReader();
+reader.onload = e=>salvar(e.target.result);
+reader.readAsDataURL(file);
+}else{
+salvar(idx!==""?subcategoriasAdm[idx].imagem:"");
+}
+}
+
+function editarSub(i){
+const s = subcategoriasAdm[i];
+document.getElementById("modalSubTitulo").innerText="Editar Subcategoria";
+document.getElementById("subEditIndex").value=i;
+document.getElementById("subNome").value=s.nome;
+document.getElementById("modalSubcategoria").classList.add("active");
+}
+
+function deletarSub(i){
+if(confirm("Deletar subcategoria? Isso não deleta os produtos.")){
+subcategoriasAdm.splice(i,1);
+localStorage.setItem("subcategoriasAdm",JSON.stringify(subcategoriasAdm));
+renderSubcategorias();
+}
 }
 
 function carregarConfigGeral(){
@@ -649,6 +716,8 @@ document.getElementById("confMoeda").value = configGeral.moeda||"BRL";
 document.getElementById("confTaxa").value = configGeral.taxa||"";
 }
 
+function salvarConfigGeral(){
+const file = document.getElementById("confLogo").files[0];
 function salvarConfigGeral(){
 const file = document.getElementById("confLogo").files[0];
 const salvar = (logo)=>{
