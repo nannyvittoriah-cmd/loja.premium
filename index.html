@@ -23,10 +23,35 @@ body{background:var(--cor-fundo);color:var(--cor-texto);overflow-x:hidden;}
 .page.active{display:block;}
 
 /* MENU LATERAL CLIENTE */
-.menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:200;display:none;}
-.menu-overlay.active{display:block;}
-.menu-drawer{position:fixed;left:-280px;top:0;width:280px;height:100vh;background:linear-gradient(180deg,#1a0a2e 0%,#0a0a0f 100%);border-right:1px solid var(--border);z-index:201;transition:left 0.3s ease;padding:20px;}
-.menu-drawer.active{left:0;}
+.menu-overlay, .modal-overlay{
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.85);
+z-index: 300;
+display: none;
+align-items: center;
+justify-content: center;
+}
+.menu-overlay.active, .modal-overlay.active{
+display: flex;
+pointer-events: auto;
+}
+.menu-drawer{
+position: fixed;
+left: -280px;
+top: 0;
+width: 280px;
+height: 100vh;
+background: linear-gradient(180deg,#1a0a2e 0%,#0a0a0f 100%);
+border-right: 1px solid var(--border);
+z-index: 301;
+transition: left 0.3s ease;
+padding: 20px;
+pointer-events: auto;
+}
+.menu-drawer.active{
+left: 0;
+}
 .menu-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:30px;}
 .menu-header h2{font-size:18px;font-weight:800;letter-spacing:1px;}
 .menu-close{width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:8px;}
@@ -36,10 +61,18 @@ body{background:var(--cor-fundo);color:var(--cor-texto);overflow-x:hidden;}
 .menu-item span{font-size:22px;color:var(--roxo);}
 .menu-item p{font-size:15px;font-weight:600;}
 
-/* MODAL PRODUTO */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:300;align-items:center;justify-content:center;padding:20px;}
-.modal-overlay.active{display:flex;}
-.modal-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;width:100%;max-width:420px;max-height:90vh;overflow-y:auto;}
+/* MODAL */
+.modal-box{
+background: var(--card);
+border: 1px solid var(--border);
+border-radius: 16px;
+padding: 20px;
+width: 100%;
+max-width: 420px;
+max-height: 90vh;
+overflow-y: auto;
+pointer-events: auto;
+}
 .modal-title{font-size:18px;font-weight:700;margin-bottom:16px;text-align:center;}
 .upload-box{position:relative;border:2px dashed var(--border);border-radius:12px;padding:20px;text-align:center;cursor:pointer;margin-bottom:8px;background:#0f0f17;}
 .upload-box:hover{border-color:var(--roxo);}
@@ -205,7 +238,7 @@ transition:.2s;
 <body>
 
 <!-- MENU LATERAL CLIENTE -->
-<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+<div class="menu-overlay" id="menuOverlay"></div>
 <div class="menu-drawer" id="menuDrawer">
 <div class="menu-header">
 <h2>MENU</h2>
@@ -843,7 +876,9 @@ let produtoEditandoId = null;
 let categoriaEditandoId = null;
 let categoriaSubId = null;
 let cupomAplicado = null;
-let valorTotal = 0;
+let produtoAtual = null;
+let filtroAtual = 'todas';
+let admOnline = true;
 let taxa = config.taxa;
 let chavePix = config.chavePix;
 let numeroWhats = config.whatsapp;
@@ -1222,6 +1257,14 @@ document.getElementById('subNome').value = '';
 renderSubcategorias();
 }
 
+function excluirSubcategoria(index){
+if(!confirm('Excluir esta subcategoria?')) return;
+const cat = categorias.find(c=>c.id===categoriaSubId);
+cat.subcategorias.splice(index,1);
+localStorage.setItem("categorias",JSON.stringify(categorias));
+renderSubcategorias();
+}
+
 // CUPONS
 function renderCuponsAdm(){
 const tabela = document.getElementById('tabelaCupons');
@@ -1332,7 +1375,7 @@ location.reload();
 }
 }
 
-// CLIENTE FUNÇÕES BÁSICAS
+// CLIENTE FUNÇÕES
 function renderHome(){
 const grid = document.getElementById('categoriesGrid');
 grid.innerHTML = '';
@@ -1421,5 +1464,4 @@ html += `<div class="cart-item">
 </div>`;
 });
 html += `<div class="resumo-box">
-<div class="resumo-linha total"><span>TOTAL</span><span>R$ ${total.toFixed(2).replace('.',',')}</span></div>
-<button class="btn-finalizar" onclick="finalizarCompra()">FINAL
+<div class="resumo-linha total"><
