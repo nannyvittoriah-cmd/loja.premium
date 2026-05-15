@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Premium Store</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<!-- ICONS OUTLINE -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
 
 <style>
@@ -31,13 +30,108 @@ overflow-x:hidden;
 --primary:#7b2cff;
 --card:#10101b;
 --border:#1d1d2e;
---muted:#9c9cb0;
+--muted:#8f8fa3;
 }
 
-/* APP */
+/* GLOBAL */
 
-.app{
+.hidden{
+display:none;
+}
+
+.page{
+min-height:100vh;
 padding-bottom:90px;
+}
+
+/* LOGIN */
+
+.auth-page{
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px;
+}
+
+.auth-box{
+width:100%;
+max-width:360px;
+background:#10101b;
+border:1px solid #1d1d2e;
+border-radius:24px;
+padding:22px;
+}
+
+.logo{
+font-size:24px;
+font-weight:700;
+margin-bottom:5px;
+}
+
+.logo span{
+color:#a855ff;
+}
+
+.auth-sub{
+font-size:11px;
+color:#8f8fa3;
+margin-bottom:20px;
+}
+
+.input{
+height:48px;
+background:#0d0d18;
+border:1px solid #1d1d2e;
+border-radius:14px;
+display:flex;
+align-items:center;
+padding:0 14px;
+gap:10px;
+margin-bottom:12px;
+}
+
+.input i{
+font-size:18px;
+color:#8f8fa3;
+}
+
+.input input{
+background:none;
+border:none;
+outline:none;
+width:100%;
+color:#fff;
+font-size:12px;
+}
+
+.auth-btn{
+width:100%;
+height:48px;
+border:none;
+border-radius:14px;
+background:#7b2cff;
+color:#fff;
+font-size:12px;
+font-weight:600;
+margin-top:4px;
+cursor:pointer;
+}
+
+.google-btn{
+background:#151525;
+border:1px solid #23233b;
+}
+
+.switch{
+margin-top:18px;
+font-size:11px;
+text-align:center;
+color:#8f8fa3;
+}
+
+.switch span{
+color:#b47cff;
+cursor:pointer;
 }
 
 /* HEADER */
@@ -49,15 +143,13 @@ justify-content:space-between;
 align-items:center;
 }
 
-.header-left h2{
-font-size:16px;
-font-weight:600;
+.logo-home{
+font-size:18px;
+font-weight:700;
 }
 
-.header-left p{
-font-size:11px;
-color:var(--muted);
-margin-top:3px;
+.logo-home span{
+color:#b47cff;
 }
 
 .icon-btn{
@@ -76,7 +168,7 @@ font-size:18px;
 
 .search{
 padding:0 18px;
-margin-bottom:16px;
+margin-bottom:18px;
 }
 
 .search-box{
@@ -92,30 +184,29 @@ gap:10px;
 
 .search-box i{
 font-size:18px;
-color:#8e8ea3;
+color:#8f8fa3;
 }
 
 .search-box input{
+width:100%;
 background:none;
 border:none;
 outline:none;
 color:#fff;
-width:100%;
 font-size:12px;
 }
 
 /* BANNER */
 
 .banner{
-margin:0 18px 18px;
-height:150px;
-border-radius:22px;
-padding:20px;
-background:linear-gradient(135deg,#7b2cff,#2b0f5e);
+margin:0 18px 20px;
+height:160px;
+border-radius:24px;
+padding:22px;
+background:linear-gradient(135deg,#7b2cff,#26084b);
 display:flex;
 flex-direction:column;
 justify-content:center;
-box-shadow:0 0 35px rgba(123,44,255,.3);
 }
 
 .banner small{
@@ -124,13 +215,13 @@ opacity:.8;
 }
 
 .banner h1{
-font-size:26px;
+font-size:28px;
 margin-top:5px;
 }
 
 .banner p{
 font-size:12px;
-margin-top:6px;
+margin-top:8px;
 }
 
 /* SECTION */
@@ -153,7 +244,7 @@ font-size:13px;
 
 .section-top span{
 font-size:11px;
-color:#9d5cff;
+color:#b47cff;
 }
 
 /* CATEGORIES */
@@ -205,8 +296,8 @@ padding:12px;
 .product-img{
 height:95px;
 border-radius:14px;
+background:linear-gradient(135deg,#7b2cff,#17052d);
 margin-bottom:10px;
-background:linear-gradient(135deg,#7b2cff,#190833);
 }
 
 .product h4{
@@ -216,7 +307,7 @@ margin-bottom:4px;
 
 .product p{
 font-size:10px;
-color:#8e8ea3;
+color:#8f8fa3;
 margin-bottom:10px;
 }
 
@@ -232,7 +323,7 @@ font-weight:700;
 color:#c38cff;
 }
 
-.add{
+.add-btn{
 width:34px;
 height:34px;
 border:none;
@@ -267,7 +358,7 @@ flex-direction:column;
 align-items:center;
 gap:4px;
 font-size:10px;
-color:#8e8ea3;
+color:#8f8fa3;
 }
 
 .nav-item.active{
@@ -278,206 +369,111 @@ color:#b47cff;
 font-size:19px;
 }
 
-/* LOGIN ADM */
-
-.admin-login{
-position:fixed;
-inset:0;
-background:#070710;
-display:none;
-align-items:center;
-justify-content:center;
-padding:20px;
-z-index:9999;
-}
-
-.login-box{
-width:100%;
-max-width:350px;
-background:#10101b;
-border:1px solid #1d1d2e;
-border-radius:22px;
-padding:22px;
-}
-
-.login-box h2{
-font-size:18px;
-margin-bottom:6px;
-}
-
-.login-box p{
-font-size:11px;
-color:#8e8ea3;
-margin-bottom:18px;
-}
-
-.input{
-height:46px;
-background:#0d0d18;
-border:1px solid #1d1d2e;
-border-radius:14px;
-display:flex;
-align-items:center;
-padding:0 14px;
-margin-bottom:12px;
-gap:10px;
-}
-
-.input i{
-color:#8e8ea3;
-font-size:18px;
-}
-
-.input input{
-background:none;
-border:none;
-outline:none;
-color:#fff;
-width:100%;
-font-size:12px;
-}
-
-.login-btn{
-width:100%;
-height:46px;
-border:none;
-border-radius:14px;
-background:#7b2cff;
-color:#fff;
-font-size:12px;
-font-weight:600;
-}
-
-/* ADMIN */
-
-.admin-panel{
-display:none;
-padding:18px;
-padding-bottom:100px;
-}
-
-.admin-top{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:18px;
-}
-
-.admin-top h2{
-font-size:18px;
-}
-
-.logout{
-width:42px;
-height:42px;
-border:none;
-border-radius:14px;
-background:#10101b;
-border:1px solid #1d1d2e;
-color:#fff;
-font-size:18px;
-}
-
-.stats{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:12px;
-margin-bottom:18px;
-}
-
-.stat{
-background:#10101b;
-border:1px solid #1d1d2e;
-border-radius:18px;
-padding:16px;
-}
-
-.stat small{
-font-size:11px;
-color:#9d5cff;
-}
-
-.stat h3{
-font-size:22px;
-margin-top:6px;
-}
-
-.admin-box{
-background:#10101b;
-border:1px solid #1d1d2e;
-border-radius:18px;
-padding:14px;
-}
-
-.admin-box-top{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:14px;
-}
-
-.admin-box-top h3{
-font-size:13px;
-}
-
-.add-btn{
-height:36px;
-padding:0 14px;
-border:none;
-border-radius:12px;
-background:#7b2cff;
-color:#fff;
-font-size:11px;
-}
-
-.item{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:12px 0;
-border-bottom:1px solid #1d1d2e;
-}
-
-.item:last-child{
-border:none;
-}
-
-.item-left h4{
-font-size:11px;
-margin-bottom:3px;
-}
-
-.item-left p{
-font-size:10px;
-color:#8e8ea3;
-}
-
-.badge{
-padding:5px 10px;
-border-radius:999px;
-background:#12301f;
-color:#4dff89;
-font-size:10px;
-}
-
 </style>
 </head>
 
 <body>
 
+<!-- LOGIN -->
+
+<div class="page auth-page" id="loginPage">
+
+<div class="auth-box">
+
+<div class="logo">
+Premium <span>Store</span>
+</div>
+
+<div class="auth-sub">
+Faça login para continuar
+</div>
+
+<div class="input">
+<i class="ri-mail-line"></i>
+<input type="email" id="loginEmail" placeholder="E-mail">
+</div>
+
+<div class="input">
+<i class="ri-lock-line"></i>
+<input type="password" id="loginPassword" placeholder="Senha">
+</div>
+
+<button class="auth-btn" onclick="login()">
+Entrar
+</button>
+
+<button class="auth-btn google-btn" onclick="googleLogin()">
+<i class="ri-google-line"></i>
+Entrar com Google
+</button>
+
+<div class="switch">
+Não possui conta?
+<span onclick="openRegister()">
+Criar conta
+</span>
+</div>
+
+</div>
+
+</div>
+
+<!-- REGISTER -->
+
+<div class="page auth-page hidden" id="registerPage">
+
+<div class="auth-box">
+
+<div class="logo">
+Criar <span>Conta</span>
+</div>
+
+<div class="auth-sub">
+Cadastre-se na Premium Store
+</div>
+
+<div class="input">
+<i class="ri-user-line"></i>
+<input type="text" id="registerName" placeholder="Nome">
+</div>
+
+<div class="input">
+<i class="ri-mail-line"></i>
+<input type="email" id="registerEmail" placeholder="E-mail">
+</div>
+
+<div class="input">
+<i class="ri-lock-line"></i>
+<input type="password" id="registerPassword" placeholder="Senha">
+</div>
+
+<button class="auth-btn" onclick="register()">
+Cadastrar
+</button>
+
+<div class="switch">
+Já possui conta?
+<span onclick="openLogin()">
+Entrar
+</span>
+</div>
+
+</div>
+
+</div>
+
 <!-- HOME -->
 
-<div class="app" id="homePage">
+<div class="page hidden" id="homePage">
 
 <div class="header">
 
-<div class="header-left">
-<h2>Premium Store</h2>
-<p>Produtos premium e games</p>
+<div class="logo-home">
+Premium <span>Store</span>
 </div>
 
 <div class="icon-btn">
-<i class="ri-shopping-bag-line"></i>
+<i class="ri-shopping-cart-2-line"></i>
 </div>
 
 </div>
@@ -556,7 +552,7 @@ Promo
 
 <span>R$18,90</span>
 
-<button class="add">
+<button class="add-btn">
 <i class="ri-add-line"></i>
 </button>
 
@@ -576,7 +572,7 @@ Promo
 
 <span>R$17,90</span>
 
-<button class="add">
+<button class="add-btn">
 <i class="ri-add-line"></i>
 </button>
 
@@ -596,7 +592,7 @@ Promo
 
 <span>R$10,90</span>
 
-<button class="add">
+<button class="add-btn">
 <i class="ri-add-line"></i>
 </button>
 
@@ -616,132 +612,10 @@ Promo
 
 <span>R$15,90</span>
 
-<button class="add">
+<button class="add-btn">
 <i class="ri-add-line"></i>
 </button>
 
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- LOGIN ADM -->
-
-<div class="admin-login" id="adminLogin">
-
-<div class="login-box">
-
-<h2>Login ADM</h2>
-<p>Acesso administrativo</p>
-
-<div class="input">
-<i class="ri-user-line"></i>
-<input type="text" id="user" placeholder="Usuário">
-</div>
-
-<div class="input">
-<i class="ri-lock-line"></i>
-<input type="password" id="pass" placeholder="Senha">
-</div>
-
-<button class="login-btn" onclick="loginAdm()">
-Entrar no painel
-</button>
-
-</div>
-
-</div>
-
-<!-- ADMIN PANEL -->
-
-<div class="admin-panel" id="adminPanel">
-
-<div class="admin-top">
-
-<h2>Painel ADM</h2>
-
-<button class="logout" onclick="closeAdmin()">
-<i class="ri-logout-box-r-line"></i>
-</button>
-
-</div>
-
-<div class="stats">
-
-<div class="stat">
-<small>Vendas</small>
-<h3>R$12K</h3>
-</div>
-
-<div class="stat">
-<small>Pedidos</small>
-<h3>1.248</h3>
-</div>
-
-<div class="stat">
-<small>Clientes</small>
-<h3>892</h3>
-</div>
-
-<div class="stat">
-<small>Produtos</small>
-<h3>523</h3>
-</div>
-
-</div>
-
-<div class="admin-box">
-
-<div class="admin-box-top">
-
-<h3>Produtos</h3>
-
-<button class="add-btn">
-+ Adicionar
-</button>
-
-</div>
-
-<div class="item">
-
-<div class="item-left">
-<h4>520 Diamantes</h4>
-<p>Free Fire</p>
-</div>
-
-<div class="badge">
-Ativo
-</div>
-
-</div>
-
-<div class="item">
-
-<div class="item-left">
-<h4>Netflix Premium</h4>
-<p>Streaming</p>
-</div>
-
-<div class="badge">
-Ativo
-</div>
-
-</div>
-
-<div class="item">
-
-<div class="item-left">
-<h4>Spotify Premium</h4>
-<p>Premium</p>
-</div>
-
-<div class="badge">
-Ativo
 </div>
 
 </div>
@@ -774,44 +648,192 @@ Carrinho
 Pedidos
 </div>
 
-<div class="nav-item" onclick="openAdmin()">
-<i class="ri-settings-3-line"></i>
-ADM
+<div class="nav-item" onclick="logoutUser()">
+<i class="ri-logout-box-r-line"></i>
+Sair
 </div>
 
 </div>
 
-<script>
+</div>
 
-function openAdmin(){
-document.getElementById("adminLogin").style.display = "flex";
+<!-- FIREBASE -->
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+GoogleAuthProvider,
+signInWithPopup,
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+onAuthStateChanged,
+signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+/* FIREBASE CONFIG */
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
+
+authDomain: "premium-store-aa58b.firebaseapp.com",
+
+databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
+
+projectId: "premium-store-aa58b",
+
+storageBucket: "premium-store-aa58b.firebasestorage.app",
+
+messagingSenderId: "462239500057",
+
+appId: "1:462239500057:web:f1b7cea162ed308a866788",
+
+measurementId: "G-CN88J28WRX"
+
+};
+
+/* START */
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const provider = new GoogleAuthProvider();
+
+/* OPEN REGISTER */
+
+window.openRegister = function(){
+
+document.getElementById("loginPage").classList.add("hidden");
+
+document.getElementById("registerPage").classList.remove("hidden");
+
 }
 
-function closeAdmin(){
+/* OPEN LOGIN */
 
-document.getElementById("adminPanel").style.display = "none";
-document.getElementById("homePage").style.display = "block";
+window.openLogin = function(){
+
+document.getElementById("registerPage").classList.add("hidden");
+
+document.getElementById("loginPage").classList.remove("hidden");
 
 }
 
-function loginAdm(){
+/* REGISTER */
 
-const user = document.getElementById("user").value;
-const pass = document.getElementById("pass").value;
+window.register = function(){
 
-if(user === "Lorrannyh" && pass === "Lorrannyh.101225"){
+const email =
+document.getElementById("registerEmail").value;
 
-document.getElementById("adminLogin").style.display = "none";
+const password =
+document.getElementById("registerPassword").value;
 
-document.getElementById("homePage").style.display = "none";
+createUserWithEmailAndPassword(auth,email,password)
 
-document.getElementById("adminPanel").style.display = "block";
+.then(()=>{
+
+alert("Conta criada com sucesso!");
+
+openLogin();
+
+})
+
+.catch((error)=>{
+
+alert(error.message);
+
+});
+
+}
+
+/* LOGIN */
+
+window.login = function(){
+
+const email =
+document.getElementById("loginEmail").value;
+
+const password =
+document.getElementById("loginPassword").value;
+
+signInWithEmailAndPassword(auth,email,password)
+
+.then(()=>{
+
+showHome();
+
+})
+
+.catch((error)=>{
+
+alert(error.message);
+
+});
+
+}
+
+/* GOOGLE LOGIN */
+
+window.googleLogin = function(){
+
+signInWithPopup(auth, provider)
+
+.then((result)=>{
+
+alert("Bem-vinda " + result.user.displayName);
+
+showHome();
+
+})
+
+.catch((error)=>{
+
+alert(error.message);
+
+});
+
+}
+
+/* LOGOUT */
+
+window.logoutUser = function(){
+
+signOut(auth);
+
+}
+
+/* AUTH */
+
+onAuthStateChanged(auth,(user)=>{
+
+if(user){
+
+showHome();
 
 }else{
 
-alert("Usuário ou senha inválidos");
+document.getElementById("homePage").classList.add("hidden");
+
+document.getElementById("loginPage").classList.remove("hidden");
 
 }
+
+});
+
+/* SHOW HOME */
+
+function showHome(){
+
+document.getElementById("loginPage").classList.add("hidden");
+
+document.getElementById("registerPage").classList.add("hidden");
+
+document.getElementById("homePage").classList.remove("hidden");
 
 }
 
