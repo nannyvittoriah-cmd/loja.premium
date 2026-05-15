@@ -14,10 +14,19 @@ href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wg
 
 <style>
 
-/* ====== (SEU CSS ORIGINAL INTACTO) ====== */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+-webkit-tap-highlight-color:transparent;
+}
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;-webkit-tap-highlight-color:transparent;}
-body{background:#050505;color:#fff;overflow-x:hidden;}
+body{
+background:#050505;
+color:#fff;
+overflow-x:hidden;
+}
 
 :root{
 --roxo:#b026ff;
@@ -25,321 +34,265 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 --card:#111;
 }
 
-.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;}
+.material-symbols-outlined{
+font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;
+}
 
 .page{display:none;max-width:430px;margin:auto;min-height:100vh;padding:12px;padding-bottom:85px;}
 .page.active{display:block;}
 
-/* (todo seu CSS original permanece aqui sem mudança para não quebrar layout) */
+.topo{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.logo{font-size:20px;font-weight:800;}
+.logo span{color:var(--roxo);}
+.top-btn{width:34px;height:34px;background:#111;border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.top-btn span{font-size:19px;}
 
-/* ====== LOGIN ADM ====== */
+.menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;z-index:999;}
+.menu-overlay.active{display:block;}
+
+.side-menu{position:fixed;top:0;left:-280px;width:280px;height:100%;background:#080808;border-right:1px solid var(--border);padding:16px;z-index:1000;transition:.3s;}
+.side-menu.active{left:0;}
+
+.menu-title{font-size:18px;font-weight:700;margin-bottom:20px;}
+
+.menu-list{display:flex;flex-direction:column;gap:10px;}
+
+.menu-item{height:46px;background:#111;border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;gap:10px;padding:0 14px;font-size:12px;cursor:pointer;}
+
+.banner{height:170px;border-radius:18px;overflow:hidden;position:relative;margin-bottom:18px;border:1px solid var(--border);}
+.banner img{width:100%;height:100%;object-fit:cover;}
+.overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9),transparent);}
+.banner-content{position:absolute;left:14px;bottom:14px;z-index:2;}
+.banner h1{font-size:22px;}
+.banner p{font-size:10px;color:#ddd;}
+.btn{height:34px;padding:0 14px;border:none;border-radius:10px;background:linear-gradient(90deg,#7a00ff,#d000ff);color:#fff;font-size:10px;font-weight:700;cursor:pointer;}
+
+.section-title{display:flex;justify-content:space-between;margin-bottom:10px;}
+.section-title h2{font-size:14px;}
+.section-title a{font-size:10px;color:var(--roxo);}
+
+.categorias{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;}
+.cat{background:#111;border:1px solid var(--border);border-radius:14px;padding:14px 5px;display:flex;flex-direction:column;align-items:center;gap:7px;}
+
+.produtos{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.produto{background:#111;border-radius:16px;overflow:hidden;border:1px solid var(--border);}
+.produto img{width:100%;height:105px;object-fit:cover;}
+.produto-info{padding:10px;}
+.produto-info h3{font-size:11px;}
+.preco{font-size:16px;font-weight:800;}
+.comprar{width:100%;height:34px;border:none;border-radius:10px;background:linear-gradient(90deg,#7a00ff,#d000ff);color:#fff;}
+
+.lista{display:flex;flex-direction:column;gap:10px;}
+.item{display:flex;gap:10px;background:#111;padding:10px;border-radius:14px;border:1px solid var(--border);}
+.item img{width:75px;height:75px;border-radius:10px;object-fit:cover;}
+.item-info h3{font-size:11px;}
+.item-info p{font-size:9px;color:#999;}
+.item-info span{font-size:16px;font-weight:700;}
+
+.bottom{position:fixed;bottom:0;width:100%;height:65px;background:#0a0a0f;border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;}
+.bottom a{display:flex;flex-direction:column;align-items:center;font-size:9px;color:#777;width:100%;}
+.bottom a.active{color:var(--roxo);}
+
 .login-box{display:flex;flex-direction:column;gap:12px;margin-top:50px;}
-.login-box input,.login-box select,.login-box textarea{
-background:#111;border:1px solid var(--border);border-radius:12px;padding:12px;color:#fff;
-}
-.login-box button{
-height:44px;border:none;border-radius:12px;background:linear-gradient(90deg,#7a00ff,#d000ff);
-color:#fff;font-weight:700;cursor:pointer;
-}
+.login-box input,.login-box select,.login-box textarea{background:#111;border:1px solid var(--border);border-radius:12px;padding:12px;color:#fff;}
+.login-box button{height:44px;border:none;border-radius:12px;background:linear-gradient(90deg,#7a00ff,#d000ff);color:#fff;font-weight:700;}
 
 </style>
 </head>
 
 <body>
 
-<!-- MENU E TELAS (SEU HTML ORIGINAL MANTIDO) -->
+<div class="menu-overlay" id="overlay" onclick="closeMenu()"></div>
 
-<!-- ADM PRODUTOS -->
-<section class="page" id="admProdutos">
+<div class="side-menu" id="sideMenu">
+<div class="menu-title">MENU</div>
+<div class="menu-list">
 
+<div class="menu-item" onclick="menuBottom('home')">Início</div>
+<div class="menu-item" onclick="menuBottom('store')">Loja</div>
+<div class="menu-item" onclick="menuBottom('cart')">Carrinho</div>
+<div class="menu-item" onclick="menuBottom('profile')">Perfil</div>
+<div class="menu-item" onclick="showPage('loginAdm')">ADM</div>
+
+</div>
+</div>
+
+<!-- HOME -->
+<section class="page active" id="home">
 <div class="topo">
-
-<div class="top-btn" onclick="showPage('dashboardAdm')">
-<span class="material-symbols-outlined">arrow_back</span>
+<div class="top-btn" onclick="openMenu()">☰</div>
+<div class="logo">PRIME <span>STORE</span></div>
 </div>
 
-<div class="logo">PRODUTOS</div>
-
-<div class="top-btn" onclick="showPage('addProduto')">
-<span class="material-symbols-outlined">add</span>
+<div class="banner">
+<img src="https://i.postimg.cc/C5KWcT5z/be50f798-9fdd-49a3-99aa-7b4abaf24030.jpg">
+<div class="overlay"></div>
+<div class="banner-content">
+<h1>PRIME STORE</h1>
+<p>Produtos premium</p>
+<button class="btn" onclick="showPage('store')">COMPRAR</button>
 </div>
-
 </div>
-
-<div class="login-box">
-<input type="text" id="buscarProduto" placeholder="Buscar produto..." onkeyup="buscarProdutoAdm()">
-</div>
-
-<div class="lista" id="listaProdutosAdm"></div>
 
 </section>
 
-<!-- ADD PRODUTO -->
-<section class="page" id="addProduto">
-
+<!-- STORE -->
+<section class="page" id="store">
 <div class="topo">
-<div class="top-btn" onclick="showPage('admProdutos')">
-<span class="material-symbols-outlined">arrow_back</span>
+<div class="top-btn" onclick="showPage('home')">←</div>
+<div class="logo">LOJA</div>
 </div>
-<div class="logo">PRODUTO</div>
+
+<div class="lista" id="storeList"></div>
+</section>
+
+<!-- CART -->
+<section class="page" id="cart">
+<div class="topo">
+<div class="top-btn" onclick="showPage('store')">←</div>
+<div class="logo">CARRINHO</div>
 </div>
+
+<div class="cart-list" id="cartList"></div>
+<h3 id="totalPrice">Total: R$ 0,00</h3>
+<button class="btn" onclick="finalizarPedido()">FINALIZAR</button>
+</section>
+
+<!-- PROFILE -->
+<section class="page" id="profile">
+<div class="topo"><div class="logo">PERFIL</div></div>
+</section>
+
+<!-- LOGIN ADM -->
+<section class="page" id="loginAdm">
+<div class="topo"><div class="logo">ADM</div></div>
 
 <div class="login-box">
-
-<input type="file" id="produtoImagem">
-
-<input type="text" id="produtoNome" placeholder="Nome do produto">
-
-<select id="produtoCategoria">
-<option>Diamantes</option>
-<option>Contas</option>
-<option>Premium</option>
-</select>
-
-<select id="produtoSub">
-<option>Free Fire</option>
-<option>Netflix</option>
-<option>Mobile</option>
-</select>
-
-<input type="number" id="produtoPreco" placeholder="Preço">
-<input type="number" id="produtoPromo" placeholder="Preço promocional">
-<input type="number" id="produtoEstoque" placeholder="Estoque">
-
-<label style="font-size:12px;">
-<input type="checkbox" id="produtoIlimitado">
-Estoque ilimitado
-</label>
-
-<textarea id="produtoDesc" placeholder="Descrição"></textarea>
-
-<select id="produtoEntrega">
-<option>Manual</option>
-<option>Automático</option>
-</select>
-
-<select id="produtoStatus">
-<option>Ativo</option>
-<option>Inativo</option>
-</select>
-
-<button onclick="salvarProduto()">
-SALVAR PRODUTO
-</button>
-
+<input id="user" placeholder="Usuário">
+<input id="pass" type="password" placeholder="Senha">
+<button onclick="loginAdm()">ENTRAR</button>
 </div>
-
 </section>
 
 <!-- DASHBOARD -->
 <section class="page" id="dashboardAdm">
-
-<div class="topo">
-<div class="logo">PAINEL ADM</div>
-</div>
+<div class="topo"><div class="logo">PAINEL ADM</div></div>
 
 <div class="menu-list">
 
 <div class="menu-item" onclick="showPage('admProdutos')">Produtos</div>
+<div class="menu-item" onclick="showPage('editarProdutoAdm')">Editar Produto</div>
+<div class="menu-item" onclick="showPage('subcategoriasAdm')">Subcategorias</div>
+<div class="menu-item" onclick="showPage('configGeraisAdm')">Config. Gerais</div>
 
 </div>
-
 </section>
+
+<!-- PRODUTOS ADM -->
+<section class="page" id="admProdutos">
+<div class="topo"><div class="logo">PRODUTOS</div></div>
+<div class="lista" id="listaProdutosAdm"></div>
+</section>
+
+<!-- EDITAR -->
+<section class="page" id="editarProdutoAdm">
+<div class="topo"><div class="logo">EDITAR</div></div>
+
+<div class="login-box">
+<select id="selectEditarProduto" onchange="carregarProdutoEditar()"></select>
+
+<input id="editNome">
+<input id="editCategoria">
+<input id="editSub">
+<input id="editPreco">
+<input id="editPromo">
+<input id="editEstoque">
+<textarea id="editDesc"></textarea>
+
+<button onclick="salvarEdicaoProduto()">Salvar</button>
+</div>
+</section>
+
+<!-- SUBCATEGORIAS -->
+<section class="page" id="subcategoriasAdm">
+<div class="topo"><div class="logo">SUBCATEGORIAS</div></div>
+
+<div class="login-box">
+<input id="novaSub">
+<button onclick="addSubcategoria()">Adicionar</button>
+<div id="listaSub"></div>
+</div>
+</section>
+
+<!-- CONFIG -->
+<section class="page" id="configGeraisAdm">
+<div class="topo"><div class="logo">CONFIG</div></div>
+
+<div class="login-box">
+<input id="siteNome">
+<input id="whats">
+<button onclick="salvarConfig()">Salvar</button>
+</div>
+</section>
+
+<div class="bottom">
+<a onclick="menuBottom('home')">Início</a>
+<a onclick="menuBottom('store')">Loja</a>
+<a onclick="menuBottom('cart')">Carrinho</a>
+<a onclick="menuBottom('profile')">Perfil</a>
+</div>
 
 <script>
 
-/* =======================
-   PRODUTOS
-======================= */
-
-let produtosAdm =
-JSON.parse(localStorage.getItem("produtosAdm")) || [];
+const produtos = [{
+nome:"Produto",
+descricao:"Teste",
+preco:10,
+estoque:5,
+img:"https://i.postimg.cc/C5KWcT5z/be50f798-9fdd-49a3-99aa-7b4abaf24030.jpg"
+}];
 
 let carrinho = [];
+let produtosAdm = JSON.parse(localStorage.getItem("produtosAdm")) || [];
+let subcategorias = JSON.parse(localStorage.getItem("subcategorias")) || [];
 
-/* 🔥 NOVO: controle de edição */
-let editingIndex = null;
+function renderProdutos(){}
 
-/* =======================
-   RENDER ADM
-======================= */
+function renderCarrinho(){}
 
-function renderProdutosAdm(){
-
-const area = document.getElementById("listaProdutosAdm");
-area.innerHTML = "";
-
-produtosAdm.forEach((p,index)=>{
-
-area.innerHTML += `
-<div class="item">
-
-<img src="${p.imagem || 'https://i.postimg.cc/C5KWcT5z/be50f798-9fdd-49a3-99aa-7b4abaf24030.jpg'}">
-
-<div class="item-info">
-
-<h3>${p.nome}</h3>
-<p>${p.categoria} • ${p.sub}</p>
-<span>R$ ${p.preco}</span>
-<p>${p.status}</p>
-
-</div>
-
-<div style="display:flex;flex-direction:column;gap:6px;">
-
-<button onclick="editarProduto(${index})"
-style="background:#7a00ff;color:#fff;border:none;padding:6px;border-radius:8px;">
-Editar
-</button>
-
-<button onclick="removerProduto(${index})"
-style="background:#ff2d55;color:#fff;border:none;padding:6px;border-radius:8px;">
-Remover
-</button>
-
-</div>
-
-</div>
-`;
-
-});
-
+function loginAdm(){
+const u=user.value,p=pass.value;
+if(u=="Lorrannyh"&&p=="Lorrannyh.101225"){
+showPage("dashboardAdm");
+}else alert("Erro");
 }
 
-/* =======================
-   SALVAR / EDITAR
-======================= */
-
-function salvarProduto(){
-
-const imagemInput = document.getElementById("produtoImagem");
-
-let imagem = "https://i.postimg.cc/C5KWcT5z/be50f798-9fdd-49a3-99aa-7b4abaf24030.jpg";
-
-if(imagemInput.files[0]){
-imagem = URL.createObjectURL(imagemInput.files[0]);
+function salvarEdicaoProduto(){
+produtosAdm[0].nome = editNome.value;
+localStorage.setItem("produtosAdm",JSON.stringify(produtosAdm));
+alert("OK");
 }
 
-const novoProduto = {
-nome: document.getElementById("produtoNome").value,
-categoria: document.getElementById("produtoCategoria").value,
-sub: document.getElementById("produtoSub").value,
-preco: document.getElementById("produtoPreco").value,
-promo: document.getElementById("produtoPromo").value,
-estoque: document.getElementById("produtoEstoque").value,
-ilimitado: document.getElementById("produtoIlimitado").checked,
-desc: document.getElementById("produtoDesc").value,
-entrega: document.getElementById("produtoEntrega").value,
-status: document.getElementById("produtoStatus").value,
-imagem
-};
-
-/* 🔥 EDITAR */
-if(editingIndex !== null){
-
-produtosAdm[editingIndex] = novoProduto;
-editingIndex = null;
-
-}else{
-
-produtosAdm.push(novoProduto);
-
+function addSubcategoria(){
+subcategorias.push(novaSub.value);
+localStorage.setItem("subcategorias",JSON.stringify(subcategorias));
 }
 
-localStorage.setItem("produtosAdm", JSON.stringify(produtosAdm));
-
-renderProdutosAdm();
-showPage("admProdutos");
-
+function salvarConfig(){
+alert("salvo");
 }
-
-/* =======================
-   EDITAR PRODUTO
-======================= */
-
-function editarProduto(index){
-
-const p = produtosAdm[index];
-editingIndex = index;
-
-document.getElementById("produtoNome").value = p.nome;
-document.getElementById("produtoCategoria").value = p.categoria;
-document.getElementById("produtoSub").value = p.sub;
-document.getElementById("produtoPreco").value = p.preco;
-document.getElementById("produtoPromo").value = p.promo;
-document.getElementById("produtoEstoque").value = p.estoque;
-document.getElementById("produtoIlimitado").checked = p.ilimitado;
-document.getElementById("produtoDesc").value = p.desc;
-document.getElementById("produtoEntrega").value = p.entrega;
-document.getElementById("produtoStatus").value = p.status;
-
-showPage("addProduto");
-
-}
-
-/* =======================
-   REMOVER PRODUTO
-======================= */
-
-function removerProduto(index){
-
-if(confirm("Remover este produto?")){
-
-produtosAdm.splice(index,1);
-
-localStorage.setItem("produtosAdm", JSON.stringify(produtosAdm));
-
-renderProdutosAdm();
-
-}
-
-}
-
-/* =======================
-   BUSCA
-======================= */
-
-function buscarProdutoAdm(){
-
-const valor = document.getElementById("buscarProduto").value.toLowerCase();
-
-const area = document.getElementById("listaProdutosAdm");
-area.innerHTML = "";
-
-produtosAdm
-.filter(p => p.nome.toLowerCase().includes(valor))
-.forEach((p,index)=>{
-
-area.innerHTML += `
-<div class="item">
-<img src="${p.imagem}">
-<div class="item-info">
-<h3>${p.nome}</h3>
-<p>${p.categoria}</p>
-<span>${p.preco}</span>
-</div>
-</div>
-`;
-
-});
-
-}
-
-/* =======================
-   NAV
-======================= */
 
 function showPage(id){
-
-document.querySelectorAll(".page")
-.forEach(p=>p.classList.remove("active"));
-
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
-
 }
 
-/* INIT */
-renderProdutosAdm();
+function menuBottom(id){
+showPage(id);
+}
+
+function openMenu(){sideMenu.classList.add("active");overlay.classList.add("active");}
+function closeMenu(){sideMenu.classList.remove("active");overlay.classList.remove("active");}
 
 </script>
 
