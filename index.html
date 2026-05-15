@@ -615,9 +615,12 @@ ${subHtml}
 }
 
 function deletarCat(i){
-if(confirm("Deletar?")){
+if(confirm("Deletar categoria? Isso vai apagar as subcategorias também.")){
+const catNome = categoriasAdm[i].nome;
+subcategoriasAdm = subcategoriasAdm.filter(s=>s.categoria!=catNome);
 categoriasAdm.splice(i,1);
 localStorage.setItem("categoriasAdm",JSON.stringify(categoriasAdm));
+localStorage.setItem("subcategoriasAdm",JSON.stringify(subcategoriasAdm));
 renderCategorias();
 renderHomeCategorias();
 }
@@ -712,7 +715,7 @@ renderCategorias();
 
 function carregarConfigGeral(){
 document.getElementById("confNomeLoja").value = configGeral.nome||"";
-document.getElementById("confCor").value = configGeral.cor||"#7c3aed";
+document.getElementById("confCor").value = configGeral.cor||"#7c3aed
 document.getElementById("confMoeda").value = configGeral.moeda||"BRL";
 document.getElementById("confTaxa").value = configGeral.taxa||"";
 }
