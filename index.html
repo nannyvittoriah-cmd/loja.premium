@@ -14,31 +14,45 @@ href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wg
 
 <style>
 
-/* ======= (SEU CSS ORIGINAL MANTIDO) ======= */
+/* ===== SEU CSS ORIGINAL ===== */
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;-webkit-tap-highlight-color:transparent}
 body{background:#050505;color:#fff;overflow-x:hidden}
 :root{--roxo:#b026ff;--border:rgba(176,38,255,.18);--card:#111}
+
 .page{display:none;max-width:430px;margin:auto;min-height:100vh;padding:12px;padding-bottom:85px}
 .page.active{display:block}
 
-/* ===== ADM NOVOS ESTILOS ===== */
+.topo{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.logo{font-size:20px;font-weight:800}
+.logo span{color:var(--roxo)}
 
-.section-box{
+.top-btn{width:34px;height:34px;background:#111;border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center}
+
+.menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;z-index:999}
+.menu-overlay.active{display:block}
+
+.side-menu{position:fixed;top:0;left:-280px;width:280px;height:100%;background:#080808;border-right:1px solid var(--border);padding:16px;transition:.3s}
+.side-menu.active{left:0}
+
+.menu-item{height:46px;background:#111;border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;gap:10px;padding:0 14px;font-size:12px;cursor:pointer}
+
+/* ADM CARDS */
+
+.list-card{
 background:#111;
 border:1px solid var(--border);
-border-radius:14px;
-padding:12px;
-margin-bottom:10px;
-}
-
-.section-box h3{
-font-size:12px;
+padding:10px;
+border-radius:12px;
 margin-bottom:8px;
-color:#fff;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
-.input, select{
+.small{font-size:10px;color:#999}
+
+.input,select,textarea{
 width:100%;
 background:#111;
 border:1px solid var(--border);
@@ -61,213 +75,191 @@ width:100%;
 cursor:pointer;
 }
 
-.list-card{
-background:#111;
-border:1px solid var(--border);
-padding:10px;
-border-radius:12px;
-margin-bottom:8px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.small{
-font-size:10px;
-color:#999;
-}
-
 </style>
+
 </head>
 
 <body>
 
-<!-- ================= DASHBOARD ================= -->
+<div class="menu-overlay" id="overlay" onclick="closeMenu()"></div>
 
+<!-- DASHBOARD -->
 <section class="page active" id="dashboardAdm">
 
-<div class="section-box">
-<h3>PAINEL ADM</h3>
+<div class="list-card">
+<div><strong>PAINEL ADM</strong></div>
+</div>
 
 <button class="btn" onclick="showPage('admProdutos')">Produtos</button>
-<button class="btn" onclick="showPage('admCategorias')">Categorias</button>
-<button class="btn" onclick="showPage('admSubcategorias')">Subcategorias</button>
-<button class="btn" onclick="showPage('admConfiguracoes')">Configurações</button>
-
-</div>
 
 </section>
 
-<!-- ================= PRODUTOS ================= -->
-
+<!-- PRODUTOS ADM -->
 <section class="page" id="admProdutos">
 
-<div class="section-box">
-<h3>PRODUTOS</h3>
+<div class="list-card">
+<strong>PRODUTOS</strong>
+</div>
 
-<input class="input" id="buscarProduto" placeholder="Buscar produtos..." onkeyup="buscarProdutoAdm()">
+<input class="input" id="buscarProduto" placeholder="Buscar..." onkeyup="buscarProdutoAdm()">
 
-<button class="btn" onclick="showPage('addProduto')">+ ADICIONAR</button>
+<button class="btn" onclick="abrirAddProduto()">+ ADICIONAR</button>
 
 <div id="listaProdutosAdm"></div>
 
-</div>
-
 </section>
 
-<!-- ================= CATEGORIAS ================= -->
+<!-- ADD PRODUTO -->
+<section class="page" id="addProduto">
 
-<section class="page" id="admCategorias">
+<div class="list-card"><strong>PRODUTO</strong></div>
 
-<div class="section-box">
-<h3>CATEGORIAS</h3>
-
-<button class="btn">+ ADICIONAR</button>
-
-<div class="list-card">
-<div>
-<strong>Diamantes</strong>
-<div class="small">3 subcategorias</div>
-</div>
-<span>✏️ 🗑️</span>
-</div>
-
-<div class="list-card">
-<div>
-<strong>Contas</strong>
-<div class="small">2 subcategorias</div>
-</div>
-<span>✏️ 🗑️</span>
-</div>
-
-</div>
-
-</section>
-
-<!-- ================= SUBCATEGORIAS ================= -->
-
-<section class="page" id="admSubcategorias">
-
-<div class="section-box">
-<h3>SUBCATEGORIAS</h3>
-
-<select class="input">
+<input class="input" id="produtoNome" placeholder="Nome">
+<select id="produtoCategoria" class="input">
 <option>Diamantes</option>
 <option>Contas</option>
+<option>Premium</option>
 </select>
 
-<button class="btn">+ ADICIONAR</button>
-
-<div class="list-card">
-<div>
-<strong>Free Fire</strong>
-<div class="small">12 produtos</div>
-</div>
-<span>✏️ 🗑️</span>
-</div>
-
-<div class="list-card">
-<div>
-<strong>Roblox</strong>
-<div class="small">15 produtos</div>
-</div>
-<span>✏️ 🗑️</span>
-</div>
-
-</div>
-
-</section>
-
-<!-- ================= CONFIGURAÇÕES ================= -->
-
-<section class="page" id="admConfiguracoes">
-
-<div class="section-box">
-<h3>CONFIGURAÇÕES</h3>
-
-<button class="btn" onclick="showPage('configGeral')">Geral</button>
-<button class="btn">Aparência</button>
-<button class="btn">Redes Sociais</button>
-<button class="btn">Pagamentos</button>
-<button class="btn">Notificações</button>
-<button class="btn">Segurança</button>
-<button class="btn">SEO</button>
-<button class="btn">Manutenção</button>
-
-</div>
-
-</section>
-
-<!-- ================= CONFIG GERAL ================= -->
-
-<section class="page" id="configGeral">
-
-<div class="section-box">
-<h3>CONFIGURAÇÕES GERAIS</h3>
-
-<input class="input" placeholder="Nome da Loja">
-
-<input type="file" class="input">
-
-<input class="input" type="color" value="#7c3aed">
-
-<select class="input">
-<option>BRL</option>
-<option>USD</option>
-<option>EUR</option>
+<select id="produtoSub" class="input">
+<option>Free Fire</option>
+<option>Roblox</option>
+<option>Mobile</option>
 </select>
 
-<input class="input" type="number" placeholder="Taxa de entrega (R$)">
+<input class="input" id="produtoPreco" type="number" placeholder="Preço">
 
-<button class="btn">SALVAR CONFIGURAÇÕES</button>
+<input class="input" id="produtoPromo" type="number" placeholder="Promo">
 
-</div>
+<input class="input" id="produtoEstoque" type="number" placeholder="Estoque">
+
+<label style="font-size:11px">
+<input type="checkbox" id="produtoIlimitado"> Ilimitado
+</label>
+
+<textarea class="input" id="produtoDesc" placeholder="Descrição"></textarea>
+
+<select id="produtoEntrega" class="input">
+<option>Manual</option>
+<option>Automático</option>
+</select>
+
+<select id="produtoStatus" class="input">
+<option>Ativo</option>
+<option>Inativo</option>
+</select>
+
+<button class="btn" onclick="salvarProduto()">SALVAR</button>
 
 </section>
 
 <script>
+
+let produtosAdm = JSON.parse(localStorage.getItem("produtosAdm")) || [];
+let editIndex = null;
 
 function showPage(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
 }
 
-let produtosAdm = JSON.parse(localStorage.getItem("produtosAdm")) || [];
+function abrirAddProduto(){
+
+editIndex = null;
+
+document.getElementById("produtoNome").value = "";
+document.getElementById("produtoPreco").value = "";
+document.getElementById("produtoPromo").value = "";
+document.getElementById("produtoEstoque").value = "";
+document.getElementById("produtoDesc").value = "";
+
+showPage("addProduto");
+}
+
+function salvarProduto(){
+
+const novo = {
+nome: document.getElementById("produtoNome").value,
+categoria: document.getElementById("produtoCategoria").value,
+sub: document.getElementById("produtoSub").value,
+preco: document.getElementById("produtoPreco").value,
+promo: document.getElementById("produtoPromo").value,
+estoque: document.getElementById("produtoEstoque").value,
+ilimitado: document.getElementById("produtoIlimitado").checked,
+desc: document.getElementById("produtoDesc").value,
+entrega: document.getElementById("produtoEntrega").value,
+status: document.getElementById("produtoStatus").value,
+imagem: ""
+};
+
+if(editIndex !== null){
+produtosAdm[editIndex] = novo;
+editIndex = null;
+}else{
+produtosAdm.push(novo);
+}
+
+localStorage.setItem("produtosAdm", JSON.stringify(produtosAdm));
+
+renderProdutosAdm();
+showPage("admProdutos");
+}
 
 function renderProdutosAdm(){
 
 const area = document.getElementById("listaProdutosAdm");
-if(!area) return;
-
 area.innerHTML = "";
 
-produtosAdm.forEach((p)=>{
+produtosAdm.forEach((p,i)=>{
 
 area.innerHTML += `
 <div class="list-card">
+
 <div>
 <strong>${p.nome}</strong>
 <div class="small">${p.categoria} • ${p.sub}</div>
 <div class="small">R$ ${p.preco}</div>
 </div>
-<span>${p.status || "Ativo"}</span>
-</div>
-`;
 
+<div style="display:flex;gap:8px">
+<span onclick="editarProduto(${i})">✏️</span>
+</div>
+
+</div>`;
 });
+
+}
+
+function editarProduto(i){
+
+const p = produtosAdm[i];
+editIndex = i;
+
+showPage("addProduto");
+
+document.getElementById("produtoNome").value = p.nome;
+document.getElementById("produtoCategoria").value = p.categoria;
+document.getElementById("produtoSub").value = p.sub;
+document.getElementById("produtoPreco").value = p.preco;
+document.getElementById("produtoPromo").value = p.promo;
+document.getElementById("produtoEstoque").value = p.estoque;
+document.getElementById("produtoDesc").value = p.desc;
+document.getElementById("produtoEntrega").value = p.entrega;
+document.getElementById("produtoStatus").value = p.status;
+document.getElementById("produtoIlimitado").checked = p.ilimitado;
 
 }
 
 function buscarProdutoAdm(){
 
 const v = document.getElementById("buscarProduto").value.toLowerCase();
-const area = document.getElementById("listaProdutosAdm");
 
+const area = document.getElementById("listaProdutosAdm");
 area.innerHTML = "";
 
 produtosAdm
 .filter(p=>p.nome.toLowerCase().includes(v))
-.forEach(p=>{
+.forEach((p,i)=>{
 
 area.innerHTML += `
 <div class="list-card">
@@ -275,9 +267,7 @@ area.innerHTML += `
 <strong>${p.nome}</strong>
 <div class="small">${p.categoria}</div>
 </div>
-</div>
-`;
-
+</div>`;
 });
 
 }
