@@ -3,824 +3,1152 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prime Store</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<title id="titleTag">Prime Store</title>
+<link id="fontLink" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0"/>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;-webkit-tap-highlight-color:transparent;}
-body{background:#050505;color:#fff;overflow-x:hidden;}
-:root{--roxo:#b026ff;--border:rgba(176,38,255,.18);--card:#111;}
+<link id="favicon" rel="icon" href="">
+<style id="dynamic-style">
+:root{
+--roxo:#a855f7;
+--cor-sec:#ff00ff;
+--cor-fundo:#0a0a0f;
+--cor-texto:#ffffff;
+--fonte:'Poppins',sans-serif;
+--border:rgba(168,85,247,.3);
+--card:#14141c;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:var(--fonte);-webkit-tap-highlight-color:transparent;}
+body{background:var(--cor-fundo);color:var(--cor-texto);overflow-x:hidden;}
 .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24;}
-.page{display:none;max-width:430px;margin:auto;min-height:100vh;padding:12px;padding-bottom:85px;position:relative;z-index:1;}
+.page{display:none;max-width:430px;margin:auto;min-height:100vh;padding:12px;padding-bottom:85px;}
 .page.active{display:block;}
-.topo{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.logo{font-size:20px;font-weight:800;}
-.logo span{color:var(--roxo);}
-.top-btn{width:34px;height:34px;background:#111;border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;z-index:2;}
-.badge{position:absolute;top:-5px;right:-5px;background:var(--roxo);color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:700;}
-.menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);opacity:0;visibility:hidden;z-index:998;transition:.3s;pointer-events:none;}
-.menu-overlay.active{opacity:1;visibility:visible;pointer-events:auto;}
-.side-menu{position:fixed;top:0;left:-280px;width:280px;height:100%;background:#080808;border-right:1px solid var(--border);padding:16px;z-index:999;transition:.3s;}
-.side-menu.active{left:0;}
-.menu-title{font-size:18px;font-weight:700;margin-bottom:20px;}
-.menu-list{display:flex;flex-direction:column;gap:10px;}
-.menu-item{height:46px;background:#111;border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;gap:10px;padding:0 14px;font-size:12px;cursor:pointer;position:relative;z-index:2;}
-.banner{height:170px;border-radius:18px;overflow:hidden;position:relative;margin-bottom:18px;border:1px solid var(--border);}
-.banner img{width:100%;height:100%;object-fit:cover;}
-.overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9),transparent);}
-.banner-content{position:absolute;left:14px;bottom:14px;z-index:2;}
-.btn{height:34px;padding:0 14px;border:none;border-radius:10px;background:linear-gradient(90deg,#7a00ff,#d000ff);color:#fff;font-size:10px;font-weight:700;cursor:pointer;position:relative;z-index:2;}
-.section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
-.section-title h2{font-size:14px;}
-.categorias{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;}
-.cat{background:#111;border:1px solid var(--border);border-radius:14px;padding:14px 5px;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;position:relative;z-index:2;transition:.2s;}
-.cat.active{background:var(--roxo);border-color:var(--roxo);}
-.cat img{width:28px;height:28px;border-radius:6px;object-fit:cover;}
-.cat span{font-size:10px;}
-.produtos{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
-.produto{background:#111;border-radius:16px;overflow:hidden;border:1px solid var(--border);cursor:pointer;position:relative;z-index:2;}
-.produto img{width:100%;height:105px;object-fit:cover;}
-.produto-info{padding:10px;}
-.produto-info h3{font-size:11px;margin-bottom:7px;}
-.preco{font-size:16px;font-weight:800;margin-bottom:10px;}
-.comprar{width:100%;height:34px;border:none;border-radius:10px;background:linear-gradient(90deg,#7a00ff,#d000ff);color:#fff;font-size:10px;font-weight:700;cursor:pointer;position:relative;z-index:2;}
-.welcome-text{background:#111;border:1px solid var(--border);border-radius:16px;padding:16px;line-height:1.6;font-size:12px;color:#ccc;}
-.welcome-text p{margin-bottom:12px;}
-.welcome-text p:last-child{margin-bottom:0;}
-.lista{display:flex;flex-direction:column;gap:10px;}
-.item{display:flex;gap:10px;background:#111;padding:10px;border-radius:14px;border:1px solid var(--border);align-items:center;position:relative;z-index:2;}
-.item img{width:75px;height:75px;border-radius:10px;object-fit:cover;}
-.item img.sub-img{width:40px;height:40px;}
-.item-info{flex:1;cursor:pointer;}
-.item-info h3{font-size:11px;margin-bottom:5px;}
-.item-info p{font-size:9px;color:#999;margin-bottom:6px;}
-.item-info span{font-size:16px;font-weight:700;}
-.sub-list{margin-left:20px;margin-top:5px;display:flex;flex-direction:column;gap:5px;}
-.sub-item{font-size:10px;color:#999;display:flex;align-items:center;gap:5px;}
-.sub-item::before{content:"└";color:var(--roxo);}
-.add{width:38px;height:38px;border-radius:10px;background:linear-gradient(90deg,#7a00ff,#d000ff);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;z-index:2;}
-.cart-list{display:flex;flex-direction:column;gap:10px;}
-.cart-item{background:#111;padding:10px;border-radius:14px;display:flex;gap:10px;border:1px solid var(--border);position:relative;z-index:2;}
-.total-box{margin-top:14px;background:#111;padding:14px;border-radius:14px;border:1px solid var(--border);position:relative;z-index:2;}
-.finalizar{width:100%;height:44px;border:none;border-radius:12px;margin-top:12px;background:linear-gradient(90deg,#7a00ff,#d000ff);color:#fff;font-weight:700;cursor:pointer;position:relative;z-index:2;}
-.login-box{display:flex;flex-direction:column;gap:12px;margin-top:20px;}
-.login-box input,.login-box select,.login-box textarea{background:#111;border:1px solid var(--border);border-radius:12px;padding:12px;color:#fff;position:relative;z-index:2;}
-.login-box textarea{height:100px;resize:none;}
-.login-box button{height:44px;border:none;border-radius:12px;background:linear-gradient(90deg,#7a00ff,#d000ff);color:#fff;font-weight:700;cursor:pointer;position:relative;z-index:2;}
-.tabs{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;}
-.tab{padding:8px 14px;background:#111;border:1px solid var(--border);border-radius:10px;font-size:11px;white-space:nowrap;cursor:pointer;position:relative;z-index:2;}
-.tab.active{background:var(--roxo);border-color:var(--roxo);}
-.bottom{position:fixed;bottom:0;left:0;width:100%;height:65px;background:#0a0a0f;border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;z-index:997;}
-.bottom a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:9px;color:#777;width:100%;height:100%;cursor:pointer;position:relative;z-index:2;}
-.bottom a.active{color:var(--roxo);}
-.toggle{position:relative;width:44px;height:24px;z-index:2;}
-.toggle input{opacity:0;width:0;height:0;}
-.toggle span{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#333;border-radius:24px;transition:.3s;}
-.toggle input:checked + span{background:var(--roxo);}
-.toggle span:before{position:absolute;content:"";height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s;}
-.toggle input:checked + span:before{transform:translateX(20px);}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:2000;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:.3s;pointer-events:none;}
-.modal.active{display:flex;opacity:1;visibility:visible;pointer-events:auto;}
-.modal-box{background:#111;border:1px solid var(--border);border-radius:16px;padding:16px;width:100%;max-width:380px;position:relative;z-index:2001;}
-.submenu{margin-left:20px;display:flex;flex-direction:column;gap:8px;margin-top:8px;}
-.submenu.menu-item{height:38px;font-size:11px;}
+.topo{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.card{background:var(--card);padding:16px;border-radius:16px;border:1px solid var(--border);margin-bottom:12px;}
+.input,.select,textarea{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;color:var(--cor-texto);width:100%;margin-bottom:12px;font-size:14px;}
+.input::placeholder,textarea::placeholder{color:#666;}
+.label{font-size:12px;color:#999;margin-bottom:6px;display:block;}
+.btn{width:100%;height:48px;border:none;border-radius:12px;background:var(--roxo);color:#fff;font-weight:700;font-size:15px;cursor:pointer;}
+.btn-sm{height:36px;padding:0 16px;border:none;border-radius:8px;background:var(--roxo);color:#fff;font-weight:600;font-size:13px;cursor:pointer;}
+.btn-danger{background:transparent;border:1px solid #ef4444;color:#ef4444;}
+.btn-outline{width:100%;height:48px;border:1px solid var(--border);border-radius:12px;background:transparent;color:var(--cor-texto);font-weight:700;font-size:15px;cursor:pointer;}
+.badge{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.badge.active{background:rgba(34,197,94,0.2);color:#22c55e;}
+.badge.inactive{background:rgba(239,68,68,0.2);color:#ef4444;}
+.badge.pending{background:rgba(255,193,7,0.2);color:#ffc107;}
+
+/* ADM Menu */
+.adm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);opacity:0;visibility:hidden;z-index:1000;transition:.3s;}
+.adm-overlay.active{opacity:1;visibility:visible;}
+.adm-menu{position:fixed;top:0;left:-300px;width:280px;height:100%;background:#0f0f17;border-right:1px solid var(--border);z-index:1001;transition:.3s;display:flex;flex-direction:column;}
+.adm-menu.active{left:0;}
+.adm-header{display:flex;align-items:center;justify-content:space-between;padding:20px;border-bottom:1px solid var(--border);}
+.adm-header h2{font-size:18px;font-weight:800;text-align:center;flex:1;}
+.adm-header h2 span{color:var(--roxo);}
+.adm-close{cursor:pointer;}
+.adm-label{padding:16px 20px 8px;font-size:11px;color:#666;font-weight:700;}
+.adm-list{flex:1;overflow-y:auto;}
+.adm-item{display:flex;align-items:center;gap:14px;padding:14px 20px;cursor:pointer;font-size:14px;font-weight:500;color:#ccc;transition:.2s;}
+.adm-item:hover{background:var(--card);}
+.adm-item.active{background:var(--roxo);color:#fff;}
+.adm-item span{font-size:22px;}
+.adm-footer{padding:16px 20px;border-top:1px solid var(--border);}
+.adm-user{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.adm-user span:first-child{font-size:24px;color:var(--roxo);}
+.adm-status{display:flex;align-items:center;gap:6px;font-size:12px;}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;}
+.status-dot.offline{background:#ef4444;}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:1002;padding:20px;}
+.modal-overlay.active{display:flex;}
+.modal{background:#0f0f17;padding:20px;border-radius:16px;border:1px solid var(--border);width:100%;max-width:420px;max-height:90vh;overflow-y:auto;}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.modal-header h3{font-size:16px;font-weight:700;}
+.modal-close{cursor:pointer;}
+
+/* Listas ADM */
+.list-item{display:flex;align-items:center;gap:12px;padding:14px;background:var(--card);border-radius:16px;border:1px solid var(--border);margin-bottom:10px;}
+.list-icon{width:40px;height:40px;background:rgba(168,85,247,0.1);border-radius:12px;display:flex;align-items:center;justify-content:center;}
+.list-icon span{color:var(--roxo);font-size:22px;}
+.list-info{flex:1;}
+.list-info h4{font-size:14px;font-weight:700;margin-bottom:2px;}
+.list-info p{font-size:12px;color:#999;}
+.list-actions{display:flex;gap:8px;}
+.btn-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;background:transparent;}
+.btn-icon.edit{color:#a855f7;}
+.btn-icon.del{color:#ef4444;}
+
+/* Produtos */
+.produto-item{display:flex;align-items:center;gap:12px;padding:14px;background:var(--card);border-radius:16px;border:1px solid var(--border);margin-bottom:10px;}
+.produto-item img{width:48px;height:48px;border-radius:12px;object-fit:cover;}
+.produto-info{flex:1;}
+.produto-info h4{font-size:14px;font-weight:700;margin-bottom:2px;}
+.produto-info p{font-size:11px;color:#999;margin-bottom:4px;}
+.produto-info.preco{font-size:15px;font-weight:800;color:var(--roxo);}
+.tabs{display:flex;gap:8px;margin-bottom:16px;border-bottom:1px solid var(--border);}
+.tab{padding:10px 0;background:transparent;border:none;color:#666;font-size:13px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;}
+.tab.active{color:var(--roxo);border-bottom-color:var(--roxo);}
+.upload-box{position:relative;width:100%;height:80px;background:var(--card);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;}
+.upload-box img{max-height:60px;}
+.upload-delete{position:absolute;top:8px;right:8px;width:28px;height:28px;background:rgba(239,68,68,0.2);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#ef4444;}
+.color-picker{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.color-box{width:40px;height:40px;border-radius:8px;border:1px solid var(--border);}
+.color-input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;color:var(--cor-texto);font-size:14px;}
+.switch{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.switch input[type="checkbox"]{width:44px;height:24px;appearance:none;background:#333;border-radius:20px;position:relative;cursor:pointer;transition:.3s;}
+.switch input[type="checkbox"]:checked{background:var(--roxo);}
+.switch input[type="checkbox"]::before{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;top:3px;left:3px;transition:.3s;}
+.switch input[type="checkbox"]:checked::before{left:23px;}
+.radio-group{display:flex;gap:20px;margin-bottom:16px;}
+.radio{display:flex;align-items:center;gap:8px;cursor:pointer;}
+.radio input[type="radio"]{accent-color:var(--roxo);}
+
+/* Loja Cliente */
+.produto-img{width:100%;height:220px;border-radius:20px;overflow:hidden;margin-bottom:20px;border:1px solid var(--border);}
+.produto-img img{width:100%;height:100%;object-fit:cover;}
+.produto-nome{font-size:22px;font-weight:800;margin-bottom:6px;}
+.produto-sub{font-size:14px;color:var(--roxo);font-weight:600;margin-bottom:12px;}
+.produto-preco{font-size:28px;font-weight:800;color:var(--roxo);}
+.preco-original{text-decoration:line-through;color:#666;font-size:14px;margin-left:8px;}
+.qtd-section{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.qtd-control{display:flex;align-items:center;gap:16px;}
+.qtd-btn{width:36px;height:36px;border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;}
+.qtd-btn:hover{background:var(--roxo);}
+.qtd-valor{font-size:18px;font-weight:700;min-width:20px;text-align:center;}
+.btn-comprar{width:100%;height:50px;border:none;border-radius:12px;background:var(--roxo);color:#fff;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+.cart-item{background:var(--card);padding:12px;border-radius:16px;border:1px solid var(--border);display:flex;gap:12px;align-items:center;margin-bottom:12px;}
+.cart-item img{width:60px;height:60px;border-radius:12px;object-fit:cover;}
+.cart-item-info{flex:1;}
+.cart-item-info h3{font-size:14px;font-weight:700;margin-bottom:4px;}
+.cart-item-info.preco{font-size:16px;font-weight:800;color:var(--roxo);}
+.cart-qtd{display:flex;align-items:center;gap:8px;}
+.cart-qtd-btn{width:28px;height:28px;border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;background:#1a1a24;}
+.remove-btn{width:36px;height:36px;border:1px solid #ff4444;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#ff4444;}
+.resumo{background:var(--card);padding:16px;border-radius:16px;border:1px solid var(--border);margin-top:20px;}
+.resumo-linha{display:flex;justify-content:space-between;margin-bottom:12px;font-size:14px;}
+.resumo-linha.total{font-size:18px;font-weight:800;color:var(--roxo);}
+.cupom-box{display:flex;gap:8px;margin-bottom:12px;}
+.cupom-aplicado{background:rgba(34,197,94,0.1);border:1px solid #22c55e;color:#22c55e;padding:10px;border-radius:12px;display:none;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.finalizar{width:100%;height:50px;border:none;border-radius:12px;background:var(--roxo);color:#fff;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;}
+.config-list{display:flex;flex-direction:column;gap:8px;}
+.config-item{display:flex;align-items:center;gap:14px;padding:14px;background:var(--card);border-radius:12px;border:1px solid var(--border);cursor:pointer;transition:.2s;}
+.config-item:hover{border-color:var(--roxo);}
+.config-icon{width:40px;height:40px;background:rgba(168,85,247,0.1);border-radius:12px;display:flex;align-items:center;justify-content:center;}
+.config-icon span{color:var(--roxo);font-size:22px;}
+.config-info{flex:1;}
+.config-info h4{font-size:14px;font-weight:700;margin-bottom:2px;}
+.config-info p{font-size:12px;color:#999;}
+.config-item .arrow{color:#666;}
+
+/* Manutenção */
+.manutencao-overlay{position:fixed;inset:0;background:var(--cor-fundo);display:none;align-items:center;justify-content:center;z-index:9999;text-align:center;padding:40px;}
+.manutencao-overlay.active{display:flex;}
+.manutencao-overlay span{font-size:64px;color:var(--roxo);margin-bottom:20px;}
+.manutencao-overlay h2{font-size:24px;margin-bottom:12px;}
+.manutencao-overlay p{font-size:14px;color:#999;}
 </style>
 </head>
 <body>
 
-<div class="menu-overlay" id="overlay" onclick="closeMenu()"></div>
-<div class="side-menu" id="sideMenu">
-<div class="menu-title">MENU</div>
-<div class="menu-list">
-<div class="menu-item" onclick="menuBottom('home')"><span class="material-symbols-outlined">home</span>Início</div>
-<div class="menu-item" onclick="menuBottom('cart')"><span class="material-symbols-outlined">shopping_cart</span>Carrinho</div>
-<div class="menu-item" onclick="showPage('loginAdm')"><span class="material-symbols-outlined">admin_panel_settings</span>ADM</div>
+<!-- MODO MANUTENÇÃO -->
+<div class="manutencao-overlay" id="manutencaoOverlay">
+<div>
+<span class="material-symbols-outlined">engineering</span>
+<h2>LOJA EM MANUTENÇÃO</h2>
+<p>Voltamos em breve! Estamos fazendo melhorias no sistema.</p>
 </div>
 </div>
 
-<!-- HOME -->
-<section class="page active" id="home">
-<div class="topo">
-<div class="top-btn" onclick="openMenu()"><span class="material-symbols-outlined">menu</span></div>
-<div class="logo" id="logoNome">PRIME <span>STORE</span></div>
-<div class="top-btn" onclick="showPage('cart')" style="position:relative;">
-<span class="material-symbols-outlined">shopping_cart</span>
-<span class="badge" id="cartBadge" style="display:none;">0</span>
+<!-- MENU ADM -->
+<div class="adm-overlay" id="admOverlay" onclick="fecharAdm()"></div>
+<div class="adm-menu" id="admMenu">
+<div class="adm-header">
+<h2>PRIME <span>STORE</span></h2>
+<div class="adm-close" onclick="fecharAdm()"><span class="material-symbols-outlined">close</span></div>
+</div>
+<div class="adm-label">PAINEL ADMIN</div>
+<div class="adm-list">
+<div class="adm-item active" onclick="abrirAdmAba('dashboard')"><span class="material-symbols-outlined">home</span>Dashboard</div>
+<div class="adm-item" onclick="abrirAdmAba('produtosAdm')"><span class="material-symbols-outlined">inventory_2</span>Produtos</div>
+<div class="adm-item" onclick="abrirAdmAba('categoriasAdm')"><span class="material-symbols-outlined">category</span>Categorias</div>
+<div class="adm-item" onclick="abrirAdmAba('cuponsAdm')"><span class="material-symbols-outlined">confirmation_number</span>Cupons</div>
+<div class="adm-item" onclick="abrirAdmAba('configAdm')"><span class="material-symbols-outlined">settings</span>Configurações</div>
+</div>
+<div class="adm-footer">
+<div class="adm-user">
+<span class="material-symbols-outlined">crown</span>
+<span>ADMIN</span>
+</div>
+<div class="adm-status">
+<div class="status-dot" id="statusDot"></div>
+<span id="statusText">online</span>
 </div>
 </div>
-<div class="banner">
-<img id="bannerImg" src="https://i.postimg.cc/C5KWcT5z/be50f798-9fdd-49a3-99aa-7b4abaf24030.jpg">
-<div class="overlay"></div>
-<div class="banner-content">
-<h1>PRIME<br>STORE</h1>
-<p>Produtos premium e exclusivos</p>
-<button class="btn" onclick="showPage('store')">COMPRAR</button>
 </div>
-</div>
-<div class="section-title"><h2>Categorias</h2></div>
-<div class="categorias" id="homeCategorias"></div>
-<div class="section-title"><h2>Destaques</h2></div>
-<div class="produtos" id="homeDestaques"></div>
-</section>
-
-<!-- LOJA - BOAS VINDAS -->
-<section class="page" id="store">
-<div class="topo">
-<div class="top-btn" onclick="showPage('home')"><span class="material-symbols-outlined">arrow_back</span></div>
-<div class="logo">LOJA</div>
-<div class="top-btn" onclick="showPage('cart')" style="position:relative;">
-<span class="material-symbols-outlined">shopping_cart</span>
-<span class="badge" id="cartBadge2" style="display:none;">0</span>
-</div>
-</div>
-<div class="welcome-text">
-<p>Bem-vindo à nossa loja!</p>
-<p>Aqui você encontra produtos selecionados com qualidade, preços acessíveis e uma experiência de compra simples e rápida. Nosso objetivo é oferecer praticidade e confiança em cada pedido, garantindo que você receba exatamente o que precisa, sem complicações.</p>
-<p>Trabalhamos com dedicação para manter um catálogo sempre atualizado, com novidades e ofertas especiais para todos os gostos. Além disso, prezamos por um atendimento ágil e suporte sempre disponível para ajudar em qualquer dúvida.</p>
-<p>Nossa missão é unir tecnologia, facilidade e segurança em um só lugar, criando uma experiência de compra moderna e eficiente.</p>
-<p>Explore, escolha seus produtos favoritos e aproveite tudo o que preparamos para você!</p>
-<button class="btn" style="width:100%;margin-top:10px;" onclick="showPage('produtosLoja')">VER PRODUTOS</button>
-</div>
-</section>
-
-<!-- PRODUTOS DA LOJA -->
-<section class="page" id="produtosLoja">
-<div class="topo">
-<div class="top-btn" onclick="showPage('store')"><span class="material-symbols-outlined">arrow_back</span></div>
-<div class="logo">PRODUTOS</div>
-<div class="top-btn" onclick="showPage('cart')" style="position:relative;">
-<span class="material-symbols-outlined">shopping_cart</span>
-<span class="badge" id="cartBadge3" style="display:none;">0</span>
-</div>
-</div>
-<div class="lista" id="storeList"></div>
-</section>
-
-<!-- CARRINHO -->
-<section class="page" id="cart">
-<div class="topo">
-<div class="top-btn" onclick="showPage('produtosLoja')"><span class="material-symbols-outlined">arrow_back</span></div>
-<div class="logo">CARRINHO</div>
-<div></div>
-</div>
-<div class="cart-list" id="cartList"></div>
-<div class="total-box">
-<h3 id="totalPrice">Total: R$ 0,00</h3>
-<button class="finalizar" onclick="finalizarPedido()">FINALIZAR COMPRA</button>
-</div>
-</section>
 
 <!-- LOGIN ADM -->
-<section class="page" id="loginAdm">
+<section class="page active" id="loginAdm">
 <div class="topo">
-<div class="top-btn" onclick="showPage('home')"><span class="material-symbols-outlined">arrow_back</span></div>
-<div class="logo">ADM</div><div></div>
+<span class="material-symbols-outlined" onclick="showPage('loja')" style="cursor:pointer;">arrow_back</span>
+<h1>ACESSO ADMINISTRATIVO</h1>
+<div style="width:24px;"></div>
 </div>
-<div class="login-box">
-<input type="text" id="user" placeholder="Usuário">
-<input type="password" id="pass" placeholder="Senha">
-<button onclick="loginAdm()">ENTRAR</button>
+<div style="max-width:360px;margin:40px auto;padding:24px;border:2px solid var(--roxo);border-radius:16px;background:rgba(168,85,247,0.05);">
+<div style="text-align:center;margin-bottom:24px;">
+<span class="material-symbols-outlined" style="font-size:48px;color:var(--roxo);">shield</span>
+<h2 style="margin-top:12px;font-size:16px;font-weight:800;">ACESSO ADMINISTRATIVO</h2>
+</div>
+<input type="text" id="user" class="input" placeholder="Usuário">
+<div style="position:relative;">
+<input type="password" id="pass" class="input" placeholder="Senha">
+<span class="material-symbols-outlined" onclick="toggleSenha()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:#666;">visibility_off</span>
+</div>
+<button class="btn" onclick="loginAdm()">ENTRAR</button>
 </div>
 </section>
 
 <!-- DASHBOARD -->
-<section class="page" id="dashboardAdm">
+<section class="page" id="dashboard">
 <div class="topo">
-<div class="logo">PAINEL ADM</div>
-<div class="top-btn" onclick="showPage('home')"><span class="material-symbols-outlined">logout</span></div>
+<span class="material-symbols-outlined" onclick="abrirAdm()" style="cursor:pointer;">menu</span>
+<h1>DASHBOARD</h1>
+<div style="width:24px;"></div>
 </div>
-<div class="menu-list">
-<div class="menu-item" onclick="showPage('admProdutos')"><span class="material-symbols-outlined">inventory_2</span>Produtos</div>
-<div class="menu-item" onclick="showPage('admCategorias')"><span class="material-symbols-outlined">grid_view</span>Categorias</div>
-<div class="menu-item" onclick="toggleSubmenu('configSubmenu')">
-<span class="material-symbols-outlined">settings</span>Configurações
-<span class="material-symbols-outlined" style="margin-left:auto;">expand_more</span>
-</div>
-<div class="submenu" id="configSubmenu" style="display:none;">
-<div class="menu-item" onclick="showPage('configGeral')"><span class="material-symbols-outlined">tune</span>Configuração do Site</div>
-</div>
-</div>
+<div class="card"><h3>Vendas Hoje</h3><h2>R$ 1.250,00</h2></div>
+<div class="card"><h3>Pedidos</h3><h2>23</h2></div>
 </section>
 
-<!-- ADM PRODUTOS -->
-<section class="page" id="admProdutos">
+<!-- PRODUTOS ADM -->
+<section class="page" id="produtosAdm">
 <div class="topo">
-<div class="top-btn" onclick="showPage('dashboardAdm')"><span class="material-symbols-outlined">arrow_back</span></div>
-<div class="logo">PRODUTOS</div>
-<div class="top-btn" onclick="showPage('addProduto')"><span class="material-symbols-outlined">add</span></div>
+<span class="material-symbols-outlined" onclick="abrirAdm()" style="cursor:pointer;">menu</span>
+<h1>PRODUTOS</h1>
+<div style="width:40px;"></div>
+</div>
+<div style="display:flex;gap:10px;margin-bottom:16px;">
+<div style="position:relative;flex:1;">
+<input type="text" id="buscarProd" class="input" placeholder="Buscar produto..." onkeyup="filtrarProdutosAdm()" style="padding-left:40px;margin:0;">
+<span class="material-symbols-outlined" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#666;">search</span>
+</div>
+<button class="btn-sm" onclick="abrirModalProduto()">+ ADICIONAR</button>
 </div>
 <div class="tabs">
-<div class="tab active" onclick="setFiltroProd('todos',this)">Todos</div>
-<div class="tab" onclick="setFiltroProd('ativos',this)">Ativos</div>
-<div class="tab" onclick="setFiltroProd('inativos',this)">Inativos</div>
+<button class="tab active" onclick="filtrarStatus('todos')">TODOS</button>
+<button class="tab" onclick="filtrarStatus('ativos')">ATIVOS</button>
+<button class="tab" onclick="filtrarStatus('inativos')">INATIVOS</button>
 </div>
-<div class="login-box" style="margin-top:0;margin-bottom:12px;">
-<input type="text" id="buscarProduto" placeholder="Buscar produtos..." onkeyup="renderProdutosAdm()">
-</div>
-<div class="lista" id="listaProdutosAdm"></div>
+<div id="listaProdutosAdm"></div>
 </section>
 
-<!-- ADD PRODUTO -->
-<section class="page" id="addProduto">
+<!-- CATEGORIAS ADM -->
+<section class="page" id="categoriasAdm">
 <div class="topo">
-<div class="top-btn" onclick="showPage('admProdutos')"><span class="material-symbols-outlined">arrow_back</span></div>
-<div class="logo" id="addTitulo">ADICIONAR</div><div></div>
+<span class="material-symbols-outlined" onclick="abrirAdm()" style="cursor:pointer;">menu</span>
+<h1>CATEGORIAS</h1>
+<div style="width:40px;"></div>
 </div>
-<div class="login-box">
-<input type="hidden" id="editIndex">
-<input type="file" id="produtoImagem">
-<input type="text" id="produtoNome" placeholder="Nome do produto">
-<select id="produtoCategoria"></select>
-<select id="produtoSub"></select>
-<input type="number" id="produtoPreco" placeholder="Preço">
-<input type="number" id="produtoPromo" placeholder="Preço promocional">
-<input type="number" id="produtoEstoque" placeholder="Estoque">
-<label style="font-size:12px;color:#ccc;"><input type="checkbox" id="produtoIlimitado"> Estoque ilimitado</label>
-<textarea id="produtoDesc" placeholder="Descrição"></textarea>
-<select id="produtoEntrega"><option>Manual</option><option>Automático</option></select>
-<select id="produtoStatus"><option>Ativo</option><option>Inativo</option></select>
-<button onclick="salvarProduto()">SALVAR PRODUTO</button>
-</div>
+<button class="btn-sm" onclick="abrirModalCategoria()" style="margin-bottom:16px;">+ ADICIONAR</button>
+<div id="listaCategoriasAdm"></div>
 </section>
 
-<!-- ADM CATEGORIAS -->
-<section class="page" id="admCategorias">
+<!-- SUBCATEGORIAS ADM -->
+<section class="page" id="subcategoriasAdm">
 <div class="topo">
-<div class="top-btn" onclick="showPage('dashboardAdm')"><span class="material-symbols-outlined">arrow_back</span></div>
-<div class="logo">CATEGORIAS</div>
-<div class="top-btn" onclick="abrirModalCategoria()"><span class="material-symbols-outlined">add</span></div>
+<span class="material-symbols-outlined" onclick="showPage('categoriasAdm')" style="cursor:pointer;">arrow_back</span>
+<h1>SUBCATEGORIAS</h1>
+<div style="width:40px;"></div>
 </div>
-<div class="lista" id="listaCategorias"></div>
+<button class="btn-sm" onclick="abrirModalSubcategoria()" style="margin-bottom:16px;">+ ADICIONAR</button>
+<div style="font-size:12px;color:#999;margin-bottom:12px;">Categoria: <span id="catAtualNome" style="color:var(--roxo);font-weight:600;">Diamantes</span></div>
+<div id="listaSubcategoriasAdm"></div>
 </section>
 
-<!-- MODAL CATEGORIA -->
-<div class="modal" id="modalCategoria">
-<div class="modal-box">
-<h3 style="margin-bottom:12px;">Nova Categoria</h3>
-<div class="login-box" style="margin-top:0;">
-<input type="text" id="catNome" placeholder="Nome da categoria">
-<input type="file" id="catImagem" accept="image/*">
-<div style="display:flex;gap:10px;">
-<button onclick="salvarCategoria()">SALVAR</button>
-<button style="background:#333;" onclick="fecharModalCategoria()">CANCELAR</button>
-</div>
-</div>
-</div>
-</div>
-
-<!-- ADM SUBCATEGORIAS -->
-<section class="page" id="admSubcategorias">
+<!-- CUPONS ADM -->
+<section class="page" id="cuponsAdm">
 <div class="topo">
-<div class="top-btn" onclick="showPage('admCategorias')"><span class="material-symbols-outlined">arrow_back</span></div>
-<div class="logo" id="subTitulo">SUBCATEGORIAS</div>
-<div class="top-btn" onclick="abrirModalSubcategoria()"><span class="material-symbols-outlined">add</span></div>
+<span class="material-symbols-outlined" onclick="abrirAdm()" style="cursor:pointer;">menu</span>
+<h1>CUPONS</h1>
+<div style="width:40px;"></div>
 </div>
-<div class="login-box" style="margin-top:0;margin-bottom:12px;">
-<select id="filtroCategoria" onchange="renderSubcategorias()"></select>
-</div>
-<div class="lista" id="listaSubcategorias"></div>
+<button class="btn-sm" onclick="abrirModalCupom()">+ ADICIONAR</button>
+<div id="listaCuponsAdm" style="margin-top:16px;"></div>
 </section>
 
-<!-- MODAL SUBCATEGORIA -->
-<div class="modal" id="modalSubcategoria">
-<div class="modal-box">
-<h3 style="margin-bottom:12px;" id="modalSubTitulo">Nova Subcategoria</h3>
-<div class="login-box" style="margin-top:0;">
-<input type="hidden" id="subEditIndex">
-<input type="text" id="subNome" placeholder="Nome da subcategoria">
-<input type="file" id="subImagem" accept="image/*">
-<div style="display:flex;gap:10px;">
-<button onclick="salvarSubcategoria()">SALVAR</button>
-<button style="background:#333;" onclick="fecharModalSubcategoria()">CANCELAR</button>
+<!-- CONFIGURAÇÕES -->
+<section class="page" id="configAdm">
+<div class="topo">
+<span class="material-symbols-outlined" onclick="abrirAdm()" style="cursor:pointer;">menu</span>
+<h1>CONFIGURAÇÕES</h1>
+<div style="width:24px;"></div>
+</div>
+<div class="config-list">
+<div class="config-item" onclick="showPage('configGeral')">
+<div class="config-icon"><span class="material-symbols-outlined">settings</span></div>
+<div class="config-info"><h4>GERAL</h4><p>Nome, logo, slogan, e-mail</p></div>
+<span class="material-symbols-outlined arrow">chevron_right</span>
+</div>
+<div class="config-item" onclick="showPage('configAparencia')">
+<div class="config-icon"><span class="material-symbols-outlined">palette</span></div>
+<div class="config-info"><h4>APARÊNCIA</h4><p>Cores, fonte, tema</p></div>
+<span class="material-symbols-outlined arrow">chevron_right</span>
+</div>
+<div class="config-item" onclick="showPage('configRedes')">
+<div class="config-icon"><span class="material-symbols-outlined">share</span></div>
+<div class="config-info"><h4>REDES SOCIAIS</h4><p>WhatsApp, Instagram, TikTok</p></div>
+<span class="material-symbols-outlined arrow">chevron_right</span>
+</div>
+<div class="config-item" onclick="showPage('configPagamento')">
+<div class="config-icon"><span class="material-symbols-outlined">payments</span></div>
+<div class="config-info"><h4>PAGAMENTOS</h4><p>PIX, Mercado Pago</p></div>
+<span class="material-symbols-outlined arrow">chevron_right</span>
+</div>
+<div class="config-item" onclick="showPage('configManutencao')">
+<div class="config-icon"><span class="material-symbols-outlined">engineering</span></div>
+<div class="config-info"><h4>MANUTENÇÃO</h4><p>Backup e limpeza</p></div>
+<span class="material-symbols-outlined arrow">chevron_right</span>
 </div>
 </div>
-</div>
-</div>
+</section>
 
 <!-- CONFIG GERAL -->
 <section class="page" id="configGeral">
 <div class="topo">
-<div class="top-btn" onclick="showPage('dashboardAdm')"><span class="material-symbols-outlined">arrow_back</span></div>
-<div class="logo">CONFIGURAÇÃO DO SITE</div><div></div>
+<span class="material-symbols-outlined" onclick="showPage('configAdm')" style="cursor:pointer;">arrow_back</span>
+<h1>CONFIGURAÇÕES GERAIS</h1>
+<div style="width:24px;"></div>
 </div>
-<div class="login-box">
-<input type="text" id="confNomeLoja" placeholder="Nome da Loja">
-<input type="file" id="confLogo">
-<label style="font-size:12px;color:#ccc;">Cor Primária</label>
-<input type="color" id="confCor" value="#7c3aed" style="height:44px;">
-<select id="confMoeda"><option>BRL</option><option>USD</option><option>EUR</option></select>
-<input type="number" id="confTaxa" placeholder="Taxa de Entrega R$">
-<button onclick="salvarConfigGeral()">SALVAR CONFIGURAÇÕES</button>
+<label class="label">NOME DA LOJA</label>
+<input type="text" id="nomeLoja" class="input" placeholder="Prime Store">
+<label class="label">SLOGAN</label>
+<input type="text" id="sloganLoja" class="input" placeholder="Qualidade • Confiança • Segurança">
+<label class="label">LOGO</label>
+<div class="upload-box" id="logoBox" onclick="document.getElementById('logoFile').click()">
+<img id="logoPreview" src="">
+<div class="upload-delete" onclick="removerLogo(event)"><span class="material-symbols-outlined">delete</span></div>
+</div>
+<input type="file" id="logoFile" accept="image/*" style="display:none;" onchange="uploadLogo(this)">
+<label class="label">FAVICON</label>
+<div class="upload-box" id="faviconBox" onclick="document.getElementById('faviconFile').click()">
+<img id="faviconPreview" src="">
+<div class="upload-delete" onclick="removerFavicon(event)"><span class="material-symbols-outlined">delete</span></div>
+</div>
+<input type="file" id="faviconFile" accept="image/*" style="display:none;" onchange="uploadFavicon(this)">
+<label class="label">E-MAIL DE SUPORTE</label>
+<input type="email" id="emailSuporte" class="input" placeholder="suporte@primestore.com">
+<label class="label">MOEDA</label>
+<select id="moeda" class="select">
+<option value="BRL">R$ - Real (BRL)</option>
+<option value="USD">$ - Dólar (USD)</option>
+<option value="EUR">€ - Euro (EUR)</option>
+</select>
+<button class="btn" onclick="salvarGeral()">SALVAR ALTERAÇÕES</button>
+</section>
+
+<!-- CONFIG APARÊNCIA -->
+<section class="page" id="configAparencia">
+<div class="topo">
+<span class="material-symbols-outlined" onclick="showPage('configAdm')" style="cursor:pointer;">arrow_back</span>
+<h1>APARÊNCIA</h1>
+<div style="width:24px;"></div>
+</div>
+<label class="label">COR PRINCIPAL</label>
+<div class="color-picker">
+<div class="color-box" id="colorBox1"></div>
+<input type="color" id="corPrincipal" onchange="updateColorPreview(1,this.value)">
+<input type="text" id="corPrincipalHex" class="color-input" onchange="updateColorPicker(1,this.value)">
+</div>
+<label class="label">COR SECUNDÁRIA</label>
+<div class="color-picker">
+<div class="color-box" id="colorBox2"></div>
+<input type="color" id="corSecundaria" onchange="updateColorPreview(2,this.value)">
+<input type="text" id="corSecundariaHex" class="color-input" onchange="updateColorPicker(2,this.value)">
+</div>
+<label class="label">COR DE FUNDO</label>
+<div class="color-picker">
+<div class="color-box" id="colorBox3"></div>
+<input type="color" id="corFundo" onchange="updateColorPreview(3,this.value)">
+<input type="text" id="corFundoHex" class="color-input" onchange="updateColorPicker(3,this.value)">
+</div>
+<label class="label">COR DO TEXTO</label>
+<div class="color-picker">
+<div class="color-box" id="colorBox4"></div>
+<input type="color" id="corTexto" onchange="updateColorPreview(4,this.value)">
+<input type="text" id="corTextoHex" class="color-input" onchange="updateColorPicker(4,this.value)">
+</div>
+<label class="label">FONTE DO SITE</label>
+<select id="fonteSite" class="select" onchange="mudarFonte(this.value)">
+<option value="Poppins">Poppins</option>
+<option value="Roboto">Roboto</option>
+<option value="Montserrat">Montserrat</option>
+<option value="Inter">Inter</option>
+</select>
+<label class="label">TEMA</label>
+<div class="radio-group">
+<label class="radio"><input type="radio" name="tema" value="claro"> Claro</label>
+<label class="radio"><input type="radio" name="tema" value="escuro" checked> Escuro</label>
+</div>
+<button class="btn" onclick="salvarAparencia()">SALVAR ALTERAÇÕES</button>
+</section>
+
+<!-- CONFIG REDES -->
+<section class="page" id="configRedes">
+<div class="topo">
+<span class="material-symbols-outlined" onclick="showPage('configAdm')" style="cursor:pointer;">arrow_back</span>
+<h1>REDES SOCIAIS</h1>
+<div style="width:24px;"></div>
+</div>
+<div class="card">
+<label class="label">WhatsApp</label>
+<input type="text" id="whatsapp" class="input" placeholder="5598984853563">
+<label class="label">Instagram</label>
+<input type="text" id="instagram" class="input" placeholder="@seuinstagram">
+<label class="label">TikTok</label>
+<input type="text" id="tiktok" class="input" placeholder="@seutiktok">
+<button class="btn" onclick="salvarRedes()">SALVAR</button>
 </div>
 </section>
 
-<!-- MENU INFERIOR -->
-<div class="bottom">
-<a class="active" onclick="menuBottom('home',this)"><span class="material-symbols-outlined">home</span><p>Início</p></a>
-<a onclick="menuBottom('cart',this)" style="position:relative;">
-<span class="material-symbols-outlined">shopping_cart</span>
-<p>Carrinho</p>
-<span class="badge" id="cartBadge4" style="display:none;">0</span>
-</a>
+<!-- CONFIG PAGAMENTOS -->
+<section class="page" id="configPagamento">
+<div class="topo">
+<span class="material-symbols-outlined" onclick="showPage('configAdm')" style="cursor:pointer;">arrow_back</span>
+<h1>PAGAMENTOS</h1>
+<div style="width:24px;"></div>
 </div>
+<div class="card">
+<label class="label">Chave PIX</label>
+<input type="text" id="chavePix" class="input" placeholder="(98)98485-3563">
+<label class="label">Nome do Recebedor</label>
+<input type="text" id="nomeRecebedor" class="input" placeholder="Prime Store">
+<button class="btn" onclick="salvarPagamento()">SALVAR</button>
+</div>
+</section>
+
+<!-- CONFIG MANUTENÇÃO -->
+<section class="page" id="configManutencao">
+<div class="topo">
+<span class="material-symbols-outlined" onclick="showPage('configAdm')" style="cursor:pointer;">arrow_back</span>
+<h1>MANUTENÇÃO</h1>
+<div style="width:24px;"></div>
+</div>
+<div class="card">
+<div class="switch">
+<div><h4 style="font-size:14px;margin-bottom:4px;">Modo Manutenção</h4><p style="font-size:12px;color:#999;">Bloqueia acesso dos clientes</p></div>
+<input type="checkbox" id="modoManutencao" onchange="toggleManutencao()">
+</div>
+<button class="btn" onclick="limparDados()" style="background:#ef4444;margin-top:20px;">LIMPAR DADOS DA LOJA</button>
+</div>
+</section>
+
+<!-- MODAL PRODUTO -->
+<div class="modal-overlay" id="modalProduto">
+<div class="modal">
+<div class="modal-header">
+<span class="material-symbols-outlined" onclick="fecharModalProduto()" style="cursor:pointer;">arrow_back</span>
+<h3 id="modalTitulo">EDITAR PRODUTO</h3>
+<span class="material-symbols-outlined" onclick="fecharModalProduto()" style="cursor:pointer;">close</span>
+</div>
+<div class="upload-box">
+<img id="uploadPreview" src="">
+<div class="upload-delete" onclick="document.getElementById('prodImgFile').click()">
+<span class="material-symbols-outlined">edit</span>
+</div>
+<input type="file" id="prodImgFile" accept="image/*" style="display:none;" onchange="previewImg(this)">
+<input type="hidden" id="prodImgUrl">
+</div>
+<label class="label">NOME DO PRODUTO</label>
+<input type="text" id="prodNome" class="input" placeholder="110 Diamantes">
+<div style="display:flex;gap:10px;">
+<div style="flex:1;">
+<label class="label">CATEGORIA</label>
+<select id="prodCat" class="select"></select>
+</div>
+<div style="flex:1;">
+<label class="label">SUBCATEGORIA</label>
+<select id="prodSub" class="select"></select>
+</div>
+</div>
+<div style="display:flex;gap:10px;">
+<div style="flex:1;">
+<label class="label">PREÇO</label>
+<input type="number" id="prodPreco" class="input" placeholder="4.99" step="0.01">
+</div>
+<div style="flex:1;">
+<label class="label">PREÇO PROMOCIONAL</label>
+<input type="number" id="prodPromo" class="input" placeholder="3.99" step="0.01">
+</div>
+</div>
+<div style="display:flex;gap:10px;">
+<div style="flex:1;">
+<label class="label">ESTOQUE</label>
+<input type="number" id="prodEstoque" class="input" placeholder="0" value="0">
+</div>
+<div style="display:flex;align-items:flex-end;padding-bottom:12px;">
+<label class="radio"><input type="checkbox" id="prodIlimitado" onchange="toggleEstoque()"> Ilimitado</label>
+</div>
+</div>
+<label class="label">DESCRIÇÃO</label>
+<textarea id="prodDesc" placeholder="Descrição do produto..."></textarea>
+<label class="label">TIPO DE ENTREGA</label>
+<div class="radio-group">
+<label class="radio"><input type="radio" name="tipoEntrega" value="Automatica"> Automática</label>
+<label class="radio"><input type="radio" name="tipoEntrega" value="Manual" checked> Manual</label>
+</div>
+<div class="switch">
+<span>STATUS</span>
+<input type="checkbox" id="prodAtivo" checked>
+</div>
+<div style="display:flex;gap:10px;margin-top:20px;">
+<button class="btn-danger" onclick="excluirProduto()">EXCLUIR</button>
+<button class="btn" onclick="salvarProduto()" style="width:48%;">SALVAR</button>
+</div>
+</div>
+</div>
+
+<!-- MODAL CATEGORIA -->
+<div class="modal-overlay" id="modalCategoria">
+<div class="modal">
+<div class="modal-header">
+<h3 id="modalCatTitulo">ADICIONAR CATEGORIA</h3>
+<span class="material-symbols-outlined modal-close" onclick="fecharModalCategoria()">close</span>
+</div>
+<label class="label">NOME DA CATEGORIA</label>
+<input type="text" id="catNome" class="input" placeholder="Ex: Diamantes">
+<label class="label">ÍCONE</label>
+<select id="catIcone" class="select">
+<option value="diamond">Diamante</option>
+<option value="person">Contas</option>
+<option value="sports_esports">Passes</option>
+<option value="subscriptions">Assinaturas</option>
+<option value="card_giftcard">Prêmios</option>
+<option value="school">Treinamentos</option>
+</select>
+<button class="btn" onclick="salvarCategoria()">SALVAR</button>
+</div>
+</div>
+
+<!-- MODAL SUBCATEGORIA -->
+<div class="modal-overlay" id="modalSubcategoria">
+<div class="modal">
+<div class="modal-header">
+<h3 id="modalSubTitulo">ADICIONAR SUBCATEGORIA</h3>
+<span class="material-symbols-outlined modal-close" onclick="fecharModalSubcategoria()">close</span>
+</div>
+<label class="label">NOME DA SUBCATEGORIA</label>
+<input type="text" id="subNome" class="input" placeholder="Ex: Free Fire">
+<button class="btn" onclick="salvarSubcategoria()">SALVAR</button>
+</div>
+</div>
+
+<!-- MODAL CUPOM -->
+<div class="modal-overlay" id="modalCupom">
+<div class="modal">
+<div class="modal-header">
+<h3>ADICIONAR CUPOM</h3>
+<span class="material-symbols-outlined modal-close" onclick="fecharModalCupom()">close</span>
+</div>
+<input type="text" id="cupomCodigo" class="input" placeholder="CÓDIGO DO CUPOM Ex: PRIME10">
+<div style="display:flex;gap:10px;">
+<select id="cupomTipo" class="select">
+<option value="percent">% Porcentagem</option>
+<option value="fixo">R$ Valor Fixo</option>
+</select>
+<input type="number" id="cupomValor" class="input" placeholder="Valor" step="0.01">
+</div>
+<input type="number" id="cupomLimite" class="input" placeholder="Limite de uso (opcional)">
+<div class="switch">
+<span>Ativo</span>
+<input type="checkbox" id="cupomAtivo" checked>
+</div>
+<button class="btn" onclick="salvarCupom()">SALVAR CUPOM</button>
+</div>
+</div>
+
+<!-- LOJA CLIENTE -->
+<section class="page" id="loja">
+<div class="topo">
+<span class="material-symbols-outlined" onclick="showPage('loginAdm')" style="cursor:pointer;">admin_panel_settings</span>
+<h1 id="lojaNome">PRIME STORE</h1>
+<span class="material-symbols-outlined" onclick="showPage('carrinho')" style="cursor:pointer;">shopping_cart</span>
+</div>
+<div id="listaProdutosLoja"></div>
+</section>
+
+<!-- PRODUTO DETALHE -->
+<section class="page" id="produto">
+<div class="topo">
+<span class="material-symbols-outlined" onclick="showPage('loja')" style="cursor:pointer;">arrow_back</span>
+<h1 id="produtoLojaNome">PRIME STORE</h1>
+<span style="width:24px;"></span>
+</div>
+<div id="produtoConteudo"></div>
+</section>
+
+<!-- CARRINHO -->
+<section class="page" id="carrinho">
+<div class="topo">
+<span class="material-symbols-outlined" onclick="showPage('loja')" style="cursor:pointer;">arrow_back</span>
+<h1>CARRINHO</h1>
+<div style="width:24px;"></div>
+</div>
+<div id="conteudoCarrinho"></div>
+</section>
 
 <script>
-let produtosAdm = JSON.parse(localStorage.getItem("produtosAdm")) || [];
-let categoriasAdm = JSON.parse(localStorage.getItem("categoriasAdm")) || [];
-let subcategoriasAdm = JSON.parse(localStorage.getItem("subcategoriasAdm")) || [];
-let configGeral = JSON.parse(localStorage.getItem("configGeral")) || {cor:"#7c3aed",moeda:"BRL",nome:"PRIME STORE"};
+// DADOS
+let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+let categorias = JSON.parse(localStorage.getItem("categorias")) || [
+{id:1,nome:"Diamantes",icone:"diamond"},
+{id:2,nome:"Contas",icone:"person"},
+{id:3,nome:"Passes",icone:"sports_esports"}
+];
+let subcategorias = JSON.parse(localStorage.getItem("subcategorias")) || [
+{id:1,catId:1,nome:"Free Fire"},
+{id:2,catId:1,nome:"Blood Strike"}
+];
+let cupons = JSON.parse(localStorage.getItem("cupons")) || [];
 let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-let filtroProd = "todos";
-let filtroCategoriaAtiva = "todas";
+let pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
 
-function init(){
-aplicarConfig();
-renderHomeCategorias();
-renderHomeDestaques();
-renderProdutos();
-renderCarrinho();
-atualizarBadgeCarrinho();
-}
+let configGeral = JSON.parse(localStorage.getItem("configGeral")) || {
+nomeLoja:"Prime Store",slogan:"Qualidade • Confiança • Segurança",logo:"",favicon:"",emailSuporte:"suporte@primestore.com",moeda:"BRL"
+};
+let configAparencia = JSON.parse(localStorage.getItem("configAparencia")) || {
+corPrincipal:"#a855f7",corSecundaria:"#ff00ff",corFundo:"#0a0a0f",corTexto:"#ffffff",fonte:"Poppins",tema:"escuro"
+};
+let configRedes = JSON.parse(localStorage.getItem("configRedes")) || {whatsapp:"5598984853563",instagram:"",tiktok:""};
+let configPagamento = JSON.parse(localStorage.getItem("configPagamento")) || {chavePix:"(98)98485-3563",nomeRecebedor:"Prime Store"};
+let configSistema = JSON.parse(localStorage.getItem("configSistema")) || {manutencao:false};
 
-function atualizarBadgeCarrinho(){
-const total = carrinho.length;
-const badges = ['cartBadge','cartBadge2','cartBadge3','cartBadge4'];
-badges.forEach(id=>{
-const el = document.getElementById(id);
-if(el){
-if(total>0){
-el.style.display='flex';
-el.innerText=total;
-}else{
-el.style.display='none';
-}
-}
-});
-}
+let filtroStatus = "todos", buscaProd = "", editandoId = null, editandoCatId = null, editandoSubId = null;
+let catAtualId = 1, cupomAplicado = null, produtoSelecionado = null, quantidadeSelecionada = 1;
 
-function aplicarConfig(){
-document.documentElement.style.setProperty('--roxo',configGeral.cor);
-document.getElementById('logoNome').innerHTML = `${configGeral.nome||'PRIME'} <span>STORE</span>`;
-if(configGeral.logo){
-document.getElementById('bannerImg').src = configGeral.logo;
-}
-}
-
-function toggleSubmenu(id){
-const el = document.getElementById(id);
-el.style.display = el.style.display==="none"?"flex":"none";
-}
-
-function filtrarPorCategoria(cat){
-filtroCategoriaAtiva = cat;
-document.querySelectorAll('.cat').forEach(c=>c.classList.remove('active'));
-event.currentTarget.classList.add('active');
-renderProdutos();
-}
-
-function renderHomeCategorias(){
-const area = document.getElementById('homeCategorias');
-area.innerHTML = '';
-area.innerHTML += `<div class="cat active" onclick="filtrarPorCategoria('todas')"><span class="material-symbols-outlined">grid_view</span><span>Todas</span></div>`;
-categoriasAdm.forEach(c=>{
-const img = c.imagem?`<img src="${c.imagem}">`:`<span class="material-symbols-outlined">category</span>`;
-area.innerHTML += `<div class="cat" onclick="filtrarPorCategoria('${c.nome}')">${img}<span>${c.nome}</span></div>`;
-});
-}
-
-function renderHomeDestaques(){
-const area = document.getElementById('homeDestaques');
-area.innerHTML = '';
-produtosAdm.filter(p=>p.status=="Ativo").slice(0,4).forEach((p,i)=>{
-area.innerHTML += `
-<div class="produto" onclick="abrirProduto(${i})">
-<img src="${p.imagem}">
-<div class="produto-info">
-<h3>${p.nome}</h3>
-<div class="preco">R$ ${p.promo||p.preco}</div>
-<button class="comprar" onclick="event.stopPropagation();adicionarCarrinho(${i})">Comprar</button>
-</div>
-</div>`;
-});
-}
-
-function renderProdutos(){
-const store = document.getElementById("storeList");
-if(!store) return;
-store.innerHTML = "";
-let produtosFiltrados = produtosAdm.filter(p=>p.status=="Ativo");
-if(filtroCategoriaAtiva!="todas"){
-produtosFiltrados = produtosFiltrados.filter(p=>p.categoria==filtroCategoriaAtiva);
-}
-produtosFiltrados.forEach((p,index)=>{
-store.innerHTML += `
-<div class="item">
-<img src="${p.imagem}">
-<div class="item-info" onclick="abrirProduto(${index})">
-<h3>${p.nome}</h3>
-<p>${p.categoria} > ${p.sub}</p>
-<span>R$ ${p.promo||p.preco}</span>
-</div>
-<div class="add" onclick="adicionarCarrinho(${index})">
-<span class="material-symbols-outlined">add</span>
-</div>
-</div>`;
-});
-}
-
-function abrirProduto(index){
-const p = produtosAdm[index];
-alert(`${p.nome}\n\n${p.desc}\n\nPreço: R$ ${p.preco}`);
-}
-
-function adicionarCarrinho(index){
-carrinho.push(produtosAdm[index]);
-localStorage.setItem("carrinho",JSON.stringify(carrinho));
-renderCarrinho();
-atualizarBadgeCarrinho();
-alert("Adicionado ao carrinho!");
-}
-
-function renderCarrinho(){
-const cart = document.getElementById("cartList");
-if(!cart) return;
-cart.innerHTML = "";
-let total = 0;
-carrinho.forEach((p,idx)=>{
-total += parseFloat(p.promo||p.preco);
-cart.innerHTML += `
-<div class="cart-item">
-<img src="${p.imagem}">
-<div style="flex:1;">
-<h3 style="font-size:11px;">${p.nome}</h3>
-<p style="font-size:10px;color:#999;margin:6px 0;">${p.desc}</p>
-<h2 style="font-size:16px;">R$ ${p.promo||p.preco}</h2>
-</div>
-<span class="material-symbols-outlined" onclick="removerCarrinho(${idx})" style="cursor:pointer;">delete</span>
-</div>`;
-});
-document.getElementById("totalPrice").innerHTML = `Total: R$ ${total.toFixed(2)}`;
-}
-
-function removerCarrinho(idx){
-carrinho.splice(idx,1);
-localStorage.setItem("carrinho",JSON.stringify(carrinho));
-renderCarrinho();
-atualizarBadgeCarrinho();
-}
-
-function finalizarPedido(){
-if(carrinho.length <= 0){alert("Carrinho vazio");return;}
-let mensagem = "🛒 *NOVO PEDIDO*%0A%0A";
-let total = 0;
-carrinho.forEach((p)=>{
-total += parseFloat(p.promo||p.preco);
-mensagem += `📦 ${p.nome} - R$ ${p.promo||p.preco}%0A`;
-});
-mensagem += `%0A💵 TOTAL: R$ ${total.toFixed(2)}`;
-window.open(`https://wa.me/5599999?text=${mensagem}`,"_blank");
-}
-
+// NAVEGAÇÃO
+function abrirAdm(){document.getElementById('admMenu').classList.add('active');document.getElementById('admOverlay').classList.add('active');}
+function fecharAdm(){document.getElementById('admMenu').classList.remove('active');document.getElementById('admOverlay').classList.remove('active');}
+function abrirAdmAba(aba){fecharAdm();showPage(aba);document.querySelectorAll('.adm-item').forEach(i=>i.classList.remove('active'));event.target.closest('.adm-item').classList.add('active');}
 function showPage(id){
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 document.getElementById(id).classList.add("active");
-closeMenu();
-if(id=="admProdutos")renderProdutosAdm();
-if(id=="admCategorias")renderCategorias();
-if(id=="admSubcategorias")renderSubcategorias();
-if(id=="configGeral")carregarConfigGeral();
-if(id=="addProduto"){carregarSelects();limparFormProduto();}
-if(id=="produtosLoja"){filtroCategoriaAtiva="todas";renderProdutos();}
+if(id==="loja")renderProdutosLoja();
 }
 
-function menuBottom(id,el){
-showPage(id);
-document.querySelectorAll(".bottom a").forEach(btn=>btn.classList.remove("active"));
-if(el)el.classList.add("active");
-}
-
-function openMenu(){document.getElementById("sideMenu").classList.add("active");document.getElementById("overlay").classList.add("active");}
-function closeMenu(){document.getElementById("sideMenu").classList.remove("active");document.getElementById("overlay").classList.remove("active");}
-
+// LOGIN
 function loginAdm(){
-if(document.getElementById("user").value==="Lorrannyh" && document.getElementById("pass").value==="Lorrannyh.101225"){
-showPage("dashboardAdm");
-}else{alert("Dados inválidos");}
+const user = document.getElementById("user").value;
+const pass = document.getElementById("pass").value;
+if(user==="Lorrannyh" && pass==="Lorrannyh.102225"){
+showPage("dashboard");abrirAdm();carregarTudo();
+}else{alert("Usuário ou senha incorretos");}
+}
+function toggleSenha(){
+const pass = document.getElementById("pass");
+const icon = event.target;
+pass.type = pass.type==="password"?"text":"password";
+icon.innerText = pass.type==="password"?"visibility_off":"visibility";
 }
 
-function carregarSelects(){
-document.getElementById("produtoCategoria").innerHTML = categoriasAdm.map(c=>`<option>${c.nome}</option>`).join("");
-document.getElementById("produtoSub").innerHTML = subcategoriasAdm.map(s=>`<option>${s.nome}</option>`).join("");
-}
-
-function limparFormProduto(){
-document.getElementById("editIndex").value="";
-document.getElementById("addTitulo").innerText="ADICIONAR";
-document.getElementById("produtoNome").value="";
-document.getElementById("produtoPreco").value="";
-document.getElementById("produtoPromo").value="";
-document.getElementById("produtoDesc").value="";
-document.getElementById("produtoImagem").value="";
-}
-
-function salvarProduto(){
-const idx = document.getElementById("editIndex").value;
-const file = document.getElementById("produtoImagem").files[0];
-const salvar = (imagem)=>{
-const obj = {
-nome:document.getElementById("produtoNome").value,
-categoria:document.getElementById("produtoCategoria").value,
-sub:document.getElementById("produtoSub").value,
-preco:document.getElementById("produtoPreco").value,
-promo:document.getElementById("produtoPromo").value,
-estoque:document.getElementById("produtoEstoque").value,
-ilimitado:document.getElementById("produtoIlimitado").checked,
-desc:document.getElementById("produtoDesc").value,
-entrega:document.getElementById("produtoEntrega").value,
-status:document.getElementById("produtoStatus").value,
-imagem:imagem||"https://i.postimg.cc/C5KWcT5z/be50f798-9fdd-49a3-99aa-7b4abaf24030.jpg"
-};
-if(idx===""){
-produtosAdm.push(obj);
-}else{
-produtosAdm[idx]=obj;
-}
-localStorage.setItem("produtosAdm",JSON.stringify(produtosAdm));
-renderProdutosAdm();
-renderProdutos();
-renderHomeDestaques();
-alert("Salvo!");
-showPage("admProdutos");
-}
-if(file){
-const reader = new FileReader();
-reader.onload = e=>salvar(e.target.result);
-reader.readAsDataURL(file);
-}else{
-salvar(idx!==""?produtosAdm[idx].imagem:null);
-}
-}
-
-function setFiltroProd(filtro,el){
-filtroProd = filtro;
-document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-el.classList.add("active");
+// PRODUTOS ADM
+function filtrarStatus(status){
+filtroStatus = status;
+document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+event.target.classList.add('active');
 renderProdutosAdm();
 }
-
+function filtrarProdutosAdm(){
+buscaProd = document.getElementById('buscarProd').value.toLowerCase();
+renderProdutosAdm();
+}
 function renderProdutosAdm(){
-const area = document.getElementById("listaProdutosAdm");
-if(!area) return;
-const busca = document.getElementById("buscarProduto").value.toLowerCase();
-area.innerHTML = "";
-produtosAdm.filter(p=>{
-if(filtroProd=="ativos") return p.status=="Ativo";
-if(filtroProd=="inativos") return p.status=="Inativo";
-return true;
-}).filter(p=>p.nome.toLowerCase().includes(busca)).forEach((p,index)=>{
+const area = document.getElementById('listaProdutosAdm');
+let lista = [...produtos];
+if(filtroStatus==='ativos')lista = lista.filter(p=>p.ativo);
+if(filtroStatus==='inativos')lista = lista.filter(p=>!p.ativo);
+if(buscaProd)lista = lista.filter(p=>p.nome.toLowerCase().includes(buscaProd));
+area.innerHTML = '';
+lista.forEach(p=>{
 area.innerHTML += `
-<div class="item">
-<img src="${p.imagem}">
-<div class="item-info" onclick="editarProd(${index})">
-<h3>${p.nome}</h3>
-<p>${p.categoria} > ${p.sub}</p>
-<span>R$ ${p.preco} ${p.promo?`R$ ${p.promo}`:""}</span>
+<div class="produto-item">
+<img src="${p.img}" onerror="this.src='https://via.placeholder.com/48'">
+<div class="produto-info">
+<h4>${p.nome}</h4>
+<p>${p.categoria} > ${p.subcategoria}</p>
+<div class="preco">R$ ${(p.precoPromo||p.preco).toFixed(2).replace('.',',')}</div>
 </div>
-<div style="display:flex;gap:8px;align-items:center;">
-<label class="toggle">
-<input type="checkbox" ${p.status=="Ativo"?"checked":""} onchange="toggleProd(${index},this.checked)">
-<span></span>
-</label>
-<span class="material-symbols-outlined" onclick="deletarProd(${index})">delete</span>
+<div class="switch">
+<input type="checkbox" ${p.ativo?'checked':''} onchange="toggleProduto(${p.id})">
+</div>
+<div class="btn-icon edit" onclick="editarProduto(${p.id})">
+<span class="material-symbols-outlined">more_vert</span>
 </div>
 </div>`;
 });
 }
-
-function editarProd(index){
-const p = produtosAdm[index];
-document.getElementById("editIndex").value=index;
-document.getElementById("addTitulo").innerText="EDITAR";
-carregarSelects();
-document.getElementById("produtoNome").value=p.nome;
-document.getElementById("produtoCategoria").value=p.categoria;
-document.getElementById("produtoSub").value=p.sub;
-document.getElementById("produtoPreco").value=p.preco;
-document.getElementById("produtoPromo").value=p.promo;
-document.getElementById("produtoDesc").value=p.desc;
-document.getElementById("produtoStatus").value=p.status;
-showPage("addProduto");
-}
-
-function deletarProd(index){
-if(confirm("Deletar produto?")){
-produtosAdm.splice(index,1);
-localStorage.setItem("produtosAdm",JSON.stringify(produtosAdm));
+function toggleProduto(id){
+const prod = produtos.find(p=>p.id===id);
+prod.ativo =!prod.ativo;
+salvarLocal();
 renderProdutosAdm();
-renderProdutos();
-renderHomeDestaques();
 }
+function abrirModalProduto(){
+editandoId = null;
+document.getElementById('modalTitulo').innerText = "ADICIONAR PRODUTO";
+document.getElementById('uploadPreview').src = "https://via.placeholder.com/80";
+document.getElementById('prodImgUrl').value = "";
+document.getElementById('prodNome').value = "";
+carregarSelectCategorias();
+document.getElementById('prodPreco').value = "";
+document.getElementById('prodPromo').value = "";
+document.getElementById('prodEstoque').value = "0";
+document.getElementById('prodIlimitado').checked = false;
+document.getElementById('prodDesc').value = "";
+document.getElementById('prodAtivo').checked = true;
+document.querySelector('input[name="tipoEntrega"][value="Manual"]').checked = true;
+document.getElementById('modalProduto').classList.add('active');
 }
-
-function toggleProd(index,check){
-produtosAdm[index].status = check?"Ativo":"Inativo";
-localStorage.setItem("produtosAdm",JSON.stringify(produtosAdm));
-renderProdutosAdm();
-renderProdutos();
-renderHomeDestaques();
+function editarProduto(id){
+const prod = produtos.find(p=>p.id===id);
+editandoId = id;
+document.getElementById('modalTitulo').innerText = "EDITAR PRODUTO";
+document.getElementById('uploadPreview').src = prod.img;
+document.getElementById('prodImgUrl').value = prod.img;
+document.getElementById('prodNome').value = prod.nome;
+carregarSelectCategorias(prod.categoria,prod.subcategoria);
+document.getElementById('prodPreco').value = prod.preco;
+document.getElementById('prodPromo').value = prod.precoPromo;
+document.getElementById('prodEstoque').value = prod.estoque;
+document.getElementById('prodIlimitado').checked = prod.ilimitado;
+document.getElementById('prodDesc').value = prod.descricao;
+document.getElementById('prodAtivo').checked = prod.ativo;
+document.querySelector(`input[name="tipoEntrega"][value="${prod.tipoEntrega}"]`).checked = true;
+toggleEstoque();
+document.getElementById('modalProduto').classList.add('active');
 }
-
-function abrirModalCategoria(){
-document.getElementById("modalCategoria").classList.add("active");
-document.getElementById("catNome").value="";
-document.getElementById("catImagem").value="";
-}
-function fecharModalCategoria(){
-document.getElementById("modalCategoria").classList.remove("active");
-}
-
-function salvarCategoria(){
-const nome = document.getElementById("catNome").value;
-const file = document.getElementById("catImagem").files[0];
-if(!nome)return;
-const salvar = (img)=>{
-categoriasAdm.push({nome,imagem:img});
-localStorage.setItem("categoriasAdm",JSON.stringify(categoriasAdm));
-renderCategorias();
-renderHomeCategorias();
-fecharModalCategoria();
-}
-if(file){
+function fecharModalProduto(){document.getElementById('modalProduto').classList.remove('active');}
+function previewImg(input){
+if(input.files && input.files[0]){
 const reader = new FileReader();
-reader.onload = e=>salvar(e.target.result);
-reader.readAsDataURL(file);
-}else{
-salvar("");
+reader.onload = e=>{
+document.getElementById('uploadPreview').src = e.target.result;
+document.getElementById('prodImgUrl').value = e.target.result;
 }
+reader.readAsDataURL(input.files[0]);
 }
-
-function renderCategorias(){
-const area = document.getElementById("listaCategorias");
-if(!area) return;
-area.innerHTML = "";
-categoriasAdm.forEach((c,i)=>{
-const subs = subcategoriasAdm.filter(s=>s.categoria==c.nome);
-const img = c.imagem?`<img src="${c.imagem}">`:`<span class="material-symbols-outlined">category</span>`;
-let subHtml = '';
-if(subs.length>0){
-subHtml = '<div class="sub-list">';
+function toggleEstoque(){document.getElementById('prodEstoque').disabled = document.getElementById('prodIlimitado').checked;}
+function carregarSelectCategorias(catSel="",subSel=""){
+const catSelect = document.getElementById('prodCat');
+catSelect.innerHTML = '<option value="">Selecione</option>';
+categorias.forEach(c=>{
+catSelect.innerHTML += `<option value="${c.nome}" ${c.nome===catSel?'selected':''}>${c.nome}</option>`;
+});
+carregarSelectSubcategorias(catSel,subSel);
+catSelect.onchange = ()=>carregarSelectSubcategorias(catSelect.value,subSel);
+}
+function carregarSelectSubcategorias(catNome,subSel=""){
+const subSelect = document.getElementById('prodSub');
+const cat = categorias.find(c=>c.nome===catNome);
+const subs = subcategorias.filter(s=>s.catId===cat?.id);
+subSelect.innerHTML = '<option value="">Selecione</option>';
 subs.forEach(s=>{
-subHtml += `<div class="sub-item">${s.nome}</div>`;
-});
-subHtml += '</div>';
-}
-area.innerHTML += `
-<div>
-<div class="item">
-${img}
-<div class="item-info" onclick="abrirSubcategorias('${c.nome}')">
-<h3>${c.nome}</h3>
-<p>${subs.length} subcategorias</p>
-</div>
-<div>
-<span class="material-symbols-outlined" onclick="deletarCat(${i})">delete</span>
-</div>
-</div>
-${subHtml}
-</div>`;
+subSelect.innerHTML += `<option value="${s.nome}" ${s.nome===subSel?'selected':''}>${s.nome}</option>`;
 });
 }
-
-function deletarCat(i){
-if(confirm("Deletar categoria? Isso vai apagar as subcategorias também.")){
-const catNome = categoriasAdm[i].nome;
-subcategoriasAdm = subcategoriasAdm.filter(s=>s.categoria!=catNome);
-categoriasAdm.splice(i,1);
-localStorage.setItem("categoriasAdm",JSON.stringify(categoriasAdm));
-localStorage.setItem("subcategoriasAdm",JSON.stringify(subcategoriasAdm));
-renderCategorias();
-renderHomeCategorias();
-}
-}
-
-function abrirSubcategorias(cat){
-document.getElementById("subTitulo").innerText="Categoria: "+cat;
-document.getElementById("filtroCategoria").innerHTML=`<option>${cat}</option>`;
-showPage('admSubcategorias');
-renderSubcategorias();
-}
-
-function renderSubcategorias(){
-const area = document.getElementById("listaSubcategorias");
-const cat = document.getElementById("filtroCategoria").value;
-area.innerHTML = "";
-subcategoriasAdm.filter(s=>s.categoria==cat).forEach((s,i)=>{
-const qtdProd = produtosAdm.filter(p=>p.sub==s.nome).length;
-const img = s.imagem?`<img src="${s.imagem}" class="sub-img">`:`<span class="material-symbols-outlined">folder</span>`;
-area.innerHTML += `
-<div class="item">
-${img}
-<div class="item-info">
-<h3>${s.nome}</h3>
-<p>${qtdProd} produtos</p>
-</div>
-<div style="display:flex;gap:10px;">
-<span class="material-symbols-outlined" onclick="editarSub(${i})">edit</span>
-<span class="material-symbols-outlined" onclick="deletarSub(${i})">delete</span>
-</div>
-</div>`;
-});
-}
-
-function abrirModalSubcategoria(){
-document.getElementById("modalSubTitulo").innerText="Nova Subcategoria";
-document.getElementById("subEditIndex").value="";
-document.getElementById("subNome").value="";
-document.getElementById("subImagem").value="";
-document.getElementById("modalSubcategoria").classList.add("active");
-}
-
-function fecharModalSubcategoria(){
-document.getElementById("modalSubcategoria").classList.remove("active");
-}
-
-function salvarSubcategoria(){
-const idx = document.getElementById("subEditIndex").value;
-const nome = document.getElementById("subNome").value;
-const cat = document.getElementById("filtroCategoria").value;
-const file = document.getElementById("subImagem").files[0];
-if(!nome)return;
-
-const salvar = (img)=>{
-const obj = {categoria:cat,nome,imagem:img};
-if(idx===""){
-subcategoriasAdm.push(obj);
-}else{
-subcategoriasAdm[idx]=obj;
-}
-localStorage.setItem("subcategoriasAdm",JSON.stringify(subcategoriasAdm));
-renderSubcategorias();
-renderCategorias();
-fecharModalSubcategoria();
-}
-
-if(file){
-const reader = new FileReader();
-reader.onload = e=>salvar(e.target.result);
-reader.readAsDataURL(file);
-}else{
-salvar(idx!==""?subcategoriasAdm[idx].imagem:"");
-}
-}
-
-function editarSub(i){
-const s = subcategoriasAdm[i];
-document.getElementById("modalSubTitulo").innerText="Editar Subcategoria";
-document.getElementById("subEditIndex").value=i;
-document.getElementById("subNome").value=s.nome;
-document.getElementById("modalSubcategoria").classList.add("active");
-}
-
-function deletarSub(i){
-if(confirm("Deletar subcategoria? Isso não deleta os produtos.")){
-subcategoriasAdm.splice(i,1);
-localStorage.setItem("subcategoriasAdm",JSON.stringify(subcategoriasAdm));
-renderSubcategorias();
-renderCategorias();
-}
-}
-
-function carregarConfigGeral(){
-document.getElementById("confNomeLoja").value = configGeral.nome||"";
-document.getElementById("confCor").value = configGeral.cor||"#7c3aed";
-document.getElementById("confMoeda").value = configGeral.moeda||"BRL";
-document.getElementById("confTaxa").value = configGeral.taxa||"";
-}
-
-function salvarConfigGeral(){
-const file = document.getElementById("confLogo").files[0];
-const salvar = (logo)=>{
-configGeral = {
-nome:document.getElementById("confNomeLoja").value,
-cor:document.getElementById("confCor").value,
-moeda:document.getElementById("confMoeda").value,
-taxa:document.getElementById("confTaxa").value,
-logo:logo||configGeral.logo
+function salvarProduto(){
+const produto = {
+id: editandoId || Date.now(),
+nome: document.getElementById('prodNome').value,
+categoria: document.getElementById('prodCat').value,
+subcategoria: document.getElementById('prodSub').value,
+preco: parseFloat(document.getElementById('prodPreco').value) || 0,
+precoPromo: parseFloat(document.getElementById('prodPromo').value) || 0,
+estoque: document.getElementById('prodIlimitado').checked? -1 : parseInt(document.getElementById('prodEstoque').value) || 0,
+ilimitado: document.getElementById('prodIlimitado').checked,
+descricao: document.getElementById('prodDesc').value,
+tipoEntrega: document.querySelector('input[name="tipoEntrega"]:checked').value,
+ativo: document.getElementById('prodAtivo').checked,
+img: document.getElementById('prodImgUrl').value || 'https://via.placeholder.com/80'
 };
-localStorage.setItem("configGeral",JSON.stringify(configGeral));
-aplicarConfig();
-alert("Salvo!");
+if(!produto.nome ||!produto.preco){alert("Preencha nome e preço");return;}
+if(editandoId){const idx = produtos.findIndex(p=>p.id===editandoId);produtos[idx] = produto;}
+else{produtos.push(produto);}
+salvarLocal();fecharModalProduto();renderProdutosAdm();renderProdutosLoja();
 }
-if(file){
-const reader = new FileReader();
-reader.onload = e=>salvar(e.target.result);
-reader.readAsDataURL(file);
-}else{
-salvar();
+function excluirProduto(){
+if(!editandoId)return;
+if(confirm("Excluir produto?")){produtos = produtos.filter(p=>p.id!==editandoId);salvarLocal();fecharModalProduto();renderProdutosAdm();renderProdutosLoja();}
+}
+
+// CATEGORIAS
+function renderCategoriasAdm(){
+const area = document.getElementById('listaCategoriasAdm');
+area.innerHTML = '';
+categorias.forEach(c=>{
+const qtdSub = subcategorias.filter(s=>s.catId===c.id).length;
+area.innerHTML += `
+<div class="list-item">
+<div class="list-icon"><span class="material-symbols-outlined">${c.icone}</span></div>
+<div class="list-info"><h4>${c.nome}</h4><p>${qtdSub} subcategorias</p></div>
+<div class="list-actions">
+<div class="btn-icon edit" onclick="abrirModalSubcategorias(${c.id})"><span class="material-symbols-outlined">folder_open</span></div>
+<div class="btn-icon edit" onclick="editarCategoria(${c.id})"><span class="material-symbols-outlined">edit</span></div>
+<div class="btn-icon del" onclick="excluirCategoria(${c.id})"><span class="material-symbols-outlined">delete</span></div>
+</div>
+</div>`;
+});
+}
+function abrirModalCategoria(){
+editandoCatId = null;
+document.getElementById('modalCatTitulo').innerText = "ADICIONAR CATEGORIA";
+document.getElementById('catNome').value = "";
+document.getElementById('catIcone').value = "diamond";
+document.getElementById('modalCategoria').classList.add('active');
+}
+function editarCategoria(id){
+const cat = categorias.find(c=>c.id===id);
+editandoCatId = id;
+document.getElementById('modalCatTitulo').innerText = "EDITAR CATEGORIA";
+document.getElementById('catNome').value = cat.nome;
+document.getElementById('catIcone').value = cat.icone;
+document.getElementById('modalCategoria').classList.add('active');
+}
+function fecharModalCategoria(){document.getElementById('modalCategoria').classList.remove('active');}
+function salvarCategoria(){
+const nome = document.getElementById('catNome').value.trim();
+const icone = document.getElementById('catIcone').value;
+if(!nome){alert("Digite o nome");return;}
+if(editandoCatId){const cat = categorias.find(c=>c.id===editandoCatId);cat.nome = nome;cat.icone = icone;}
+else{categorias.push({id:Date.now(),nome,icone});}
+localStorage.setItem("categorias",JSON.stringify(categorias));fecharModalCategoria();renderCategoriasAdm();
+}
+function excluirCategoria(id){
+if(confirm("Excluir categoria e subcategorias?")){
+categorias = categorias.filter(c=>c.id!==id);
+subcategorias = subcategorias.filter(s=>s.catId!==id);
+localStorage.setItem("categorias",JSON.stringify(categorias));
+localStorage.setItem("subcategorias",JSON.stringify(subcategorias));
+renderCategoriasAdm();
 }
 }
 
-init();
+// SUBCATEGORIAS
+function abrirModalSubcategorias(catId){
+catAtualId = catId;
+const cat = categorias.find(c=>c.id===catId);
+document.getElementById('catAtualNome').innerText = cat.nome;
+showPage('subcategoriasAdm');renderSubcategoriasAdm();
+}
+function renderSubcategoriasAdm(){
+const area = document.getElementById('listaSubcategoriasAdm');
+const lista = subcategorias.filter(s=>s.catId===catAtualId);
+area.innerHTML = '';
+lista.forEach(s=>{
+area.innerHTML += `
+<div class="list-item">
+<div class="list-info"><h4>${s.nome}</h4></div>
+<div class="list-actions">
+<div class="btn-icon edit" onclick="editarSubcategoria(${s.id})"><span class="material-symbols-outlined">edit</span></div>
+<div class="btn-icon del" onclick="excluirSubcategoria(${s.id})"><span class="material-symbols-outlined">delete</span></div>
+</div>
+</div>`;
+});
+}
+function abrirModalSubcategoria(){
+editandoSubId = null;
+document.getElementById('modalSubTitulo').innerText = "ADICIONAR SUBCATEGORIA";
+document.getElementById('subNome').value = "";
+document.getElementById('modalSubcategoria').classList.add('active');
+}
+function editarSubcategoria(id){
+const sub = subcategorias.find(s=>s.id===id);
+editandoSubId = id;
+document.getElementById('modalSubTitulo').innerText = "EDITAR SUBCATEGORIA";
+document.getElementById('subNome').value = sub.nome;
+document.getElementById('modalSubcategoria').classList.add('active');
+}
+function fecharModalSubcategoria(){document.getElementById('modalSubcategoria').classList.remove('active');}
+function salvarSubcategoria(){
+const nome = document.getElementById('subNome').value.trim();
+if(!nome){alert("Digite o nome");return;}
+if(editandoSubId){const sub = subcategorias.find(s=>s.id===editandoSubId);sub.nome = nome;}
+else{subcategorias.push({id:Date.now(),catId:catAtualId,nome});}
+localStorage.setItem("subcategorias",JSON.stringify(subcategorias));fecharModalSubcategoria();renderSubcategoriasAdm();renderCategoriasAdm();
+}
+function excluirSubcategoria(id){
+if(confirm("Excluir subcategoria?")){
+subcategorias = subcategorias.filter(s=>s.id!==id);
+localStorage.setItem("subcategorias",JSON.stringify(subcategorias));
+renderSubcategoriasAdm();renderCategoriasAdm();
+}
+}
+
+// CUPONS
+function renderCuponsAdm(){
+const area = document.getElementById('listaCuponsAdm');
+area.innerHTML = '';
+cupons.forEach(c=>{
+area.innerHTML += `
+<div class="card">
+<h4>${c.codigo}</h4>
+<p style="color:#999;font-size:13px;">${c.tipo==='percent'?c.valor+'% off':`R$ ${c.valor.toFixed(2)} off`}</p>
+<span class="badge ${c.ativo?'active':'inactive'}">${c.ativo?'Ativo':'Inativo'}</span>
+</div>`;
+});
+}
+function abrirModalCupom(){
+document.getElementById('cupomCodigo').value = "";
+document.getElementById('cupomTipo').value = "percent";
+document.getElementById('cupomValor').value = "";
+document.getElementById('cupomLimite').value = "";
+document.getElementById('cupomAtivo').checked = true;
+document.getElementById('modalCupom').classList.add('active');
+}
+function fecharModalCupom(){document.getElementById('modalCupom').classList.remove('active');}
+function salvarCupom(){
+const cupom = {
+id: Date.now(),
+codigo: document.getElementById('cupomCodigo').value.toUpperCase(),
+tipo: document.getElementById('cupomTipo').value,
+valor: parseFloat(document.getElementById('cupomValor').value) || 0,
+limite: parseInt(document.getElementById('cupomLimite').value) || 0,
+ativo: document.getElementById('cupomAtivo').checked
+};
+if(!cupom.codigo ||!cupom.valor){alert("Preencha código e valor");return;}
+cupons.push(cupom);localStorage.setItem("cupons",JSON.stringify(cupons));
+fecharModalCupom();renderCuponsAdm();
+}
+
+// CONFIGURAÇÕES
+function carregarTudo(){
+carregarGeral();carregarAparencia();carregarRedes();carregarPagamento();carregarSistema();
+aplicarAparencia();verificarManutencao();renderProdutosAdm();renderCategoriasAdm();renderCuponsAdm();renderProdutosLoja();
+}
+function carregarGeral(){
+document.getElementById('nomeLoja').value = configGeral.nomeLoja;
+document.getElementById('sloganLoja').value = configGeral.slogan;
+document.getElementById('emailSuporte').value = configGeral.emailSuporte;
+document.getElementById('moeda').value = configGeral.moeda;
+document.getElementById('logoPreview').src = configGeral.logo || "";
+document.getElementById('faviconPreview').src = configGeral.favicon || "";
+document.getElementById('logoBox').style.display = configGeral.logo? "flex" : "none";
+document.getElementById('faviconBox').style.display = configGeral.favicon? "flex" : "none";
+document.getElementById('lojaNome').innerText = configGeral.nomeLoja;
+document.getElementById('produtoLojaNome').innerText = configGeral.nomeLoja;
+document.getElementById('titleTag').innerText = configGeral.nomeLoja;
+if(configGeral.favicon)document.getElementById('favicon').href = configGeral.favicon;
+}
+function uploadLogo(input){if(input.files && input.files[0]){const reader = new FileReader();reader.onload = e=>{configGeral.logo = e.target.result;document.getElementById('logoPreview').src = e.target.result;document.getElementById('logoBox').style.display = "flex";}reader.readAsDataURL(input.files[0]);}}
+function removerLogo(e){e.stopPropagation();configGeral.logo = "";document.getElementById('logoPreview').src = "";document.getElementById('logoBox').style.display = "none";}
+function uploadFavicon(input){if(input.files && input.files[0]){const reader = new FileReader();reader.onload = e=>{configGeral.favicon = e.target.result;document.getElementById('faviconPreview').src = e.target.result;document.getElementById('faviconBox').style.display = "flex";}reader.readAsDataURL(input.files[0]);}}
+function removerFavicon(e){e.stopPropagation();configGeral.favicon = "";document.getElementById('faviconPreview').src = "";document.getElementById('faviconBox').style.display = "none";}
+function salvarGeral(){
+configGeral.nomeLoja = document.getElementById('nomeLoja').value;
+configGeral.slogan = document.getElementById('sloganLoja').value;
+configGeral.emailSuporte = document.getElementById('emailSuporte').value;
+configGeral.moeda = document.getElementById('moeda').value;
+localStorage.setItem("configGeral",JSON.stringify(configGeral));
+carregarGeral();alert("Salvo!");
+}
+
+// APARÊNCIA
+function carregarAparencia(){
+document.getElementById('corPrincipal').value = configAparencia.corPrincipal;
+document.getElementById('corPrincipalHex').value = configAparencia.corPrincipal;
+document.getElementById('colorBox1').style.background = configAparencia.corPrincipal;
+document.getElementById('corSecundaria').value = configAparencia.corSecundaria;
+document.getElementById('corSecundariaHex').value = configAparencia.corSecundaria;
+document.getElementById('colorBox2').style.background = configAparencia.corSecundaria;
+document.getElementById('corFundo').value = configAparencia.corFundo;
+document.getElementById('corFundoHex').value = configAparencia.corFundo;
+document.getElementById('colorBox3').style.background = configAparencia.corFundo;
+document.getElementById('corTexto').value = configAparencia.corTexto;
+document.getElementById('corTextoHex').value = configAparencia.corTexto;
+document.getElementById('colorBox4').style.background = configAparencia.corTexto;
+document.getElementById('fonteSite').value = configAparencia.fonte;
+document.querySelector(`input[name="tema"][value="${configAparencia.tema}"]`).checked = true;
+}
+function updateColorPreview(num,cor){document.getElementById(`colorBox${num}`).style.background = cor;document.getElementById(`cor${['Principal','Secundaria','Fundo','Texto'][num-1]}Hex`).value = cor;}
+function updateColorPicker(num,cor){if(/^#[0-9A-F]{6}$/i.test(cor)){document.getElementById(`colorBox${num}`).style.background = cor;document.getElementById(`cor${['Principal','Secundaria','Fundo','Texto'][num-1]}`).value = cor;}}
+function mudarFonte(fonte){
+document.getElementById('fontLink').href = `https://fonts.googleapis.com/css2?family=${fonte}:wght@300;400;500;600;700;800&display=swap`;
+document.documentElement.style.setProperty('--fonte',`'${fonte}',sans-serif`);
+}
+function salvarAparencia(){
+configAparencia.corPrincipal = document.getElementById('corPrincipal').value;
+configAparencia.corSecundaria = document.getElementById('corSecundaria').value;
+configAparencia.corFundo = document.getElementById('corFundo').value;
+configAparencia.corTexto = document.getElementById('corTexto').value;
+configAparencia.fonte = document.getElementById('fonteSite').value;
+configAparencia.tema = document.querySelector('input[name="tema"]:checked').value;
+localStorage.setItem("configAparencia",JSON.stringify(configAparencia));
+aplicarAparencia();alert("Salvo!");
+}
+function aplicarAparencia(){
+const root = document.documentElement;
+root.style.setProperty('--roxo',configAparencia.corPrincipal);
+root.style.setProperty('--cor-sec',configAparencia.corSecundaria);
+root.style.setProperty('--cor-fundo',configAparencia.corFundo);
+root.style.setProperty('--cor-texto',configAparencia.corTexto);
+root.style.setProperty('--fonte',`'${configAparencia.fonte}',sans-serif`);
+document.body.style.fontFamily = root.style.getPropertyValue('--fonte');
+mudarFonte(configAparencia.fonte);
+}
+
+// REDES E PAGAMENTO
+function carregarRedes(){
+document.getElementById('whatsapp').value = configRedes.whatsapp;
+document.getElementById('instagram').value = configRedes.instagram;
+document.getElementById('tiktok').value = configRedes.tiktok;
+}
+function salvarRedes(){
+configRedes.whatsapp = document.getElementById('whatsapp').value;
+configRedes.instagram = document.getElementById('instagram').value;
+configRedes.tiktok = document.getElementById('tiktok').value;
+localStorage.setItem("configRedes",JSON.stringify(configRedes));alert("Salvo!");
+}
+function carregarPagamento(){
+document.getElementById('chavePix').value = configPagamento.chavePix;
+document.getElementById('nomeRecebedor').value = configPagamento.nomeRecebedor;
+}
+function salvarPagamento(){
+configPagamento.chavePix = document.getElementById('chavePix').value;
+configPagamento.nomeRecebedor = document.getElementById('nomeRecebedor').value;
+localStorage.setItem("configPagamento",JSON.stringify(configPagamento));alert("Salvo!");
+}
+
+// MANUTENÇÃO
+function carregarSistema(){
+document.getElementById('modoManutencao').checked = configSistema.manutencao;
+verificarManutencao();
+}
+function toggleManutencao(){
+configSistema.manutencao = document.getElementById('modoManutencao').checked;
+localStorage.setItem("configSistema",JSON.stringify(configSistema));
+verificarManutencao();
+alert(configSistema.manutencao?"Modo manutenção ativado":"Desativado");
+}
+function verificarManutencao(){
+document.getElementById('manutencaoOverlay').classList.toggle('active',configSistema.manutencao);
+}
+function limparDados(){
+if(confirm("Apagar tudo?")){localStorage.clear();location.reload();}
+}
+
+// LOJA CLIENTE
+function renderProdutosLoja(){
+const area = document.getElementById('listaProdutosLoja');
+area.innerHTML = '';
+produtos.filter(p=>p.ativo).forEach(p=>{
+const precoFinal = p.precoPromo && p.precoPromo>0? p.precoPromo : p.preco;
+area.innerHTML += `
+<div class="card" onclick="abrirProduto(${p.id})" style="cursor:pointer;display:flex;gap:12px;align-items:center;">
+<img src="${p.img}" style="width:60px;height:60px;border-radius:12px;">
+<div style="flex:1;">
+<h4>${p.nome}</h4>
+<p style="font-size:12px;color:#999;">${p.categoria} > ${p.subcategoria}</p>
+<div style="display:flex;align-items:center;">
+<span style="color:var(--roxo);font-weight:700;">R$ ${precoFinal.toFixed(2).replace('.',',')}</span>
+${p.precoPromo>0?`<span class="preco-original">R$ ${p.preco.toFixed(2).replace('.',',')}</span>`:''}
+</div>
+</div>
+</div>`;
+});
+}
+function abrirProduto(id){
+produtoSelecionado = produtos.find(p=>p.id===id);
+quantidadeSelecionada = 1;
+const p = produtoSelecionado;
+const precoFinal = p.precoPromo && p.precoPromo>0? p.precoPromo : p.preco;
+document.getElementById('produtoConteudo').innerHTML = `
+<div class="produto-img"><img src="${p.img}"></div>
+<div class="produto-nome">${p.nome}</div>
+<div class="produto-sub">${p.categoria} > ${p.subcategoria}</div>
+<div class="produto-preco">R$ ${precoFinal.toFixed(2).replace('.',',')}${p.precoPromo>0?`<span class="preco-original">R$ ${p.preco.toFixed(2).replace('.',',')}</span>`:''}</div>
+<div style="margin:20px 0;"><label class="label">DESCRIÇÃO</label><p style="color:#999;font-size:13px;line-height:1.6;">${p.descricao}</p></div>
+<div class="qtd-section"><div class="qtd-label">QUANTIDADE</div><div class="qtd-control"><div class="qtd-btn" onclick="mudarQtd(-1)">−</div><div class="qtd-valor" id="qtdValor">${quantidadeSelecionada}</div><div class="qtd-btn" onclick="mudarQtd(1)">+</div></div></div>
+<button class="btn-comprar" onclick="adicionarCarrinho()"><span class="material-symbols-outlined">shopping_cart</span>COMPRAR AGORA</button>`;
+showPage('produto');
+}
+function mudarQtd(valor){quantidadeSelecionada += valor;if(quantidadeSelecionada<1)quantidadeSelecionada=1;document.getElementById('qtdValor').innerText = quantidadeSelecionada;}
+function adicionarCarrinho(){
+for(let i=0;i<quantidadeSelecionada;i++){carrinho.push(produtoSelecionado);}
+localStorage.setItem("carrinho",JSON.stringify(carrinho));renderCarrinho();showPage('carrinho');
+}
+
+// CARRINHO
+function renderCarrinho(){
+const area = document.getElementById('conteudoCarrinho');
+if(carrinho.length===0){area.innerHTML = '<p style="text-align:center;color:#666;padding:40px;">Carrinho vazio</p>';return;}
+const agrupado = {};
+carrinho.forEach(p=>{const key = p.id;if(!agrupado[key])agrupado[key]={...p,qtd:0};agrupado[key].qtd++;});
+let subtotal = 0;let html = '<div>';
+Object.values(agrupado).forEach(p=>{
+const precoUnit = p.precoPromo && p.precoPromo>0? p.precoPromo : p.preco;
+const subtotalItem = precoUnit * p.qtd;subtotal += subtotalItem;
+html += `
+<div class="cart-item">
+<img src="${p.img}">
+<div class="cart-item-info">
+<h3>${p.nome}</h3>
+<div class="preco">R$ ${subtotalItem.toFixed(2).replace('.',',')}</div>
+<div class="cart-qtd" style="margin-top:8px;">
+<div class="cart-qtd-btn" onclick="mudarQtdCarrinho(${p.id},-1)">−</div>
+<div>${p.qtd}</div>
+<div class="cart-qtd-btn" onclick="mudarQtdCarrinho(${p.id},1)">+</div>
+</div>
+</div>
+<div class="remove-btn" onclick="removerCarrinho(${p.id})"><span class="material-symbols-outlined">delete</span></div>
+</div>`;
+});
+let desconto = 0;
+if(cupomAplicado){
+desconto = cupomAplicado.tipo==='percent'?subtotal*(cupomAplicado.valor/100):cupomAplicado.valor;
+}
+const total = Math.max(0,subtotal - desconto);
+html += `
+<div class="cupom-box">
+<input type="text" id="inputCupom" class="input" placeholder="Código do cupom" style="margin:0;">
+<button class="btn-sm" onclick="aplicarCupom()">APLICAR</button>
+</div>
+<div class="cupom-aplicado" id="cupomAplicado">
+<span>Cupom aplicado!</span>
+<span class="material-symbols-outlined" onclick="removerCupom()" style="cursor:pointer;">close</span>
+</div>
+<div class="resumo">
+<div class="resumo-linha"><span>Subtotal</span><span>R$ ${subtotal.toFixed(2).replace('.',',')}</span></div>
+${desconto>0?`<div class="resumo-linha" style="color:#22c55e;"><span>Desconto</span><span>-R$ ${desconto.toFixed(2).replace('.',',')}</span></div>`:''}
+<div class="resumo-linha total"><span>Total</span><span>R$ ${total.toFixed(2).replace('.',',')}</span></div>
+<button class="finalizar" onclick="finalizarPedido()">FINALIZAR COMPRA</button>
+</div>
+</div>`;
+area.innerHTML = html;
+if(cupomAplicado)document.getElementById('cupomAplicado').style.display='flex';
+}
+function mudarQtdCarrinho(id,valor){
+if(valor>0){const prod = produtos.find(p=>p.id===id);carrinho.push(prod);}
+else{const idx = carrinho.findIndex(p=>p.id===id);if(idx>-1)carrinho.splice(idx,1);}
+localStorage.setItem("carrinho",JSON.stringify(carrinho));renderCarrinho();
+}
+function removerCarrinho(id){carrinho = carrinho.filter(p=>p.id!==id);localStorage.setItem("carrinho",JSON.stringify(carrinho));renderCarrinho();}
+function aplicarCupom(){
+const codigo = document.getElementById('inputCupom').value.toUpperCase();
+const cupom = cupons.find(c=>c.codigo===codigo && c.ativo);
+if(!cupom){alert("Cupom inválido");return;}
+cupomAplicado = cupom;renderCarrinho();
+}
+function removerCupom(){cupomAplicado = null;renderCarrinho();}
+function finalizarPedido(){
+alert("Pedido finalizado! Chave PIX: "+configPagamento.chavePix);
+pedidos.push({id:Date.now(),itens:[...carrinho],total:carrinho.reduce((a,b)=>a+(b.precoPromo||b.preco),0),status:"Pago",data:new Date()});
+localStorage.setItem("pedidos",JSON.stringify(pedidos));
+carrinho = [];cupomAplicado = null;localStorage.setItem("carrinho",JSON.stringify(carrinho));
+showPage('loja');renderCarrinho();
+}
+
+// SALVAR LOCAL
+function salvarLocal(){localStorage.setItem("produtos",JSON.stringify(produtos));}
+
+// INIT
+carregarTudo();
 </script>
 </body>
 </html>
