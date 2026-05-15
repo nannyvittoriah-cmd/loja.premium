@@ -50,6 +50,9 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 .item-info h3{font-size:11px;margin-bottom:5px;}
 .item-info p{font-size:9px;color:#999;margin-bottom:6px;}
 .item-info span{font-size:16px;font-weight:700;}
+.sub-list{margin-left:20px;margin-top:5px;display:flex;flex-direction:column;gap:5px;}
+.sub-item{font-size:10px;color:#999;display:flex;align-items:center;gap:5px;}
+.sub-item::before{content:"└";color:var(--roxo);}
 .add{width:38px;height:38px;border-radius:10px;background:linear-gradient(90deg,#7a00ff,#d000ff);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;z-index:2;}
 .cart-list{display:flex;flex-direction:column;gap:10px;}
 .cart-item{background:#111;padding:10px;border-radius:14px;display:flex;gap:10px;border:1px solid var(--border);}
@@ -74,6 +77,8 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:2000;align-items:center;justify-content:center;padding:20px;}
 .modal.active{display:flex;}
 .modal-box{background:#111;border:1px solid var(--border);border-radius:16px;padding:16px;width:100%;max-width:380px;position:relative;z-index:2001;}
+.submenu{margin-left:20px;display:flex;flex-direction:column;gap:8px;margin-top:8px;}
+.submenu.menu-item{height:38px;font-size:11px;}
 </style>
 </head>
 <body>
@@ -157,7 +162,13 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 <div class="menu-list">
 <div class="menu-item" onclick="showPage('admProdutos')"><span class="material-symbols-outlined">inventory_2</span>Produtos</div>
 <div class="menu-item" onclick="showPage('admCategorias')"><span class="material-symbols-outlined">grid_view</span>Categorias</div>
-<div class="menu-item" onclick="showPage('admConfig')"><span class="material-symbols-outlined">settings</span>Configurações</div>
+<div class="menu-item" onclick="toggleSubmenu('configSubmenu')">
+<span class="material-symbols-outlined">settings</span>Configurações
+<span class="material-symbols-outlined" style="margin-left:auto;">expand_more</span>
+</div>
+<div class="submenu" id="configSubmenu" style="display:none;">
+<div class="menu-item" onclick="showPage('configGeral')"><span class="material-symbols-outlined">tune</span>Configuração do Site</div>
+</div>
 </div>
 </section>
 
@@ -256,29 +267,11 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 </div>
 </div>
 
-<!-- ADM CONFIG -->
-<section class="page" id="admConfig">
-<div class="topo">
-<div class="top-btn" onclick="showPage('dashboardAdm')"><span class="material-symbols-outlined">arrow_back</span></div>
-<div class="logo">CONFIGURAÇÕES</div><div></div>
-</div>
-<div class="menu-list">
-<div class="menu-item" onclick="showPage('configGeral')"><span class="material-symbols-outlined">settings</span>Geral<span class="material-symbols-outlined" style="margin-left:auto;">chevron_right</span></div>
-<div class="menu-item"><span class="material-symbols-outlined">palette</span>Aparência<span class="material-symbols-outlined" style="margin-left:auto;">chevron_right</span></div>
-<div class="menu-item"><span class="material-symbols-outlined">share</span>Redes Sociais<span class="material-symbols-outlined" style="margin-left:auto;">chevron_right</span></div>
-<div class="menu-item"><span class="material-symbols-outlined">payments</span>Pagamentos<span class="material-symbols-outlined" style="margin-left:auto;">chevron_right</span></div>
-<div class="menu-item"><span class="material-symbols-outlined">notifications</span>Notificações<span class="material-symbols-outlined" style="margin-left:auto;">chevron_right</span></div>
-<div class="menu-item"><span class="material-symbols-outlined">security</span>Segurança<span class="material-symbols-outlined" style="margin-left:auto;">chevron_right</span></div>
-<div class="menu-item"><span class="material-symbols-outlined">search</span>SEO<span class="material-symbols-outlined" style="margin-left:auto;">chevron_right</span></div>
-<div class="menu-item"><span class="material-symbols-outlined">build</span>Manutenção<span class="material-symbols-outlined" style="margin-left:auto;">chevron_right</span></div>
-</div>
-</section>
-
 <!-- CONFIG GERAL -->
 <section class="page" id="configGeral">
 <div class="topo">
-<div class="top-btn" onclick="showPage('admConfig')"><span class="material-symbols-outlined">arrow_back</span></div>
-<div class="logo">GERAL</div><div></div>
+<div class="top-btn" onclick="showPage('dashboardAdm')"><span class="material-symbols-outlined">arrow_back</span></div>
+<div class="logo">CONFIGURAÇÃO DO SITE</div><div></div>
 </div>
 <div class="login-box">
 <input type="text" id="confNomeLoja" placeholder="Nome da Loja">
@@ -291,7 +284,7 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 </div>
 </section>
 
-<!-- MENU INFERIOR - SEM PERFIL -->
+<!-- MENU INFERIOR -->
 <div class="bottom">
 <a class="active" onclick="menuBottom('home',this)"><span class="material-symbols-outlined">home</span><p>Início</p></a>
 <a onclick="menuBottom('store',this)"><span class="material-symbols-outlined">storefront</span><p>Loja</p></a>
@@ -320,6 +313,11 @@ document.getElementById('logoNome').innerHTML = `${configGeral.nome||'PRIME'} <s
 if(configGeral.logo){
 document.getElementById('bannerImg').src = configGeral.logo;
 }
+}
+
+function toggleSubmenu(id){
+const el = document.getElementById(id);
+el.style.display = el.style.display==="none"?"flex":"none";
 }
 
 function renderHomeCategorias(){
@@ -589,18 +587,29 @@ function renderCategorias(){
 const area = document.getElementById("listaCategorias");
 area.innerHTML = "";
 categoriasAdm.forEach((c,i)=>{
-const qtdSub = subcategoriasAdm.filter(s=>s.categoria==c.nome).length;
+const subs = subcategoriasAdm.filter(s=>s.categoria==c.nome);
 const img = c.imagem?`<img src="${c.imagem}">`:`<span class="material-symbols-outlined">category</span>`;
+let subHtml = '';
+if(subs.length>0){
+subHtml = '<div class="sub-list">';
+subs.forEach(s=>{
+subHtml += `<div class="sub-item">${s.nome}</div>`;
+});
+subHtml += '</div>';
+}
 area.innerHTML += `
+<div>
 <div class="item">
 ${img}
 <div class="item-info" onclick="abrirSubcategorias('${c.nome}')">
 <h3>${c.nome}</h3>
-<p>${qtdSub} subcategorias</p>
+<p>${subs.length} subcategorias</p>
 </div>
 <div>
 <span class="material-symbols-outlined" onclick="deletarCat(${i})">delete</span>
 </div>
+</div>
+${subHtml}
 </div>`;
 });
 }
@@ -671,6 +680,7 @@ subcategoriasAdm[idx]=obj;
 }
 localStorage.setItem("subcategoriasAdm",JSON.stringify(subcategoriasAdm));
 renderSubcategorias();
+renderCategorias();
 fecharModalSubcategoria();
 }
 
@@ -696,6 +706,7 @@ if(confirm("Deletar subcategoria? Isso não deleta os produtos.")){
 subcategoriasAdm.splice(i,1);
 localStorage.setItem("subcategoriasAdm",JSON.stringify(subcategoriasAdm));
 renderSubcategorias();
+renderCategorias();
 }
 }
 
@@ -732,4 +743,4 @@ salvar();
 init();
 </script>
 </body>
-</html
+</html>
