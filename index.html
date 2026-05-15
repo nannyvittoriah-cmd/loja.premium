@@ -45,6 +45,7 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 .lista{display:flex;flex-direction:column;gap:10px;}
 .item{display:flex;gap:10px;background:#111;padding:10px;border-radius:14px;border:1px solid var(--border);align-items:center;position:relative;z-index:2;}
 .item img{width:75px;height:75px;border-radius:10px;object-fit:cover;}
+.item img.sub-img{width:40px;height:40px;}
 .item-info{flex:1;cursor:pointer;}
 .item-info h3{font-size:11px;margin-bottom:5px;}
 .item-info p{font-size:9px;color:#999;margin-bottom:6px;}
@@ -84,7 +85,6 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 <div class="menu-item" onclick="menuBottom('home')"><span class="material-symbols-outlined">home</span>Início</div>
 <div class="menu-item" onclick="menuBottom('store')"><span class="material-symbols-outlined">storefront</span>Loja</div>
 <div class="menu-item" onclick="menuBottom('cart')"><span class="material-symbols-outlined">shopping_cart</span>Carrinho</div>
-<div class="menu-item" onclick="menuBottom('profile')"><span class="material-symbols-outlined">person</span>Perfil</div>
 <div class="menu-item" onclick="showPage('loginAdm')"><span class="material-symbols-outlined">admin_panel_settings</span>ADM</div>
 </div>
 </div>
@@ -132,22 +132,6 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 <div class="total-box">
 <h3 id="totalPrice">Total: R$ 0,00</h3>
 <button class="finalizar" onclick="finalizarPedido()">FINALIZAR COMPRA</button>
-</div>
-</section>
-
-<!-- PERFIL -->
-<section class="page" id="profile">
-<div class="topo">
-<div class="top-btn"><span class="material-symbols-outlined">person</span></div>
-<div class="logo">PERFIL</div>
-<div class="top-btn"><span class="material-symbols-outlined">notifications</span></div>
-</div>
-<div style="background:#111;padding:16px;border-radius:18px;border:1px solid var(--border);">
-<div style="width:55px;height:55px;border-radius:50%;border:1px solid var(--roxo);display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
-<span class="material-symbols-outlined">person</span>
-</div>
-<h2 style="font-size:15px;">Prime Player</h2>
-<p style="font-size:10px;color:#999;">primeplayer@gmail.com</p>
 </div>
 </section>
 
@@ -280,6 +264,13 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 </div>
 <div class="menu-list">
 <div class="menu-item" onclick="showPage('configGeral')"><span class="material-symbols-outlined">settings</span>Geral<span class="material-symbols-outlined" style="margin-left:auto;">chevron_right</span></div>
+<div class="menu-item"><span class="material-symbols-outlined">palette</span>Aparência<span class="material-symbols-outlined" style="margin-left:auto;">chevron_right</span></div>
+<div class="menu-item"><span class="material-symbols-outlined">share</span>Redes Sociais<span class="material-symbols-outlined" style="margin-left:auto;">chevron_right</span></div>
+<div class="menu-item"><span class="material-symbols-outlined">payments</span>Pagamentos<span class="material-symbols-outlined" style="margin-left:auto;">chevron_right</span></div>
+<div class="menu-item"><span class="material-symbols-outlined">notifications</span>Notificações<span class="material-symbols-outlined" style="margin-left:auto;">chevron_right</span></div>
+<div class="menu-item"><span class="material-symbols-outlined">security</span>Segurança<span class="material-symbols-outlined" style="margin-left:auto;">chevron_right</span></div>
+<div class="menu-item"><span class="material-symbols-outlined">search</span>SEO<span class="material-symbols-outlined" style="margin-left:auto;">chevron_right</span></div>
+<div class="menu-item"><span class="material-symbols-outlined">build</span>Manutenção<span class="material-symbols-outlined" style="margin-left:auto;">chevron_right</span></div>
 </div>
 </section>
 
@@ -300,12 +291,11 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 </div>
 </section>
 
-<!-- MENU INFERIOR -->
+<!-- MENU INFERIOR - SEM PERFIL -->
 <div class="bottom">
 <a class="active" onclick="menuBottom('home',this)"><span class="material-symbols-outlined">home</span><p>Início</p></a>
 <a onclick="menuBottom('store',this)"><span class="material-symbols-outlined">storefront</span><p>Loja</p></a>
 <a onclick="menuBottom('cart',this)"><span class="material-symbols-outlined">shopping_cart</span><p>Carrinho</p></a>
-<a onclick="menuBottom('profile',this)"><span class="material-symbols-outlined">person</span><p>Perfil</p></a>
 </div>
 
 <script>
@@ -637,8 +627,7 @@ const cat = document.getElementById("filtroCategoria").value;
 area.innerHTML = "";
 subcategoriasAdm.filter(s=>s.categoria==cat).forEach((s,i)=>{
 const qtdProd = produtosAdm.filter(p=>p.sub==s.nome).length;
-const img = s.imagem?`<img src="${s.imagem}" style="width:40px;height:40px;border-radius:8px;object-fit:cover;">`
-:`<span class="material-symbols-outlined">folder</span>`;
+const img = s.imagem?`<img src="${s.imagem}" class="sub-img">`:`<span class="material-symbols-outlined">folder</span>`;
 area.innerHTML += `
 <div class="item">
 ${img}
@@ -708,6 +697,13 @@ subcategoriasAdm.splice(i,1);
 localStorage.setItem("subcategoriasAdm",JSON.stringify(subcategoriasAdm));
 renderSubcategorias();
 }
+}
+
+function carregarConfigGeral(){
+document.getElementById("confNomeLoja").value = configGeral.nome||"";
+document.getElementById("confCor").value = configGeral.cor||"#7c3aed";
+document.getElementById("confMoeda").value = configGeral.moeda||"BRL";
+document.getElementById("confTaxa").value = configGeral.taxa||"";
 }
 
 function salvarConfigGeral(){
