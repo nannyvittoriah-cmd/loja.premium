@@ -28,6 +28,7 @@ overflow-x:hidden;
 
 :root{
 --primary:#7b2cff;
+--secondary:#a855ff;
 --card:#10101b;
 --border:#1d1d2e;
 --muted:#8f8fa3;
@@ -36,7 +37,7 @@ overflow-x:hidden;
 /* GLOBAL */
 
 .hidden{
-display:none;
+display:none !important;
 }
 
 .page{
@@ -58,7 +59,7 @@ width:100%;
 max-width:360px;
 background:#10101b;
 border:1px solid #1d1d2e;
-border-radius:24px;
+border-radius:26px;
 padding:22px;
 }
 
@@ -69,7 +70,7 @@ margin-bottom:5px;
 }
 
 .logo span{
-color:#a855ff;
+color:#b47cff;
 }
 
 .auth-sub{
@@ -113,19 +114,20 @@ background:#7b2cff;
 color:#fff;
 font-size:12px;
 font-weight:600;
-margin-top:4px;
 cursor:pointer;
+margin-top:4px;
 }
 
 .google-btn{
-background:#151525;
-border:1px solid #23233b;
+background:#171727;
+border:1px solid #26263b;
+margin-top:10px;
 }
 
 .switch{
 margin-top:18px;
-font-size:11px;
 text-align:center;
+font-size:11px;
 color:#8f8fa3;
 }
 
@@ -200,13 +202,14 @@ font-size:12px;
 
 .banner{
 margin:0 18px 20px;
-height:160px;
-border-radius:24px;
-padding:22px;
-background:linear-gradient(135deg,#7b2cff,#26084b);
+height:165px;
+border-radius:26px;
+padding:24px;
+background:linear-gradient(135deg,#7b2cff,#25094d);
 display:flex;
 flex-direction:column;
 justify-content:center;
+box-shadow:0 0 35px rgba(123,44,255,.35);
 }
 
 .banner small{
@@ -215,8 +218,8 @@ opacity:.8;
 }
 
 .banner h1{
-font-size:28px;
-margin-top:5px;
+font-size:30px;
+margin-top:6px;
 }
 
 .banner p{
@@ -260,11 +263,11 @@ display:none;
 }
 
 .cat{
-min-width:82px;
-height:82px;
+min-width:84px;
+height:84px;
 background:#10101b;
 border:1px solid #1d1d2e;
-border-radius:18px;
+border-radius:20px;
 display:flex;
 flex-direction:column;
 align-items:center;
@@ -289,7 +292,7 @@ gap:12px;
 .product{
 background:#10101b;
 border:1px solid #1d1d2e;
-border-radius:18px;
+border-radius:20px;
 padding:12px;
 }
 
@@ -343,7 +346,7 @@ position:fixed;
 bottom:0;
 left:0;
 width:100%;
-height:72px;
+height:74px;
 background:#0d0d18;
 border-top:1px solid #1d1d2e;
 display:flex;
@@ -359,6 +362,7 @@ align-items:center;
 gap:4px;
 font-size:10px;
 color:#8f8fa3;
+cursor:pointer;
 }
 
 .nav-item.active{
@@ -488,9 +492,13 @@ Premium <span>Store</span>
 </div>
 
 <div class="banner">
-<small>MEGA PROMOÇÃO</small>
+
+<small>PREMIUM STORE</small>
+
 <h1>ATÉ 50% OFF</h1>
-<p>Produtos premium e contas digitais</p>
+
+<p>Contas premium, seguidores, games e serviços digitais.</p>
+
 </div>
 
 <div class="section">
@@ -519,7 +527,7 @@ Social
 
 <div class="cat">
 <i class="ri-vip-crown-line"></i>
-VIP
+Premium
 </div>
 
 <div class="cat">
@@ -566,7 +574,7 @@ Promo
 
 <h4>Netflix Premium</h4>
 
-<p>1 Mês</p>
+<p>1 mês</p>
 
 <div class="price">
 
@@ -664,16 +672,18 @@ Sair
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
+
 getAuth,
 GoogleAuthProvider,
-signInWithPopup,
+signInWithRedirect,
 createUserWithEmailAndPassword,
 signInWithEmailAndPassword,
 onAuthStateChanged,
 signOut
+
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-/* FIREBASE CONFIG */
+/* CONFIG */
 
 const firebaseConfig = {
 
@@ -781,21 +791,7 @@ alert(error.message);
 
 window.googleLogin = function(){
 
-signInWithPopup(auth, provider)
-
-.then((result)=>{
-
-alert("Bem-vinda " + result.user.displayName);
-
-showHome();
-
-})
-
-.catch((error)=>{
-
-alert(error.message);
-
-});
+signInWithRedirect(auth, provider);
 
 }
 
