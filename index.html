@@ -1,305 +1,751 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
 <title>Prime Store</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
-:root{
-  --bg:#000;--card:#111;--border:#2a2a2a;--primary:#8A28E2;--secondary:#FF00FF;
-  --text:#FFFFFF;--text-sec:#a3a3a3;--danger:#ff3b3b;--success:#22c55e;
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
 }
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
-body{background:var(--bg);color:var(--text);}
-.hidden{display:none !important;}
-input,select,textarea{background:var(--card);border:1px solid var(--border);color:var(--text);padding:12px;border-radius:8px;width:100%;outline:none;}
-.btn{background:var(--primary);color:white;border:none;padding:12px 20px;border-radius:8px;font-weight:600;cursor:pointer;}
-.btn:hover{filter:brightness(1.15);}
-.btn-sec{background:var(--card);border:1px solid var(--border);}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;}
-.grid{display:grid;gap:16px;}
-.flex{display:flex;gap:12px;align-items:center;}
-.grid-3{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}
-.product{cursor:pointer;transition:0.2s;}
-.product:hover{border-color:var(--primary);}
-.badge{padding:4px 10px;border-radius:20px;font-size:12px;background:var(--primary);}
-.sidebar{width:240px;background:var(--card);border-right:1px solid var(--border);height:100vh;position:fixed;left:0;top:0;padding:20px;}
-.main{margin-left:240px;padding:30px;}
-.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;}
-.toggle{width:44px;height:24px;background:var(--border);border-radius:12px;position:relative;cursor:pointer;}
-.toggle.active{background:var(--primary);}
-.toggle::after{content:'';width:18px;height:18px;background:white;border-radius:50%;position:absolute;top:3px;left:3px;transition:0.2s;}
-.toggle.active::after{left:23px;}
+
+body{
+background:#050505;
+color:#fff;
+overflow-x:hidden;
+}
+
+a{
+text-decoration:none;
+color:inherit;
+}
+
+img{
+max-width:100%;
+display:block;
+}
+
+:root{
+--roxo:#a020ff;
+--roxo2:#7a00ff;
+--bg:#070707;
+--card:#0f0f14;
+--border:#8c2bff;
+}
+
+.container{
+padding:15px;
+padding-bottom:100px;
+}
+
+.topo{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:20px;
+}
+
+.logo{
+font-size:28px;
+font-weight:800;
+color:#fff;
+letter-spacing:2px;
+}
+
+.logo span{
+color:var(--roxo);
+}
+
+.icon{
+font-size:26px;
+cursor:pointer;
+}
+
+.banner{
+position:relative;
+height:220px;
+border:1px solid rgba(160,32,255,.5);
+overflow:hidden;
+border-radius:18px;
+margin-bottom:25px;
+background:url('https://images.unsplash.com/photo-1542751110-97427bbecf20?q=80&w=1200&auto=format&fit=crop') center/cover;
+}
+
+.banner::before{
+content:'';
+position:absolute;
+inset:0;
+background:linear-gradient(90deg,#000 20%,rgba(0,0,0,.3));
+}
+
+.banner-content{
+position:absolute;
+left:20px;
+top:50%;
+transform:translateY(-50%);
+z-index:2;
+}
+
+.banner h1{
+font-size:34px;
+line-height:36px;
+margin-bottom:10px;
+}
+
+.banner p{
+font-size:13px;
+margin-bottom:18px;
+color:#ccc;
+}
+
+.btn{
+background:linear-gradient(90deg,var(--roxo),#d000ff);
+border:none;
+padding:13px 20px;
+color:#fff;
+font-weight:600;
+border-radius:12px;
+cursor:pointer;
+}
+
+.section-title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:15px;
+}
+
+.section-title h2{
+font-size:18px;
+}
+
+.section-title a{
+font-size:13px;
+color:var(--roxo);
+}
+
+.categorias{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
+margin-bottom:30px;
+}
+
+.cat{
+background:var(--card);
+border:1px solid rgba(160,32,255,.4);
+padding:20px 10px;
+border-radius:16px;
+text-align:center;
+transition:.3s;
+}
+
+.cat:hover{
+transform:translateY(-5px);
+border-color:var(--roxo);
+}
+
+.cat i{
+font-size:30px;
+margin-bottom:10px;
+display:block;
+color:var(--roxo);
+}
+
+.cat span{
+font-size:13px;
+}
+
+.produtos{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:14px;
+}
+
+.produto{
+background:var(--card);
+border-radius:18px;
+overflow:hidden;
+border:1px solid rgba(160,32,255,.3);
+transition:.3s;
+}
+
+.produto:hover{
+transform:translateY(-5px);
+border-color:var(--roxo);
+}
+
+.produto-img{
+height:140px;
+background:#111;
+overflow:hidden;
+}
+
+.produto-img img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.produto-info{
+padding:14px;
+}
+
+.produto-info h3{
+font-size:14px;
+margin-bottom:8px;
+}
+
+.preco{
+font-size:20px;
+font-weight:700;
+color:#fff;
+margin-bottom:12px;
+}
+
+.comprar{
+width:100%;
+padding:12px;
+background:linear-gradient(90deg,var(--roxo),#d000ff);
+border:none;
+border-radius:10px;
+color:#fff;
+font-weight:600;
+cursor:pointer;
+}
+
+.bottom{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+height:75px;
+background:#0a0a0f;
+border-top:1px solid rgba(160,32,255,.3);
+display:flex;
+justify-content:space-around;
+align-items:center;
+z-index:999;
+}
+
+.bottom a{
+display:flex;
+flex-direction:column;
+align-items:center;
+font-size:12px;
+color:#aaa;
+}
+
+.bottom a.active{
+color:var(--roxo);
+}
+
+.bottom i{
+font-size:22px;
+margin-bottom:4px;
+}
+
+.loja-page{
+display:none;
+}
+
+.search{
+display:flex;
+gap:10px;
+margin-bottom:20px;
+}
+
+.search input{
+flex:1;
+height:50px;
+background:#111;
+border:1px solid rgba(160,32,255,.4);
+border-radius:12px;
+padding:0 15px;
+outline:none;
+color:#fff;
+}
+
+.filtro{
+width:50px;
+height:50px;
+border-radius:12px;
+background:#111;
+display:flex;
+align-items:center;
+justify-content:center;
+border:1px solid rgba(160,32,255,.4);
+}
+
+.lista-produtos{
+display:flex;
+flex-direction:column;
+gap:15px;
+}
+
+.item{
+display:flex;
+gap:14px;
+background:#111;
+padding:12px;
+border-radius:16px;
+border:1px solid rgba(160,32,255,.3);
+}
+
+.item img{
+width:100px;
+height:100px;
+object-fit:cover;
+border-radius:12px;
+}
+
+.item-info{
+flex:1;
+}
+
+.item-info h3{
+font-size:15px;
+margin-bottom:6px;
+}
+
+.item-info p{
+font-size:12px;
+color:#999;
+margin-bottom:8px;
+}
+
+.item-info span{
+font-size:22px;
+font-weight:700;
+}
+
+.add{
+width:50px;
+height:50px;
+background:linear-gradient(90deg,var(--roxo),#d000ff);
+border-radius:12px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:24px;
+}
+
+.carrinho{
+display:none;
+}
+
+.cart-item{
+display:flex;
+gap:12px;
+background:#111;
+padding:12px;
+border-radius:15px;
+margin-bottom:15px;
+border:1px solid rgba(160,32,255,.3);
+}
+
+.cart-item img{
+width:90px;
+height:90px;
+border-radius:12px;
+object-fit:cover;
+}
+
+.cart-info{
+flex:1;
+}
+
+.total-box{
+margin-top:25px;
+background:#111;
+padding:18px;
+border-radius:18px;
+border:1px solid rgba(160,32,255,.3);
+}
+
+.total-line{
+display:flex;
+justify-content:space-between;
+margin-bottom:10px;
+}
+
+.total{
+font-size:24px;
+font-weight:700;
+}
+
+.finalizar{
+margin-top:20px;
+width:100%;
+height:55px;
+border:none;
+border-radius:14px;
+background:linear-gradient(90deg,var(--roxo),#d000ff);
+color:#fff;
+font-size:16px;
+font-weight:700;
+}
+
+.perfil{
+display:none;
+}
+
+.profile-card{
+background:#111;
+padding:20px;
+border-radius:18px;
+border:1px solid rgba(160,32,255,.3);
+margin-bottom:20px;
+}
+
+.avatar{
+width:70px;
+height:70px;
+border-radius:50%;
+border:2px solid var(--roxo);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:30px;
+margin-bottom:12px;
+}
+
+.menu{
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.menu-item{
+background:#111;
+padding:16px;
+border-radius:14px;
+border:1px solid rgba(160,32,255,.2);
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+::-webkit-scrollbar{
+width:0;
+}
+
 </style>
 </head>
 <body>
 
-<!-- LOJA PÚBLICA -->
-<div id="store">
-  <!-- TELA 1: HOME -->
-  <div id="home" class="page">
-    <div style="padding:20px;">
-      <div class="flex" style="justify-content:space-between;margin-bottom:30px;">
-        <h2>PRIME STORE</h2>
-        <div class="flex">
-          <button class="btn-sec" onclick="show('cart')">Carrinho <span id="cart-count">0</span></button>
-          <button class="btn-sec" onclick="show('admin-login')">ADM</button>
-        </div>
-      </div>
-      
-      <h3 style="margin-bottom:16px;">Categorias</h3>
-      <div class="flex" style="overflow-x:auto;margin-bottom:30px;">
-        <button class="btn-sec" onclick="filterCat('all')">Todos</button>
-        <button class="btn-sec" onclick="filterCat('streaming')">Streaming</button>
-        <button class="btn-sec" onclick="filterCat('vpn')">VPN</button>
-      </div>
+<!-- HOME -->
 
-      <h3 style="margin-bottom:16px;">Produtos em Destaque</h3>
-      <div class="grid grid-3" id="products-grid">
-        <!-- Produtos gerados via JS -->
-      </div>
-    </div>
-  </div>
+<section class="container">
 
-  <!-- TELA 2: LISTA PRODUTOS -->
-  <div id="products" class="page hidden">
-    <div style="padding:20px;">
-      <button class="btn-sec" onclick="show('home')">← Voltar</button>
-      <input placeholder="Buscar produto..." style="margin:20px 0;" onkeyup="searchProd(this.value)">
-      <div class="grid grid-3" id="products-list"></div>
-    </div>
-  </div>
-
-  <!-- TELA 3: PRODUTO -->
-  <div id="product-detail" class="page hidden">
-    <div style="padding:20px;max-width:800px;margin:auto;">
-      <button class="btn-sec" onclick="show('products')">← Voltar</button>
-      <div class="card" style="margin-top:20px;">
-        <img id="prod-img" style="width:100%;height:200px;object-fit:cover;border-radius:8px;margin-bottom:16px;">
-        <h2 id="prod-name"></h2>
-        <p id="prod-desc" style="color:var(--text-sec);margin:12px 0;"></p>
-        <h3 id="prod-price" style="color:var(--primary);margin:16px 0;"></h3>
-        <button class="btn" onclick="addToCart()">Comprar</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- TELA 4: CARRINHO -->
-  <div id="cart" class="page hidden">
-    <div style="padding:20px;max-width:600px;margin:auto;">
-      <h3>Seu Carrinho</h3>
-      <div id="cart-items" class="grid" style="margin:20px 0;"></div>
-      <h3 id="cart-total"></h3>
-      <button class="btn" onclick="show('checkout')" style="margin-top:20px;width:100%;">Finalizar Compra</button>
-    </div>
-  </div>
-
-  <!-- TELA 5: CHECKOUT -->
-  <div id="checkout" class="page hidden">
-    <div style="padding:20px;max-width:600px;margin:auto;">
-      <h3>Finalizar Compra</h3>
-      <div class="card" style="margin:20px 0;">
-        <p><b>Chave PIX:</b> sua-chave-pix-aqui</p>
-        <p style="color:var(--text-sec);margin:12px 0;">Faça o PIX e envie o comprovante abaixo</p>
-        <input type="file" accept="image/*">
-        <button class="btn" onclick="show('support')" style="margin-top:12px;width:100%;">Enviar Comprovante</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- TELA 6: SUPORTE -->
-  <div id="support" class="page hidden">
-    <div style="padding:20px;max-width:600px;margin:auto;text-align:center;">
-      <h3>Compra em análise</h3>
-      <p style="color:var(--text-sec);margin:20px 0;">Em breve enviaremos suas credenciais no WhatsApp</p>
-      <a href="https://wa.me/5598984853563" class="btn" style="display:inline-block;text-decoration:none;">Falar no WhatsApp</a>
-      <button class="btn-sec" onclick="show('home')" style="margin-top:12px;">Voltar para Home</button>
-    </div>
-  </div>
+<div class="topo">
+<div class="icon">☰</div>
+<div class="logo">PRIME <span>STORE</span></div>
+<div class="icon">🛒</div>
 </div>
 
-<!-- ADMIN -->
-<div id="admin" class="hidden">
-  <!-- TELA 7: LOGIN ADM -->
-  <div id="admin-login" class="page flex" style="justify-content:center;align-items:center;height:100vh;">
-    <div class="card" style="width:400px;">
-      <h2 style="text-align:center;margin-bottom:20px;">LOGIN ADMIN</h2>
-      <div class="grid">
-        <input type="email" value="admin@prime.com">
-        <input type="password" value="Lorrannyh.101225">
-        <button class="btn" onclick="loginAdmin()">Entrar</button>
-        <button class="btn-sec" onclick="show('home')">Voltar</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- PAINEL ADM -->
-  <div id="admin-panel" class="hidden">
-    <div class="sidebar">
-      <h3>PRIME STORE</h3>
-      <a onclick="showAdmin('dashboard')">Dashboard</a>
-      <a onclick="showAdmin('adm-products')">Produtos</a>
-      <a onclick="showAdmin('adm-categories')">Categorias</a>
-      <a onclick="showAdmin('adm-orders')">Pedidos</a>
-      <a onclick="showAdmin('adm-settings')">Configurações</a>
-      <a onclick="logoutAdmin()">Sair</a>
-    </div>
-    <div class="main">
-      <!-- DASHBOARD -->
-      <div id="dashboard" class="adm-page">
-        <h2>Dashboard</h2>
-        <div class="grid" style="grid-template-columns:repeat(4,1fr);margin-top:20px;">
-          <div class="card"><p>Vendas</p><h2>R$ 1.240</h2></div>
-          <div class="card"><p>Pedidos</p><h2>18</h2></div>
-          <div class="card"><p>Produtos</p><h2>42</h2></div>
-          <div class="card"><p>Usuários</p><h2>156</h2></div>
-        </div>
-      </div>
-
-      <!-- PRODUTOS ADM -->
-      <div id="adm-products" class="adm-page hidden">
-        <div class="flex" style="justify-content:space-between;margin-bottom:20px;">
-          <h2>Produtos</h2>
-          <button class="btn" onclick="showAdmin('add-product')">+ Adicionar</button>
-        </div>
-        <div class="card">
-          <table style="width:100%;">
-            <tr><th>Produto</th><th>Preço</th><th>Status</th><th>Ações</th></tr>
-            <tr><td>Netflix Premium</td><td>R$ 29,90</td><td><div class="toggle active"></div></td><td><button class="btn-sec">Editar</button></td></tr>
-          </table>
-        </div>
-      </div>
-
-      <!-- ADD PRODUTO -->
-      <div id="add-product" class="adm-page hidden">
-        <h2>Adicionar Produto</h2>
-        <div class="card grid" style="margin-top:20px;">
-          <input placeholder="Nome">
-          <textarea placeholder="Descrição"></textarea>
-          <input placeholder="Preço" type="number">
-          <div class="flex"><div class="toggle active"></div> Ativo</div>
-          <button class="btn">Salvar</button>
-        </div>
-      </div>
-
-      <!-- CATEGORIAS -->
-      <div id="adm-categories" class="adm-page hidden">
-        <h2>Categorias</h2>
-        <div class="card" style="margin-top:20px;">
-          <p>Streaming <button class="btn-sec">Editar</button></p>
-          <p>VPN <button class="btn-sec">Editar</button></p>
-        </div>
-      </div>
-
-      <!-- PEDIDOS -->
-      <div id="adm-orders" class="adm-page hidden">
-        <h2>Pedidos</h2>
-        <div class="card" style="margin-top:20px;">
-          <p>#1023 - João Silva - R$ 29,90 - <span class="badge">Pago</span></p>
-        </div>
-      </div>
-
-      <!-- CONFIGURAÇÕES -->
-      <div id="adm-settings" class="adm-page hidden">
-        <h2>Configurações</h2>
-        <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:20px;">
-          <div class="card grid">
-            <h4>Geral</h4>
-            <input value="Prime Store">
-            <input value="suporte@primestore.com">
-            <input value="(98) 98485-3563">
-            <button class="btn">Salvar</button>
-          </div>
-          <div class="card grid">
-            <h4>Aparência</h4>
-            <input value="#8A28E2">
-            <input value="#FF00FF">
-            <input value="#000">
-            <button class="btn">Salvar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="banner">
+<div class="banner-content">
+<h1>RECARGA<br>FREE FIRE</h1>
+<p>Os melhores preços você encontra aqui.</p>
+<button class="btn">COMPRE AGORA</button>
+</div>
 </div>
 
-<script>
-let cart = [];
-let products = [
-  {id:1,name:'Netflix Premium',price:29.90,cat:'streaming',desc:'Conta premium 1 mês',img:'https://via.placeholder.com/400x200'},
-  {id:2,name:'Spotify Premium',price:19.90,cat:'streaming',desc:'Conta premium 1 mês',img:'https://via.placeholder.com/400x200'},
-  {id:3,name:'NordVPN',price:15.00,cat:'vpn',desc:'VPN 30 dias',img:'https://via.placeholder.com/400x200'}
-];
+<div class="section-title">
+<h2>Categorias</h2>
+<a href="#">Ver todas</a>
+</div>
 
-function show(page){
-  document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));
-  document.getElementById(page).classList.remove('hidden');
-  if(page=='products') loadProducts();
-  if(page=='cart') loadCart();
-}
+<div class="categorias">
 
-function showAdmin(page){
-  document.querySelectorAll('.adm-page').forEach(p=>p.classList.add('hidden'));
-  document.getElementById(page).classList.remove('hidden');
-}
+<div class="cat">
+<i>💎</i>
+<span>Diamantes</span>
+</div>
 
-function loadProducts(){
-  let html = products.map(p=>`
-    <div class="card product" onclick="openProduct(${p.id})">
-      <img src="${p.img}" style="width:100%;height:140px;object-fit:cover;border-radius:8px;">
-      <h4 style="margin-top:12px;">${p.name}</h4>
-      <p style="color:var(--primary);font-weight:600;">R$ ${p.price.toFixed(2)}</p>
-    </div>
-  `).join('');
-  document.getElementById('products-grid').innerHTML = html;
-  document.getElementById('products-list').innerHTML = html;
-}
+<div class="cat">
+<i>🎮</i>
+<span>Jogos</span>
+</div>
 
-function openProduct(id){
-  let p = products.find(x=>x.id==id);
-  document.getElementById('prod-name').innerText = p.name;
-  document.getElementById('prod-desc').innerText = p.desc;
-  document.getElementById('prod-price').innerText = 'R$ '+p.price.toFixed(2);
-  document.getElementById('prod-img').src = p.img;
-  show('product-detail');
-}
+<div class="cat">
+<i>👑</i>
+<span>Assinaturas</span>
+</div>
 
-function addToCart(){
-  let name = document.getElementById('prod-name').innerText;
-  cart.push(name);
-  document.getElementById('cart-count').innerText = cart.length;
-  alert('Adicionado ao carrinho!');
-  show('cart');
-}
+<div class="cat">
+<i>🏆</i>
+<span>Prêmios</span>
+</div>
 
-function loadCart(){
-  let html = cart.map(i=>`<div class="card">${i}</div>`).join('');
-  document.getElementById('cart-items').innerHTML = html || '<p>Carrinho vazio</p>';
-  document.getElementById('cart-total').innerText = 'Total: R$ '+(cart.length*29.90).toFixed(2);
-}
+<div class="cat">
+<i>🎓</i>
+<span>Treinamentos</span>
+</div>
 
-function filterCat(cat){
-  show('products');
-  // filtro simples, você pode melhorar
-}
+<div class="cat">
+<i>•••</i>
+<span>Outros</span>
+</div>
 
-function searchProd(val){
-  // busca simples
-}
+</div>
 
-function loginAdmin(){
-  document.getElementById('admin-login').classList.add('hidden');
-  document.getElementById('admin-panel').classList.remove('hidden');
-  showAdmin('dashboard');
-}
+<div class="section-title">
+<h2>Produtos em destaque</h2>
+<a href="#">Ver todos</a>
+</div>
 
-function logoutAdmin(){
-  document.getElementById('admin-panel').classList.add('hidden');
-  document.getElementById('admin-login').classList.remove('hidden');
-}
+<div class="produtos">
 
-loadProducts();
-</script>
+<div class="produto">
+<div class="produto-img">
+<img src="https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=1200&auto=format&fit=crop">
+</div>
+
+<div class="produto-info">
+<h3>110 Diamantes</h3>
+<div class="preco">R$ 4,99</div>
+<button class="comprar">Comprar</button>
+</div>
+</div>
+
+<div class="produto">
+<div class="produto-img">
+<img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop">
+</div>
+
+<div class="produto-info">
+<h3>Passe Booyah</h3>
+<div class="preco">R$ 14,90</div>
+<button class="comprar">Comprar</button>
+</div>
+</div>
+
+<div class="produto">
+<div class="produto-img">
+<img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200&auto=format&fit=crop">
+</div>
+
+<div class="produto-info">
+<h3>Netflix Premium</h3>
+<div class="preco">R$ 21,90</div>
+<button class="comprar">Comprar</button>
+</div>
+</div>
+
+<div class="produto">
+<div class="produto-img">
+<img src="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?q=80&w=1200&auto=format&fit=crop">
+</div>
+
+<div class="produto-info">
+<h3>Conta FF</h3>
+<div class="preco">R$ 89,90</div>
+<button class="comprar">Comprar</button>
+</div>
+</div>
+
+</div>
+
+</section>
+
+<!-- LOJA -->
+
+<section class="container loja-page">
+
+<div class="topo">
+<div class="icon">←</div>
+<div class="logo">LOJA</div>
+<div class="icon">🛒</div>
+</div>
+
+<div class="search">
+<input type="text" placeholder="Buscar produtos...">
+<div class="filtro">⚙️</div>
+</div>
+
+<div class="lista-produtos">
+
+<div class="item">
+
+<img src="https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=1200&auto=format&fit=crop">
+
+<div class="item-info">
+<h3>110 DIAMANTES</h3>
+<p>FREE FIRE</p>
+<span>R$ 4,99</span>
+</div>
+
+<div class="add">+</div>
+
+</div>
+
+<div class="item">
+
+<img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop">
+
+<div class="item-info">
+<h3>PASSE BOOYAH</h3>
+<p>FREE FIRE</p>
+<span>R$ 14,90</span>
+</div>
+
+<div class="add">+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- CARRINHO -->
+
+<section class="container carrinho">
+
+<div class="topo">
+<div class="icon">←</div>
+<div class="logo">CARRINHO</div>
+<div class="icon">🛒</div>
+</div>
+
+<div class="cart-item">
+
+<img src="https://images.unsplash.com/photo-1627856013091-fed6e4e30025?q=80&w=1200&auto=format&fit=crop">
+
+<div class="cart-info">
+<h3>110 DIAMANTES</h3>
+<p>FREE FIRE</p>
+<h2>R$ 4,99</h2>
+</div>
+
+</div>
+
+<div class="cart-item">
+
+<img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200&auto=format&fit=crop">
+
+<div class="cart-info">
+<h3>NETFLIX PREMIUM</h3>
+<p>1 MÊS</p>
+<h2>R$ 21,90</h2>
+</div>
+
+</div>
+
+<div class="total-box">
+
+<div class="total-line">
+<span>Subtotal</span>
+<span>R$ 26,89</span>
+</div>
+
+<div class="total-line">
+<span>Taxa</span>
+<span>R$ 0,00</span>
+</div>
+
+<hr style="margin:15px 0;border-color:#222;">
+
+<div class="total-line total">
+<span>Total</span>
+<span>R$ 26,89</span>
+</div>
+
+<button class="finalizar">
+FINALIZAR COMPRA
+</button>
+
+</div>
+
+</section>
+
+<!-- PERFIL -->
+
+<section class="container perfil">
+
+<div class="topo">
+<div class="icon">←</div>
+<div class="logo">PERFIL</div>
+<div class="icon">🔔</div>
+</div>
+
+<div class="profile-card">
+
+<div class="avatar">👤</div>
+
+<h2>Prime Player</h2>
+
+<p style="color:#999;margin-top:5px;">
+primeplayer@gmail.com
+</p>
+
+</div>
+
+<div class="menu">
+
+<div class="menu-item">
+<span>Dados pessoais</span>
+<span>›</span>
+</div>
+
+<div class="menu-item">
+<span>Endereços</span>
+<span>›</span>
+</div>
+
+<div class="menu-item">
+<span>Métodos de pagamento</span>
+<span>›</span>
+</div>
+
+<div class="menu-item">
+<span>Segurança</span>
+<span>›</span>
+</div>
+
+<div class="menu-item">
+<span>Sair da conta</span>
+<span>›</span>
+</div>
+
+</div>
+
+</section>
+
+<!-- MENU -->
+
+<div class="bottom">
+
+<a class="active">
+<div>🏠</div>
+<span>Início</span>
+</a>
+
+<a>
+<div>📦</div>
+<span>Categorias</span>
+</a>
+
+<a>
+<div>🛒</div>
+<span>Carrinho</span>
+</a>
+
+<a>
+<div>👤</div>
+<span>Perfil</span>
+</a>
+
+</div>
+
 </body>
 </html>
