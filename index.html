@@ -17,6 +17,7 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 .logo{font-size:20px;font-weight:800;}
 .logo span{color:var(--roxo);}
 .top-btn{width:34px;height:34px;background:#111;border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;z-index:2;}
+.badge{position:absolute;top:-5px;right:-5px;background:var(--roxo);color:#fff;border-radius:50%;width:18px;height:18px;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:700;}
 .menu-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);opacity:0;visibility:hidden;z-index:998;transition:.3s;pointer-events:none;}
 .menu-overlay.active{opacity:1;visibility:visible;pointer-events:auto;}
 .side-menu{position:fixed;top:0;left:-280px;width:280px;height:100%;background:#080808;border-right:1px solid var(--border);padding:16px;z-index:999;transition:.3s;}
@@ -32,7 +33,8 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 .section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .section-title h2{font-size:14px;}
 .categorias{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;}
-.cat{background:#111;border:1px solid var(--border);border-radius:14px;padding:14px 5px;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;position:relative;z-index:2;}
+.cat{background:#111;border:1px solid var(--border);border-radius:14px;padding:14px 5px;display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;position:relative;z-index:2;transition:.2s;}
+.cat.active{background:var(--roxo);border-color:var(--roxo);}
 .cat img{width:28px;height:28px;border-radius:6px;object-fit:cover;}
 .cat span{font-size:10px;}
 .produtos{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
@@ -42,10 +44,12 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 .produto-info h3{font-size:11px;margin-bottom:7px;}
 .preco{font-size:16px;font-weight:800;margin-bottom:10px;}
 .comprar{width:100%;height:34px;border:none;border-radius:10px;background:linear-gradient(90deg,#7a00ff,#d000ff);color:#fff;font-size:10px;font-weight:700;cursor:pointer;position:relative;z-index:2;}
+.welcome-text{background:#111;border:1px solid var(--border);border-radius:16px;padding:16px;line-height:1.6;font-size:12px;color:#ccc;}
+.welcome-text p{margin-bottom:12px;}
+.welcome-text p:last-child{margin-bottom:0;}
 .lista{display:flex;flex-direction:column;gap:10px;}
 .item{display:flex;gap:10px;background:#111;padding:10px;border-radius:14px;border:1px solid var(--border);align-items:center;position:relative;z-index:2;}
 .item img{width:75px;height:75px;border-radius:10px;object-fit:cover;}
-.item img.sub-img{width:40px;height:40px;}
 .item-info{flex:1;cursor:pointer;}
 .item-info h3{font-size:11px;margin-bottom:5px;}
 .item-info p{font-size:9px;color:#999;margin-bottom:6px;}
@@ -88,7 +92,6 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 <div class="menu-title">MENU</div>
 <div class="menu-list">
 <div class="menu-item" onclick="menuBottom('home')"><span class="material-symbols-outlined">home</span>Início</div>
-<div class="menu-item" onclick="menuBottom('store')"><span class="material-symbols-outlined">storefront</span>Loja</div>
 <div class="menu-item" onclick="menuBottom('cart')"><span class="material-symbols-outlined">shopping_cart</span>Carrinho</div>
 <div class="menu-item" onclick="showPage('loginAdm')"><span class="material-symbols-outlined">admin_panel_settings</span>ADM</div>
 </div>
@@ -99,7 +102,10 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 <div class="topo">
 <div class="top-btn" onclick="openMenu()"><span class="material-symbols-outlined">menu</span></div>
 <div class="logo" id="logoNome">PRIME <span>STORE</span></div>
-<div class="top-btn" onclick="showPage('cart')"><span class="material-symbols-outlined">shopping_cart</span></div>
+<div class="top-btn" onclick="showPage('cart')" style="position:relative;">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="badge" id="cartBadge" style="display:none;">0</span>
+</div>
 </div>
 <div class="banner">
 <img id="bannerImg" src="https://i.postimg.cc/C5KWcT5z/be50f798-9fdd-49a3-99aa-7b4abaf24030.jpg">
@@ -116,12 +122,35 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 <div class="produtos" id="homeDestaques"></div>
 </section>
 
-<!-- LOJA -->
+<!-- LOJA - BOAS VINDAS -->
 <section class="page" id="store">
 <div class="topo">
 <div class="top-btn" onclick="showPage('home')"><span class="material-symbols-outlined">arrow_back</span></div>
 <div class="logo">LOJA</div>
-<div class="top-btn" onclick="showPage('cart')"><span class="material-symbols-outlined">shopping_cart</span></div>
+<div class="top-btn" onclick="showPage('cart')" style="position:relative;">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="badge" id="cartBadge2" style="display:none;">0</span>
+</div>
+</div>
+<div class="welcome-text">
+<p>Bem-vindo à nossa loja!</p>
+<p>Aqui você encontra produtos selecionados com qualidade, preços acessíveis e uma experiência de compra simples e rápida. Nosso objetivo é oferecer praticidade e confiança em cada pedido, garantindo que você receba exatamente o que precisa, sem complicações.</p>
+<p>Trabalhamos com dedicação para manter um catálogo sempre atualizado, com novidades e ofertas especiais para todos os gostos. Além disso, prezamos por um atendimento ágil e suporte sempre disponível para ajudar em qualquer dúvida.</p>
+<p>Nossa missão é unir tecnologia, facilidade e segurança em um só lugar, criando uma experiência de compra moderna e eficiente.</p>
+<p>Explore, escolha seus produtos favoritos e aproveite tudo o que preparamos para você!</p>
+<button class="btn" style="width:100%;margin-top:10px;" onclick="showPage('produtosLoja')">VER PRODUTOS</button>
+</div>
+</section>
+
+<!-- PRODUTOS DA LOJA -->
+<section class="page" id="produtosLoja">
+<div class="topo">
+<div class="top-btn" onclick="showPage('store')"><span class="material-symbols-outlined">arrow_back</span></div>
+<div class="logo">PRODUTOS</div>
+<div class="top-btn" onclick="showPage('cart')" style="position:relative;">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="badge" id="cartBadge3" style="display:none;">0</span>
+</div>
 </div>
 <div class="lista" id="storeList"></div>
 </section>
@@ -129,9 +158,9 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 <!-- CARRINHO -->
 <section class="page" id="cart">
 <div class="topo">
-<div class="top-btn" onclick="showPage('store')"><span class="material-symbols-outlined">arrow_back</span></div>
+<div class="top-btn" onclick="showPage('produtosLoja')"><span class="material-symbols-outlined">arrow_back</span></div>
 <div class="logo">CARRINHO</div>
-<div class="top-btn"><span class="material-symbols-outlined">shopping_cart</span></div>
+<div></div>
 </div>
 <div class="cart-list" id="cartList"></div>
 <div class="total-box">
@@ -287,8 +316,11 @@ body{background:#050505;color:#fff;overflow-x:hidden;}
 <!-- MENU INFERIOR -->
 <div class="bottom">
 <a class="active" onclick="menuBottom('home',this)"><span class="material-symbols-outlined">home</span><p>Início</p></a>
-<a onclick="menuBottom('store',this)"><span class="material-symbols-outlined">storefront</span><p>Loja</p></a>
-<a onclick="menuBottom('cart',this)"><span class="material-symbols-outlined">shopping_cart</span><p>Carrinho</p></a>
+<a onclick="menuBottom('cart',this)" style="position:relative;">
+<span class="material-symbols-outlined">shopping_cart</span>
+<p>Carrinho</p>
+<span class="badge" id="cartBadge4" style="display:none;">0</span>
+</a>
 </div>
 
 <script>
@@ -298,6 +330,7 @@ let subcategoriasAdm = JSON.parse(localStorage.getItem("subcategoriasAdm")) || [
 let configGeral = JSON.parse(localStorage.getItem("configGeral")) || {cor:"#7c3aed",moeda:"BRL",nome:"PRIME STORE"};
 let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
 let filtroProd = "todos";
+let filtroCategoriaAtiva = "todas";
 
 function init(){
 aplicarConfig();
@@ -305,6 +338,22 @@ renderHomeCategorias();
 renderHomeDestaques();
 renderProdutos();
 renderCarrinho();
+atualizarBadgeCarrinho();
+}
+
+function atualizarBadgeCarrinho(){
+const total = carrinho.length;
+const badges = ['cartBadge','cartBadge2','cartBadge3','cartBadge4'];
+badges.forEach(id=>{
+const el = document.getElementById(id);
+if(el){
+if(total>0){
+el.style.display='flex';
+el.innerText=total;
+}else{
+el.style.display='none';
+}
+});
 }
 
 function aplicarConfig(){
@@ -320,12 +369,20 @@ const el = document.getElementById(id);
 el.style.display = el.style.display==="none"?"flex":"none";
 }
 
+function filtrarPorCategoria(cat){
+filtroCategoriaAtiva = cat;
+document.querySelectorAll('.cat').forEach(c=>c.classList.remove('active'));
+event.currentTarget.classList.add('active');
+renderProdutos();
+}
+
 function renderHomeCategorias(){
 const area = document.getElementById('homeCategorias');
 area.innerHTML = '';
+area.innerHTML += `<div class="cat active" onclick="filtrarPorCategoria('todas')"><span class="material-symbols-outlined">grid_view</span><span>Todas</span></div>`;
 categoriasAdm.forEach(c=>{
 const img = c.imagem?`<img src="${c.imagem}">`:`<span class="material-symbols-outlined">category</span>`;
-area.innerHTML += `<div class="cat">${img}<span>${c.nome}</span></div>`;
+area.innerHTML += `<div class="cat" onclick="filtrarPorCategoria('${c.nome}')">${img}<span>${c.nome}</span></div>`;
 });
 }
 
@@ -348,7 +405,11 @@ area.innerHTML += `
 function renderProdutos(){
 const store = document.getElementById("storeList");
 store.innerHTML = "";
-produtosAdm.filter(p=>p.status=="Ativo").forEach((p,index)=>{
+let produtosFiltrados = produtosAdm.filter(p=>p.status=="Ativo");
+if(filtroCategoriaAtiva!="todas"){
+produtosFiltrados = produtosFiltrados.filter(p=>p.categoria==filtroCategoriaAtiva);
+}
+produtosFiltrados.forEach((p,index)=>{
 store.innerHTML += `
 <div class="item">
 <img src="${p.imagem}">
@@ -373,26 +434,35 @@ function adicionarCarrinho(index){
 carrinho.push(produtosAdm[index]);
 localStorage.setItem("carrinho",JSON.stringify(carrinho));
 renderCarrinho();
-alert("Adicionado ao carrinho");
+atualizarBadgeCarrinho();
+alert("Adicionado ao carrinho!");
 }
 
 function renderCarrinho(){
 const cart = document.getElementById("cartList");
 cart.innerHTML = "";
 let total = 0;
-carrinho.forEach((p)=>{
+carrinho.forEach((p,idx)=>{
 total += parseFloat(p.promo||p.preco);
 cart.innerHTML += `
 <div class="cart-item">
 <img src="${p.imagem}">
-<div>
+<div style="flex:1;">
 <h3 style="font-size:11px;">${p.nome}</h3>
 <p style="font-size:10px;color:#999;margin:6px 0;">${p.desc}</p>
 <h2 style="font-size:16px;">R$ ${p.promo||p.preco}</h2>
 </div>
+<span class="material-symbols-outlined" onclick="removerCarrinho(${idx})" style="cursor:pointer;">delete</span>
 </div>`;
 });
 document.getElementById("totalPrice").innerHTML = `Total: R$ ${total.toFixed(2)}`;
+}
+
+function removerCarrinho(idx){
+carrinho.splice(idx,1);
+localStorage.setItem("carrinho",JSON.stringify(carrinho));
+renderCarrinho();
+atualizarBadgeCarrinho();
 }
 
 function finalizarPedido(){
@@ -416,6 +486,7 @@ if(id=="admCategorias")renderCategorias();
 if(id=="admSubcategorias")renderSubcategorias();
 if(id=="configGeral")carregarConfigGeral();
 if(id=="addProduto"){carregarSelects();limparFormProduto();}
+if(id=="produtosLoja"){filtroCategoriaAtiva="todas";renderProdutos();}
 }
 
 function menuBottom(id,el){
@@ -588,7 +659,8 @@ const area = document.getElementById("listaCategorias");
 area.innerHTML = "";
 categoriasAdm.forEach((c,i)=>{
 const subs = subcategoriasAdm.filter(s=>s.categoria==c.nome);
-const img = c.imagem?`<img src="${c.imagem}">`:`<span class="material-symbols-outlined">category</span>`;
+const img = c.imagem?`<img src="${c.imagem
+}">`:`<span class="material-symbols-outlined">category</span>`;
 let subHtml = '';
 if(subs.length>0){
 subHtml = '<div class="sub-list">';
@@ -706,7 +778,8 @@ document.getElementById("modalSubcategoria").classList.add("active");
 
 function deletarSub(i){
 if(confirm("Deletar subcategoria? Isso não deleta os produtos.")){
-storage.setItem("subcategoriasAdm",JSON.stringify(subcategoriasAdm));
+subcategoriasAdm.splice(i,1);
+localStorage.setItem("subcategoriasAdm",JSON.stringify(subcategoriasAdm));
 renderSubcategorias();
 renderCategorias();
 }
