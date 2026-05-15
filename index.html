@@ -21,68 +21,120 @@ font-family:'Poppins',sans-serif;
 }
 
 body{
-background:#070710;
+background:#06060d;
 color:#fff;
 overflow-x:hidden;
 }
 
 :root{
 --primary:#7b2cff;
---secondary:#a855ff;
+--secondary:#b47cff;
 --card:#10101b;
 --border:#1d1d2e;
---muted:#8f8fa3;
+--muted:#8d8da3;
 }
-
-/* GLOBAL */
 
 .hidden{
-display:none !important;
+display:none!important;
 }
 
-.page{
+/* LOGIN SCREEN */
+
+.login-screen{
 min-height:100vh;
-padding-bottom:90px;
-}
-
-/* LOGIN */
-
-.auth-page{
+position:relative;
+overflow:hidden;
 display:flex;
 align-items:center;
 justify-content:center;
 padding:20px;
 }
 
-.auth-box{
-width:100%;
-max-width:360px;
-background:#10101b;
-border:1px solid #1d1d2e;
-border-radius:26px;
-padding:22px;
+/* BG */
+
+.bg-circle{
+position:absolute;
+border-radius:50%;
+filter:blur(80px);
+opacity:.6;
 }
 
-.logo{
-font-size:24px;
+.bg1{
+width:260px;
+height:260px;
+background:#7b2cff;
+top:-80px;
+left:-80px;
+}
+
+.bg2{
+width:240px;
+height:240px;
+background:#4d9fff;
+bottom:-100px;
+right:-80px;
+}
+
+.bg3{
+width:180px;
+height:180px;
+background:#ff2cdf;
+top:45%;
+left:-90px;
+}
+
+/* TOP */
+
+.login-top{
+position:absolute;
+top:60px;
+text-align:center;
+}
+
+.login-top h1{
+font-size:34px;
 font-weight:700;
-margin-bottom:5px;
 }
 
-.logo span{
-color:#b47cff;
+.login-top h1 span{
+color:var(--secondary);
 }
 
-.auth-sub{
+.login-top p{
+margin-top:8px;
+font-size:12px;
+color:#cfcfe0;
+}
+
+/* LOGIN BOX */
+
+.login-box{
+width:100%;
+max-width:320px;
+padding:22px;
+background:rgba(16,16,27,.82);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,.06);
+border-radius:28px;
+z-index:2;
+}
+
+.login-box h2{
+font-size:17px;
+margin-bottom:4px;
+}
+
+.login-box small{
 font-size:11px;
-color:#8f8fa3;
-margin-bottom:20px;
+color:var(--muted);
+display:block;
+margin-bottom:18px;
 }
 
 .input{
-height:48px;
-background:#0d0d18;
-border:1px solid #1d1d2e;
+height:46px;
+background:#0b0b14;
+border:1px solid var(--border);
 border-radius:14px;
 display:flex;
 align-items:center;
@@ -92,51 +144,86 @@ margin-bottom:12px;
 }
 
 .input i{
-font-size:18px;
-color:#8f8fa3;
+font-size:17px;
+color:var(--muted);
 }
 
 .input input{
+width:100%;
 background:none;
 border:none;
 outline:none;
-width:100%;
 color:#fff;
 font-size:12px;
 }
 
-.auth-btn{
+.btn{
 width:100%;
-height:48px;
+height:46px;
 border:none;
 border-radius:14px;
-background:#7b2cff;
+background:linear-gradient(135deg,#7b2cff,#944dff);
 color:#fff;
 font-size:12px;
 font-weight:600;
-cursor:pointer;
-margin-top:4px;
+margin-top:5px;
 }
 
 .google-btn{
-background:#171727;
-border:1px solid #26263b;
+background:#141421;
+border:1px solid #23233a;
 margin-top:10px;
 }
 
 .switch{
-margin-top:18px;
 text-align:center;
 font-size:11px;
-color:#8f8fa3;
+margin-top:16px;
+color:var(--muted);
 }
 
 .switch span{
-color:#b47cff;
-cursor:pointer;
+color:var(--secondary);
 }
 
-/* HEADER */
+/* MINI INFO */
+
+.mini-info{
+position:absolute;
+bottom:95px;
+display:flex;
+gap:12px;
+z-index:1;
+}
+
+.info-card{
+width:92px;
+height:72px;
+background:rgba(255,255,255,.04);
+backdrop-filter:blur(15px);
+border:1px solid rgba(255,255,255,.06);
+border-radius:18px;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:6px;
+}
+
+.info-card i{
+font-size:20px;
+color:#c18cff;
+}
+
+.info-card span{
+font-size:10px;
+}
+
+/* HOME */
+
+.home{
+padding-bottom:90px;
+}
 
 .header{
 padding:18px;
@@ -145,13 +232,13 @@ justify-content:space-between;
 align-items:center;
 }
 
-.logo-home{
-font-size:18px;
+.logo{
+font-size:19px;
 font-weight:700;
 }
 
-.logo-home span{
-color:#b47cff;
+.logo span{
+color:var(--secondary);
 }
 
 .icon-btn{
@@ -163,10 +250,23 @@ border:1px solid #1d1d2e;
 display:flex;
 align-items:center;
 justify-content:center;
+position:relative;
 font-size:18px;
 }
 
-/* SEARCH */
+.cart-count{
+position:absolute;
+top:-5px;
+right:-5px;
+width:18px;
+height:18px;
+background:#7b2cff;
+border-radius:50%;
+font-size:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
 
 .search{
 padding:0 18px;
@@ -184,11 +284,6 @@ padding:0 14px;
 gap:10px;
 }
 
-.search-box i{
-font-size:18px;
-color:#8f8fa3;
-}
-
 .search-box input{
 width:100%;
 background:none;
@@ -198,12 +293,10 @@ color:#fff;
 font-size:12px;
 }
 
-/* BANNER */
-
 .banner{
 margin:0 18px 20px;
 height:165px;
-border-radius:26px;
+border-radius:28px;
 padding:24px;
 background:linear-gradient(135deg,#7b2cff,#25094d);
 display:flex;
@@ -214,12 +307,11 @@ box-shadow:0 0 35px rgba(123,44,255,.35);
 
 .banner small{
 font-size:11px;
-opacity:.8;
 }
 
 .banner h1{
-font-size:30px;
-margin-top:6px;
+font-size:31px;
+margin-top:5px;
 }
 
 .banner p{
@@ -227,11 +319,9 @@ font-size:12px;
 margin-top:8px;
 }
 
-/* SECTION */
-
 .section{
 padding:0 18px;
-margin-bottom:20px;
+margin-bottom:22px;
 }
 
 .section-top{
@@ -247,10 +337,8 @@ font-size:13px;
 
 .section-top span{
 font-size:11px;
-color:#b47cff;
+color:var(--secondary);
 }
-
-/* CATEGORIES */
 
 .categories{
 display:flex;
@@ -278,10 +366,8 @@ font-size:10px;
 
 .cat i{
 font-size:22px;
-color:#b47cff;
+color:#c18cff;
 }
-
-/* PRODUCTS */
 
 .products{
 display:grid;
@@ -310,7 +396,7 @@ margin-bottom:4px;
 
 .product p{
 font-size:10px;
-color:#8f8fa3;
+color:var(--muted);
 margin-bottom:10px;
 }
 
@@ -323,7 +409,7 @@ align-items:center;
 .price span{
 font-size:13px;
 font-weight:700;
-color:#c38cff;
+color:#c18cff;
 }
 
 .add-btn{
@@ -339,8 +425,6 @@ color:#fff;
 font-size:18px;
 }
 
-/* NAVBAR */
-
 .navbar{
 position:fixed;
 bottom:0;
@@ -352,7 +436,6 @@ border-top:1px solid #1d1d2e;
 display:flex;
 justify-content:space-around;
 align-items:center;
-z-index:999;
 }
 
 .nav-item{
@@ -362,11 +445,10 @@ align-items:center;
 gap:4px;
 font-size:10px;
 color:#8f8fa3;
-cursor:pointer;
 }
 
 .nav-item.active{
-color:#b47cff;
+color:#c18cff;
 }
 
 .nav-item i{
@@ -380,17 +462,31 @@ font-size:19px;
 
 <!-- LOGIN -->
 
-<div class="page auth-page" id="loginPage">
+<div class="login-screen" id="loginPage">
 
-<div class="auth-box">
+<div class="bg-circle bg1"></div>
+<div class="bg-circle bg2"></div>
+<div class="bg-circle bg3"></div>
 
-<div class="logo">
+<div class="login-top">
+
+<h1>
 Premium <span>Store</span>
+</h1>
+
+<p>
+Games, streaming e serviços premium.
+</p>
+
 </div>
 
-<div class="auth-sub">
-Faça login para continuar
-</div>
+<div class="login-box">
+
+<h2>Entrar</h2>
+
+<small>
+Acesse sua conta rapidamente.
+</small>
 
 <div class="input">
 <i class="ri-mail-line"></i>
@@ -402,11 +498,11 @@ Faça login para continuar
 <input type="password" id="loginPassword" placeholder="Senha">
 </div>
 
-<button class="auth-btn" onclick="login()">
+<button class="btn" onclick="login()">
 Entrar
 </button>
 
-<button class="auth-btn google-btn" onclick="googleLogin()">
+<button class="btn google-btn" onclick="googleLogin()">
 <i class="ri-google-line"></i>
 Entrar com Google
 </button>
@@ -420,21 +516,41 @@ Criar conta
 
 </div>
 
+<div class="mini-info">
+
+<div class="info-card">
+<i class="ri-shield-check-line"></i>
+<span>Seguro</span>
+</div>
+
+<div class="info-card">
+<i class="ri-flashlight-line"></i>
+<span>Rápido</span>
+</div>
+
+<div class="info-card">
+<i class="ri-vip-crown-line"></i>
+<span>Premium</span>
+</div>
+
+</div>
+
 </div>
 
 <!-- REGISTER -->
 
-<div class="page auth-page hidden" id="registerPage">
+<div class="login-screen hidden" id="registerPage">
 
-<div class="auth-box">
+<div class="bg-circle bg1"></div>
+<div class="bg-circle bg2"></div>
 
-<div class="logo">
-Criar <span>Conta</span>
-</div>
+<div class="login-box">
 
-<div class="auth-sub">
-Cadastre-se na Premium Store
-</div>
+<h2>Criar conta</h2>
+
+<small>
+Cadastre-se na Premium Store.
+</small>
 
 <div class="input">
 <i class="ri-user-line"></i>
@@ -451,7 +567,7 @@ Cadastre-se na Premium Store
 <input type="password" id="registerPassword" placeholder="Senha">
 </div>
 
-<button class="auth-btn" onclick="register()">
+<button class="btn" onclick="register()">
 Cadastrar
 </button>
 
@@ -468,16 +584,22 @@ Entrar
 
 <!-- HOME -->
 
-<div class="page hidden" id="homePage">
+<div class="home hidden" id="homePage">
 
 <div class="header">
 
-<div class="logo-home">
+<div class="logo">
 Premium <span>Store</span>
 </div>
 
 <div class="icon-btn">
+
 <i class="ri-shopping-cart-2-line"></i>
+
+<div class="cart-count" id="cartCount">
+0
+</div>
+
 </div>
 
 </div>
@@ -497,7 +619,9 @@ Premium <span>Store</span>
 
 <h1>ATÉ 50% OFF</h1>
 
-<p>Contas premium, seguidores, games e serviços digitais.</p>
+<p>
+Contas premium, seguidores e serviços digitais.
+</p>
 
 </div>
 
@@ -632,8 +756,6 @@ Promo
 
 </div>
 
-<!-- NAVBAR -->
-
 <div class="navbar">
 
 <div class="nav-item active">
@@ -665,8 +787,6 @@ Sair
 
 </div>
 
-<!-- FIREBASE -->
-
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -682,8 +802,6 @@ onAuthStateChanged,
 signOut
 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-/* CONFIG */
 
 const firebaseConfig = {
 
@@ -705,15 +823,11 @@ measurementId: "G-CN88J28WRX"
 
 };
 
-/* START */
-
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 
 const provider = new GoogleAuthProvider();
-
-/* OPEN REGISTER */
 
 window.openRegister = function(){
 
@@ -723,8 +837,6 @@ document.getElementById("registerPage").classList.remove("hidden");
 
 }
 
-/* OPEN LOGIN */
-
 window.openLogin = function(){
 
 document.getElementById("registerPage").classList.add("hidden");
@@ -732,8 +844,6 @@ document.getElementById("registerPage").classList.add("hidden");
 document.getElementById("loginPage").classList.remove("hidden");
 
 }
-
-/* REGISTER */
 
 window.register = function(){
 
@@ -747,7 +857,7 @@ createUserWithEmailAndPassword(auth,email,password)
 
 .then(()=>{
 
-alert("Conta criada com sucesso!");
+alert("Conta criada!");
 
 openLogin();
 
@@ -760,8 +870,6 @@ alert(error.message);
 });
 
 }
-
-/* LOGIN */
 
 window.login = function(){
 
@@ -787,23 +895,17 @@ alert(error.message);
 
 }
 
-/* GOOGLE LOGIN */
-
 window.googleLogin = function(){
 
 signInWithRedirect(auth, provider);
 
 }
 
-/* LOGOUT */
-
 window.logoutUser = function(){
 
 signOut(auth);
 
 }
-
-/* AUTH */
 
 onAuthStateChanged(auth,(user)=>{
 
@@ -813,25 +915,59 @@ showHome();
 
 }else{
 
-document.getElementById("homePage").classList.add("hidden");
+document.getElementById("homePage")
+.classList.add("hidden");
 
-document.getElementById("loginPage").classList.remove("hidden");
+document.getElementById("loginPage")
+.classList.remove("hidden");
 
 }
 
 });
 
-/* SHOW HOME */
-
 function showHome(){
 
-document.getElementById("loginPage").classList.add("hidden");
+document.getElementById("loginPage")
+.classList.add("hidden");
 
-document.getElementById("registerPage").classList.add("hidden");
+document.getElementById("registerPage")
+.classList.add("hidden");
 
-document.getElementById("homePage").classList.remove("hidden");
+document.getElementById("homePage")
+.classList.remove("hidden");
 
 }
+
+/* CARRINHO */
+
+let cart = [];
+
+document.querySelectorAll(".add-btn").forEach((btn)=>{
+
+btn.addEventListener("click",()=>{
+
+const product =
+btn.closest(".product");
+
+const name =
+product.querySelector("h4").innerText;
+
+const price =
+product.querySelector("span").innerText;
+
+cart.push({
+name,
+price
+});
+
+document.getElementById("cartCount")
+.innerText = cart.length;
+
+alert(name + " adicionado ao carrinho!");
+
+});
+
+});
 
 </script>
 
