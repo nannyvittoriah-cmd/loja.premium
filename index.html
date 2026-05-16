@@ -47,8 +47,8 @@ button{cursor:pointer;position:relative;z-index:10;}
 .cat-tab.active{background:var(--purple);color:#fff;}
 .cat-card{display:flex;align-items:center;gap:12px;background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:12px;margin:0 16px 10px;cursor:pointer;transition:0.3s;}
 .cat-card:hover{border-color:var(--purple);}
-.cat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;}
-.cat-icon span{font-size:22px;color:#fff;}
+.cat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.cat-icon img{width:100%;height:100%;object-fit:cover;}
 .cat-info h4{font-size:13px;font-weight:600;margin-bottom:2px;}
 .cat-info p{font-size:11px;color:var(--text-muted);}
 
@@ -190,6 +190,21 @@ p{font-size:11px;color:var(--text-muted);}
 <div id="catContent"></div>
 </section>
 
+<section class="page" id="categoryDetail">
+<div class="header">
+<span class="material-symbols-outlined" onclick="showPage('categories')" style="cursor:pointer;">arrow_back</span>
+<h3 id="catDetailTitle" style="font-size:14px;">Games</h3>
+<span class="material-symbols-outlined" style="cursor:pointer;">search</span>
+</div>
+
+<div class="cat-tabs">
+  <div class="cat-tab active" onclick="switchDetailTab(this,'sub')">Subcategorias</div>
+  <div class="cat-tab" onclick="switchDetailTab(this,'prod')">Produtos</div>
+</div>
+
+<div id="catDetailContent"></div>
+</section>
+
 <section class="page" id="shop">
 <div class="header">
 <span class="material-symbols-outlined" onclick="showPage('home')" style="cursor:pointer;">arrow_back</span>
@@ -255,7 +270,8 @@ p{font-size:11px;color:var(--text-muted);}
 <h4 style="font-size:13px;margin-bottom:10px;">Adicionar Produto</h4>
 <input id="prodName" placeholder="Nome" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
 <input id="prodPrice" placeholder="Preço 18.90" type="number" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
-<input id="prodCat" placeholder="Categoria: Free Fire" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
+<input id="prodCat" placeholder="Categoria: Games" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
+<input id="prodSub" placeholder="Subcategoria: Free Fire" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
 <input id="prodImg" placeholder="URL da imagem" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
 <button class="btn-primary" onclick="addProduct()">Salvar Produto</button>
 </div>
@@ -292,16 +308,31 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
 
-let currentUser=null,isAdmin=false,products=[],categories=[],cart=JSON.parse(localStorage.getItem("cart"))||[],selectedTab='all',historyPage='home',currentPage='login';
+let currentUser=null,isAdmin=false,products=[],categories=[],subcategories={},cart=JSON.parse(localStorage.getItem("cart"))||[],selectedTab='all',historyPage='home',currentPage='login',currentCategory='';
 let isRegisterMode = false;
 
 const subcategoriesData = {
-  "Games": ["Free Fire", "Roblox", "Fortnite", "COD Mobile"],
-  "Streaming": ["Netflix", "Spotify", "Disney+", "Prime Video"],
-  "Redes Sociais": ["Instagram", "TikTok", "Facebook", "YouTube"],
-  "Gift Cards": ["Google Play", "App Store", "Xbox", "PlayStation"],
-  "Apps": ["CapCut Pro", "Canva Pro", "ChatGPT Plus"],
-  "VIP": ["VIP Mensal", "VIP Anual", "Acesso Premium"]
+  "Games": {
+    items: ["Free Fire", "Roblox", "Fortnite", "Valorant", "Minecraft", "Brawl Stars", "Clash Royale", "League of Legends"],
+    imgs: {
+      "Free Fire": "https://i.imgur.com/8Km9tLL.png",
+      "Roblox": "https://i.imgur.com/3b8hX9X.png",
+      "Fortnite": "https://i.imgur.com/5QfK9kL.png",
+      "Valorant": "https://i.imgur.com/2Y3Qk9L.png",
+      "Minecraft": "https://i.imgur.com/7Qk9k9L.png",
+      "Brawl Stars": "https://i.imgur.com/9Qk9k9L.png",
+      "Clash Royale": "https://i.imgur.com/1Qk9k9L.png",
+      "League of Legends": "https://i.imgur.com/4Qk9k9L.png"
+    }
+  },
+  "Streaming": {
+    items: ["Netflix", "Spotify", "Disney+", "Prime Video"],
+    imgs: {}
+  },
+  "Redes Sociais": {
+    items: ["Instagram", "TikTok", "Facebook", "YouTube"],
+    imgs: {}
+  }
 };
 
 function showPage(page){
@@ -419,12 +450,14 @@ function addProduct(){
     name:document.getElementById('prodName').value,
     price:parseFloat(document.getElementById('prodPrice').value),
     category:document.getElementById('prodCat').value,
+    subcategory:document.getElementById('prodSub').value,
     img:document.getElementById('prodImg').value,
     createdAt:firebase.firestore.FieldValue.serverTimestamp()
   }).then(()=>{
     document.getElementById('prodName').value='';
     document.getElementById('prodPrice').value='';
     document.getElementById('prodCat').value='';
+    document.getElementById('prodSub').value='';
     document.getElementById('prodImg').value='';
     alert('Produto adicionado!');
   });
@@ -442,14 +475,13 @@ function checkout(){
 }
 
 function renderHome(){
-  document.getElementById('homeCategories').innerHTML=categories.slice(0,6).map(c=>`<div class="card-sm" onclick="openCategory('${c}')"><span class="material-symbols-outlined" style="font-size:24px;color:var(--purple);">category</span><h4>${c}</h4></div>`).join('');
+  document.getElementById('homeCategories').innerHTML=categories.slice(0,6).map(c=>`<div class="card-sm" onclick="openCategoryDetail('${c}')"><span class="material-symbols-outlined" style="font-size:24px;color:var(--purple);">category</span><h4>${c}</h4></div>`).join('');
   document.getElementById('homeProducts').innerHTML=products.slice(0,6).map(p=>`<div class="card-sm" onclick="openProduct('${p.id}')"><img src="${p.img||'https://via.placeholder.com/100'}"><h4>${p.name}</h4><div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div></div>`).join('');
 }
 
 function switchCatTab(el,tab){
   document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
-
   if(tab=='categories'){
     renderCategoriesList();
   }else{
@@ -477,7 +509,7 @@ function renderCategoriesList(){
   };
 
   document.getElementById('catContent').innerHTML = categories.map((c,i)=>`
-    <div class="cat-card" onclick="openCategory('${c}')">
+    <div class="cat-card" onclick="openCategoryDetail('${c}')">
       <div class="cat-icon" style="background:${colors[i%colors.length]}">
         <span class="material-symbols-outlined">${icons[c]||'category'}</span>
       </div>
@@ -492,37 +524,103 @@ function renderCategoriesList(){
 function renderSubcategoriesList(){
   let html = '';
   categories.forEach(c=>{
-    const subs = subcategoriesData[c] || [];
+    const subs = subcategoriesData[c]?.items || [];
     if(subs.length==0) return;
     html += `<div style="padding:0 16px;margin:16px 0 8px;"><h4 style="font-size:12px;color:var(--text-muted);">${c}</h4></div>`;
     html += subs.map(s=>`
       <div class="cat-card" onclick="openSubcategory('${s}')">
         <div class="cat-icon" style="background:#2a2a3a">
-          <span class="material-symbols-outlined">chevron_right</span>
+          <img src="${subcategoriesData[c].imgs[s]||''}" onerror="this.style.display='none'">
         </div>
         <div class="cat-info">
           <h4>${s}</h4>
           <p>Ver produtos</p>
         </div>
+        <span class="material-symbols-outlined" style="font-size:20px;color:var(--text-muted);">chevron_right</span>
       </div>
     `).join('');
   });
   document.getElementById('catContent').innerHTML = html;
 }
 
+function openCategoryDetail(cat){
+  currentCategory=cat;
+  document.getElementById('catDetailTitle').innerText=cat;
+  showPage('categoryDetail');
+  switchDetailTab(document.querySelector('#categoryDetail.cat-tab'),'sub');
+}
+
+function switchDetailTab(el,tab){
+  document.querySelectorAll('#categoryDetail.cat-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+
+  if(tab=='sub'){
+    renderCategorySubcategories();
+  }else{
+    renderCategoryProducts();
+  }
+}
+
+function renderCategorySubcategories(){
+  const subs = subcategoriesData[currentCategory]?.items || [];
+  const imgs = subcategoriesData[currentCategory]?.imgs || {};
+
+  document.getElementById('catDetailContent').innerHTML = subs.map(s=>`
+    <div class="cat-card" onclick="openSubcategory('${s}')">
+      <div class="cat-icon">
+        <img src="${imgs[s]||'https://via.placeholder.com/40'}" onerror="this.src='https://via.placeholder.com/40'">
+      </div>
+      <div class="cat-info">
+        <h4>${s}</h4>
+      </div>
+      <span class="material-symbols-outlined" style="font-size:20px;color:var(--text-muted);">chevron_right</span>
+    </div>
+  `).join('');
+}
+
+function renderCategoryProducts(){
+  const filtered = products.filter(p=>p.category==currentCategory);
+  document.getElementById('catDetailContent').innerHTML = filtered.map(p=>`
+    <div class="list-item" onclick="openProduct('${p.id}')">
+      <img src="${p.img}">
+      <div class="list-item-info">
+        <h4>${p.name}</h4>
+        <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
+      </div>
+      <button class="btn-cart" onclick="event.stopPropagation();addToCart('${p.id}')"><span class="material-symbols-outlined" style="font-size:20px;">shopping_cart</span></button>
+    </div>
+  `).join('');
+}
+
+function openSubcategory(sub){
+  selectedTab=sub;
+  showPage('shop');
+  renderShop();
+}
+
 function openCategory(cat){selectedTab=cat;showPage('shop');renderShop();}
-function openSubcategory(sub){selectedTab=sub;showPage('shop');renderShop();}
 
 function renderShop(){
   document.getElementById('shopTabs').innerHTML='<div class="tab active" onclick="setTab(this,\'all\')">Todos</div>'+categories.map(c=>`<div class="tab" onclick="setTab(this,'${c}')">${c}</div>`).join('');
-  document.getElementById('shopProducts').innerHTML=products.filter(p=>selectedTab=='all'||p.category==selectedTab).map(p=>`<div class="list-item"><img src="${p.img}"><div class="list-item-info"><h4>${p.name}</h4><div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div></div><button class="btn-cart" onclick="addToCart('${p.id}')"><span class="material-symbols-outlined" style="font-size:20px;">shopping_cart</span></button></div>`).join('');
+  document.getElementById('shopProducts').innerHTML=products.filter(p=>selectedTab=='all'||p.category==selectedTab||p.subcategory==selectedTab).map(p=>`<div class="list-item"><img src="${p.img}"><div class="list-item-info"><h4>${p.name}</h4><div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div></div><button class="btn-cart" onclick="addToCart('${p.id}')"><span class="material-symbols-outlined" style="font-size:20px;">shopping_cart</span></button></div>`).join('');
 }
 
 function setTab(el,tab){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');selectedTab=tab;renderShop();}
 
 function openProduct(id){
   selectedProduct=products.find(p=>p.id==id);
-  document.getElementById('productDetail').innerHTML=`<div style="padding:16px;"><img src="${selectedProduct.img}" style="width:100%;border-radius:12px;border:1px solid var(--border);"><h2 style="margin-top:12px;font-size:16px;">${selectedProduct.name}</h2><h3 style="color:var(--gold);font-size:22px;margin:12px 0;">R$ ${selectedProduct.price.toFixed(2).replace('.',',')}</h3><button class="btn-primary" onclick="addToCart('${selectedProduct.id}')">Comprar agora</button></div>`;
+  document.getElementById('productDetail').innerHTML=`
+    <div style="padding:16px;">
+      <img src="${selectedProduct.img}" style="width:100%;border-radius:12px;border:1px solid var(--border);margin-bottom:12px;">
+      <h2 style="margin-top:12px;font-size:16px;font-weight:700;">${selectedProduct.name}</h2>
+      <p style="font-size:11px;color:var(--text-muted);margin:6px 0;">${selectedProduct.category} ${selectedProduct.subcategory ? '• ' + selectedProduct.subcategory : ''}</p>
+      <h3 style="color:var(--gold);font-size:22px;margin:12px 0;">R$ ${selectedProduct.price.toFixed(2).replace('.',',')}</h3>
+      <p style="font-size:12px;color:var(--text-muted);line-height:1.4;margin-bottom:16px;">
+        ${selectedProduct.desc || 'Descrição não informada'}
+      </p>
+      <button class="btn-primary" onclick="addToCart('${selectedProduct.id}')">Comprar agora</button>
+    </div>
+  `;
   showPage('product');
 }
 
@@ -534,13 +632,13 @@ function addToCart(id){
   else cart.push({...p,qty:1});
   localStorage.setItem("cart",JSON.stringify(cart));
   updateCartBadge();
-  alert('Adicionado!');
+  alert('Adicionado ao carrinho!');
 }
 
 function renderCart(){
   const div=document.getElementById('cartItems');
   if(cart.length==0){
-    div.innerHTML='<p style="text-align:center;padding:40px;">Carrinho vazio</p>';
+    div.innerHTML='<p style="text-align:center;padding:40px;color:var(--text-muted);">Carrinho vazio</p>';
     document.getElementById('cartTotal').innerText='R$ 0,00';
     updateCartBadge();
     return;
@@ -548,7 +646,16 @@ function renderCart(){
   let total=0;
   div.innerHTML=cart.map(item=>{
     total+=item.price*item.qty;
-    return `<div class="list-item"><img src="${item.img}"><div class="list-item-info"><h4>${item.name}</h4><div class="price">R$ ${item.price.toFixed(2).replace('.',',')}</div></div></div>`;
+    return `
+      <div class="list-item">
+        <img src="${item.img}">
+        <div class="list-item-info">
+          <h4>${item.name}</h4>
+          <div class="price">R$ ${item.price.toFixed(2).replace('.',',')}</div>
+          <div class="small">Qtd: ${item.qty}</div>
+        </div>
+      </div>
+    `;
   }).join('');
   document.getElementById('cartTotal').innerText='R$ '+total.toFixed(2).replace('.',',');
   updateCartBadge();
@@ -579,15 +686,40 @@ function searchProducts(){
     return;
   }
   const filtered = products.filter(p=>p.name.toLowerCase().includes(query));
-  document.getElementById('homeProducts').innerHTML = filtered.slice(0,6).map(p=>`<div class="card-sm" onclick="openProduct('${p.id}')"><img src="${p.img||'https://via.placeholder.com/100'}"><h4>${p.name}</h4><div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div></div>`).join('');
+  document.getElementById('homeProducts').innerHTML = filtered.slice(0,6).map(p=>`
+    <div class="card-sm" onclick="openProduct('${p.id}')">
+      <img src="${p.img||'https://via.placeholder.com/100'}">
+      <h4>${p.name}</h4>
+      <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
+    </div>
+  `).join('');
 }
 
 function renderOrders(orders){
-  document.getElementById('ordersList').innerHTML=orders.map(o=>`<div class="list-item"><div class="list-item-info"><h4>Pedido #${o.id.slice(0,5)}</h4><div class="sub">${new Date(o.createdAt?.seconds*1000).toLocaleDateString('pt-BR')}</div><div class="price">R$ ${o.total.toFixed(2).replace('.',',')}</div></div><span class="status ${o.status}">${o.status}</span></div>`).join('');
+  document.getElementById('ordersList').innerHTML=orders.map(o=>`
+    <div class="list-item">
+      <div class="list-item-info">
+        <h4>Pedido #${o.id.slice(0,5)}</h4>
+        <div class="small">${new Date(o.createdAt?.seconds*1000).toLocaleDateString('pt-BR')}</div>
+        <div class="price">R$ ${o.total.toFixed(2).replace('.',',')}</div>
+      </div>
+      <span class="status ${o.status}">${o.status}</span>
+    </div>
+  `).join('');
 }
 
 function renderAdminOrders(orders){
-  document.getElementById('adminOrdersTable').innerHTML='<tr><th>ID</th><th>Cliente</th><th>Valor</th><th>Status</th></tr>'+orders.map(o=>`<tr><td>${o.id.slice(0,5)}</td><td>${o.userName}</td><td>R$ ${o.total.toFixed(2).replace('.',',')}</td><td><span class="status ${o.status}">${o.status}</span></td></tr>`).join('');
+  document.getElementById('adminOrdersTable').innerHTML=`
+    <tr><th>ID</th><th>Cliente</th><th>Valor</th><th>Status</th></tr>
+    ${orders.map(o=>`
+      <tr>
+        <td>${o.id.slice(0,5)}</td>
+        <td>${o.userName}</td>
+        <td>R$ ${o.total.toFixed(2).replace('.',',')}</td>
+        <td><span class="status ${o.status}">${o.status}</span></td>
+      </tr>
+    `).join('')}
+  `;
 }
 
 function loadAdmin(){loadOrders();}
