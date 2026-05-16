@@ -10,7 +10,6 @@
 :root{
   --bg:#060609;--card:#131319;--border:#26262f;--purple:#7c3aed;--text:#f5f5f7;--text2:#8a8a93;
 }
-
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
 body{background:var(--bg);color:var(--text);font-size:12px;}
 .page{display:none;min-height:100vh;padding-bottom:70px;}
@@ -167,15 +166,15 @@ h2{font-size:18px;font-weight:600;margin-bottom:6px;}
 <section class="page" id="categories">
   <div class="header">
     <span class="material-symbols-outlined" onclick="showPage('home')">arrow_back</span>
-    <h3>Categorias</h3>
-    <span></span>
+    <h3>subcategorias</h3>
+    <span class="material-symbols-outlined">search</span>
   </div>
   <div class="tabs" id="catTabs">
-    <div class="tab active" onclick="switchCatTab(this,'cats')">Categorias</div>
-    <div class="tab" onclick="switchCatTab(this,'subcats')">Subcategorias</div>
+    <div class="tab active" onclick="switchCatTab(this,'subcats')">Subcategorias</div>
+    <div class="tab" onclick="switchCatTab(this,'products')">Produtos</div>
   </div>
-  <div id="catsList" style="padding:0 16px;"></div>
-  <div id="subcatsList" style="padding:0 16px;display:none;"></div>
+  <div id="subcatsList" style="padding:0 16px;"></div>
+  <div id="productsList" style="padding:0 16px;display:none;"></div>
 </section>
 
 <!-- LOJA -->
@@ -240,6 +239,7 @@ const db = firebase.firestore();
 let user=null;
 let history='home';
 let cart = JSON.parse(localStorage.getItem("cart"))||[];
+let currentSubcat = '';
 
 const categories = [
   {name:'Games', desc:'Produtos relacionados a jogos', img:'https://img.icons8.com/ios-filled/50/7c3aed/game-controller.png'},
@@ -251,21 +251,27 @@ const categories = [
 ];
 
 const subcategories = [
-  {name:'Roblox', desc:'Robux e gamepasses', img:'https://i.imgur.com/5zQ8X3m.png', parent:'Games'},
-  {name:'Free Fire', desc:'Diamantes', img:'https://i.imgur.com/3QJ3Q3m.png', parent:'Games'},
-  {name:'Netflix', desc:'Contas premium', img:'https://i.imgur.com/6W0lVJy.png', parent:'Streaming'},
-  {name:'Spotify', desc:'Premium individual', img:'https://i.imgur.com/5d0vgDi.png', parent:'Streaming'},
-  {name:'Instagram', desc:'Seguidores e curtidas', img:'https://img.icons8.com/ios-filled/50/7c3aed/instagram-new.png', parent:'Redes Sociais'},
-  {name:'Google Play', desc:'Gift cards R$ 20-200', img:'https://i.imgur.com/5QJ3Q3m.png', parent:'Gift Cards'}
+  {name:'Free Fire', desc:'Diamantes', img:'https://img.icons8.com/color/48/free-fire.png', parent:'Games'},
+  {name:'Roblox', desc:'Robux e gamepasses', img:'https://img.icons8.com/color/48/roblox.png', parent:'Games'},
+  {name:'Fortnite', desc:'V-Bucks', img:'https://img.icons8.com/color/48/fortnite.png', parent:'Games'},
+  {name:'Valorant', desc:'VP e skins', img:'https://img.icons8.com/color/48/valorant.png', parent:'Games'},
+  {name:'Minecraft', desc:'Minecoins', img:'https://img.icons8.com/color/48/minecraft-logo.png', parent:'Games'},
+  {name:'Brawl Stars', desc:'Gemas', img:'https://img.icons8.com/color/48/brawl-stars.png', parent:'Games'},
+  {name:'Clash Royale', desc:'Gemas', img:'https://img.icons8.com/color/48/clash-royale.png', parent:'Games'},
+  {name:'League of Legends', desc:'Riot Points', img:'https://img.icons8.com/color/48/league-of-legends.png', parent:'Games'}
 ];
 
 const products = [
-  {id:1,name:'ROBUX',desc:'400 Robux',price:15.90,img:'https://i.imgur.com/5zQ8X3m.png',cat:'Games'},
-  {id:2,name:'NETFLIX',desc:'1 Mês',price:17.90,img:'https://i.imgur.com/6W0lVJy.png',cat:'Streaming'},
-  {id:3,name:'SPOTIFY',desc:'Premium 1 Mês',price:10.90,img:'https://i.imgur.com/5d0vgDi.png',cat:'Streaming'},
-  {id:4,name:'FREE FIRE',desc:'1000 Diamantes',price:29.90,img:'https://i.imgur.com/3QJ3Q3m.png',cat:'Games'},
-  {id:5,name:'DISCORD',desc:'Nitro 1 Mês',price:24.90,img:'https://i.imgur.com/4QJ3Q3m.png',cat:'Redes Sociais'},
-  {id:6,name:'GOOGLE PLAY',desc:'R$ 50',price:50.00,img:'https://i.imgur.com/5QJ3Q3m.png',cat:'Gift Cards'}
+  {id:1,name:'ROBUX 400',desc:'400 Robux',price:15.90,img:'https://img.icons8.com/color/48/roblox.png',subcat:'Roblox',cat:'Games'},
+  {id:2,name:'ROBUX 800',desc:'800 Robux',price:29.90,img:'https://img.icons8.com/color/48/roblox.png',subcat:'Roblox',cat:'Games'},
+  {id:3,name:'FREE FIRE 1000',desc:'1000 Diamantes',price:29.90,img:'https://img.icons8.com/color/48/free-fire.png',subcat:'Free Fire',cat:'Games'},
+  {name:'FREE FIRE 5000',desc:'5000 Diamantes',price:129.90,img:'https://img.icons8.com/color/48/free-fire.png',subcat:'Free Fire',cat:'Games',id:4},
+  {id:5,name:'V-BUCKS 1000',desc:'1000 V-Bucks',price:39.90,img:'https://img.icons8.com/color/48/fortnite.png',subcat:'Fortnite',cat:'Games'},
+  {id:6,name:'VP 1250',desc:'1250 VP',price:49.90,img:'https://img.icons8.com/color/48/valorant.png',subcat:'Valorant',cat:'Games'},
+  {id:7,name:'MINECRAFT 1720',desc:'1720 Minecoins',price:59.90,img:'https://img.icons8.com/color/48/minecraft-logo.png',subcat:'Minecraft',cat:'Games'},
+  {id:8,name:'BRAWL STARS 1700',desc:'1700 Gemas',price:79.90,img:'https://img.icons8.com/color/48/brawl-stars.png',subcat:'Brawl Stars',cat:'Games'},
+  {id:9,name:'CLASH ROYALE 1200',desc:'1200 Gemas',price:49.90,img:'https://img.icons8.com/color/48/clash-royale.png',subcat:'Clash Royale',cat:'Games'},
+  {id:10,name:'LOL 1380 RP',desc:'1380 RP',price:49.90,img:'https://img.icons8.com/color/48/league-of-legends.png',subcat:'League of Legends',cat:'Games'}
 ];
 
 function showPage(p){
@@ -351,23 +357,14 @@ function renderHome(){
 
 function openCategories(){
   showPage('categories');
-  renderCategories();
   renderSubcategories();
-}
-
-function renderCategories(){
-  document.getElementById('catsList').innerHTML=categories.map(c=>`
-    <div class="list" onclick="openCat('${c.name}')">
-      <img src="${c.img}">
-      <div class="list-info"><h4>${c.name}</h4><div class="small">${c.desc}</div></div>
-      <span class="material-symbols-outlined" style="color:var(--text2);">chevron_right</span>
-    </div>
-  `).join('');
+  renderProducts();
+  switchCatTab(document.querySelector('#catTabs.tab'), 'subcats');
 }
 
 function renderSubcategories(){
   document.getElementById('subcatsList').innerHTML=subcategories.map(s=>`
-    <div class="list" onclick="filterBySubcat('${s.name}')">
+    <div class="list" onclick="openSubcatProducts('${s.name}')">
       <img src="${s.img}">
       <div class="list-info"><h4>${s.name}</h4><div class="small">${s.desc}</div></div>
       <span class="material-symbols-outlined" style="color:var(--text2);">chevron_right</span>
@@ -375,11 +372,35 @@ function renderSubcategories(){
   `).join('');
 }
 
+function renderProducts(){
+  document.getElementById('productsList').innerHTML=products.map(p=>`
+    <div class="list" onclick="addCart(${p.id})">
+      <img src="${p.img}">
+      <div class="list-info"><h4>${p.name}</h4><div class="small">${p.desc}</div></div>
+      <div style="font-size:13px;font-weight:700;color:var(--purple);">R$ ${p.price.toFixed(2).replace('.',',')}</div>
+    </div>
+  `).join('');
+}
+
 function switchCatTab(el,tab){
   document.querySelectorAll('#catTabs.tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
-  document.getElementById('catsList').style.display=tab=='cats'?'block':'none';
   document.getElementById('subcatsList').style.display=tab=='subcats'?'block':'none';
+  document.getElementById('productsList').style.display=tab=='products'?'block':'none';
+}
+
+function openSubcatProducts(subcat){
+  currentSubcat = subcat;
+  switchCatTab(document.querySelectorAll('#catTabs.tab')[1], 'products');
+
+  const filtered = products.filter(p=>p.subcat==subcat);
+  document.getElementById('productsList').innerHTML=filtered.map(p=>`
+    <div class="list" onclick="addCart(${p.id})">
+      <img src="${p.img}">
+      <div class="list-info"><h4>${p.name}</h4><div class="small">${p.desc}</div></div>
+      <div style="font-size:13px;font-weight:700;color:var(--purple);">R$ ${p.price.toFixed(2).replace('.',',')}</div>
+    </div>
+  `).join('');
 }
 
 function openCat(cat){
@@ -387,21 +408,6 @@ function openCat(cat){
   document.getElementById('shopTitle').innerText=cat;
   setTimeout(()=>{
     document.getElementById('shopGrid').innerHTML=products.filter(p=>p.cat==cat).map(p=>`
-      <div class="prod-card" onclick="addCart(${p.id})">
-        <img src="${p.img}">
-        <h5>${p.name}</h5>
-        <p>${p.desc}</p>
-        <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
-      </div>
-    `).join('');
-  },100);
-}
-
-function filterBySubcat(subcat){
-  showPage('shop');
-  document.getElementById('shopTitle').innerText=subcat;
-  setTimeout(()=>{
-    document.getElementById('shopGrid').innerHTML=products.filter(p=>p.name==subcat).map(p=>`
       <div class="prod-card" onclick="addCart(${p.id})">
         <img src="${p.img}">
         <h5>${p.name}</h5>
