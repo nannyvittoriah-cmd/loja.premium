@@ -91,9 +91,26 @@ p{font-size:11px;color:var(--text-muted);}
 .table{width:100%;border-collapse:collapse;font-size:12px;}
 .table th{text-align:left;padding:10px;color:var(--text-muted);border-bottom:1px solid var(--border);}
 .table td{padding:10px;border-bottom:1px solid var(--border);}
-.status{padding:4px 8px;border-radius:6px;font-size:10px;font-weight:600;}
-.status.pending{background:rgba(251,191,36,0.2);color:var(--gold);}
-.status.completed{background:rgba(34,197,94,0.2);color:#22c55e;}
+
+/* Status badges */
+.status{padding:4px 8px;border-radius:6px;font-size:10px;font-weight:600;text-transform:capitalize;}
+.status.concluido{background:rgba(34,197,94,0.2);color:#22c55e;}
+.status.aguardando{background:rgba(251,191,36,0.2);color:#fbbf24;}
+.status.cancelado{background:rgba(239,68,68,0.2);color:#ef4444;}
+
+/* Orders Page */
+.orders-filters{display:flex;gap:8px;padding:12px 16px;overflow-x:auto;}
+.order-filter{padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:600;color:var(--text-muted);white-space:nowrap;cursor:pointer;transition:0.3s;}
+.order-filter.active{background:var(--purple);color:#fff;border-color:var(--purple);}
+.order-item{display:flex;gap:10px;background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:12px;margin:0 16px 10px;}
+.order-item img{width:40px;height:40px;border-radius:8px;object-fit:cover;}
+.order-item-info{flex:1;}
+.order-item-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;}
+.order-item-id{font-size:11px;color:var(--text-muted);}
+.order-item-name{font-size:13px;font-weight:600;margin-bottom:2px;}
+.order-item-bottom{display:flex;justify-content:space-between;align-items:center;}
+.order-item-price{font-size:14px;font-weight:700;color:var(--text);}
+.order-item-date{font-size:10px;color:var(--text-muted);}
 
 /* Product Page */
 .product-page{background:var(--bg);min-height:100vh;}
@@ -362,9 +379,17 @@ p{font-size:11px;color:var(--text-muted);}
 <div class="header">
 <span class="material-symbols-outlined" onclick="showPage('home')" style="cursor:pointer;">arrow_back</span>
 <h3 style="font-size:14px;">Meus Pedidos</h3>
-<div></div>
+<span class="material-symbols-outlined" onclick="alert('Fechar')" style="cursor:pointer;">close</span>
 </div>
-<div class="section" id="ordersList"></div>
+
+<div class="orders-filters" id="orderFilters">
+  <div class="order-filter active" onclick="filterOrders(this,'all')">Todos</div>
+  <div class="order-filter" onclick="filterOrders(this,'aguardando')">Aguardando</div>
+  <div class="order-filter" onclick="filterOrders(this,'concluido')">Concluídos</div>
+  <div class="order-filter" onclick="filterOrders(this,'cancelado')">Cancelados</div>
+</div>
+
+<div id="ordersList"></div>
 </section>
 
 <section class="page" id="profile">
@@ -429,7 +454,7 @@ const db = firebase.firestore();
 const auth = firebase.auth();
 
 let currentUser=null,isAdmin=false,products=[],categories=[],cart=JSON.parse(localStorage.getItem("cart"))||[],selectedTab='all',historyPage='home',currentPage='login';
-let currentCategory='',currentSubcategory='',currentFilter='all',isRegisterMode=false,selectedProduct=null,couponDiscount=0,currentOrder=null;
+let currentCategory='',currentSubcategory='',currentFilter='all',isRegisterMode=false,selectedProduct=null,couponDiscount=0,currentOrder=null,orderFilter='all',allOrders=[];
 
 const subcategoriesData = {
   "Games": {
@@ -558,10 +583,53 @@ function loadOrders(){
   if(!currentUser)return;
   const q=isAdmin?db.collection("orders"):db.collection("orders").where("userId","==",currentUser.uid);
   q.orderBy("createdAt","desc").onSnapshot((snap)=>{
-        const orders=[];snap.forEach(doc=>orders.push({id:doc.id,...doc.data()}));
-    renderOrders(orders);
-    if(isAdmin)renderAdminOrders(orders);
+    allOrders=[];snap.forEach(doc=>allOrders.push({id:doc.id,...doc.data()}));
+    filterOrders(document.querySelector('.order-filter.active'),'all');
+    if(isAdmin)renderAdminOrders(allOrders);
   });
+}
+
+function filterOrders(el,status){
+  document.querySelectorAll('.order-filter').forEach(f=>f.classList.remove('active'));
+  el.classList.add('active');
+  orderFilter = status;
+
+  let filtered = allOrders;
+  if(status!== 'all'){
+    filtered = allOrders.filter(o=>o.status === status);
+  }
+  renderOrders(filtered);
+}
+
+function renderOrders(orders){
+  if(orders.length==0){
+    document.getElementById('ordersList').innerHTML='<p style="text-align:center;padding:60px 20px;color:var(--text-muted);">Nenhum pedido encontrado</p>';
+    return;
+  }
+
+  document.getElementById('ordersList').innerHTML=orders.map(o=>{
+    const item = o.items && o.items[0]? o.items[0] : {};
+    const date = o.createdAt?.seconds? new Date(o.createdAt.seconds*1000) : new Date();
+    const dateStr = date.toLocaleDateString('pt-BR');
+
+    return `
+    <div class="order-item">
+      <img src="${item.img || 'https://via.placeholder.com/40'}">
+      <div class="order-item-info">
+        <div class="order-item-top">
+          <div>
+            <div class="order-item-id">#${o.id.slice(0,5)}</div>
+            <div class="order-item-name">${item.name || 'Pedido'}</div>
+          </div>
+          <span class="status ${o.status}">${o.status}</span>
+        </div>
+        <div class="order-item-bottom">
+          <div class="order-item-price">R$ ${o.total.toFixed(2).replace('.',',')}</div>
+          <div class="order-item-date">${dateStr}</div>
+        </div>
+      </div>
+    </div>
+  `}).join('');
 }
 
 function addProduct(){
@@ -622,10 +690,10 @@ function payWithPix(){
     discount:currentOrder.discount,
     total:currentOrder.total,
     paymentMethod: 'pix',
-    status:'pending',
+    status:'aguardando',
     createdAt:firebase.firestore.FieldValue.serverTimestamp()
   }).then(()=>{
-    alert('Pedido criado! QR Code Pix em breve.');
+    alert('Pedido criado! Aguardando pagamento Pix.');
     cart=[];
     couponDiscount=0;
     currentOrder=null;
@@ -743,7 +811,7 @@ function renderCategoryProducts(){
   });
 
   document.getElementById('catDetailContent').innerHTML = filtered.length==0
-  ? '<p style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum produto encontrado</p>'
+ ? '<p style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum produto encontrado</p>'
     : filtered.map(p=>`
     <div class="list-item" onclick="openProduct('${p.id}')">
       <img src="${p.img||'https://via.placeholder.com/40'}">
@@ -967,19 +1035,6 @@ function searchProducts(){
       <img src="${p.img||'https://via.placeholder.com/100'}">
       <h4>${p.name}</h4>
       <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
-    </div>
-  `).join('');
-}
-
-function renderOrders(orders){
-  document.getElementById('ordersList').innerHTML=orders.map(o=>`
-    <div class="list-item">
-      <div class="list-item-info">
-        <h4>Pedido #${o.id.slice(0,5)}</h4>
-        <div class="small">${new Date(o.createdAt?.seconds*1000).toLocaleDateString('pt-BR')}</div>
-        <div class="price">R$ ${o.total.toFixed(2).replace('.',',')}</div>
-      </div>
-      <span class="status ${o.status}">${o.status}</span>
     </div>
   `).join('');
 }
