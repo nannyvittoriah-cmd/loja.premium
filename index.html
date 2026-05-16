@@ -191,7 +191,7 @@ p{font-size:11px;color:var(--text-muted);}
 
 <section class="page" id="categoryDetail">
 <div class="header">
-<span class="material-symbols-outlined" onclick="showPage('categories')" style="cursor:pointer;">arrow_back</span>
+<span class="material-symbols-outlined" onclick="goBack()" style="cursor:pointer;">arrow_back</span>
 <h3 id="catDetailTitle" style="font-size:14px;">Free Fire</h3>
 <span class="material-symbols-outlined" style="cursor:pointer;">search</span>
 </div>
@@ -348,7 +348,11 @@ function showPage(page){
     n.classList.toggle('active',i==['home','shop','cart','orders','profile'].indexOf(page));
   });
 }
-function goBack(){showPage(historyPage);}
+
+function goBack(){
+  const prev = historyPage || 'categories';
+  showPage(prev);
+}
 
 function toggleMode(){
   isRegisterMode =!isRegisterMode;
@@ -570,17 +574,17 @@ function renderCategoryProducts(){
   });
 
   document.getElementById('catDetailContent').innerHTML = filtered.length==0
-  ? '<p style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum produto encontrado</p>'
+ ? '<p style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum produto encontrado</p>'
     : filtered.map(p=>`
     <div class="list-item" onclick="openProduct('${p.id}')">
-      <img src="${p.img}">
+      <img src="${p.img||'https://via.placeholder.com/40'}">
       <div class="list-item-info">
         <h4>${p.name}</h4>
         <div class="small">${p.subcategory}</div>
       </div>
       <div style="text-align:right;">
         <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
-            <span class="material-symbols-outlined" style="font-size:18px;color:var(--text-muted);">chevron_right</span>
+        <span class="material-symbols-outlined" style="font-size:18px;color:var(--text-muted);">chevron_right</span>
       </div>
     </div>
   `).join('');
@@ -589,14 +593,8 @@ function renderCategoryProducts(){
 function renderCategoryInfo(){
   document.getElementById('catDetailContent').innerHTML = `
     <div class="info-box">
-      <strong style="color:var(--text);">Sobre ${currentSubcategory}</strong><br><br>
-      Aqui você encontra produtos de ${currentSubcategory} com entrega rápida e segura.<br><br>
-      <strong>Como funciona:</strong><br>
-      1. Escolha o produto<br>
-      2. Faça o pagamento<br>
-      3. Receba no seu email/ID em minutos<br><br>
-      <strong>Suporte:</strong> 24h via WhatsApp
-    </div>
+      <strong style="color:var(--text);">Sobre ${currentSubcategory
+          </div>
   `;
 }
 
@@ -630,13 +628,20 @@ function setTab(el,tab){
 }
 
 function openProduct(id){
-  selectedProduct=products.find(p=>p.id==id);
+  selectedProduct = products.find(p=>p.id==id);
+  if(!selectedProduct) return;
+
   document.getElementById('productDetail').innerHTML=`
     <div style="padding:16px;">
-      <img src="${selectedProduct.img}" style="width:100%;border-radius:12px;border:1px solid var(--border);margin-bottom:12px;">
+      <img src="${selectedProduct.img || 'https://via.placeholder.com/200'}" 
+           style="width:100%;border-radius:12px;border:1px solid var(--border);margin-bottom:12px;">
       <h2 style="font-size:16px;font-weight:700;">${selectedProduct.name}</h2>
-      <p style="font-size:11px;color:var(--text-muted);margin:6px 0;">${selectedProduct.category} ${selectedProduct.subcategory ? '• ' + selectedProduct.subcategory : ''}</p>
-      <h3 style="color:var(--gold);font-size:22px;margin:12px 0;">R$ ${selectedProduct.price.toFixed(2).replace('.',',')}</h3>
+      <p style="font-size:11px;color:var(--text-muted);margin:6px 0;">
+        ${selectedProduct.category} ${selectedProduct.subcategory ? '• ' + selectedProduct.subcategory : ''}
+      </p>
+      <h3 style="color:var(--gold);font-size:22px;margin:12px 0;">
+        R$ ${selectedProduct.price.toFixed(2).replace('.',',')}
+      </h3>
       <p style="font-size:12px;color:var(--text-muted);line-height:1.4;margin-bottom:16px;">
         ${selectedProduct.desc || 'Descrição não informada'}
       </p>
