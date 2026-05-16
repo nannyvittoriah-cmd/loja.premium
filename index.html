@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>NEXUS STORE</title>
+<title>PRIME STORE</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300,0,0"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -110,9 +110,15 @@ p{font-size:11px;color:var(--text-muted);}
 .admin-chart{background:rgba(18,18,24,0.8);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:16px;padding:16px;margin:0 16px 16px;}
 .admin-chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
 .admin-date-picker{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px;}
-.admin-table{width:100%;border-collapse:collapse;font-size:12px;margin:0 16px;}
+.admin-table{width:100%;border-collapse:collapse;font-size:12px;}
 .admin-table th{text-align:left;padding:10px;color:var(--text-muted);border-bottom:1px solid var(--border);}
-.admin-table td{padding:10px;border-bottom:1px solid var(--border);}
+.admin-table td{padding:12px 10px;border-bottom:1px solid var(--border);}
+.admin-table tr:hover{background:rgba(168,85,247,0.05);}
+.admin-orders-filters{display:flex;gap:8px;padding:0 16px 12px;overflow-x:auto;}
+.admin-orders-filter{padding:6px 14px;border-radius:20px;background:var(--card);border:1px solid var(--border);font-size:11px;font-weight:600;color:var(--text-muted);white-space:nowrap;cursor:pointer;}
+.admin-orders-filter.active{background:var(--purple);color:#fff;border-color:var(--purple);}
+.admin-orders-wrap{background:var(--card);margin:0 16px;border-radius:12px;overflow:hidden;border:1px solid var(--border);}
+.admin-orders-btn{width:calc(100% - 32px);margin:12px 16px;padding:12px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--purple);font-weight:600;font-size:13px;}
 
 .status{padding:4px 8px;border-radius:6px;font-size:10px;font-weight:600;text-transform:capitalize;}
 .status.ativo{background:rgba(34,197,94,0.2);color:#22c55e;}
@@ -127,8 +133,6 @@ p{font-size:11px;color:var(--text-muted);}
 .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
 .modal-header h3{font-size:16px;font-weight:700;}
 .modal-close{cursor:pointer;color:var(--text-muted);}
-
-/* Modal inputs */
 .modal .input-box{margin-bottom:12px;}
 .modal .input-box textarea{resize:none;height:60px;padding:10px 0;}
 </style>
@@ -257,13 +261,45 @@ p{font-size:11px;color:var(--text-muted);}
 <div style="padding:0 16px 20px;">
   <h4 style="font-size:13px;font-weight:700;margin-bottom:10px;">Últimos Pedidos</h4>
   <table class="admin-table" id="adminOrdersTable"></table>
+  <button class="admin-orders-btn" onclick="showAdminTab('orders')">Ver todos os pedidos</button>
 </div>
 
 <div class="admin-tabs">
   <div class="admin-tab active" onclick="showAdminTab('products')">Produtos</div>
   <div class="admin-tab" onclick="showAdminTab('categories')">Categorias</div>
   <div class="admin-tab" onclick="showAdminTab('subcategories')">Subcategorias</div>
+  <div class="admin-tab" onclick="showAdminTab('orders')">Pedidos</div>
 </div>
+</section>
+
+<!-- ADMIN PEDIDOS -->
+<section class="page" id="adminOrders">
+<div class="admin-header">
+  <div class="admin-header-top">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="material-symbols-outlined" onclick="showPage('admin')" style="cursor:pointer;">arrow_back</span>
+      <h3>Admin - Pedidos</h3>
+    </div>
+    <img id="adminAvatar5" src="https://i.pravatar.cc/100" class="admin-header-avatar">
+  </div>
+</div>
+
+<div style="padding:16px 16px 0;">
+  <h4 style="font-size:16px;font-weight:700;">Pedidos</h4>
+</div>
+
+<div class="admin-orders-filters" id="adminOrderFilters">
+  <div class="admin-orders-filter active" onclick="filterAdminOrders(this,'all')">Todos</div>
+  <div class="admin-orders-filter" onclick="filterAdminOrders(this,'aguardando')">Aguardando</div>
+  <div class="admin-orders-filter" onclick="filterAdminOrders(this,'concluido')">Concluídos</div>
+  <div class="admin-orders-filter" onclick="filterAdminOrders(this,'cancelado')">Cancelados</div>
+</div>
+
+<div class="admin-orders-wrap">
+  <table class="admin-table" id="adminOrdersFullTable"></table>
+</div>
+
+<button class="admin-orders-btn" onclick="loadAllAdminOrders()">Atualizar</button>
 </section>
 
 <!-- ADMIN PRODUTOS -->
@@ -355,22 +391,10 @@ p{font-size:11px;color:var(--text-muted);}
     <span class="material-symbols-outlined modal-close" onclick="closeProductModal()">close</span>
   </div>
   <input type="hidden" id="productId">
-  <div class="input-box">
-    <input type="text" id="prodName" placeholder="Nome do produto">
-  </div>
-  <div class="input-box">
-    <input type="number" id="prodPrice" placeholder="Preço 18.90" step="0.01">
-  </div>
-  <div class="input-box">
-    <select id="prodCategory">
-      <option value="">Selecione a categoria</option>
-    </select>
-  </div>
-  <div class="input-box">
-    <select id="prodSubcategory">
-      <option value="">Selecione a subcategoria</option>
-    </select>
-  </div>
+  <div class="input-box"><input type="text" id="prodName" placeholder="Nome do produto"></div>
+  <div class="input-box"><input type="number" id="prodPrice" placeholder="Preço 18.90" step="0.01"></div>
+  <div class="input-box"><select id="prodCategory"><option value="">Selecione a categoria</option></select></div>
+  <div class="input-box"><select id="prodSubcategory"><option value="">Selecione a subcategoria</option></select></div>
   <div class="input-box">
     <select id="prodType">
       <option value="Diamantes">Diamantes</option>
@@ -378,12 +402,8 @@ p{font-size:11px;color:var(--text-muted);}
       <option value="Outros">Outros</option>
     </select>
   </div>
-  <div class="input-box">
-    <input type="text" id="prodImg" placeholder="URL da imagem">
-  </div>
-  <div class="input-box">
-    <textarea id="prodDesc" placeholder="Descrição"></textarea>
-  </div>
+  <div class="input-box"><input type="text" id="prodImg" placeholder="URL da imagem"></div>
+  <div class="input-box"><textarea id="prodDesc" placeholder="Descrição"></textarea></div>
   <div class="input-box">
     <select id="prodStatus">
       <option value="ativo">Ativo</option>
@@ -402,15 +422,9 @@ p{font-size:11px;color:var(--text-muted);}
     <span class="material-symbols-outlined modal-close" onclick="closeCategoryModal()">close</span>
   </div>
   <input type="hidden" id="categoryId">
-  <div class="input-box">
-    <input type="text" id="catName" placeholder="Nome da categoria">
-  </div>
-  <div class="input-box">
-    <input type="text" id="catIcon" placeholder="Ícone: sports_esports">
-  </div>
-  <div class="input-box">
-    <input type="color" id="catColor" value="#a855f7">
-  </div>
+  <div class="input-box"><input type="text" id="catName" placeholder="Nome da categoria"></div>
+  <div class="input-box"><input type="text" id="catIcon" placeholder="Ícone: sports_esports"></div>
+  <div class="input-box"><input type="color" id="catColor" value="#a855f7"></div>
   <button class="btn-primary" onclick="saveCategory()">Salvar</button>
 </div>
 </div>
@@ -423,22 +437,14 @@ p{font-size:11px;color:var(--text-muted);}
     <span class="material-symbols-outlined modal-close" onclick="closeSubcategoryModal()">close</span>
   </div>
   <input type="hidden" id="subcategoryId">
-  <div class="input-box">
-    <select id="subcatCategory">
-      <option value="">Selecione a categoria</option>
-    </select>
-  </div>
-  <div class="input-box">
-    <input type="text" id="subcatName" placeholder="Nome da subcategoria">
-  </div>
-  <div class="input-box">
-    <input type="text" id="subcatImg" placeholder="URL da imagem">
-  </div>
+  <div class="input-box"><select id="subcatCategory"><option value="">Selecione a categoria</option></select></div>
+  <div class="input-box"><input type="text" id="subcatName" placeholder="Nome da subcategoria"></div>
+  <div class="input-box"><input type="text" id="subcatImg" placeholder="URL da imagem"></div>
   <button class="btn-primary" onclick="saveSubcategory()">Salvar</button>
 </div>
 </div>
 
-<!-- RESTO DAS PÁGINAS CLIENTE -->
+<!-- HOME CLIENTE -->
 <section class="page" id="home">
 <div class="top-bar">
   <div class="top-bar-left">
@@ -450,15 +456,18 @@ p{font-size:11px;color:var(--text-muted);}
     <span class="cart-badge" id="cartBadge">0</span>
   </div>
 </div>
+
 <div class="search-box">
   <span class="material-symbols-outlined" style="font-size:18px;color:var(--text-muted);">search</span>
   <input type="text" id="searchInput" placeholder="Buscar produtos..." oninput="searchProducts()">
 </div>
+
 <div class="banner">
 <h2 style="font-size:18px;font-weight:800;margin-bottom:4px;position:relative;">MEGA PROMO<br>ATÉ 50% OFF</h2>
 <p class="small" style="position:relative;margin-bottom:12px;">Produtos selecionados</p>
 <button class="btn-ghost" onclick="showPage('shop')">COMPRAR AGORA</button>
 </div>
+
 <div class="section">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
 <h4>Categorias</h4>
@@ -466,6 +475,7 @@ p{font-size:11px;color:var(--text-muted);}
 </div>
 <div class="grid-3" id="homeCategories"></div>
 </div>
+
 <div class="section">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
 <h4>Destaques</h4>
@@ -475,6 +485,7 @@ p{font-size:11px;color:var(--text-muted);}
 </div>
 </section>
 
+<!-- RESTO DAS PÁGINAS CLIENTE -->
 <section class="page" id="categories">
 <div class="header">
 <span class="material-symbols-outlined" onclick="showPage('home')" style="cursor:pointer;">arrow_back</span>
@@ -537,88 +548,8 @@ p{font-size:11px;color:var(--text-muted);}
   <div class="summary-line"><span>Desconto</span><span id="discount">- R$ 0,00</span></div>
   <div class="summary-line"><span>Taxa</span><span id="tax">R$ 0,00</span></div>
   <div class="summary-line total"><span>Total</span><span id="cartTotal">R$ 0,00</span></div>
-  <button class="btn-primary" onclick="checkout()">Finalizar compra</button>
-</div>
-</section>
-
-<section class="page" id="payment">
-<div class="header">
-<span class="material-symbols-outlined" onclick="showPage('cart')" style="cursor:pointer;">arrow_back</span>
-<h3 style="font-size:14px;">Pagamento</h3>
-<div></div>
-</div>
-<div class="payment-wrap">
-  <div class="payment-box">
-    <h4>Resumo do pedido</h4>
-    <div id="paymentItems"></div>
-    <div class="payment-total"><span>Total</span><span id="paymentTotal">R$ 0,00</span></div>
-  </div>
-  <div class="payment-box">
-    <h4>Método de pagamento</h4>
-    <div class="payment-method active">
-      <div class="method-left">
-        <span class="material-symbols-outlined">diamond</span>
-        <span>Pix</span>
-      </div>
-      <div class="radio-dot"></div>
-    </div>
-  </div>
-  <button class="btn-primary" onclick="payWithPix()">
-    <span class="material-symbols-outlined">diamond</span>
-    Pagar com Pix
+  <button class="btn-primary" onclick="checkout()">Finalizar compra
   </button>
-  <p class="payment-terms">Ao finalizar a compra você concorda com<br>os Termos de Uso e Política de Privacidade</p>
-</div>
-</section>
-
-<section class="page" id="orders">
-<div class="header">
-<span class="material-symbols-outlined" onclick="showPage('home')" style="cursor:pointer;">arrow_back</span>
-<h3 style="font-size:14px;">Meus Pedidos</h3>
-<span class="material-symbols-outlined" onclick="alert('Fechar')" style="cursor:pointer;">close</span>
-</div>
-<div class="orders-filters" id="orderFilters">
-  <div class="order-filter active" onclick="filterOrders(this,'all')">Todos</div>
-  <div class="order-filter" onclick="filterOrders(this,'aguardando')">Aguardando</div>
-  <div class="order-filter" onclick="filterOrders(this,'concluido')">Concluídos</div>
-  <div class="order-filter" onclick="filterOrders(this,'cancelado')">Cancelados</div>
-</div>
-<div id="ordersList"></div>
-</section>
-
-<section class="page" id="orderDetail">
-<div class="header">
-<span class="material-symbols-outlined" onclick="goBack()" style="cursor:pointer;">arrow_back</span>
-<h3 id="orderDetailTitle" style="font-size:14px;">Pedido #12548</h3>
-<span class="material-symbols-outlined" onclick="alert('Mais opções em breve')" style="cursor:pointer;">more_vert</span>
-</div>
-<div class="receipt-wrap">
-  <div class="receipt-card">
-    <div class="receipt-row"><span class="receipt-label">Status</span><span class="status concluido" id="receiptStatus">Concluído</span></div>
-    <div class="receipt-row"><span class="receipt-label">Data</span><span class="receipt-value" id="receiptDate">12/05/2024 - 14:32</span></div>
-  </div>
-  <div class="receipt-card">
-    <div class="receipt-section-title">Produto</div>
-    <div class="receipt-row">
-      <div class="receipt-product">
-        <img id="receiptImg" src="https://via.placeholder.com/40">
-        <div>
-          <div style="font-size:13px;font-weight:600;" id="receiptProductName">520 Diamantes</div>
-          <div style="font-size:11px;color:var(--text-muted);" id="receiptProductSub">Free Fire</div>
-        </div>
-      </div>
-      <div class="receipt-value" id="receiptProductPrice">R$ 18,90</div>
-    </div>
-  </div>
-  <div class="receipt-card">
-    <div class="receipt-row"><span class="receipt-label">Total</span><span class="receipt-value" id="receiptTotal">R$ 18,90</span></div>
-  </div>
-  <div class="receipt-card">
-    <div class="receipt-section-title">Informações</div>
-    <div class="receipt-row"><span class="receipt-label">ID do jogo</span><span class="receipt-value" id="receiptGameId">123456789</span></div>
-    <div class="receipt-row"><span class="receipt-label">Método de pagamento</span><span class="receipt-value" id="receiptPayment">Pix</span></div>
-  </div>
-  <button class="btn-help" onclick="alert('Suporte em breve')">Precisa de ajuda?</button>
 </div>
 </section>
 
@@ -686,7 +617,7 @@ const db = firebase.firestore();
 const auth = firebase.auth();
 
 let currentUser=null,isAdmin=false,products=[],categories=[],subcategories=[],cart=JSON.parse(localStorage.getItem("cart"))||[],selectedTab='all',historyPage='home',currentPage='login';
-let currentCategory='',currentSubcategory='',currentFilter='all',isRegisterMode=false,selectedProduct=null,couponDiscount=0,currentOrder=null,orderFilter='all',allOrders=[],selectedOrder=null,chart=null;
+let currentCategory='',currentSubcategory='',currentFilter='all',isRegisterMode=false,selectedProduct=null,couponDiscount=0,currentOrder=null,orderFilter='all',allOrders=[],selectedOrder=null,chart=null,adminOrderFilter='all';
 
 setTimeout(() => {
   document.getElementById('loading').classList.add('hide');
@@ -706,6 +637,7 @@ function showPage(page){
   if(page=='adminProducts')loadAdminProducts();
   if(page=='adminCategories')loadAdminCategories();
   if(page=='adminSubcategories')loadAdminSubcategories();
+  if(page=='adminOrders')loadAllAdminOrders();
   document.querySelectorAll('.bottom-nav.nav-item').forEach((n,i)=>{
     n.classList.toggle('active',i==['home','shop','cart','orders','profile'].indexOf(page));
   });
@@ -715,6 +647,7 @@ function showAdminTab(tab){
   if(tab=='products') showPage('adminProducts');
   if(tab=='categories') showPage('adminCategories');
   if(tab=='subcategories') showPage('adminSubcategories');
+  if(tab=='orders') showPage('adminOrders');
 }
 
 function goBack(){
@@ -774,7 +707,7 @@ function loginAdmin(){
     return;
   }
   auth.signInWithEmailAndPassword(email, pass)
-  .catch(e=>{showAdminError(traduzErro(e.code));});
+ .catch(e=>{showAdminError(traduzErro(e.code));});
 }
 
 function traduzErro(code){
@@ -800,6 +733,7 @@ auth.onAuthStateChanged((user)=>{
         document.getElementById('adminAvatar2').src = user.photoURL || `https://i.pravatar.cc/100?u=${user.uid}`;
         document.getElementById('adminAvatar3').src = user.photoURL || `https://i.pravatar.cc/100?u=${user.uid}`;
         document.getElementById('adminAvatar4').src = user.photoURL || `https://i.pravatar.cc/100?u=${user.uid}`;
+        document.getElementById('adminAvatar5').src = user.photoURL || `https://i.pravatar.cc/100?u=${user.uid}`;
         showPage('admin');
       }else{
         document.getElementById('userName').innerText=user.displayName||user.email.split('@')[0];
@@ -919,11 +853,11 @@ function renderSalesChart(){
 }
 
 function renderAdminDashboardOrders(orders){
-  const lastOrders = orders.slice(0,10);
+  const lastOrders = orders.slice(0,5);
   document.getElementById('adminOrdersTable').innerHTML=`
-    <tr><th>ID</th><th>Cliente</th><th>Valor</th><th>Status</th></tr>
+    <tr><th>Pedido</th><th>Cliente</th><th>Total</th><th>Status</th></tr>
     ${lastOrders.map(o=>`
-      <tr>
+      <tr onclick="openOrderDetail('${o.id}')" style="cursor:pointer;">
         <td>#${o.id.slice(0,5)}</td>
         <td>${o.userName}</td>
         <td>R$ ${o.total.toFixed(2).replace('.',',')}</td>
@@ -931,6 +865,32 @@ function renderAdminDashboardOrders(orders){
       </tr>
     `).join('')}
   `;
+}
+
+// ADMIN PEDIDOS COMPLETO
+function loadAllAdminOrders(){
+  let filtered = allOrders;
+  if(adminOrderFilter!== 'all'){
+    filtered = allOrders.filter(o=>o.status === adminOrderFilter);
+  }
+  document.getElementById('adminOrdersFullTable').innerHTML=`
+    <tr><th>Pedido</th><th>Cliente</th><th>Total</th><th>Status</th></tr>
+    ${filtered.map(o=>`
+      <tr onclick="openOrderDetail('${o.id}')">
+        <td>#${o.id.slice(0,5)}</td>
+        <td>${o.userName}</td>
+        <td>R$ ${o.total.toFixed(2).replace('.',',')}</td>
+        <td><span class="status ${o.status}">${o.status}</span></td>
+      </tr>
+    `).join('')}
+  `;
+}
+
+function filterAdminOrders(el,status){
+  document.querySelectorAll('.admin-orders-filter').forEach(f=>f.classList.remove('active'));
+  el.classList.add('active');
+  adminOrderFilter = status;
+  loadAllAdminOrders();
 }
 
 // ADMIN PRODUTOS
@@ -1307,7 +1267,7 @@ function openSubcategory(sub){
   currentCategory = subcategories.find(s=>s.name==sub)?.category || '';
   document.getElementById('catDetailTitle').innerText=sub;
   showPage('categoryDetail');
-  ('#categoryDetail.cat-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('#categoryDetail.cat-tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('#categoryDetail.cat-tab')[0].classList.add('active');
   renderFilters();
   renderCategoryProducts();
@@ -1348,7 +1308,7 @@ function renderCategoryProducts(){
     return p.type && p.type.toLowerCase() == currentFilter;
   });
   document.getElementById('catDetailContent').innerHTML = filtered.length==0
-? '<p style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum produto encontrado</p>'
+   ? '<p style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum produto encontrado</p>'
     : filtered.map(p=>`
     <div class="list-item" onclick="openProduct('${p.id}')">
       <img src="${p.img||'https://via.placeholder.com/40'}">
