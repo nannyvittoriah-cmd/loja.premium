@@ -166,16 +166,14 @@ h2{font-size:18px;font-weight:600;margin-bottom:6px;}
 <section class="page" id="categories">
   <div class="header">
     <span class="material-symbols-outlined" onclick="showPage('home')">arrow_back</span>
-    <h3>categorias</h3>
+    <h3 id="catPageTitle">subcategorias</h3>
     <span class="material-symbols-outlined">search</span>
   </div>
   <div class="tabs" id="catTabs">
-    <div class="tab active" onclick="switchCatTab(this,'cats')">Categorias</div>
-    <div class="tab" onclick="switchCatTab(this,'subcats')">Subcategorias</div>
+    <div class="tab active" onclick="switchCatTab(this,'subcats')">Subcategorias</div>
     <div class="tab" onclick="switchCatTab(this,'products')">Produtos</div>
   </div>
-  <div id="catsList" style="padding:0 16px;"></div>
-  <div id="subcatsList" style="padding:0 16px;display:none;"></div>
+  <div id="subcatsList" style="padding:0 16px;"></div>
   <div id="productsList" style="padding:0 16px;display:none;"></div>
 </section>
 
@@ -241,6 +239,7 @@ const db = firebase.firestore();
 let user=null;
 let history='home';
 let cart = JSON.parse(localStorage.getItem("cart"))||[];
+let selectedCat = '';
 
 const categories = [
   {name:'Games', desc:'Produtos relacionados a jogos', img:'https://img.icons8.com/ios-filled/50/7c3aed/game-controller.png'},
@@ -335,7 +334,7 @@ auth.onAuthStateChanged(u=>{
 
 function renderHome(){
   document.getElementById('catGrid').innerHTML=categories.slice(0,4).map(c=>`
-    <div class="cat-card" onclick="openCat('${c.name}')">
+    <div class="cat-card" onclick="openCategory('${c.name}')">
       <img src="${c.img}">
       <p>${c.name}</p>
     </div>
@@ -352,25 +351,26 @@ function renderHome(){
 }
 
 function openCategories(){
+  selectedCat = '';
   showPage('categories');
-  renderCategories();
+  document.getElementById('catPageTitle').innerText = 'subcategorias';
   renderSubcategories();
   renderProducts();
-  switchCatTab(document.querySelector('#catTabs.tab'), 'cats');
+  switchCatTab(document.querySelectorAll('#catTabs.tab')[0], 'subcats');
 }
 
-function renderCategories(){
-  document.getElementById('catsList').innerHTML=categories.map(c=>`
-    <div class="list" onclick="openCat('${c.name}')">
-      <img src="${c.img}">
-      <div class="list-info"><h4>${c.name}</h4><div class="small">${c.desc}</div></div>
-      <span class="material-symbols-outlined" style="color:var(--text2);">chevron_right</span>
-    </div>
-  `).join('');
+function openCategory(cat){
+  selectedCat = cat;
+  showPage('categories');
+  document.getElementById('catPageTitle').innerText = cat.toLowerCase();
+  renderSubcategories();
+  renderProducts();
+  switchCatTab(document.querySelectorAll('#catTabs.tab')[0], 'subcats');
 }
 
 function renderSubcategories(){
-  document.getElementById('subcatsList').innerHTML=subcategories.map(s=>`
+  let filtered = selectedCat? subcategories.filter(s=>s.parent==selectedCat) : subcategories;
+  document.getElementById('subcatsList').innerHTML=filtered.map(s=>`
     <div class="list" onclick="openSubcatProducts('${s.name}')">
       <img src="${s.img}">
       <div class="list-info"><h4>${s.name}</h4><div class="small">${s.desc}</div></div>
@@ -380,7 +380,8 @@ function renderSubcategories(){
 }
 
 function renderProducts(){
-  document.getElementById('productsList').innerHTML=products.map(p=>`
+  let filtered = selectedCat? products.filter(p=>p.cat==selectedCat) : products;
+  document.getElementById('productsList').innerHTML=filtered.map(p=>`
     <div class="list" onclick="addCart(${p.id})">
       <img src="${p.img}">
       <div class="list-info"><h4>${p.name}</h4><div class="small">${p.desc}</div></div>
@@ -392,13 +393,12 @@ function renderProducts(){
 function switchCatTab(el,tab){
   document.querySelectorAll('#catTabs.tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
-  document.getElementById('catsList').style.display=tab=='cats'?'block':'none';
   document.getElementById('subcatsList').style.display=tab=='subcats'?'block':'none';
   document.getElementById('productsList').style.display=tab=='products'?'block':'none';
 }
 
 function openSubcatProducts(subcat){
-  switchCatTab(document.querySelectorAll('#catTabs.tab')[2], 'products');
+  switchCatTab(document.querySelectorAll('#catTabs.tab')[1], 'products');
   const filtered = products.filter(p=>p.subcat==subcat);
   document.getElementById('productsList').innerHTML=filtered.map(p=>`
     <div class="list" onclick="addCart(${p.id})">
