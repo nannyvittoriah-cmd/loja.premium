@@ -18,7 +18,7 @@
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
 body{background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
-.page{display:none;flex:1;}
+.page{display:none;flex:1;overflow-y:auto;}
 .page.active{display:block;}
 .hidden{display:none;}
 
@@ -229,6 +229,10 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
   align-items:center;
   padding:16px;
   gap:16px;
+  position:sticky;
+  top:0;
+  background:var(--bg);
+  z-index:10;
 }
 
 .page-header.material-symbols-outlined{
@@ -266,7 +270,7 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
 }
 
 .category-list{
-  padding:0 16px;
+  padding:0 16px 80px;
   display:flex;
   flex-direction:column;
   gap:12px;
@@ -290,6 +294,17 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
   display:flex;
   align-items:center;
   justify-content:center;
+  overflow:hidden;
+}
+
+.category-item.icon img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.category-item.info{
+  flex:1;
 }
 
 .category-item.info h5{
@@ -303,15 +318,22 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
   color:var(--text2);
 }
 
+.category-item.arrow{
+  color:var(--text2);
+}
+
 /* BOTTOM NAV */
 .bottom-nav{
-  position:sticky;
+  position:fixed;
   bottom:0;
+  left:0;
+  right:0;
   background:#0a0a0f;
   border-top:1px solid var(--border);
   display:flex;
   justify-content:space-around;
   padding:8px 0;
+  z-index:20;
 }
 
 .nav-item{
@@ -351,6 +373,7 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
   text-align:center;
   font-size:12px;
   color:#b3b3bd;
+  margin-bottom:60px;
 }
 </style>
 </head>
@@ -534,7 +557,7 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
   </div>
 
   <div class="category-list" id="categoriasTab">
-    <div class="category-item">
+    <div class="category-item" onclick="showPage('games')">
       <div class="icon" style="background:#7c3aed;">
         <span class="material-symbols-outlined">stadia_controller</span>
       </div>
@@ -542,6 +565,7 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
         <h5>Games</h5>
         <p>Produtos relacionados a jogos</p>
       </div>
+      <span class="material-symbols-outlined arrow">chevron_right</span>
     </div>
 
     <div class="category-item">
@@ -552,6 +576,7 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
         <h5>Streaming</h5>
         <p>Netflix, Spotify, Disney+ e mais</p>
       </div>
+      <span class="material-symbols-outlined arrow">chevron_right</span>
     </div>
 
     <div class="category-item">
@@ -562,6 +587,7 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
         <h5>Redes Sociais</h5>
         <p>Seguidores, curtidas e views</p>
       </div>
+      <span class="material-symbols-outlined arrow">chevron_right</span>
     </div>
 
     <div class="category-item">
@@ -572,6 +598,7 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
         <h5>Gift Cards</h5>
         <p>Cartões presente digitais</p>
       </div>
+      <span class="material-symbols-outlined arrow">chevron_right</span>
     </div>
 
     <div class="category-item">
@@ -582,6 +609,7 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
         <h5>Apps</h5>
         <p>Aplicativos premium</p>
       </div>
+      <span class="material-symbols-outlined arrow">chevron_right</span>
     </div>
 
     <div class="category-item">
@@ -592,6 +620,7 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
         <h5>VIP</h5>
         <p>Vantagens exclusivas</p>
       </div>
+      <span class="material-symbols-outlined arrow">chevron_right</span>
     </div>
   </div>
 
@@ -600,6 +629,135 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
       <div class="info">
         <h5>Em breve</h5>
         <p>Subcategorias serão adicionadas em breve</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="showPage('home')">
+      <span class="material-symbols-outlined">home</span>
+      <span>Home</span>
+    </div>
+    <div class="nav-item active" onclick="showPage('categories')">
+      <span class="material-symbols-outlined">storefront</span>
+      <span>Loja</span>
+    </div>
+    <div class="nav-item" style="position:relative;">
+      <span class="material-symbols-outlined">shopping_cart</span>
+      <span>Carrinho</span>
+      <span class="badge">1</span>
+    </div>
+    <div class="nav-item">
+      <span class="material-symbols-outlined">receipt_long</span>
+      <span>Pedidos</span>
+    </div>
+    <div class="nav-item">
+      <span class="material-symbols-outlined">person</span>
+      <span>Perfil</span>
+    </div>
+  </div>
+</section>
+
+<!-- GAMES -->
+<section class="page" id="games">
+  <div class="page-header">
+    <span class="material-symbols-outlined" onclick="showPage('categories')">arrow_back</span>
+    <h3>Games</h3>
+    <span class="material-symbols-outlined">search</span>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchGameTab('sub')">Subcategorias</div>
+    <div class="tab" onclick="switchGameTab('prod')">Produtos</div>
+  </div>
+
+  <div class="category-list" id="gamesSubTab">
+    <div class="category-item">
+      <div class="icon">
+        <img src="https://i.imgur.com/8Km9tLL.png" alt="Free Fire">
+      </div>
+      <div class="info">
+        <h5>Free Fire</h5>
+      </div>
+      <span class="material-symbols-outlined arrow">chevron_right</span>
+    </div>
+
+    <div class="category-item">
+      <div class="icon">
+        <img src="https://i.imgur.com/4ZQV7bG.png" alt="Roblox">
+      </div>
+      <div class="info">
+        <h5>Roblox</h5>
+      </div>
+      <span class="material-symbols-outlined arrow">chevron_right</span>
+    </div>
+
+    <div class="category-item">
+      <div class="icon">
+        <img src="https://i.imgur.com/3ZbRU7m.png" alt="Fortnite">
+      </div>
+      <div class="info">
+        <h5>Fortnite</h5>
+      </div>
+      <span class="material-symbols-outlined arrow">chevron_right</span>
+    </div>
+
+    <div class="category-item">
+      <div class="icon">
+        <img src="https://i.imgur.com/7xYJQzL.png" alt="Valorant">
+      </div>
+      <div class="info">
+        <h5>Valorant</h5>
+      </div>
+      <span class="material-symbols-outlined arrow">chevron_right</span>
+    </div>
+
+    <div class="category-item">
+      <div class="icon">
+        <img src="https://i.imgur.com/5Z4K8bB.png" alt="Minecraft">
+      </div>
+      <div class="info">
+        <h5>Minecraft</h5>
+      </div>
+      <span class="material-symbols-outlined arrow">chevron_right</span>
+    </div>
+
+    <div class="category-item">
+      <div class="icon">
+        <img src="https://i.imgur.com/9K3Qm3L.png" alt="Brawl Stars">
+      </div>
+      <div class="info">
+        <h5>Brawl Stars</h5>
+      </div>
+      <span class="material-symbols-outlined arrow">chevron_right</span>
+    </div>
+
+    <div class="category-item">
+      <div class="icon">
+        <img src="https://i.imgur.com/2ZQK9bM.png" alt="Clash Royale">
+      </div>
+      <div class="info">
+        <h5>Clash Royale</h5>
+      </div>
+      <span class="material-symbols-outlined arrow">chevron_right</span>
+    </div>
+
+    <div class="category-item">
+      <div class="icon">
+        <img src="https://i.imgur.com/6QZb8mL.png" alt="League of Legends">
+      </div>
+      <div class="info">
+        <h5>League of Legends</h5>
+      </div>
+      <span class="material-symbols-outlined arrow">chevron_right</span>
+    </div>
+  </div>
+
+  <div class="category-list hidden" id="gamesProdTab">
+    <div class="category-item">
+      <div class="info">
+        <h5>Em breve</h5>
+        <p>Produtos dessa categoria serão adicionados em breve</p>
       </div>
     </div>
   </div>
@@ -662,7 +820,6 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// Expõe funções pro HTML conseguir chamar
 window.toggleForm = function(){
   document.getElementById('loginForm').classList.toggle('hidden');
   document.getElementById('registerForm').classList.toggle('hidden');
@@ -680,20 +837,34 @@ window.showPage = function(p){
 
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   if(p === 'home') document.querySelectorAll('.nav-item')[0].classList.add('active');
-  if(p === 'categories') document.querySelectorAll('.nav-item')[1].classList.add('active');
+  if(p === 'categories' || p === 'games') document.querySelectorAll('.nav-item')[1].classList.add('active');
 }
 
 window.switchTab = function(tab){
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#categories.tab').forEach(t => t.classList.remove('active'));
   document.getElementById('categoriasTab').classList.add('hidden');
   document.getElementById('subcategoriasTab').classList.add('hidden');
 
   if(tab === 'categorias'){
-    document.querySelectorAll('.tab')[0].classList.add('active');
+    document.querySelectorAll('#categories.tab')[0].classList.add('active');
     document.getElementById('categoriasTab').classList.remove('hidden');
   } else {
-    document.querySelectorAll('.tab')[1].classList.add('active');
+    document.querySelectorAll('#categories.tab')[1].classList.add('active');
     document.getElementById('subcategoriasTab').classList.remove('hidden');
+  }
+}
+
+window.switchGameTab = function(tab){
+  document.querySelectorAll('#games.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('gamesSubTab').classList.add('hidden');
+  document.getElementById('gamesProdTab').classList.add('hidden');
+
+  if(tab === 'sub'){
+    document.querySelectorAll('#games.tab')[0].classList.add('active');
+    document.getElementById('gamesSubTab').classList.remove('hidden');
+  } else {
+    document.querySelectorAll('#games.tab')[1].classList.add('active');
+    document.getElementById('gamesProdTab').classList.remove('hidden');
   }
 }
 
