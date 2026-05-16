@@ -29,7 +29,7 @@ button{cursor:pointer;position:relative;z-index:10;}
 .login-logo span{font-size:28px;color:var(--gold);filter:drop-shadow(0 0 10px rgba(251,191,36,0.5));}
 .input-box{display:flex;align-items:center;gap:10px;background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:0 14px;height:46px;margin-bottom:14px;}
 .input-box input{background:transparent;color:var(--text);flex:1;font-size:13px;}
-.btn-primary{width:100%;height:46px;background:linear-gradient(135deg,var(--purple),#7c3aed);border-radius:12px;color:#fff;font-weight:700;font-size:14px;box-shadow:var(--glow);}
+.btn-primary{width:100%;height:46px;background:linear-gradient(135deg,var(--purple),#7c3aed);border-radius:12px;color:#fff;font-weight:700;font-size:14px;box-shadow:var(--glow);display:flex;align-items:center;justify-content:center;gap:6px;}
 .btn-outline{width:100%;height:46px;background:transparent;border:1px solid var(--purple);border-radius:12px;color:var(--purple);font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;}
 .error-msg{color:#ef4444;font-size:11px;margin-top:-10px;margin-bottom:10px;display:none;}
 
@@ -139,6 +139,19 @@ p{font-size:11px;color:var(--text-muted);}
 .summary-line{display:flex;justify-content:space-between;margin-bottom:10px;font-size:13px;color:var(--text-muted);}
 .summary-line.total{font-size:16px;font-weight:700;color:var(--text);margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
 .cart-summary.btn-primary{margin-top:16px;background:var(--purple);}
+
+/* Payment Page */
+.payment-wrap{padding:16px;}
+.payment-box{background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;}
+.payment-box h4{font-size:13px;font-weight:700;margin-bottom:12px;}
+.payment-item{display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px;}
+.payment-item span:first-child{display:flex;align-items:center;gap:6px;}
+.payment-total{display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:14px;font-weight:700;}
+.payment-method{display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--card);border:1px solid var(--purple);border-radius:10px;}
+.method-left{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;}
+.radio-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--purple);position:relative;}
+.radio-dot::after{content:'';position:absolute;inset:3px;background:var(--purple);border-radius:50%;}
+.payment-terms{font-size:10px;color:var(--text-muted);text-align:center;margin-top:12px;line-height:1.4;}
 </style>
 </head>
 <body>
@@ -305,6 +318,46 @@ p{font-size:11px;color:var(--text-muted);}
 </div>
 </section>
 
+<section class="page" id="payment">
+<div class="header">
+<span class="material-symbols-outlined" onclick="showPage('cart')" style="cursor:pointer;">arrow_back</span>
+<h3 style="font-size:14px;">Pagamento</h3>
+<div></div>
+</div>
+
+<div class="payment-wrap">
+  <div class="payment-box">
+    <h4>Resumo do pedido</h4>
+    <div id="paymentItems"></div>
+    <div class="payment-total">
+      <span>Total</span>
+      <span id="paymentTotal">R$ 0,00</span>
+    </div>
+  </div>
+
+  <div class="payment-box">
+    <h4>Método de pagamento</h4>
+    <div class="payment-method active">
+      <div class="method-left">
+        <span class="material-symbols-outlined">diamond</span>
+        <span>Pix</span>
+      </div>
+      <div class="radio-dot"></div>
+    </div>
+  </div>
+
+  <button class="btn-primary" onclick="payWithPix()">
+    <span class="material-symbols-outlined">diamond</span>
+    Pagar com Pix
+  </button>
+
+  <p class="payment-terms">
+    Ao finalizar a compra você concorda com<br>
+    os Termos de Uso e Política de Privacidade
+  </p>
+</div>
+</section>
+
 <section class="page" id="orders">
 <div class="header">
 <span class="material-symbols-outlined" onclick="showPage('home')" style="cursor:pointer;">arrow_back</span>
@@ -376,7 +429,7 @@ const db = firebase.firestore();
 const auth = firebase.auth();
 
 let currentUser=null,isAdmin=false,products=[],categories=[],cart=JSON.parse(localStorage.getItem("cart"))||[],selectedTab='all',historyPage='home',currentPage='login';
-let currentCategory='',currentSubcategory='',currentFilter='all',isRegisterMode=false,selectedProduct=null,couponDiscount=0;
+let currentCategory='',currentSubcategory='',currentFilter='all',isRegisterMode=false,selectedProduct=null,couponDiscount=0,currentOrder=null;
 
 const subcategoriesData = {
   "Games": {
@@ -505,7 +558,7 @@ function loadOrders(){
   if(!currentUser)return;
   const q=isAdmin?db.collection("orders"):db.collection("orders").where("userId","==",currentUser.uid);
   q.orderBy("createdAt","desc").onSnapshot((snap)=>{
-    const orders=[];snap.forEach(doc=>orders.push({id:doc.id,...doc.data()}));
+        const orders=[];snap.forEach(doc=>orders.push({id:doc.id,...doc.data()}));
     renderOrders(orders);
     if(isAdmin)renderAdminOrders(orders);
   });
@@ -530,14 +583,57 @@ function addProduct(){
 
 function checkout(){
   if(cart.length==0)return alert('Carrinho vazio');
+
   const subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
   const total=subtotal-couponDiscount;
+
+  currentOrder = {
+    items: [...cart],
+    subtotal,
+    discount: couponDiscount,
+    total
+  };
+
+  showPage('payment');
+  renderPayment();
+}
+
+function renderPayment(){
+  if(!currentOrder) return;
+
+  document.getElementById('paymentItems').innerHTML = currentOrder.items.map(item=>`
+    <div class="payment-item">
+      <span><span class="material-symbols-outlined" style="font-size:16px;color:var(--purple);">diamond</span>${item.name}</span>
+      <span>R$ ${(item.price*item.qty).toFixed(2).replace('.',',')}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('paymentTotal').innerText = 'R$ ' + currentOrder.total.toFixed(2).replace('.',',');
+}
+
+function payWithPix(){
+  if(!currentOrder) return;
+
   db.collection("orders").add({
-    userId:currentUser.uid,userName:currentUser.displayName||currentUser.email,
-    items:cart,subtotal,discount:couponDiscount,total,
-    status:'pending',createdAt:firebase.firestore.FieldValue.serverTimestamp()
+    userId:currentUser.uid,
+    userName:currentUser.displayName||currentUser.email,
+    items:currentOrder.items,
+    subtotal:currentOrder.subtotal,
+    discount:currentOrder.discount,
+    total:currentOrder.total,
+    paymentMethod: 'pix',
+    status:'pending',
+    createdAt:firebase.firestore.FieldValue.serverTimestamp()
   }).then(()=>{
-    cart=[];couponDiscount=0;localStorage.removeItem("cart");alert('Pedido criado!');showPage('orders');updateCartBadge();
+    alert('Pedido criado! QR Code Pix em breve.');
+    cart=[];
+    couponDiscount=0;
+    currentOrder=null;
+    localStorage.removeItem("cart");
+    updateCartBadge();
+    showPage('orders');
+  }).catch(e=>{
+    alert('Erro ao criar pedido: ' + e.message);
   });
 }
 
@@ -647,7 +743,7 @@ function renderCategoryProducts(){
   });
 
   document.getElementById('catDetailContent').innerHTML = filtered.length==0
-   ? '<p style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum produto encontrado</p>'
+  ? '<p style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum produto encontrado</p>'
     : filtered.map(p=>`
     <div class="list-item" onclick="openProduct('${p.id}')">
       <img src="${p.img||'https://via.placeholder.com/40'}">
