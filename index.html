@@ -296,6 +296,8 @@ p{font-size:11px;color:var(--text-muted);}
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
+console.log("1. Script iniciou");
+
 const firebaseConfig = {
   apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
   authDomain: "premium-store-aa58b.firebaseapp.com",
@@ -306,12 +308,16 @@ const firebaseConfig = {
 };
 const ADMIN_EMAIL = "nannyhvittoriah@gmail.com";
 
+console.log("2. Firebase config carregada");
+
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
 
+console.log("3. Firebase inicializado");
+
 let currentUser=null,isAdmin=false,products=[],categories=[],cart=JSON.parse(localStorage.getItem("cart"))||[],selectedTab='all',historyPage='home',currentPage='login';
-let currentCategory='',currentSubcategory='',currentFilter='all',isRegisterMode=false;
+let currentCategory='',currentSubcategory='',currentFilter='all',isRegisterMode=false,selectedProduct=null;
 
 const subcategoriesData = {
   "Games": {
@@ -323,6 +329,14 @@ const subcategoriesData = {
     }
   }
 };
+
+console.log("4. Variáveis declaradas");
+
+// Timeout de segurança - se travar, libera em 3s
+setTimeout(() => {
+  document.getElementById('loading').classList.add('hide');
+  console.log("5. Timeout - loader removido");
+}, 3000);
 
 function showPage(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -366,9 +380,9 @@ function registerEmail(){
   if(!email.includes('@')){showError('Email inválido'); return;}
   if(pass.length < 6){showError('Senha deve ter 6+ caracteres'); return;}
   auth.createUserWithEmailAndPassword(email, pass)
- .then((cred)=>cred.user.updateProfile({displayName: name}))
- .then(()=>{showError(''); alert('Conta criada com sucesso!'); toggleMode();})
- .catch(e=>{showError(traduzErro(e.code));});
+.then((cred)=>cred.user.updateProfile({displayName: name}))
+.then(()=>{showError(''); alert('Conta criada com sucesso!'); toggleMode();})
+.catch(e=>{showError(traduzErro(e.code));});
 }
 
 function loginEmail(){
@@ -393,6 +407,7 @@ function logout(){
 }
 
 auth.onAuthStateChanged((user)=>{
+  console.log("6. Auth state mudou", user);
   document.getElementById('loading').classList.add('hide');
   if(user){
     currentUser=user;
@@ -404,7 +419,13 @@ auth.onAuthStateChanged((user)=>{
     loadProducts();
     loadOrders();
     updateCartBadge();
-  }else{showPage('login');}
+  }else{
+    showPage('login');
+  }
+}, (error)=>{
+  console.error("Erro Firebase:", error);
+  document.getElementById('loading').classList.add('hide');
+  showPage('login');
 });
 
 function loadProducts(){
@@ -412,6 +433,8 @@ function loadProducts(){
     products=[];snap.forEach(doc=>products.push({id:doc.id,...doc.data()}));
     categories=[...new Set(products.map(p=>p.category))];
     renderHome();renderShop();renderCategoriesList();
+  }, (error)=>{
+    console.error("Erro ao carregar produtos:", error);
   });
 }
 
@@ -581,9 +604,28 @@ function renderCategoryInfo(){
 }
 
 function renderShop(){
-  document.getElementById('shopTabs').innerHTML='<div class="tab active" onclick="setTab(this,\'all\')">Todos</div>'+categories.map(c=>`<div class="tab" onclick="setTab(this,'${c}')">${c}</div>`).join('');
-  document.getElementById('shopProducts').innerHTML=products.filter(p=>selectedTab=='all'||p.category==selectedTab).map(p=>`<div class="list-item"><img src="${p.img}"><div class="list-item-info"><h4>${p.name}</h4><div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div></div><button class="btn-cart" onclick="add
- function setTab(el,tab){
+  document.getElementById('shopTabs').innerHTML='<div class="tab active" onclick="setTab(this,\'all\')">Todos</div>'+
+    categories.map(c=>`<div class="tab" onclick="setTab(this,'${c}')">${c}</div>`).join('');
+  
+  const filtered = selectedTab=='all'?products:products.filter(p=>p.category==selectedTab);
+  document.getElementById('shopProducts').innerHTML = filtered.map(p=>`
+    <div class="list-item" onclick="openProduct('${p.id}')">
+      <img src="${p.img||'https://via.placeholder.com/100'}">
+      <div class="list-item-info">
+        <h4>${p.name}</h4>
+        <div class="small">${p.subcategory || p.category}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
+        <button class="btn-cart" onclick="event.stopPropagation();addToCart('${p.id}')">
+          <span class="material-symbols-outlined" style="font-size:18px;">add_shopping_cart</span>
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function setTab(el,tab){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
   selectedTab=tab;
@@ -595,7 +637,7 @@ function openProduct(id){
   document.getElementById('productDetail').innerHTML=`
     <div style="padding:16px;">
       <img src="${selectedProduct.img}" style="width:100%;border-radius:12px;border:1px solid var(--border);margin-bottom:12px;">
-      <h2 style="margin-top:12px;font-size:16px;font-weight:700;">${selectedProduct.name}</h2>
+      <h2 style="font-size:16px;font-weight:700;">${selectedProduct.name}</h2>
       <p style="font-size:11px;color:var(--text-muted);margin:6px 0;">${selectedProduct.category} ${selectedProduct.subcategory ? '• ' + selectedProduct.subcategory : ''}</p>
       <h3 style="color:var(--gold);font-size:22px;margin:12px 0;">R$ ${selectedProduct.price.toFixed(2).replace('.',',')}</h3>
       <p style="font-size:12px;color:var(--text-muted);line-height:1.4;margin-bottom:16px;">
