@@ -26,8 +26,8 @@ h2{font-size:18px;font-weight:600;margin-bottom:6px;}
 .input-group{position:relative;margin-bottom:14px;}
 .input-group input{width:100%;height:42px;background:rgba(26,26,33,0.8);border:1px solid var(--border);border-radius:10px;padding:0 40px 0 40px;color:var(--text);font-size:13px;outline:none;}
 .input-group input:focus{border-color:var(--purple);box-shadow:0 0 0 2px rgba(124,58,237,0.2);}
-.input-group.icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text2);font-size:18px;}
-.input-group.toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--text2);cursor:pointer;font-size:18px;}
+.icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text2);font-size:18px;}
+.toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--text2);cursor:pointer;font-size:18px;}
 .input-group input::placeholder{color:var(--text2);font-size:11px;}
 .btn{width:100%;height:42px;background:transparent;border:1px solid var(--purple);border-radius:10px;color:var(--purple);font-size:13px;font-weight:600;cursor:pointer;transition:0.2s;}
 .btn:hover{background:var(--purple);color:#fff;box-shadow:0 0 20px rgba(124,58,237,0.4);}
@@ -166,14 +166,16 @@ h2{font-size:18px;font-weight:600;margin-bottom:6px;}
 <section class="page" id="categories">
   <div class="header">
     <span class="material-symbols-outlined" onclick="showPage('home')">arrow_back</span>
-    <h3>subcategorias</h3>
+    <h3>categorias</h3>
     <span class="material-symbols-outlined">search</span>
   </div>
   <div class="tabs" id="catTabs">
-    <div class="tab active" onclick="switchCatTab(this,'subcats')">Subcategorias</div>
+    <div class="tab active" onclick="switchCatTab(this,'cats')">Categorias</div>
+    <div class="tab" onclick="switchCatTab(this,'subcats')">Subcategorias</div>
     <div class="tab" onclick="switchCatTab(this,'products')">Produtos</div>
   </div>
-  <div id="subcatsList" style="padding:0 16px;"></div>
+  <div id="catsList" style="padding:0 16px;"></div>
+  <div id="subcatsList" style="padding:0 16px;display:none;"></div>
   <div id="productsList" style="padding:0 16px;display:none;"></div>
 </section>
 
@@ -239,15 +241,12 @@ const db = firebase.firestore();
 let user=null;
 let history='home';
 let cart = JSON.parse(localStorage.getItem("cart"))||[];
-let currentSubcat = '';
 
 const categories = [
   {name:'Games', desc:'Produtos relacionados a jogos', img:'https://img.icons8.com/ios-filled/50/7c3aed/game-controller.png'},
   {name:'Streaming', desc:'Netflix, Spotify, Disney+ e mais', img:'https://img.icons8.com/ios-filled/50/7c3aed/youtube-play.png'},
   {name:'Redes Sociais', desc:'Seguidores, curtidas e views', img:'https://img.icons8.com/ios-filled/50/7c3aed/instagram-new.png'},
-  {name:'Gift Cards', desc:'Cartões presente digitais', img:'https://img.icons8.com/ios-filled/50/7c3aed/wallet.png'},
-  {name:'Apps', desc:'Aplicativos premium', img:'https://img.icons8.com/ios-filled/50/7c3aed/app.png'},
-  {name:'VIP', desc:'Vantagens exclusivas', img:'https://img.icons8.com/ios-filled/50/7c3aed/star.png'}
+  {name:'Gift Cards', desc:'Cartões presente digitais', img:'https://img.icons8.com/ios-filled/50/7c3aed/wallet.png'}
 ];
 
 const subcategories = [
@@ -256,22 +255,19 @@ const subcategories = [
   {name:'Fortnite', desc:'V-Bucks', img:'https://img.icons8.com/color/48/fortnite.png', parent:'Games'},
   {name:'Valorant', desc:'VP e skins', img:'https://img.icons8.com/color/48/valorant.png', parent:'Games'},
   {name:'Minecraft', desc:'Minecoins', img:'https://img.icons8.com/color/48/minecraft-logo.png', parent:'Games'},
-  {name:'Brawl Stars', desc:'Gemas', img:'https://img.icons8.com/color/48/brawl-stars.png', parent:'Games'},
-  {name:'Clash Royale', desc:'Gemas', img:'https://img.icons8.com/color/48/clash-royale.png', parent:'Games'},
-  {name:'League of Legends', desc:'Riot Points', img:'https://img.icons8.com/color/48/league-of-legends.png', parent:'Games'}
+  {name:'Netflix', desc:'Contas premium', img:'https://img.icons8.com/color/48/netflix.png', parent:'Streaming'},
+  {name:'Spotify', desc:'Premium individual', img:'https://img.icons8.com/color/48/spotify.png', parent:'Streaming'}
 ];
 
 const products = [
   {id:1,name:'ROBUX 400',desc:'400 Robux',price:15.90,img:'https://img.icons8.com/color/48/roblox.png',subcat:'Roblox',cat:'Games'},
   {id:2,name:'ROBUX 800',desc:'800 Robux',price:29.90,img:'https://img.icons8.com/color/48/roblox.png',subcat:'Roblox',cat:'Games'},
   {id:3,name:'FREE FIRE 1000',desc:'1000 Diamantes',price:29.90,img:'https://img.icons8.com/color/48/free-fire.png',subcat:'Free Fire',cat:'Games'},
-  {name:'FREE FIRE 5000',desc:'5000 Diamantes',price:129.90,img:'https://img.icons8.com/color/48/free-fire.png',subcat:'Free Fire',cat:'Games',id:4},
-  {id:5,name:'V-BUCKS 1000',desc:'1000 V-Bucks',price:39.90,img:'https://img.icons8.com/color/48/fortnite.png',subcat:'Fortnite',cat:'Games'},
-  {id:6,name:'VP 1250',desc:'1250 VP',price:49.90,img:'https://img.icons8.com/color/48/valorant.png',subcat:'Valorant',cat:'Games'},
-  {id:7,name:'MINECRAFT 1720',desc:'1720 Minecoins',price:59.90,img:'https://img.icons8.com/color/48/minecraft-logo.png',subcat:'Minecraft',cat:'Games'},
-  {id:8,name:'BRAWL STARS 1700',desc:'1700 Gemas',price:79.90,img:'https://img.icons8.com/color/48/brawl-stars.png',subcat:'Brawl Stars',cat:'Games'},
-  {id:9,name:'CLASH ROYALE 1200',desc:'1200 Gemas',price:49.90,img:'https://img.icons8.com/color/48/clash-royale.png',subcat:'Clash Royale',cat:'Games'},
-  {id:10,name:'LOL 1380 RP',desc:'1380 RP',price:49.90,img:'https://img.icons8.com/color/48/league-of-legends.png',subcat:'League of Legends',cat:'Games'}
+  {id:4,name:'FREE FIRE 5000',desc:'5000 Diamantes',price:129.90,img:'https://img.icons8.com/color/48/free-fire.png',subcat:'Free Fire',cat:'Games'},
+  {id:5,name:'FORTNITE 1000',desc:'1000 V-Bucks',price:39.90,img:'https://img.icons8.com/color/48/fortnite.png',subcat:'Fortnite',cat:'Games'},
+  {id:6,name:'VALORANT 1250',desc:'1250 VP',price:49.90,img:'https://img.icons8.com/color/48/valorant.png',subcat:'Valorant',cat:'Games'},
+  {id:7,name:'NETFLIX 1 MÊS',desc:'Conta premium',price:17.90,img:'https://img.icons8.com/color/48/netflix.png',subcat:'Netflix',cat:'Streaming'},
+  {id:8,name:'SPOTIFY 1 MÊS',desc:'Premium individual',price:10.90,img:'https://img.icons8.com/color/48/spotify.png',subcat:'Spotify',cat:'Streaming'}
 ];
 
 function showPage(p){
@@ -357,9 +353,20 @@ function renderHome(){
 
 function openCategories(){
   showPage('categories');
+  renderCategories();
   renderSubcategories();
   renderProducts();
-  switchCatTab(document.querySelector('#catTabs.tab'), 'subcats');
+  switchCatTab(document.querySelector('#catTabs.tab'), 'cats');
+}
+
+function renderCategories(){
+  document.getElementById('catsList').innerHTML=categories.map(c=>`
+    <div class="list" onclick="openCat('${c.name}')">
+      <img src="${c.img}">
+      <div class="list-info"><h4>${c.name}</h4><div class="small">${c.desc}</div></div>
+      <span class="material-symbols-outlined" style="color:var(--text2);">chevron_right</span>
+    </div>
+  `).join('');
 }
 
 function renderSubcategories(){
@@ -385,14 +392,13 @@ function renderProducts(){
 function switchCatTab(el,tab){
   document.querySelectorAll('#catTabs.tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
+  document.getElementById('catsList').style.display=tab=='cats'?'block':'none';
   document.getElementById('subcatsList').style.display=tab=='subcats'?'block':'none';
   document.getElementById('productsList').style.display=tab=='products'?'block':'none';
 }
 
 function openSubcatProducts(subcat){
-  currentSubcat = subcat;
-  switchCatTab(document.querySelectorAll('#catTabs.tab')[1], 'products');
-
+  switchCatTab(document.querySelectorAll('#catTabs.tab')[2], 'products');
   const filtered = products.filter(p=>p.subcat==subcat);
   document.getElementById('productsList').innerHTML=filtered.map(p=>`
     <div class="list" onclick="addCart(${p.id})">
