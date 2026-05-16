@@ -4,301 +4,330 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Prime Store</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0"/>
 <style>
 :root{
-  --bg:#060609;
-  --card:#131319;
-  --border:#26262f;
-  --purple:#7c3aed;
-  --text:#f5f5f7;
-  --text2:#8a8a93;
+  --bg:#060609;--card:#131319;--border:#26262f;--purple:#7c3aed;--text:#f5f5f7;--text2:#8a8a93;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
-body{
-  background:radial-gradient(circle at 50% 0%, rgba(124,58,237,0.12), transparent 50%), var(--bg);
-  color:var(--text);
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  font-size:13px;
-}
+body{background:var(--bg);color:var(--text);font-size:12px;}
+.page{display:none;min-height:100vh;padding-bottom:70px;}
+.page.active{display:block;}
 
-.login-card{
-  width:100%;
-  max-width:320px;
-  background:rgba(19,19,25,0.6);
-  backdrop-filter:blur(20px);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:28px 24px;
-  box-shadow:0 8px 32px rgba(0,0,0,0.4);
+.header{
+  padding:14px 16px;display:flex;justify-content:space-between;align-items:center;
 }
+.header h3{font-size:14px;font-weight:600;}
+.header.right{display:flex;align-items:center;gap:14px;}
+.header.right span{cursor:pointer;font-size:20px;}
 
-.logo{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  margin-bottom:28px;
-}
-.logo svg{width:28px;height:28px;}
-.logo h1{font-size:18px;font-weight:600;letter-spacing:0.5px;}
-.logo span{font-size:11px;color:var(--text2);letter-spacing:2px;display:block;}
-
-h2{font-size:18px;font-weight:600;margin-bottom:6px;}
-.subtitle{font-size:12px;color:var(--text2);margin-bottom:24px;}
-
-.input-group{
-  position:relative;
-  margin-bottom:14px;
-}
-.input-group input{
-  width:100%;
-  height:42px;
+.search{
+  margin:0 16px 16px;
   background:rgba(26,26,33,0.8);
   border:1px solid var(--border);
   border-radius:10px;
-  padding:0 40px 0 40px;
-  color:var(--text);
-  font-size:13px;
-  outline:none;
-  transition:0.2s;
+  height:38px;
+  display:flex;
+  align-items:center;
+  padding:0 12px;
+  gap:8px;
 }
-.input-group input:focus{
-  border-color:var(--purple);
-  box-shadow:0 0 0 2px rgba(124,58,237,0.2);
+.search input{
+  background:transparent;border:none;outline:none;color:var(--text);
+  flex:1;font-size:12px;
 }
-.input-group .icon{
-  position:absolute;
-  left:12px;
-  top:50%;
-  transform:translateY(-50%);
-  color:var(--text2);
-  font-size:18px;
-}
-.input-group .toggle{
-  position:absolute;
-  right:12px;
-  top:50%;
-  transform:translateY(-50%);
-  color:var(--text2);
-  cursor:pointer;
-  font-size:18px;
-}
-.input-group input::placeholder{color:var(--text2);font-size:12px;}
+.search input::placeholder{color:var(--text2);font-size:11px;}
 
-.forgot{text-align:right;margin-bottom:20px;}
-.forgot a{color:var(--purple);font-size:12px;text-decoration:none;}
-
-.btn{
-  width:100%;
-  height:42px;
-  background:transparent;
-  border:1px solid var(--purple);
-  border-radius:10px;
-  color:var(--purple);
-  font-size:13px;
-  font-weight:600;
-  cursor:pointer;
-  transition:0.2s;
+.banner{
+  margin:0 16px 20px;
+  height:140px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#1e1b4b,#7c3aed);
+  padding:20px;
+  position:relative;
+  overflow:hidden;
 }
-.btn:hover{
-  background:var(--purple);
-  color:#fff;
-  box-shadow:0 0 20px rgba(124,58,237,0.4);
+.banner h2{font-size:16px;font-weight:700;margin-bottom:4px;}
+.banner p{font-size:11px;color:#d1d5db;}
+.banner img{
+  position:absolute;right:10px;bottom:0;height:120px;
 }
 
-.divider{height:1px;background:var(--border);margin:20px 0;}
-.signup{text-align:center;font-size:12px;color:var(--text2);}
-.signup a{color:var(--purple);text-decoration:none;font-weight:500;}
-.hidden{display:none;}
-.error{color:#ef4444;font-size:11px;margin:-10px 0 12px;display:none;}
+.section-head{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 16px;margin-bottom:12px;
+}
+.section-head h4{font-size:13px;font-weight:600;}
+.section-head a{font-size:11px;color:var(--purple);text-decoration:none;}
+
+.grid-cat{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+  padding:0 16px;margin-bottom:24px;
+}
+.cat-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:12px 8px;text-align:center;cursor:pointer;
+}
+.cat-card img{width:32px;height:32px;margin-bottom:6px;}
+.cat-card p{font-size:10px;color:var(--text2);}
+
+.grid-prod{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+  padding:0 16px;
+}
+.prod-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:10px;cursor:pointer;
+}
+.prod-card img{
+  width:100%;height:60px;object-fit:contain;margin-bottom:8px;
+}
+.prod-card h5{font-size:11px;font-weight:600;margin-bottom:2px;}
+.prod-card p{font-size:10px;color:var(--text2);margin-bottom:4px;}
+.prod-card.price{font-size:12px;font-weight:700;color:#fff;}
+
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(19,19,25,0.95);backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-around;padding:8px 0;
+}
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  color:var(--text2);font-size:10px;cursor:pointer;
+}
+.nav-item.active{color:var(--purple);}
+.nav-item span{font-size:22px;}
+.badge{
+  position:absolute;background:#ef4444;color:#fff;font-size:9px;
+  border-radius:50%;width:16px;height:16px;display:none;
+  align-items:center;justify-content:center;top:4px;right:16px;
+}
 </style>
 </head>
 <body>
 
-<div class="login-card">
-  
-  <div class="logo">
-    <svg viewBox="0 0 24 24" fill="none">
-      <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#7c3aed"/>
-      <path d="M2 17L12 22L22 17" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"/>
-      <path d="M2 12L12 17L22 12" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"/>
-    </svg>
+<!-- HOME -->
+<section class="page active" id="home">
+  <div class="header">
     <div>
-      <h1>PRIME</h1>
-      <span>STORE</span>
+      <span class="material-symbols-outlined">menu</span>
+    </div>
+    <h3>Olá, Gabriel 👋</h3>
+    <div class="right">
+      <span>Ver saldo</span>
+      <span class="material-symbols-outlined" onclick="showPage('cart')" style="position:relative;">
+        shopping_cart
+        <span class="badge" id="cartBadge">0</span>
+      </span>
     </div>
   </div>
 
-  <!-- LOGIN -->
-  <div id="loginForm">
-    <h2>Bem-vindo de volta!</h2>
-    <p class="subtitle">Faça login para continuar</p>
-    
-    <div class="input-group">
-      <span class="material-symbols-outlined icon">mail</span>
-      <input type="email" id="loginEmail" placeholder="seu@email.com">
-    </div>
-    
-    <div class="input-group">
-      <span class="material-symbols-outlined icon">lock</span>
-      <input type="password" id="loginPass" placeholder="Senha">
-      <span class="material-symbols-outlined toggle" onclick="togglePass('loginPass',this)">visibility_off</span>
-    </div>
-    
-    <p class="error" id="loginError"></p>
-    
-    <div class="forgot">
-      <a href="#" onclick="resetPass()">Esqueci minha senha</a>
-    </div>
-    
-    <button class="btn" onclick="login()">Entrar</button>
-    
-    <div class="divider"></div>
-    
-    <div class="signup">
-      Ainda não tem conta? <a href="#" onclick="toggleForm()">Criar conta</a>
-    </div>
+  <div class="search">
+    <span class="material-symbols-outlined" style="color:var(--text2);font-size:18px;">search</span>
+    <input type="text" id="searchInput" placeholder="Buscar produtos..." oninput="search()">
   </div>
 
-  <!-- CADASTRO -->
-  <div id="registerForm" class="hidden">
-    <h2>Criar conta</h2>
-    <p class="subtitle">Preencha seus dados</p>
-    
-    <div class="input-group">
-      <span class="material-symbols-outlined icon">person</span>
-      <input type="text" id="regName" placeholder="Seu nome">
-    </div>
-    
-    <div class="input-group">
-      <span class="material-symbols-outlined icon">mail</span>
-      <input type="email" id="regEmail" placeholder="seu@email.com">
-    </div>
-    
-    <div class="input-group">
-      <span class="material-symbols-outlined icon">lock</span>
-      <input type="password" id="regPass" placeholder="Senha">
-      <span class="material-symbols-outlined toggle" onclick="togglePass('regPass',this)">visibility_off</span>
-    </div>
-    
-    <p class="error" id="regError"></p>
-    
-    <button class="btn" onclick="register()">Cadastrar</button>
-    
-    <div class="divider"></div>
-    
-    <div class="signup">
-      Já tem conta? <a href="#" onclick="toggleForm()">Fazer login</a>
-    </div>
+  <div class="banner">
+    <h2>MEGA PROMO</h2>
+    <p>ATÉ 50% OFF<br>Produtos selecionados!</p>
+    <img src="https://i.imgur.com/8QfT6vO.png" alt="">
   </div>
 
+  <div class="section-head">
+    <h4>Categorias</h4>
+    <a href="#" onclick="showPage('shop')">Ver todas</a>
+  </div>
+
+  <div class="grid-cat" id="catGrid"></div>
+
+  <div class="section-head">
+    <h4>Destaques</h4>
+    <a href="#" onclick="showPage('shop')">Ver todas</a>
+  </div>
+
+  <div class="grid-prod" id="prodGrid"></div>
+</section>
+
+<!-- SHOP -->
+<section class="page" id="shop">
+  <div class="header">
+    <span class="material-symbols-outlined" onclick="showPage('home')">arrow_back</span>
+    <h3>Loja</h3>
+    <span></span>
+  </div>
+  <div class="grid-prod" id="shopGrid" style="padding:16px;"></div>
+</section>
+
+<!-- CART -->
+<section class="page" id="cart">
+  <div class="header">
+    <span class="material-symbols-outlined" onclick="showPage('home')">arrow_back</span>
+    <h3>Carrinho</h3>
+    <span onclick="clearCart()" style="color:var(--purple);font-size:12px;">Limpar</span>
+  </div>
+  <div id="cartList" style="padding:16px;display:flex;flex-direction:column;gap:10px;"></div>
+</section>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <div class="nav-item active" onclick="showPage('home')">
+    <span class="material-symbols-outlined">home</span>Home
+  </div>
+  <div class="nav-item" onclick="showPage('shop')">
+    <span class="material-symbols-outlined">grid_view</span>Loja
+  </div>
+  <div class="nav-item" onclick="showPage('cart')" style="position:relative;">
+    <span class="material-symbols-outlined">shopping_cart</span>Carrinho
+  </div>
+  <div class="nav-item">
+    <span class="material-symbols-outlined">receipt</span>Pedidos
+  </div>
+  <div class="nav-item">
+    <span class="material-symbols-outlined">person</span>Perfil
+  </div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
-  authDomain: "premium-store-aa58b.firebaseapp.com",
-  databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
-  projectId: "premium-store-aa58b",
-  storageBucket: "premium-store-aa58b.firebasestorage.app",
-  messagingSenderId: "462239500057",
-  appId: "1:462239500057:web:f1b7cea162ed308a866788",
-  measurementId: "G-CN88J28WRX"
-};
+const categories = [
+  {name:'Games', img:'https://img.icons8.com/ios-filled/50/7c3aed/game-controller.png'},
+  {name:'Streaming', img:'https://img.icons8.com/ios-filled/50/7c3aed/youtube-play.png'},
+  {name:'Redes Sociais', img:'https://img.icons8.com/ios-filled/50/7c3aed/instagram-new.png'},
+  {name:'Gift Cards', img:'https://img.icons8.com/ios-filled/50/7c3aed/wallet.png'}
+];
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
+const products = [
+  {id:1,name:'ROBUX',desc:'400 Robux',price:15.90,img:'https://i.imgur.com/5zQ8X3m.png',cat:'Games'},
+  {id:2,name:'NETFLIX',desc:'1 Mês',price:17.90,img:'https://i.imgur.com/6W0lVJy.png',cat:'Streaming'},
+  {id:3,name:'SPOTIFY',desc:'Premium 1 Mês',price:10.90,img:'https://i.imgur.com/5d0vgDi.png',cat:'Streaming'},
+  {id:4,name:'FREE FIRE',desc:'1000 Diamantes',price:29.90,img:'https://i.imgur.com/3QJ3Q3m.png',cat:'Games'},
+  {id:5,name:'DISCORD',desc:'Nitro 1 Mês',price:24.90,img:'https://i.imgur.com/4QJ3Q3m.png',cat:'Redes Sociais'},
+  {id:6,name:'GOOGLE PLAY',desc:'R$ 50',price:50.00,img:'https://i.imgur.com/5QJ3Q3m.png',cat:'Gift Cards'}
+];
 
-function toggleForm(){
-  document.getElementById('loginForm').classList.toggle('hidden');
-  document.getElementById('registerForm').classList.toggle('hidden');
-  document.getElementById('loginError').style.display='none';
-  document.getElementById('regError').style.display='none';
+let cart = JSON.parse(localStorage.getItem("cart"))||[];
+
+function showPage(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById(p).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach((n,i)=>n.classList.toggle('active',i==['home','shop','cart','orders','profile'].indexOf(p)));
+
+  if(p=='home')renderHome();
+  if(p=='shop')renderShop();
+  if(p=='cart')renderCart();
 }
 
-function togglePass(id, el){
-  const input = document.getElementById(id);
-  if(input.type === 'password'){
-    input.type = 'text';
-    el.innerText = 'visibility';
-  }else{
-    input.type = 'password';
-    el.innerText = 'visibility_off';
+function renderHome(){
+  document.getElementById('catGrid').innerHTML = categories.map(c=>`
+    <div class="cat-card" onclick="openCat('${c.name}')">
+      <img src="${c.img}">
+      <p>${c.name}</p>
+    </div>
+  `).join('');
+
+  document.getElementById('prodGrid').innerHTML = products.slice(0,3).map(p=>`
+    <div class="prod-card" onclick="addCart(${p.id})">
+      <img src="${p.img}">
+      <h5>${p.name}</h5>
+      <p>${p.desc}</p>
+      <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
+    </div>
+  `).join('');
+
+  updateBadge();
+}
+
+function renderShop(){
+  document.getElementById('shopGrid').innerHTML = products.map(p=>`
+    <div class="prod-card" onclick="addCart(${p.id})">
+      <img src="${p.img}">
+      <h5>${p.name}</h5>
+      <p>${p.desc}</p>
+      <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
+    </div>
+  `).join('');
+}
+
+function openCat(cat){
+  showPage('shop');
+  setTimeout(()=>{
+    document.getElementById('shopGrid').innerHTML = products.filter(p=>p.cat==cat).map(p=>`
+      <div class="prod-card" onclick="addCart(${p.id})">
+        <img src="${p.img}">
+        <h5>${p.name}</h5>
+        <p>${p.desc}</p>
+        <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
+      </div>
+    `).join('');
+  },100);
+}
+
+function search(){
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const f = products.filter(p=>p.name.toLowerCase().includes(q));
+  document.getElementById('prodGrid').innerHTML = f.slice(0,3).map(p=>`
+    <div class="prod-card" onclick="addCart(${p.id})">
+      <img src="${p.img}">
+      <h5>${p.name}</h5>
+      <p>${p.desc}</p>
+      <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
+    </div>
+  `).join('');
+}
+
+function addCart(id){
+  const p = products.find(x=>x.id==id);
+  const e = cart.find(x=>x.id==id);
+  if(e)e.qty++;else cart.push({...p,qty:1});
+  localStorage.setItem("cart",JSON.stringify(cart));
+  updateBadge();
+  alert(p.name+' adicionado!');
+}
+
+function renderCart(){
+  if(cart.length==0){
+    document.getElementById('cartList').innerHTML='<p style="text-align:center;padding:40px;color:var(--text2);">Carrinho vazio</p>';
+    return;
   }
+  document.getElementById('cartList').innerHTML = cart.map((i,idx)=>`
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;gap:12px;align-items:center;">
+      <img src="${i.img}" style="width:50px;height:50px;object-fit:contain;">
+      <div style="flex:1;">
+        <h5 style="font-size:12px;">${i.name}</h5>
+        <p style="font-size:11px;color:var(--text2);">${i.desc}</p>
+        <div style="font-size:13px;font-weight:700;">R$ ${(i.price*i.qty).toFixed(2).replace('.',',')}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button onclick="chgQty(${idx},-1)" style="width:24px;height:24px;border:1px solid var(--border);background:transparent;color:#fff;border-radius:6px;">-</button>
+        <span style="font-size:12px;">${i.qty}</span>
+        <button onclick="chgQty(${idx},1)" style="width:24px;height:24px;border:1px solid var(--border);background:transparent;color:#fff;border-radius:6px;">+</button>
+      </div>
+    </div>
+  `).join('');
 }
 
-function showError(id, msg){
-  document.getElementById(id).innerText = msg;
-  document.getElementById(id).style.display = 'block';
+function chgQty(i,d){
+  cart[i].qty+=d;
+  if(cart[i].qty<=0)cart.splice(i,1);
+  localStorage.setItem("cart",JSON.stringify(cart));
+  renderCart();updateBadge();
 }
 
-async function login(){
-  const email = document.getElementById('loginEmail').value;
-  const pass = document.getElementById('loginPass').value;
-  document.getElementById('loginError').style.display='none';
-  
-  try{
-    await auth.signInWithEmailAndPassword(email,pass);
-    alert('Logado com sucesso!');
-    // window.location.href = 'home.html';
-  }catch(e){
-    showError('loginError', e.message);
-  }
+function clearCart(){
+  cart=[];localStorage.removeItem("cart");
+  renderCart();updateBadge();
 }
 
-async function register(){
-  const name = document.getElementById('regName').value;
-  const email = document.getElementById('regEmail').value;
-  const pass = document.getElementById('regPass').value;
-  document.getElementById('regError').style.display='none';
-  
-  if(!name){showError('regError', 'Digite seu nome'); return;}
-  
-  try{
-    const cred = await auth.createUserWithEmailAndPassword(email,pass);
-    await cred.user.updateProfile({displayName:name});
-    await db.collection('users').doc(cred.user.uid).set({
-      name:name,
-      email:email,
-      createdAt:firebase.firestore.FieldValue.serverTimestamp()
-    });
-    alert('Conta criada! Faça login.');
-    toggleForm();
-  }catch(e){
-    showError('regError', e.message);
-  }
+function updateBadge(){
+  const t = cart.reduce((s,i)=>s+i.qty,0);
+  document.getElementById('cartBadge').style.display=t>0?'flex':'none';
+  document.getElementById('cartBadge').innerText=t;
 }
 
-async function resetPass(){
-  const email = document.getElementById('loginEmail').value;
-  if(!email){showError('loginError', 'Digite seu email primeiro'); return;}
-  try{
-    await auth.sendPasswordResetEmail(email);
-    alert('Email de recuperação enviado!');
-  }catch(e){
-    showError('loginError', e.message);
-  }
-}
-
-// Redireciona se já estiver logado
-auth.onAuthStateChanged(user=>{
-  if(user){
-    console.log('Usuário logado:', user.email);
-    // window.location.href = 'home.html';
-  }
-});
+// Inicia
+renderHome();
 </script>
 </body>
 </html>
