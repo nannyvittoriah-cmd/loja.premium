@@ -18,13 +18,11 @@ body{background:var(--bg);color:var(--text);font-size:13px;overflow-x:hidden;}
 button,input{outline:none;border:none;font-family:inherit;}
 button{cursor:pointer;position:relative;z-index:10;}
 
-/* LOADING SCREEN - evita flash */
 .loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;}
 .loading.hide{display:none;}
 .loading span{font-size:40px;color:var(--purple);animation:pulse 1.5s infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(1.1);}}
 
-/* LOGIN */
 .login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 50% 0%,rgba(168,85,247,0.15),transparent 50%);}
 .login-box{width:100%;max-width:360px;}
 .login-logo{display:flex;align-items:center;gap:8px;margin-bottom:32px;justify-content:center;}
@@ -37,33 +35,23 @@ button{cursor:pointer;position:relative;z-index:10;}
 .header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;position:sticky;top:0;background:rgba(7,7,9,0.8);backdrop-filter:blur(10px);z-index:50;border-bottom:1px solid var(--border);}
 .section{padding:0 16px;margin-bottom:20px;}
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-
-/* CARDS PEQUENOS */
 .card-sm{background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:10px;padding:10px;cursor:pointer;}
 .card-sm img{width:40px;height:40px;border-radius:8px;object-fit:cover;margin-bottom:6px;}
 .card-sm h4{font-size:12px;font-weight:600;}
 .card-sm.price{font-size:14px;font-weight:700;color:var(--gold);}
-
-/* LIST ITEM */
 .list-item{display:flex;align-items:center;gap:10px;background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:8px;cursor:pointer;}
 .list-item img{width:42px;height:42px;border-radius:8px;object-fit:cover;}
 .list-item-info{flex:1;}
 .list-item-info h4{font-size:12px;font-weight:600;}
 .list-item-info.price{font-size:15px;font-weight:700;color:var(--gold);}
-
-/* BOTÕES TRANSPARENTES */
-.btn-ghost{background:transparent;border:1px solid var(--purple);border-radius:8px;color:var(--purple);padding:8px 12px;font-size:12px;font-weight:600;}
 .btn-cart{width:36px;height:36px;background:transparent;border:1px solid var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--gold);}
-
-/* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(15,15,23,0.9);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:6px 0;z-index:100;}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;color:#666;}
 .nav-item.active{color:var(--purple);}
 .nav-item span{font-size:20px;}
 .nav-item p{font-size:9px;font-weight:600;}
-
 .banner{margin:16px;border-radius:16px;background:linear-gradient(135deg,rgba(168,85,247,0.2),rgba(251,191,36,0.1));border:1px solid rgba(168,85,247,0.3);padding:18px;}
-.btn-ghost{padding:8px 18px;}
+.btn-ghost{background:transparent;border:1px solid var(--purple);border-radius:8px;color:var(--purple);padding:8px 18px;font-size:12px;font-weight:600;}
 .tabs{display:flex;gap:16px;padding:0 16px 10px;overflow-x:auto;border-bottom:1px solid var(--border);}
 .tab{font-size:12px;font-weight:600;color:var(--text-muted);white-space:nowrap;padding-bottom:6px;cursor:pointer;}
 .tab.active{color:var(--purple);border-bottom:2px solid var(--purple);}
@@ -74,6 +62,7 @@ p{font-size:11px;color:var(--text-muted);}
 .table{width:100%;border-collapse:collapse;font-size:12px;}
 .table th{text-align:left;padding:10px;color:var(--text-muted);border-bottom:1px solid var(--border);}
 .table td{padding:10px;border-bottom:1px solid var(--border);}
+.error-msg{color:#ef4444;font-size:11px;margin-top:-10px;margin-bottom:10px;display:none;}
 </style>
 </head>
 <body>
@@ -89,18 +78,27 @@ p{font-size:11px;color:var(--text-muted);}
 <span class="material-symbols-outlined">diamond</span>
 <h1 style="font-size:22px;font-weight:800;">NEXUS STORE</h1>
 </div>
-<h2 style="font-size:20px;font-weight:700;margin-bottom:6px;">Bem-vindo!</h2>
+<h2 id="loginTitle" style="font-size:20px;font-weight:700;margin-bottom:6px;">Entrar</h2>
+
+<div class="input-box" id="nameBox" style="display:none;">
+<span class="material-symbols-outlined" style="font-size:20px;">person</span>
+<input type="text" id="loginName" placeholder="Seu nome">
+</div>
+
 <div class="input-box">
 <span class="material-symbols-outlined" style="font-size:20px;">mail</span>
 <input type="email" id="loginEmail" placeholder="seu@email.com">
 </div>
+
 <div class="input-box">
 <span class="material-symbols-outlined" style="font-size:20px;">lock</span>
 <input type="password" id="loginPass" placeholder="••••">
 </div>
-<button class="btn-primary" onclick="loginEmail()">Entrar</button>
-<button class="btn-outline" onclick="registerEmail()">Criar conta</button>
-<button class="btn-outline" onclick="loginGoogle()">Entrar com Google</button>
+
+<p class="error-msg" id="errorMsg"></p>
+
+<button class="btn-primary" id="mainBtn" onclick="loginEmail()">Entrar</button>
+<button class="btn-outline" id="switchBtn" onclick="toggleMode()">Criar conta</button>
 </div>
 </div>
 </section>
@@ -234,9 +232,9 @@ const ADMIN_EMAIL = "nannyhvittoriah@gmail.com";
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
-const provider = new firebase.auth.GoogleAuthProvider();
 
 let currentUser=null,isAdmin=false,products=[],categories=[],cart=JSON.parse(localStorage.getItem("cart"))||[],selectedTab='all',historyPage='home',currentPage='login';
+let isRegisterMode = false;
 
 function showPage(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -255,18 +253,61 @@ function showPage(page){
 }
 function goBack(){showPage(historyPage);}
 
+function toggleMode(){
+  isRegisterMode =!isRegisterMode;
+  document.getElementById('nameBox').style.display = isRegisterMode? 'flex' : 'none';
+  document.getElementById('loginTitle').innerText = isRegisterMode? 'Criar conta' : 'Entrar';
+  document.getElementById('mainBtn').innerText = isRegisterMode? 'Cadastrar' : 'Entrar';
+  document.getElementById('switchBtn').innerText = isRegisterMode? 'Já tenho conta' : 'Criar conta';
+  hideError();
+}
+
+function showError(msg){
+  document.getElementById('errorMsg').innerText = msg;
+  document.getElementById('errorMsg').style.display = 'block';
+}
+function hideError(){
+  document.getElementById('errorMsg').style.display = 'none';
+}
+
 function registerEmail(){
-  auth.createUserWithEmailAndPassword(document.getElementById('loginEmail').value,document.getElementById('loginPass').value)
-.then(()=>alert('Conta criada!'))
-.catch(e=>alert('Erro: '+e.message));
+  const name = document.getElementById('loginName').value.trim();
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPass').value;
+
+  if(!name){showError('Digite seu nome'); return;}
+  if(!email.includes('@')){showError('Email inválido'); return;}
+  if(pass.length < 6){showError('Senha deve ter 6+ caracteres'); return;}
+
+  auth.createUserWithEmailAndPassword(email, pass)
+ .then((cred)=>{
+    return cred.user.updateProfile({displayName: name});
+  })
+ .then(()=>{showError(''); alert('Conta criada com sucesso!'); toggleMode();})
+ .catch(e=>{showError(traduzErro(e.code));});
 }
+
 function loginEmail(){
-  auth.signInWithEmailAndPassword(document.getElementById('loginEmail').value,document.getElementById('loginPass').value)
-.catch(e=>alert('Login inválido'));
+  if(isRegisterMode){registerEmail(); return;}
+
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPass').value;
+
+  if(!email.includes('@')){showError('Email inválido'); return;}
+  if(!pass){showError('Digite sua senha'); return;}
+
+  auth.signInWithEmailAndPassword(email, pass)
+ .catch(e=>{showError(traduzErro(e.code));});
 }
-function loginGoogle(){
-  auth.signInWithPopup(provider).catch(e=>alert('Erro Google'));
+
+function traduzErro(code){
+  if(code == 'auth/user-not-found') return 'Email não cadastrado';
+  if(code == 'auth/wrong-password') return 'Senha incorreta';
+  if(code == 'auth/email-already-in-use') return 'Email já cadastrado';
+  if(code == 'auth/invalid-email') return 'Email inválido';
+  return 'Erro ao entrar. Tente novamente.';
 }
+
 function logout(){
   auth.signOut().then(()=>showPage('login'));
 }
@@ -279,7 +320,6 @@ auth.onAuthStateChanged((user)=>{
     document.getElementById('userName').innerText=user.displayName||user.email.split('@')[0];
     document.getElementById('profileName').innerText=user.displayName||'Usuário';
     document.getElementById('profileEmail').innerText=user.email;
-    if(user.photoURL)document.getElementById('userAvatar').src=user.photoURL;
     showPage(isAdmin?'admin':'home');
     loadProducts();
     loadOrders();
