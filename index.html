@@ -32,9 +32,34 @@ body{background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;over
 h2{font-size:18px;font-weight:600;text-align:center;margin-bottom:6px;}
 .subtitle{font-size:12px;color:var(--text2);text-align:center;margin-bottom:24px;}
 .input-group{position:relative;margin-bottom:12px;}
-.input-group input{width:100%;height:44px;background:#1a1a21;border:1px solid var(--border);border-radius:10px;padding:0 40px 0 40px;color:var(--text);font-size:13px;outline:none;}
-.input-group .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text2);font-size:18px;}
-.input-group .toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--text2);cursor:pointer;font-size:18px;}
+.input-group input{
+  width:100%;
+  height:44px;
+  background:#1a1a21;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:0 40px 0 40px;
+  color:var(--text);
+  font-size:13px;
+  outline:none;
+}
+.input-group .icon{
+  position:absolute;
+  left:12px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--text2);
+  font-size:18px;
+}
+.input-group .toggle{
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--text2);
+  cursor:pointer;
+  font-size:18px;
+}
 .forgot{text-align:right;margin:-6px 0 16px;}
 .forgot a{font-size:11px;color:var(--purple);text-decoration:none;}
 .btn-primary{width:100%;height:44px;background:var(--purple);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;}
@@ -638,7 +663,9 @@ h2{font-size:18px;font-weight:600;text-align:center;margin-bottom:6px;}
 
   <div class="buy-bar">
     <button class="btn-primary" onclick="addToCart()">Comprar agora</button>
-       <div class="fav-btn" onclick="toggleFav(this)">
+    <div class="fav-btn" onclick="toggleFav(this)">
+      <span class="material-symbols"
+          <div class="fav-btn" onclick="toggleFav(this)">
       <span class="material-symbols-outlined">favorite_border</span>
     </div>
   </div>
@@ -775,7 +802,7 @@ let currentUser = null;
 
 const PIX_NOME = "Lorrane vitória Alves vaz";
 const PIX_CHAVE = "(98) 98485-3563";
-const WHATSAPP_NUMERO = "5598984853563"; // número sem + e sem espaços
+const WHATSAPP_NUMERO = "5598984853563";
 
 onAuthStateChanged(auth, (user) => {
   if(user){
@@ -813,7 +840,7 @@ window.showPage = function(p){
 }
 
 window.switchFFTab = function(tab, e){
-  document.querySelectorAll('#freefire.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   e.target.classList.add('active');
 
   if(tab === 'prod'){
@@ -826,7 +853,7 @@ window.switchFFTab = function(tab, e){
 }
 
 window.filterFF = function(cat, e){
-  document.querySelectorAll('#ffFilters.filter').forEach(f => f.classList.remove('active'));
+  document.querySelectorAll('.filter').forEach(f => f.classList.remove('active'));
   e.target.classList.add('active');
 
   const items = document.querySelectorAll('#ffProdutos.category-item');
@@ -915,7 +942,7 @@ window.updateCart = function(){
   } else {
     cartItems.forEach(item => {
       cartList.innerHTML += `
-        <div class="cart-item" data-price="${item.price}">
+        <div class="cart-item">
           <div class="icon">
             <img src="${item.img}" alt="${item.name}">
           </div>
@@ -963,7 +990,7 @@ window.renderPaymentSummary = function(){
     summaryDiv.innerHTML += `
       <div class="payment-item">
         <img src="${item.img}" alt="">
-        <span>${item.name}</span>
+        <span>${item.name} x${item.qty}</span>
         <span style="margin-left:auto;">R$ ${(item.price * item.qty).toFixed(2).replace('.',',')}</span>
       </div>
     `;
@@ -985,7 +1012,7 @@ window.pagarComPix = function(){
   mensagem += `*ITENS DO PEDIDO:*%0A`;
 
   cartItems.forEach(item => {
-    mensagem += `- ${item.name} (${item.qty}x) - R$ ${(item.price * item.qty).toFixed(2).replace('.',',')}%0A`;
+    mensagem += `- ${item.name} x${item.qty} - R$ ${(item.price * item.qty).toFixed(2).replace('.',',')}%0A`;
   });
 
   const total = cartItems.reduce((s, i) => s + i.price * i.qty, 0) - discount;
@@ -993,7 +1020,7 @@ window.pagarComPix = function(){
 
   mensagem += `*DADOS PARA PAGAMENTO PIX:*%0A`;
   mensagem += `Bancaria - ${PIX_NOME}%0A`;
-  mensagem += `Chave Pix: ${PIX_CHAVE}%0A%0A`;
+  mensagem += `Cole essa chave pix: ${PIX_CHAVE}%0A%0A`;
   mensagem += `Manda foto de comprovante 📸%0A%0A`;
   mensagem += `Aguardo confirmação para liberar o produto!`;
 
