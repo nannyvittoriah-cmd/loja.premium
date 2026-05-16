@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXUS STORE - Home</title>
+<title>Produtos - NEXUS STORE</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
@@ -11,79 +11,66 @@ body{background:#0c0c14;color:#fff;padding-bottom:80px;}
 
 /* Header */
 .header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 16px;
+  display:flex;align-items:center;gap:16px;
+  padding:16px;border-bottom:1px solid #1a1a24;
 }
-.menu-icon{width:24px;height:24px;color:#fff;cursor:pointer;}
-.header-right{display:flex;align-items:center;gap:16px;}
-.greeting{font-size:15px;font-weight:600;}
-.balance{font-size:13px;color:#9ca3af;cursor:pointer;}
-.cart{position:relative;cursor:pointer;}
-.cart svg{width:24px;height:24px;}
+.back-btn{width:24px;height:24px;color:#fff;cursor:pointer;}
+.header h2{font-size:16px;font-weight:600;flex:1;text-align:center;}
+.cart-btn{position:relative;cursor:pointer;}
+.cart-btn svg{width:24px;height:24px;}
 .badge{
   position:absolute;top:-6px;right:-8px;background:#ef4444;color:#fff;
   font-size:10px;padding:2px 5px;border-radius:10px;font-weight:600;
 }
 
-/* Search */
-.search{
-  margin:0 16px 16px;position:relative;
+/* Filter */
+.filter{
+  display:flex;gap:10px;overflow-x:auto;padding:16px;
+  scrollbar-width:none;
 }
-.search svg{
-  position:absolute;left:14px;top:50%;transform:translateY(-50%);
-  width:18px;height:18px;color:#6b7280;
+.filter::-webkit-scrollbar{display:none;}
+.filter-btn{
+  padding:8px 16px;background:#1a1a24;border:1px solid #2a2a35;
+  border-radius:20px;font-size:13px;color:#9ca3af;white-space:nowrap;
+  cursor:pointer;transition:0.2s;
 }
-.search input{
-  width:100%;height:46px;background:#1a1a24;border:1px solid #2a2a35;
-  border-radius:12px;padding:0 16px 0 44px;color:#fff;font-size:14px;outline:none;
-}
-
-/* Banner */
-.banner{
-  margin:0 16px 20px;height:160px;border-radius:16px;
-  background:linear-gradient(135deg,#1e1b4b,#7c3aed);
-  position:relative;overflow:hidden;display:flex;align-items:center;
-  padding:0 20px;
-}
-.banner-text{position:relative;z-index:2;}
-.banner-text h3{font-size:18px;font-weight:700;margin-bottom:6px;}
-.banner-text p{font-size:13px;color:#d1d5db;line-height:1.4;}
-.banner-img{
-  position:absolute;right:-10px;bottom:0;height:140px;
-  opacity:0.9;
+.filter-btn.active{
+  background:#7c3aed;border-color:#7c3aed;color:#fff;
 }
 
-/* Section */
-.section{padding:0 16px 20px;}
-.section-head{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:12px;
+/* Products Grid */
+.grid{
+  padding:0 16px;display:grid;
+  grid-template-columns:repeat(2,1fr);gap:12px;
 }
-.section-head h4{font-size:15px;font-weight:600;}
-.section-head a{font-size:13px;color:#9ca3af;text-decoration:none;}
-
-/* Categories */
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-.card{
-  background:#1a1a24;border:1px solid #2a2a35;border-radius:12px;
-  padding:14px 8px;text-align:center;cursor:pointer;
-  transition:0.2s;
-}
-.card:active{transform:scale(0.95);}
-.card img{width:28px;height:28px;margin-bottom:6px;}
-.card span{font-size:11px;color:#9ca3af;display:block;}
-
-/* Products */
-.products{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
 .prod-card{
   background:#1a1a24;border:1px solid #2a2a35;border-radius:12px;
-  overflow:hidden;cursor:pointer;
+  overflow:hidden;cursor:pointer;transition:0.2s;
 }
-.prod-card img{width:100%;height:80px;object-fit:cover;}
-.prod-info{padding:8px;}
-.prod-info h5{font-size:12px;font-weight:600;margin-bottom:3px;}
-.prod-info p{font-size:11px;color:#9ca3af;}
-.price{font-size:13px;font-weight:700;color:#7c3aed;margin-top:4px;}
+.prod-card:active{transform:scale(0.98);}
+.prod-img{
+  width:100%;height:120px;background:#0c0c14;
+  display:flex;align-items:center;justify-content:center;
+}
+.prod-img img{width:60px;height:60px;object-fit:contain;}
+.prod-info{padding:12px;}
+.prod-info h4{font-size:14px;font-weight:600;margin-bottom:4px;}
+.prod-info p{font-size:12px;color:#9ca3af;margin-bottom:8px;}
+.price-row{display:flex;justify-content:space-between;align-items:center;}
+.price{font-size:15px;font-weight:700;color:#7c3aed;}
+.add-btn{
+  width:28px;height:28px;background:#7c3aed;border:none;
+  border-radius:8px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+}
+.add-btn svg{width:16px;height:16px;color:#fff;}
+
+/* Empty State */
+.empty{
+  text-align:center;padding:60px 20px;color:#9ca3af;
+}
+.empty svg{width:48px;height:48px;margin-bottom:12px;opacity:0.5;}
+.hidden{display:none;}
 
 /* Bottom Nav */
 .bottom-nav{
@@ -103,112 +90,50 @@ body{background:#0c0c14;color:#fff;padding-bottom:80px;}
 
 <!-- Header -->
 <div class="header">
-  <svg class="menu-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-    <path d="M4 6h16M4 12h16M4 18h16"/>
+  <svg class="back-btn" onclick="history.back()" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <path d="M15 18l-6-6 6-6"/>
   </svg>
-  <div class="greeting">Olá, <span id="userName">Gabriel</span> 👋</div>
-  <div class="header-right">
-    <span class="balance" onclick="logout()">Ver saldo</span>
-    <div class="cart">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-      </svg>
-      <span class="badge">1</span>
-    </div>
+  <h2 id="categoryTitle">Produtos</h2>
+  <div class="cart-btn" onclick="alert('Carrinho em breve')">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+    </svg>
+    <span class="badge" id="cartCount">0</span>
   </div>
 </div>
 
-<!-- Search -->
-<div class="search">
+<!-- Filter -->
+<div class="filter" id="filterBar">
+  <div class="filter-btn active" onclick="filterProducts('all', event)">Todos</div>
+</div>
+
+<!-- Products Grid -->
+<div class="grid" id="productsGrid"></div>
+
+<!-- Empty State -->
+<div class="empty hidden" id="emptyState">
   <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
     <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
   </svg>
-  <input type="text" placeholder="Buscar produtos...">
-</div>
-
-<!-- Banner -->
-<div class="banner">
-  <div class="banner-text">
-    <h3>MEGA PROMO</h3>
-    <p>ATÉ 50% OFF<br>Produtos selecionados!</p>
-  </div>
-  <img class="banner-img" src="https://i.imgur.com/8Km9tLL.png" alt="">
-</div>
-
-<!-- Categories -->
-<div class="section">
-  <div class="section-head">
-    <h4>Categorias</h4>
-    <a href="#">Ver todas</a>
-  </div>
-  <div class="grid">
-    <div class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/3616/3616212.png">
-      <span>Games</span>
-    </div>
-    <div class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
-      <span>Streaming</span>
-    </div>
-    <div class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png">
-      <span>Redes Sociais</span>
-    </div>
-    <div class="card">
-      <img src="https://cdn-icons-png.flaticon.com/512/833/833593.png">
-      <span>Gift Cards</span>
-    </div>
-  </div>
-</div>
-
-<!-- Destaques -->
-<div class="section">
-  <div class="section-head">
-    <h4>Destaques</h4>
-    <a href="#">Ver todas</a>
-  </div>
-  <div class="products">
-    <div class="prod-card">
-      <img src="https://i.imgur.com/9Q2bZ8L.png">
-      <div class="prod-info">
-        <h5>ROBLOX</h5>
-        <p>400 Robux</p>
-        <div class="price">R$ 15,90</div>
-      </div>
-    </div>
-    <div class="prod-card">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" style="background:#000;padding:20px;">
-      <div class="prod-info">
-        <h5>NETFLIX</h5>
-        <p>1 Mês</p>
-        <div class="price">R$ 17,90</div>
-      </div>
-    </div>
-    <div class="prod-card">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg" style="background:#1DB954;padding:20px;">
-      <div class="prod-info">
-        <h5>SPOTIFY</h5>
-        <p>Premium 1 Mês</p>
-        <div class="price">R$ 10,90</div>
-      </div>
-    </div>
-  </div>
+  <p>Nenhum produto encontrado</p>
 </div>
 
 <!-- Bottom Nav -->
 <div class="bottom-nav">
-  <div class="nav-item active">
-    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+  <div class="nav-item" onclick="window.location.href='home.html'">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+    </svg>
     <span>Home</span>
   </div>
-  <div class="nav-item">
-    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+  <div class="nav-item active">
+    <svg fill="currentColor" viewBox="0 0 24 24">
       <path d="M3 3h18M3 12h18M3 21h18"/>
     </svg>
     <span>Loja</span>
   </div>
-  <div class="nav-item">
+  <div class="nav-item" onclick="alert('Carrinho em breve')">
     <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
       <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
       <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
@@ -233,17 +158,15 @@ body{background:#0c0c14;color:#fff;padding-bottom:80px;}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
   authDomain: "premium-store-aa58b.firebaseapp.com",
-  databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
   projectId: "premium-store-aa58b",
   storageBucket: "premium-store-aa58b.firebasestorage.app",
   messagingSenderId: "462239500057",
-  appId: "1:462239500057:web:f1b7cea162ed308a866788",
-  measurementId: "G-CN88J28WRX"
+  appId: "1:462239500057:web:f1b7cea162ed308a866788"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -251,18 +174,149 @@ const auth = getAuth(app);
 
 // Protege a página - se não tiver logado volta pro login
 onAuthStateChanged(auth, (user) => {
-  if(user){
-    document.getElementById('userName').innerText = user.displayName || user.email.split('@')[0];
-  }else{
+  if(!user){
     window.location.href = 'index.html';
   }
 });
 
-window.logout = function(){
-  signOut(auth).then(() => {
-    window.location.href = 'index.html';
-  });
+// Mock de produtos - depois troca por Firestore
+const productsData = {
+  games: [
+    {id:1, name:"ROBLOX", desc:"400 Robux", price:"15,90", img:"https://i.imgur.com/9Q2bZ8L.png", tag:"Popular"},
+    {id:2, name:"FREE FIRE", desc:"100 Diamantes", price:"4,99", img:"https://cdn-icons-png.flaticon.com/512/3616/3616212.png", tag:"Oferta"},
+    {id:3, name:"FORTNITE", desc:"1000 V-Bucks", price:"39,90", img:"https://cdn-icons-png.flaticon.com/512/3616/3616212.png", tag:""}
+  ],
+  streaming: [
+    {id:4, name:"NETFLIX", desc:"1 Mês", price:"17,90", img:"https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg", tag:""},
+    {id:5, name:"SPOTIFY", desc:"Premium 1 Mês", price:"10,90", img:"https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg", tag:"Popular"},
+    {id:6, name:"DISNEY+", desc:"1 Mês", price:"12,90", img:"https://cdn-icons-png.flaticon.com/512/1384/1384060.png", tag:""}
+  ],
+  social: [
+    {id:7, name:"INSTAGRAM", desc:"1000 Seguidores", price:"29,90", img:"https://cdn-icons-png.flaticon.com/512/2111/2111463.png", tag:""},
+    {id:8, name:"TIKTOK", desc:"5000 Views", price:"9,90", img:"https://cdn-icons-png.flaticon.com/512/2111/2111463.png", tag:"Oferta"}
+  ],
+  gift: [
+    {id:9, name:"GOOGLE PLAY", desc:"R$ 50", price:"50,00", img:"https://cdn-icons-png.flaticon.com/512/833/833593.png", tag:""},
+    {id:10, name:"STEAM", desc:"R$ 100", price:"100,00", img:"https://cdn-icons-png.flaticon.com/512/833/833593.png", tag:""}
+  ],
+  apps: [
+    {id:11, name:"CANVA PRO", desc:"1 Ano", price:"89,90", img:"https://cdn-icons-png.flaticon.com/512/3208/3208723.png", tag:"Popular"}
+  ],
+  vip: [
+    {id:12, name:"VIP MENSAL", desc:"Acesso ilimitado", price:"19,90", img:"https://cdn-icons-png.flaticon.com/512/1828/1828884.png", tag:"VIP"}
+  ]
+};
+
+// Pega categoria da URL
+const urlParams = new URLSearchParams(window.location.search);
+const category = urlParams.get('cat') || 'games';
+
+// Nomes das categorias
+const categoryNames = {
+  games: "Games",
+  streaming: "Streaming",
+  social: "Redes Sociais",
+  gift: "Gift Cards",
+  apps: "Apps",
+  vip: "VIP"
+};
+
+document.getElementById('categoryTitle').innerText = categoryNames[category] || "Produtos";
+
+// Renderiza produtos
+function renderProducts(categoryKey){
+  const products = productsData[categoryKey] || [];
+  const grid = document.getElementById('productsGrid');
+  const empty = document.getElementById('emptyState');
+
+  if(products.length === 0){
+    grid.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+
+  empty.classList.add('hidden');
+  grid.innerHTML = products.map(p => `
+    <div class="prod-card" onclick="addToCart(${p.id})">
+      <div class="prod-img" style="background:${p.tag === 'Oferta'? '#f59e0b20' : '#0c0c14'}">
+        <img src="${p.img}" alt="${p.name}">
+      </div>
+      <div class="prod-info">
+        <h4>${p.name}</h4>
+        <p>${p.desc}</p>
+        <div class="price-row">
+          <span class="price">R$ ${p.price}</span>
+          <button class="add-btn">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
 }
+
+// Filtros
+window.filterProducts = function(filter, event){
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+
+  const products = productsData[category] || [];
+
+  if(filter === 'all'){
+    renderProducts(category);
+    return;
+  }
+
+  const filtered = products.filter(p => p.tag.toLowerCase() === filter);
+  const grid = document.getElementById('productsGrid');
+  const empty = document.getElementById('emptyState');
+
+  if(filtered.length === 0){
+    grid.innerHTML = '';
+    empty.classList.remove('hidden');
+  }else{
+    empty.classList.add('hidden');
+    grid.innerHTML = filtered.map(p => `
+      <div class="prod-card" onclick="addToCart(${p.id})">
+        <div class="prod-img">
+          <img src="${p.img}" alt="${p.name}">
+        </div>
+        <div class="prod-info">
+          <h4>${p.name}</h4>
+          <p>${p.desc}</p>
+          <div class="price-row">
+            <span class="price">R$ ${p.price}</span>
+            <button class="add-btn">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M12 5v14M5 12h14"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+}
+
+// Adicionar ao carrinho - mock por enquanto
+let cart = [];
+window.addToCart = function(id){
+  cart.push(id);
+  document.getElementById('cartCount').innerText = cart.length;
+  alert('Produto adicionado ao carrinho!');
+}
+
+// Carrega produtos ao abrir
+renderProducts(category);
+
+// Adiciona filtros dinâmicos baseado nas tags dos produtos
+const tags = [...new Set((productsData[category] || []).map(p => p.tag).filter(t => t))];
+const filterBar = document.getElementById('filterBar');
+tags.forEach(tag => {
+  filterBar.innerHTML += `<div class="filter-btn" onclick="filterProducts('${tag.toLowerCase()}', event)">${tag}</div>`;
+});
 </script>
 </body>
 </html>
