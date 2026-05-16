@@ -296,8 +296,6 @@ p{font-size:11px;color:var(--text-muted);}
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
-console.log("1. Script iniciou");
-
 const firebaseConfig = {
   apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
   authDomain: "premium-store-aa58b.firebaseapp.com",
@@ -308,13 +306,9 @@ const firebaseConfig = {
 };
 const ADMIN_EMAIL = "nannyhvittoriah@gmail.com";
 
-console.log("2. Firebase config carregada");
-
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
-
-console.log("3. Firebase inicializado");
 
 let currentUser=null,isAdmin=false,products=[],categories=[],cart=JSON.parse(localStorage.getItem("cart"))||[],selectedTab='all',historyPage='home',currentPage='login';
 let currentCategory='',currentSubcategory='',currentFilter='all',isRegisterMode=false,selectedProduct=null;
@@ -335,11 +329,8 @@ const subcategoriesData = {
   }
 };
 
-console.log("4. Variáveis declaradas");
-
 setTimeout(() => {
   document.getElementById('loading').classList.add('hide');
-  console.log("5. Timeout - loader removido");
 }, 3000);
 
 function showPage(page){
@@ -411,7 +402,6 @@ function logout(){
 }
 
 auth.onAuthStateChanged((user)=>{
-  console.log("6. Auth state mudou", user);
   document.getElementById('loading').classList.add('hide');
   if(user){
     currentUser=user;
@@ -426,10 +416,6 @@ auth.onAuthStateChanged((user)=>{
   }else{
     showPage('login');
   }
-}, (error)=>{
-  console.error("Erro Firebase:", error);
-  document.getElementById('loading').classList.add('hide');
-  showPage('login');
 });
 
 function loadProducts(){
@@ -437,8 +423,6 @@ function loadProducts(){
     products=[];snap.forEach(doc=>products.push({id:doc.id,...doc.data()}));
     categories=[...new Set(products.map(p=>p.category))];
     renderHome();renderShop();renderCategoriesList();
-  }, (error)=>{
-    console.error("Erro ao carregar produtos:", error);
   });
 }
 
@@ -492,8 +476,8 @@ function switchCatTab(el,tab){
 }
 
 function renderCategoriesList(){
-  const icons={"Games":"sports_esports","Streaming":"play_circle","Redes Sociais":"share"};
-  const colors=["#a855f7","#ef4444","#3b82f6"];
+  const icons={"Games":"sports_esports","Streaming":"play_circle","Redes Sociais":"share","Gift Cards":"card_giftcard","Apps":"apps","VIP":"star"};
+  const colors=["#a855f7","#ef4444","#3b82f6","#f59e0b","#10b981","#ec4899"];
   document.getElementById('catContent').innerHTML = categories.map((c,i)=>`
     <div class="list-item" onclick="openCategoryDetail('${c}')">
       <div style="width:40px;height:40px;border-radius:10px;background:${colors[i%colors.length]};display:flex;align-items:center;justify-content:center;">
@@ -530,13 +514,18 @@ function renderSubcategoriesList(){
 
 function openCategoryDetail(cat){
   currentCategory=cat;
+  currentSubcategory='';
   document.getElementById('catDetailTitle').innerText=cat;
   showPage('categoryDetail');
-  switchDetailTab(document.querySelector('#categoryDetail.cat-tab'),'prod');
+  document.querySelectorAll('#categoryDetail.cat-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('#categoryDetail.cat-tab')[0].classList.add('active');
+  renderFilters();
+  renderCategoryProducts();
 }
 
 function openSubcategory(sub){
   currentSubcategory=sub;
+  currentCategory = categories.find(c => subcategoriesData[c]?.items.includes(sub)) || '';
   document.getElementById('catDetailTitle').innerText=sub;
   showPage('categoryDetail');
   document.querySelectorAll('#categoryDetail.cat-tab').forEach(t=>t.classList.remove('active'));
@@ -580,7 +569,9 @@ function renderCategoryProducts(){
     return p.type && p.type.toLowerCase() == currentFilter;
   });
 
-  document.getElementById('catDetailContent').innerHTML = filtered.map(p=>`
+  document.getElementById('catDetailContent').innerHTML = filtered.length==0
+  ? '<p style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum produto encontrado</p>'
+    : filtered.map(p=>`
     <div class="list-item" onclick="openProduct('${p.id}')">
       <img src="${p.img}">
       <div class="list-item-info">
@@ -589,7 +580,7 @@ function renderCategoryProducts(){
       </div>
       <div style="text-align:right;">
         <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
-        <span class="material-symbols-outlined" style="font-size:18px;color:var(--text-muted);">chevron_right</span>
+            <span class="material-symbols-outlined" style="font-size:18px;color:var(--text-muted);">chevron_right</span>
       </div>
     </div>
   `).join('');
@@ -602,7 +593,7 @@ function renderCategoryInfo(){
       Aqui você encontra produtos de ${currentSubcategory} com entrega rápida e segura.<br><br>
       <strong>Como funciona:</strong><br>
       1. Escolha o produto<br>
-            2. Faça o pagamento<br>
+      2. Faça o pagamento<br>
       3. Receba no seu email/ID em minutos<br><br>
       <strong>Suporte:</strong> 24h via WhatsApp
     </div>
