@@ -1,97 +1,37 @@
-<!-- LOGIN -->
-<section class="page active" id="login">
-  <div class="login-wrap">
-    <div class="login-card">
-      
-      <div class="logo">
-        <div class="logo-icon">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#7c3aed"/>
-            <path d="M2 17L12 22L22 17" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"/>
-            <path d="M2 12L12 17L22 12" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div>
-          <h1>PRIME</h1>
-          <span>STORE VZ</span>
-        </div>
-      </div>
-
-      <div id="loginForm">
-        <h2>Bem-vindo de volta!</h2>
-        <p class="subtitle">Faça login para continuar</p>
-        
-        <div class="input-group">
-          <span class="material-symbols-outlined icon">mail</span>
-          <input type="email" id="loginEmail" placeholder="seu@email.com">
-        </div>
-        
-        <div class="input-group">
-          <span class="material-symbols-outlined icon">lock</span>
-          <input type="password" id="loginPass" placeholder="Senha">
-          <span class="material-symbols-outlined toggle" onclick="togglePass('loginPass',this)">visibility_off</span>
-        </div>
-
-        <div class="forgot">
-          <a href="#">Esqueci minha senha</a>
-        </div>
-
-        <p class="error" id="loginError"></p>
-        
-        <button class="btn-primary" onclick="login()">Entrar</button>
-
-        <div class="divider"></div>
-
-        <p class="signup">Ainda não tem conta? <a href="#" onclick="toggleForm()">Criar conta</a></p>
-      </div>
-
-      <div id="registerForm" class="hidden">
-        <h2>Criar conta</h2>
-        <p class="subtitle">Preencha seus dados</p>
-        
-        <div class="input-group">
-          <span class="material-symbols-outlined icon">person</span>
-          <input type="text" id="regName" placeholder="Seu nome">
-        </div>
-        
-        <div class="input-group">
-          <span class="material-symbols-outlined icon">mail</span>
-          <input type="email" id="regEmail" placeholder="seu@email.com">
-        </div>
-        
-        <div class="input-group">
-          <span class="material-symbols-outlined icon">lock</span>
-          <input type="password" id="regPass" placeholder="Senha">
-          <span class="material-symbols-outlined toggle" onclick="togglePass('regPass',this)">visibility_off</span>
-        </div>
-
-        <p class="error" id="regError"></p>
-        
-        <button class="btn-primary" onclick="register()">Cadastrar</button>
-
-        <div class="divider"></div>
-
-        <p class="signup">Já tem conta? <a href="#" onclick="toggleForm()">Fazer login</a></p>
-      </div>
-    </div>
-  </div>
-</section>
-
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRIME STORE VZ</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0"/>
 <style>
+:root{
+  --bg:#060609;
+  --card:#131319;
+  --border:#26262f;
+  --purple:#7c3aed;
+  --text:#fff;
+  --text2:#8a8a93;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+body{background:var(--bg);color:var(--text);}
+
 .login-wrap{
   min-height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
   padding:20px;
-  background:#060609;
 }
 
 .login-card{
   width:100%;
   max-width:360px;
-  background:#131319;
-  border:1px solid #26262f;
+  background:var(--card);
+  border:1px solid var(--border);
   border-radius:18px;
   padding:32px 24px;
 }
@@ -107,19 +47,14 @@
   width:40px;
   height:40px;
 }
-.logo-icon svg{
-  width:100%;
-  height:100%;
-}
 .logo h1{
   font-size:20px;
   font-weight:700;
   letter-spacing:0.5px;
-  color:#fff;
 }
 .logo span{
   font-size:11px;
-  color:#8a8a93;
+  color:var(--text2);
   letter-spacing:2px;
   display:block;
   margin-top:-2px;
@@ -128,15 +63,14 @@
 h2{
   font-size:20px;
   font-weight:600;
-  margin-bottom:6px;
-  color:#fff;
   text-align:center;
+  margin-bottom:6px;
 }
 .subtitle{
   font-size:13px;
-  color:#8a8a93;
-  margin-bottom:28px;
+  color:var(--text2);
   text-align:center;
+  margin-bottom:28px;
 }
 
 .input-group{
@@ -147,26 +81,22 @@ h2{
   width:100%;
   height:48px;
   background:#1a1a21;
-  border:1px solid #26262f;
+  border:1px solid var(--border);
   border-radius:12px;
   padding:0 44px 0 44px;
-  color:#fff;
+  color:var(--text);
   font-size:14px;
   outline:none;
   transition:0.2s;
 }
-.input-group input:focus{
-  border-color:#7c3aed;
-}
-.input-group input::placeholder{
-  color:#6b7280;
-}
+.input-group input:focus{border-color:var(--purple);}
+.input-group input::placeholder{color:#6b7280;}
 .input-group .icon{
   position:absolute;
   left:14px;
   top:50%;
   transform:translateY(-50%);
-  color:#8a8a93;
+  color:var(--text2);
   font-size:20px;
 }
 .input-group .toggle{
@@ -174,11 +104,10 @@ h2{
   right:14px;
   top:50%;
   transform:translateY(-50%);
-  color:#8a8a93;
+  color:var(--text2);
   cursor:pointer;
   font-size:20px;
 }
-.input-group .toggle:hover{color:#7c3aed;}
 
 .forgot{
   text-align:right;
@@ -186,14 +115,14 @@ h2{
 }
 .forgot a{
   font-size:12px;
-  color:#7c3aed;
+  color:var(--purple);
   text-decoration:none;
 }
 
 .btn-primary{
   width:100%;
   height:48px;
-  background:#7c3aed;
+  background:var(--purple);
   border:none;
   border-radius:12px;
   color:#fff;
@@ -202,23 +131,21 @@ h2{
   cursor:pointer;
   transition:0.2s;
 }
-.btn-primary:hover{
-  background:#6d28d9;
-}
+.btn-primary:hover{background:#6d28d9;}
 
 .divider{
   height:1px;
-  background:#26262f;
+  background:var(--border);
   margin:20px 0;
 }
 
 .signup{
   text-align:center;
   font-size:13px;
-  color:#8a8a93;
+  color:var(--text2);
 }
 .signup a{
-  color:#7c3aed;
+  color:var(--purple);
   text-decoration:none;
   font-weight:600;
 }
@@ -230,7 +157,83 @@ h2{
   display:none;
   text-align:center;
 }
-
-.hidden{display:none;}
 </style>
-<html>
+</head>
+<body>
+
+<div class="login-wrap">
+  <div class="login-card">
+
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#7c3aed"/>
+          <path d="M2 17L12 22L22 17" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"/>
+          <path d="M2 12L12 17L22 12" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <h1>PRIME</h1>
+        <span>STORE VZ</span>
+      </div>
+    </div>
+
+    <h2>Bem-vindo de volta!</h2>
+    <p class="subtitle">Faça login para continuar</p>
+
+    <div class="input-group">
+      <span class="material-symbols-outlined icon">mail</span>
+      <input type="email" id="email" placeholder="seu@email.com">
+    </div>
+
+    <div class="input-group">
+      <span class="material-symbols-outlined icon">lock</span>
+      <input type="password" id="password" placeholder="Senha">
+      <span class="material-symbols-outlined toggle" onclick="togglePass()">visibility_off</span>
+    </div>
+
+    <div class="forgot">
+      <a href="#">Esqueci minha senha</a>
+    </div>
+
+    <p class="error" id="error"></p>
+
+    <button class="btn-primary" onclick="login()">Entrar</button>
+
+    <div class="divider"></div>
+
+    <p class="signup">Ainda não tem conta? <a href="#">Criar conta</a></p>
+  </div>
+</div>
+
+<script>
+function togglePass(){
+  const pass = document.getElementById('password');
+  const icon = document.querySelector('.toggle');
+  if(pass.type === 'password'){
+    pass.type = 'text';
+    icon.innerText = 'visibility';
+  }else{
+    pass.type = 'password';
+    icon.innerText = 'visibility_off';
+  }
+}
+
+function login(){
+  const email = document.getElementById('email').value;
+  const pass = document.getElementById('password').value;
+  const error = document.getElementById('error');
+  
+  if(!email || !pass){
+    error.innerText = 'Preencha e-mail e senha';
+    error.style.display = 'block';
+    return;
+  }
+  
+  error.style.display = 'none';
+  alert('Login funcionando! Agora conectamos no Firebase.');
+}
+</script>
+
+</body>
+</html>
