@@ -45,12 +45,11 @@ button{cursor:pointer;position:relative;z-index:10;}
 .cat-tabs{display:flex;background:var(--card);margin:12px 16px;border-radius:10px;padding:4px;}
 .cat-tab{flex:1;text-align:center;padding:8px;font-size:12px;font-weight:600;color:var(--text-muted);border-radius:8px;cursor:pointer;transition:0.3s;}
 .cat-tab.active{background:var(--purple);color:#fff;}
-.cat-card{display:flex;align-items:center;gap:12px;background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:12px;margin:0 16px 10px;cursor:pointer;transition:0.3s;}
-.cat-card:hover{border-color:var(--purple);}
-.cat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
-.cat-icon img{width:100%;height:100%;object-fit:cover;}
-.cat-info h4{font-size:13px;font-weight:600;margin-bottom:2px;}
-.cat-info p{font-size:11px;color:var(--text-muted);}
+.chips{display:flex;gap:8px;padding:0 16px 12px;overflow-x:auto;scrollbar-width:none;}
+.chips::-webkit-scrollbar{display:none;}
+.chip{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:11px;font-weight:600;color:var(--text-muted);white-space:nowrap;cursor:pointer;transition:0.3s;}
+.chip.active{background:var(--purple);color:#fff;border-color:var(--purple);}
+.info-box{background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:14px;margin:0 16px;font-size:12px;line-height:1.5;color:var(--text-muted);}
 
 .section{padding:0 16px;margin-bottom:20px;}
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
@@ -58,14 +57,14 @@ button{cursor:pointer;position:relative;z-index:10;}
 .card-sm:hover{border-color:var(--purple);box-shadow:var(--glow);transform:translateY(-2px);}
 .card-sm img{width:40px;height:40px;border-radius:8px;object-fit:cover;margin-bottom:6px;}
 .card-sm h4{font-size:12px;font-weight:600;margin-bottom:2px;}
-.card-sm.price{font-size:14px;font-weight:700;color:var(--gold);}
 
-.list-item{display:flex;align-items:center;gap:10px;background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:8px;cursor:pointer;transition:0.3s;}
+.list-item{display:flex;align-items:center;gap:10px;background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:10px;margin:0 16px 10px;cursor:pointer;transition:0.3s;}
 .list-item:hover{border-color:var(--purple);}
 .list-item img{width:42px;height:42px;border-radius:8px;object-fit:cover;}
 .list-item-info{flex:1;}
-.list-item-info h4{font-size:12px;font-weight:600;}
-.list-item-info.price{font-size:15px;font-weight:700;color:var(--gold);}
+.list-item-info h4{font-size:13px;font-weight:600;margin-bottom:2px;}
+.list-item-info.small{font-size:11px;color:var(--text-muted);}
+.price{font-size:15px;font-weight:700;color:var(--gold);}
 
 .btn-cart{width:36px;height:36px;background:transparent;border:1px solid var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--gold);transition:0.3s;}
 .btn-cart:hover{background:rgba(251,191,36,0.1);}
@@ -193,15 +192,16 @@ p{font-size:11px;color:var(--text-muted);}
 <section class="page" id="categoryDetail">
 <div class="header">
 <span class="material-symbols-outlined" onclick="showPage('categories')" style="cursor:pointer;">arrow_back</span>
-<h3 id="catDetailTitle" style="font-size:14px;">Games</h3>
+<h3 id="catDetailTitle" style="font-size:14px;">Free Fire</h3>
 <span class="material-symbols-outlined" style="cursor:pointer;">search</span>
 </div>
 
 <div class="cat-tabs">
-  <div class="cat-tab active" onclick="switchDetailTab(this,'sub')">Subcategorias</div>
-  <div class="cat-tab" onclick="switchDetailTab(this,'prod')">Produtos</div>
+  <div class="cat-tab active" onclick="switchDetailTab(this,'prod')">Produtos</div>
+  <div class="cat-tab" onclick="switchDetailTab(this,'info')">Informações</div>
 </div>
 
+<div class="chips" id="filterChips"></div>
 <div id="catDetailContent"></div>
 </section>
 
@@ -231,10 +231,10 @@ p{font-size:11px;color:var(--text-muted);}
 <span onclick="clearCart()" style="color:#ef4444;font-size:12px;cursor:pointer;">Limpar</span>
 </div>
 <div id="cartItems"></div>
-<div class="summary">
-<div class="summary-row total">
+<div class="section">
+<div style="display:flex;justify-content:space-between;margin-bottom:12px;">
 <span>Total</span>
-<span id="cartTotal" style="color:var(--gold);">R$ 0,00</span>
+<span id="cartTotal" style="color:var(--gold);font-weight:700;">R$ 0,00</span>
 </div>
 <button class="btn-primary" onclick="checkout()">Finalizar compra</button>
 </div>
@@ -272,7 +272,9 @@ p{font-size:11px;color:var(--text-muted);}
 <input id="prodPrice" placeholder="Preço 18.90" type="number" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
 <input id="prodCat" placeholder="Categoria: Games" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
 <input id="prodSub" placeholder="Subcategoria: Free Fire" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
+<input id="prodType" placeholder="Tipo: Diamantes, Contas, Outros" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
 <input id="prodImg" placeholder="URL da imagem" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
+<textarea id="prodDesc" placeholder="Descrição" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;height:60px;"></textarea>
 <button class="btn-primary" onclick="addProduct()">Salvar Produto</button>
 </div>
 <div class="admin-card">
@@ -308,8 +310,8 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
 
-let currentUser=null,isAdmin=false,products=[],categories=[],subcategories={},cart=JSON.parse(localStorage.getItem("cart"))||[],selectedTab='all',historyPage='home',currentPage='login',currentCategory='';
-let isRegisterMode = false;
+let currentUser=null,isAdmin=false,products=[],categories=[],cart=JSON.parse(localStorage.getItem("cart"))||[],selectedTab='all',historyPage='home',currentPage='login';
+let currentCategory='',currentSubcategory='',currentFilter='all',isRegisterMode=false;
 
 const subcategoriesData = {
   "Games": {
@@ -317,21 +319,8 @@ const subcategoriesData = {
     imgs: {
       "Free Fire": "https://i.imgur.com/8Km9tLL.png",
       "Roblox": "https://i.imgur.com/3b8hX9X.png",
-      "Fortnite": "https://i.imgur.com/5QfK9kL.png",
-      "Valorant": "https://i.imgur.com/2Y3Qk9L.png",
-      "Minecraft": "https://i.imgur.com/7Qk9k9L.png",
-      "Brawl Stars": "https://i.imgur.com/9Qk9k9L.png",
-      "Clash Royale": "https://i.imgur.com/1Qk9k9L.png",
-      "League of Legends": "https://i.imgur.com/4Qk9k9L.png"
+      "Fortnite": "https://i.imgur.com/5QfK9kL.png"
     }
-  },
-  "Streaming": {
-    items: ["Netflix", "Spotify", "Disney+", "Prime Video"],
-    imgs: {}
-  },
-  "Redes Sociais": {
-    items: ["Instagram", "TikTok", "Facebook", "YouTube"],
-    imgs: {}
   }
 };
 
@@ -373,30 +362,22 @@ function registerEmail(){
   const name = document.getElementById('loginName').value.trim();
   const email = document.getElementById('loginEmail').value.trim();
   const pass = document.getElementById('loginPass').value;
-
   if(!name){showError('Digite seu nome'); return;}
   if(!email.includes('@')){showError('Email inválido'); return;}
   if(pass.length < 6){showError('Senha deve ter 6+ caracteres'); return;}
-
   auth.createUserWithEmailAndPassword(email, pass)
-.then((cred)=>{
-    return cred.user.updateProfile({displayName: name});
-  })
-.then(()=>{showError(''); alert('Conta criada com sucesso!'); toggleMode();})
-.catch(e=>{showError(traduzErro(e.code));});
+ .then((cred)=>cred.user.updateProfile({displayName: name}))
+ .then(()=>{showError(''); alert('Conta criada com sucesso!'); toggleMode();})
+ .catch(e=>{showError(traduzErro(e.code));});
 }
 
 function loginEmail(){
   if(isRegisterMode){registerEmail(); return;}
-
   const email = document.getElementById('loginEmail').value.trim();
   const pass = document.getElementById('loginPass').value;
-
   if(!email.includes('@')){showError('Email inválido'); return;}
   if(!pass){showError('Digite sua senha'); return;}
-
-  auth.signInWithEmailAndPassword(email, pass)
-.catch(e=>{showError(traduzErro(e.code));});
+  auth.signInWithEmailAndPassword(email, pass).catch(e=>{showError(traduzErro(e.code));});
 }
 
 function traduzErro(code){
@@ -451,14 +432,12 @@ function addProduct(){
     price:parseFloat(document.getElementById('prodPrice').value),
     category:document.getElementById('prodCat').value,
     subcategory:document.getElementById('prodSub').value,
+    type:document.getElementById('prodType').value,
     img:document.getElementById('prodImg').value,
+    desc:document.getElementById('prodDesc').value,
     createdAt:firebase.firestore.FieldValue.serverTimestamp()
   }).then(()=>{
-    document.getElementById('prodName').value='';
-    document.getElementById('prodPrice').value='';
-    document.getElementById('prodCat').value='';
-    document.getElementById('prodSub').value='';
-    document.getElementById('prodImg').value='';
+    ['prodName','prodPrice','prodCat','prodSub','prodType','prodImg','prodDesc'].forEach(id=>document.getElementById(id).value='');
     alert('Produto adicionado!');
   });
 }
@@ -480,43 +459,24 @@ function renderHome(){
 }
 
 function switchCatTab(el,tab){
-  document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('#categories.cat-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
-  if(tab=='categories'){
-    renderCategoriesList();
-  }else{
-    renderSubcategoriesList();
-  }
+  if(tab=='categories'){renderCategoriesList();}else{renderSubcategoriesList();}
 }
 
 function renderCategoriesList(){
-  const icons = {
-    "Games": "sports_esports",
-    "Streaming": "play_circle",
-    "Redes Sociais": "share",
-    "Gift Cards": "card_giftcard",
-    "Apps": "apps",
-    "VIP": "star"
-  };
-  const colors = ["#a855f7","#ef4444","#3b82f6","#8b5cf6","#06b6d4","#fbbf24"];
-  const desc = {
-    "Games": "Produtos relacionados a jogos",
-    "Streaming": "Netflix, Spotify, Disney+ e mais",
-    "Redes Sociais": "Seguidores, curtidas e views",
-    "Gift Cards": "Cartões presente digitais",
-    "Apps": "Aplicativos premium",
-    "VIP": "Vantagens exclusivas"
-  };
-
+  const icons={"Games":"sports_esports","Streaming":"play_circle","Redes Sociais":"share"};
+  const colors=["#a855f7","#ef4444","#3b82f6"];
   document.getElementById('catContent').innerHTML = categories.map((c,i)=>`
-    <div class="cat-card" onclick="openCategoryDetail('${c}')">
-      <div class="cat-icon" style="background:${colors[i%colors.length]}">
-        <span class="material-symbols-outlined">${icons[c]||'category'}</span>
+    <div class="list-item" onclick="openCategoryDetail('${c}')">
+      <div style="width:40px;height:40px;border-radius:10px;background:${colors[i%colors.length]};display:flex;align-items:center;justify-content:center;">
+        <span class="material-symbols-outlined" style="color:#fff;">${icons[c]||'category'}</span>
       </div>
-      <div class="cat-info">
+      <div class="list-item-info">
         <h4>${c}</h4>
-        <p>${desc[c]||'Produtos da categoria'}</p>
+        <div class="small">Produtos da categoria</div>
       </div>
+      <span class="material-symbols-outlined" style="font-size:20px;color:var(--text-muted);">chevron_right</span>
     </div>
   `).join('');
 }
@@ -528,13 +488,11 @@ function renderSubcategoriesList(){
     if(subs.length==0) return;
     html += `<div style="padding:0 16px;margin:16px 0 8px;"><h4 style="font-size:12px;color:var(--text-muted);">${c}</h4></div>`;
     html += subs.map(s=>`
-      <div class="cat-card" onclick="openSubcategory('${s}')">
-        <div class="cat-icon" style="background:#2a2a3a">
-          <img src="${subcategoriesData[c].imgs[s]||''}" onerror="this.style.display='none'">
-        </div>
-        <div class="cat-info">
+      <div class="list-item" onclick="openSubcategory('${s}')">
+        <img src="${subcategoriesData[c].imgs[s]||'https://via.placeholder.com/40'}">
+        <div class="list-item-info">
           <h4>${s}</h4>
-          <p>Ver produtos</p>
+          <div class="small">Ver produtos</div>
         </div>
         <span class="material-symbols-outlined" style="font-size:20px;color:var(--text-muted);">chevron_right</span>
       </div>
@@ -547,65 +505,90 @@ function openCategoryDetail(cat){
   currentCategory=cat;
   document.getElementById('catDetailTitle').innerText=cat;
   showPage('categoryDetail');
-  switchDetailTab(document.querySelector('#categoryDetail.cat-tab'),'sub');
+  switchDetailTab(document.querySelector('#categoryDetail.cat-tab'),'prod');
+}
+
+function openSubcategory(sub){
+  currentSubcategory=sub;
+  document.getElementById('catDetailTitle').innerText=sub;
+  showPage('categoryDetail');
+  switchDetailTab(document.querySelector('#categoryDetail.cat-tab'),'prod');
+  renderFilters();
+}
+
+function renderFilters(){
+  const filters = ['Todos','Diamantes','Contas','Outros'];
+  document.getElementById('filterChips').innerHTML = filters.map((f,i)=>`
+    <div class="chip ${i==0?'active':''}" onclick="setFilter(this,'${f.toLowerCase()}')">${f}</div>
+  `).join('');
+  currentFilter = 'all';
+}
+
+function setFilter(el,filter){
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  currentFilter = filter;
+  renderCategoryProducts();
 }
 
 function switchDetailTab(el,tab){
   document.querySelectorAll('#categoryDetail.cat-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
-
-  if(tab=='sub'){
-    renderCategorySubcategories();
-  }else{
+  if(tab=='prod'){
+    document.getElementById('filterChips').style.display = 'flex';
     renderCategoryProducts();
+  }else{
+    document.getElementById('filterChips').style.display = 'none';
+    renderCategoryInfo();
   }
 }
 
-function renderCategorySubcategories(){
-  const subs = subcategoriesData[currentCategory]?.items || [];
-  const imgs = subcategoriesData[currentCategory]?.imgs || {};
-
-  document.getElementById('catDetailContent').innerHTML = subs.map(s=>`
-    <div class="cat-card" onclick="openSubcategory('${s}')">
-      <div class="cat-icon">
-        <img src="${imgs[s]||'https://via.placeholder.com/40'}" onerror="this.src='https://via.placeholder.com/40'">
-      </div>
-      <div class="cat-info">
-        <h4>${s}</h4>
-      </div>
-      <span class="material-symbols-outlined" style="font-size:20px;color:var(--text-muted);">chevron_right</span>
-    </div>
-  `).join('');
-}
-
 function renderCategoryProducts(){
-  const filtered = products.filter(p=>p.category==currentCategory);
+  const filtered = products.filter(p=>{
+    const matchSub = p.subcategory == currentSubcategory;
+    if(!matchSub) return false;
+    if(currentFilter == 'all') return true;
+    return p.type && p.type.toLowerCase() == currentFilter;
+  });
+
   document.getElementById('catDetailContent').innerHTML = filtered.map(p=>`
     <div class="list-item" onclick="openProduct('${p.id}')">
       <img src="${p.img}">
       <div class="list-item-info">
         <h4>${p.name}</h4>
-        <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
+        <div class="small">${p.subcategory}</div>
       </div>
-      <button class="btn-cart" onclick="event.stopPropagation();addToCart('${p.id}')"><span class="material-symbols-outlined" style="font-size:20px;">shopping_cart</span></button>
+      <div style="text-align:right;">
+        <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
+        <span class="material-symbols-outlined" style="font-size:18px;color:var(--text-muted);">chevron_right</span>
+      </div>
     </div>
   `).join('');
 }
 
-function openSubcategory(sub){
-  selectedTab=sub;
-  showPage('shop');
-  renderShop();
+function renderCategoryInfo(){
+  document.getElementById('catDetailContent').innerHTML = `
+    <div class="info-box">
+      <strong style="color:var(--text);">Sobre ${currentSubcategory}</strong><br><br>
+      Aqui você encontra produtos de ${currentSubcategory} com entrega rápida e segura.<br><br>
+      <strong>Como funciona:</strong><br>
+      1. Escolha o produto<br>
+      2. Faça o pagamento<br>
+      3. Receba no seu email/ID em minutos<br><br>
+      <strong>Suporte:</strong> 24h via WhatsApp
+    </div>
+  `;
 }
-
-function openCategory(cat){selectedTab=cat;showPage('shop');renderShop();}
 
 function renderShop(){
   document.getElementById('shopTabs').innerHTML='<div class="tab active" onclick="setTab(this,\'all\')">Todos</div>'+categories.map(c=>`<div class="tab" onclick="setTab(this,'${c}')">${c}</div>`).join('');
-  document.getElementById('shopProducts').innerHTML=products.filter(p=>selectedTab=='all'||p.category==selectedTab||p.subcategory==selectedTab).map(p=>`<div class="list-item"><img src="${p.img}"><div class="list-item-info"><h4>${p.name}</h4><div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div></div><button class="btn-cart" onclick="addToCart('${p.id}')"><span class="material-symbols-outlined" style="font-size:20px;">shopping_cart</span></button></div>`).join('');
+  document.getElementById('shopProducts').innerHTML=products.filter(p=>selectedTab=='all'||p.category==selectedTab).map(p=>`<div class="list-item"><img src="${p.img}"><div class="list-item-info"><h4>${p.name}</h4><div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div></div><button class="btn-cart" onclick="add
+ function setTab(el,tab){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  selectedTab=tab;
+  renderShop();
 }
-
-function setTab(el,tab){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');selectedTab=tab;renderShop();}
 
 function openProduct(id){
   selectedProduct=products.find(p=>p.id==id);
@@ -651,9 +634,9 @@ function renderCart(){
         <img src="${item.img}">
         <div class="list-item-info">
           <h4>${item.name}</h4>
-          <div class="price">R$ ${item.price.toFixed(2).replace('.',',')}</div>
           <div class="small">Qtd: ${item.qty}</div>
         </div>
+        <div class="price">R$ ${(item.price*item.qty).toFixed(2).replace('.',',')}</div>
       </div>
     `;
   }).join('');
