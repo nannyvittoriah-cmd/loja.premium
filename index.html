@@ -4,17 +4,7 @@
     <div class="login-card">
       
       <div class="logo">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-          <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#grad)"/>
-          <path d="M2 17L12 22L22 17" stroke="url(#grad)" stroke-width="2" stroke-linecap="round"/>
-          <path d="M2 12L12 17L22 12" stroke="url(#grad)" stroke-width="2" stroke-linecap="round"/>
-          <defs>
-            <linearGradient id="grad" x1="0" y1="0" x2="24" y2="24">
-              <stop offset="0%" stop-color="#8b5cf6"/>
-              <stop offset="100%" stop-color="#d4af37"/>
-            </linearGradient>
-          </defs>
-        </svg>
+        <div class="mark">P</div>
         <div>
           <h1>PRIME</h1>
           <span>STORE</span>
@@ -22,55 +12,62 @@
       </div>
 
       <div id="loginForm">
-        <h2>Bem-vindo de volta</h2>
-        <p class="subtitle">Faça login para continuar</p>
+        <h2>Entrar</h2>
         
-        <div class="input-group">
-          <input type="email" id="loginEmail" placeholder="E-mail" autocomplete="email">
+        <div class="field">
+          <label>E-mail</label>
+          <input type="email" id="loginEmail" autocomplete="email">
         </div>
         
-        <div class="input-group">
-          <input type="password" id="loginPass" placeholder="Senha" autocomplete="current-password">
-          <span class="material-symbols-outlined toggle" onclick="togglePass('loginPass',this)">visibility_off</span>
+        <div class="field">
+          <label>Senha</label>
+          <div class="input-wrap">
+            <input type="password" id="loginPass" autocomplete="current-password">
+            <span class="material-symbols-outlined toggle" onclick="togglePass('loginPass',this)">visibility_off</span>
+          </div>
         </div>
 
-        <div class="options">
-          <label class="checkbox">
+        <div class="row">
+          <label class="check">
             <input type="checkbox">
             <span>Lembrar-me</span>
           </label>
-          <a href="#" class="forgot">Esqueci a senha</a>
+          <a href="#" class="link">Esqueceu a senha?</a>
         </div>
 
         <p class="error" id="loginError"></p>
         
-        <button class="btn-primary" onclick="login()">Entrar</button>
+        <button class="btn" onclick="login()">Continuar</button>
 
-        <p class="signup">Ainda não tem conta? <a href="#" onclick="toggleForm()">Criar conta</a></p>
+        <p class="alt">Não tem conta? <a href="#" onclick="toggleForm()">Criar conta</a></p>
       </div>
 
       <div id="registerForm" class="hidden">
         <h2>Criar conta</h2>
-        <p class="subtitle">Comece agora</p>
         
-        <div class="input-group">
-          <input type="text" id="regName" placeholder="Nome completo">
+        <div class="field">
+          <label>Nome</label>
+          <input type="text" id="regName">
+        </div>
+
+        <div class="field">
+          <label>E-mail</label>
+          <input type="email" id="regEmail">
         </div>
         
-        <div class="input-group">
-          <input type="email" id="regEmail" placeholder="E-mail">
-        </div>
-        
-        <div class="input-group">
-          <input type="password" id="regPass" placeholder="Senha">
-          <span class="material-symbols-outlined toggle" onclick="togglePass('regPass',this)">visibility_off</span>
+        <div class="field">
+          <label>Senha</label>
+          <div class="input-wrap">
+            <input type="password" id="regPass">
+            <span class="material-symbols-outlined toggle" onclick="togglePass('regPass',this)">visibility_off</span>
+          </div>
         </div>
 
         <p class="error" id="regError"></p>
         
-        <button class="btn-primary" onclick="register()">Cadastrar</button>
+        <button class="btn" onclick="register()">Cadastrar</button>
 
-        <p class="signup">Já tem conta? <a href="#" onclick="toggleForm()">Fazer login</a></p>
+        <p class="alt">Já tem conta? <a href="#" onclick="toggleForm()">Entrar</a></p>
       </div>
     </div>
   </div>
@@ -83,154 +80,151 @@
   align-items:center;
   justify-content:center;
   padding:24px;
-  background:radial-gradient(circle at 50% -20%, rgba(139,92,246,0.15) 0%, transparent 50%),
-             #060609;
+  background:#0a0a0a;
 }
 
 .login-card{
   width:100%;
-  max-width:380px;
-  background:#0c0c0f;
-  border:1px solid #1a1a22;
-  border-radius:20px;
-  padding:40px 32px;
-  box-shadow:0 20px 50px rgba(0,0,0,0.6);
-  animation:fadeIn 0.4s ease;
-}
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(12px);}
-  to{opacity:1;transform:translateY(0);}
+  max-width:360px;
+  background:#111;
+  border:1px solid #1e1e1e;
+  border-radius:16px;
+  padding:48px 32px;
 }
 
 .logo{
   display:flex;
   align-items:center;
+  gap:12px;
+  margin-bottom:48px;
+}
+.mark{
+  width:40px;
+  height:40px;
+  background:#fff;
+  color:#000;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
   justify-content:center;
-  gap:10px;
-  margin-bottom:40px;
+  font-weight:700;
+  font-size:18px;
 }
 .logo h1{
-  font-size:24px;
-  font-weight:700;
-  letter-spacing:1px;
+  font-size:20px;
+  font-weight:600;
+  letter-spacing:0.5px;
   color:#fff;
 }
 .logo span{
   font-size:11px;
-  color:#6b7280;
-  letter-spacing:2.5px;
+  color:#666;
+  letter-spacing:2px;
   display:block;
-  margin-top:-4px;
+  margin-top:-2px;
 }
 
 h2{
-  font-size:22px;
+  font-size:24px;
   font-weight:600;
-  margin-bottom:6px;
+  margin-bottom:32px;
   color:#fff;
 }
-.subtitle{
-  font-size:13px;
-  color:#6b7280;
-  margin-bottom:32px;
-}
 
-.input-group{
-  position:relative;
-  margin-bottom:16px;
+.field{
+  margin-bottom:20px;
 }
-.input-group input{
+.field label{
+  display:block;
+  font-size:12px;
+  color:#888;
+  margin-bottom:8px;
+  font-weight:500;
+}
+.field input{
   width:100%;
   height:52px;
-  background:#141418;
-  border:1px solid #1f1f28;
-  border-radius:12px;
+  background:#1a1a1a;
+  border:1px solid #2a2a2a;
+  border-radius:10px;
   padding:0 16px;
   color:#fff;
   font-size:14px;
   outline:none;
-  transition:all 0.2s;
+  transition:border 0.2s;
 }
-.input-group input:focus{
-  border-color:#8b5cf6;
-  background:#17171c;
+.field input:focus{
+  border-color:#fff;
 }
-.input-group input::placeholder{
-  color:#4b5563;
+.input-wrap{
+  position:relative;
 }
 .toggle{
   position:absolute;
   right:16px;
   top:50%;
   transform:translateY(-50%);
-  color:#6b7280;
+  color:#666;
   cursor:pointer;
   font-size:20px;
 }
-.toggle:hover{color:#8b5cf6;}
+.toggle:hover{color:#fff;}
 
-.options{
+.row{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin:20px 0 28px;
+  margin:24px 0 32px;
   font-size:13px;
 }
-.checkbox{
+.check{
   display:flex;
   align-items:center;
   gap:8px;
-  color:#9ca3af;
+  color:#888;
   cursor:pointer;
 }
-.checkbox input{
+.check input{
   width:16px;
   height:16px;
-  accent-color:#8b5cf6;
+  accent-color:#fff;
 }
-.forgot{
-  color:#8b5cf6;
+.link{
+  color:#888;
   text-decoration:none;
-  font-weight:500;
 }
-.forgot:hover{text-decoration:underline;}
+.link:hover{color:#fff;}
 
-.btn-primary{
+.btn{
   width:100%;
   height:52px;
-  background:#8b5cf6;
+  background:#fff;
   border:none;
-  border-radius:12px;
-  color:#fff;
+  border-radius:10px;
+  color:#000;
   font-size:15px;
   font-weight:600;
   cursor:pointer;
-  transition:all 0.2s;
+  transition:opacity 0.2s;
 }
-.btn-primary:hover{
-  background:#7c3aed;
-  transform:translateY(-1px);
-  box-shadow:0 8px 20px rgba(139,92,246,0.3);
-}
-.btn-primary:active{transform:translateY(0);}
+.btn:hover{opacity:0.85;}
 
-.signup{
+.alt{
   text-align:center;
   font-size:13px;
-  color:#6b7280;
+  color:#666;
   margin-top:24px;
 }
-.signup a{
-  color:#8b5cf6;
-  font-weight:500;
+.alt a{
+  color:#fff;
   text-decoration:none;
+  font-weight:500;
 }
-.signup a:hover{text-decoration:underline;}
 
 .error{
-  color:#ef4444;
+  color:#ff4444;
   font-size:12px;
-  margin:-8px 0 16px;
+  margin:-12px 0 16px;
   display:none;
 }
 
