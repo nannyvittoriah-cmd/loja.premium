@@ -60,7 +60,6 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
   border-radius:12px;padding:0 44px 0 44px;color:var(--text);font-size:14px;outline:none;
 }
 .input-group input:focus{border-color:var(--purple);}
-.input-group input::placeholder{color:#6b7280;}
 .input-group.icon{
   position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text2);font-size:20px;
 }
@@ -84,16 +83,209 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
 .error{color:#ef4444;font-size:12px;margin:-8px 0 16px;display:none;text-align:center;}
 
 /* HOME */
-.home-wrap{padding:40px 20px;max-width:1200px;margin:0 auto;}
-.home-wrap h1{font-size:24px;margin-bottom:12px;}
-.home-wrap p{color:var(--text2);margin-bottom:20px;}
+.home-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px;
+  background:var(--bg);
+}
+
+.home-header.greeting{
+  font-size:16px;
+  font-weight:600;
+}
+
+.home-header.actions{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.search-bar{
+  margin:0 16px 16px;
+  position:relative;
+}
+
+.search-bar input{
+  width:100%;
+  height:44px;
+  background:#1a1a21;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:0 16px 0 44px;
+  color:var(--text);
+  font-size:14px;
+  outline:none;
+}
+
+.search-bar.material-symbols-outlined{
+  position:absolute;
+  left:14px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--text2);
+}
+
+.banner{
+  margin:0 16px 24px;
+  height:160px;
+  border-radius:16px;
+  background:linear-gradient(135deg, #7c3aed, #3b82f6);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:20px;
+  position:relative;
+  overflow:hidden;
+}
+
+.banner-text h3{
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:4px;
+}
+
+.banner-text p{
+  font-size:13px;
+  color:#d1d5db;
+}
+
+.section{
+  padding:0 16px 24px;
+}
+
+.section-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.section-header h4{
+  font-size:15px;
+  font-weight:600;
+}
+
+.section-header a{
+  font-size:13px;
+  color:var(--purple);
+  text-decoration:none;
+}
+
+.categories{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+.category{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px 8px;
+  text-align:center;
+}
+
+.category.material-symbols-outlined{
+  font-size:28px;
+  color:var(--purple);
+  margin-bottom:6px;
+}
+
+.category span{
+  display:block;
+  font-size:11px;
+  color:var(--text2);
+}
+
+.products{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.product{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+}
+
+.product.icon{
+  width:40px;
+  height:40px;
+  border-radius:8px;
+  margin-bottom:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+}
+
+.product h5{
+  font-size:13px;
+  font-weight:600;
+  margin-bottom:4px;
+}
+
+.product.sub{
+  font-size:11px;
+  color:var(--text2);
+  margin-bottom:6px;
+}
+
+.product.price{
+  font-size:14px;
+  font-weight:700;
+  color:var(--purple);
+}
+
+/* BOTTOM NAV */
+.bottom-nav{
+  position:sticky;
+  bottom:0;
+  background:#0a0a0f;
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:space-around;
+  padding:8px 0;
+}
+
+.nav-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  font-size:10px;
+  color:var(--text2);
+  cursor:pointer;
+}
+
+.nav-item.active{
+  color:var(--purple);
+}
+
+.nav-item.material-symbols-outlined{
+  font-size:24px;
+}
+
+.badge{
+  position:absolute;
+  top:-4px;
+  right:-4px;
+  background:#ef4444;
+  color:#fff;
+  font-size:10px;
+  padding:2px 5px;
+  border-radius:10px;
+}
 
 /* RODAPÉ */
 .footer{
   background:#0a0a0f;
   border-top:1px solid var(--purple);
   padding:12px;
-  margin-top:auto;
   text-align:center;
   font-size:12px;
   color:#b3b3bd;
@@ -166,10 +358,103 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
 
 <!-- HOME -->
 <section class="page" id="home">
-  <div class="home-wrap">
-    <h1>Bem-vindo, <span id="userName">Usuário</span> 👋</h1>
-    <p>Seu site está conectado ao Firebase.</p>
-    <button class="btn-primary" style="width:auto;padding:0 24px;" onclick="logout()">Sair</button>
+  <div class="home-header">
+    <div class="greeting">Olá, <span id="userName">Gabriel</span> 👋</div>
+    <div class="actions">
+      <span style="font-size:13px;color:var(--text2);cursor:pointer;">Ver saldo</span>
+      <span class="material-symbols-outlined" style="position:relative;cursor:pointer;">
+        shopping_cart
+        <span class="badge">1</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <span class="material-symbols-outlined">search</span>
+    <input type="text" placeholder="Buscar produtos...">
+  </div>
+
+  <div class="banner">
+    <div class="banner-text">
+      <h3>MEGA PROMO</h3>
+      <p>ATÉ 50% OFF<br>Produtos selecionados!</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <h4>Categorias</h4>
+      <a href="#">Ver todas</a>
+    </div>
+    <div class="categories">
+      <div class="category">
+        <span class="material-symbols-outlined">stadia_controller</span>
+        <span>Games</span>
+      </div>
+      <div class="category">
+        <span class="material-symbols-outlined">play_circle</span>
+        <span>Streaming</span>
+      </div>
+      <div class="category">
+        <span class="material-symbols-outlined">photo_camera</span>
+        <span>Redes Sociais</span>
+      </div>
+      <div class="category">
+        <span class="material-symbols-outlined">redeem</span>
+        <span>Gift Cards</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <h4>Destaques</h4>
+      <a href="#">Ver todas</a>
+    </div>
+    <div class="products">
+      <div class="product">
+        <div class="icon" style="background:#1a1a21;color:#fff;">R</div>
+        <h5>ROBLOX</h5>
+        <div class="sub">400 Robux</div>
+        <div class="price">R$ 15,90</div>
+      </div>
+      <div class="product">
+        <div class="icon" style="background:#e50914;color:#fff;">N</div>
+        <h5>NETFLIX</h5>
+        <div class="sub">1 Mês</div>
+        <div class="price">R$ 17,90</div>
+      </div>
+      <div class="product">
+        <div class="icon" style="background:#1db954;color:#fff;">S</div>
+        <h5>SPOTIFY</h5>
+        <div class="sub">Premium 1 Mês</div>
+        <div class="price">R$ 10,90</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item active">
+      <span class="material-symbols-outlined">home</span>
+      <span>Home</span>
+    </div>
+    <div class="nav-item">
+      <span class="material-symbols-outlined">storefront</span>
+      <span>Loja</span>
+    </div>
+    <div class="nav-item" style="position:relative;">
+      <span class="material-symbols-outlined">shopping_cart</span>
+      <span>Carrinho</span>
+      <span class="badge">1</span>
+    </div>
+    <div class="nav-item">
+      <span class="material-symbols-outlined">receipt_long</span>
+      <span>Pedidos</span>
+    </div>
+    <div class="nav-item">
+      <span class="material-symbols-outlined">person</span>
+      <span>Perfil</span>
+    </div>
   </div>
 </section>
 
