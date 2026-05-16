@@ -41,6 +41,17 @@ button{cursor:pointer;position:relative;z-index:10;}
 .cart-icon{position:relative;cursor:pointer;}
 .cart-badge{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:10px;font-weight:700;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;display:none;}
 
+.header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;position:sticky;top:0;background:rgba(7,7,9,0.8);backdrop-filter:blur(10px);z-index:50;border-bottom:1px solid var(--border);}
+.cat-tabs{display:flex;background:var(--card);margin:12px 16px;border-radius:10px;padding:4px;}
+.cat-tab{flex:1;text-align:center;padding:8px;font-size:12px;font-weight:600;color:var(--text-muted);border-radius:8px;cursor:pointer;transition:0.3s;}
+.cat-tab.active{background:var(--purple);color:#fff;}
+.cat-card{display:flex;align-items:center;gap:12px;background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:12px;margin:0 16px 10px;cursor:pointer;transition:0.3s;}
+.cat-card:hover{border-color:var(--purple);}
+.cat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;}
+.cat-icon span{font-size:22px;color:#fff;}
+.cat-info h4{font-size:13px;font-weight:600;margin-bottom:2px;}
+.cat-info p{font-size:11px;color:var(--text-muted);}
+
 .section{padding:0 16px;margin-bottom:20px;}
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
 .card-sm{background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:10px;padding:10px;cursor:pointer;transition:0.3s;}
@@ -168,9 +179,15 @@ p{font-size:11px;color:var(--text-muted);}
 <div class="header">
 <span class="material-symbols-outlined" onclick="showPage('home')" style="cursor:pointer;">arrow_back</span>
 <h3 style="font-size:14px;">Categorias</h3>
-<div></div>
+<span class="material-symbols-outlined" style="cursor:pointer;">search</span>
 </div>
-<div id="categoriesList"></div>
+
+<div class="cat-tabs">
+  <div class="cat-tab active" onclick="switchCatTab(this,'categories')">Categorias</div>
+  <div class="cat-tab" onclick="switchCatTab(this,'subcategories')">Subcategorias</div>
+</div>
+
+<div id="catContent"></div>
 </section>
 
 <section class="page" id="shop">
@@ -278,6 +295,15 @@ const auth = firebase.auth();
 let currentUser=null,isAdmin=false,products=[],categories=[],cart=JSON.parse(localStorage.getItem("cart"))||[],selectedTab='all',historyPage='home',currentPage='login';
 let isRegisterMode = false;
 
+const subcategoriesData = {
+  "Games": ["Free Fire", "Roblox", "Fortnite", "COD Mobile"],
+  "Streaming": ["Netflix", "Spotify", "Disney+", "Prime Video"],
+  "Redes Sociais": ["Instagram", "TikTok", "Facebook", "YouTube"],
+  "Gift Cards": ["Google Play", "App Store", "Xbox", "PlayStation"],
+  "Apps": ["CapCut Pro", "Canva Pro", "ChatGPT Plus"],
+  "VIP": ["VIP Mensal", "VIP Anual", "Acesso Premium"]
+};
+
 function showPage(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(page).classList.add('active');
@@ -285,7 +311,7 @@ function showPage(page){
   currentPage=page;
   if(page=='home')renderHome();
   if(page=='shop')renderShop();
-  if(page=='categories')renderCategories();
+  if(page=='categories')renderCategoriesList();
   if(page=='cart')renderCart();
   if(page=='orders')loadOrders();
   if(page=='admin')loadAdmin();
@@ -373,7 +399,7 @@ function loadProducts(){
   db.collection("products").orderBy("createdAt","desc").onSnapshot((snap)=>{
     products=[];snap.forEach(doc=>products.push({id:doc.id,...doc.data()}));
     categories=[...new Set(products.map(p=>p.category))];
-    renderHome();renderShop();renderCategories();
+    renderHome();renderShop();renderCategoriesList();
   });
 }
 
@@ -420,11 +446,72 @@ function renderHome(){
   document.getElementById('homeProducts').innerHTML=products.slice(0,6).map(p=>`<div class="card-sm" onclick="openProduct('${p.id}')"><img src="${p.img||'https://via.placeholder.com/100'}"><h4>${p.name}</h4><div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div></div>`).join('');
 }
 
-function renderCategories(){
-  document.getElementById('categoriesList').innerHTML=categories.map(c=>`<div class="list-item" onclick="openCategory('${c}')"><span class="material-symbols-outlined" style="font-size:22px;color:var(--purple);">category</span><div class="list-item-info"><h4>${c}</h4></div><span class="material-symbols-outlined" style="font-size:20px;">chevron_right</span></div>`).join('');
+function switchCatTab(el,tab){
+  document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+
+  if(tab=='categories'){
+    renderCategoriesList();
+  }else{
+    renderSubcategoriesList();
+  }
+}
+
+function renderCategoriesList(){
+  const icons = {
+    "Games": "sports_esports",
+    "Streaming": "play_circle",
+    "Redes Sociais": "share",
+    "Gift Cards": "card_giftcard",
+    "Apps": "apps",
+    "VIP": "star"
+  };
+  const colors = ["#a855f7","#ef4444","#3b82f6","#8b5cf6","#06b6d4","#fbbf24"];
+  const desc = {
+    "Games": "Produtos relacionados a jogos",
+    "Streaming": "Netflix, Spotify, Disney+ e mais",
+    "Redes Sociais": "Seguidores, curtidas e views",
+    "Gift Cards": "Cartões presente digitais",
+    "Apps": "Aplicativos premium",
+    "VIP": "Vantagens exclusivas"
+  };
+
+  document.getElementById('catContent').innerHTML = categories.map((c,i)=>`
+    <div class="cat-card" onclick="openCategory('${c}')">
+      <div class="cat-icon" style="background:${colors[i%colors.length]}">
+        <span class="material-symbols-outlined">${icons[c]||'category'}</span>
+      </div>
+      <div class="cat-info">
+        <h4>${c}</h4>
+        <p>${desc[c]||'Produtos da categoria'}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderSubcategoriesList(){
+  let html = '';
+  categories.forEach(c=>{
+    const subs = subcategoriesData[c] || [];
+    if(subs.length==0) return;
+    html += `<div style="padding:0 16px;margin:16px 0 8px;"><h4 style="font-size:12px;color:var(--text-muted);">${c}</h4></div>`;
+    html += subs.map(s=>`
+      <div class="cat-card" onclick="openSubcategory('${s}')">
+        <div class="cat-icon" style="background:#2a2a3a">
+          <span class="material-symbols-outlined">chevron_right</span>
+        </div>
+        <div class="cat-info">
+          <h4>${s}</h4>
+          <p>Ver produtos</p>
+        </div>
+      </div>
+    `).join('');
+  });
+  document.getElementById('catContent').innerHTML = html;
 }
 
 function openCategory(cat){selectedTab=cat;showPage('shop');renderShop();}
+function openSubcategory(sub){selectedTab=sub;showPage('shop');renderShop();}
 
 function renderShop(){
   document.getElementById('shopTabs').innerHTML='<div class="tab active" onclick="setTab(this,\'all\')">Todos</div>'+categories.map(c=>`<div class="tab" onclick="setTab(this,'${c}')">${c}</div>`).join('');
