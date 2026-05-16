@@ -94,6 +94,29 @@ p{font-size:11px;color:var(--text-muted);}
 .status{padding:4px 8px;border-radius:6px;font-size:10px;font-weight:600;}
 .status.pending{background:rgba(251,191,36,0.2);color:var(--gold);}
 .status.completed{background:rgba(34,197,94,0.2);color:#22c55e;}
+
+/* Product Page */
+.product-page{background:var(--bg);min-height:100vh;}
+.product-header{padding:16px;}
+.product-header img{width:100%;border-radius:16px;aspect-ratio:1/1;object-fit:cover;}
+.product-info{padding:0 16px 100px;}
+.product-info h2{font-size:18px;font-weight:700;margin-bottom:4px;}
+.product-sub{font-size:12px;color:var(--text-muted);margin-bottom:8px;}
+.product-meta{display:flex;gap:12px;font-size:11px;color:var(--text-muted);margin-bottom:16px;}
+.product-meta.rating{color:#fbbf24;}
+.product-price{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.product-price h3{font-size:24px;font-weight:800;color:var(--text);}
+.product-price.stock{font-size:12px;color:#22c55e;font-weight:600;}
+.product-section{margin-bottom:20px;}
+.product-section h4{font-size:14px;font-weight:700;margin-bottom:8px;}
+.product-section p{font-size:12px;color:var(--text-muted);line-height:1.5;}
+.how-it-works{list-style:none;padding:0;}
+.how-it-works li{font-size:12px;color:var(--text-muted);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.how-it-works li::before{content:'✓';color:#22c55e;font-weight:700;}
+.product-actions{display:flex;gap:10px;position:fixed;bottom:80px;left:16px;right:16px;}
+.product-actions.btn-primary{flex:1;}
+.btn-fav{width:46px;height:46px;border-radius:12px;border:1px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;}
+.btn-fav span{font-size:20px;color:var(--text-muted);}
 </style>
 </head>
 <body>
@@ -219,7 +242,7 @@ p{font-size:11px;color:var(--text-muted);}
 <div class="header">
 <span class="material-symbols-outlined" onclick="goBack()" style="cursor:pointer;">arrow_back</span>
 <h3 style="font-size:14px;">Produto</h3>
-<div></div>
+<span class="material-symbols-outlined" onclick="alert('Compartilhar em breve')" style="cursor:pointer;">share</span>
 </div>
 <div id="productDetail"></div>
 </section>
@@ -546,7 +569,7 @@ function openSubcategory(sub){
 
 function renderFilters(){
   const filters = ['Todos','Diamantes','Contas','Outros'];
-  document.getElementById('filterChips').innerHTML = filters.map((f,i)=>`
+    document.getElementById('filterChips').innerHTML = filters.map((f,i)=>`
     <div class="chip ${i==0?'active':''}" onclick="setFilter(this,'${f.toLowerCase()}')">${f}</div>
   `).join('');
   currentFilter = 'all';
@@ -580,7 +603,7 @@ function renderCategoryProducts(){
   });
 
   document.getElementById('catDetailContent').innerHTML = filtered.length==0
-? '<p style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum produto encontrado</p>'
+    ? '<p style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum produto encontrado</p>'
     : filtered.map(p=>`
     <div class="list-item" onclick="openProduct('${p.id}')">
       <img src="${p.img||'https://via.placeholder.com/40'}">
@@ -597,7 +620,7 @@ function renderCategoryProducts(){
 }
 
 function renderCategoryInfo(){
-    document.getElementById('catDetailContent').innerHTML = `
+  document.getElementById('catDetailContent').innerHTML = `
     <div class="info-box">
       <strong style="color:var(--text);">Sobre ${currentSubcategory || currentCategory}</strong><br><br>
       Aqui você encontra produtos de ${currentSubcategory || currentCategory} com entrega rápida e segura.<br><br>
@@ -644,20 +667,46 @@ function openProduct(id){
   if(!selectedProduct) return;
 
   document.getElementById('productDetail').innerHTML=`
-    <div style="padding:16px;">
-      <img src="${selectedProduct.img || 'https://via.placeholder.com/200'}" 
-           style="width:100%;border-radius:12px;border:1px solid var(--border);margin-bottom:12px;">
-      <h2 style="font-size:16px;font-weight:700;">${selectedProduct.name}</h2>
-      <p style="font-size:11px;color:var(--text-muted);margin:6px 0;">
-        ${selectedProduct.category} ${selectedProduct.subcategory ? '• ' + selectedProduct.subcategory : ''}
-      </p>
-      <h3 style="color:var(--gold);font-size:22px;margin:12px 0;">
-        R$ ${selectedProduct.price.toFixed(2).replace('.',',')}
-      </h3>
-      <p style="font-size:12px;color:var(--text-muted);line-height:1.4;margin-bottom:16px;">
-        ${selectedProduct.desc || 'Descrição não informada'}
-      </p>
-      <button class="btn-primary" onclick="addToCart('${selectedProduct.id}')">Comprar agora</button>
+    <div class="product-page">
+      <div class="product-header">
+        <img src="${selectedProduct.img || 'https://via.placeholder.com/200'}" alt="">
+      </div>
+
+      <div class="product-info">
+        <h2>${selectedProduct.name}</h2>
+        <p class="product-sub">${selectedProduct.subcategory || selectedProduct.category}</p>
+        
+        <div class="product-meta">
+          <span class="rating">★ 4.9 (2.348)</span>
+          <span class="type">Produto digital</span>
+        </div>
+
+        <div class="product-price">
+          <h3>R$ ${selectedProduct.price.toFixed(2).replace('.',',')}</h3>
+          <span class="stock">Em estoque</span>
+        </div>
+
+        <div class="product-section">
+          <h4>Descrição</h4>
+          <p>${selectedProduct.desc || 'Os diamantes serão adicionados na conta informada após a confirmação do pagamento.'}</p>
+        </div>
+
+        <div class="product-section">
+          <h4>Como funciona?</h4>
+          <ul class="how-it-works">
+            <li>✓ Informe seu ID/Nickname</li>
+            <li>✓ Efetue o pagamento</li>
+            <li>✓ Receba em minutos</li>
+          </ul>
+        </div>
+
+        <div class="product-actions">
+          <button class="btn-primary" onclick="addToCart('${selectedProduct.id}')">Comprar agora</button>
+          <button class="btn-fav" onclick="alert('Favorito em breve')">
+            <span class="material-symbols-outlined">favorite</span>
+          </button>
+        </div>
+      </div>
     </div>
   `;
   showPage('product');
