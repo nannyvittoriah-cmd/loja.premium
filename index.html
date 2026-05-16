@@ -329,7 +329,6 @@ const subcategoriesData = {
   }
 };
 
-// Esconde loading sempre depois de 3s, mesmo com erro
 setTimeout(() => {
   document.getElementById('loading').classList.add('hide');
 }, 3000);
@@ -583,7 +582,7 @@ function renderCategoryProducts(){
   document.getElementById('catDetailContent').innerHTML = filtered.length==0
 ? '<p style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum produto encontrado</p>'
     : filtered.map(p=>`
-       <div class="list-item" onclick="openProduct('${p.id}')">
+    <div class="list-item" onclick="openProduct('${p.id}')">
       <img src="${p.img||'https://via.placeholder.com/40'}">
       <div class="list-item-info">
         <h4>${p.name}</h4>
@@ -598,10 +597,10 @@ function renderCategoryProducts(){
 }
 
 function renderCategoryInfo(){
-  document.getElementById('catDetailContent').innerHTML = `
+    document.getElementById('catDetailContent').innerHTML = `
     <div class="info-box">
-      <strong style="color:var(--text);">Sobre ${currentSubcategory}</strong><br><br>
-      Aqui você encontra produtos de ${currentSubcategory} com entrega rápida e segura.<br><br>
+      <strong style="color:var(--text);">Sobre ${currentSubcategory || currentCategory}</strong><br><br>
+      Aqui você encontra produtos de ${currentSubcategory || currentCategory} com entrega rápida e segura.<br><br>
       <strong>Como funciona:</strong><br>
       1. Escolha o produto<br>
       2. Faça o pagamento<br>
