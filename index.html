@@ -137,6 +137,17 @@ h2{font-size:18px;font-weight:600;text-align:center;margin-bottom:6px;}
 .summary-row.total span:last-child{color:var(--purple);}
 .checkout-bar{position:fixed;bottom:60px;left:0;right:0;background:#0a0a0f;border-top:1px solid var(--border);padding:10px 16px;z-index:20;}
 
+/* PAYMENT */
+.payment-box{margin:16px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.payment-box h4{font-size:14px;font-weight:600;margin-bottom:12px;}
+.payment-item{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.payment-item img{width:24px;height:24px;}
+.payment-item span{font-size:13px;}
+.payment-method{border:1px solid var(--purple);background:#1a1a21;border-radius:10px;padding:12px;display:flex;align-items:center;gap:10px;}
+.payment-method .radio{width:18px;height:18px;border:2px solid var(--purple);border-radius:50%;background:var(--purple);}
+.terms{font-size:11px;color:var(--text2);text-align:center;margin-top:12px;}
+.terms a{color:var(--purple);text-decoration:none;}
+
 /* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#0a0a0f;border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:6px 0;z-index:30;}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:var(--text2);cursor:pointer;}
@@ -627,7 +638,7 @@ h2{font-size:18px;font-weight:600;text-align:center;margin-bottom:6px;}
 
   <div class="buy-bar">
     <button class="btn-primary" onclick="addToCart()">Comprar agora</button>
-    <div class="fav-btn" onclick="toggleFav(this)">
+       <div class="fav-btn" onclick="toggleFav(this)">
       <span class="material-symbols-outlined">favorite_border</span>
     </div>
   </div>
@@ -657,14 +668,18 @@ h2{font-size:18px;font-weight:600;text-align:center;margin-bottom:6px;}
       <span>Desconto</span>
       <span id="discount">R$ 0,00</span>
     </div>
-       <div class="summary-row total">
+    <div class="summary-row">
+      <span>Taxa</span>
+      <span>R$ 0,00</span>
+    </div>
+    <div class="summary-row total">
       <span>Total</span>
       <span id="total">R$ 0,00</span>
     </div>
   </div>
 
   <div class="checkout-bar">
-    <button class="btn-primary" onclick="checkout()">Finalizar compra</button>
+    <button class="btn-primary" onclick="showPage('pagamento')">Finalizar compra</button>
   </div>
 
   <div class="bottom-nav">
@@ -690,6 +705,44 @@ h2{font-size:18px;font-weight:600;text-align:center;margin-bottom:6px;}
       <span>Perfil</span>
     </div>
   </div>
+</section>
+
+<!-- PAGAMENTO -->
+<section class="page" id="pagamento">
+  <div class="page-header">
+    <span class="material-symbols-outlined" onclick="showPage('carrinho')">arrow_back</span>
+    <h3>Pagamento</h3>
+  </div>
+
+  <div class="payment-box">
+    <h4>Resumo do pedido</h4>
+    <div id="paymentSummary"></div>
+    <div class="summary-row total" style="margin-top:12px;">
+      <span>Total</span>
+      <span id="paymentTotal">R$ 0,00</span>
+    </div>
+  </div>
+
+  <div class="payment-box">
+    <h4>Método de pagamento</h4>
+    <div class="payment-method">
+      <div class="radio"></div>
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pix/pix-original.svg" width="24" height="24" alt="Pix">
+      <span>Pix</span>
+    </div>
+  </div>
+
+  <div class="checkout-bar">
+    <button class="btn-primary" onclick="pagarComPix()">
+      <span class="material-symbols-outlined" style="font-size:18px;vertical-align:middle;">payments</span>
+      Pagar com Pix
+    </button>
+  </div>
+
+  <p class="terms">
+    Ao finalizar a compra você concorda com os
+    <a href="#">Termos de Uso</a> e <a href="#">Política de Privacidade</a>
+  </p>
 </section>
 
 <footer class="footer">
@@ -718,9 +771,15 @@ const auth = getAuth(app);
 let discount = 0;
 let cartItems = [];
 let currentProduct = null;
+let currentUser = null;
+
+const PIX_NOME = "Lorrane vitória Alves vaz";
+const PIX_CHAVE = "(98) 98485-3563";
+const WHATSAPP_NUMERO = "5598984853563"; // número sem + e sem espaços
 
 onAuthStateChanged(auth, (user) => {
   if(user){
+    currentUser = user;
     document.getElementById('userName').innerText = user.displayName || 'Usuário';
     showPage('home');
   }else{
@@ -742,6 +801,10 @@ window.togglePass = function(id, el){
 window.showPage = function(p){
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.getElementById(p).classList.add('active');
+
+  if(p === 'pagamento'){
+    renderPaymentSummary();
+  }
 
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   if(p === 'home') document.querySelectorAll('.nav-item')[0].classList.add('active');
@@ -892,12 +955,50 @@ window.updateCartBadge = function(){
   document.getElementById('cartBadge5').innerText = count;
 }
 
-window.checkout = function(){
+window.renderPaymentSummary = function(){
+  const summaryDiv = document.getElementById('paymentSummary');
+  summaryDiv.innerHTML = '';
+
+  cartItems.forEach(item => {
+    summaryDiv.innerHTML += `
+      <div class="payment-item">
+        <img src="${item.img}" alt="">
+        <span>${item.name}</span>
+        <span style="margin-left:auto;">R$ ${(item.price * item.qty).toFixed(2).replace('.',',')}</span>
+      </div>
+    `;
+  });
+
+  const total = cartItems.reduce((s, i) => s + i.price * i.qty, 0) - discount;
+  document.getElementById('paymentTotal').innerText = 'R$ ' + total.toFixed(2).replace('.',',');
+}
+
+window.pagarComPix = function(){
   if(cartItems.length === 0){
     alert('Carrinho vazio!');
     return;
   }
-  alert('Redirecionando para pagamento...');
+
+  let mensagem = `*NOVO PEDIDO - PRIME STORE VZ*%0A%0A`;
+  mensagem += `*Cliente:* ${currentUser?.displayName || 'Cliente'}%0A`;
+  mensagem += `*Email:* ${currentUser?.email || 'N/A'}%0A%0A`;
+  mensagem += `*ITENS DO PEDIDO:*%0A`;
+
+  cartItems.forEach(item => {
+    mensagem += `- ${item.name} (${item.qty}x) - R$ ${(item.price * item.qty).toFixed(2).replace('.',',')}%0A`;
+  });
+
+  const total = cartItems.reduce((s, i) => s + i.price * i.qty, 0) - discount;
+  mensagem += `%0A*TOTAL:* R$ ${total.toFixed(2).replace('.',',')}%0A%0A`;
+
+  mensagem += `*DADOS PARA PAGAMENTO PIX:*%0A`;
+  mensagem += `Bancaria - ${PIX_NOME}%0A`;
+  mensagem += `Chave Pix: ${PIX_CHAVE}%0A%0A`;
+  mensagem += `Manda foto de comprovante 📸%0A%0A`;
+  mensagem += `Aguardo confirmação para liberar o produto!`;
+
+  const url = `https://wa.me/${WHATSAPP_NUMERO}?text=${mensagem}`;
+  window.open(url, '_blank');
 }
 
 window.login = async function(){
