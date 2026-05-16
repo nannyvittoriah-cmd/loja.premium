@@ -88,18 +88,11 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
   align-items:center;
   justify-content:space-between;
   padding:16px;
-  background:var(--bg);
 }
 
 .home-header.greeting{
   font-size:16px;
   font-weight:600;
-}
-
-.home-header.actions{
-  display:flex;
-  align-items:center;
-  gap:16px;
 }
 
 .search-bar{
@@ -136,8 +129,6 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
   align-items:center;
   justify-content:space-between;
   padding:20px;
-  position:relative;
-  overflow:hidden;
 }
 
 .banner-text h3{
@@ -171,6 +162,7 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
   font-size:13px;
   color:var(--purple);
   text-decoration:none;
+  cursor:pointer;
 }
 
 .categories{
@@ -185,6 +177,7 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
   border-radius:12px;
   padding:12px 8px;
   text-align:center;
+  cursor:pointer;
 }
 
 .category.material-symbols-outlined{
@@ -212,17 +205,6 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
   padding:12px;
 }
 
-.product.icon{
-  width:40px;
-  height:40px;
-  border-radius:8px;
-  margin-bottom:8px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700;
-}
-
 .product h5{
   font-size:13px;
   font-weight:600;
@@ -239,6 +221,86 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
   font-size:14px;
   font-weight:700;
   color:var(--purple);
+}
+
+/* CATEGORIAS PAGE */
+.page-header{
+  display:flex;
+  align-items:center;
+  padding:16px;
+  gap:16px;
+}
+
+.page-header.material-symbols-outlined{
+  cursor:pointer;
+}
+
+.page-header h3{
+  flex:1;
+  text-align:center;
+  font-size:16px;
+  font-weight:600;
+}
+
+.tabs{
+  display:flex;
+  margin:0 16px 16px;
+  background:#1a1a21;
+  border-radius:12px;
+  padding:4px;
+}
+
+.tab{
+  flex:1;
+  text-align:center;
+  padding:10px;
+  font-size:13px;
+  border-radius:8px;
+  cursor:pointer;
+  color:var(--text2);
+}
+
+.tab.active{
+  background:var(--purple);
+  color:#fff;
+}
+
+.category-list{
+  padding:0 16px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.category-item{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  cursor:pointer;
+}
+
+.category-item.icon{
+  width:40px;
+  height:40px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.category-item.info h5{
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:2px;
+}
+
+.category-item.info p{
+  font-size:12px;
+  color:var(--text2);
 }
 
 /* BOTTOM NAV */
@@ -384,10 +446,10 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
   <div class="section">
     <div class="section-header">
       <h4>Categorias</h4>
-      <a href="#">Ver todas</a>
+      <a onclick="showPage('categories')">Ver todas</a>
     </div>
     <div class="categories">
-      <div class="category">
+      <div class="category" onclick="showPage('categories')">
         <span class="material-symbols-outlined">stadia_controller</span>
         <span>Games</span>
       </div>
@@ -434,11 +496,120 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
   </div>
 
   <div class="bottom-nav">
-    <div class="nav-item active">
+    <div class="nav-item active" onclick="showPage('home')">
       <span class="material-symbols-outlined">home</span>
       <span>Home</span>
     </div>
+    <div class="nav-item" onclick="showPage('categories')">
+      <span class="material-symbols-outlined">storefront</span>
+      <span>Loja</span>
+    </div>
+    <div class="nav-item" style="position:relative;">
+      <span class="material-symbols-outlined">shopping_cart</span>
+      <span>Carrinho</span>
+      <span class="badge">1</span>
+    </div>
     <div class="nav-item">
+      <span class="material-symbols-outlined">receipt_long</span>
+      <span>Pedidos</span>
+    </div>
+    <div class="nav-item">
+      <span class="material-symbols-outlined">person</span>
+      <span>Perfil</span>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIAS -->
+<section class="page" id="categories">
+  <div class="page-header">
+    <span class="material-symbols-outlined" onclick="showPage('home')">arrow_back</span>
+    <h3>Categorias</h3>
+    <span class="material-symbols-outlined">search</span>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('categorias')">Categorias</div>
+    <div class="tab" onclick="switchTab('subcategorias')">Subcategorias</div>
+  </div>
+
+  <div class="category-list" id="categoriasTab">
+    <div class="category-item">
+      <div class="icon" style="background:#7c3aed;">
+        <span class="material-symbols-outlined">stadia_controller</span>
+      </div>
+      <div class="info">
+        <h5>Games</h5>
+        <p>Produtos relacionados a jogos</p>
+      </div>
+    </div>
+
+    <div class="category-item">
+      <div class="icon" style="background:#e50914;">
+        <span class="material-symbols-outlined">play_circle</span>
+      </div>
+      <div class="info">
+        <h5>Streaming</h5>
+        <p>Netflix, Spotify, Disney+ e mais</p>
+      </div>
+    </div>
+
+    <div class="category-item">
+      <div class="icon" style="background:#1877f2;">
+        <span class="material-symbols-outlined">photo_camera</span>
+      </div>
+      <div class="info">
+        <h5>Redes Sociais</h5>
+        <p>Seguidores, curtidas e views</p>
+      </div>
+    </div>
+
+    <div class="category-item">
+      <div class="icon" style="background:#f59e0b;">
+        <span class="material-symbols-outlined">redeem</span>
+      </div>
+      <div class="info">
+        <h5>Gift Cards</h5>
+        <p>Cartões presente digitais</p>
+      </div>
+    </div>
+
+    <div class="category-item">
+      <div class="icon" style="background:#06b6d4;">
+        <span class="material-symbols-outlined">apps</span>
+      </div>
+      <div class="info">
+        <h5>Apps</h5>
+        <p>Aplicativos premium</p>
+      </div>
+    </div>
+
+    <div class="category-item">
+      <div class="icon" style="background:#fbbf24;">
+        <span class="material-symbols-outlined">star</span>
+      </div>
+      <div class="info">
+        <h5>VIP</h5>
+        <p>Vantagens exclusivas</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="category-list hidden" id="subcategoriasTab">
+    <div class="category-item">
+      <div class="info">
+        <h5>Em breve</h5>
+        <p>Subcategorias serão adicionadas em breve</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="showPage('home')">
+      <span class="material-symbols-outlined">home</span>
+      <span>Home</span>
+    </div>
+    <div class="nav-item active" onclick="showPage('categories')">
       <span class="material-symbols-outlined">storefront</span>
       <span>Loja</span>
     </div>
@@ -505,6 +676,25 @@ window.togglePass = function(id, el){
 function showPage(p){
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.getElementById(p).classList.add('active');
+
+  // Atualiza menu inferior ativo
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if(p === 'home') document.querySelectorAll('.nav-item')[0].classList.add('active');
+  if(p === 'categories') document.querySelectorAll('.nav-item')[1].classList.add('active');
+}
+
+window.switchTab = function(tab){
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('categoriasTab').classList.add('hidden');
+  document.getElementById('subcategoriasTab').classList.add('hidden');
+
+  if(tab === 'categorias'){
+    document.querySelectorAll('.tab')[0].classList.add('active');
+    document.getElementById('categoriasTab').classList.remove('hidden');
+  } else {
+    document.querySelectorAll('.tab')[1].classList.add('active');
+    document.getElementById('subcategoriasTab').classList.remove('hidden');
+  }
 }
 
 window.login = async function(){
