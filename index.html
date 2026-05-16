@@ -173,6 +173,17 @@ h2{font-size:18px;font-weight:600;text-align:center;margin-bottom:6px;}
 .terms{font-size:11px;color:var(--text2);text-align:center;margin-top:12px;}
 .terms a{color:var(--purple);text-decoration:none;}
 
+/* ORDERS */
+.status-badge{
+  padding:4px 8px;
+  border-radius:6px;
+  font-size:10px;
+  font-weight:600;
+}
+.status-concluido{background:#10b98120;color:#10b981;}
+.status-aguardando{background:#f59e0b20;color:#f59e0b;}
+.status-cancelado{background:#ef444420;color:#ef4444;}
+
 /* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#0a0a0f;border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:6px 0;z-index:30;}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:var(--text2);cursor:pointer;}
@@ -335,7 +346,7 @@ h2{font-size:18px;font-weight:600;text-align:center;margin-bottom:6px;}
       <span>Carrinho</span>
       <span class="badge" id="cartBadge2">0</span>
     </div>
-    <div class="nav-item">
+    <div class="nav-item" onclick="showPage('pedidos')">
       <span class="material-symbols-outlined">receipt_long</span>
       <span>Pedidos</span>
     </div>
@@ -413,7 +424,7 @@ h2{font-size:18px;font-weight:600;text-align:center;margin-bottom:6px;}
       <span>Carrinho</span>
       <span class="badge" id="cartBadge3">0</span>
     </div>
-    <div class="nav-item">
+    <div class="nav-item" onclick="showPage('pedidos')">
       <span class="material-symbols-outlined">receipt_long</span>
       <span>Pedidos</span>
     </div>
@@ -487,7 +498,7 @@ h2{font-size:18px;font-weight:600;text-align:center;margin-bottom:6px;}
       <span>Carrinho</span>
       <span class="badge" id="cartBadge4">0</span>
     </div>
-    <div class="nav-item">
+    <div class="nav-item" onclick="showPage('pedidos')">
       <span class="material-symbols-outlined">receipt_long</span>
       <span>Pedidos</span>
     </div>
@@ -595,7 +606,7 @@ h2{font-size:18px;font-weight:600;text-align:center;margin-bottom:6px;}
       <span>Carrinho</span>
       <span class="badge" id="cartBadge5">0</span>
     </div>
-    <div class="nav-item">
+    <div class="nav-item" onclick="showPage('pedidos')">
       <span class="material-symbols-outlined">receipt_long</span>
       <span>Pedidos</span>
     </div>
@@ -646,11 +657,15 @@ h2{font-size:18px;font-weight:600;text-align:center;margin-bottom:6px;}
 
     <div class="how-it-works">
       <h4>Como funciona?</h4>
-      <div class="step">
+           <div class="step">
         <span class="material-symbols-outlined">check_circle</span>
         <span>Informe seu ID do Free Fire</span>
       </div>
-            <div class="step">
+      <div class="step">
+        <span class="material-symbols-outlined">check_circle</span>
+        <span>Efetue o pagamento</span>
+      </div>
+      <div class="step">
         <span class="material-symbols-outlined">check_circle</span>
         <span>Diamantes adicionados em instantes</span>
       </div>
@@ -715,9 +730,9 @@ h2{font-size:18px;font-weight:600;text-align:center;margin-bottom:6px;}
     <div class="nav-item active" style="position:relative;" onclick="showPage('carrinho')">
       <span class="material-symbols-outlined">shopping_cart</span>
       <span>Carrinho</span>
-      <span class="badge" id="cartBadge2">0</span>
+      <span class="badge" id="cartBadge6">0</span>
     </div>
-    <div class="nav-item">
+    <div class="nav-item" onclick="showPage('pedidos')">
       <span class="material-symbols-outlined">receipt_long</span>
       <span>Pedidos</span>
     </div>
@@ -766,6 +781,48 @@ h2{font-size:18px;font-weight:600;text-align:center;margin-bottom:6px;}
   </p>
 </section>
 
+<!-- PEDIDOS -->
+<section class="page" id="pedidos">
+  <div class="page-header">
+    <h3>Meus Pedidos</h3>
+    <span class="material-symbols-outlined" onclick="showPage('home')">close</span>
+  </div>
+
+  <div class="tabs" id="orderTabs">
+    <div class="tab active" onclick="filterOrders('todos',event)">Todos</div>
+    <div class="tab" onclick="filterOrders('aguardando',event)">Aguardando</div>
+    <div class="tab" onclick="filterOrders('concluidos',event)">Concluidos</div>
+    <div class="tab" onclick="filterOrders('cancelados',event)">Cancelados</div>
+  </div>
+
+  <div class="category-list" id="orderList">
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="showPage('home')">
+      <span class="material-symbols-outlined">home</span>
+      <span>Home</span>
+    </div>
+    <div class="nav-item" onclick="showPage('categories')">
+      <span class="material-symbols-outlined">storefront</span>
+      <span>Loja</span>
+    </div>
+    <div class="nav-item" style="position:relative;" onclick="showPage('carrinho')">
+      <span class="material-symbols-outlined">shopping_cart</span>
+      <span>Carrinho</span>
+      <span class="badge" id="cartBadge7">0</span>
+    </div>
+    <div class="nav-item active">
+      <span class="material-symbols-outlined">receipt_long</span>
+      <span>Pedidos</span>
+    </div>
+    <div class="nav-item">
+      <span class="material-symbols-outlined">person</span>
+      <span>Perfil</span>
+    </div>
+  </div>
+</section>
+
 <footer class="footer">
   Segurança | entrega manual | suporte 24h
 </footer>
@@ -798,6 +855,13 @@ const PIX_NOME = "Lorrane vitória Alves vaz";
 const PIX_CHAVE = "(98) 98485-3563";
 const WHATSAPP_NUMERO = "5598984853563";
 
+let orders = [
+  {id:12548, name:'520 Diamantes Free Fire', img:'https://i.imgur.com/9Q2bZ8L.png', price:18.90, status:'concluido', date:'13/01/2024'},
+  {id:12547, name:'Netflix 1 Mês', img:'https://i.imgur.com/9Q2bZ8L.png', price:17.90, status:'concluido', date:'13/01/2024'},
+  {id:12546, name:'100 Diamantes Free Fire', img:'https://i.imgur.com/9Q2bZ8L.png', price:4.99, status:'aguardando', date:'13/01/2024'},
+  {id:12545, name:'Spotify Premium', img:'https://i.imgur.com/9Q2bZ8L.png', price:10.90, status:'concluido', date:'13/01/2024'}
+];
+
 onAuthStateChanged(auth, (user) => {
   if(user){
     currentUser = user;
@@ -826,11 +890,15 @@ window.showPage = function(p){
   if(p === 'pagamento'){
     renderPaymentSummary();
   }
+  if(p === 'pedidos'){
+    renderOrders('todos');
+  }
 
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   if(p === 'home') document.querySelectorAll('.nav-item')[0].classList.add('active');
   if(p === 'categories' || p === 'games' || p === 'freefire' || p === 'produto') document.querySelectorAll('.nav-item')[1].classList.add('active');
   if(p === 'carrinho') document.querySelectorAll('.nav-item')[2].classList.add('active');
+  if(p === 'pedidos') document.querySelectorAll('.nav-item')[3].classList.add('active');
 }
 
 window.switchFFTab = function(tab, e){
@@ -968,12 +1036,14 @@ window.updateTotal = function(){
 }
 
 window.updateCartBadge = function(){
-  const count = cartItems.length;
+  const count = cartItems.reduce((s, i) => s + i.qty, 0);
   document.getElementById('cartBadge').innerText = count;
   document.getElementById('cartBadge2').innerText = count;
   document.getElementById('cartBadge3').innerText = count;
   document.getElementById('cartBadge4').innerText = count;
   document.getElementById('cartBadge5').innerText = count;
+  document.getElementById('cartBadge6').innerText = count;
+  document.getElementById('cartBadge7').innerText = count;
 }
 
 window.renderPaymentSummary = function(){
@@ -1020,6 +1090,72 @@ window.pagarComPix = function(){
 
   const url = `https://wa.me/${WHATSAPP_NUMERO}?text=${mensagem}`;
   window.open(url, '_blank');
+
+  // Adiciona pedido na lista como "aguardando"
+  const newOrder = {
+    id: Math.floor(Math.random() * 90000) + 10000,
+    name: cartItems[0].name + (cartItems.length > 1? ` +${cartItems.length-1} itens` : ''),
+    img: cartItems[0].img,
+    price: total,
+    status: 'aguardando',
+    date: new Date().toLocaleDateString('pt-BR')
+  };
+  orders.unshift(newOrder);
+  cartItems = [];
+  updateCart();
+}
+
+window.filterOrders = function(status, e){
+  document.querySelectorAll('#orderTabs.tab').forEach(t => t.classList.remove('active'));
+  e.target.classList.add('active');
+  renderOrders(status);
+}
+
+window.renderOrders = function(filter = 'todos'){
+  const orderList = document.getElementById('orderList');
+  orderList.innerHTML = '';
+
+  let filtered = orders;
+  if(filter!== 'todos'){
+    filtered = orders.filter(o => o.status === filter);
+  }
+
+  if(filtered.length === 0){
+    orderList.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--text2);">Nenhum pedido encontrado</div>';
+    return;
+  }
+
+  filtered.forEach(order => {
+    let statusClass = 'status-concluido';
+    let statusText = 'Concluido';
+    if(order.status === 'aguardando'){
+      statusClass = 'status-aguardando';
+      statusText = 'Aguardando';
+    }
+    if(order.status === 'cancelado'){
+      statusClass = 'status-cancelado';
+      statusText = 'Cancelado';
+    }
+
+    orderList.innerHTML += `
+      <div class="category-item" data-status="${order.status}">
+        <div class="icon">
+          <img src="${order.img}" alt="">
+        </div>
+        <div class="info">
+          <h5>#${order.id}</h5>
+          <p>${order.name}</p>
+        </div>
+        <div style="text-align:right;">
+          <div class="status-badge ${statusClass}">${statusText}</div>
+          <div style="font-size:14px;font-weight:700;color:var(--purple);margin-top:4px;">
+            R$ ${order.price.toFixed(2).replace('.',',')}
+          </div>
+          <div style="font-size:10px;color:var(--text2);">${order.date}</div>
+        </div>
+      </div>
+    `;
+  });
 }
 
 window.login = async function(){
