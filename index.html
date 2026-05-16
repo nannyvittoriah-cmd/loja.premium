@@ -6,6 +6,7 @@
 <title>NEXUS STORE</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300,0,0"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 :root{
 --bg:#070709;--card:#121218;--border:#2a2a3a;--purple:#a855f7;
@@ -15,7 +16,7 @@
 body{background:var(--bg);color:var(--text);font-size:13px;overflow-x:hidden;}
 .page{display:none;min-height:100vh;padding-bottom:75px;opacity:0;transition:opacity 0.3s;}
 .page.active{display:block;opacity:1;}
-button,input{outline:none;border:none;font-family:inherit;}
+button,input,select{outline:none;border:none;font-family:inherit;}
 button{cursor:pointer;position:relative;z-index:10;}
 
 .loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;}
@@ -88,10 +89,23 @@ h4{font-size:13px;font-weight:600;}
 p{font-size:11px;color:var(--text-muted);}
 .small{font-size:10px;}
 
-.admin-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin:16px;}
-.table{width:100%;border-collapse:collapse;font-size:12px;}
-.table th{text-align:left;padding:10px;color:var(--text-muted);border-bottom:1px solid var(--border);}
-.table td{padding:10px;border-bottom:1px solid var(--border);}
+/* Admin */
+.admin-header{background:linear-gradient(135deg,#1a0b2e,#0f0f17);padding:16px;border-bottom:1px solid var(--border);}
+.admin-header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.admin-header-top h3{font-size:16px;font-weight:700;}
+.admin-header-avatar{width:32px;height:32px;border-radius:50%;border:2px solid var(--purple);object-fit:cover;}
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px;}
+.admin-card{background:rgba(18,18,24,0.8);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:16px;padding:16px;}
+.admin-card-label{font-size:11px;color:var(--text-muted);margin-bottom:6px;}
+.admin-card-value{font-size:18px;font-weight:800;margin-bottom:4px;}
+.admin-card-change{font-size:11px;color:#22c55e;font-weight:600;}
+.admin-card-change.neg{color:#ef4444;}
+.admin-chart{background:rgba(18,18,24,0.8);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:16px;padding:16px;margin:0 16px 16px;}
+.admin-chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.admin-date-picker{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px;}
+.admin-table{width:100%;border-collapse:collapse;font-size:12px;margin:0 16px;}
+.admin-table th{text-align:left;padding:10px;color:var(--text-muted);border-bottom:1px solid var(--border);}
+.admin-table td{padding:10px;border-bottom:1px solid var(--border);}
 
 /* Status badges */
 .status{padding:4px 8px;border-radius:6px;font-size:10px;font-weight:600;text-transform:capitalize;}
@@ -137,64 +151,6 @@ p{font-size:11px;color:var(--text-muted);}
 .profile-item-red .profile-item-icon{background:rgba(239,68,68,0.15);}
 .profile-item-red .profile-item-icon span{color:#ef4444;}
 .profile-item-red h4{color:#ef4444;}
-
-/* Product Page */
-.product-page{background:var(--bg);min-height:100vh;}
-.product-header{padding:16px;}
-.product-header img{width:100%;border-radius:16px;aspect-ratio:1/1;object-fit:cover;}
-.product-info{padding:0 16px 100px;}
-.product-info h2{font-size:18px;font-weight:700;margin-bottom:4px;}
-.product-sub{font-size:12px;color:var(--text-muted);margin-bottom:8px;}
-.product-meta{display:flex;gap:12px;font-size:11px;color:var(--text-muted);margin-bottom:16px;}
-.product-meta.rating{color:#fbbf24;}
-.product-price{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
-.product-price h3{font-size:24px;font-weight:800;color:var(--text);}
-.product-price.stock{font-size:12px;color:#22c55e;font-weight:600;}
-.product-section{margin-bottom:20px;}
-.product-section h4{font-size:14px;font-weight:700;margin-bottom:8px;}
-.product-section p{font-size:12px;color:var(--text-muted);line-height:1.5;}
-.how-it-works{list-style:none;padding:0;}
-.how-it-works li{font-size:12px;color:var(--text-muted);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
-.how-it-works li::before{content:'✓';color:#22c55e;font-weight:700;}
-.product-actions{display:flex;gap:10px;position:fixed;bottom:80px;left:16px;right:16px;}
-.product-actions.btn-primary{flex:1;}
-.btn-fav{width:46px;height:46px;border-radius:12px;border:1px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;}
-.btn-fav span{font-size:20px;color:var(--text-muted);}
-
-/* Cart Page */
-.cart-item{display:flex;gap:12px;background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:12px;margin:0 16px 10px;}
-.cart-item img{width:50px;height:50px;border-radius:10px;object-fit:cover;}
-.cart-item-info{flex:1;}
-.cart-item-info h4{font-size:13px;font-weight:600;margin-bottom:2px;}
-.cart-item-info.small{font-size:11px;color:var(--text-muted);}
-.cart-item-info.price{font-size:14px;font-weight:700;color:var(--text);margin-top:4px;}
-.cart-item-actions{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;}
-.cart-item-actions.delete{font-size:20px;color:#666;cursor:pointer;}
-.cart-item-actions.delete:hover{color:#ef4444;}
-.qty-control{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:4px 8px;}
-.qty-control button{background:transparent;color:var(--text);font-size:16px;font-weight:700;width:20px;cursor:pointer;}
-.qty-control span{font-size:13px;font-weight:600;min-width:16px;text-align:center;}
-
-.cart-summary{background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border-top:1px solid var(--border);padding:16px;margin-top:20px;}
-.coupon-box{display:flex;gap:8px;margin-bottom:16px;}
-.coupon-box input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0 12px;height:42px;color:var(--text);font-size:13px;}
-.coupon-box button{background:var(--purple);color:#fff;border-radius:10px;padding:0 16px;font-weight:700;font-size:13px;}
-.summary-line{display:flex;justify-content:space-between;margin-bottom:10px;font-size:13px;color:var(--text-muted);}
-.summary-line.total{font-size:16px;font-weight:700;color:var(--text);margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
-.cart-summary.btn-primary{margin-top:16px;background:var(--purple);}
-
-/* Payment Page */
-.payment-wrap{padding:16px;}
-.payment-box{background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;}
-.payment-box h4{font-size:13px;font-weight:700;margin-bottom:12px;}
-.payment-item{display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px;}
-.payment-item span:first-child{display:flex;align-items:center;gap:6px;}
-.payment-total{display:flex;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:14px;font-weight:700;}
-.payment-method{display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--card);border:1px solid var(--purple);border-radius:10px;}
-.method-left{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;}
-.radio-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--purple);position:relative;}
-.radio-dot::after{content:'';position:absolute;inset:3px;background:var(--purple);border-radius:50%;}
-.payment-terms{font-size:10px;color:var(--text-muted);text-align:center;margin-top:12px;line-height:1.4;}
 </style>
 </head>
 <body>
@@ -203,6 +159,7 @@ p{font-size:11px;color:var(--text-muted);}
 <span class="material-symbols-outlined">diamond</span>
 </div>
 
+<!-- LOGIN CLIENTE -->
 <section class="page" id="login">
 <div class="login-page">
 <div class="login-box">
@@ -231,10 +188,40 @@ p{font-size:11px;color:var(--text-muted);}
 
 <button class="btn-primary" id="mainBtn" onclick="loginEmail()">Entrar</button>
 <button class="btn-outline" id="switchBtn" onclick="toggleMode()">Criar conta</button>
+<button class="btn-outline" onclick="showPage('adminLogin')" style="border-color:var(--gold);color:var(--gold);margin-top:8px;">Entrar como Admin</button>
 </div>
 </div>
 </section>
 
+<!-- LOGIN ADMIN -->
+<section class="page" id="adminLogin">
+<div class="login-page">
+<div class="login-box">
+<div class="login-logo">
+<span class="material-symbols-outlined">shield</span>
+<h1 style="font-size:22px;font-weight:800;">ADMIN</h1>
+</div>
+<h2 style="font-size:20px;font-weight:700;margin-bottom:6px;">Painel Administrativo</h2>
+
+<div class="input-box">
+<span class="material-symbols-outlined" style="font-size:20px;">mail</span>
+<input type="email" id="adminEmail" placeholder="email do admin">
+</div>
+
+<div class="input-box">
+<span class="material-symbols-outlined" style="font-size:20px;">lock</span>
+<input type="password" id="adminPass" placeholder="senha">
+</div>
+
+<p class="error-msg" id="adminErrorMsg"></p>
+
+<button class="btn-primary" onclick="loginAdmin()">Entrar</button>
+<button class="btn-outline" onclick="showPage('login')">Voltar</button>
+</div>
+</div>
+</section>
+
+<!-- HOME CLIENTE -->
 <section class="page" id="home">
 <div class="top-bar">
   <div class="top-bar-left">
@@ -275,18 +262,76 @@ p{font-size:11px;color:var(--text-muted);}
 </div>
 </section>
 
+<!-- ADMIN DASHBOARD -->
+<section class="page" id="admin">
+<div class="admin-header">
+  <div class="admin-header-top">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="material-symbols-outlined" onclick="alert('Menu em breve')" style="cursor:pointer;">menu</span>
+      <h3>Admin - Dashboard</h3>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="material-symbols-outlined" onclick="alert('Mais opções em breve')" style="cursor:pointer;">more_vert</span>
+      <img id="adminAvatar" src="https://i.pravatar.cc/100" class="admin-header-avatar">
+    </div>
+  </div>
+</div>
+
+<div style="padding:16px;display:flex;justify-content:space-between;align-items:center;">
+  <h4 style="font-size:16px;font-weight:700;">Dashboard</h4>
+  <div class="admin-date-picker">
+    <span id="dateRange">12/05/2024 - 12/06/2024</span>
+    <span class="material-symbols-outlined" style="font-size:16px;">calendar_month</span>
+  </div>
+</div>
+
+<div class="admin-grid">
+  <div class="admin-card">
+    <div class="admin-card-label">Vendas</div>
+    <div class="admin-card-value" id="statVendas">R$ 0,00</div>
+    <div class="admin-card-change" id="statVendasChange">+0%</div>
+  </div>
+  <div class="admin-card">
+    <div class="admin-card-label">Pedidos</div>
+    <div class="admin-card-value" id="statPedidos">0</div>
+    <div class="admin-card-change" id="statPedidosChange">+0%</div>
+  </div>
+  <div class="admin-card">
+    <div class="admin-card-label">Clientes</div>
+    <div class="admin-card-value" id="statClientes">0</div>
+    <div class="admin-card-change" id="statClientesChange">+0%</div>
+  </div>
+  <div class="admin-card">
+    <div class="admin-card-label">Produtos</div>
+    <div class="admin-card-value" id="statProdutos">0</div>
+    <div class="admin-card-change" id="statProdutosChange">+0%</div>
+  </div>
+</div>
+
+<div class="admin-chart">
+  <div class="admin-chart-header">
+    <h4 style="font-size:13px;font-weight:700;">Gráfico de vendas</h4>
+  </div>
+  <canvas id="salesChart" height="180"></canvas>
+</div>
+
+<div style="padding:0 16px 20px;">
+  <h4 style="font-size:13px;font-weight:700;margin-bottom:10px;">Últimos Pedidos</h4>
+  <table class="admin-table" id="adminOrdersTable"></table>
+</div>
+</section>
+
+<!-- RESTO DAS PÁGINAS CLIENTE -->
 <section class="page" id="categories">
 <div class="header">
 <span class="material-symbols-outlined" onclick="showPage('home')" style="cursor:pointer;">arrow_back</span>
 <h3 style="font-size:14px;">Categorias</h3>
 <span class="material-symbols-outlined" style="cursor:pointer;">search</span>
 </div>
-
 <div class="cat-tabs">
   <div class="cat-tab active" onclick="switchCatTab(this,'categories')">Categorias</div>
   <div class="cat-tab" onclick="switchCatTab(this,'subcategories')">Subcategorias</div>
 </div>
-
 <div id="catContent"></div>
 </section>
 
@@ -296,12 +341,10 @@ p{font-size:11px;color:var(--text-muted);}
 <h3 id="catDetailTitle" style="font-size:14px;">Free Fire</h3>
 <span class="material-symbols-outlined" style="cursor:pointer;">search</span>
 </div>
-
 <div class="cat-tabs">
   <div class="cat-tab active" onclick="switchDetailTab(this,'prod')">Produtos</div>
   <div class="cat-tab" onclick="switchDetailTab(this,'info')">Informações</div>
 </div>
-
 <div class="chips" id="filterChips"></div>
 <div id="catDetailContent"></div>
 </section>
@@ -331,32 +374,16 @@ p{font-size:11px;color:var(--text-muted);}
 <h3 style="font-size:14px;">Carrinho</h3>
 <span onclick="clearCart()" style="color:#a855f7;font-size:12px;cursor:pointer;font-weight:600;">Limpar</span>
 </div>
-
 <div id="cartItems"></div>
-
 <div class="cart-summary" id="cartSummary" style="display:none;">
   <div class="coupon-box">
     <input type="text" id="couponInput" placeholder="Digite o cupom">
     <button onclick="applyCoupon()">Aplicar</button>
   </div>
-
-  <div class="summary-line">
-    <span>Subtotal</span>
-    <span id="subtotal">R$ 0,00</span>
-  </div>
-  <div class="summary-line">
-    <span>Desconto</span>
-    <span id="discount">- R$ 0,00</span>
-  </div>
-  <div class="summary-line">
-    <span>Taxa</span>
-    <span id="tax">R$ 0,00</span>
-  </div>
-  <div class="summary-line total">
-    <span>Total</span>
-    <span id="cartTotal">R$ 0,00</span>
-  </div>
-
+  <div class="summary-line"><span>Subtotal</span><span id="subtotal">R$ 0,00</span></div>
+  <div class="summary-line"><span>Desconto</span><span id="discount">- R$ 0,00</span></div>
+  <div class="summary-line"><span>Taxa</span><span id="tax">R$ 0,00</span></div>
+  <div class="summary-line total"><span>Total</span><span id="cartTotal">R$ 0,00</span></div>
   <button class="btn-primary" onclick="checkout()">Finalizar compra</button>
 </div>
 </section>
@@ -367,17 +394,12 @@ p{font-size:11px;color:var(--text-muted);}
 <h3 style="font-size:14px;">Pagamento</h3>
 <div></div>
 </div>
-
 <div class="payment-wrap">
   <div class="payment-box">
     <h4>Resumo do pedido</h4>
     <div id="paymentItems"></div>
-    <div class="payment-total">
-      <span>Total</span>
-      <span id="paymentTotal">R$ 0,00</span>
-    </div>
+    <div class="payment-total"><span>Total</span><span id="paymentTotal">R$ 0,00</span></div>
   </div>
-
   <div class="payment-box">
     <h4>Método de pagamento</h4>
     <div class="payment-method active">
@@ -388,16 +410,11 @@ p{font-size:11px;color:var(--text-muted);}
       <div class="radio-dot"></div>
     </div>
   </div>
-
   <button class="btn-primary" onclick="payWithPix()">
     <span class="material-symbols-outlined">diamond</span>
     Pagar com Pix
   </button>
-
-  <p class="payment-terms">
-    Ao finalizar a compra você concorda com<br>
-    os Termos de Uso e Política de Privacidade
-  </p>
+  <p class="payment-terms">Ao finalizar a compra você concorda com<br>os Termos de Uso e Política de Privacidade</p>
 </div>
 </section>
 
@@ -407,14 +424,12 @@ p{font-size:11px;color:var(--text-muted);}
 <h3 style="font-size:14px;">Meus Pedidos</h3>
 <span class="material-symbols-outlined" onclick="alert('Fechar')" style="cursor:pointer;">close</span>
 </div>
-
 <div class="orders-filters" id="orderFilters">
   <div class="order-filter active" onclick="filterOrders(this,'all')">Todos</div>
   <div class="order-filter" onclick="filterOrders(this,'aguardando')">Aguardando</div>
   <div class="order-filter" onclick="filterOrders(this,'concluido')">Concluídos</div>
   <div class="order-filter" onclick="filterOrders(this,'cancelado')">Cancelados</div>
 </div>
-
 <div id="ordersList"></div>
 </section>
 
@@ -424,19 +439,11 @@ p{font-size:11px;color:var(--text-muted);}
 <h3 id="orderDetailTitle" style="font-size:14px;">Pedido #12548</h3>
 <span class="material-symbols-outlined" onclick="alert('Mais opções em breve')" style="cursor:pointer;">more_vert</span>
 </div>
-
 <div class="receipt-wrap">
   <div class="receipt-card">
-    <div class="receipt-row">
-      <span class="receipt-label">Status</span>
-      <span class="status concluido" id="receiptStatus">Concluído</span>
-    </div>
-    <div class="receipt-row">
-      <span class="receipt-label">Data</span>
-      <span class="receipt-value" id="receiptDate">12/05/2024 - 14:32</span>
-    </div>
+    <div class="receipt-row"><span class="receipt-label">Status</span><span class="status concluido" id="receiptStatus">Concluído</span></div>
+    <div class="receipt-row"><span class="receipt-label">Data</span><span class="receipt-value" id="receiptDate">12/05/2024 - 14:32</span></div>
   </div>
-
   <div class="receipt-card">
     <div class="receipt-section-title">Produto</div>
     <div class="receipt-row">
@@ -450,137 +457,51 @@ p{font-size:11px;color:var(--text-muted);}
       <div class="receipt-value" id="receiptProductPrice">R$ 18,90</div>
     </div>
   </div>
-
   <div class="receipt-card">
-    <div class="receipt-row">
-      <span class="receipt-label">Total</span>
-      <span class="receipt-value" id="receiptTotal">R$ 18,90</span>
-    </div>
+    <div class="receipt-row"><span class="receipt-label">Total</span><span class="receipt-value" id="receiptTotal">R$ 18,90</span></div>
   </div>
-
   <div class="receipt-card">
     <div class="receipt-section-title">Informações</div>
-    <div class="receipt-row">
-      <span class="receipt-label">ID do jogo</span>
-      <span class="receipt-value" id="receiptGameId">123456789</span>
-    </div>
-    <div class="receipt-row">
-      <span class="receipt-label">Método de pagamento</span>
-      <span class="receipt-value" id="receiptPayment">Pix</span>
-    </div>
+    <div class="receipt-row"><span class="receipt-label">ID do jogo</span><span class="receipt-value" id="receiptGameId">123456789</span></div>
+    <div class="receipt-row"><span class="receipt-label">Método de pagamento</span><span class="receipt-value" id="receiptPayment">Pix</span></div>
   </div>
-
   <button class="btn-help" onclick="alert('Suporte em breve')">Precisa de ajuda?</button>
 </div>
 </section>
 
 <section class="page" id="profile">
-<div class="header">
-<h3 style="font-size:14px;">Perfil</h3>
-<div></div>
-</div>
-
+<div class="header"><h3 style="font-size:14px;">Perfil</h3><div></div></div>
 <div class="profile-header">
   <img id="userAvatar" src="https://i.pravatar.cc/100" class="profile-avatar">
   <h3 id="profileName" class="profile-name">Usuário</h3>
   <p id="profileEmail" class="profile-email">email@email.com</p>
 </div>
-
 <div class="profile-section">
   <div class="profile-section-title">Conta</div>
-  
   <div class="list-item" onclick="alert('Editar perfil em breve')">
-    <div class="profile-item-icon">
-      <span class="material-symbols-outlined">person</span>
-    </div>
-    <div class="list-item-info">
-      <h4>Editar perfil</h4>
-      <div class="small">Altere seus dados pessoais</div>
-    </div>
+    <div class="profile-item-icon"><span class="material-symbols-outlined">person</span></div>
+    <div class="list-item-info"><h4>Editar perfil</h4><div class="small">Altere seus dados pessoais</div></div>
     <span class="material-symbols-outlined list-item-arrow">chevron_right</span>
   </div>
-
   <div class="list-item" onclick="alert('Endereços em breve')">
-    <div class="profile-item-icon">
-      <span class="material-symbols-outlined">location_on</span>
-    </div>
-    <div class="list-item-info">
-      <h4>Endereços</h4>
-      <div class="small">Gerencie seus endereços</div>
-    </div>
-    <span class="material-symbols-outlined list-item-arrow">chevron_right</span>
-  </div>
-
-  <div class="list-item" onclick="alert('Pagamentos em breve')">
-    <div class="profile-item-icon">
-      <span class="material-symbols-outlined">credit_card</span>
-    </div>
-    <div class="list-item-info">
-      <h4>Métodos de pagamento</h4>
-      <div class="small">Cartões e Pix salvos</div>
-    </div>
+    <div class="profile-item-icon"><span class="material-symbols-outlined">location_on</span></div>
+    <div class="list-item-info"><h4>Endereços</h4><div class="small">Gerencie seus endereços</div></div>
     <span class="material-symbols-outlined list-item-arrow">chevron_right</span>
   </div>
 </div>
-
 <div class="profile-section">
   <div class="profile-section-title">Suporte</div>
-  
   <div class="list-item" onclick="alert('Ajuda em breve')">
-    <div class="profile-item-icon">
-      <span class="material-symbols-outlined">help</span>
-    </div>
-    <div class="list-item-info">
-      <h4>Central de ajuda</h4>
-      <div class="small">Perguntas frequentes</div>
-    </div>
-    <span class="material-symbols-outlined list-item-arrow">chevron_right</span>
-  </div>
-
-  <div class="list-item" onclick="alert('Contato em breve')">
-    <div class="profile-item-icon">
-      <span class="material-symbols-outlined">support_agent</span>
-    </div>
-    <div class="list-item-info">
-      <h4>Fale conosco</h4>
-      <div class="small">WhatsApp 24h</div>
-    </div>
+    <div class="profile-item-icon"><span class="material-symbols-outlined">help</span></div>
+    <div class="list-item-info"><h4>Central de ajuda</h4><div class="small">Perguntas frequentes</div></div>
     <span class="material-symbols-outlined list-item-arrow">chevron_right</span>
   </div>
 </div>
-
 <div class="profile-section">
   <div class="list-item profile-item-red" onclick="logout()">
-    <div class="profile-item-icon">
-      <span class="material-symbols-outlined">logout</span>
-    </div>
-    <div class="list-item-info">
-      <h4>Sair da conta</h4>
-      <div class="small">Encerrar sua sessão</div>
-    </div>
+    <div class="profile-item-icon"><span class="material-symbols-outlined">logout</span></div>
+    <div class="list-item-info"><h4>Sair da conta</h4><div class="small">Encerrar sua sessão</div></div>
   </div>
-</div>
-</section>
-
-<section class="page" id="admin">
-<div class="header">
-<h3 style="font-size:14px;">Admin</h3>
-<span class="material-symbols-outlined" onclick="logout()" style="cursor:pointer;">logout</span>
-</div>
-<div class="admin-card">
-<h4 style="font-size:13px;margin-bottom:10px;">Adicionar Produto</h4>
-<input id="prodName" placeholder="Nome" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
-<input id="prodPrice" placeholder="Preço 18.90" type="number" style="width:100%;margin6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
-<input id="prodCat" placeholder="Categoria: Games" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
-<input id="prodSub" placeholder="Subcategoria: Free Fire" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
-<input id="prodType" placeholder="Tipo: Diamantes, Contas, Outros" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
-<input id="prodImg" placeholder="URL da imagem" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;">
-<textarea id="prodDesc" placeholder="Descrição" style="width:100%;margin:6px 0;padding:9px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:12px;height:60px;"></textarea>
-<button class="btn-primary" onclick="addProduct()">Salvar Produto</button>
-</div>
-<div class="admin-card">
-<h4 style="font-size:13px;margin-bottom:10px;">Pedidos</h4>
-<table class="table" id="adminOrdersTable"></table>
 </div>
 </section>
 
@@ -603,16 +524,16 @@ const firebaseConfig = {
   projectId: "premium-store-aa58b",
   storageBucket: "premium-store-aa58b.firebasestorage.app",
   messagingSenderId: "462239500057",
-  appId: "1:462239500057:web:f1b7cea162ed308a866788"
+  appId:  "1:462239500057:web:f1b7cea162ed308a866788"
 };
-const ADMIN_EMAIL = "nannyhvittoriah@gmail.com";
+const ADMIN_EMAIL = "vittoriahvahz@gmail.com";
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
 
 let currentUser=null,isAdmin=false,products=[],categories=[],cart=JSON.parse(localStorage.getItem("cart"))||[],selectedTab='all',historyPage='home',currentPage='login';
-let currentCategory='',currentSubcategory='',currentFilter='all',isRegisterMode=false,selectedProduct=null,couponDiscount=0,currentOrder=null,orderFilter='all',allOrders=[],selectedOrder=null;
+let currentCategory='',currentSubcategory='',currentFilter='all',isRegisterMode=false,selectedProduct=null,couponDiscount=0,currentOrder=null,orderFilter='all',allOrders=[],selectedOrder=null,chart=null;
 
 const subcategoriesData = {
   "Games": {
@@ -644,8 +565,8 @@ function showPage(page){
   if(page=='categories')renderCategoriesList();
   if(page=='cart')renderCart();
   if(page=='orders')loadOrders();
-  if(page=='admin')loadAdmin();
-  document.querySelectorAll('.nav-item').forEach((n,i)=>{
+  if(page=='admin')loadAdminDashboard();
+  document.querySelectorAll('.bottom-nav.nav-item').forEach((n,i)=>{
     n.classList.toggle('active',i==['home','shop','cart','orders','profile'].indexOf(page));
   });
 }
@@ -672,6 +593,11 @@ function hideError(){
   document.getElementById('errorMsg').style.display = 'none';
 }
 
+function showAdminError(msg){
+  document.getElementById('adminErrorMsg').innerText = msg;
+  document.getElementById('adminErrorMsg').style.display = 'block';
+}
+
 function registerEmail(){
   const name = document.getElementById('loginName').value.trim();
   const email = document.getElementById('loginEmail').value.trim();
@@ -694,6 +620,17 @@ function loginEmail(){
   auth.signInWithEmailAndPassword(email, pass).catch(e=>{showError(traduzErro(e.code));});
 }
 
+function loginAdmin(){
+  const email = document.getElementById('adminEmail').value.trim();
+  const pass = document.getElementById('adminPass').value;
+  if(email!== ADMIN_EMAIL){
+    showAdminError('Email não autorizado');
+    return;
+  }
+  auth.signInWithEmailAndPassword(email, pass)
+   .catch(e=>{showAdminError(traduzErro(e.code));});
+}
+
 function traduzErro(code){
   if(code == 'auth/user-not-found') return 'Email não cadastrado';
   if(code == 'auth/wrong-password') return 'Senha incorreta';
@@ -712,11 +649,16 @@ auth.onAuthStateChanged((user)=>{
     if(user){
       currentUser=user;
       isAdmin=user.email===ADMIN_EMAIL;
-      document.getElementById('userName').innerText=user.displayName||user.email.split('@')[0];
-      document.getElementById('profileName').innerText=user.displayName||'Usuário';
-      document.getElementById('profileEmail').innerText=user.email;
-      document.getElementById('userAvatar').src = user.photoURL || `https://i.pravatar.cc/100?u=${user.uid}`;
-      showPage(isAdmin?'admin':'home');
+      if(isAdmin){
+        document.getElementById('adminAvatar').src = user.photoURL || `https://i.pravatar.cc/100?u=${user.uid}`;
+        showPage('admin');
+      }else{
+        document.getElementById('userName').innerText=user.displayName||user.email.split('@')[0];
+        document.getElementById('profileName').innerText=user.displayName||'Usuário';
+        document.getElementById('profileEmail').innerText=user.email;
+        document.getElementById('userAvatar').src = user.photoURL || `https://i.pravatar.cc/100?u=${user.uid}`;
+        showPage('home');
+      }
       loadProducts();
       loadOrders();
       updateCartBadge();
@@ -735,6 +677,7 @@ function loadProducts(){
     products=[];snap.forEach(doc=>products.push({id:doc.id,...doc.data()}));
     categories=[...new Set(products.map(p=>p.category))];
     renderHome();renderShop();renderCategoriesList();
+    if(isAdmin)loadAdminDashboard();
   },(err)=>console.error(err));
 }
 
@@ -744,15 +687,97 @@ function loadOrders(){
   q.orderBy("createdAt","desc").onSnapshot((snap)=>{
     allOrders=[];snap.forEach(doc=>allOrders.push({id:doc.id,...doc.data()}));
     filterOrders(document.querySelector('.order-filter.active'),'all');
-    if(isAdmin)renderAdminOrders(allOrders);
+    if(isAdmin)renderAdminDashboardOrders(allOrders);
   });
 }
 
+// ADMIN DASHBOARD
+function loadAdminDashboard(){
+  if(!isAdmin) return;
+  updateAdminStats();
+  renderSalesChart();
+  renderAdminDashboardOrders(allOrders);
+}
+
+function updateAdminStats(){
+  const now = new Date();
+  const thirtyDaysAgo = new Date(now.getTime() - 30*24*60*60*1000);
+
+  const recentOrders = allOrders.filter(o=>o.createdAt?.seconds*1000 > thirtyDaysAgo.getTime() && o.status==='concluido');
+  const totalVendas = recentOrders.reduce((sum,o)=>sum+o.total,0);
+  const totalPedidos = recentOrders.length;
+
+  const clientes = new Set(allOrders.map(o=>o.userId)).size;
+  const produtos = products.length;
+
+  document.getElementById('statVendas').innerText = 'R$ ' + totalVendas.toLocaleString('pt-BR',{minimumFractionDigits:2});
+  document.getElementById('statPedidos').innerText = totalPedidos;
+  document.getElementById('statClientes').innerText = clientes;
+  document.getElementById('statProdutos').innerText = produtos;
+
+  // Simulação de variação - depois liga no histórico real
+  document.getElementById('statVendasChange').innerText = '+12.5%';
+  document.getElementById('statPedidosChange').innerText = '+8.2%';
+  document.getElementById('statClientesChange').innerText = '+5.1%';
+  document.getElementById('statProdutosChange').innerText = '+2.7%';
+}
+
+function renderSalesChart(){
+  const ctx = document.getElementById('salesChart').getContext('2d');
+  if(chart) chart.destroy();
+
+  // Dados mockados igual ao print - depois troca por dados reais do Firebase
+  const labels = ['15/05','18/05','21/05','24/05','27/05','30/05','02/06','05/06'];
+  const data = [1200,1800,1500,2200,1900,2400,2100,2800];
+
+  chart = new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:labels,
+      datasets:[{
+        label:'Vendas',
+        data:data,
+        borderColor:'#a855f7',
+        backgroundColor:'rgba(168,85,247,0.2)',
+        tension:0.4,
+        fill:true,
+        pointBackgroundColor:'#a855f7',
+        pointBorderColor:'#fff',
+        pointRadius:4
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#a1a1aa',font:{size:10}}},
+        y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#a1a1aa',font:{size:10},callback:function(value){return value>=1000?value/1000+'k':value;}}}
+      }
+    }
+  });
+}
+
+function renderAdminDashboardOrders(orders){
+  const lastOrders = orders.slice(0,10);
+  document.getElementById('adminOrdersTable').innerHTML=`
+    <tr><th>ID</th><th>Cliente</th><th>Valor</th><th>Status</th></tr>
+    ${lastOrders.map(o=>`
+      <tr>
+        <td>#${o.id.slice(0,5)}</td>
+        <td>${o.userName}</td>
+        <td>R$ ${o.total.toFixed(2).replace('.',',')}</td>
+        <td><span class="status ${o.status}">${o.status}</span></td>
+      </tr>
+    `).join('')}
+  `;
+}
+
+// RESTO DAS FUNÇÕES CLIENTE - IGUAL ANTES
 function filterOrders(el,status){
   document.querySelectorAll('.order-filter').forEach(f=>f.classList.remove('active'));
   el.classList.add('active');
   orderFilter = status;
-
   let filtered = allOrders;
   if(status!== 'all'){
     filtered = allOrders.filter(o=>o.status === status);
@@ -765,12 +790,10 @@ function renderOrders(orders){
     document.getElementById('ordersList').innerHTML='<p style="text-align:center;padding:60px 20px;color:var(--text-muted);">Nenhum pedido encontrado</p>';
     return;
   }
-
   document.getElementById('ordersList').innerHTML=orders.map(o=>{
     const item = o.items && o.items[0]? o.items[0] : {};
     const date = o.createdAt?.seconds? new Date(o.createdAt.seconds*1000) : new Date();
     const dateStr = date.toLocaleDateString('pt-BR');
-
     return `
     <div class="order-item" onclick="openOrderDetail('${o.id}')">
       <img src="${item.img || 'https://via.placeholder.com/40'}">
@@ -794,11 +817,9 @@ function renderOrders(orders){
 function openOrderDetail(orderId){
   selectedOrder = allOrders.find(o=>o.id===orderId);
   if(!selectedOrder) return;
-
   const item = selectedOrder.items && selectedOrder.items[0]? selectedOrder.items[0] : {};
   const date = selectedOrder.createdAt?.seconds? new Date(selectedOrder.createdAt.seconds*1000) : new Date();
   const dateStr = date.toLocaleDateString('pt-BR') + ' - ' + date.toLocaleTimeString('pt-BR').slice(0,5);
-
   document.getElementById('orderDetailTitle').innerText = `Pedido #${selectedOrder.id.slice(0,5)}`;
   document.getElementById('receiptStatus').innerText = selectedOrder.status.charAt(0).toUpperCase() + selectedOrder.status.slice(1);
   document.getElementById('receiptStatus').className = `status ${selectedOrder.status}`;
@@ -810,82 +831,7 @@ function openOrderDetail(orderId){
   document.getElementById('receiptTotal').innerText = `R$ ${selectedOrder.total.toFixed(2).replace('.',',')}`;
   document.getElementById('receiptGameId').innerText = selectedOrder.gameId || '---';
   document.getElementById('receiptPayment').innerText = selectedOrder.paymentMethod || 'Pix';
-
   showPage('orderDetail');
-}
-
-function addProduct(){
-  if(!isAdmin)return alert('Sem permissão');
-  db.collection("products").add({
-    name:document.getElementById('prodName').value,
-    price:parseFloat(document.getElementById('prodPrice').value),
-    category:document.getElementById('prodCat').value,
-    subcategory:document.getElementById('prodSub').value,
-    type:document.getElementById('prodType').value,
-    img:document.getElementById('prodImg').value,
-    desc:document.getElementById('prodDesc').value,
-    createdAt:firebase.firestore.FieldValue.serverTimestamp()
-  }).then(()=>{
-    ['prodName','prodPrice','prodCat','prodSub','prodType','prodImg','prodDesc'].forEach(id=>document.getElementById(id).value='');
-    alert('Produto adicionado!');
-  });
-}
-
-function checkout(){
-  if(cart.length==0)return alert('Carrinho vazio');
-
-  const subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
-  const total=subtotal-couponDiscount;
-
-  currentOrder = {
-    items: [...cart],
-    subtotal,
-    discount: couponDiscount,
-    total
-  };
-
-  showPage('payment');
-  renderPayment();
-}
-
-function renderPayment(){
-  if(!currentOrder) return;
-
-  document.getElementById('paymentItems').innerHTML = currentOrder.items.map(item=>`
-    <div class="payment-item">
-      <span><span class="material-symbols-outlined" style="font-size:16px;color:var(--purple);">diamond</span>${item.name}</span>
-      <span>R$ ${(item.price*item.qty).toFixed(2).replace('.',',')}</span>
-    </div>
-  `).join('');
-
-  document.getElementById('paymentTotal').innerText = 'R$ ' + currentOrder.total.toFixed(2).replace('.',',');
-}
-
-function payWithPix(){
-  if(!currentOrder) return;
-
-  db.collection("orders").add({
-    userId:currentUser.uid,
-    userName:currentUser.displayName||currentUser.email,
-    items:currentOrder.items,
-    subtotal:currentOrder.subtotal,
-    discount:currentOrder.discount,
-    total:currentOrder.total,
-    paymentMethod: 'pix',
-    status:'aguardando',
-    gameId: '',
-    createdAt:firebase.firestore.FieldValue.serverTimestamp()
-  }).then(()=>{
-    alert('Pedido criado! Aguardando pagamento Pix.');
-    cart=[];
-    couponDiscount=0;
-    currentOrder=null;
-    localStorage.removeItem("cart");
-    updateCartBadge();
-    showPage('orders');
-  }).catch(e=>{
-    alert('Erro ao criar pedido: ' + e.message);
-  });
 }
 
 function renderHome(){
@@ -992,7 +938,6 @@ function renderCategoryProducts(){
     if(currentFilter == 'all') return true;
     return p.type && p.type.toLowerCase() == currentFilter;
   });
-
   document.getElementById('catDetailContent').innerHTML = filtered.length==0
 ? '<p style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum produto encontrado</p>'
     : filtered.map(p=>`
@@ -1027,7 +972,6 @@ function renderCategoryInfo(){
 function renderShop(){
   document.getElementById('shopTabs').innerHTML='<div class="tab active" onclick="setTab(this,\'all\')">Todos</div>'+
     categories.map(c=>`<div class="tab" onclick="setTab(this,'${c}')">${c}</div>`).join('');
-
   const filtered = selectedTab=='all'?products:products.filter(p=>p.category==selectedTab);
   document.getElementById('shopProducts').innerHTML = filtered.map(p=>`
     <div class="list-item" onclick="openProduct('${p.id}')">
@@ -1056,32 +1000,26 @@ function setTab(el,tab){
 function openProduct(id){
   selectedProduct = products.find(p=>p.id==id);
   if(!selectedProduct) return;
-
   document.getElementById('productDetail').innerHTML=`
     <div class="product-page">
       <div class="product-header">
         <img src="${selectedProduct.img || 'https://via.placeholder.com/200'}" alt="">
       </div>
-
       <div class="product-info">
         <h2>${selectedProduct.name}</h2>
         <p class="product-sub">${selectedProduct.subcategory || selectedProduct.category}</p>
-
         <div class="product-meta">
           <span class="rating">★ 4.9 (2.348)</span>
           <span class="type">Produto digital</span>
         </div>
-
         <div class="product-price">
           <h3>R$ ${selectedProduct.price.toFixed(2).replace('.',',')}</h3>
           <span class="stock">Em estoque</span>
         </div>
-
         <div class="product-section">
           <h4>Descrição</h4>
-          <p>${selectedProduct.desc || 'Os diamantes serão adicionados na conta informada após a confirmação do pagamento.'}</p>
+          <p>${selectedProduct.desc || 'Produto digital com entrega imediata após confirmação.'}</p>
         </div>
-
         <div class="product-section">
           <h4>Como funciona?</h4>
           <ul class="how-it-works">
@@ -1090,7 +1028,6 @@ function openProduct(id){
             <li>✓ Receba em minutos</li>
           </ul>
         </div>
-
         <div class="product-actions">
           <button class="btn-primary" onclick="addToCart('${selectedProduct.id}')">Comprar agora</button>
           <button class="btn-fav" onclick="alert('Favorito em breve')">
@@ -1117,17 +1054,14 @@ function addToCart(id){
 function renderCart(){
   const div=document.getElementById('cartItems');
   const summary=document.getElementById('cartSummary');
-
   if(cart.length==0){
     div.innerHTML='<p style="text-align:center;padding:60px 20px;color:var(--text-muted);">Seu carrinho está vazio</p>';
     summary.style.display='none';
     updateCartBadge();
     return;
   }
-
   summary.style.display='block';
   let subtotal=0;
-
   div.innerHTML=cart.map((item, idx)=> {
     subtotal += item.price * item.qty;
     return `
@@ -1149,16 +1083,13 @@ function renderCart(){
       </div>
     `;
   }).join('');
-
   const discount = couponDiscount;
   const tax = 0;
   const total = subtotal - discount + tax;
-
   document.getElementById('subtotal').innerText = 'R$ ' + subtotal.toFixed(2).replace('.',',');
   document.getElementById('discount').innerText = '- R$ ' + discount.toFixed(2).replace('.',',');
   document.getElementById('tax').innerText = 'R$ ' + tax.toFixed(2).replace('.',',');
   document.getElementById('cartTotal').innerText = 'R$ ' + total.toFixed(2).replace('.',',');
-
   updateCartBadge();
 }
 
@@ -1222,21 +1153,51 @@ function searchProducts(){
   `).join('');
 }
 
-function renderAdminOrders(orders){
-  document.getElementById('adminOrdersTable').innerHTML=`
-    <tr><th>ID</th><th>Cliente</th><th>Valor</th><th>Status</th></tr>
-    ${orders.map(o=>`
-      <tr>
-        <td>${o.id.slice(0,5)}</td>
-        <td>${o.userName}</td>
-        <td>R$ ${o.total.toFixed(2).replace('.',',')}</td>
-        <td><span class="status ${o.status}">${o.status}</span></td>
-      </tr>
-    `).join('')}
-  `;
+function checkout(){
+  if(cart.length==0)return alert('Carrinho vazio');
+  const subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const total=subtotal-couponDiscount;
+  currentOrder = {items: [...cart],subtotal,discount: couponDiscount,total};
+  showPage('payment');
+  renderPayment();
 }
 
-function loadAdmin(){loadOrders();}
+function renderPayment(){
+  if(!currentOrder) return;
+  document.getElementById('paymentItems').innerHTML = currentOrder.items.map(item=>`
+    <div class="payment-item">
+      <span><span class="material-symbols-outlined" style="font-size:16px;color:var(--purple);">diamond</span>${item.name}</span>
+      <span>R$ ${(item.price*item.qty).toFixed(2).replace('.',',')}</span>
+    </div>
+  `).join('');
+  document.getElementById('paymentTotal').innerText = 'R$ ' + currentOrder.total.toFixed(2).replace('.',',');
+}
+
+function payWithPix(){
+  if(!currentOrder) return;
+  db.collection("orders").add({
+    userId:currentUser.uid,
+    userName:currentUser.displayName||currentUser.email,
+    items:currentOrder.items,
+    subtotal:currentOrder.subtotal,
+    discount:currentOrder.discount,
+    total:currentOrder.total,
+    paymentMethod: 'pix',
+    status:'aguardando',
+    gameId: '',
+    createdAt:firebase.firestore.FieldValue.serverTimestamp()
+  }).then(()=>{
+    alert('Pedido criado! Aguardando pagamento Pix.');
+    cart=[];
+    couponDiscount=0;
+    currentOrder=null;
+    localStorage.removeItem("cart");
+    updateCartBadge();
+    showPage('orders');
+  }).catch(e=>{
+    alert('Erro ao criar pedido: ' + e.message);
+  });
+}
 </script>
 </body>
 </html>
