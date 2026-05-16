@@ -662,6 +662,7 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
+// Expõe funções pro HTML conseguir chamar
 window.toggleForm = function(){
   document.getElementById('loginForm').classList.toggle('hidden');
   document.getElementById('registerForm').classList.toggle('hidden');
@@ -673,11 +674,10 @@ window.togglePass = function(id, el){
   el.innerText = input.type==='password'?'visibility_off':'visibility';
 }
 
-function showPage(p){
+window.showPage = function(p){
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.getElementById(p).classList.add('active');
 
-  // Atualiza menu inferior ativo
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   if(p === 'home') document.querySelectorAll('.nav-item')[0].classList.add('active');
   if(p === 'categories') document.querySelectorAll('.nav-item')[1].classList.add('active');
