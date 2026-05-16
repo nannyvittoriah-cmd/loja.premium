@@ -117,6 +117,28 @@ p{font-size:11px;color:var(--text-muted);}
 .product-actions.btn-primary{flex:1;}
 .btn-fav{width:46px;height:46px;border-radius:12px;border:1px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;}
 .btn-fav span{font-size:20px;color:var(--text-muted);}
+
+/* Cart Page */
+.cart-item{display:flex;gap:12px;background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:12px;margin:0 16px 10px;}
+.cart-item img{width:50px;height:50px;border-radius:10px;object-fit:cover;}
+.cart-item-info{flex:1;}
+.cart-item-info h4{font-size:13px;font-weight:600;margin-bottom:2px;}
+.cart-item-info.small{font-size:11px;color:var(--text-muted);}
+.cart-item-info.price{font-size:14px;font-weight:700;color:var(--text);margin-top:4px;}
+.cart-item-actions{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;}
+.cart-item-actions.delete{font-size:20px;color:#666;cursor:pointer;}
+.cart-item-actions.delete:hover{color:#ef4444;}
+.qty-control{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:4px 8px;}
+.qty-control button{background:transparent;color:var(--text);font-size:16px;font-weight:700;width:20px;cursor:pointer;}
+.qty-control span{font-size:13px;font-weight:600;min-width:16px;text-align:center;}
+
+.cart-summary{background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border-top:1px solid var(--border);padding:16px;margin-top:20px;}
+.coupon-box{display:flex;gap:8px;margin-bottom:16px;}
+.coupon-box input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0 12px;height:42px;color:var(--text);font-size:13px;}
+.coupon-box button{background:var(--purple);color:#fff;border-radius:10px;padding:0 16px;font-weight:700;font-size:13px;}
+.summary-line{display:flex;justify-content:space-between;margin-bottom:10px;font-size:13px;color:var(--text-muted);}
+.summary-line.total{font-size:16px;font-weight:700;color:var(--text);margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+.cart-summary.btn-primary{margin-top:16px;background:var(--purple);}
 </style>
 </head>
 <body>
@@ -251,15 +273,35 @@ p{font-size:11px;color:var(--text-muted);}
 <div class="header">
 <span class="material-symbols-outlined" onclick="goBack()" style="cursor:pointer;">arrow_back</span>
 <h3 style="font-size:14px;">Carrinho</h3>
-<span onclick="clearCart()" style="color:#ef4444;font-size:12px;cursor:pointer;">Limpar</span>
+<span onclick="clearCart()" style="color:#a855f7;font-size:12px;cursor:pointer;font-weight:600;">Limpar</span>
 </div>
+
 <div id="cartItems"></div>
-<div class="section">
-<div style="display:flex;justify-content:space-between;margin-bottom:12px;">
-<span>Total</span>
-<span id="cartTotal" style="color:var(--gold);font-weight:700;">R$ 0,00</span>
-</div>
-<button class="btn-primary" onclick="checkout()">Finalizar compra</button>
+
+<div class="cart-summary" id="cartSummary" style="display:none;">
+  <div class="coupon-box">
+    <input type="text" id="couponInput" placeholder="Digite o cupom">
+    <button onclick="applyCoupon()">Aplicar</button>
+  </div>
+
+  <div class="summary-line">
+    <span>Subtotal</span>
+    <span id="subtotal">R$ 0,00</span>
+  </div>
+  <div class="summary-line">
+    <span>Desconto</span>
+    <span id="discount">- R$ 0,00</span>
+  </div>
+  <div class="summary-line">
+    <span>Taxa</span>
+    <span id="tax">R$ 0,00</span>
+  </div>
+  <div class="summary-line total">
+    <span>Total</span>
+    <span id="cartTotal">R$ 0,00</span>
+  </div>
+
+  <button class="btn-primary" onclick="checkout()">Finalizar compra</button>
 </div>
 </section>
 
@@ -334,7 +376,7 @@ const db = firebase.firestore();
 const auth = firebase.auth();
 
 let currentUser=null,isAdmin=false,products=[],categories=[],cart=JSON.parse(localStorage.getItem("cart"))||[],selectedTab='all',historyPage='home',currentPage='login';
-let currentCategory='',currentSubcategory='',currentFilter='all',isRegisterMode=false,selectedProduct=null;
+let currentCategory='',currentSubcategory='',currentFilter='all',isRegisterMode=false,selectedProduct=null,couponDiscount=0;
 
 const subcategoriesData = {
   "Games": {
@@ -488,12 +530,14 @@ function addProduct(){
 
 function checkout(){
   if(cart.length==0)return alert('Carrinho vazio');
+  const subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const total=subtotal-couponDiscount;
   db.collection("orders").add({
     userId:currentUser.uid,userName:currentUser.displayName||currentUser.email,
-    items:cart,total:cart.reduce((s,i)=>s+i.price*i.qty,0),
+    items:cart,subtotal,discount:couponDiscount,total,
     status:'pending',createdAt:firebase.firestore.FieldValue.serverTimestamp()
   }).then(()=>{
-    cart=[];localStorage.removeItem("cart");alert('Pedido criado!');showPage('orders');updateCartBadge();
+    cart=[];couponDiscount=0;localStorage.removeItem("cart");alert('Pedido criado!');showPage('orders');updateCartBadge();
   });
 }
 
@@ -569,7 +613,7 @@ function openSubcategory(sub){
 
 function renderFilters(){
   const filters = ['Todos','Diamantes','Contas','Outros'];
-    document.getElementById('filterChips').innerHTML = filters.map((f,i)=>`
+  document.getElementById('filterChips').innerHTML = filters.map((f,i)=>`
     <div class="chip ${i==0?'active':''}" onclick="setFilter(this,'${f.toLowerCase()}')">${f}</div>
   `).join('');
   currentFilter = 'all';
@@ -596,14 +640,14 @@ function switchDetailTab(el,tab){
 
 function renderCategoryProducts(){
   const filtered = products.filter(p=>{
-    const matchSub = p.subcategory == currentSubcategory;
+    const matchSub = currentSubcategory? p.subcategory == currentSubcategory : p.category == currentCategory;
     if(!matchSub) return false;
     if(currentFilter == 'all') return true;
     return p.type && p.type.toLowerCase() == currentFilter;
   });
 
   document.getElementById('catDetailContent').innerHTML = filtered.length==0
-    ? '<p style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum produto encontrado</p>'
+   ? '<p style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum produto encontrado</p>'
     : filtered.map(p=>`
     <div class="list-item" onclick="openProduct('${p.id}')">
       <img src="${p.img||'https://via.placeholder.com/40'}">
@@ -636,7 +680,7 @@ function renderCategoryInfo(){
 function renderShop(){
   document.getElementById('shopTabs').innerHTML='<div class="tab active" onclick="setTab(this,\'all\')">Todos</div>'+
     categories.map(c=>`<div class="tab" onclick="setTab(this,'${c}')">${c}</div>`).join('');
-  
+
   const filtered = selectedTab=='all'?products:products.filter(p=>p.category==selectedTab);
   document.getElementById('shopProducts').innerHTML = filtered.map(p=>`
     <div class="list-item" onclick="openProduct('${p.id}')">
@@ -675,7 +719,7 @@ function openProduct(id){
       <div class="product-info">
         <h2>${selectedProduct.name}</h2>
         <p class="product-sub">${selectedProduct.subcategory || selectedProduct.category}</p>
-        
+
         <div class="product-meta">
           <span class="rating">★ 4.9 (2.348)</span>
           <span class="type">Produto digital</span>
@@ -725,32 +769,80 @@ function addToCart(id){
 
 function renderCart(){
   const div=document.getElementById('cartItems');
+  const summary=document.getElementById('cartSummary');
+
   if(cart.length==0){
-    div.innerHTML='<p style="text-align:center;padding:40px;color:var(--text-muted);">Carrinho vazio</p>';
-    document.getElementById('cartTotal').innerText='R$ 0,00';
+    div.innerHTML='<p style="text-align:center;padding:60px 20px;color:var(--text-muted);">Seu carrinho está vazio</p>';
+    summary.style.display='none';
     updateCartBadge();
     return;
   }
-  let total=0;
-  div.innerHTML=cart.map(item=>{
-    total+=item.price*item.qty;
+
+  summary.style.display='block';
+  let subtotal=0;
+
+  div.innerHTML=cart.map((item, idx)=> {
+    subtotal += item.price * item.qty;
     return `
-      <div class="list-item">
-        <img src="${item.img}">
-        <div class="list-item-info">
+      <div class="cart-item">
+        <img src="${item.img || 'https://via.placeholder.com/50'}">
+        <div class="cart-item-info">
           <h4>${item.name}</h4>
-          <div class="small">Qtd: ${item.qty}</div>
+          <div class="small">${item.subcategory || item.category}</div>
+          <div class="price">R$ ${item.price.toFixed(2).replace('.',',')}</div>
         </div>
-        <div class="price">R$ ${(item.price*item.qty).toFixed(2).replace('.',',')}</div>
+        <div class="cart-item-actions">
+          <span class="material-symbols-outlined delete" onclick="removeFromCart(${idx})">delete</span>
+          <div class="qty-control">
+            <button onclick="updateQty(${idx}, -1)">-</button>
+            <span>${item.qty}</span>
+            <button onclick="updateQty(${idx}, 1)">+</button>
+          </div>
+        </div>
       </div>
     `;
   }).join('');
-  document.getElementById('cartTotal').innerText='R$ '+total.toFixed(2).replace('.',',');
+
+  const discount = couponDiscount;
+  const tax = 0;
+  const total = subtotal - discount + tax;
+
+  document.getElementById('subtotal').innerText = 'R$ ' + subtotal.toFixed(2).replace('.',',');
+  document.getElementById('discount').innerText = '- R$ ' + discount.toFixed(2).replace('.',',');
+  document.getElementById('tax').innerText = 'R$ ' + tax.toFixed(2).replace('.',',');
+  document.getElementById('cartTotal').innerText = 'R$ ' + total.toFixed(2).replace('.',',');
+
   updateCartBadge();
+}
+
+function updateQty(index, change){
+  cart[index].qty += change;
+  if(cart[index].qty <= 0) cart.splice(index, 1);
+  localStorage.setItem("cart",JSON.stringify(cart));
+  renderCart();
+}
+
+function removeFromCart(index){
+  cart.splice(index, 1);
+  localStorage.setItem("cart",JSON.stringify(cart));
+  renderCart();
+}
+
+function applyCoupon(){
+  const code = document.getElementById('couponInput').value.trim().toLowerCase();
+  if(code == 'nexus10'){
+    couponDiscount = 5;
+    alert('Cupom aplicado! R$ 5,00 OFF');
+  }else{
+    couponDiscount = 0;
+    alert('Cupom inválido');
+  }
+  renderCart();
 }
 
 function clearCart(){
   cart=[];
+  couponDiscount=0;
   localStorage.removeItem("cart");
   renderCart();
   updateCartBadge();
