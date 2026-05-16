@@ -184,6 +184,45 @@ h2{font-size:18px;font-weight:600;text-align:center;margin-bottom:6px;}
 .status-aguardando{background:#f59e0b20;color:#f59e0b;}
 .status-cancelado{background:#ef444420;color:#ef4444;}
 
+/* COMPROVANTE */
+.comp-wrap{padding:16px;}
+.comp-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:12px;
+  margin-bottom:10px;
+  font-size:13px;
+}
+.comp-row span:first-child{color:var(--text2);}
+.comp-section{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:10px;}
+.comp-label{font-size:12px;color:var(--text2);display:block;margin-bottom:8px;}
+.comp-produto{display:flex;align-items:center;gap:10px;}
+.comp-produto img{width:40px;height:40px;border-radius:8px;}
+.comp-produto h5{font-size:13px;font-weight:600;margin-bottom:2px;}
+.comp-produto p{font-size:11px;color:var(--text2);}
+.comp-price{margin-left:auto;font-size:14px;font-weight:700;color:var(--purple);}
+.total-row{font-weight:700;font-size:14px;}
+.total-row span:last-child{color:var(--purple);}
+.comp-info{background:#1a1a21;border-radius:8px;padding:10px;}
+.comp-info-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;}
+.comp-info-row span:first-child{color:var(--text2);}
+.btn-help{
+  width:100%;
+  height:44px;
+  background:#7c3aed;
+  border:none;
+  border-radius:10px;
+  color:#fff;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  margin-top:16px;
+}
+
 /* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#0a0a0f;border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:6px 0;z-index:30;}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:var(--text2);cursor:pointer;}
@@ -607,7 +646,7 @@ h2{font-size:18px;font-weight:600;text-align:center;margin-bottom:6px;}
       <span class="badge" id="cartBadge5">0</span>
     </div>
     <div class="nav-item" onclick="showPage('pedidos')">
-      <span class="material-symbols-outlined">receipt_long</span>
+           <span class="material-symbols-outlined">receipt_long</span>
       <span>Pedidos</span>
     </div>
     <div class="nav-item">
@@ -657,7 +696,7 @@ h2{font-size:18px;font-weight:600;text-align:center;margin-bottom:6px;}
 
     <div class="how-it-works">
       <h4>Como funciona?</h4>
-           <div class="step">
+      <div class="step">
         <span class="material-symbols-outlined">check_circle</span>
         <span>Informe seu ID do Free Fire</span>
       </div>
@@ -823,6 +862,62 @@ h2{font-size:18px;font-weight:600;text-align:center;margin-bottom:6px;}
   </div>
 </section>
 
+<!-- COMPROVANTE -->
+<section class="page" id="comprovante">
+  <div class="page-header">
+    <span class="material-symbols-outlined" onclick="voltarPedidos()">arrow_back</span>
+    <h3 id="compNumero">Pedido #12548</h3>
+    <span class="material-symbols-outlined">more_vert</span>
+  </div>
+
+  <div class="comp-wrap">
+    <div class="comp-row">
+      <span>Status</span>
+      <span id="compStatus" class="status-badge status-concluido">Concluido</span>
+    </div>
+
+    <div class="comp-row">
+      <span>Data</span>
+      <span id="compData">12/05/2024 - 14:32</span>
+    </div>
+
+    <div class="comp-section">
+      <span class="comp-label">Produto</span>
+      <div class="comp-produto">
+        <img id="compImg" src="" alt="">
+        <div>
+          <h5 id="compProdName">520 Diamantes</h5>
+          <p id="compProdGame">Free Fire</p>
+        </div>
+        <span id="compProdPrice" class="comp-price">R$ 18,90</span>
+      </div>
+    </div>
+
+    <div class="comp-row total-row">
+      <span>Total</span>
+      <span id="compTotal">R$ 18,90</span>
+    </div>
+
+    <div class="comp-section">
+      <span class="comp-label">Informações</span>
+      <div class="comp-info">
+        <div class="comp-info-row">
+          <span>ID do jogo</span>
+          <span id="compGameId">123456789</span>
+        </div>
+        <div class="comp-info-row">
+          <span>Método de pagamento</span>
+          <span id="compPayment">Pix</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-help" onclick="abrirSuporte()">
+      Precisa de ajuda?
+    </button>
+  </div>
+</section>
+
 <footer class="footer">
   Segurança | entrega manual | suporte 24h
 </footer>
@@ -856,10 +951,10 @@ const PIX_CHAVE = "(98) 98485-3563";
 const WHATSAPP_NUMERO = "5598984853563";
 
 let orders = [
-  {id:12548, name:'520 Diamantes Free Fire', img:'https://i.imgur.com/9Q2bZ8L.png', price:18.90, status:'concluido', date:'13/01/2024'},
-  {id:12547, name:'Netflix 1 Mês', img:'https://i.imgur.com/9Q2bZ8L.png', price:17.90, status:'concluido', date:'13/01/2024'},
-  {id:12546, name:'100 Diamantes Free Fire', img:'https://i.imgur.com/9Q2bZ8L.png', price:4.99, status:'aguardando', date:'13/01/2024'},
-  {id:12545, name:'Spotify Premium', img:'https://i.imgur.com/9Q2bZ8L.png', price:10.90, status:'concluido', date:'13/01/2024'}
+  {id:12548, name:'520 Diamantes Free Fire', img:'https://i.imgur.com/9Q2bZ8L.png', price:18.90, status:'concluido', date:'13/01/2024', gameId:'123456789', payment:'Pix'},
+  {id:12547, name:'Netflix 1 Mês', img:'https://i.imgur.com/9Q2bZ8L.png', price:17.90, status:'concluido', date:'13/01/2024', gameId:'---', payment:'Pix'},
+  {id:12546, name:'100 Diamantes Free Fire', img:'https://i.imgur.com/9Q2bZ8L.png', price:4.99, status:'aguardando', date:'13/01/2024', gameId:'987654321', payment:'Pix'},
+  {id:12545, name:'Spotify Premium', img:'https://i.imgur.com/9Q2bZ8L.png', price:10.90, status:'concluido', date:'13/01/2024', gameId:'---', payment:'Pix'}
 ];
 
 onAuthStateChanged(auth, (user) => {
@@ -1070,9 +1165,16 @@ window.pagarComPix = function(){
     return;
   }
 
+  const gameId = prompt('Digite seu ID do jogo Free Fire:');
+  if(!gameId){
+    alert('ID do jogo é obrigatório');
+    return;
+  }
+
   let mensagem = `*NOVO PEDIDO - PRIME STORE VZ*%0A%0A`;
   mensagem += `*Cliente:* ${currentUser?.displayName || 'Cliente'}%0A`;
-  mensagem += `*Email:* ${currentUser?.email || 'N/A'}%0A%0A`;
+  mensagem += `*Email:* ${currentUser?.email || 'N/A'}%0A`;
+  mensagem += `*ID do jogo:* ${gameId}%0A%0A`;
   mensagem += `*ITENS DO PEDIDO:*%0A`;
 
   cartItems.forEach(item => {
@@ -1091,14 +1193,15 @@ window.pagarComPix = function(){
   const url = `https://wa.me/${WHATSAPP_NUMERO}?text=${mensagem}`;
   window.open(url, '_blank');
 
-  // Adiciona pedido na lista como "aguardando"
   const newOrder = {
     id: Math.floor(Math.random() * 90000) + 10000,
     name: cartItems[0].name + (cartItems.length > 1? ` +${cartItems.length-1} itens` : ''),
     img: cartItems[0].img,
     price: total,
     status: 'aguardando',
-    date: new Date().toLocaleDateString('pt-BR')
+    date: new Date().toLocaleDateString('pt-BR'),
+    gameId: gameId,
+    payment: 'Pix'
   };
   orders.unshift(newOrder);
   cartItems = [];
@@ -1138,7 +1241,7 @@ window.renderOrders = function(filter = 'todos'){
     }
 
     orderList.innerHTML += `
-      <div class="category-item" data-status="${order.status}">
+      <div class="category-item" onclick='abrirComprovante(${JSON.stringify(order)})'>
         <div class="icon">
           <img src="${order.img}" alt="">
         </div>
@@ -1156,6 +1259,32 @@ window.renderOrders = function(filter = 'todos'){
       </div>
     `;
   });
+}
+
+window.abrirComprovante = function(order){
+  document.getElementById('compNumero').innerText = `Pedido #${order.id}`;
+  document.getElementById('compStatus').innerText = order.status === 'concluido'? 'Concluido' : order.status === 'aguardando'? 'Aguardando' : 'Cancelado';
+  document.getElementById('compStatus').className = `status-badge status-${order.status}`;
+  document.getElementById('compData').innerText = order.date + ' - 14:32';
+  document.getElementById('compImg').src = order.img;
+  document.getElementById('compProdName').innerText = order.name.split(' +')[0];
+  document.getElementById('compProdGame').innerText = order.name.includes('Free Fire')? 'Free Fire' : 'Digital';
+  document.getElementById('compProdPrice').innerText = `R$ ${order.price.toFixed(2).replace('.',',')}`;
+  document.getElementById('compTotal').innerText = `R$ ${order.price.toFixed(2).replace('.',',')}`;
+  document.getElementById('compGameId').innerText = order.gameId || '---';
+  document.getElementById('compPayment').innerText = order.payment || 'Pix';
+
+  showPage('comprovante');
+}
+
+window.voltarPedidos = function(){
+  showPage('pedidos');
+}
+
+window.abrirSuporte = function(){
+  const pedidoNum = document.getElementById('compNumero').innerText.replace('Pedido #','');
+  const msg = `Olá, preciso de ajuda com o pedido #${pedidoNum}`;
+  window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
 window.login = async function(){
