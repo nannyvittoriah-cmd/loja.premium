@@ -25,12 +25,15 @@ h1{font-size:20px;font-weight:700;text-align:center;margin-bottom:8px;}
 .input-group input::placeholder{color:#5a5a63;}
 .eye{position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;}
 .btn{width:100%;height:46px;background:#7c3aed;border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;}
+.btn:disabled{opacity:0.6;}
+.error{color:#ef4444;font-size:12px;margin-top:-8px;margin-bottom:14px;text-align:center;}
 
 /* HOME */
 #homeScreen{padding-bottom:70px;}
 .header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;}
 .greeting{font-size:14px;font-weight:600;}
 .header-right{display:flex;align-items:center;gap:14px;font-size:12px;}
+.logout{font-size:11px;color:#ef4444;cursor:pointer;}
 .cart{position:relative;}
 .badge{position:absolute;top:-6px;right:-8px;background:#ef4444;color:#fff;font-size:9px;padding:1px 4px;border-radius:8px;}
 .search{margin:0 16px 14px;position:relative;}
@@ -53,7 +56,7 @@ h1{font-size:20px;font-weight:700;text-align:center;margin-bottom:8px;}
 .prod-info{padding:6px;}
 .prod-info h5{font-size:11px;font-weight:600;margin-bottom:2px;}
 .prod-info p{font-size:10px;color:#8a8a93;}
-.prod-info.price{font-size:12px;font-weight:700;color:#7c3aed;margin-top:3px;}
+.price{font-size:12px;font-weight:700;color:#7c3aed;margin-top:3px;}
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#0a0a0f;border-top:1px solid #26262f;display:flex;justify-content:space-around;padding:6px 0;}
 .nav-item{display:flex;flex-direction:column;align-items:center;font-size:9px;color:#8a8a93;}
 .nav-item.active{color:#7c3aed;}
@@ -62,7 +65,7 @@ h1{font-size:20px;font-weight:700;text-align:center;margin-bottom:8px;}
 </head>
 <body>
 
-<!-- TELA LOGIN - SEM HIDDEN -->
+<!-- TELA LOGIN -->
 <div id="loginScreen">
   <div class="login-box">
     <div class="logo">
@@ -79,6 +82,8 @@ h1{font-size:20px;font-weight:700;text-align:center;margin-bottom:8px;}
 
     <h1>Bem-vindo de volta!</h1>
     <p class="subtitle">Faça login para continuar</p>
+
+    <div id="errorMsg" class="error"></div>
 
     <div class="input-group">
       <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -100,16 +105,16 @@ h1{font-size:20px;font-weight:700;text-align:center;margin-bottom:8px;}
       </svg>
     </div>
 
-    <button class="btn" onclick="login()">Entrar</button>
+    <button class="btn" id="loginBtn" onclick="login()">Entrar</button>
   </div>
 </div>
 
-<!-- TELA HOME - COM HIDDEN -->
+<!-- TELA HOME -->
 <div id="homeScreen" class="hidden">
   <div class="header">
-    <div class="greeting">Olá, <span id="userName">Gabriel</span> 👋</div>
+    <div class="greeting">Olá, <span id="userName">...</span> 👋</div>
     <div class="header-right">
-      <span>Saldo</span>
+      <span class="logout" onclick="logout()">Sair</span>
       <div class="cart">
         <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
@@ -213,26 +218,76 @@ h1{font-size:20px;font-weight:700;text-align:center;margin-bottom:8px;}
   </div>
 </div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
+  authDomain: "premium-store-aa58b.firebaseapp.com",
+  databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
+  projectId: "premium-store-aa58b",
+  storageBucket: "premium-store-aa58b.firebasestorage.app",
+  messagingSenderId: "462239500057",
+  appId: "1:462239500057:web:f1b7cea162ed308a866788",
+  measurementId: "G-CN88J28WRX"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+onAuthStateChanged(auth, (user) => {
+  if(user){
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('homeScreen').classList.remove('hidden');
+    document.getElementById('userName').innerText = user.email.split('@')[0];
+  }else{
+    document.getElementById('loginScreen').classList.remove('hidden');
+    document.getElementById('homeScreen').classList.add('hidden');
+  }
+});
+
 document.getElementById('togglePass').onclick = function(){
   let pass = document.getElementById('password');
   pass.type = pass.type === 'password'? 'text' : 'password';
 }
 
-function login(){
-  let email = document.getElementById('email').value;
-  let pass = document.getElementById('password').value;
+window.login = async function(){
+  const email = document.getElementById('email').value;
+  const pass = document.getElementById('password').value;
+  const btn = document.getElementById('loginBtn');
+  const errorMsg = document.getElementById('errorMsg');
+
+  errorMsg.innerText = '';
 
   if(!email ||!pass){
-    alert('Preenche email e senha');
+    errorMsg.innerText = 'Preenche email e senha';
     return;
   }
 
-  document.getElementById('userName').innerText = email.split('@')[0];
-  document.getElementById('loginScreen').classList.add('hidden');
-  document.getElementById('homeScreen').classList.remove('hidden');
+  btn.disabled = true;
+  btn.innerText = 'Entrando...';
+
+  try{
+    await signInWithEmailAndPassword(auth, email, pass);
+  }catch(error){
+    btn.disabled = false;
+    btn.innerText = 'Entrar';
+    if(error.code === 'auth/user-not-found'){
+      errorMsg.innerText = 'Usuário não encontrado';
+    }else if(error.code === 'auth/wrong-password'){
+      errorMsg.innerText = 'Senha incorreta';
+    }else if(error.code === 'auth/invalid-email'){
+      errorMsg.innerText = 'Email inválido';
+    }else{
+      errorMsg.innerText = 'Erro ao fazer login';
+    }
+  }
+}
+
+window.logout = function(){
+  signOut(auth);
 }
 </script>
-
 </body>
 </html>
