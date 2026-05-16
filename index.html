@@ -16,7 +16,7 @@
 body{background:var(--bg);color:var(--text);font-size:13px;overflow-x:hidden;}
 .page{display:none;min-height:100vh;padding-bottom:75px;opacity:0;transition:opacity 0.3s;}
 .page.active{display:block;opacity:1;}
-button,input,select{outline:none;border:none;font-family:inherit;}
+button,input,select,textarea{outline:none;border:none;font-family:inherit;}
 button{cursor:pointer;position:relative;z-index:10;}
 
 .loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;}
@@ -29,9 +29,13 @@ button{cursor:pointer;position:relative;z-index:10;}
 .login-logo{display:flex;align-items:center;gap:8px;margin-bottom:32px;justify-content:center;}
 .login-logo span{font-size:28px;color:var(--gold);filter:drop-shadow(0 0 10px rgba(251,191,36,0.5));}
 .input-box{display:flex;align-items:center;gap:10px;background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:0 14px;height:46px;margin-bottom:14px;}
-.input-box input{background:transparent;color:var(--text);flex:1;font-size:13px;}
+.input-box input,.input-box select,.input-box textarea{background:transparent;color:var(--text);flex:1;font-size:13px;}
 .btn-primary{width:100%;height:46px;background:linear-gradient(135deg,var(--purple),#7c3aed);border-radius:12px;color:#fff;font-weight:700;font-size:14px;box-shadow:var(--glow);display:flex;align-items:center;justify-content:center;gap:6px;}
 .btn-outline{width:100%;height:46px;background:transparent;border:1px solid var(--purple);border-radius:12px;color:var(--purple);font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;}
+.btn-sm{padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;}
+.btn-add{background:var(--purple);color:#fff;}
+.btn-edit{background:rgba(59,130,246,0.2);color:#3b82f6;}
+.btn-delete{background:rgba(239,68,68,0.2);color:#ef4444;}
 .error-msg{color:#ef4444;font-size:11px;margin-top:-10px;margin-bottom:10px;display:none;}
 
 .top-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;}
@@ -94,6 +98,9 @@ p{font-size:11px;color:var(--text-muted);}
 .admin-header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
 .admin-header-top h3{font-size:16px;font-weight:700;}
 .admin-header-avatar{width:32px;height:32px;border-radius:50%;border:2px solid var(--purple);object-fit:cover;}
+.admin-tabs{display:flex;background:var(--card);margin:12px 16px;border-radius:10px;padding:4px;}
+.admin-tab{flex:1;text-align:center;padding:8px;font-size:12px;font-weight:600;color:var(--text-muted);border-radius:8px;cursor:pointer;transition:0.3s;}
+.admin-tab.active{background:var(--purple);color:#fff;}
 .admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px;}
 .admin-card{background:rgba(18,18,24,0.8);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:16px;padding:16px;}
 .admin-card-label{font-size:11px;color:var(--text-muted);margin-bottom:6px;}
@@ -107,50 +114,23 @@ p{font-size:11px;color:var(--text-muted);}
 .admin-table th{text-align:left;padding:10px;color:var(--text-muted);border-bottom:1px solid var(--border);}
 .admin-table td{padding:10px;border-bottom:1px solid var(--border);}
 
-/* Status badges */
 .status{padding:4px 8px;border-radius:6px;font-size:10px;font-weight:600;text-transform:capitalize;}
-.status.concluido{background:rgba(34,197,94,0.2);color:#22c55e;}
+.status.ativo{background:rgba(34,197,94,0.2);color:#22c55e;}
+.status.inativo{background:rgba(239,68,68,0.2);color:#ef4444;}
 .status.aguardando{background:rgba(251,191,36,0.2);color:#fbbf24;}
+.status.concluido{background:rgba(34,197,94,0.2);color:#22c55e;}
 .status.cancelado{background:rgba(239,68,68,0.2);color:#ef4444;}
 
-/* Orders Page */
-.orders-filters{display:flex;gap:8px;padding:12px 16px;overflow-x:auto;}
-.order-filter{padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:600;color:var(--text-muted);white-space:nowrap;cursor:pointer;transition:0.3s;}
-.order-filter.active{background:var(--purple);color:#fff;border-color:var(--purple);}
-.order-item{display:flex;gap:10px;background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:12px;margin:0 16px 10px;}
-.order-item img{width:40px;height:40px;border-radius:8px;object-fit:cover;}
-.order-item-info{flex:1;}
-.order-item-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;}
-.order-item-id{font-size:11px;color:var(--text-muted);}
-.order-item-name{font-size:13px;font-weight:600;margin-bottom:2px;}
-.order-item-bottom{display:flex;justify-content:space-between;align-items:center;}
-.order-item-price{font-size:14px;font-weight:700;color:var(--text);}
-.order-item-date{font-size:10px;color:var(--text-muted);}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;}
+.modal.active{display:flex;}
+.modal-content{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;width:100%;max-width:400px;max-height:80vh;overflow-y:auto;}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.modal-header h3{font-size:16px;font-weight:700;}
+.modal-close{cursor:pointer;color:var(--text-muted);}
 
-/* Order Detail / Receipt */
-.receipt-wrap{padding:16px;}
-.receipt-card{background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:0;margin-bottom:12px;overflow:hidden;}
-.receipt-row{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border);}
-.receipt-row:last-child{border-bottom:none;}
-.receipt-label{font-size:12px;color:var(--text-muted);}
-.receipt-value{font-size:13px;font-weight:600;color:var(--text);}
-.receipt-product{display:flex;gap:10px;align-items:center;}
-.receipt-product img{width:38px;height:38px;border-radius:8px;object-fit:cover;}
-.receipt-section-title{font-size:13px;font-weight:700;padding:12px 14px;background:rgba(0,0,0,0.2);}
-.btn-help{width:100%;height:44px;background:rgba(168,85,247,0.15);border:1px solid var(--purple);border-radius:12px;color:var(--purple);font-weight:700;font-size:13px;margin-top:12px;}
-
-/* Profile Page */
-.profile-header{text-align:center;padding:24px 16px 16px;}
-.profile-avatar{width:80px;height:80px;border-radius:50%;margin:0 auto 12px;border:2px solid var(--purple);object-fit:cover;}
-.profile-name{font-size:16px;font-weight:700;margin-bottom:4px;}
-.profile-email{font-size:12px;color:var(--text-muted);}
-.profile-section{margin-top:20px;}
-.profile-section-title{font-size:12px;color:var(--text-muted);padding:0 16px 8px;text-transform:uppercase;font-weight:600;letter-spacing:0.5px;}
-.profile-item-icon{width:36px;height:36px;border-radius:10px;background:rgba(168,85,247,0.15);display:flex;align-items:center;justify-content:center;}
-.profile-item-icon span{font-size:20px;color:var(--purple);}
-.profile-item-red .profile-item-icon{background:rgba(239,68,68,0.15);}
-.profile-item-red .profile-item-icon span{color:#ef4444;}
-.profile-item-red h4{color:#ef4444;}
+/* Modal inputs */
+.modal .input-box{margin-bottom:12px;}
+.modal .input-box textarea{resize:none;height:60px;padding:10px 0;}
 </style>
 </head>
 <body>
@@ -221,47 +201,6 @@ p{font-size:11px;color:var(--text-muted);}
 </div>
 </section>
 
-<!-- HOME CLIENTE -->
-<section class="page" id="home">
-<div class="top-bar">
-  <div class="top-bar-left">
-    <span class="material-symbols-outlined" onclick="alert('Menu em breve')">menu</span>
-    <div style="font-size:12px;color:var(--text-muted)">Olá, <span id="userName" style="color:var(--text);font-weight:600;">Usuário</span> 👋</div>
-  </div>
-  <div class="cart-icon" onclick="showPage('cart')">
-    <span class="material-symbols-outlined" style="font-size:22px;">shopping_cart</span>
-    <span class="cart-badge" id="cartBadge">0</span>
-  </div>
-</div>
-
-<div class="search-box">
-  <span class="material-symbols-outlined" style="font-size:18px;color:var(--text-muted);">search</span>
-  <input type="text" id="searchInput" placeholder="Buscar produtos..." oninput="searchProducts()">
-</div>
-
-<div class="banner">
-<h2 style="font-size:18px;font-weight:800;margin-bottom:4px;position:relative;">MEGA PROMO<br>ATÉ 50% OFF</h2>
-<p class="small" style="position:relative;margin-bottom:12px;">Produtos selecionados</p>
-<button class="btn-ghost" onclick="showPage('shop')">COMPRAR AGORA</button>
-</div>
-
-<div class="section">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-<h4>Categorias</h4>
-<span style="font-size:11px;color:var(--purple);cursor:pointer;" onclick="showPage('categories')">Ver todas</span>
-</div>
-<div class="grid-3" id="homeCategories"></div>
-</div>
-
-<div class="section">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-<h4>Destaques</h4>
-<span style="font-size:11px;color:var(--purple);cursor:pointer;" onclick="showPage('shop')">Ver todas</span>
-</div>
-<div class="grid-3" id="homeProducts"></div>
-</div>
-</section>
-
 <!-- ADMIN DASHBOARD -->
 <section class="page" id="admin">
 <div class="admin-header">
@@ -319,9 +258,223 @@ p{font-size:11px;color:var(--text-muted);}
   <h4 style="font-size:13px;font-weight:700;margin-bottom:10px;">Últimos Pedidos</h4>
   <table class="admin-table" id="adminOrdersTable"></table>
 </div>
+
+<div class="admin-tabs">
+  <div class="admin-tab active" onclick="showAdminTab('products')">Produtos</div>
+  <div class="admin-tab" onclick="showAdminTab('categories')">Categorias</div>
+  <div class="admin-tab" onclick="showAdminTab('subcategories')">Subcategorias</div>
+</div>
 </section>
 
+<!-- ADMIN PRODUTOS -->
+<section class="page" id="adminProducts">
+<div class="admin-header">
+  <div class="admin-header-top">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="material-symbols-outlined" onclick="showPage('admin')" style="cursor:pointer;">arrow_back</span>
+      <h3>Admin - Produtos</h3>
+    </div>
+    <img id="adminAvatar2" src="https://i.pravatar.cc/100" class="admin-header-avatar">
+  </div>
+</div>
+
+<div style="padding:16px;display:flex;justify-content:space-between;align-items:center;">
+  <h4 style="font-size:16px;font-weight:700;">Produtos</h4>
+  <button class="btn-sm btn-add" onclick="openProductModal()">
+    <span class="material-symbols-outlined" style="font-size:16px;">add</span> Adicionar
+  </button>
+</div>
+
+<div class="search-box">
+  <span class="material-symbols-outlined" style="font-size:18px;color:var(--text-muted);">search</span>
+  <input type="text" id="searchProduct" placeholder="Buscar produto..." oninput="searchAdminProducts()">
+</div>
+
+<div id="adminProductsList"></div>
+</section>
+
+<!-- ADMIN CATEGORIAS -->
+<section class="page" id="adminCategories">
+<div class="admin-header">
+  <div class="admin-header-top">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="material-symbols-outlined" onclick="showPage('admin')" style="cursor:pointer;">arrow_back</span>
+      <h3>Admin - Categorias</h3>
+    </div>
+    <img id="adminAvatar3" src="https://i.pravatar.cc/100" class="admin-header-avatar">
+  </div>
+</div>
+
+<div style="padding:16px;display:flex;justify-content:space-between;align-items:center;">
+  <h4 style="font-size:16px;font-weight:700;">Categorias</h4>
+  <button class="btn-sm btn-add" onclick="openCategoryModal()">
+    <span class="material-symbols-outlined" style="font-size:16px;">add</span> Adicionar
+  </button>
+</div>
+
+<div class="search-box">
+  <span class="material-symbols-outlined" style="font-size:18px;color:var(--text-muted);">search</span>
+  <input type="text" id="searchCategory" placeholder="Buscar categoria..." oninput="searchAdminCategories()">
+</div>
+
+<div id="adminCategoriesList"></div>
+</section>
+
+<!-- ADMIN SUBCATEGORIAS -->
+<section class="page" id="adminSubcategories">
+<div class="admin-header">
+  <div class="admin-header-top">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="material-symbols-outlined" onclick="showPage('admin')" style="cursor:pointer;">arrow_back</span>
+      <h3>Admin - Subcategorias</h3>
+    </div>
+    <img id="adminAvatar4" src="https://i.pravatar.cc/100" class="admin-header-avatar">
+  </div>
+</div>
+
+<div style="padding:16px;display:flex;justify-content:space-between;align-items:center;">
+  <h4 style="font-size:16px;font-weight:700;">Subcategorias</h4>
+  <button class="btn-sm btn-add" onclick="openSubcategoryModal()">
+    <span class="material-symbols-outlined" style="font-size:16px;">add</span> Adicionar
+  </button>
+</div>
+
+<div class="search-box">
+  <span class="material-symbols-outlined" style="font-size:18px;color:var(--text-muted);">search</span>
+  <input type="text" id="searchSubcategory" placeholder="Buscar subcategoria..." oninput="searchAdminSubcategories()">
+</div>
+
+<div id="adminSubcategoriesList"></div>
+</section>
+
+<!-- MODAL PRODUTO -->
+<div class="modal" id="productModal">
+<div class="modal-content">
+  <div class="modal-header">
+    <h3 id="productModalTitle">Adicionar Produto</h3>
+    <span class="material-symbols-outlined modal-close" onclick="closeProductModal()">close</span>
+  </div>
+  <input type="hidden" id="productId">
+  <div class="input-box">
+    <input type="text" id="prodName" placeholder="Nome do produto">
+  </div>
+  <div class="input-box">
+    <input type="number" id="prodPrice" placeholder="Preço 18.90" step="0.01">
+  </div>
+  <div class="input-box">
+    <select id="prodCategory">
+      <option value="">Selecione a categoria</option>
+    </select>
+  </div>
+  <div class="input-box">
+    <select id="prodSubcategory">
+      <option value="">Selecione a subcategoria</option>
+    </select>
+  </div>
+  <div class="input-box">
+    <select id="prodType">
+      <option value="Diamantes">Diamantes</option>
+      <option value="Contas">Contas</option>
+      <option value="Outros">Outros</option>
+    </select>
+  </div>
+  <div class="input-box">
+    <input type="text" id="prodImg" placeholder="URL da imagem">
+  </div>
+  <div class="input-box">
+    <textarea id="prodDesc" placeholder="Descrição"></textarea>
+  </div>
+  <div class="input-box">
+    <select id="prodStatus">
+      <option value="ativo">Ativo</option>
+      <option value="inativo">Inativo</option>
+    </select>
+  </div>
+  <button class="btn-primary" onclick="saveProduct()">Salvar</button>
+</div>
+</div>
+
+<!-- MODAL CATEGORIA -->
+<div class="modal" id="categoryModal">
+<div class="modal-content">
+  <div class="modal-header">
+    <h3 id="categoryModalTitle">Adicionar Categoria</h3>
+    <span class="material-symbols-outlined modal-close" onclick="closeCategoryModal()">close</span>
+  </div>
+  <input type="hidden" id="categoryId">
+  <div class="input-box">
+    <input type="text" id="catName" placeholder="Nome da categoria">
+  </div>
+  <div class="input-box">
+    <input type="text" id="catIcon" placeholder="Ícone: sports_esports">
+  </div>
+  <div class="input-box">
+    <input type="color" id="catColor" value="#a855f7">
+  </div>
+  <button class="btn-primary" onclick="saveCategory()">Salvar</button>
+</div>
+</div>
+
+<!-- MODAL SUBCATEGORIA -->
+<div class="modal" id="subcategoryModal">
+<div class="modal-content">
+  <div class="modal-header">
+    <h3 id="subcategoryModalTitle">Adicionar Subcategoria</h3>
+    <span class="material-symbols-outlined modal-close" onclick="closeSubcategoryModal()">close</span>
+  </div>
+  <input type="hidden" id="subcategoryId">
+  <div class="input-box">
+    <select id="subcatCategory">
+      <option value="">Selecione a categoria</option>
+    </select>
+  </div>
+  <div class="input-box">
+    <input type="text" id="subcatName" placeholder="Nome da subcategoria">
+  </div>
+  <div class="input-box">
+    <input type="text" id="subcatImg" placeholder="URL da imagem">
+  </div>
+  <button class="btn-primary" onclick="saveSubcategory()">Salvar</button>
+</div>
+</div>
+
 <!-- RESTO DAS PÁGINAS CLIENTE -->
+<section class="page" id="home">
+<div class="top-bar">
+  <div class="top-bar-left">
+    <span class="material-symbols-outlined" onclick="alert('Menu em breve')">menu</span>
+    <div style="font-size:12px;color:var(--text-muted)">Olá, <span id="userName" style="color:var(--text);font-weight:600;">Usuário</span> 👋</div>
+  </div>
+  <div class="cart-icon" onclick="showPage('cart')">
+    <span class="material-symbols-outlined" style="font-size:22px;">shopping_cart</span>
+    <span class="cart-badge" id="cartBadge">0</span>
+  </div>
+</div>
+<div class="search-box">
+  <span class="material-symbols-outlined" style="font-size:18px;color:var(--text-muted);">search</span>
+  <input type="text" id="searchInput" placeholder="Buscar produtos..." oninput="searchProducts()">
+</div>
+<div class="banner">
+<h2 style="font-size:18px;font-weight:800;margin-bottom:4px;position:relative;">MEGA PROMO<br>ATÉ 50% OFF</h2>
+<p class="small" style="position:relative;margin-bottom:12px;">Produtos selecionados</p>
+<button class="btn-ghost" onclick="showPage('shop')">COMPRAR AGORA</button>
+</div>
+<div class="section">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+<h4>Categorias</h4>
+<span style="font-size:11px;color:var(--purple);cursor:pointer;" onclick="showPage('categories')">Ver todas</span>
+</div>
+<div class="grid-3" id="homeCategories"></div>
+</div>
+<div class="section">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+<h4>Destaques</h4>
+<span style="font-size:11px;color:var(--purple);cursor:pointer;" onclick="showPage('shop')">Ver todas</span>
+</div>
+<div class="grid-3" id="homeProducts"></div>
+</div>
+</section>
+
 <section class="page" id="categories">
 <div class="header">
 <span class="material-symbols-outlined" onclick="showPage('home')" style="cursor:pointer;">arrow_back</span>
@@ -524,7 +677,7 @@ const firebaseConfig = {
   projectId: "premium-store-aa58b",
   storageBucket: "premium-store-aa58b.firebasestorage.app",
   messagingSenderId: "462239500057",
-  appId:  "1:462239500057:web:f1b7cea162ed308a866788"
+  appId: "1:462239500057:web:f1b7cea162ed308a866788"
 };
 const ADMIN_EMAIL = "vittoriahvahz@gmail.com";
 
@@ -532,24 +685,8 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
 
-let currentUser=null,isAdmin=false,products=[],categories=[],cart=JSON.parse(localStorage.getItem("cart"))||[],selectedTab='all',historyPage='home',currentPage='login';
+let currentUser=null,isAdmin=false,products=[],categories=[],subcategories=[],cart=JSON.parse(localStorage.getItem("cart"))||[],selectedTab='all',historyPage='home',currentPage='login';
 let currentCategory='',currentSubcategory='',currentFilter='all',isRegisterMode=false,selectedProduct=null,couponDiscount=0,currentOrder=null,orderFilter='all',allOrders=[],selectedOrder=null,chart=null;
-
-const subcategoriesData = {
-  "Games": {
-    items: ["Free Fire", "Roblox", "Fortnite", "Valorant", "Minecraft", "Brawl Stars", "Clash Royale", "League of Legends"],
-    imgs: {
-      "Free Fire": "https://i.imgur.com/8Km9tLL.png",
-      "Roblox": "https://i.imgur.com/3b8hX9X.png",
-      "Fortnite": "https://i.imgur.com/5QfK9kL.png",
-      "Valorant": "https://i.imgur.com/9Z9kLkL.png",
-      "Minecraft": "https://i.imgur.com/2b8hX9X.png",
-      "Brawl Stars": "https://i.imgur.com/7Km9tLL.png",
-      "Clash Royale": "https://i.imgur.com/6QfK9kL.png",
-      "League of Legends": "https://i.imgur.com/4b8hX9X.png"
-    }
-  }
-};
 
 setTimeout(() => {
   document.getElementById('loading').classList.add('hide');
@@ -566,9 +703,18 @@ function showPage(page){
   if(page=='cart')renderCart();
   if(page=='orders')loadOrders();
   if(page=='admin')loadAdminDashboard();
+  if(page=='adminProducts')loadAdminProducts();
+  if(page=='adminCategories')loadAdminCategories();
+  if(page=='adminSubcategories')loadAdminSubcategories();
   document.querySelectorAll('.bottom-nav.nav-item').forEach((n,i)=>{
     n.classList.toggle('active',i==['home','shop','cart','orders','profile'].indexOf(page));
   });
+}
+
+function showAdminTab(tab){
+  if(tab=='products') showPage('adminProducts');
+  if(tab=='categories') showPage('adminCategories');
+  if(tab=='subcategories') showPage('adminSubcategories');
 }
 
 function goBack(){
@@ -628,7 +774,7 @@ function loginAdmin(){
     return;
   }
   auth.signInWithEmailAndPassword(email, pass)
-   .catch(e=>{showAdminError(traduzErro(e.code));});
+  .catch(e=>{showAdminError(traduzErro(e.code));});
 }
 
 function traduzErro(code){
@@ -651,6 +797,9 @@ auth.onAuthStateChanged((user)=>{
       isAdmin=user.email===ADMIN_EMAIL;
       if(isAdmin){
         document.getElementById('adminAvatar').src = user.photoURL || `https://i.pravatar.cc/100?u=${user.uid}`;
+        document.getElementById('adminAvatar2').src = user.photoURL || `https://i.pravatar.cc/100?u=${user.uid}`;
+        document.getElementById('adminAvatar3').src = user.photoURL || `https://i.pravatar.cc/100?u=${user.uid}`;
+        document.getElementById('adminAvatar4').src = user.photoURL || `https://i.pravatar.cc/100?u=${user.uid}`;
         showPage('admin');
       }else{
         document.getElementById('userName').innerText=user.displayName||user.email.split('@')[0];
@@ -660,6 +809,8 @@ auth.onAuthStateChanged((user)=>{
         showPage('home');
       }
       loadProducts();
+      loadCategories();
+      loadSubcategories();
       loadOrders();
       updateCartBadge();
     }else{
@@ -672,13 +823,30 @@ auth.onAuthStateChanged((user)=>{
   }
 });
 
+// LOAD DATA
 function loadProducts(){
   db.collection("products").orderBy("createdAt","desc").onSnapshot((snap)=>{
     products=[];snap.forEach(doc=>products.push({id:doc.id,...doc.data()}));
-    categories=[...new Set(products.map(p=>p.category))];
     renderHome();renderShop();renderCategoriesList();
-    if(isAdmin)loadAdminDashboard();
-  },(err)=>console.error(err));
+    if(isAdmin)loadAdminProducts();
+  });
+}
+
+function loadCategories(){
+  db.collection("categories").orderBy("name").onSnapshot((snap)=>{
+    categories=[];snap.forEach(doc=>categories.push({id:doc.id,...doc.data()}));
+    renderCategoriesList();
+    if(isAdmin)loadAdminCategories();
+    updateCategorySelects();
+  });
+}
+
+function loadSubcategories(){
+  db.collection("subcategories").orderBy("name").onSnapshot((snap)=>{
+    subcategories=[];snap.forEach(doc=>subcategories.push({id:doc.id,...doc.data()}));
+    if(isAdmin)loadAdminSubcategories();
+    updateSubcategorySelects();
+  });
 }
 
 function loadOrders(){
@@ -702,20 +870,15 @@ function loadAdminDashboard(){
 function updateAdminStats(){
   const now = new Date();
   const thirtyDaysAgo = new Date(now.getTime() - 30*24*60*60*1000);
-
   const recentOrders = allOrders.filter(o=>o.createdAt?.seconds*1000 > thirtyDaysAgo.getTime() && o.status==='concluido');
   const totalVendas = recentOrders.reduce((sum,o)=>sum+o.total,0);
   const totalPedidos = recentOrders.length;
-
   const clientes = new Set(allOrders.map(o=>o.userId)).size;
   const produtos = products.length;
-
   document.getElementById('statVendas').innerText = 'R$ ' + totalVendas.toLocaleString('pt-BR',{minimumFractionDigits:2});
   document.getElementById('statPedidos').innerText = totalPedidos;
   document.getElementById('statClientes').innerText = clientes;
   document.getElementById('statProdutos').innerText = produtos;
-
-  // Simulação de variação - depois liga no histórico real
   document.getElementById('statVendasChange').innerText = '+12.5%';
   document.getElementById('statPedidosChange').innerText = '+8.2%';
   document.getElementById('statClientesChange').innerText = '+5.1%';
@@ -725,11 +888,8 @@ function updateAdminStats(){
 function renderSalesChart(){
   const ctx = document.getElementById('salesChart').getContext('2d');
   if(chart) chart.destroy();
-
-  // Dados mockados igual ao print - depois troca por dados reais do Firebase
   const labels = ['15/05','18/05','21/05','24/05','27/05','30/05','02/06','05/06'];
   const data = [1200,1800,1500,2200,1900,2400,2100,2800];
-
   chart = new Chart(ctx,{
     type:'line',
     data:{
@@ -773,7 +933,258 @@ function renderAdminDashboardOrders(orders){
   `;
 }
 
-// RESTO DAS FUNÇÕES CLIENTE - IGUAL ANTES
+// ADMIN PRODUTOS
+function loadAdminProducts(){
+  const search = document.getElementById('searchProduct')?.value.toLowerCase() || '';
+  const filtered = products.filter(p=>p.name.toLowerCase().includes(search));
+  document.getElementById('adminProductsList').innerHTML = filtered.map(p=>`
+    <div class="list-item">
+      <img src="${p.img||'https://via.placeholder.com/40'}">
+      <div class="list-item-info">
+        <h4>${p.name}</h4>
+        <div class="small">${p.category} > ${p.subcategory}</div>
+        <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <span class="status ${p.status}">${p.status}</span>
+        <button class="btn-sm btn-edit" onclick="editProduct('${p.id}')"><span class="material-symbols-outlined" style="font-size:16px;">edit</span></button>
+        <button class="btn-sm btn-delete" onclick="deleteProduct('${p.id}')"><span class="material-symbols-outlined" style="font-size:16px;">delete</span></button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function searchAdminProducts(){
+  loadAdminProducts();
+}
+
+function openProductModal(){
+  document.getElementById('productModalTitle').innerText = 'Adicionar Produto';
+  document.getElementById('productId').value = '';
+  document.getElementById('prodName').value = '';
+  document.getElementById('prodPrice').value = '';
+  document.getElementById('prodCategory').value = '';
+  document.getElementById('prodSubcategory').value = '';
+  document.getElementById('prodType').value = 'Diamantes';
+  document.getElementById('prodImg').value = '';
+  document.getElementById('prodDesc').value = '';
+  document.getElementById('prodStatus').value = 'ativo';
+  document.getElementById('productModal').classList.add('active');
+}
+
+function closeProductModal(){
+  document.getElementById('productModal').classList.remove('active');
+}
+
+function editProduct(id){
+  const p = products.find(x=>x.id==id);
+  if(!p) return;
+  document.getElementById('productModalTitle').innerText = 'Editar Produto';
+  document.getElementById('productId').value = p.id;
+  document.getElementById('prodName').value = p.name;
+  document.getElementById('prodPrice').value = p.price;
+  document.getElementById('prodCategory').value = p.category;
+  updateSubcategorySelects(p.category);
+  document.getElementById('prodSubcategory').value = p.subcategory;
+  document.getElementById('prodType').value = p.type;
+  document.getElementById('prodImg').value = p.img;
+  document.getElementById('prodDesc').value = p.desc;
+  document.getElementById('prodStatus').value = p.status;
+  document.getElementById('productModal').classList.add('active');
+}
+
+function saveProduct(){
+  const id = document.getElementById('productId').value;
+  const data = {
+    name:document.getElementById('prodName').value,
+    price:parseFloat(document.getElementById('prodPrice').value),
+    category:document.getElementById('prodCategory').value,
+    subcategory:document.getElementById('prodSubcategory').value,
+    type:document.getElementById('prodType').value,
+    img:document.getElementById('prodImg').value,
+    desc:document.getElementById('prodDesc').value,
+    status:document.getElementById('prodStatus').value,
+    updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+  };
+  if(!id){
+    data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    db.collection("products").add(data).then(()=>{closeProductModal();alert('Produto criado!');});
+  }else{
+    db.collection("products").doc(id).update(data).then(()=>{closeProductModal();alert('Produto atualizado!');});
+  }
+}
+
+function deleteProduct(id){
+  if(confirm('Excluir este produto?')){
+    db.collection("products").doc(id).delete();
+  }
+}
+
+// ADMIN CATEGORIAS
+function loadAdminCategories(){
+  const search = document.getElementById('searchCategory')?.value.toLowerCase() || '';
+  const filtered = categories.filter(c=>c.name.toLowerCase().includes(search));
+  document.getElementById('adminCategoriesList').innerHTML = filtered.map(c=>`
+    <div class="list-item">
+      <div style="width:40px;height:40px;border-radius:10px;background:${c.color||'#a855f7'};display:flex;align-items:center;justify-content:center;">
+        <span class="material-symbols-outlined" style="color:#fff;">${c.icon||'category'}</span>
+      </div>
+      <div class="list-item-info">
+        <h4>${c.name}</h4>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-sm btn-edit" onclick="editCategory('${c.id}')"><span class="material-symbols-outlined" style="font-size:16px;">edit</span></button>
+        <button class="btn-sm btn-delete" onclick="deleteCategory('${c.id}')"><span class="material-symbols-outlined" style="font-size:16px;">delete</span></button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function searchAdminCategories(){
+  loadAdminCategories();
+}
+
+function openCategoryModal(){
+  document.getElementById('categoryModalTitle').innerText = 'Adicionar Categoria';
+  document.getElementById('categoryId').value = '';
+  document.getElementById('catName').value = '';
+  document.getElementById('catIcon').value = 'category';
+  document.getElementById('catColor').value = '#a855f7';
+  document.getElementById('categoryModal').classList.add('active');
+}
+
+function closeCategoryModal(){
+  document.getElementById('categoryModal').classList.remove('active');
+}
+
+function editCategory(id){
+  const c = categories.find(x=>x.id==id);
+  if(!c) return;
+  document.getElementById('categoryModalTitle').innerText = 'Editar Categoria';
+  document.getElementById('categoryId').value = c.id;
+  document.getElementById('catName').value = c.name;
+  document.getElementById('catIcon').value = c.icon;
+  document.getElementById('catColor').value = c.color;
+  document.getElementById('categoryModal').classList.add('active');
+}
+
+function saveCategory(){
+  const id = document.getElementById('categoryId').value;
+  const data = {
+    name:document.getElementById('catName').value,
+    icon:document.getElementById('catIcon').value,
+    color:document.getElementById('catColor').value,
+    updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+  };
+  if(!id){
+    data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    db.collection("categories").add(data).then(()=>{closeCategoryModal();alert('Categoria criada!');});
+  }else{
+    db.collection("categories").doc(id).update(data).then(()=>{closeCategoryModal();alert('Categoria atualizada!');});
+  }
+}
+
+function deleteCategory(id){
+  if(confirm('Excluir esta categoria? Produtos vinculados ficarão sem categoria.')){
+    db.collection("categories").doc(id).delete();
+  }
+}
+
+// ADMIN SUBCATEGORIAS
+function loadAdminSubcategories(){
+  const search = document.getElementById('searchSubcategory')?.value.toLowerCase() || '';
+  const filtered = subcategories.filter(s=>s.name.toLowerCase().includes(search));
+  document.getElementById('adminSubcategoriesList').innerHTML = filtered.map(s=>`
+    <div class="list-item">
+      <img src="${s.img||'https://via.placeholder.com/40'}">
+      <div class="list-item-info">
+        <h4>${s.name}</h4>
+        <div class="small">${s.category}</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-sm btn-edit" onclick="editSubcategory('${s.id}')"><span class="material-symbols-outlined" style="font-size:16px;">edit</span></button>
+        <button class="btn-sm btn-delete" onclick="deleteSubcategory('${s.id}')"><span class="material-symbols-outlined" style="font-size:16px;">delete</span></button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function searchAdminSubcategories(){
+  loadAdminSubcategories();
+}
+
+function openSubcategoryModal(){
+  document.getElementById('subcategoryModalTitle').innerText = 'Adicionar Subcategoria';
+  document.getElementById('subcategoryId').value = '';
+  document.getElementById('subcatCategory').value = '';
+  document.getElementById('subcatName').value = '';
+  document.getElementById('subcatImg').value = '';
+  document.getElementById('subcategoryModal').classList.add('active');
+}
+
+function closeSubcategoryModal(){
+  document.getElementById('subcategoryModal').classList.remove('active');
+}
+
+function editSubcategory(id){
+  const s = subcategories.find(x=>x.id==id);
+  if(!s) return;
+  document.getElementById('subcategoryModalTitle').innerText = 'Editar Subcategoria';
+  document.getElementById('subcategoryId').value = s.id;
+  document.getElementById('subcatCategory').value = s.category;
+  document.getElementById('subcatName').value = s.name;
+  document.getElementById('subcatImg').value = s.img;
+  document.getElementById('subcategoryModal').classList.add('active');
+}
+
+function saveSubcategory(){
+  const id = document.getElementById('subcategoryId').value;
+  const data = {
+    name:document.getElementById('subcatName').value,
+    category:document.getElementById('subcatCategory').value,
+    img:document.getElementById('subcatImg').value,
+    updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+  };
+  if(!id){
+    data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+    db.collection("subcategories").add(data).then(()=>{closeSubcategoryModal();alert('Subcategoria criada!');});
+  }else{
+    db.collection("subcategories").doc(id).update(data).then(()=>{closeSubcategoryModal();alert('Subcategoria atualizada!');});
+  }
+}
+
+function deleteSubcategory(id){
+  if(confirm('Excluir esta subcategoria?')){
+    db.collection("subcategories").doc(id).delete();
+  }
+}
+
+function updateCategorySelects(){
+  const select = document.getElementById('prodCategory');
+  const select2 = document.getElementById('subcatCategory');
+  if(select){
+    select.innerHTML = '<option value="">Selecione a categoria</option>' +
+      categories.map(c=>`<option value="${c.name}">${c.name}</option>`).join('');
+  }
+  if(select2){
+    select2.innerHTML = '<option value="">Selecione a categoria</option>' +
+      categories.map(c=>`<option value="${c.name}">${c.name}</option>`).join('');
+  }
+}
+
+function updateSubcategorySelects(categoryName){
+  const select = document.getElementById('prodSubcategory');
+  if(!select) return;
+  const filtered = subcategories.filter(s=>s.category==categoryName);
+  select.innerHTML = '<option value="">Selecione a subcategoria</option>' +
+    filtered.map(s=>`<option value="${s.name}">${s.name}</option>`).join('');
+}
+
+document.getElementById('prodCategory')?.addEventListener('change', (e)=>{
+  updateSubcategorySelects(e.target.value);
+});
+
+// CLIENTE - FUNÇÕES RESTANTES
 function filterOrders(el,status){
   document.querySelectorAll('.order-filter').forEach(f=>f.classList.remove('active'));
   el.classList.add('active');
@@ -835,26 +1246,24 @@ function openOrderDetail(orderId){
 }
 
 function renderHome(){
-  document.getElementById('homeCategories').innerHTML=categories.slice(0,6).map(c=>`<div class="card-sm" onclick="openCategoryDetail('${c}')"><span class="material-symbols-outlined" style="font-size:24px;color:var(--purple);">category</span><h4>${c}</h4></div>`).join('');
+  document.getElementById('homeCategories').innerHTML=categories.slice(0,6).map(c=>`<div class="card-sm" onclick="openCategoryDetail('${c.name}')"><span class="material-symbols-outlined" style="font-size:24px;color:var(--purple);">category</span><h4>${c.name}</h4></div>`).join('');
   document.getElementById('homeProducts').innerHTML=products.slice(0,6).map(p=>`<div class="card-sm" onclick="openProduct('${p.id}')"><img src="${p.img||'https://via.placeholder.com/100'}"><h4>${p.name}</h4><div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div></div>`).join('');
 }
 
 function switchCatTab(el,tab){
   document.querySelectorAll('#categories.cat-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
-  if(tab=='categories'){renderCategoriesList();}else{renderSubcategoriesList();}
+  if(tab=='categories'){renderCategoriesList();}else{renderSubcategoriesListClient();}
 }
 
 function renderCategoriesList(){
-  const icons={"Games":"sports_esports","Streaming":"play_circle","Redes Sociais":"share","Gift Cards":"card_giftcard","Apps":"apps","VIP":"star"};
-  const colors=["#a855f7","#ef4444","#3b82f6","#f59e0b","#10b981","#ec4899"];
   document.getElementById('catContent').innerHTML = categories.map((c,i)=>`
-    <div class="list-item" onclick="openCategoryDetail('${c}')">
-      <div style="width:40px;height:40px;border-radius:10px;background:${colors[i%colors.length]};display:flex;align-items:center;justify-content:center;">
-        <span class="material-symbols-outlined" style="color:#fff;">${icons[c]||'category'}</span>
+    <div class="list-item" onclick="openCategoryDetail('${c.name}')">
+      <div style="width:40px;height:40px;border-radius:10px;background:${c.color||'#a855f7'};display:flex;align-items:center;justify-content:center;">
+        <span class="material-symbols-outlined" style="color:#fff;">${c.icon||'category'}</span>
       </div>
       <div class="list-item-info">
-        <h4>${c}</h4>
+        <h4>${c.name}</h4>
         <div class="small">Produtos da categoria</div>
       </div>
       <span class="material-symbols-outlined" style="font-size:20px;color:var(--text-muted);">chevron_right</span>
@@ -862,17 +1271,17 @@ function renderCategoriesList(){
   `).join('');
 }
 
-function renderSubcategoriesList(){
+function renderSubcategoriesListClient(){
   let html = '';
   categories.forEach(c=>{
-    const subs = subcategoriesData[c]?.items || [];
+    const subs = subcategories.filter(s=>s.category==c.name);
     if(subs.length==0) return;
-    html += `<div style="padding:0 16px;margin:16px 0 8px;"><h4 style="font-size:12px;color:var(--text-muted);">${c}</h4></div>`;
+    html += `<div style="padding:0 16px;margin:16px 0 8px;"><h4 style="font-size:12px;color:var(--text-muted);">${c.name}</h4></div>`;
     html += subs.map(s=>`
-      <div class="list-item" onclick="openSubcategory('${s}')">
-        <img src="${subcategoriesData[c].imgs[s]||'https://via.placeholder.com/40'}">
+      <div class="list-item" onclick="openSubcategory('${s.name}')">
+        <img src="${s.img||'https://via.placeholder.com/40'}">
         <div class="list-item-info">
-          <h4>${s}</h4>
+          <h4>${s.name}</h4>
           <div class="small">Ver produtos</div>
         </div>
         <span class="material-symbols-outlined" style="font-size:20px;color:var(--text-muted);">chevron_right</span>
@@ -895,10 +1304,10 @@ function openCategoryDetail(cat){
 
 function openSubcategory(sub){
   currentSubcategory=sub;
-  currentCategory = categories.find(c => subcategoriesData[c]?.items.includes(sub)) || '';
+  currentCategory = subcategories.find(s=>s.name==sub)?.category || '';
   document.getElementById('catDetailTitle').innerText=sub;
   showPage('categoryDetail');
-  document.querySelectorAll('#categoryDetail.cat-tab').forEach(t=>t.classList.remove('active'));
+  ('#categoryDetail.cat-tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('#categoryDetail.cat-tab')[0].classList.add('active');
   renderFilters();
   renderCategoryProducts();
@@ -971,7 +1380,7 @@ function renderCategoryInfo(){
 
 function renderShop(){
   document.getElementById('shopTabs').innerHTML='<div class="tab active" onclick="setTab(this,\'all\')">Todos</div>'+
-    categories.map(c=>`<div class="tab" onclick="setTab(this,'${c}')">${c}</div>`).join('');
+    categories.map(c=>`<div class="tab" onclick="setTab(this,'${c.name}')">${c.name}</div>`).join('');
   const filtered = selectedTab=='all'?products:products.filter(p=>p.category==selectedTab);
   document.getElementById('shopProducts').innerHTML = filtered.map(p=>`
     <div class="list-item" onclick="openProduct('${p.id}')">
