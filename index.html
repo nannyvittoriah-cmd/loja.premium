@@ -112,6 +112,18 @@ p{font-size:11px;color:var(--text-muted);}
 .order-item-price{font-size:14px;font-weight:700;color:var(--text);}
 .order-item-date{font-size:10px;color:var(--text-muted);}
 
+/* Order Detail / Receipt */
+.receipt-wrap{padding:16px;}
+.receipt-card{background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:0;margin-bottom:12px;overflow:hidden;}
+.receipt-row{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border);}
+.receipt-row:last-child{border-bottom:none;}
+.receipt-label{font-size:12px;color:var(--text-muted);}
+.receipt-value{font-size:13px;font-weight:600;color:var(--text);}
+.receipt-product{display:flex;gap:10px;align-items:center;}
+.receipt-product img{width:38px;height:38px;border-radius:8px;object-fit:cover;}
+.receipt-section-title{font-size:13px;font-weight:700;padding:12px 14px;background:rgba(0,0,0,0.2);}
+.btn-help{width:100%;height:44px;background:rgba(168,85,247,0.15);border:1px solid var(--purple);border-radius:12px;color:var(--purple);font-weight:700;font-size:13px;margin-top:12px;}
+
 /* Product Page */
 .product-page{background:var(--bg);min-height:100vh;}
 .product-header{padding:16px;}
@@ -392,6 +404,62 @@ p{font-size:11px;color:var(--text-muted);}
 <div id="ordersList"></div>
 </section>
 
+<section class="page" id="orderDetail">
+<div class="header">
+<span class="material-symbols-outlined" onclick="goBack()" style="cursor:pointer;">arrow_back</span>
+<h3 id="orderDetailTitle" style="font-size:14px;">Pedido #12548</h3>
+<span class="material-symbols-outlined" onclick="alert('Mais opções em breve')" style="cursor:pointer;">more_vert</span>
+</div>
+
+<div class="receipt-wrap">
+  <div class="receipt-card">
+    <div class="receipt-row">
+      <span class="receipt-label">Status</span>
+      <span class="status concluido" id="receiptStatus">Concluído</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-label">Data</span>
+      <span class="receipt-value" id="receiptDate">12/05/2024 - 14:32</span>
+    </div>
+  </div>
+
+  <div class="receipt-card">
+    <div class="receipt-section-title">Produto</div>
+    <div class="receipt-row">
+      <div class="receipt-product">
+        <img id="receiptImg" src="https://via.placeholder.com/40">
+        <div>
+          <div style="font-size:13px;font-weight:600;" id="receiptProductName">520 Diamantes</div>
+          <div style="font-size:11px;color:var(--text-muted);" id="receiptProductSub">Free Fire</div>
+        </div>
+      </div>
+      <div class="receipt-value" id="receiptProductPrice">R$ 18,90</div>
+    </div>
+  </div>
+
+  <div class="receipt-card">
+    <div class="receipt-row">
+      <span class="receipt-label">Total</span>
+      <span class="receipt-value" id="receiptTotal">R$ 18,90</span>
+    </div>
+  </div>
+
+  <div class="receipt-card">
+    <div class="receipt-section-title">Informações</div>
+    <div class="receipt-row">
+      <span class="receipt-label">ID do jogo</span>
+      <span class="receipt-value" id="receiptGameId">123456789</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-label">Método de pagamento</span>
+      <span class="receipt-value" id="receiptPayment">Pix</span>
+    </div>
+  </div>
+
+  <button class="btn-help" onclick="alert('Suporte em breve')">Precisa de ajuda?</button>
+</div>
+</section>
+
 <section class="page" id="profile">
 <div class="header"><h3 style="font-size:14px;">Perfil</h3><div></div></div>
 <div style="text-align:center;padding:24px 16px;">
@@ -453,8 +521,9 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 const auth = firebase.auth();
 
-let currentUser=null,isAdmin=false,products=[],categories=[],cart=JSON.parse(localStorage.getItem("cart"))||[],selectedTab='all',historyPage='home',currentPage='login';
-let currentCategory='',currentSubcategory='',currentFilter='all',isRegisterMode=false,selectedProduct=null,couponDiscount=0,currentOrder=null,orderFilter='all',allOrders=[];
+let currentUser=null,isAdmin=false,products=[],categories=[],cart=JSON.parse(localStorage.getItem("cart"))||[],selectedTab='all',historyPage='home',currentPage
+let currentPage='login';
+let currentCategory='',currentSubcategory='',currentFilter='all',isRegisterMode=false,selectedProduct=null,couponDiscount=0,currentOrder=null,orderFilter='all',allOrders=[],selectedOrder=null;
 
 const subcategoriesData = {
   "Games": {
@@ -613,7 +682,7 @@ function renderOrders(orders){
     const dateStr = date.toLocaleDateString('pt-BR');
 
     return `
-    <div class="order-item">
+    <div class="order-item" onclick="openOrderDetail('${o.id}')">
       <img src="${item.img || 'https://via.placeholder.com/40'}">
       <div class="order-item-info">
         <div class="order-item-top">
@@ -630,6 +699,29 @@ function renderOrders(orders){
       </div>
     </div>
   `}).join('');
+}
+
+function openOrderDetail(orderId){
+  selectedOrder = allOrders.find(o=>o.id===orderId);
+  if(!selectedOrder) return;
+
+  const item = selectedOrder.items && selectedOrder.items[0]? selectedOrder.items[0] : {};
+  const date = selectedOrder.createdAt?.seconds? new Date(selectedOrder.createdAt.seconds*1000) : new Date();
+  const dateStr = date.toLocaleDateString('pt-BR') + ' - ' + date.toLocaleTimeString('pt-BR').slice(0,5);
+
+  document.getElementById('orderDetailTitle').innerText = `Pedido #${selectedOrder.id.slice(0,5)}`;
+  document.getElementById('receiptStatus').innerText = selectedOrder.status.charAt(0).toUpperCase() + selectedOrder.status.slice(1);
+  document.getElementById('receiptStatus').className = `status ${selectedOrder.status}`;
+  document.getElementById('receiptDate').innerText = dateStr;
+  document.getElementById('receiptImg').src = item.img || 'https://via.placeholder.com/40';
+  document.getElementById('receiptProductName').innerText = item.name || 'Produto';
+  document.getElementById('receiptProductSub').innerText = item.subcategory || item.category || '';
+  document.getElementById('receiptProductPrice').innerText = `R$ ${item.price.toFixed(2).replace('.',',')}`;
+  document.getElementById('receiptTotal').innerText = `R$ ${selectedOrder.total.toFixed(2).replace('.',',')}`;
+  document.getElementById('receiptGameId').innerText = selectedOrder.gameId || '---';
+  document.getElementById('receiptPayment').innerText = selectedOrder.paymentMethod || 'Pix';
+
+  showPage('orderDetail');
 }
 
 function addProduct(){
@@ -691,6 +783,7 @@ function payWithPix(){
     total:currentOrder.total,
     paymentMethod: 'pix',
     status:'aguardando',
+    gameId: '',
     createdAt:firebase.firestore.FieldValue.serverTimestamp()
   }).then(()=>{
     alert('Pedido criado! Aguardando pagamento Pix.');
@@ -811,7 +904,7 @@ function renderCategoryProducts(){
   });
 
   document.getElementById('catDetailContent').innerHTML = filtered.length==0
- ? '<p style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum produto encontrado</p>'
+? '<p style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum produto encontrado</p>'
     : filtered.map(p=>`
     <div class="list-item" onclick="openProduct('${p.id}')">
       <img src="${p.img||'https://via.placeholder.com/40'}">
