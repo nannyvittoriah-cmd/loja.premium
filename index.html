@@ -3,10 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>PRIME STORE</title>
+<title>NEXUS STORE</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300,0,0"/>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 :root{
 --bg:#070709;--card:#121218;--border:#2a2a3a;--purple:#a855f7;
@@ -107,10 +106,7 @@ p{font-size:11px;color:var(--text-muted);}
 .admin-card-value{font-size:18px;font-weight:800;margin-bottom:4px;}
 .admin-card-change{font-size:11px;color:#22c55e;font-weight:600;}
 .admin-card-change.neg{color:#ef4444;}
-.admin-chart{background:rgba(18,18,24,0.8);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:16px;padding:16px;margin:0 16px 16px;}
-.admin-chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
-.admin-date-picker{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px;}
-.admin-table{width:100%;border-collapse:collapse;font-size:12px;}
+.admin-table{width:100%;border-collapse:collapse;font-size:12px;margin:0 16px;}
 .admin-table th{text-align:left;padding:10px;color:var(--text-muted);border-bottom:1px solid var(--border);}
 .admin-table td{padding:12px 10px;border-bottom:1px solid var(--border);}
 .admin-table tr:hover{background:rgba(168,85,247,0.05);}
@@ -119,6 +115,15 @@ p{font-size:11px;color:var(--text-muted);}
 .admin-orders-filter.active{background:var(--purple);color:#fff;border-color:var(--purple);}
 .admin-orders-wrap{background:var(--card);margin:0 16px;border-radius:12px;overflow:hidden;border:1px solid var(--border);}
 .admin-orders-btn{width:calc(100% - 32px);margin:12px 16px;padding:12px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--purple);font-weight:600;font-size:13px;}
+
+/* Admin Clientes */
+.admin-clients-wrap{background:var(--card);margin:0 16px;border-radius:12px;overflow:hidden;border:1px solid var(--border);}
+.admin-clients-table{width:100%;border-collapse:collapse;font-size:12px;}
+.admin-clients-table th{text-align:left;padding:12px 16px;color:var(--text-muted);border-bottom:1px solid var(--border);font-weight:500;}
+.admin-clients-table td{padding:14px 16px;border-bottom:1px solid var(--border);}
+.admin-clients-table tr:last-child td{border-bottom:none;}
+.admin-clients-table .client-info{display:flex;align-items:center;gap:10px;}
+.admin-clients-table .client-avatar{width:32px;height:32px;border-radius:50%;object-fit:cover;}
 
 .status{padding:4px 8px;border-radius:6px;font-size:10px;font-weight:600;text-transform:capitalize;}
 .status.ativo{background:rgba(34,197,94,0.2);color:#22c55e;}
@@ -205,7 +210,7 @@ p{font-size:11px;color:var(--text-muted);}
 </div>
 </section>
 
-<!-- ADMIN DASHBOARD -->
+<!-- ADMIN DASHBOARD SEM GRÁFICO -->
 <section class="page" id="admin">
 <div class="admin-header">
   <div class="admin-header-top">
@@ -251,13 +256,6 @@ p{font-size:11px;color:var(--text-muted);}
   </div>
 </div>
 
-<div class="admin-chart">
-  <div class="admin-chart-header">
-    <h4 style="font-size:13px;font-weight:700;">Gráfico de vendas</h4>
-  </div>
-  <canvas id="salesChart" height="180"></canvas>
-</div>
-
 <div style="padding:0 16px 20px;">
   <h4 style="font-size:13px;font-weight:700;margin-bottom:10px;">Últimos Pedidos</h4>
   <table class="admin-table" id="adminOrdersTable"></table>
@@ -265,11 +263,46 @@ p{font-size:11px;color:var(--text-muted);}
 </div>
 
 <div class="admin-tabs">
-  <div class="admin-tab active" onclick="showAdminTab('products')">Produtos</div>
+  <div class="admin-tab" onclick="showAdminTab('products')">Produtos</div>
   <div class="admin-tab" onclick="showAdminTab('categories')">Categorias</div>
   <div class="admin-tab" onclick="showAdminTab('subcategories')">Subcategorias</div>
   <div class="admin-tab" onclick="showAdminTab('orders')">Pedidos</div>
+  <div class="admin-tab" onclick="showAdminTab('clients')">Clientes</div>
 </div>
+</section>
+
+<!-- ADMIN CLIENTES -->
+<section class="page" id="adminClients">
+<div class="admin-header">
+  <div class="admin-header-top">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span class="material-symbols-outlined" onclick="showPage('admin')" style="cursor:pointer;">arrow_back</span>
+      <h3>Admin - Clientes</h3>
+    </div>
+    <img id="adminAvatar6" src="https://i.pravatar.cc/100" class="admin-header-avatar">
+  </div>
+</div>
+
+<div style="padding:16px 16px 0;">
+  <h4 style="font-size:16px;font-weight:700;">Clientes</h4>
+</div>
+
+<div class="search-box">
+  <span class="material-symbols-outlined" style="font-size:18px;color:var(--text-muted);">search</span>
+  <input type="text" id="searchClient" placeholder="Buscar cliente..." oninput="searchAdminClients()">
+</div>
+
+<div class="admin-clients-wrap">
+  <table class="admin-clients-table" id="adminClientsTable">
+    <tr>
+      <th>Cliente</th>
+      <th>Pedidos</th>
+      <th>Total gasto</th>
+    </tr>
+  </table>
+</div>
+
+<button class="admin-orders-btn" onclick="loadAllAdminClients()">Atualizar</button>
 </section>
 
 <!-- ADMIN PEDIDOS -->
@@ -548,9 +581,62 @@ p{font-size:11px;color:var(--text-muted);}
   <div class="summary-line"><span>Desconto</span><span id="discount">- R$ 0,00</span></div>
   <div class="summary-line"><span>Taxa</span><span id="tax">R$ 0,00</span></div>
   <div class="summary-line total"><span>Total</span><span id="cartTotal">R$ 0,00</span></div>
-  <button class="btn-primary" onclick="checkout()">Finalizar compra
-  </button>
+  <button class="btn-primary" onclick="checkout()">Finalizar compra</button>
 </div>
+</section>
+
+<section class="page" id="payment">
+<div class="header">
+<span class="material-symbols-outlined" onclick="showPage('cart')" style="cursor:pointer;">arrow_back</span>
+<h3 style="font-size:14px;">Pagamento</h3>
+<div></div>
+</div>
+<div class="payment-wrap">
+  <div class="payment-box">
+    <h4>Resumo do pedido</h4>
+    <div id="paymentItems"></div>
+    <div class="payment-total"><span>Total</span><span id="paymentTotal">R$ 0,00</span></div>
+  </div>
+  <div class="payment-box">
+    <h4>Método de pagamento</h4>
+    <div class="payment-method active">
+      <div class="method-left">
+        <span class="material-symbols-outlined">diamond</span>
+        <span>Pix</span>
+      </div>
+      <div class="radio-dot"></div>
+    </div>
+  </div>
+  <button class="btn-primary" onclick="payWithPix()">
+    <span class="material-symbols-outlined">diamond</span>
+    Pagar com Pix
+  </button>
+  <p class="payment-terms">Ao finalizar a compra você concorda com<br>os Termos de Uso e Política de Privacidade</p>
+</div>
+</section>
+
+<section class="page" id="orders">
+<div class="header">
+<span class="material-symbols-outlined" onclick="showPage('home')" style="cursor:pointer;">arrow_back</span>
+<h3 style="font-size:14px;">Meus Pedidos</h3>
+<span class="material-symbols-outlined" onclick="alert('Fechar')" style="cursor:pointer;">close</span>
+</div>
+<div class="orders-filters" id="orderFilters">
+  <div class="order-filter active" onclick="filterOrders(this,'all')">Todos</div>
+  <div class="order-filter" onclick="filterOrders(this,'aguardando')">Aguardando</div>
+  <div class="order-filter" onclick="filterOrders(this,'concluido')">Concluídos</div>
+  <div class="order-filter" onclick="filterOrders(this,'cancelado')">Cancelados</div>
+</div>
+<div id="ordersList"></div>
+</section>
+
+<section class="page" id="orderDetail">
+<div class="header">
+<span class="material-symbols-outlined" onclick="goBack()" style="cursor:pointer;">arrow_back</span>
+<h3 id="orderDetailTitle" style="font-size:14px;">Pedido #12548</h3>
+<span class="material-symbols-outlined" onclick="alert('Mais opções em breve')" style="cursor:pointer;">more_vert</span>
+</div>
+<div id="orderDetailContent"></div>
 </section>
 
 <section class="page" id="profile">
@@ -617,7 +703,7 @@ const db = firebase.firestore();
 const auth = firebase.auth();
 
 let currentUser=null,isAdmin=false,products=[],categories=[],subcategories=[],cart=JSON.parse(localStorage.getItem("cart"))||[],selectedTab='all',historyPage='home',currentPage='login';
-let currentCategory='',currentSubcategory='',currentFilter='all',isRegisterMode=false,selectedProduct=null,couponDiscount=0,currentOrder=null,orderFilter='all',allOrders=[],selectedOrder=null,chart=null,adminOrderFilter='all';
+let currentCategory='',currentSubcategory='',currentFilter='all',isRegisterMode=false,selectedProduct=null,couponDiscount=0,currentOrder=null,orderFilter='all',allOrders=[],selectedOrder=null,adminOrderFilter='all',allClients=[];
 
 setTimeout(() => {
   document.getElementById('loading').classList.add('hide');
@@ -638,6 +724,7 @@ function showPage(page){
   if(page=='adminCategories')loadAdminCategories();
   if(page=='adminSubcategories')loadAdminSubcategories();
   if(page=='adminOrders')loadAllAdminOrders();
+  if(page=='adminClients')loadAllAdminClients();
   document.querySelectorAll('.bottom-nav.nav-item').forEach((n,i)=>{
     n.classList.toggle('active',i==['home','shop','cart','orders','profile'].indexOf(page));
   });
@@ -648,6 +735,7 @@ function showAdminTab(tab){
   if(tab=='categories') showPage('adminCategories');
   if(tab=='subcategories') showPage('adminSubcategories');
   if(tab=='orders') showPage('adminOrders');
+  if(tab=='clients') showPage('adminClients');
 }
 
 function goBack(){
@@ -707,7 +795,7 @@ function loginAdmin(){
     return;
   }
   auth.signInWithEmailAndPassword(email, pass)
- .catch(e=>{showAdminError(traduzErro(e.code));});
+.catch(e=>{showAdminError(traduzErro(e.code));});
 }
 
 function traduzErro(code){
@@ -734,6 +822,7 @@ auth.onAuthStateChanged((user)=>{
         document.getElementById('adminAvatar3').src = user.photoURL || `https://i.pravatar.cc/100?u=${user.uid}`;
         document.getElementById('adminAvatar4').src = user.photoURL || `https://i.pravatar.cc/100?u=${user.uid}`;
         document.getElementById('adminAvatar5').src = user.photoURL || `https://i.pravatar.cc/100?u=${user.uid}`;
+        document.getElementById('adminAvatar6').src = user.photoURL || `https://i.pravatar.cc/100?u=${user.uid}`;
         showPage('admin');
       }else{
         document.getElementById('userName').innerText=user.displayName||user.email.split('@')[0];
@@ -746,6 +835,7 @@ auth.onAuthStateChanged((user)=>{
       loadCategories();
       loadSubcategories();
       loadOrders();
+      loadClients();
       updateCartBadge();
     }else{
       showPage('login');
@@ -793,11 +883,18 @@ function loadOrders(){
   });
 }
 
-// ADMIN DASHBOARD
+function loadClients(){
+  if(!isAdmin)return;
+  db.collection("users").onSnapshot((snap)=>{
+    allClients=[];snap.forEach(doc=>allClients.push({id:doc.id,...doc.data()}));
+    loadAllAdminClients();
+  });
+}
+
+// ADMIN DASHBOARD SEM GRÁFICO
 function loadAdminDashboard(){
   if(!isAdmin) return;
   updateAdminStats();
-  renderSalesChart();
   renderAdminDashboardOrders(allOrders);
 }
 
@@ -813,43 +910,6 @@ function updateAdminStats(){
   document.getElementById('statPedidos').innerText = totalPedidos;
   document.getElementById('statClientes').innerText = clientes;
   document.getElementById('statProdutos').innerText = produtos;
-  document.getElementById('statVendasChange').innerText = '+12.5%';
-  document.getElementById('statPedidosChange').innerText = '+8.2%';
-  document.getElementById('statClientesChange').innerText = '+5.1%';
-  document.getElementById('statProdutosChange').innerText = '+2.7%';
-}
-
-function renderSalesChart(){
-  const ctx = document.getElementById('salesChart').getContext('2d');
-  if(chart) chart.destroy();
-  const labels = ['15/05','18/05','21/05','24/05','27/05','30/05','02/06','05/06'];
-  const data = [1200,1800,1500,2200,1900,2400,2100,2800];
-  chart = new Chart(ctx,{
-    type:'line',
-    data:{
-      labels:labels,
-      datasets:[{
-        label:'Vendas',
-        data:data,
-        borderColor:'#a855f7',
-        backgroundColor:'rgba(168,85,247,0.2)',
-        tension:0.4,
-        fill:true,
-        pointBackgroundColor:'#a855f7',
-        pointBorderColor:'#fff',
-        pointRadius:4
-      }]
-    },
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{
-        x:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#a1a1aa',font:{size:10}}},
-        y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#a1a1aa',font:{size:10},callback:function(value){return value>=1000?value/1000+'k':value;}}}
-      }
-    }
-  });
 }
 
 function renderAdminDashboardOrders(orders){
@@ -865,6 +925,48 @@ function renderAdminDashboardOrders(orders){
       </tr>
     `).join('')}
   `;
+}
+
+// ADMIN CLIENTES
+function loadAllAdminClients(){
+  const search = document.getElementById('searchClient')?.value.toLowerCase() || '';
+  let clients = allClients.filter(c=>c.displayName?.toLowerCase().includes(search) || c.email?.toLowerCase().includes(search));
+
+  // Calcula pedidos e total gasto por cliente
+  clients = clients.map(c=>{
+    const userOrders = allOrders.filter(o=>o.userId==c.id && o.status=='concluido');
+    const totalGasto = userOrders.reduce((sum,o)=>sum+o.total,0);
+    return {
+     ...c,
+      totalPedidos: userOrders.length,
+      totalGasto: totalGasto,
+      avatar: c.photoURL || `https://i.pravatar.cc/100?u=${c.id}`
+    };
+  }).sort((a,b)=>b.totalGasto-a.totalGasto);
+
+  document.getElementById('adminClientsTable').innerHTML=`
+    <tr>
+      <th>Cliente</th>
+      <th>Pedidos</th>
+      <th>Total gasto</th>
+    </tr>
+    ${clients.map(c=>`
+      <tr>
+        <td>
+          <div class="client-info">
+            <img src="${c.avatar}" class="client-avatar">
+            <span>${c.displayName || c.email.split('@')[0]}</span>
+          </div>
+        </td>
+        <td>${c.totalPedidos}</td>
+        <td>R$ ${c.totalGasto.toFixed(2).replace('.',',')}</td>
+      </tr>
+    `).join('')}
+  `;
+}
+
+function searchAdminClients(){
+  loadAllAdminClients();
 }
 
 // ADMIN PEDIDOS COMPLETO
@@ -1144,7 +1246,7 @@ document.getElementById('prodCategory')?.addEventListener('change', (e)=>{
   updateSubcategorySelects(e.target.value);
 });
 
-// CLIENTE - FUNÇÕES RESTANTES
+// CLIENTE - FUNÇÕES
 function filterOrders(el,status){
   document.querySelectorAll('.order-filter').forEach(f=>f.classList.remove('active'));
   el.classList.add('active');
@@ -1192,16 +1294,27 @@ function openOrderDetail(orderId){
   const date = selectedOrder.createdAt?.seconds? new Date(selectedOrder.createdAt.seconds*1000) : new Date();
   const dateStr = date.toLocaleDateString('pt-BR') + ' - ' + date.toLocaleTimeString('pt-BR').slice(0,5);
   document.getElementById('orderDetailTitle').innerText = `Pedido #${selectedOrder.id.slice(0,5)}`;
-  document.getElementById('receiptStatus').innerText = selectedOrder.status.charAt(0).toUpperCase() + selectedOrder.status.slice(1);
-  document.getElementById('receiptStatus').className = `status ${selectedOrder.status}`;
-  document.getElementById('receiptDate').innerText = dateStr;
-  document.getElementById('receiptImg').src = item.img || 'https://via.placeholder.com/40';
-  document.getElementById('receiptProductName').innerText = item.name || 'Produto';
-  document.getElementById('receiptProductSub').innerText = item.subcategory || item.category || '';
-  document.getElementById('receiptProductPrice').innerText = `R$ ${item.price.toFixed(2).replace('.',',')}`;
-  document.getElementById('receiptTotal').innerText = `R$ ${selectedOrder.total.toFixed(2).replace('.',',')}`;
-  document.getElementById('receiptGameId').innerText = selectedOrder.gameId || '---';
-  document.getElementById('receiptPayment').innerText = selectedOrder.paymentMethod || 'Pix';
+  document.getElementById('orderDetailContent').innerHTML=`
+    <div class="order-detail-wrap">
+      <div class="order-detail-status">
+        <span class="status ${selectedOrder.status}">${selectedOrder.status.charAt(0).toUpperCase() + selectedOrder.status.slice(1)}</span>
+        <span class="small">${dateStr}</span>
+      </div>
+      <div class="order-detail-item">
+        <img src="${item.img || 'https://via.placeholder.com/40'}">
+        <div>
+          <h4>${item.name || 'Produto'}</h4>
+          <p>${item.subcategory || item.category || ''}</p>
+          <div class="price">R$ ${item.price.toFixed(2).replace('.',',')}</div>
+        </div>
+      </div>
+      <div class="order-detail-info">
+        <div class="info-line"><span>ID do Jogo</span><span>${selectedOrder.gameId || '---'}</span></div>
+        <div class="info-line"><span>Método de pagamento</span><span>${selectedOrder.paymentMethod || 'Pix'}</span></div>
+        <div class="info-line total-line"><span>Total</span><span>R$ ${selectedOrder.total.toFixed(2).replace('.',',')}</span></div>
+      </div>
+    </div>
+  `;
   showPage('orderDetail');
 }
 
@@ -1211,7 +1324,7 @@ function renderHome(){
 }
 
 function switchCatTab(el,tab){
-  document.querySelectorAll('#categories.cat-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('#categories .cat-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
   if(tab=='categories'){renderCategoriesList();}else{renderSubcategoriesListClient();}
 }
@@ -1256,8 +1369,8 @@ function openCategoryDetail(cat){
   currentSubcategory='';
   document.getElementById('catDetailTitle').innerText=cat;
   showPage('categoryDetail');
-  document.querySelectorAll('#categoryDetail.cat-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('#categoryDetail.cat-tab')[0].classList.add('active');
+  document.querySelectorAll('#categoryDetail .cat-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('#categoryDetail .cat-tab')[0].classList.add('active');
   renderFilters();
   renderCategoryProducts();
 }
@@ -1267,8 +1380,8 @@ function openSubcategory(sub){
   currentCategory = subcategories.find(s=>s.name==sub)?.category || '';
   document.getElementById('catDetailTitle').innerText=sub;
   showPage('categoryDetail');
-  document.querySelectorAll('#categoryDetail.cat-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('#categoryDetail.cat-tab')[0].classList.add('active');
+  document.querySelectorAll('#categoryDetail .cat-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('#categoryDetail .cat-tab')[0].classList.add('active');
   renderFilters();
   renderCategoryProducts();
 }
@@ -1289,7 +1402,7 @@ function setFilter(el,filter){
 }
 
 function switchDetailTab(el,tab){
-  document.querySelectorAll('#categoryDetail.cat-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('#categoryDetail .cat-tab').forEach(t=>t.classList.remove('active'));
   el.classList.add('active');
   if(tab=='prod'){
     document.getElementById('filterChips').style.display = 'flex';
