@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>NEXUS STORE</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300,400,600,700,800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300,0,0"/>
 <style>
 :root{
@@ -12,239 +12,72 @@
 --gold:#fbbf24;--text:#fff;--text-muted:#a1a1aa;--glow:0 0 20px rgba(168,85,247,0.4);
 }
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent;}
-body{background:var(--bg);color:var(--text);font-size:13px;overflow-x:hidden;}
-.page{display:none;min-height:100vh;padding-bottom:75px;opacity:0;transition:opacity 0.3s;}
-.page.active{display:block;opacity:1;}
+body{background:var(--bg);color:var(--text);font-size:13px;}
+.page{display:none;min-height:100vh;padding-bottom:75px;}
+.page.active{display:block;}
 button,input,select,textarea{outline:none;border:none;font-family:inherit;}
-button{cursor:pointer;position:relative;z-index:10;}
-
+button{cursor:pointer;}
 .loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;}
 .loading.hide{display:none;}
 .loading span{font-size:40px;color:var(--purple);animation:pulse 1.5s infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(1.1);}}
 
-.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at 50% 0%,rgba(168,85,247,0.15),transparent 50%);}
+.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
 .login-box{width:100%;max-width:360px;}
-.login-logo{display:flex;align-items:center;gap:8px;margin-bottom:32px;justify-content:center;}
-.login-logo span{font-size:28px;color:var(--gold);filter:drop-shadow(0 0 10px rgba(251,191,36,0.5));}
-.input-box{display:flex;align-items:center;gap:10px;background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:0 14px;height:46px;margin-bottom:14px;}
+.input-box{display:flex;align-items:center;gap:10px;background:rgba(18,18,24,0.6);border:1px solid var(--border);border-radius:12px;padding:0 14px;height:46px;margin-bottom:14px;}
 .input-box input,.input-box select,.input-box textarea{background:transparent;color:var(--text);flex:1;font-size:13px;}
-.btn-primary{width:100%;height:46px;background:linear-gradient(135deg,var(--purple),#7c3aed);border-radius:12px;color:#fff;font-weight:700;font-size:14px;box-shadow:var(--glow);display:flex;align-items:center;justify-content:center;gap:6px;}
-.btn-outline{width:100%;height:46px;background:transparent;border:1px solid var(--purple);border-radius:12px;color:var(--purple);font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;}
-.btn-sm{padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;}
-.btn-add{background:var(--purple);color:#fff;}
-.btn-edit{background:rgba(59,130,246,0.2);color:#3b82f6;}
-.btn-delete{background:rgba(239,68,68,0.2);color:#ef4444;}
+.btn-primary{width:100%;height:46px;background:linear-gradient(135deg,var(--purple),#7c3aed);border-radius:12px;color:#fff;font-weight:700;box-shadow:var(--glow);}
+.btn-outline{width:100%;height:46px;background:transparent;border:1px solid var(--purple);border-radius:12px;color:var(--purple);font-weight:600;margin-top:10px;}
 .error-msg{color:#ef4444;font-size:11px;margin-top:-10px;margin-bottom:10px;display:none;}
 
-.top-bar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;}
-.top-bar-left{display:flex;align-items:center;gap:12px;}
-.top-bar-left span{font-size:22px;cursor:pointer;}
-.search-box{display:flex;align-items:center;gap:8px;background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:10px;padding:0 12px;height:40px;margin:0 16px 16px;}
-.search-box input{background:transparent;color:var(--text);flex:1;font-size:13px;}
-.cart-icon{position:relative;cursor:pointer;}
-.cart-badge{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:10px;font-weight:700;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;display:none;}
-
 .header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;position:sticky;top:0;background:rgba(7,7,9,0.8);backdrop-filter:blur(10px);z-index:50;border-bottom:1px solid var(--border);}
-.cat-tabs{display:flex;background:var(--card);margin:12px 16px;border-radius:10px;padding:4px;}
-.cat-tab{flex:1;text-align:center;padding:8px;font-size:12px;font-weight:600;color:var(--text-muted);border-radius:8px;cursor:pointer;transition:0.3s;}
-.cat-tab.active{background:var(--purple);color:#fff;}
-.chips{display:flex;gap:8px;padding:0 16px 12px;overflow-x:auto;scrollbar-width:none;}
-.chips::-webkit-scrollbar{display:none;}
-.chip{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:11px;font-weight:600;color:var(--text-muted);white-space:nowrap;cursor:pointer;transition:0.3s;}
-.chip.active{background:var(--purple);color:#fff;border-color:var(--purple);}
-.info-box{background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:14px;margin:0 16px;font-size:12px;line-height:1.5;color:var(--text-muted);}
-
-.section{padding:0 16px;margin-bottom:20px;}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-.card-sm{background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:10px;padding:10px;cursor:pointer;transition:0.3s;}
-.card-sm:hover{border-color:var(--purple);box-shadow:var(--glow);transform:translateY(-2px);}
+.search-box{display:flex;align-items:center;gap:8px;background:rgba(18,18,24,0.6);border:1px solid var(--border);border-radius:10px;padding:0 12px;height:40px;margin:12px 16px;}
+.search-box input{background:transparent;color:var(--text);flex:1;font-size:13px;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px;}
+.card-sm{background:rgba(18,18,24,0.6);border:1px solid var(--border);border-radius:10px;padding:10px;}
 .card-sm img{width:100%;height:60px;border-radius:8px;object-fit:cover;margin-bottom:6px;}
-.card-sm h4{font-size:12px;font-weight:600;margin-bottom:2px;}
-
-.list-item{display:flex;align-items:center;gap:12px;background:rgba(18,18,24,0.6);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:12px;padding:14px;margin:0 16px 10px;cursor:pointer;transition:0.3s;}
-.list-item:hover{border-color:var(--purple);}
+.list-item{display:flex;align-items:center;gap:12px;background:rgba(18,18,24,0.6);border:1px solid var(--border);border-radius:12px;padding:14px;margin:0 16px 10px;}
 .list-item img{width:42px;height:42px;border-radius:8px;object-fit:cover;}
 .list-item-info{flex:1;}
-.list-item-info h4{font-size:13px;font-weight:600;margin-bottom:2px;}
-.list-item-info .small{font-size:11px;color:var(--text-muted);}
-.list-item-arrow{font-size:20px;color:var(--text-muted);}
 .price{font-size:15px;font-weight:700;color:var(--gold);}
-
-.btn-cart{width:36px;height:36px;background:transparent;border:1px solid var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--gold);transition:0.3s;}
-.btn-cart:hover{background:rgba(251,191,36,0.1);}
-
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(15,15,23,0.9);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:6px 0;z-index:100;}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;color:#666;transition:0.3s;}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;color:#666;}
 .nav-item.active{color:var(--purple);}
 .nav-item span{font-size:20px;}
 .nav-item p{font-size:9px;font-weight:600;}
 
-.banner{margin:16px;border-radius:16px;background:linear-gradient(135deg,rgba(168,85,247,0.2),rgba(251,191,36,0.1));border:1px solid rgba(168,85,247,0.3);padding:18px;position:relative;overflow:hidden;}
-.banner::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(251,191,36,0.2),transparent 50%);}
-.btn-ghost{background:transparent;border:1px solid var(--purple);border-radius:8px;color:var(--purple);padding:8px 18px;font-size:12px;font-weight:600;position:relative;}
-
-.tabs{display:flex;gap:16px;padding:0 16px 10px;overflow-x:auto;border-bottom:1px solid var(--border);}
-.tab{font-size:12px;font-weight:600;color:var(--text-muted);white-space:nowrap;padding-bottom:6px;cursor:pointer;transition:0.3s;}
-.tab.active{color:var(--purple);border-bottom:2px solid var(--purple);}
-
-h4{font-size:13px;font-weight:600;}
-p{font-size:11px;color:var(--text-muted);}
-.small{font-size:10px;}
-
-/* Admin */
 .admin-header{background:linear-gradient(135deg,#1a0b2e,#0f0f17);padding:16px;border-bottom:1px solid var(--border);}
-.admin-header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
-.admin-header-top h3{font-size:16px;font-weight:700;}
-.admin-header-avatar{width:32px;height:32px;border-radius:50%;border:2px solid var(--purple);object-fit:cover;}
 .admin-tabs{display:flex;background:var(--card);margin:12px 16px;border-radius:10px;padding:4px;}
-.admin-tab{flex:1;text-align:center;padding:8px;font-size:12px;font-weight:600;color:var(--text-muted);border-radius:8px;cursor:pointer;transition:0.3s;}
+.admin-tab{flex:1;text-align:center;padding:8px;font-size:12px;font-weight:600;color:var(--text-muted);border-radius:8px;cursor:pointer;}
 .admin-tab.active{background:var(--purple);color:#fff;}
 .admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px;}
-.admin-card{background:rgba(18,18,24,0.8);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:16px;padding:16px;}
-.admin-card-label{font-size:11px;color:var(--text-muted);margin-bottom:6px;}
-.admin-card-value{font-size:18px;font-weight:800;margin-bottom:4px;}
-.admin-table{width:100%;border-collapse:collapse;font-size:12px;margin:0 16px;}
-.admin-table th{text-align:left;padding:10px;color:var(--text-muted);border-bottom:1px solid var(--border);}
-.admin-table td{padding:12px 10px;border-bottom:1px solid var(--border);}
-.admin-table tr:hover{background:rgba(168,85,247,0.05);}
-
-/* Admin Clientes */
-.admin-clients-wrap{background:var(--card);margin:0 16px;border-radius:12px;overflow:hidden;border:1px solid var(--border);}
-.admin-clients-table{width:100%;border-collapse:collapse;font-size:12px;}
-.admin-clients-table th{text-align:left;padding:12px 16px;color:var(--text-muted);border-bottom:1px solid var(--border);font-weight:500;}
-.admin-clients-table td{padding:14px 16px;border-bottom:1px solid var(--border);}
-.admin-clients-table .client-info{display:flex;align-items:center;gap:10px;}
-.admin-clients-table .client-avatar{width:32px;height:32px;border-radius:50%;object-fit:cover;}
-
-.status{padding:4px 8px;border-radius:6px;font-size:10px;font-weight:600;text-transform:capitalize;}
-.status.ativo{background:rgba(34,197,94,0.2);color:#22c55e;}
-.status.inativo{background:rgba(239,68,68,0.2);color:#ef4444;}
-.status.aguardando{background:rgba(251,191,36,0.2);color:#fbbf24;}
-.status.concluido{background:rgba(34,197,94,0.2);color:#22c55e;}
-.status.cancelado{background:rgba(239,68,68,0.2);color:#ef4444;}
-
+.admin-card{background:rgba(18,18,24,0.8);border:1px solid var(--border);border-radius:16px;padding:16px;}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;}
 .modal.active{display:flex;}
 .modal-content{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;width:100%;max-width:400px;max-height:80vh;overflow-y:auto;}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
-.modal-header h3{font-size:16px;font-weight:700;}
-.modal-close{cursor:pointer;color:var(--text-muted);}
-
-/* Produto */
-.product-page{background:var(--bg);}
-.product-header img{width:100%;height:200px;object-fit:cover;}
-.product-info{padding:16px;}
-.product-info h2{font-size:18px;font-weight:700;margin-bottom:4px;}
-.product-sub{font-size:12px;color:var(--text-muted);margin-bottom:12px;}
-.product-meta{display:flex;gap:12px;margin-bottom:12px;font-size:12px;color:var(--text-muted);}
-.product-price{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
-.product-price h3{font-size:22px;color:var(--gold);}
-.stock{font-size:12px;color:#22c55e;}
-.product-section{margin-bottom:16px;}
-.product-section h4{font-size:14px;margin-bottom:8px;}
-.how-it-works{list-style:none;padding:0;}
-.how-it-works li{font-size:12px;color:var(--text-muted);margin-bottom:6px;}
-.product-actions{display:flex;gap:12px;}
-.btn-fav{width:46px;height:46px;border:1px solid var(--border);background:transparent;border-radius:12px;display:flex;align-items:center;justify-content:center;}
-
-/* Carrinho */
-.cart-item{display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);}
-.cart-item img{width:50px;height:50px;border-radius:8px;object-fit:cover;}
-.cart-item-info{flex:1;}
-.cart-item-actions{display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
-.qty-control{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:8px;padding:4px;}
-.qty-control button{width:24px;height:24px;background:var(--purple);color:#fff;border-radius:6px;}
-.delete{color:#ef4444;cursor:pointer;}
-.cart-summary{padding:16px;}
-.coupon-box{display:flex;gap:8px;margin-bottom:16px;}
-.coupon-box input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:0 12px;height:40px;color:#fff;}
-.coupon-box button{background:var(--purple);color:#fff;padding:0 16px;border-radius:8px;}
-.summary-line{display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px;}
-.summary-line.total{font-size:16px;font-weight:700;color:var(--gold);margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
-
-/* Pagamento */
-.payment-wrap{padding:16px;}
-.payment-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;}
-.payment-item{display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px;}
-.payment-total{display:flex;justify-content:space-between;font-weight:700;font-size:16px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
-.payment-method{display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid var(--purple);border-radius:8px;background:rgba(168,85,247,0.1);}
-.method-left{display:flex;align-items:center;gap:8px;}
-.radio-dot{width:16px;height:16px;border:2px solid var(--purple);border-radius:50%;position:relative;}
-.radio-dot::after{content:'';position:absolute;inset:3px;background:var(--purple);border-radius:50%;}
-.payment-terms{text-align:center;font-size:11px;color:var(--text-muted);margin-top:16px;}
-
-/* Pedidos */
-.orders-filters{display:flex;gap:8px;padding:0 16px 12px;overflow-x:auto;}
-.order-filter{padding:6px 14px;border-radius:20px;background:var(--card);border:1px solid var(--border);font-size:11px;font-weight:600;color:var(--text-muted);white-space:nowrap;cursor:pointer;}
-.order-filter.active{background:var(--purple);color:#fff;border-color:var(--purple);}
-.order-item{display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;}
-.order-item img{width:40px;height:40px;border-radius:8px;object-fit:cover;}
-.order-item-info{flex:1;}
-.order-item-top{display:flex;justify-content:space-between;margin-bottom:4px;}
-.order-item-id{font-size:11px;color:var(--text-muted);}
-.order-item-name{font-size:13px;font-weight:600;}
-.order-item-bottom{display:flex;justify-content:space-between;font-size:12px;}
-.order-item-price{font-weight:700;color:var(--gold);}
-.order-item-date{color:var(--text-muted);}
-
-/* Detalhe Pedido */
-.order-detail-wrap{padding:16px;}
-.order-detail-status{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
-.order-detail-item{display:flex;gap:12px;padding:14px;background:var(--card);border-radius:12px;margin-bottom:16px;}
-.order-detail-item img{width:50px;height:50px;border-radius:8px;}
-.order-detail-info{background:var(--card);border-radius:12px;padding:14px;}
-.info-line{display:flex;justify-content:space-between;margin-bottom:10px;font-size:12px;}
-.info-line.total-line{font-weight:700;font-size:16px;color:var(--gold);padding-top:10px;border-top:1px solid var(--border);}
-
-/* Perfil */
-.profile-header{text-align:center;padding:24px 16px;border-bottom:1px solid var(--border);}
-.profile-avatar{width:80px;height:80px;border-radius:50%;border:2px solid var(--purple);object-fit:cover;margin-bottom:12px;}
-.profile-name{font-size:18px;font-weight:700;margin-bottom:4px;}
-.profile-email{font-size:12px;color:var(--text-muted);}
-.profile-section{padding:16px;}
-.profile-section-title{font-size:12px;color:var(--text-muted);margin-bottom:12px;text-transform:uppercase;}
-.profile-item-icon{width:36px;height:36px;background:rgba(168,85,247,0.1);border-radius:8px;display:flex;align-items:center;justify-content:center;}
-.profile-item-red .profile-item-icon{background:rgba(239,68,68,0.1);}
-.profile-item-red h4{color:#ef4444;}
+.btn-sm{padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;}
+.btn-add{background:var(--purple);color:#fff;}
+.btn-edit{background:rgba(59,130,246,0.2);color:#3b82f6;}
+.btn-delete{background:rgba(239,68,68,0.2);color:#ef4444;}
+.profile-avatar{width:80px;height:80px;border-radius:50%;border:2px solid var(--purple);object-fit:cover;}
 </style>
 </head>
 <body>
 
-<div class="loading" id="loading">
-<span class="material-symbols-outlined">diamond</span>
-</div>
+<div class="loading" id="loading"><span class="material-symbols-outlined">diamond</span></div>
 
 <!-- LOGIN CLIENTE -->
 <section class="page" id="login">
 <div class="login-page">
 <div class="login-box">
-<div class="login-logo">
-<span class="material-symbols-outlined">diamond</span>
-<h1 style="font-size:22px;font-weight:800;">NEXUS STORE</h1>
-</div>
-<h2 id="loginTitle" style="font-size:20px;font-weight:700;margin-bottom:6px;">Entrar</h2>
-
-<div class="input-box" id="nameBox" style="display:none;">
-<span class="material-symbols-outlined" style="font-size:20px;">person</span>
-<input type="text" id="loginName" placeholder="Seu nome">
-</div>
-
-<div class="input-box">
-<span class="material-symbols-outlined" style="font-size:20px;">mail</span>
-<input type="email" id="loginEmail" placeholder="seu@email.com">
-</div>
-
-<div class="input-box">
-<span class="material-symbols-outlined" style="font-size:20px;">lock</span>
-<input type="password" id="loginPass" placeholder="••••">
-</div>
-
+<h2 id="loginTitle" style="margin-bottom:16px;font-size:20px;">Entrar</h2>
+<div class="input-box" id="nameBox" style="display:none;"><input type="text" id="loginName" placeholder="Seu nome"></div>
+<div class="input-box"><input type="email" id="loginEmail" placeholder="Email"></div>
+<div class="input-box"><input type="password" id="loginPass" placeholder="Senha"></div>
 <p class="error-msg" id="errorMsg"></p>
-
-<button class="btn-primary" id="mainBtn" onclick="loginEmail()">Entrar</button>
-<button class="btn-outline" id="switchBtn" onclick="toggleMode()">Criar conta</button>
-<button class="btn-outline" onclick="showPage('adminLogin')" style="border-color:var(--gold);color:var(--gold);margin-top:8px;">Entrar como Admin</button>
+<button class="btn-primary" onclick="loginEmail()">Entrar</button>
+<button class="btn-outline" onclick="toggleMode()">Criar conta</button>
+<button class="btn-outline" onclick="showPage('adminLogin')" style="border-color:var(--gold);color:var(--gold);">Entrar como Admin</button>
 </div>
 </div>
 </section>
@@ -253,24 +86,10 @@ p{font-size:11px;color:var(--text-muted);}
 <section class="page" id="adminLogin">
 <div class="login-page">
 <div class="login-box">
-<div class="login-logo">
-<span class="material-symbols-outlined">shield</span>
-<h1 style="font-size:22px;font-weight:800;">ADMIN</h1>
-</div>
-<h2 style="font-size:20px;font-weight:700;margin-bottom:6px;">Painel Administrativo</h2>
-
-<div class="input-box">
-<span class="material-symbols-outlined" style="font-size:20px;">mail</span>
-<input type="email" id="adminEmail" placeholder="email do admin">
-</div>
-
-<div class="input-box">
-<span class="material-symbols-outlined" style="font-size:20px;">lock</span>
-<input type="password" id="adminPass" placeholder="senha">
-</div>
-
+<h2 style="margin-bottom:16px;font-size:20px;">Admin</h2>
+<div class="input-box"><input type="email" id="adminEmail" placeholder="Email admin"></div>
+<div class="input-box"><input type="password" id="adminPass" placeholder="Senha"></div>
 <p class="error-msg" id="adminErrorMsg"></p>
-
 <button class="btn-primary" onclick="loginAdmin()">Entrar</button>
 <button class="btn-outline" onclick="showPage('login')">Voltar</button>
 </div>
@@ -280,448 +99,128 @@ p{font-size:11px;color:var(--text-muted);}
 <!-- ADMIN DASHBOARD -->
 <section class="page" id="admin">
 <div class="admin-header">
-  <div class="admin-header-top">
-    <div style="display:flex;align-items:center;gap:12px;">
-      <span class="material-symbols-outlined" onclick="alert('Menu em breve')" style="cursor:pointer;">menu</span>
-      <h3>Admin - Dashboard</h3>
-    </div>
-    <img id="adminAvatar" src="https://i.pravatar.cc/100" class="admin-header-avatar">
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+    <h3>Admin - Dashboard</h3>
+    <img id="adminAvatar" src="https://i.pravatar.cc/100" style="width:32px;height:32px;border-radius:50%;border:2px solid var(--purple);">
   </div>
 </div>
-
-<div style="padding:16px;display:flex;justify-content:space-between;align-items:center;">
-  <h4 style="font-size:16px;font-weight:700;">Dashboard</h4>
-</div>
-
 <div class="admin-grid">
-  <div class="admin-card">
-    <div class="admin-card-label">Vendas</div>
-    <div class="admin-card-value" id="statVendas">R$ 0,00</div>
-  </div>
-  <div class="admin-card">
-    <div class="admin-card-label">Pedidos</div>
-    <div class="admin-card-value" id="statPedidos">0</div>
-  </div>
-  <div class="admin-card">
-    <div class="admin-card-label">Clientes</div>
-    <div class="admin-card-value" id="statClientes">0</div>
-  </div>
-  <div class="admin-card">
-    <div class="admin-card-label">Produtos</div>
-    <div class="admin-card-value" id="statProdutos">0</div>
-  </div>
+  <div class="admin-card"><div>Clientes</div><div id="statClientes" style="font-size:20px;font-weight:700;">0</div></div>
+  <div class="admin-card"><div>Produtos</div><div id="statProdutos" style="font-size:20px;font-weight:700;">0</div></div>
 </div>
-
-<div style="padding:0 16px 20px;">
-  <h4 style="font-size:13px;font-weight:700;margin-bottom:10px;">Últimos Pedidos</h4>
-  <table class="admin-table" id="adminOrdersTable"></table>
-  <button class="btn-primary" style="width:calc(100% - 32px);margin:12px 16px;" onclick="showAdminTab('orders')">Ver todos os pedidos</button>
-</div>
-
 <div class="admin-tabs">
-  <div class="admin-tab" onclick="showAdminTab('products')">Produtos</div>
+  <div class="admin-tab active" onclick="showAdminTab('products')">Produtos</div>
   <div class="admin-tab" onclick="showAdminTab('categories')">Categorias</div>
   <div class="admin-tab" onclick="showAdminTab('subcategories')">Subcategorias</div>
-  <div class="admin-tab" onclick="showAdminTab('orders')">Pedidos</div>
   <div class="admin-tab" onclick="showAdminTab('clients')">Clientes</div>
 </div>
 </section>
 
-<!-- ADMIN CLIENTES -->
-<section class="page" id="adminClients">
-<div class="admin-header">
-  <div class="admin-header-top">
-    <span class="material-symbols-outlined" onclick="showPage('admin')" style="cursor:pointer;">arrow_back</span>
-    <h3>Admin - Clientes</h3>
-    <img id="adminAvatar6" src="https://i.pravatar.cc/100" class="admin-header-avatar">
-  </div>
-</div>
-
-<div style="padding:16px 16px 0;">
-  <h4 style="font-size:16px;font-weight:700;">Clientes</h4>
-</div>
-
-<div class="search-box">
-  <span class="material-symbols-outlined" style="font-size:18px;color:var(--text-muted);">search</span>
-  <input type="text" id="searchClient" placeholder="Buscar cliente..." oninput="searchAdminClients()">
-</div>
-
-<div class="admin-clients-wrap">
-  <table class="admin-clients-table" id="adminClientsTable"></table>
-</div>
-</section>
-
-<!-- ADMIN CATEGORIAS -->
-<section class="page" id="adminCategories">
-<div class="admin-header">
-  <div class="admin-header-top">
-    <span class="material-symbols-outlined" onclick="showPage('admin')" style="cursor:pointer;">arrow_back</span>
-    <h3>Admin - Categorias</h3>
-    <img id="adminAvatar3" src="https://i.pravatar.cc/100" class="admin-header-avatar">
-  </div>
-</div>
-
-<div style="padding:16px;display:flex;justify-content:space-between;align-items:center;">
-  <h4 style="font-size:16px;font-weight:700;">Categorias</h4>
-  <button class="btn-sm btn-add" onclick="openCategoryModal()">
-    <span class="material-symbols-outlined" style="font-size:16px;">add</span> Adicionar
-  </button>
-</div>
-
-<div id="adminCategoriesList"></div>
-</section>
-
-<!-- ADMIN SUBCATEGORIAS -->
-<section class="page" id="adminSubcategories">
-<div class="admin-header">
-  <div class="admin-header-top">
-    <span class="material-symbols-outlined" onclick="showPage('admin')" style="cursor:pointer;">arrow_back</span>
-    <h3>Admin - Subcategorias</h3>
-    <img id="adminAvatar4" src="https://i.pravatar.cc/100" class="admin-header-avatar">
-  </div>
-</div>
-
-<div style="padding:16px;display:flex;justify-content:space-between;align-items:center;">
-  <h4 style="font-size:16px;font-weight:700;">Subcategorias</h4>
-  <button class="btn-sm btn-add" onclick="openSubcategoryModal()">
-    <span class="material-symbols-outlined" style="font-size:16px;">add</span> Adicionar
-  </button>
-</div>
-
-<div id="adminSubcategoriesList"></div>
-</section>
-
-<!-- ADMIN PRODUTOS -->
+<!-- ADMIN LISTAS -->
 <section class="page" id="adminProducts">
-<div class="admin-header">
-  <div class="admin-header-top">
-    <span class="material-symbols-outlined" onclick="showPage('admin')" style="cursor:pointer;">arrow_back</span>
-    <h3>Admin - Produtos</h3>
-    <img id="adminAvatar2" src="https://i.pravatar.cc/100" class="admin-header-avatar">
-  </div>
-</div>
-
-<div style="padding:16px;display:flex;justify-content:space-between;align-items:center;">
-  <h4 style="font-size:16px;font-weight:700;">Produtos</h4>
-  <button class="btn-sm btn-add" onclick="openProductModal()">
-    <span class="material-symbols-outlined" style="font-size:16px;">add</span> Adicionar
-  </button>
-</div>
-
+<div class="header"><span class="material-symbols-outlined" onclick="showPage('admin')">arrow_back</span><h3>Produtos</h3><button class="btn-sm btn-add" onclick="openProductModal()">+ Adicionar</button></div>
 <div id="adminProductsList"></div>
 </section>
 
-<!-- MODAL CATEGORIA COM IMAGEM -->
+<section class="page" id="adminCategories">
+<div class="header"><span class="material-symbols-outlined" onclick="showPage('admin')">arrow_back</span><h3>Categorias</h3><button class="btn-sm btn-add" onclick="openCategoryModal()">+ Adicionar</button></div>
+<div id="adminCategoriesList"></div>
+</section>
+
+<section class="page" id="adminSubcategories">
+<div class="header"><span class="material-symbols-outlined" onclick="showPage('admin')">arrow_back</span><h3>Subcategorias</h3><button class="btn-sm btn-add" onclick="openSubcategoryModal()">+ Adicionar</button></div>
+<div id="adminSubcategoriesList"></div>
+</section>
+
+<section class="page" id="adminClients">
+<div class="header"><span class="material-symbols-outlined" onclick="showPage('admin')">arrow_back</span><h3>Clientes</h3></div>
+<div id="adminClientsList"></div>
+</section>
+
+<!-- MODAIS ADMIN -->
 <div class="modal" id="categoryModal">
 <div class="modal-content">
-  <div class="modal-header">
-    <h3 id="categoryModalTitle">Adicionar Categoria</h3>
-    <span class="material-symbols-outlined modal-close" onclick="closeCategoryModal()">close</span>
-  </div>
+  <h3 id="categoryModalTitle">Categoria</h3>
   <input type="hidden" id="categoryId">
-  <div class="input-box"><input type="text" id="catName" placeholder="Nome da categoria"></div>
-  <div class="input-box"><input type="text" id="catImg" placeholder="URL da imagem"></div>
+  <div class="input-box"><input type="text" id="catName" placeholder="Nome"></div>
+  <div class="input-box"><input type="file" id="catImg" accept="image/*"></div>
   <button class="btn-primary" onclick="saveCategory()">Salvar</button>
 </div>
 </div>
 
-<!-- MODAL SUBCATEGORIA COM IMAGEM -->
 <div class="modal" id="subcategoryModal">
 <div class="modal-content">
-  <div class="modal-header">
-    <h3 id="subcategoryModalTitle">Adicionar Subcategoria</h3>
-    <span class="material-symbols-outlined modal-close" onclick="closeSubcategoryModal()">close</span>
-  </div>
+  <h3 id="subcategoryModalTitle">Subcategoria</h3>
   <input type="hidden" id="subcategoryId">
-  <div class="input-box"><select id="subcatCategory"><option value="">Selecione a categoria</option></select></div>
-  <div class="input-box"><input type="text" id="subcatName" placeholder="Nome da subcategoria"></div>
-  <div class="input-box"><input type="text" id="subcatImg" placeholder="URL da imagem"></div>
+  <div class="input-box"><select id="subcatCategory"></select></div>
+  <div class="input-box"><input type="text" id="subcatName" placeholder="Nome"></div>
+  <div class="input-box"><input type="file" id="subcatImg" accept="image/*"></div>
   <button class="btn-primary" onclick="saveSubcategory()">Salvar</button>
 </div>
 </div>
 
-<!-- MODAL PRODUTO -->
 <div class="modal" id="productModal">
 <div class="modal-content">
-  <div class="modal-header">
-    <h3 id="productModalTitle">Adicionar Produto</h3>
-    <span class="material-symbols-outlined modal-close" onclick="closeProductModal()">close</span>
-  </div>
+  <h3 id="productModalTitle">Produto</h3>
   <input type="hidden" id="productId">
-  <div class="input-box"><input type="text" id="prodName" placeholder="Nome do produto"></div>
-  <div class="input-box"><input type="number" id="prodPrice" placeholder="Preço 18.90" step="0.01"></div>
-  <div class="input-box"><select id="prodCategory"><option value="">Selecione a categoria</option></select></div>
-  <div class="input-box"><select id="prodSubcategory"><option value="">Selecione a subcategoria</option></select></div>
-  <div class="input-box"><input type="text" id="prodImg" placeholder="URL da imagem"></div>
-  <div class="input-box"><textarea id="prodDesc" placeholder="Descrição" style="height:60px;padding:10px 0;resize:none;"></textarea></div>
+  <div class="input-box"><input type="text" id="prodName" placeholder="Nome"></div>
+  <div class="input-box"><input type="number" id="prodPrice" placeholder="Preço" step="0.01"></div>
+  <div class="input-box"><select id="prodCategory"></select></div>
+  <div class="input-box"><select id="prodSubcategory"></select></div>
+  <div class="input-box"><input type="file" id="prodImg" accept="image/*"></div>
+  <div class="input-box"><textarea id="prodDesc" placeholder="Descrição" style="height:60px;padding:10px 0;"></textarea></div>
   <button class="btn-primary" onclick="saveProduct()">Salvar</button>
 </div>
 </div>
 
-<!-- HOME CLIENTE -->
+<!-- CLIENTE HOME -->
 <section class="page" id="home">
-<div class="top-bar">
-  <div class="top-bar-left">
-    <span class="material-symbols-outlined" onclick="alert('Menu em breve')">menu</span>
-    <div style="font-size:12px;color:var(--text-muted)">Olá, <span id="userName" style="color:var(--text);font-weight:600;">Usuário</span> 👋</div>
-  </div>
-  <div class="cart-icon" onclick="showPage('cart')">
-    <span class="material-symbols-outlined" style="font-size:22px;">shopping_cart</span>
-    <span class="cart-badge" id="cartBadge">0</span>
-  </div>
-</div>
-
-<div class="search-box">
-  <span class="material-symbols-outlined" style="font-size:18px;color:var(--text-muted);">search</span>
-  <input type="text" id="searchInput" placeholder="Buscar produtos..." oninput="searchProducts()">
-</div>
-
-<div class="banner">
-<h2 style="font-size:18px;font-weight:800;margin-bottom:4px;">MEGA PROMO<br>ATÉ 50% OFF</h2>
-<button class="btn-ghost" onclick="showPage('shop')">COMPRAR AGORA</button>
-</div>
-
-<div class="section">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-<h4>Categorias</h4>
-<span style="font-size:11px;color:var(--purple);cursor:pointer;" onclick="showPage('categories')">Ver todas</span>
-</div>
+<div class="header"><h3>Olá, <span id="userName">Usuário</span></h3><div></div></div>
+<div class="search-box"><input type="text" id="searchInput" placeholder="Buscar produtos..." oninput="searchProducts()"></div>
+<div style="padding:0 16px;margin-bottom:10px;"><h4>Categorias</h4></div>
 <div class="grid-3" id="homeCategories"></div>
-</div>
-
-<div class="section">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-<h4>Destaques</h4>
-<span style="font-size:11px;color:var(--purple);cursor:pointer;" onclick="showPage('shop')">Ver todas</span>
-</div>
+<div style="padding:0 16px;margin:20px 0 10px;"><h4>Destaques</h4></div>
 <div class="grid-3" id="homeProducts"></div>
-</div>
 </section>
 
-<!-- CATEGORIAS COM FOTOS -->
+<!-- CLIENTE CATEGORIAS -->
 <section class="page" id="categories">
-<div class="header">
-<span class="material-symbols-outlined" onclick="showPage('home')" style="cursor:pointer;">arrow_back</span>
-<h3 style="font-size:14px;">Categorias</h3>
-<div></div>
-</div>
+<div class="header"><span class="material-symbols-outlined" onclick="showPage('home')">arrow_back</span><h3>Categorias</h3></div>
 <div id="catContent"></div>
 </section>
 
-<!-- CATEGORIA DETALHE -->
-<section class="page" id="categoryDetail">
-<div class="header">
-<span class="material-symbols-outlined" onclick="goBack()" style="cursor:pointer;">arrow_back</span>
-<h3 id="catDetailTitle" style="font-size:14px;">Categoria</h3>
-<span class="material-symbols-outlined" style="cursor:pointer;">search</span>
+<!-- CLIENTE PERFIL -->
+<section class="page" id="profile">
+<div class="header"><h3>Perfil</h3></div>
+<div style="text-align:center;padding:24px 16px;border-bottom:1px solid var(--border);">
+  <img id="userAvatar" src="https://i.pravatar.cc/100" class="profile-avatar">
+  <h3 id="profileName" style="margin-top:10px;">Usuário</h3>
+  <p id="profileEmail" style="color:var(--text-muted);font-size:12px;">email@email.com</p>
 </div>
-<div class="cat-tabs">
-  <div class="cat-tab active" onclick="switchDetailTab(this,'prod')">Produtos</div>
-  <div class="cat-tab" onclick="switchDetailTab(this,'info')">Informações</div>
+<div style="padding:16px;">
+  <div class="list-item" onclick="openEditProfile()"><span class="material-symbols-outlined">person</span><div class="list-item-info"><h4>Editar perfil</h4></div></div>
+  <div class="list-item" onclick="logout()" style="color:#ef4444;"><span class="material-symbols-outlined">logout</span><div class="list-item-info"><h4>Sair</h4></div></div>
 </div>
-<div class="chips" id="filterChips"></div>
-<div id="catDetailContent"></div>
-</section>
-
-<!-- LOJA -->
-<section class="page" id="shop">
-<div class="header">
-<span class="material-symbols-outlined" onclick="showPage('home')" style="cursor:pointer;">arrow_back</span>
-<h3 id="shopTitle" style="font-size:14px;">Produtos</h3>
-<div></div>
-</div>
-<div class="tabs" id="shopTabs"></div>
-<div class="section" id="shopProducts"></div>
-</section>
-
-<!-- PRODUTO -->
-"product">
-<div class="header">
-<span class="material-symbols-outlined" onclick="goBack()" style="cursor:pointer;">arrow_back</span>
-<h3 style="font-size:14px;">Produto</h3>
-<span class="material-symbols-outlined" onclick="alert('Compartilhar em breve')" style="cursor:pointer;">share</span>
-</div>
-<div id="productDetail"></div>
-</section>
-
-<!-- CARRINHO -->
-<section class="page" id="cart">
-<div class="header">
-<span class="material-symbols-outlined" onclick="goBack()" style="cursor:pointer;">arrow_back</span>
-<h3 style="font-size:14px;">Carrinho</h3>
-<span onclick="clearCart()" style="color:#a855f7;font-size:12px;cursor:pointer;font-weight:600;">Limpar</span>
-</div>
-<div id="cartItems"></div>
-<div class="cart-summary" id="cartSummary" style="display:none;">
-  <div class="coupon-box">
-    <input type="text" id="couponInput" placeholder="Digite o cupom">
-    <button onclick="applyCoupon()">Aplicar</button>
-  </div>
-  <div class="summary-line"><span>Subtotal</span><span id="subtotal">R$ 0,00</span></div>
-  <div class="summary-line"><span>Desconto</span><span id="discount">- R$ 0,00</span></div>
-  <div class="summary-line"><span>Taxa</span><span id="tax">R$ 0,00</span></div>
-  <div class="summary-line total"><span>Total</span><span id="cartTotal">R$ 0,00</span></div>
-  <button class="btn-primary" onclick="checkout()">Finalizar compra</button>
-</div>
-</section>
-
-<!-- PAGAMENTO -->
-<section class="page" id="payment">
-<div class="header">
-<span class="material-symbols-outlined" onclick="showPage('cart')" style="cursor:pointer;">arrow_back</span>
-<h3 style="font-size:14px;">Pagamento</h3>
-<div></div>
-</div>
-<div class="payment-wrap">
-  <div class="payment-box">
-    <h4>Resumo do pedido</h4>
-    <div id="paymentItems"></div>
-    <div class="payment-total"><span>Total</span><span id="paymentTotal">R$ 0,00</span></div>
-  </div>
-  <div class="payment-box">
-    <h4>Método de pagamento</h4>
-    <div class="payment-method active">
-      <div class="method-left">
-        <span class="material-symbols-outlined">diamond</span>
-        <span>Pix</span>
-      </div>
-      <div class="radio-dot"></div>
-    </div>
-  </div>
-  <button class="btn-primary" onclick="payWithPix()">
-    <span class="material-symbols-outlined">diamond</span>
-    Pagar com Pix
-  </button>
-  <p class="payment-terms">Ao finalizar a compra você concorda com<br>os Termos de Uso e Política de Privacidade</p>
-</div>
-</section>
-
-<!-- PEDIDOS -->
-<section class="page" id="orders">
-<div class="header">
-<span class="material-symbols-outlined" onclick="showPage('home')" style="cursor:pointer;">arrow_back</span>
-<h3 style="font-size:14px;">Meus Pedidos</h3>
-<span class="material-symbols-outlined" onclick="alert('Fechar')" style="cursor:pointer;">close</span>
-</div>
-<div class="orders-filters" id="orderFilters">
-  <div class="order-filter active" onclick="filterOrders(this,'all')">Todos</div>
-  <div class="order-filter" onclick="filterOrders(this,'aguardando')">Aguardando</div>
-  <div class="order-filter" onclick="filterOrders(this,'concluido')">Concluídos</div>
-  <div class="order-filter" onclick="filterOrders(this,'cancelado')">Cancelados</div>
-</div>
-<div id="ordersList"></div>
-</section>
-
-<!-- DETALHE PEDIDO -->
-<section class="page" id="orderDetail">
-<div class="header">
-<span class="material-symbols-outlined" onclick="goBack()" style="cursor:pointer;">arrow_back</span>
-<h3 id="orderDetailTitle" style="font-size:14px;">Pedido #12548</h3>
-<span class="material-symbols-outlined" onclick="alert('Mais opções em breve')" style="cursor:pointer;">more_vert</span>
-</div>
-<div id="orderDetailContent"></div>
 </section>
 
 <!-- EDITAR PERFIL -->
 <section class="page" id="editProfile">
-<div class="header">
-<span class="material-symbols-outlined" onclick="showPage('profile')" style="cursor:pointer;">arrow_back</span>
-<h3 style="font-size:14px;">Editar Perfil</h3>
-<div></div>
-</div>
-<div style="padding:20px;">
-  <div style="text-align:center;margin-bottom:20px;">
-    <div style="position:relative;width:90px;height:90px;margin:0 auto;">
-      <img id="editAvatarPreview" src="https://i.pravatar.cc/100" style="width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid var(--purple);">
-      <label for="avatarUpload" style="position:absolute;bottom:0;right:0;background:var(--purple);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;">
-        <span class="material-symbols-outlined" style="font-size:18px;">camera_alt</span>
-      </label>
-      <input type="file" id="avatarUpload" accept="image/*" style="display:none;" onchange="uploadAvatar()">
-    </div>
-  </div>
-
-  <div class="input-box">
-    <span class="material-symbols-outlined" style="font-size:20px;">person</span>
-    <input type="text" id="editName" placeholder="Seu nome">
-  </div>
-
-  <button class="btn-primary" onclick="saveProfile()">Salvar Alterações</button>
+<div class="header"><span class="material-symbols-outlined" onclick="showPage('profile')">arrow_back</span><h3>Editar Perfil</h3></div>
+<div style="padding:20px;text-align:center;">
+  <img id="editAvatarPreview" src="https://i.pravatar.cc/100" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:2px solid var(--purple);margin-bottom:12px;">
+  <div class="input-box"><input type="file" id="avatarUpload" accept="image/*" onchange="uploadAvatar()"></div>
+  <div class="input-box"><input type="text" id="editName" placeholder="Seu nome"></div>
+  <button class="btn-primary" onclick="saveProfile()">Salvar</button>
 </div>
 </section>
 
-<!-- FAQ -->
-<section class="page" id="faq">
-<div class="header">
-<span class="material-symbols-outlined" onclick="showPage('profile')" style="cursor:pointer;">arrow_back</span>
-<h3 style="font-size:14px;">❓ Perguntas Frequentes</h3>
-<div></div>
-</div>
-<div style="padding:16px;">
-  <div style="background:rgba(18,18,24,0.6);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;">
-    <div style="font-size:13px;font-weight:600;margin-bottom:6px;">1. Como faço uma compra?</div>
-    <div style="font-size:12px;color:var(--text-muted);line-height:1.5;">Basta escolher o produto, adicionar ao carrinho e finalizar o pagamento.</div>
-  </div>
-
-  <div style="background:rgba(18,18,24,0.6);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;">
-    <div style="font-size:13px;font-weight:600;margin-bottom:6px;">2. Quais formas de pagamento aceitam?</div>
-    <div style="font-size:12px;color:var(--text-muted);line-height:1.5;">Aceitamos somente Pix.</div>
-  </div>
-
-  <div style="background:rgba(18,18,24,0.6);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;">
-    <div style="font-size:13px;font-weight:600;margin-bottom:6px;">3. Em quanto tempo recebo meu pedido?</div>
-    <div style="font-size:12px;color:var(--text-muted);line-height:1.5;">Produtos entregues manual para a segurança após o pagamento.</div>
-  </div>
-
-  <div style="background:rgba(18,18,24,0.6);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;">
-    <div style="font-size:13px;font-weight:600;margin-bottom:6px;">4. Preciso criar uma conta?</div>
-    <div style="font-size:12px;color:var(--text-muted);line-height:1.5;">Sim, é necessário para acompanhar seus pedidos e garantir segurança.</div>
-  </div>
-
-  <div style="background:rgba(18,18,24,0.6);border:1px solid var(--border);border-radius:12px;padding:14px;">
-    <div style="font-size:13px;font-weight:600;margin-bottom:6px;">5. Como falo com o suporte?</div>
-    <div style="font-size:12px;color:var(--text-muted);line-height:1.5;">Você pode entrar em contato pela página de suporte ou botão de atendimento do site.</div>
-  </div>
-</div>
-</section>
-
-<!-- PERFIL -->
-<section class="page" id="profile">
-<div class="header"><h3 style="font-size:14px;">Perfil</h3><div></div></div>
-<div class="profile-header">
-  <img id="userAvatar" src="https://i.pravatar.cc/100" class="profile-avatar">
-  <h3 id="profileName" class="profile-name">Usuário</h3>
-  <p id="profileEmail" class="profile-email">email@email.com</p>
-</div>
-<div class="profile-section">
-  <div class="list-item" onclick="openEditProfile()">
-    <div class="profile-item-icon"><span class="material-symbols-outlined">person</span></div>
-    <div class="list-item-info"><h4>Editar perfil</h4><div class="small">Alterar foto e nome</div></div>
-    <span class="material-symbols-outlined list-item-arrow">chevron_right</span>
-  </div>
-  <div class="list-item" onclick="showPage('faq')">
-    <div class="profile-item-icon"><span class="material-symbols-outlined">help</span></div>
-    <div class="list-item-info"><h4>Central de ajuda</h4><div class="small">Perguntas frequentes</div></div>
-    <span class="material-symbols-outlined list-item-arrow">chevron_right</span>
-  </div>
-</div>
-<div class="profile-section">
-  <div class="list-item profile-item-red" onclick="logout()">
-    <div class="profile-item-icon"><span class="material-symbols-outlined">logout</span></div>
-    <div class="list-item-info"><h4>Sair da conta</h4></div>
-  </div>
-</div>
-</section>
-
-<!-- NAVEGAÇÃO INFERIOR -->
-<div class="bottom-nav">
+<!-- NAV CLIENTE -->
+<div class="bottom-nav" id="bottomNav" style="display:none;">
 <div class="nav-item active" onclick="showPage('home')"><span class="material-symbols-outlined">home</span><p>Home</p></div>
-<div class="nav-item" onclick="showPage('shop')"><span class="material-symbols-outlined">grid_view</span><p>Loja</p></div>
-<div class="nav-item" onclick="showPage('cart')"><span class="material-symbols-outlined">shopping_cart</span><p>Carrinho</p></div>
-<div class="nav-item" onclick="showPage('orders')"><span class="material-symbols-outlined">receipt_long</span><p>Pedidos</p></div>
+<div class="nav-item" onclick="showPage('categories')"><span class="material-symbols-outlined">grid_view</span><p>Categorias</p></div>
 <div class="nav-item" onclick="showPage('profile')"><span class="material-symbols-outlined">person</span><p>Perfil</p></div>
 </div>
 
-<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -743,900 +242,425 @@ const db = firebase.firestore();
 const auth = firebase.auth();
 const storage = firebase.storage();
 
-let currentUser=null,isAdmin=false,products=[],categories=[],subcategories=[],cart=JSON.parse(localStorage.getItem("cart"))||[],selectedTab='all',historyPage='home',currentPage='login';
-let currentCategory='',currentSubcategory='',currentFilter='all',isRegisterMode=false,selectedProduct=null,couponDiscount=0,currentOrder=null,orderFilter='all',allOrders=[],allClients=[];
+let currentUser=null,isAdmin=false,products=[],categories=[],subcategories=[],allClients=[];
 
-setTimeout(() => {
-  document.getElementById('loading').classList.add('hide');
-}, 1500);
+setTimeout(()=>document.getElementById('loading').classList.add('hide'),1200);
 
 function showPage(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(page).classList.add('active');
-  historyPage=currentPage;
-  currentPage=page;
   if(page=='home')renderHome();
-  if(page=='shop')renderShop();
   if(page=='categories')renderCategoriesList();
   if(page=='admin')loadAdminDashboard();
   if(page=='adminProducts')loadAdminProducts();
   if(page=='adminCategories')loadAdminCategories();
   if(page=='adminSubcategories')loadAdminSubcategories();
-  if(page=='adminClients')loadAllAdminClients();
+  if(page=='adminClients')loadAdminClients();
 }
 
 function showAdminTab(tab){
+  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+  event.target.classList.add('active');
   if(tab=='products') showPage('adminProducts');
   if(tab=='categories') showPage('adminCategories');
   if(tab=='subcategories') showPage('adminSubcategories');
-  if(tab=='orders') showPage('adminOrders');
   if(tab=='clients') showPage('adminClients');
 }
 
-function goBack(){
-  const prev = historyPage || 'home';
-  showPage(prev);
-}
-
+// AUTH
 function toggleMode(){
-  isRegisterMode =!isRegisterMode;
-  document.getElementById('nameBox').style.display = isRegisterMode? 'flex' : 'none';
-  document.getElementById('loginTitle').innerText = isRegisterMode? 'Criar conta' : 'Entrar';
-  document.getElementById('mainBtn').innerText = isRegisterMode? 'Cadastrar' : 'Entrar';
-  document.getElementById('switchBtn').innerText = isRegisterMode? 'Já tenho conta' : 'Criar conta';
-  hideError();
+  const isReg = document.getElementById('nameBox').style.display==='flex';
+  document.getElementById('nameBox').style.display = isReg?'none':'flex';
+  document.getElementById('loginTitle').innerText = isReg?'Entrar':'Criar conta';
 }
 
-function showError(msg){
-  document.getElementById('errorMsg').innerText = msg;
-  document.getElementById('errorMsg').style.display = 'block';
-}
-function hideError(){
-  document.getElementById('errorMsg').style.display = 'none';
-}
+function showError(msg,id='errorMsg'){document.getElementById(id).innerText=msg;document.getElementById(id).style.display='block';}
+function hideError(id='errorMsg'){document.getElementById(id).style.display='none';}
 
-function registerEmail(){
-  const name = document.getElementById('loginName').value.trim();
-  const email = document.getElementById('loginEmail').value.trim();
+async function loginEmail(){
+  const isReg = document.getElementById('nameBox').style.display==='flex';
+  const email = document.getElementById('loginEmail').value;
   const pass = document.getElementById('loginPass').value;
-  if(!name){showError('Digite seu nome'); return;}
-  if(!email.includes('@')){showError('Email inválido'); return;}
-  if(pass.length < 6){showError('Senha deve ter 6+ caracteres'); return;}
-  auth.createUserWithEmailAndPassword(email, pass)
-.then((cred)=>cred.user.updateProfile({displayName: name}))
-.then(()=>{showError(''); alert('Conta criada com sucesso!'); toggleMode();})
-.catch(e=>{showError(e.message);});
+  const name = document.getElementById('loginName').value;
+
+  try{
+    hideError();
+    if(isReg){
+      const cred = await auth.createUserWithEmailAndPassword(email,pass);
+      await cred.user.updateProfile({displayName:name});
+      await db.collection('users').doc(cred.user.uid).set({displayName:name,email:email,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+      alert('Conta criada! Faça login.');
+      toggleMode();
+    }else{
+      await auth.signInWithEmailAndPassword(email,pass);
+    }
+  }catch(e){showError(e.message);}
 }
 
-function loginEmail(){
-  if(isRegisterMode){registerEmail(); return;}
-  const email = document.getElementById('loginEmail').value.trim();
-  const pass = document.getElementById('loginPass').value;
-  auth.signInWithEmailAndPassword(email, pass).catch(e=>{showError(e.message);});
-}
-
-function loginAdmin(){
-  const email = document.getElementById('adminEmail').value.trim();
+async function loginAdmin(){
+  const email = document.getElementById('adminEmail').value;
   const pass = document.getElementById('adminPass').value;
-  if(email!== ADMIN_EMAIL){
-    showError('Email não autorizado');
-    return;
-  }
-  auth.signInWithEmailAndPassword(email, pass)
-.catch(e=>{showError(e.message);});
+  if(email!==ADMIN_EMAIL){showError('Email não autorizado','adminErrorMsg');return;}
+  try{await auth.signInWithEmailAndPassword(email,pass);}catch(e){showError(e.message,'adminErrorMsg');}
 }
 
-function logout(){
-  auth.signOut().then(()=>showPage('login'));
-}
+function logout(){auth.signOut();}
 
-auth.onAuthStateChanged((user)=>{
+auth.onAuthStateChanged(async(user)=>{
   document.getElementById('loading').classList.add('hide');
   if(user){
     currentUser=user;
     isAdmin=user.email===ADMIN_EMAIL;
+
     if(isAdmin){
-      document.getElementById('adminAvatar').src = user.photoURL || `https://i.pravatar.cc/100?u=${user.uid}`;
+      document.getElementById('adminAvatar').src=user.photoURL||`https://i.pravatar.cc/100?u=${user.uid}`;
+      document.getElementById('bottomNav').style.display='none';
       showPage('admin');
     }else{
+      document.getElementById('bottomNav').style.display='flex';
       document.getElementById('userName').innerText=user.displayName||user.email.split('@')[0];
       document.getElementById('profileName').innerText=user.displayName||'Usuário';
       document.getElementById('profileEmail').innerText=user.email;
-      document.getElementById('userAvatar').src = user.photoURL || `https://i.pravatar.cc/100?u=${user.uid}`;
+      document.getElementById('userAvatar').src=user.photoURL||`https://i.pravatar.cc/100?u=${user.uid}`;
       showPage('home');
     }
+
     loadProducts();
     loadCategories();
     loadSubcategories();
     loadClients();
-    loadOrders();
-    updateCartBadge();
   }else{
+    document.getElementById('bottomNav').style.display='none';
     showPage('login');
   }
 });
 
 // LOAD DATA
-function loadProducts(){
-  db.collection("products").orderBy("createdAt","desc").onSnapshot((snap)=>{
-    products=[];snap.forEach(doc=>products.push({id:doc.id,...doc.data()}));
-    renderHome();renderShop();
-    if(isAdmin)loadAdminProducts();
-  });
+function loadProducts(){db.collection("products").orderBy("createdAt","desc").onSnapshot(s=>{products=[];s.forEach(d=>products.push({id:d.id,...d.data()}));renderHome();if(isAdmin)loadAdminProducts();});}
+function loadCategories(){db.collection("categories").orderBy("name").onSnapshot(s=>{categories=[];s.forEach(d=>categories.push({id:d.id,...d.data()}));renderCategoriesList();if(isAdmin)loadAdminCategories();updateCategorySelects();});}
+function loadSubcategories(){db.collection("subcategories").orderBy("name").onSnapshot(s=>{subcategories=[];s.forEach(d=>subcategories.push({id:d.id,...d.data()}));if(isAdmin)loadAdminSubcategories();updateSubcategorySelects();});}
+function loadClients(){db.collection("users").onSnapshot(s=>{allClients=[];s.forEach(d=>allClients.push({id:d.id,...d.data()}));if(isAdmin)loadAdminClients();});}
+
+// UPLOAD
+async function uploadImage(file,path){
+  if(!file)return'';
+  try{
+    const ref=storage.ref(path+'/'+Date.now()+'_'+file.name);
+    const snap=await ref.put(file);
+    return await snap.ref.getDownloadURL();
+  }catch(e){console.error(e);alert('Erro no upload: '+e.message);return'';}
 }
 
-function loadCategories(){
-  db.collection("categories").orderBy("name").onSnapshot((snap)=>{
-    categories=[];snap.forEach(doc=>categories.push({id:doc.id,...doc.data()}));
-    renderCategoriesList();
-    if(isAdmin)loadAdminCategories();
-    updateCategorySelects();
-  });
-}
-
-function loadSubcategories(){
-  db.collection("subcategories").orderBy("name").onSnapshot((snap)=>{
-    subcategories=[];snap.forEach(doc=>subcategories.push({id:doc.id,...doc.data()}));
-    if(isAdmin)loadAdminSubcategories();
-    updateSubcategorySelects();
-  });
-}
-
-function loadClients(){
-  db.collection("users").onSnapshot((snap)=>{
-    allClients=[];snap.forEach(doc=>allClients.push({id:doc.id,...doc.data()}));
-    if(isAdmin)loadAllAdminClients();
-  });
-}
-
-function loadOrders(){
-  if(!currentUser)return;
-  const q=isAdmin?db.collection("orders"):db.collection("orders").where("userId","==",currentUser.uid);
-  q.orderBy("createdAt","desc").onSnapshot((snap)=>{
-    allOrders=[];snap.forEach(doc=>allOrders.push({id:doc.id,...doc.data()}));
-    filterOrders(document.querySelector('.order-filter.active'),'all');
-    if(isAdmin)renderAdminDashboardOrders(allOrders);
-  });
-}
-
-// EDITAR PERFIL COM FOTO
-function openEditProfile(){
-  document.getElementById('editName').value = currentUser.displayName || '';
-  document.getElementById('editAvatarPreview').src = currentUser.photoURL || 'https://i.pravatar.cc/100';
-  showPage('editProfile');
-}
-
-function uploadAvatar(){
-  const file = document.getElementById('avatarUpload').files[0];
-  if(!file) return;
-
-  const reader = new FileReader();
-  reader.onload = e => document.getElementById('editAvatarPreview').src = e.target.result;
-  reader.readAsDataURL(file);
-
-  const ref = storage.ref(`avatars/${currentUser.uid}`);
-  ref.put(file).then(()=> ref.getDownloadURL()).then(url=>{
-    currentUser.updateProfile({photoURL: url});
-    db.collection('users').doc(currentUser.uid).update({photoURL: url});
-    document.getElementById('userAvatar').src = url;
-  });
-}
-
-function saveProfile(){
-  const name = document.getElementById('editName').value.trim();
-  if(!name){alert('Digite um nome'); return;}
-
-  currentUser.updateProfile({displayName: name}).then(()=>{
-    db.collection('users').doc(currentUser.uid).update({displayName: name});
-    document.getElementById('profileName').innerText = name;
-    document.getElementById('userName').innerText = name;
-    alert('Perfil atualizado!');
-    showPage('profile');
-  });
-}
-
-// CATEGORIAS COM FOTOS
-function renderCategoriesList(){
-  document.getElementById('catContent').innerHTML = categories.map(c=>`
-    <div class="list-item" onclick="openCategoryDetail('${c.name}')">
-      <img src="${c.img || 'https://via.placeholder.com/42'}" alt="${c.name}">
-      <div class="list-item-info">
-        <h4>${c.name}</h4>
-        <div class="small">Produtos da categoria</div>
-      </div>
-      <span class="material-symbols-outlined" style="font-size:20px;color:var(--text-muted);">chevron_right</span>
-    </div>
-  `).join('');
-}
-
-function renderSubcategoriesListClient(){
-  let html = '';
-  categories.forEach(c=>{
-    const subs = subcategories.filter(s=>s.category==c.name);
-    if(subs.length==0) return;
-    html += `<div style="padding:0 16px;margin:16px 0 8px;"><h4 style="font-size:12px;color:var(--text-muted);">${c.name}</h4></div>`;
-    html += subs.map(s=>`
-      <div class="list-item" onclick="openSubcategory('${s.name}')">
-        <img src="${s.img || 'https://via.placeholder.com/40'}">
-        <div class="list-item-info">
-          <h4>${s.name}</h4>
-          <div class="small">Ver produtos</div>
-        </div>
-        <span class="material-symbols-outlined" style="font-size:20px;color:var(--text-muted);">chevron_right</span>
-      </div>
-    `).join('');
-  });
-  document.getElementById('catContent').innerHTML = html;
-}
-
+// CLIENTE RENDER
 function renderHome(){
   document.getElementById('homeCategories').innerHTML=categories.slice(0,6).map(c=>`
-    <div class="card-sm" onclick="openCategoryDetail('${c.name}')">
-      <img src="${c.img || 'https://via.placeholder.com/100'}" alt="${c.name}">
+    <div class="card-sm">
+      <img src="${c.img||'https://via.placeholder.com/100'}">
       <h4>${c.name}</h4>
     </div>
   `).join('');
-
   document.getElementById('homeProducts').innerHTML=products.slice(0,6).map(p=>`
-    <div class="card-sm" onclick="openProduct('${p.id}')">
-      <img src="${p.img||'https://via.placeholder.com/100'}" alt="${p.name}">
+    <div class="card-sm">
+      <img src="${p.img||'https://via.placeholder.com/100'}">
       <h4>${p.name}</h4>
       <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
     </div>
   `).join('');
 }
 
-// RESTO DAS FUNÇÕES - CARRINHO, PEDIDOS, ADMIN, ETC
-function renderShop(){
-  document.getElementById('shopTabs').innerHTML='<div class="tab active" onclick="setTab(this,\'all\')">Todos</div>'+
-    categories.map(c=>`<div class="tab" onclick="setTab(this,'${c.name}')">${c.name}</div>`).join('');
-  const filtered = selectedTab=='all'?products:products.filter(p=>p.category==selectedTab);
-  document.getElementById('shopProducts').innerHTML = filtered.map(p=>`
-    <div class="list-item" onclick="openProduct('${p.id}')">
-      <img src="${p.img||'https://via.placeholder.com/100'}">
-      <div class="list-item-info">
-        <h4>${p.name}</h4>
-        <div class="small">${p.subcategory || p.category}</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
-        <button class="btn-cart" onclick="event.stopPropagation();addToCart('${p.id}')">
-          <span class="material-symbols-outlined" style="font-size:18px;">add_shopping_cart</span>
-        </button>
-      </div>
-    </div>
-  `).join('');
-}
-
-function setTab(el,tab){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  selectedTab=tab;
-  renderShop();
-}
-
-function openProduct(id){
-  selectedProduct = products.find(p=>p.id==id);
-  if(!selectedProduct) return;
-  document.getElementById('productDetail').innerHTML=`
-    <div class="product-page">
-      <div class="product-header">
-        <img src="${selectedProduct.img || 'https://via.placeholder.com/200'}" alt="">
-      </div>
-      <div class="product-info">
-        <h2>${selectedProduct.name}</h2>
-        <p class="product-sub">${selectedProduct.subcategory || selectedProduct.category}</p>
-        <div class="product-price">
-          <h3>R$ ${selectedProduct.price.toFixed(2).replace('.',',')}</h3>
-          <span class="stock">Em estoque</span>
-        </div>
-        <div class="product-section">
-          <h4>Descrição</h4>
-          <p>${selectedProduct.desc || 'Produto digital com entrega imediata após confirmação.'}</p>
-        </div>
-        <div class="product-actions">
-          <button class="btn-primary" onclick="addToCart('${selectedProduct.id}')">Comprar agora</button>
-        </div>
-      </div>
-    </div>
-  `;
-  showPage('product');
-}
-
-function addToCart(id){
-  const p=products.find(x=>x.id==id);
-  if(!p)return;
-  const exist=cart.find(x=>x.id==id);
-  if(exist)exist.qty++;
-  else cart.push({...p,qty:1});
-  localStorage.setItem("cart",JSON.stringify(cart));
-  updateCartBadge();
-  alert('Adicionado ao carrinho!');
-}
-
-function renderCart(){
-  const div=document.getElementById('cartItems');
-  const summary=document.getElementById('cartSummary');
-  if(cart.length==0){
-    div.innerHTML='<p style="text-align:center;padding:60px 20px;color:var(--text-muted);">Seu carrinho está vazio</p>';
-    summary.style.display='none';
-    updateCartBadge();
-    return;
-  }
-  summary.style.display='block';
-  let subtotal=0;
-  div.innerHTML=cart.map((item, idx)=> {
-    subtotal += item.price * item.qty;
-    return `
-      <div class="cart-item">
-        <img src="${item.img || 'https://via.placeholder.com/50'}">
-        <div class="cart-item-info">
-          <h4>${item.name}</h4>
-          <div class="small">${item.subcategory || item.category}</div>
-          <div class="price">R$ ${item.price.toFixed(2).replace('.',',')}</div>
-        </div>
-        <div class="cart-item-actions">
-          <span class="material-symbols-outlined delete" onclick="removeFromCart(${idx})">delete</span>
-          <div class="qty-control">
-            <button onclick="updateQty(${idx}, -1)">-</button>
-            <span>${item.qty}</span>
-            <button onclick="updateQty(${idx}, 1)">+</button>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
-  const discount = couponDiscount;
-  const tax = 0;
-  const total = subtotal - discount + tax;
-  document.getElementById('subtotal').innerText = 'R$ ' + subtotal.toFixed(2).replace('.',',');
-  document.getElementById('discount').innerText = '- R$ ' + discount.toFixed(2).replace('.',',');
-  document.getElementById('tax').innerText = 'R$ ' + tax.toFixed(2).replace('.',',');
-  document.getElementById('cartTotal').innerText = 'R$ ' + total.toFixed(2).replace('.',',');
-  updateCartBadge();
-}
-
-function updateQty(index, change){
-  cart[index].qty += change;
-  if(cart[index].qty <= 0) cart.splice(index, 1);
-  localStorage.setItem("cart",JSON.stringify(cart));
-  renderCart();
-}
-
-function removeFromCart(index){
-  cart.splice(index, 1);
-  localStorage.setItem("cart",JSON.stringify(cart));
-  renderCart();
-}
-
-function applyCoupon(){
-  const code = document.getElementById('couponInput').value.trim().toLowerCase();
-  if(code == 'nexus10'){
-    couponDiscount = 5;
-    alert('Cupom aplicado! R$ 5,00 OFF');
-  }else{
-    couponDiscount = 0;
-    alert('Cupom inválido');
-  }
-  renderCart();
-}
-
-function clearCart(){
-  cart=[];
-  couponDiscount=0;
-  localStorage.removeItem("cart");
-  renderCart();
-  updateCartBadge();
-}
-
-function updateCartBadge(){
-  const badge = document.getElementById('cartBadge');
-  const totalQty = cart.reduce((sum,i)=>sum+i.qty,0);
-  if(totalQty > 0){
-    badge.innerText = totalQty;
-    badge.style.display = 'flex';
-  }else{
-    badge.style.display = 'none';
-  }
-}
-
-function checkout(){
-  if(cart.length==0)return alert('Carrinho vazio');
-  const subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
-  const total=subtotal-couponDiscount;
-  currentOrder = {items: [...cart],subtotal,discount: couponDiscount,total};
-  showPage('payment');
-  renderPayment();
-}
-
-function renderPayment(){
-  if(!currentOrder) return;
-  document.getElementById('paymentItems').innerHTML = currentOrder.items.map(item=>`
-    <div class="payment-item">
-      <span>${item.name}</span>
-      <span>R$ ${(item.price*item.qty).toFixed(2).replace('.',',')}</span>
-    </div>
-  `).join('');
-  document.getElementById('paymentTotal').innerText = 'R$ ' + currentOrder.total.toFixed(2).replace('.',',');
-}
-
-function payWithPix(){
-  if(!currentOrder) return;
-  db.collection("orders").add({
-    userId:currentUser.uid,
-    userName:currentUser.displayName||currentUser.email,
-    items:currentOrder.items,
-    subtotal:currentOrder.subtotal,
-    discount:currentOrder.discount,
-    total:currentOrder.total,
-    paymentMethod: 'pix',
-    status:'aguardando',
-    createdAt:firebase.firestore.FieldValue.serverTimestamp()
-  }).then(()=>{
-    alert('Pedido criado! Aguardando pagamento Pix.');
-    cart=[];
-    couponDiscount=0;
-    currentOrder=null;
-    localStorage.removeItem("cart");
-    updateCartBadge();
-    showPage('orders');
-  }).catch(e=>{
-    alert('Erro ao criar pedido: ' + e.message);
-  });
-}
-
-function filterOrders(el,status){
-  document.querySelectorAll('.order-filter').forEach(f=>f.classList.remove('active'));
-  el.classList.add('active');
-  orderFilter = status;
-  let filtered = allOrders;
-  if(status!== 'all'){
-    filtered = allOrders.filter(o=>o.status === status);
-  }
-  renderOrders(filtered);
-}
-
-function renderOrders(orders){
-  if(orders.length==0){
-    document.getElementById('ordersList').innerHTML='<p style="text-align:center;padding:60px 20px;color:var(--text-muted);">Nenhum pedido encontrado</p>';
-    return;
-  }
-  document.getElementById('ordersList').innerHTML=orders.map(o=>{
-    const item = o.items && o.items[0]? o.items[0] : {};
-    const date = o.createdAt?.seconds? new Date(o.createdAt.seconds*1000) : new Date();
-    const dateStr = date.toLocaleDateString('pt-BR');
-    return `
-    <div class="order-item" onclick="openOrderDetail('${o.id}')">
-      <img src="${item.img || 'https://via.placeholder.com/40'}">
-      <div class="order-item-info">
-        <div class="order-item-top">
-          <div>
-            <div class="order-item-id">#${o.id.slice(0,5)}</div>
-            <div class="order-item-name">${item.name || 'Pedido'}</div>
-          </div>
-          <span class="status ${o.status}">${o.status}</span>
-        </div>
-        <div class="order-item-bottom">
-          <div class="order-item-price">R$ ${o.total.toFixed(2).replace('.',',')}</div>
-          <div class="order-item-date">${dateStr}</div>
-        </div>
-      </div>
-    </div>
-  `}).join('');
-}
-
-function openOrderDetail(orderId){
-  selectedOrder = allOrders.find(o=>o.id===orderId);
-  if(!selectedOrder) return;
-  const item = selectedOrder.items && selectedOrder.items[0]? selectedOrder.items[0] : {};
-  const date = selectedOrder.createdAt?.seconds? new Date(selectedOrder.createdAt.seconds*1000) : new Date();
-  const dateStr = date.toLocaleDateString('pt-BR') + ' - ' + date.toLocaleTimeString('pt-BR').slice(0,5);
-  document.getElementById('orderDetailTitle').innerText = `Pedido #${selectedOrder.id.slice(0,5)}`;
-  document.getElementById('orderDetailContent').innerHTML=`
-    <div class="order-detail-wrap">
-      <div class="order-detail-status">
-        <span class="status ${selectedOrder.status}">${selectedOrder.status.charAt(0).toUpperCase() + selectedOrder.status.slice(1)}</span>
-        <span class="small">${dateStr}</span>
-      </div>
-      <div class="order-detail-item">
-        <img src="${item.img || 'https://via.placeholder.com/40'}">
-        <div>
-          <h4>${item.name || 'Produto'}</h4>
-          <p>${item.subcategory || item.category || ''}</p>
-          <div class="price">R$ ${item.price.toFixed(2).replace('.',',')}</div>
-        </div>
-      </div>
-      <div class="order-detail-info">
-        <div class="info-line"><span>Método de pagamento</span><span>${selectedOrder.paymentMethod || 'Pix'}</span></div>
-        <div class="info-line total-line"><span>Total</span><span>R$ ${selectedOrder.total.toFixed(2).replace('.',',')}</span></div>
-      </div>
-    </div>
-  `;
-  showPage('orderDetail');
-}
-
-// ADMIN FUNCTIONS
-function loadAdminDashboard(){
-  updateAdminStats();
-  renderAdminDashboardOrders(allOrders);
-}
-
-function updateAdminStats(){
-  const now = new Date();
-  const thirtyDaysAgo = new Date(now.getTime() - 30*24*60*60*1000);
-  const recentOrders = allOrders.filter(o=>o.createdAt?.seconds*1000 > thirtyDaysAgo.getTime() && o.status==='concluido');
-  const totalVendas = recentOrders.reduce((sum,o)=>sum+o.total,0);
-  document.getElementById('statVendas').innerText = 'R$ ' + totalVendas.toLocaleString('pt-BR',{minimumFractionDigits:2});
-  document.getElementById('statPedidos').innerText = allOrders.length;
-  document.getElementById('statClientes').innerText = allClients.length;
-  document.getElementById('statProdutos').innerText = products.length;
-}
-
-function renderAdminDashboardOrders(orders){
-  const lastOrders = orders.slice(0,5);
-  document.getElementById('adminOrdersTable').innerHTML=`
-    <tr><th>Pedido</th><th>Cliente</th><th>Total</th><th>Status</th></tr>
-    ${lastOrders.map(o=>`
-      <tr>
-        <td>#${o.id.slice(0,5)}</td>
-        <td>${o.userName}</td>
-        <td>R$ ${o.total.toFixed(2).replace('.',',')}</td>
-        <td><span class="status ${o.status}">${o.status}</span></td>
-      </tr>
-    `).join('')}
-  `;
-}
-
-function loadAllAdminClients(){
-  const search = document.getElementById('searchClient').value.toLowerCase();
-  const filtered = allClients.filter(c => 
-    (c.displayName && c.displayName.toLowerCase().includes(search)) ||
-    (c.email && c.email.toLowerCase().includes(search))
-  );
-  
-  document.getElementById('adminClientsTable').innerHTML=`
-    <tr><th>Cliente</th><th>Email</th><th>Pedidos</th><th>Total Gasto</th></tr>
-    ${filtered.map(c=>{
-      const userOrders = allOrders.filter(o=>o.userId===c.id && o.status==='concluido');
-      const totalGasto = userOrders.reduce((sum,o)=>sum+o.total,0);
-      return `
-      <tr>
-        <td>
-          <div class="client-info">
-            <img src="${c.photoURL || 'https://i.pravatar.cc/32'}" class="client-avatar">
-            <span>${c.displayName || 'Sem nome'}</span>
-          </div>
-        </td>
-        <td>${c.email}</td>
-        <td>${userOrders.length}</td>
-        <td>R$ ${totalGasto.toFixed(2).replace('.',',')}</td>
-      </tr>
-    `}).join('')}
-  `;
-}
-
-function searchAdminClients(){
-  loadAllAdminClients();
-}
-
-function loadAdminCategories(){
-  document.getElementById('adminCategoriesList').innerHTML = categories.map(c=>`
+function renderCategoriesList(){
+  document.getElementById('catContent').innerHTML=categories.map(c=>`
     <div class="list-item">
-      <img src="${c.img || 'https://via.placeholder.com/42'}" alt="${c.name}">
-      <div class="list-item-info">
-        <h4>${c.name}</h4>
-      </div>
-      <div style="display:flex;gap:8px;">
-        <button class="btn-sm btn-edit" onclick="editCategory('${c.id}')"><span class="material-symbols-outlined" style="font-size:16px;">edit</span></button>
-        <button class="btn-sm btn-delete" onclick="deleteCategory('${c.id}')"><span class="material-symbols-outlined" style="font-size:16px;">delete</span></button>
-      </div>
+      <img src="${c.img||'https://via.placeholder.com/42'}">
+      <div class="list-item-info"><h4>${c.name}</h4></div>
     </div>
   `).join('');
-}
-
-function openCategoryModal(){
-  document.getElementById('categoryModalTitle').innerText = 'Adicionar Categoria';
-  document.getElementById('categoryId').value = '';
-  document.getElementById('catName').value = '';
-  document.getElementById('catImg').value = '';
-  document.getElementById('categoryModal').classList.add('active');
-}
-
-function closeCategoryModal(){
-  document.getElementById('categoryModal').classList.remove('active');
-}
-
-function editCategory(id){
-  const c = categories.find(x=>x.id==id);
-  if(!c) return;
-  document.getElementById('categoryModalTitle').innerText = 'Editar Categoria';
-  document.getElementById('categoryId').value = c.id;
-  document.getElementById('catName').value = c.name;
-  document.getElementById('catImg').value = c.img || '';
-  document.getElementById('categoryModal').classList.add('active');
-}
-
-function saveCategory(){
-  const id = document.getElementById('categoryId').value;
-  const data = {
-    name:document.getElementById('catName').value,
-    img:document.getElementById('catImg').value,
-    updatedAt:firebase.firestore.FieldValue.serverTimestamp()
-  };
-  if(!id){
-    data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-    db.collection("categories").add(data).then(()=>{closeCategoryModal();alert('Categoria criada!');});
-  }else{
-    db.collection("categories").doc(id).update(data).then(()=>{closeCategoryModal();alert('Categoria atualizada!');});
-  }
-}
-
-function deleteCategory(id){
-  if(confirm('Excluir esta categoria?')){
-    db.collection("categories").doc(id).delete();
-  }
-}
-
-function loadAdminSubcategories(){
-  document.getElementById('adminSubcategoriesList').innerHTML = subcategories.map(s=>`
-    <div class="list-item">
-      <img src="${s.img || 'https://via.placeholder.com/42'}" alt="${s.name}">
-      <div class="list-item-info">
-        <h4>${s.name}</h4>
-        <div class="small">${s.category}</div>
-      </div>
-      <div style="display:flex;gap:8px;">
-        <button class="btn-sm btn-edit" onclick="editSubcategory('${s.id}')"><span class="material-symbols-outlined" style="font-size:16px;">edit</span></button>
-        <button class="btn-sm btn-delete" onclick="deleteSubcategory('${s.id}')"><span class="material-symbols-outlined" style="font-size:16px;">delete</span></button>
-      </div>
-    </div>
-  `).join('');
-}
-
-function openSubcategoryModal(){
-  document.getElementById('subcategoryModalTitle').innerText = 'Adicionar Subcategoria';
-  document.getElementById('subcategoryId').value = '';
-  document.getElementById('subcatCategory').value = '';
-  document.getElementById('subcatName').value = '';
-  document.getElementById('subcatImg').value = '';
-  document.getElementById('subcategoryModal').classList.add('active');
-}
-
-function closeSubcategoryModal(){
-  document.getElementById('subcategoryModal').classList.remove('active');
-}
-
-function editSubcategory(id){
-  const s = subcategories.find(x=>x.id==id);
-  if(!s) return;
-  document.getElementById('subcategoryModalTitle').innerText = 'Editar Subcategoria';
-  document.getElementById('subcategoryId').value = s.id;
-  document.getElementById('subcatCategory').value = s.category;
-  document.getElementById('subcatName').value = s.name;
-  document.getElementById('subcatImg').value = s.img || '';
-  document.getElementById('subcategoryModal').classList.add('active');
-}
-
-function saveSubcategory(){
-  const id = document.getElementById('subcategoryId').value;
-  const data = {
-    name:document.getElementById('subcatName').value,
-    category:document.getElementById('subcatCategory').value,
-    img:document.getElementById('subcatImg').value,
-    updatedAt:firebase.firestore.FieldValue.serverTimestamp()
-  };
-  if(!id){
-    data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-    db.collection("subcategories").add(data).then(()=>{closeSubcategoryModal();alert('Subcategoria criada!');});
-  }else{
-    db.collection("subcategories").doc(id).update(data).then(()=>{closeSubcategoryModal();alert('Subcategoria atualizada!');});
-  }
-}
-
-function deleteSubcategory(id){
-  if(confirm('Excluir esta subcategoria?')){
-    db.collection("subcategories").doc(id).delete();
-  }
-}
-
-function loadAdminProducts(){
-  document.getElementById('adminProductsList').innerHTML = products.map(p=>`
-    <div class="list-item">
-      <img src="${p.img||'https://via.placeholder.com/42'}" alt="${p.name}">
-      <div class="list-item-info">
-        <h4>${p.name}</h4>
-        <div class="small">${p.category} > ${p.subcategory}</div>
-        <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
-      </div>
-      <div style="display:flex;gap:8px;">
-        <button class="btn-sm btn-edit" onclick="editProduct('${p.id}')"><span class="material-symbols-outlined" style="font-size:16px;">edit</span></button>
-        <button class="btn-sm btn-delete" onclick="deleteProduct('${p.id}')"><span class="material-symbols-outlined" style="font-size:16px;">delete</span></button>
-      </div>
-    </div>
-  `).join('');
-}
-
-function openProductModal(){
-  document.getElementById('productModalTitle').innerText = 'Adicionar Produto';
-  document.getElementById('productId').value = '';
-  document.getElementById('prodName').value = '';
-  document.getElementById('prodPrice').value = '';
-  document.getElementById('prodCategory').value = '';
-  document.getElementById('prodSubcategory').value = '';
-  document.getElementById('prodImg').value = '';
-  document.getElementById('prodDesc').value = '';
-  document.getElementById('productModal').classList.add('active');
-}
-
-function closeProductModal(){
-  document.getElementById('productModal').classList.remove('active');
-}
-
-function editProduct(id){
-  const p = products.find(x=>x.id==id);
-  if(!p) return;
-  document.getElementById('productModalTitle').innerText = 'Editar Produto';
-  document.getElementById('productId').value = p.id;
-  document.getElementById('prodName').value = p.name;
-  document.getElementById('prodPrice').value = p.price;
-  document.getElementById('prodCategory').value = p.category;
-  document.getElementById('prodSubcategory').value = p.subcategory;
-  document.getElementById('prodImg').value = p.img || '';
-  document.getElementById('prodDesc').value = p.desc;
-  document.getElementById('productModal').classList.add('active');
-}
-
-function saveProduct(){
-  const id = document.getElementById('productId').value;
-  const data = {
-    name:document.getElementById('prodName').value,
-    price:parseFloat(document.getElementById('prodPrice').value),
-    category:document.getElementById('prodCategory').value,
-    subcategory:document.getElementById('prodSubcategory').value,
-    img:document.getElementById('prodImg').value,
-    desc:document.getElementById('prodDesc').value,
-    updatedAt:firebase.firestore.FieldValue.serverTimestamp()
-  };
-  if(!id){
-    data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-    db.collection("products").add(data).then(()=>{closeProductModal();alert('Produto criado!');});
-  }else{
-    db.collection("products").doc(id).update(data).then(()=>{closeProductModal();alert('Produto atualizada!');});
-  }
-}
-
-function deleteProduct(id){
-  if(confirm('Excluir este produto?')){
-    db.collection("products").doc(id).delete();
-  }
-}
-
-function updateCategorySelects(){
-  const select = document.getElementById('prodCategory');
-  const select2 = document.getElementById('subcatCategory');
-  if(select){
-    select.innerHTML = '<option value="">Selecione a categoria</option>' +
-      categories.map(c=>`<option value="${c.name}">${c.name}</option>`).join('');
-  }
-  if(select2){
-    select2.innerHTML = '<option value="">Selecione a categoria</option>' +
-      categories.map(c=>`<option value="${c.name}">${c.name}</option>`).join('');
-  }
-}
-
-function updateSubcategorySelects(categoryName){
-  const select = document.getElementById('prodSubcategory');
-  if(!select) return;
-  const filtered = subcategories.filter(s=>s.category==categoryName);
-  select.innerHTML = '<option value="">Selecione a subcategoria</option>' +
-    filtered.map(s=>`<option value="${s.name}">${s.name}</option>`).join('');
-}
-
-document.getElementById('prodCategory')?.addEventListener('change', (e)=>{
-  updateSubcategorySelects(e.target.value);
-});
-
-function openCategoryDetail(cat){
-  currentCategory=cat;
-  currentSubcategory='';
-  document.getElementById('catDetailTitle').innerText=cat;
-  showPage('categoryDetail');
-  document.querySelectorAll('#categoryDetail .cat-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('#categoryDetail .cat-tab')[0].classList.add('active');
-  renderFilters();
-  renderCategoryProducts();
-}
-
-function openSubcategory(sub){
-  currentSubcategory=sub;
-  currentCategory = subcategories.find(s=>s.name==sub)?.category || '';
-  document.getElementById('catDetailTitle').innerText=sub;
-  showPage('categoryDetail');
-  document.querySelectorAll('#categoryDetail .cat-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('#categoryDetail .cat-tab')[0].classList.add('active');
-  renderFilters();
-  renderCategoryProducts();
-}
-
-function renderFilters(){
-  const filters = ['Todos','Diamantes','Contas','Outros'];
-  document.getElementById('filterChips').innerHTML = filters.map((f,i)=>`
-    <div class="chip ${i==0?'active':''}" onclick="setFilter(this,'${f.toLowerCase()}')">${f}</div>
-  `).join('');
-  currentFilter = 'all';
-}
-
-function setFilter(el,filter){
-  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  currentFilter = filter;
-  renderCategoryProducts();
-}
-
-function switchDetailTab(el,tab){
-  document.querySelectorAll('#categoryDetail .cat-tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  if(tab=='prod'){
-    document.getElementById('filterChips').style.display = 'flex';
-    renderCategoryProducts();
-  }else{
-    document.getElementById('filterChips').style.display = 'none';
-    renderCategoryInfo();
-  }
-}
-
-function renderCategoryProducts(){
-  const filtered = products.filter(p=>{
-    const matchSub = currentSubcategory? p.subcategory == currentSubcategory : p.category == currentCategory;
-    if(!matchSub) return false;
-    if(currentFilter == 'all') return true;
-    return p.type && p.type.toLowerCase() == currentFilter;
-  });
-  document.getElementById('catDetailContent').innerHTML = filtered.length==0
-   ? '<p style="text-align:center;padding:40px;color:var(--text-muted);">Nenhum produto encontrado</p>'
-    : filtered.map(p=>`
-    <div class="list-item" onclick="openProduct('${p.id}')">
-      <img src="${p.img||'https://via.placeholder.com/40'}">
-      <div class="list-item-info">
-        <h4>${p.name}</h4>
-        <div class="small">${p.subcategory}</div>
-      </div>
-      <div style="text-align:right;">
-        <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
-        <span class="material-symbols-outlined" style="font-size:18px;color:var(--text-muted);">chevron_right</span>
-      </div>
-    </div>
-  `).join('');
-}
-
-function renderCategoryInfo(){
-  document.getElementById('catDetailContent').innerHTML = `
-    <div class="info-box">
-      <strong style="color:var(--text);">Sobre ${currentSubcategory || currentCategory}</strong><br><br>
-      Aqui você encontra produtos de ${currentSubcategory || currentCategory} com entrega rápida e segura.<br><br>
-      <strong>Como funciona:</strong><br>
-      1. Escolha o produto<br>
-      2. Faça o pagamento<br>
-      3. Receba no seu email/ID em minutos<br><br>
-      <strong>Suporte:</strong> 24h via WhatsApp
-    </div>
-  `;
 }
 
 function searchProducts(){
-  const query = document.getElementById('searchInput').value.toLowerCase();
-  if(!query){
-    renderHome();
-    return;
-  }
-  const filtered = products.filter(p=>p.name.toLowerCase().includes(query));
-  document.getElementById('homeProducts').innerHTML = filtered.slice(0,6).map(p=>`
-    <div class="card-sm" onclick="openProduct('${p.id}')">
+  const query=document.getElementById('searchInput').value.toLowerCase();
+  if(!query){renderHome();return;}
+  const filtered=products.filter(p=>p.name.toLowerCase().includes(query));
+  document.getElementById('homeProducts').innerHTML=filtered.slice(0,6).map(p=>`
+    <div class="card-sm">
       <img src="${p.img||'https://via.placeholder.com/100'}">
       <h4>${p.name}</h4>
       <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
     </div>
   `).join('');
+}
+
+// ADMIN DASHBOARD
+function loadAdminDashboard(){
+  document.getElementById('statClientes').innerText=allClients.length;
+  document.getElementById('statProdutos').innerText=products.length;
+}
+
+function loadAdminProducts(){
+  document.getElementById('adminProductsList').innerHTML=products.map(p=>`
+    <div class="list-item">
+      <img src="${p.img||'https://via.placeholder.com/42'}">
+      <div class="list-item-info">
+        <h4>${p.name}</h4>
+        <div style="font-size:11px;color:var(--text-muted);">${p.category} > ${p.subcategory}</div>
+        <div class="price">R$ ${p.price.toFixed(2).replace('.',',')}</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-sm btn-edit" onclick="editProduct('${p.id}')">Editar</button>
+        <button class="btn-sm btn-delete" onclick="deleteProduct('${p.id}')">Excluir</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function loadAdminCategories(){
+  document.getElementById('adminCategoriesList').innerHTML=categories.map(c=>`
+    <div class="list-item">
+      <img src="${c.img||'https://via.placeholder.com/42'}">
+      <div class="list-item-info"><h4>${c.name}</h4></div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-sm btn-edit" onclick="editCategory('${c.id}')">Editar</button>
+        <button class="btn-sm btn-delete" onclick="deleteCategory('${c.id}')">Excluir</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function loadAdminSubcategories(){
+  document.getElementById('adminSubcategoriesList').innerHTML=subcategories.map(s=>`
+    <div class="list-item">
+      <img src="${s.img||'https://via.placeholder.com/42'}">
+      <div class="list-item-info">
+        <h4>${s.name}</h4>
+        <div style="font-size:11px;color:var(--text-muted);">${s.category}</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn-sm btn-edit" onclick="editSubcategory('${s.id}')">Editar</button>
+        <button class="btn-sm btn-delete" onclick="deleteSubcategory('${s.id}')">Excluir</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function loadAdminClients(){
+  document.getElementById('adminClientsList').innerHTML=allClients.map(c=>`
+    <div class="list-item">
+      <img src="${c.photoURL||'https://i.pravatar.cc/42'}" style="border-radius:50%;">
+      <div class="list-item-info">
+        <h4>${c.displayName||'Sem nome'}</h4>
+        <div style="font-size:11px;color:var(--text-muted);">${c.email}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// CATEGORIA CRUD
+function openCategoryModal(){
+  document.getElementById('categoryModalTitle').innerText='Adicionar Categoria';
+  document.getElementById('categoryId').value='';
+  document.getElementById('catName').value='';
+  document.getElementById('catImg').value='';
+  document.getElementById('categoryModal').classList.add('active');
+}
+function closeCategoryModal(){document.getElementById('categoryModal').classList.remove('active');}
+
+function editCategory(id){
+  const c=categories.find(x=>x.id==id);
+  if(!c)return;
+  document.getElementById('categoryModalTitle').innerText='Editar Categoria';
+  document.getElementById('categoryId').value=c.id;
+  document.getElementById('catName').value=c.name;
+  document.getElementById('catImg').value='';
+  document.getElementById('categoryModal').classList.add('active');
+}
+
+async function saveCategory(){
+  const id=document.getElementById('categoryId').value;
+  const name=document.getElementById('catName').value;
+  const file=document.getElementById('catImg').files[0];
+  if(!name){alert('Digite o nome');return;}
+  try{
+    let imgUrl='';
+    if(file){imgUrl=await uploadImage(file,'categories');}
+    else if(id){imgUrl=categories.find(c=>c.id==id).img||'';}
+    const data={name,img:imgUrl,updatedAt:firebase.firestore.FieldValue.serverTimestamp()};
+    if(!id){
+      data.createdAt=firebase.firestore.FieldValue.serverTimestamp();
+      await db.collection("categories").add(data);
+      alert('Categoria criada!');
+    }else{
+      await db.collection("categories").doc(id).update(data);
+      alert('Categoria atualizada!');
+    }
+    closeCategoryModal();
+  }catch(e){alert('Erro: '+e.message);}
+}
+
+async function deleteCategory(id){
+  if(confirm('Excluir esta categoria?')){await db.collection("categories").doc(id).delete();}
+}
+
+// SUBCATEGORIA CRUD
+function openSubcategoryModal(){
+  document.getElementById('subcategoryModalTitle').innerText='Adicionar Subcategoria';
+  document.getElementById('subcategoryId').value='';
+  document.getElementById('subcatCategory').value='';
+  document.getElementById('subcatName').value='';
+  document.getElementById('subcatImg').value='';
+  document.getElementById('subcategoryModal').classList.add('active');
+}
+function closeSubcategoryModal(){document.getElementById('subcategoryModal').classList.remove('active');}
+
+function editSubcategory(id){
+  const s=subcategories.find(x=>x.id==id);
+  if(!s)return;
+  document.getElementById('subcategoryModalTitle').innerText='Editar Subcategoria';
+  document.getElementById('subcategoryId').value=s.id;
+  document.getElementById('subcatCategory').value=s.category;
+  document.getElementById('subcatName').value=s.name;
+  document.getElementById('subcatImg').value='';
+  document.getElementById('subcategoryModal').classList.add('active');
+}
+
+async function saveSubcategory(){
+  const id=document.getElementById('subcategoryId').value;
+  const name=document.getElementById('subcatName').value;
+  const category=document.getElementById('subcatCategory').value;
+  const file=document.getElementById('subcatImg').files[0];
+  if(!name||!category){alert('Preencha tudo');return;}
+  try{
+    let imgUrl='';
+    if(file){imgUrl=await uploadImage(file,'subcategories');}
+    else if(id){imgUrl=subcategories.find(s=>s.id==id).img||'';}
+    const data={name,category,img:imgUrl,updatedAt:firebase.firestore.FieldValue.serverTimestamp()};
+    if(!id){
+      data.createdAt=firebase.firestore.FieldValue.serverTimestamp();
+      await db.collection("subcategories").add(data);
+      alert('Subcategoria criada!');
+    }else{
+      await db.collection("subcategories").doc(id).update(data);
+      alert('Subcategoria atualizada!');
+    }
+    closeSubcategoryModal();
+  }catch(e){alert('Erro: '+e.message);}
+}
+
+async function deleteSubcategory(id){
+  if(confirm('Excluir esta subcategoria?')){await db.collection("subcategories").doc(id).delete();}
+}
+
+// PRODUTO CRUD
+function openProductModal(){
+  document.getElementById('productModalTitle').innerText='Adicionar Produto';
+  document.getElementById('productId').value='';
+  document.getElementById('prodName').value='';
+  document.getElementById('prodPrice').value='';
+  document.getElementById('prodCategory').value='';
+  document.getElementById('prodSubcategory').value='';
+  document.getElementById('prodImg').value='';
+  document.getElementById('prodDesc').value='';
+  document.getElementById('productModal').classList.add('active');
+}
+function closeProductModal(){document.getElementById('productModal').classList.remove('active');}
+
+function editProduct(id){
+  const p=products.find(x=>x.id==id);
+  if(!p)return;
+  document.getElementById('productModalTitle').innerText='Editar Produto';
+  document.getElementById('productId').value=p.id;
+  document.getElementById('prodName').value=p.name;
+  document.getElementById('prodPrice').value=p.price;
+  document.getElementById('prodCategory').value=p.category;
+  document.getElementById('prodSubcategory').value=p.subcategory;
+  document.getElementById('prodImg').value='';
+  document.getElementById('prodDesc').value=p.desc;
+  document.getElementById('productModal').classList.add('active');
+}
+
+async function saveProduct(){
+  const id=document.getElementById('productId').value;
+  const file=document.getElementById('prodImg').files[0];
+  try{
+    let imgUrl='';
+    if(file){imgUrl=await uploadImage(file,'products');}
+    else if(id){imgUrl=products.find(p=>p.id==id).img||'';}
+    const data={
+      name:document.getElementById('prodName').value,
+      price:parseFloat(document.getElementById('prodPrice').value),
+      category:document.getElementById('prodCategory').value,
+      subcategory:document.getElementById('prodSubcategory').value,
+      img:imgUrl,
+      desc:document.getElementById('prodDesc').value,
+      updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+    };
+    if(!data.name||!data.price||!data.category){alert('Preencha nome, preço e categoria');return;}
+    if(!id){
+      data.createdAt=firebase.firestore.FieldValue.serverTimestamp();
+      await db.collection("products").add(data);
+      alert('Produto criado!');
+    }else{
+      await db.collection("products").doc(id).update(data);
+      alert('Produto atualizado!');
+    }
+    closeProductModal();
+  }catch(e){alert('Erro: '+e.message);}
+}
+
+async function deleteProduct(id){
+  if(confirm('Excluir este produto?')){await db.collection("products").doc(id).delete();}
+}
+
+// SELECTS
+function updateCategorySelects(){
+  const opts='<option value="">Selecione</option>'+categories.map(c=>`<option value="${c.name}">${c.name}</option>`).join('');
+  document.getElementById('prodCategory').innerHTML=opts;
+  document.getElementById('subcatCategory').innerHTML=opts;
+}
+
+function updateSubcategorySelects(){
+  const cat=document.getElementById('prodCategory').value;
+  const filtered=subcategories.filter(s=>s.category==cat);
+  document.getElementById('prodSubcategory').innerHTML='<option value="">Selecione</option>'+filtered.map(s=>`<option value="${s.name}">${s.name}</option>`).join('');
+}
+
+document.addEventListener('change',e=>{
+  if(e.target.id==='prodCategory'){updateSubcategorySelects();}
+});
+
+// PERFIL
+function openEditProfile(){
+  document.getElementById('editName').value=currentUser.displayName||'';
+  document.getElementById('editAvatarPreview').src=currentUser.photoURL||'https://i.pravatar.cc/100';
+  showPage('editProfile');
+}
+
+async function uploadAvatar(){
+  const file=document.getElementById('avatarUpload').files[0];
+  if(!file)return;
+  try{
+    const reader=new File
+        reader.onload=e=>document.getElementById('editAvatarPreview').src=e.target.result;
+    reader.readAsDataURL(file);
+
+    const url=await uploadImage(file,'avatars');
+    await currentUser.updateProfile({photoURL:url});
+    await db.collection('users').doc(currentUser.uid).update({photoURL:url});
+    document.getElementById('userAvatar').src=url;
+    alert('Foto atualizada!');
+  }catch(e){alert('Erro: '+e.message);console.error(e);}
+}
+
+async function saveProfile(){
+  const name=document.getElementById('editName').value.trim();
+  if(!name){alert('Digite um nome');return;}
+  try{
+    await currentUser.updateProfile({displayName:name});
+    await db.collection('users').doc(currentUser.uid).update({displayName:name});
+    document.getElementById('profileName').innerText=name;
+    document.getElementById('userName').innerText=name;
+    alert('Perfil atualizado!');
+    showPage('profile');
+  }catch(e){alert('Erro: '+e.message);console.error(e);}
 }
 </script>
 </body>
