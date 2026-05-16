@@ -223,7 +223,7 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
   color:var(--purple);
 }
 
-/* CATEGORIAS PAGE */
+/* PAGE HEADER */
 .page-header{
   display:flex;
   align-items:center;
@@ -246,6 +246,7 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
   font-weight:600;
 }
 
+/* TABS */
 .tabs{
   display:flex;
   margin:0 16px 16px;
@@ -269,6 +270,32 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
   color:#fff;
 }
 
+/* FILTERS */
+.filters{
+  display:flex;
+  gap:8px;
+  padding:0 16px 16px;
+  overflow-x:auto;
+}
+
+.filter{
+  padding:8px 16px;
+  background:#1a1a21;
+  border:1px solid var(--border);
+  border-radius:20px;
+  font-size:13px;
+  white-space:nowrap;
+  cursor:pointer;
+  color:var(--text2);
+}
+
+.filter.active{
+  background:var(--purple);
+  color:#fff;
+  border-color:var(--purple);
+}
+
+/* LIST ITEMS */
 .category-list{
   padding:0 16px 80px;
   display:flex;
@@ -316,6 +343,12 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
 .category-item.info p{
   font-size:12px;
   color:var(--text2);
+}
+
+.category-item.price{
+  font-size:15px;
+  font-weight:700;
+  color:var(--purple);
 }
 
 .category-item.arrow{
@@ -672,7 +705,7 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
   </div>
 
   <div class="category-list" id="gamesSubTab">
-    <div class="category-item">
+    <div class="category-item" onclick="showPage('freefire')">
       <div class="icon">
         <img src="https://i.imgur.com/8Km9tLL.png" alt="Free Fire">
       </div>
@@ -787,6 +820,122 @@ h2{font-size:20px;font-weight:600;text-align:center;margin-bottom:6px;}
   </div>
 </section>
 
+<!-- FREE FIRE -->
+<section class="page" id="freefire">
+  <div class="page-header">
+    <span class="material-symbols-outlined" onclick="showPage('games')">arrow_back</span>
+    <h3>Free Fire</h3>
+    <span class="material-symbols-outlined">search</span>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchFFTab('prod')">Produtos</div>
+    <div class="tab" onclick="switchFFTab('info')">Informações</div>
+  </div>
+
+  <div class="filters" id="ffFilters">
+    <div class="filter active" onclick="filterFF('todos')">Todos</div>
+    <div class="filter" onclick="filterFF('diamantes')">Diamantes</div>
+    <div class="filter" onclick="filterFF('contas')">Contas</div>
+    <div class="filter" onclick="filterFF('outros')">Outros</div>
+  </div>
+
+  <div class="category-list" id="ffProdutos">
+    <div class="category-item" data-cat="diamantes">
+      <div class="icon">
+        <img src="https://i.imgur.com/9Q2bZ8L.png" alt="Diamante">
+      </div>
+      <div class="info">
+        <h5>100 Diamantes</h5>
+        <p>Free Fire</p>
+      </div>
+      <div class="price">R$ 4,99</div>
+      <span class="material-symbols-outlined arrow">chevron_right</span>
+    </div>
+
+    <div class="category-item" data-cat="diamantes">
+      <div class="icon">
+        <img src="https://i.imgur.com/9Q2bZ8L.png" alt="Diamante">
+      </div>
+      <div class="info">
+        <h5>310 Diamantes</h5>
+        <p>Free Fire</p>
+      </div>
+      <div class="price">R$ 11,90</div>
+      <span class="material-symbols-outlined arrow">chevron_right</span>
+    </div>
+
+    <div class="category-item" data-cat="diamantes">
+      <div class="icon">
+        <img src="https://i.imgur.com/9Q2bZ8L.png" alt="Diamante">
+      </div>
+      <div class="info">
+        <h5>520 Diamantes</h5>
+        <p>Free Fire</p>
+      </div>
+      <div class="price">R$ 18,90</div>
+      <span class="material-symbols-outlined arrow">chevron_right</span>
+    </div>
+
+    <div class="category-item" data-cat="diamantes">
+      <div class="icon">
+        <img src="https://i.imgur.com/9Q2bZ8L.png" alt="Diamante">
+      </div>
+      <div class="info">
+        <h5>1060 Diamantes</h5>
+        <p>Free Fire</p>
+      </div>
+      <div class="price">R$ 37,90</div>
+      <span class="material-symbols-outlined arrow">chevron_right</span>
+    </div>
+
+    <div class="category-item" data-cat="diamantes">
+      <div class="icon">
+        <img src="https://i.imgur.com/9Q2bZ8L.png" alt="Diamante">
+      </div>
+      <div class="info">
+        <h5>2180 Diamantes</h5>
+        <p>Free Fire</p>
+      </div>
+      <div class="price">R$ 72,90</div>
+      <span class="material-symbols-outlined arrow">chevron_right</span>
+    </div>
+  </div>
+
+  <div class="category-list hidden" id="ffInformacoes">
+    <div class="category-item">
+      <div class="info">
+        <h5>Como funciona?</h5>
+        <p>Entrega manual em até 24h após confirmação do pagamento. Você recebe os diamantes direto na sua conta Free Fire.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="showPage('home')">
+      <span class="material-symbols-outlined">home</span>
+      <span>Home</span>
+    </div>
+    <div class="nav-item active" onclick="showPage('categories')">
+      <span class="material-symbols-outlined">storefront</span>
+      <span>Loja</span>
+    </div>
+    <div class="nav-item" style="position:relative;">
+      <span class="material-symbols-outlined">shopping_cart</span>
+      <span>Carrinho</span>
+      <span class="badge">1</span>
+    </div>
+    <div class="nav-item">
+      <span class="material-symbols-outlined">receipt_long</span>
+      <span>Pedidos</span>
+    </div>
+    <div class="nav-item">
+      <span class="material-symbols-outlined">person</span>
+      <span>Perfil</span>
+    </div>
+  </div>
+</section>
+
 <!-- RODAPÉ -->
 <footer class="footer">
   Segurança | entrega manual | suporte
@@ -837,7 +986,7 @@ window.showPage = function(p){
 
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   if(p === 'home') document.querySelectorAll('.nav-item')[0].classList.add('active');
-  if(p === 'categories' || p === 'games') document.querySelectorAll('.nav-item')[1].classList.add('active');
+  if(p === 'categories' || p === 'games' || p === 'freefire') document.querySelectorAll('.nav-item')[1].classList.add('active');
 }
 
 window.switchTab = function(tab){
@@ -859,13 +1008,41 @@ window.switchGameTab = function(tab){
   document.getElementById('gamesSubTab').classList.add('hidden');
   document.getElementById('gamesProdTab').classList.add('hidden');
 
-  if(tab === 'sub'){
+    if(tab === 'sub'){
     document.querySelectorAll('#games.tab')[0].classList.add('active');
     document.getElementById('gamesSubTab').classList.remove('hidden');
   } else {
     document.querySelectorAll('#games.tab')[1].classList.add('active');
     document.getElementById('gamesProdTab').classList.remove('hidden');
   }
+}
+
+window.switchFFTab = function(tab){
+  document.querySelectorAll('#freefire.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('ffProdutos').classList.add('hidden');
+  document.getElementById('ffInformacoes').classList.add('hidden');
+
+  if(tab === 'prod'){
+    document.querySelectorAll('#freefire.tab')[0].classList.add('active');
+    document.getElementById('ffProdutos').classList.remove('hidden');
+  } else {
+    document.querySelectorAll('#freefire.tab')[1].classList.add('active');
+    document.getElementById('ffInformacoes').classList.remove('hidden');
+  }
+}
+
+window.filterFF = function(cat){
+  document.querySelectorAll('#ffFilters.filter').forEach(f => f.classList.remove('active'));
+  event.target.classList.add('active');
+
+  const items = document.querySelectorAll('#ffProdutos.category-item');
+  items.forEach(item => {
+    if(cat === 'todos' || item.dataset.cat === cat){
+      item.style.display = 'flex';
+    } else {
+      item.style.display = 'none';
+    }
+  });
 }
 
 window.login = async function(){
