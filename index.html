@@ -40,7 +40,7 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
 
 /* HEADER */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;}
-.topbar h2{font-size:14px;font-weight:700;letter-spacing:1px;}
+.topbar h2{font-size:14px;font-weight:700;letter-spacing:0.5px;max-width:70%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .back-btn,.cart-icon{width:22px;height:22px;cursor:pointer;}
 .cart-icon{position:relative;}
 .cart-badge,.nav-badge{position:absolute;top:-5px;right:-5px;background:var(--purple);color:#fff;font-size:9px;font-weight:700;width:16px;height:16px;border-radius:50%;display:grid;place-items:center;}
@@ -51,7 +51,7 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
 .search-btn{width:40px;height:40px;background:var(--purple);border:none;border-radius:9px;display:grid;place-items:center;cursor:pointer;}
 .search-btn svg{width:18px;height:18px;color:#fff;}
 
-/* CATEGORIAS - imagem + nome */
+/* CATEGORIAS */
 .cat-grid{padding:0 16px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
 @media(min-width:768px){.cat-grid{grid-template-columns:repeat(3,1fr);}}
 .cat-card{background:var(--card-2);border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:.2s;}
@@ -138,7 +138,7 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
 <!-- HOME -->
 <div class="screen" id="screen-home">
   <div class="topbar">
-    <h2>Olá, <span id="userName" style="color:var(--purple)">User</span></h2>
+    <h2>Olá, <span id="userName">Usuário</span></h2>
     <div class="cart-icon" onclick="goTo('carrinho')">
       <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <circle cx="9" cy="21" r="1"/>
@@ -272,7 +272,7 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
   </div>
 </div>
 
-<!-- OUTRAS TELAS -->
+<!-- CARRINHO -->
 <div class="screen" id="screen-carrinho">
   <div class="topbar">
     <svg class="back-btn" onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
@@ -282,6 +282,7 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
   <div class="simple-page"><h2>Carrinho vazio</h2><p>Adicione produtos na loja</p></div>
 </div>
 
+<!-- PEDIDOS -->
 <div class="screen" id="screen-pedidos">
   <div class="topbar">
     <svg class="back-btn" onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
@@ -291,6 +292,7 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
   <div class="simple-page"><h2>Sem pedidos</h2><p>Você ainda não fez nenhum pedido</p></div>
 </div>
 
+<!-- PERFIL -->
 <div class="screen" id="screen-perfil">
   <div class="topbar">
     <svg class="back-btn" onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
@@ -299,6 +301,7 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
   </div>
   <div class="simple-page">
     <h2>Meu Perfil</h2>
+    <p>Nome: <span id="profileName"></span></p>
     <p>Email: <span id="profileEmail"></span></p>
     <button class="btn" style="margin-top:16px;max-width:180px" onclick="logout()">Sair</button>
   </div>
@@ -354,6 +357,13 @@ function handleRoute(){
 }
 
 function goTo(page){window.location.hash = page;}
+
+function updateUserUI(user){
+  const name = user.displayName || user.email.split('@')[0];
+  document.getElementById('userName').innerText = name;
+  document.getElementById('profileName').innerText = name;
+  document.getElementById('profileEmail').innerText = user.email;
+}
 
 function renderHomeDestaques(){
   const homeCat = document.getElementById('homeCatGrid');
@@ -413,8 +423,7 @@ function openSubcategoria(nome){alert('Abrir subcategoria: ' + nome);}
 
 onAuthStateChanged(auth, (user) => {
   if(user &&!justLoggedIn){
-    document.getElementById('userName').innerText = user.displayName || user.email.split('@')[0];
-    document.getElementById('profileEmail').innerText = user.email;
+    updateUserUI(user);
     if(window.location.hash === '' || window.location.hash === '#login'){
       window.location.hash = 'home';
     }
