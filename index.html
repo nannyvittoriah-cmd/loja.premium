@@ -45,12 +45,6 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
 .cart-icon{position:relative;}
 .cart-badge,.nav-badge{position:absolute;top:-5px;right:-5px;background:var(--purple);color:#fff;font-size:9px;font-weight:700;width:16px;height:16px;border-radius:50%;display:grid;place-items:center;}
 
-/* SEARCH */
-.search-box{padding:0 16px;display:flex;gap:8px;margin-bottom:16px;}
-.search-box input{flex:1;height:40px;background:var(--card-2);border:1px solid var(--border);border-radius:9px;padding:0 12px;color:var(--text);font-size:13px;outline:none;}
-.search-btn{width:40px;height:40px;background:var(--purple);border:none;border-radius:9px;display:grid;place-items:center;cursor:pointer;}
-.search-btn svg{width:18px;height:18px;color:#fff;}
-
 /* CATEGORIAS LIST - CARDS SOMBREADOS */
 .cat-tabs{display:flex;background:var(--card-2);margin:0 16px 16px;border-radius:10px;padding:4px;box-shadow:0 4px 12px rgba(0,0,0,0.4);}
 .cat-tab{flex:1;text-align:center;padding:8px 0;font-size:13px;font-weight:600;color:var(--text-3);border-radius:8px;cursor:pointer;transition:.2s;}
@@ -334,16 +328,21 @@ const subcategorias = [
   {nome:'PUBG', desc:'UC e passes', icon:'🔫', color:'#f39c12'}
 ];
 
+// Expõe funções pro window pra onclick funcionar
+window.goTo = function(page){
+  window.location.hash = page;
+}
+
+window.openCategoria = function(nome){alert('Abrir categoria: ' + nome);}
+window.openSubcategoria = function(nome){alert('Abrir subcategoria: ' + nome);}
+window.logout = function(){signOut(auth);}
+
 function handleRoute(){
   const hash = window.location.hash.slice(1) || 'login';
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + hash)?.classList.add('active');
   if(hash === 'categorias') renderCategorias();
   if(hash === 'home') renderHomeDestaques();
-}
-
-function goTo(page){
-  window.location.hash = page;
 }
 
 function updateUserUI(user){
@@ -407,9 +406,6 @@ function renderCategorias(){
     `).join('');
   }
 }
-
-function openCategoria(nome){alert('Abrir categoria: ' + nome);}
-function openSubcategoria(nome){alert('Abrir subcategoria: ' + nome);}
 
 document.getElementById('tabCategorias').onclick = () => {
   document.getElementById('tabCategorias').classList.add('active');
@@ -491,8 +487,6 @@ function showError(msg, type='error'){
   e.style.display = 'block';
   setTimeout(()=>{e.style.display='none';},3000);
 }
-
-function logout(){signOut(auth);}
 
 window.addEventListener('hashchange', handleRoute);
 window.addEventListener('load', handleRoute);
