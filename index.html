@@ -215,7 +215,7 @@ body{background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;over
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot, getDocs, doc, deleteDoc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot, getDocs, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "SEU_API_KEY",
@@ -262,7 +262,7 @@ document.getElementById('loginBtn').onclick = async function(){
   try{
     await signInWithEmailAndPassword(auth, email, password);
   }catch(e){
-    showError('Erro ao entrar');
+    showError('Email ou senha incorretos');
     this.disabled = false;
   }
 }
@@ -449,6 +449,16 @@ window.goBack = function(){
   document.getElementById('screen-home').classList.add('active');
 }
 
+// DRAWER
+window.openDrawer = function(){
+  document.getElementById('drawer').classList.add('active');
+  document.getElementById('drawerOverlay').classList.add('active');
+}
+window.closeDrawer = function(){
+  document.getElementById('drawer').classList.remove('active');
+  document.getElementById('drawerOverlay').classList.remove('active');
+}
+
 // ADMIN
 window.openAdmin = function(){
   document.getElementById('screen-home').classList.remove('active');
@@ -496,7 +506,7 @@ window.adminProdutos = function(){
         <td>${p.nome}</td>
         <td>R$ ${p.preco}</td>
         <td>
-          <button class="btn-secondary" style="padding:4px 8px;font-size:10px;" onclick="editProduto('${p.id}')">Editar</button>
+          <button class="btn-secondary" style="padding:4px 8px;font-size:10px;" onclick="openProdutoModal('${p.id}')">Editar</button>
           <button class="btn-danger" style="padding:4px 8px;font-size:10px;" onclick="deleteProduto('${p.id}')">Del</button>
         </td>
       </tr>`).join('')}</tbody>
@@ -540,7 +550,7 @@ window.saveProduto = async function(id){
 }
 
 window.deleteProduto = async function(id){
-  if(confirm('Deletar?')){
+  if(confirm('Deletar produto?')){
     await deleteDoc(doc(db,'produtos',id));
     await loadData();
     adminProdutos();
@@ -592,7 +602,7 @@ window.saveCategoria = async function(){
 }
 
 window.deleteCategoria = async function(id){
-  if(confirm('Deletar?')){
+  if(confirm('Deletar categoria?')){
     await deleteDoc(doc(db,'categorias',id));
     await loadData();
     adminCategorias();
@@ -609,8 +619,7 @@ window.adminPedidos = function(){
       <tbody>${allOrders.map(o => `<tr>
         <td>${o.userEmail}</td>
         <td>R$ ${o.total}</td>
-        <td><span class="badge badge-${o.status === 'concluido'? 'success' :
-        'warning' : 'danger'}">${o.status}</span></td>
+        <td><span class="badge badge-${o'warning' : 'danger'}">${o.status}</span></td>
         <td>
           <select onchange="updatePedidoStatus('${o.id}', this.value)" style="background:var(--card-2);border:1px solid #2a2a35;border-radius:6px;color:#fff;padding:4px;font-size:10px;">
             <option value="aguardando" ${o.status==='aguardando'?'selected':''}>Aguardando</option>
@@ -636,10 +645,10 @@ window.adminUsuarios = function(){
     <h2 style="margin-bottom:16px;">Usuários</h2>
     <table class="table">
       <thead><tr><th>Email</th><th>UID</th></tr></thead>
-      <tbody>${allUsers.map(u => `<tr>
+      <tbody>${allUsers.length > 0 ? allUsers.map(u => `<tr>
         <td>${u.email}</td>
         <td style="font-size:9px;color:var(--text-2);">${u.uid}</td>
-      </tr>`).join('')}</tbody>
+      </tr>`).join('') : '<tr><td colspan="2" style="text-align:center;color:var(--text-2);">Nenhum usuário</td></tr>'}</tbody>
     </table>
   `;
 }
@@ -655,3 +664,4 @@ window.goBackFromAdmin = function(){
 </script>
 </body>
 </html>
+  
