@@ -317,10 +317,210 @@ h2{font-size:18px;font-weight:700;color:#fff;text-align:center;margin-bottom:6px
       <span>Discord</span>
     </div>
     <div class="social-link" onclick="window.open('https://tiktok.com','_blank')">
-      <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v
-            <div class="prod-info"><h3>Free Fire</h3><p>500 Diamantes</p><div class="price">R$ 24,90</div></div>
+            <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.42a10.842 10.842 0 0 1-4.62-.54v10.58a8.109 8.109 0 0 1-9.18 8.06A8.106 8.106 0 0 1 3.49 12.5v-3.84c2.85.13 5.65-.94 7.9-2.89 1.11-1 2.03-2.24 2.62-3.65.3-.65.52-1.34.61-2.03z"/></svg>
+      <span>TikTok</span>
     </div>
-  ];
+  </div>
+</div>
+
+<div class="screen" id="screen-afiliados">
+  <div class="header">
+    <svg class="back-btn" onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    <h2>Afiliados</h2>
+    <div style="width:22px"></div>
+  </div>
+  <div class="simple-page">
+    <h2>Programa de Afiliados</h2>
+    <p>Indique amigos e ganhe 10% de comissão em cada compra. Seu link de indicação aparecerá aqui em breve.</p>
+  </div>
+</div>
+
+<div class="screen" id="screen-carrinho">
+  <div class="header">
+    <svg class="back-btn" onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    <h2>Carrinho</h2>
+    <div style="width:22px"></div>
+  </div>
+  <div class="simple-page">
+    <h2>Seu Carrinho</h2>
+    <p>Carrinho vazio. Adicione produtos na loja.</p>
+  </div>
+</div>
+
+<div class="screen" id="screen-pedidos">
+  <div class="header">
+    <svg class="back-btn" onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    <h2>Pedidos</h2>
+    <div style="width:22px"></div>
+  </div>
+  <div class="simple-page">
+    <h2>Meus Pedidos</h2>
+    <p>Você ainda não fez nenhum pedido.</p>
+  </div>
+</div>
+
+<div class="screen" id="screen-perfil">
+  <div class="header">
+    <svg class="back-btn" onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    <h2>Perfil</h2>
+    <div style="width:22px"></div>
+  </div>
+  <div class="simple-page">
+    <h2>Meu Perfil</h2>
+    <p>Email: <span id="profileEmail"></span></p>
+    <button class="btn" style="margin-top:20px" onclick="logout()">Sair da conta</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
+  authDomain: "premium-store-aa58b.firebaseapp.com",
+  projectId: "premium-store-aa58b",
+  storageBucket: "premium-store-aa58b.firebasestorage.app",
+  messagingSenderId: "462239500057",
+  appId: "1:462239500057:web:f1b7cea162ed308a866788"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+let currentUser = null;
+
+// Router
+function handleRoute(){
+  const hash = window.location.hash.slice(1) || 'login';
+  const [page, query] = hash.split('?');
+
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + page).classList.add('active');
+
+  if(page === 'produtos'){
+    const params = new URLSearchParams(query);
+    loadProdutos(params.get('cat'));
+  }
+
+  document.querySelectorAll('.bottom-nav.nav-item').forEach(n => n.classList.remove('active'));
+  if(['home','categorias','carrinho','pedidos','perfil'].includes(page)){
+    const navItems = document.querySelectorAll('#screen-' + page + '.bottom-nav.nav-item');
+    navItems.forEach((item, i) => {
+      if((page==='home' && i===0) || (page==='categorias' && i===1) ||
+         (page==='carrinho' && i===2) || (page==='pedidos' && i===3) ||
+         (page==='perfil' && i===4)){
+        item.classList.add('active');
+      }
+    });
+  }
+}
+
+function goTo(page){
+  window.location.hash = page;
+  toggleMenu(false);
+}
+
+function openProdutos(cat){
+  window.location.hash = 'produtos?cat=' + cat;
+}
+
+function toggleMenu(force){
+  const menu = document.getElementById('sideMenu');
+  const overlay = document.getElementById('overlay');
+  if(force === false){
+    menu.classList.remove('open');
+    overlay.classList.remove('show');
+  }else{
+    menu.classList.toggle('open');
+    overlay.classList.toggle('show');
+  }
+}
+
+// Auth
+onAuthStateChanged(auth, (user) => {
+  currentUser = user;
+  if(user){
+    document.getElementById('userName').innerText = user.email.split('@')[0];
+    document.getElementById('menuUser').innerText = 'Olá, ' + user.email.split('@')[0];
+    document.getElementById('menuEmail').innerText = user.email;
+    document.getElementById('profileEmail').innerText = user.email;
+    if(window.location.hash === '' || window.location.hash === '#login'){
+      window.location.hash = 'home';
+    }
+  }else{
+    if(window.location.hash!== '#login'){
+      window.location.hash = 'login';
+    }
+  }
+});
+
+window.togglePass = function(){
+  const pass = document.getElementById('password');
+  pass.type = pass.type === 'password'? 'text' : 'password';
+}
+
+window.login = async function(){
+  const email = document.getElementById('email').value;
+  const pass = document.getElementById('password').value;
+  if(!email ||!pass){showError('Preencha email e senha');return;}
+  document.getElementById('loginBtn').disabled = true;
+  try{
+    await signInWithEmailAndPassword(auth, email, pass);
+    window.location.hash = 'home';
+  }catch(e){showError('Email ou senha incorretos');document.getElementById('loginBtn').disabled = false;}
+}
+
+window.register = async function(){
+  const email = document.getElementById('email').value;
+  const pass = document.getElementById('password').value;
+  if(pass.length < 6){showError('Senha mínimo 6 caracteres');return;}
+  try{await createUserWithEmailAndPassword(auth, email, pass);window.location.hash = 'home';}
+  catch(e){showError('Erro ao criar conta');}
+}
+
+window.forgotPass = async function(){
+  const email = document.getElementById('email').value;
+  if(!email){showError('Digite seu email primeiro');return;}
+  try{await sendPasswordResetEmail(auth, email);showError('Email enviado!', 'success');}
+  catch(e){showError('Erro ao enviar email');}
+}
+
+window.logout = function(){
+  signOut(auth).then(() => {
+    window.location.hash = 'login';
+  });
+}
+
+function loadProdutos(cat){
+  const titles = {
+    games:'Games',
+    streaming:'Streaming',
+    social:'Redes Sociais',
+    gift:'Gift Cards',
+    apps:'Apps',
+    vip:'VIP'
+  };
+  document.getElementById('catTitle').innerText = titles[cat] || 'Produtos';
+
+  const produtosData = {
+    games:[
+      {nome:'ROBLOX',desc:'400 Robux',preco:'R$ 15,90',img:'https://i.imgur.com/9Q2bZ8L.png',bg:''},
+      {nome:'Free Fire',desc:'500 Diamantes',preco:'R$ 24,90',img:'https://i.imgur.com/9Q2bZ8L.png',bg:''}
+    ],
+    streaming:[
+      {nome:'NETFLIX',desc:'1 Mês',preco:'R$ 17,90',img:'https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg',bg:'background:#000;padding:20px;'},
+      {nome:'SPOTIFY',desc:'Premium 1 Mês',preco:'R$ 10,90',img:'https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg',bg:'background:#1DB954;padding:20px;'}
+    ],
+    social:[
+      {nome:'Instagram',desc:'1000 Seguidores',preco:'R$ 12,90',img:'https://cdn-icons-png.flaticon.com/512/2111/2111463.png',bg:''}
+    ],
+    gift:[
+      {nome:'Google Play',desc:'R$ 50 Gift Card',preco:'R$ 50,00',img:'https://cdn-icons-png.flaticon.com/512/833/833593.png',bg:''}
+    ],
+    apps:[],
+    vip:[]
+  };
 
   const produtos = produtosData[cat] || [];
 
@@ -346,11 +546,6 @@ function showTab(tab, el){
   el.classList.add('active');
   document.getElementById('categoriasList').style.display = tab==='categorias'?'block':'none';
   document.getElementById('subcategoriasList').style.display = tab==='subcategorias'?'block':'none';
-}
-
-function toggleMenu(){
-  document.getElementById('sideMenu').classList.toggle('open');
-  document.getElementById('overlay').classList.toggle('show');
 }
 
 function showError(msg, type='error'){
