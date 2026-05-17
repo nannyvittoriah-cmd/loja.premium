@@ -51,15 +51,15 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
 .search-btn{width:40px;height:40px;background:var(--purple);border:none;border-radius:9px;display:grid;place-items:center;cursor:pointer;}
 .search-btn svg{width:18px;height:18px;color:#fff;}
 
-/* CATEGORIAS LIST */
-.cat-tabs{display:flex;background:var(--card-2);margin:0 16px 16px;border-radius:10px;padding:4px;}
-.cat-tab{flex:1;text-align:center;padding:8px 0;font-size:13px;font-weight:600;color:var(--text-3);border-radius:8px;cursor:pointer;}
-.cat-tab.active{background:var(--purple);color:#fff;}
-.cat-list{padding:0 16px;display:flex;flex-direction:column;gap:10px;}
-.cat-item{display:flex;align-items:center;gap:12px;background:var(--card-2);border:1px solid var(--border);border-radius:12px;padding:12px;cursor:pointer;}
-.cat-item:hover{border-color:var(--purple);}
-.cat-icon{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-size:20px;}
-.cat-info h4{font-size:14px;font-weight:600;margin-bottom:2px;}
+/* CATEGORIAS LIST - CARDS SOMBREADOS */
+.cat-tabs{display:flex;background:var(--card-2);margin:0 16px 16px;border-radius:10px;padding:4px;box-shadow:0 4px 12px rgba(0,0,0,0.4);}
+.cat-tab{flex:1;text-align:center;padding:8px 0;font-size:13px;font-weight:600;color:var(--text-3);border-radius:8px;cursor:pointer;transition:.2s;}
+.cat-tab.active{background:var(--purple);color:#fff;box-shadow:0 2px 8px rgba(139,92,246,0.4);}
+.cat-list{padding:0 16px;display:flex;flex-direction:column;gap:12px;}
+.cat-item{display:flex;align-items:center;gap:12px;background:var(--card-2);border:1px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.3);transition:.2s;}
+.cat-item:hover{border-color:var(--purple);box-shadow:0 6px 20px rgba(139,92,246,0.3);transform:translateY(-2px);}
+.cat-icon{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;font-size:22px;box-shadow:0 2px 8px rgba(0,0,0,0.3);}
+.cat-info h4{font-size:14px;font-weight:600;margin-bottom:3px;}
 .cat-info p{font-size:12px;color:var(--text-2);}
 
 /* DESTAQUES HOME */
@@ -70,8 +70,8 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
 .see-all:active{opacity:0.7;}
 .prod-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
 @media(min-width:768px){.prod-grid{grid-template-columns:repeat(3,1fr);}}
-.prod-card{background:var(--card-2);border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:.2s;}
-.prod-card:hover{border-color:var(--purple);}
+.prod-card{background:var(--card-2);border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:.2s;box-shadow:0 4px 12px rgba(0,0,0,0.3);}
+.prod-card:hover{border-color:var(--purple);box-shadow:0 6px 20px rgba(139,92,246,0.3);transform:translateY(-2px);}
 .prod-card img{width:100%;height:100px;object-fit:cover;background:#000;}
 .prod-info{padding:10px;}
 .prod-info h4{font-size:13px;font-weight:600;margin-bottom:3px;}
@@ -79,7 +79,7 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
 .prod-price{font-size:14px;font-weight:700;color:var(--purple);margin-top:5px;}
 
 /* BOTTOM NAV */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:6px 0;}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:6px 0;box-shadow:0 -4px 12px rgba(0,0,0,0.4);}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;color:var(--text-3);cursor:pointer;position:relative;padding:3px 0;}
 .nav-item.active{color:var(--purple);}
 .nav-item svg{width:20px;height:20px;}
@@ -342,7 +342,9 @@ function handleRoute(){
   if(hash === 'home') renderHomeDestaques();
 }
 
-function goTo(page){window.location.hash = page;}
+function goTo(page){
+  window.location.hash = page;
+}
 
 function updateUserUI(user){
   document.getElementById('profileName').innerText = user.displayName || user.email.split('@')[0];
@@ -380,26 +382,30 @@ function renderHomeDestaques(){
 
 function renderCategorias(){
   const list = document.getElementById('catList');
-  list.innerHTML = categorias.map(cat => `
-    <div class="cat-item" onclick="openCategoria('${cat.nome}')">
-      <div class="cat-icon" style="background:${cat.color}20;color:${cat.color}">${cat.icon}</div>
-      <div class="cat-info">
-        <h4>${cat.nome}</h4>
-        <p>${cat.desc}</p>
+  if(list){
+    list.innerHTML = categorias.map(cat => `
+      <div class="cat-item" onclick="openCategoria('${cat.nome}')">
+        <div class="cat-icon" style="background:${cat.color}20;color:${cat.color}">${cat.icon}</div>
+        <div class="cat-info">
+          <h4>${cat.nome}</h4>
+          <p>${cat.desc}</p>
+        </div>
       </div>
-    </div>
-  `).join('');
+    `).join('');
+  }
 
   const sublist = document.getElementById('subcatList');
-  sublist.innerHTML = subcategorias.map(sub => `
-    <div class="cat-item" onclick="openSubcategoria('${sub.nome}')">
-      <div class="cat-icon" style="background:${sub.color}20;color:${sub.color}">${sub.icon}</div>
-      <div class="cat-info">
-        <h4>${sub.nome}</h4>
-        <p>${sub.desc}</p>
+  if(sublist){
+    sublist.innerHTML = subcategorias.map(sub => `
+      <div class="cat-item" onclick="openSubcategoria('${sub.nome}')">
+        <div class="cat-icon" style="background:${sub.color}20;color:${sub.color}">${sub.icon}</div>
+        <div class="cat-info">
+          <h4>${sub.nome}</h4>
+          <p>${sub.desc}</p>
+        </div>
       </div>
-    </div>
-  `).join('');
+    `).join('');
+  }
 }
 
 function openCategoria(nome){alert('Abrir categoria: ' + nome);}
