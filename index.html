@@ -135,6 +135,12 @@ body{
   margin-bottom:14px;
   display:none;
 }
+.error.success{
+  background:#10b98120;
+  border-color:#10b981;
+  color:#10b981;
+}
+.hidden{display:none;}
 </style>
 </head>
 <body>
@@ -155,9 +161,14 @@ body{
 
   <div class="error" id="errorMsg"></div>
 
+  <div class="input-group hidden" id="nameGroup">
+    <label>Nome</label>
+    <input type="text" id="name" placeholder="Digite seu nome">
+  </div>
+
   <div class="input-group">
-    <label>E-mail ou telefone</label>
-    <input type="text" id="email" placeholder="Digite seu e-mail ou telefone">
+    <label>E-mail</label>
+    <input type="email" id="email" placeholder="Digite seu e-mail">
   </div>
 
   <div class="input-group">
@@ -176,7 +187,7 @@ body{
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -199,12 +210,14 @@ const tabRegister = document.getElementById('tabRegister');
 const actionBtn = document.getElementById('actionBtn');
 const togglePass = document.getElementById('togglePass');
 const passInput = document.getElementById('password');
+const nameGroup = document.getElementById('nameGroup');
 
 tabLogin.onclick = () => {
   mode = 'login';
   tabLogin.classList.add('active');
   tabRegister.classList.remove('active');
   actionBtn.innerText = 'ENTRAR';
+  nameGroup.classList.add('hidden');
 }
 
 tabRegister.onclick = () => {
@@ -212,6 +225,7 @@ tabRegister.onclick = () => {
   tabRegister.classList.add('active');
   tabLogin.classList.remove('active');
   actionBtn.innerText = 'CRIAR CONTA';
+  nameGroup.classList.remove('hidden');
 }
 
 togglePass.onclick = () => {
@@ -219,9 +233,12 @@ togglePass.onclick = () => {
 }
 
 actionBtn.onclick = async () => {
+  const name = document.getElementById('name').value.trim();
   const email = document.getElementById('email').value.trim();
   const pass = document.getElementById('password').value;
+  
   if(!email || !pass){showError('Preencha todos os campos');return;}
+  if(mode === 'register' && !name){showError('Digite seu nome');return;}
   
   actionBtn.disabled = true;
   
@@ -231,12 +248,13 @@ actionBtn.onclick = async () => {
       showError('Login ok! Redirecionando...', 'success');
       setTimeout(()=>{window.location.href='home.html'},1000);
     }else{
-      await createUserWithEmailAndPassword(auth, email, pass);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+      await updateProfile(userCredential.user, {displayName: name});
       showError('Conta criada! Redirecionando...', 'success');
       setTimeout(()=>{window.location.href='home.html'},1000);
     }
   }catch(e){
-    showError(mode==='login'?'Email ou senha incorretos':'Erro ao criar conta');
+    showError(mode==='login'?'Email ou senha incorretos':e.message);
     actionBtn.disabled = false;
   }
 }
@@ -244,10 +262,8 @@ actionBtn.onclick = async () => {
 function showError(msg, type='error'){
   const e = document.getElementById('errorMsg');
   e.innerText = msg;
+  e.className = 'error' + (type==='success'?' success':'');
   e.style.display = 'block';
-  e.style.background = type==='success'?'#10b98120':'#ef444420';
-  e.style.borderColor = type==='success'?'#10b981':'#ef4444';
-  e.style.color = type==='success'?'#10b981':'#ef4444';
   setTimeout(()=>{e.style.display='none';},3000);
 }
 </script>
