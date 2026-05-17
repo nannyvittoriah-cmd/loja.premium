@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Premium Store</title>
+<title>Prime Store Vz</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -40,7 +40,7 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
 
 /* HEADER */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;}
-.topbar h2{font-size:14px;font-weight:700;letter-spacing:0.5px;max-width:70%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.topbar h2{font-size:15px;font-weight:700;letter-spacing:0.5px;color:var(--purple);}
 .back-btn,.cart-icon{width:22px;height:22px;cursor:pointer;}
 .cart-icon{position:relative;}
 .cart-badge,.nav-badge{position:absolute;top:-5px;right:-5px;background:var(--purple);color:#fff;font-size:9px;font-weight:700;width:16px;height:16px;border-radius:50%;display:grid;place-items:center;}
@@ -138,7 +138,7 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
 <!-- HOME -->
 <div class="screen" id="screen-home">
   <div class="topbar">
-    <h2>Olá, <span id="userName">Usuário</span></h2>
+    <h2>Prime Store Vc</h2>
     <div class="cart-icon" onclick="goTo('carrinho')">
       <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <circle cx="9" cy="21" r="1"/>
@@ -209,7 +209,7 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
     <svg class="back-btn" onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
       <path d="M15 18l-6-6 6-6"/>
     </svg>
-    <h2>CATEGORIAS</h2>
+    <h2>Prime Store Vc</h2>
     <div class="cart-icon" onclick="goTo('carrinho')">
       <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <circle cx="9" cy="21" r="1"/>
@@ -276,7 +276,7 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
 <div class="screen" id="screen-carrinho">
   <div class="topbar">
     <svg class="back-btn" onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-    <h2>CARRINHO</h2>
+    <h2>Prime Store Vc</h2>
     <div style="width:22px"></div>
   </div>
   <div class="simple-page"><h2>Carrinho vazio</h2><p>Adicione produtos na loja</p></div>
@@ -286,7 +286,7 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
 <div class="screen" id="screen-pedidos">
   <div class="topbar">
     <svg class="back-btn" onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-    <h2>PEDIDOS</h2>
+    <h2>Prime Store Vc</h2>
     <div style="width:22px"></div>
   </div>
   <div class="simple-page"><h2>Sem pedidos</h2><p>Você ainda não fez nenhum pedido</p></div>
@@ -296,7 +296,7 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
 <div class="screen" id="screen-perfil">
   <div class="topbar">
     <svg class="back-btn" onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-    <h2>PERFIL</h2>
+    <h2>Prime Store Vc</h2>
     <div style="width:22px"></div>
   </div>
   <div class="simple-page">
@@ -309,7 +309,7 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, reload } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -358,11 +358,8 @@ function handleRoute(){
 
 function goTo(page){window.location.hash = page;}
 
-async function updateUserUI(user){
-  await reload(user);
-  const name = user.displayName || user.email.split('@')[0];
-  document.getElementById('userName').innerText = name;
-  document.getElementById('profileName').innerText = name;
+function updateUserUI(user){
+  document.getElementById('profileName').innerText = user.displayName || user.email.split('@')[0];
   document.getElementById('profileEmail').innerText = user.email;
 }
 
