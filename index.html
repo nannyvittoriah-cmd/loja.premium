@@ -2,501 +2,254 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Prime Store Vz</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Store - Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#0a0a12;--card:#16161f;--border:#262630;--text:#fff;--text-2:#8a8a9e;
-  --primary:#7c3aed;--primary-2:#a855f7;
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+body{
+  background:#000;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  color:#fff;
 }
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent;}
-body{background:var(--bg);color:var(--text);}
-.screen{display:none;min-height:100vh;padding-bottom:70px;}
-.screen.active{display:block;}
-input,button{outline:none;}
-/* Login */
-.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
-.login-box{width:100%;max-width:340px;}
-.logo{display:flex;flex-direction:column;align-items:center;margin-bottom:32px;}
-.logo-icon{width:48px;height:48px;background:linear-gradient(135deg,var(--primary),var(--primary-2));border-radius:14px;display:grid;place-items:center;margin-bottom:12px;box-shadow:0 8px 30px rgba(124,58,237,0.35);}
-.logo h1{font-size:16px;font-weight:700;letter-spacing:0.5px;}
-.logo span{font-size:11px;color:var(--text-2);letter-spacing:1.5px;margin-top:2px;}
-.login-card h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:6px;}
-.subtitle{font-size:12px;color:var(--text-2);text-align:center;margin-bottom:28px;}
-.input-group{position:relative;margin-bottom:14px;}
-.input-group svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:#6b7280;}
-.input-group input{width:100%;height:46px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0 44px 0 44px;color:var(--text);font-size:13px;}
-.input-group input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(124,58,237,0.15);}
-.toggle-pass{position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;background:none;border:none;color:#6b7280;}
-.btn{width:100%;height:46px;background:linear-gradient(135deg,var(--primary),var(--primary-2));border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;}
-.btn:active{transform:scale(0.98);}
-.btn:disabled{opacity:0.6;}
-.forgot{text-align:right;margin-bottom:20px;}
-.forgot a{font-size:12px;color:var(--text-2);text-decoration:none;}
-.divider{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--text-2);font-size:12px;}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
-.footer{text-align:center;margin-top:24px;font-size:12px;color:var(--text-2);}
-.footer a{color:var(--primary);text-decoration:none;font-weight:600;}
-.error{background:#ef444420;border:1px solid #ef4444;color:#ef4444;padding:10px;border-radius:10px;font-size:12px;margin-bottom:14px;display:none;}
-.error.success{background:#10b98120;border-color:#10b981;color:#10b981;}
 
-/* Header + Menu */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:998;display:none;}
-.overlay.show{display:block;}
-.menu{position:fixed;top:0;left:-280px;width:260px;height:100vh;background:#15151c;border-right:1px solid var(--border);z-index:999;transition:0.3s;overflow-y:auto;}
-.menu.open{left:0;}
-.menu-header{padding:20px 16px;border-bottom:1px solid var(--border);}
-.menu-header h3{font-size:15px;font-weight:700;}
-.menu-header small{font-size:11px;color:var(--text-2);}
-.menu-item{display:flex;align-items:center;gap:12px;padding:14px 16px;font-size:13px;color:#d1d5db;cursor:pointer;}
-.menu-item:hover{background:#1f1f28;}
-.menu-item svg{width:18px;height:18px;color:var(--text-2);}
-.header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;}
-.hamb{width:22px;height:22px;cursor:pointer;}
-.header h3{font-size:14px;font-weight:600;}
-.cart{position:relative;width:22px;height:22px;}
-.cart-badge{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:10px;width:16px;height:16px;border-radius:50%;display:grid;place-items:center;}
+.card{
+  width:100%;
+  max-width:360px;
+  background:#0f0f0f;
+  border-radius:16px;
+  padding:28px 24px;
+  border:1px solid #1a1a1a;
+}
 
-/* Home */
-.search{margin:12px 16px;position:relative;}
-.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:#6b7280;}
-.search input{width:100%;height:46px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0 16px 0 44px;color:var(--text);font-size:13px;}
-.banner{margin:0 16px 20px;height:160px;border-radius:16px;background:linear-gradient(135deg,#1e1b4b,#7c3aed);position:relative;overflow:hidden;display:flex;align-items:center;padding:0 20px;}
-.banner h3{font-size:18px;font-weight:700;margin-bottom:6px;}
-.banner p{font-size:13px;color:#d1d5db;}
-.banner img{position:absolute;right:0;bottom:0;height:140px;opacity:0.8;}
-.section{padding:0 16px 20px;}
-.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
-.section-head h4{font-size:15px;font-weight:600;}
-.section-head a{font-size:13px;color:var(--text-2);text-decoration:none;cursor:pointer;}
-.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 8px;text-align:center;cursor:pointer;}
-.card img{width:28px;height:28px;margin-bottom:6px;}
-.card span{font-size:11px;color:var(--text-2);display:block;}
-.prod-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;}
-.prod-card img{width:100%;height:120px;object-fit:cover;}
-.prod-info{padding:10px;}
-.prod-info h5{font-size:13px;font-weight:600;margin-bottom:4px;}
-.prod-info p{font-size:11px;color:var(--text-2);}
-.price{font-size:14px;font-weight:700;color:var(--primary);margin-top:6px;}
+.logo{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  margin-bottom:24px;
+}
+.logo svg{
+  width:48px;
+  height:48px;
+  margin-bottom:8px;
+}
+.logo h1{
+  font-size:20px;
+  font-weight:700;
+  letter-spacing:1px;
+}
+.logo span{
+  font-size:12px;
+  color:#8b5cf6;
+  letter-spacing:2px;
+  margin-top:-4px;
+}
 
-/* Categorias */
-.tabs{display:flex;background:var(--card);margin:12px 16px;border-radius:10px;padding:4px;}
-.tab{flex:1;padding:9px;text-align:center;font-size:13px;color:var(--text-2);border-radius:8px;cursor:pointer;}
-.tab.active{background:var(--primary);color:#fff;font-weight:600;}
-.category-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;cursor:pointer;}
-.category-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;}
-.category-icon img{width:20px;height:20px;}
-.category-info h3{font-size:14px;font-weight:600;margin-bottom:3px;}
-.category-info p{font-size:11px;color:var(--text-2);}
+.tabs{
+  display:flex;
+  margin-bottom:20px;
+  border-bottom:1px solid #1a1a1a;
+}
+.tab{
+  flex:1;
+  text-align:center;
+  padding:12px 0;
+  font-size:14px;
+  font-weight:600;
+  color:#6b7280;
+  cursor:pointer;
+}
+.tab.active{
+  color:#fff;
+  border-bottom:2px solid #8b5cf6;
+}
 
-/* Bottom Nav */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--bg);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:8px 0 10px;z-index:100;}
-.nav-item{display:flex;flex-direction:column;align-items:center;font-size:10px;color:#6b7280;cursor:pointer;}
-.nav-item.active{color:var(--primary);}
-.nav-item svg{width:20px;height:20px;margin-bottom:3px;}
+.input-group{
+  margin-bottom:16px;
+}
+.input-group label{
+  display:block;
+  font-size:13px;
+  color:#9ca3af;
+  margin-bottom:6px;
+}
+.input-group input{
+  width:100%;
+  height:44px;
+  background:#1a1a1a;
+  border:1px solid #2a2a2a;
+  border-radius:10px;
+  padding:0 14px;
+  color:#fff;
+  font-size:14px;
+  outline:none;
+}
+.input-group input:focus{
+  border-color:#8b5cf6;
+}
+.input-group .pass-wrap{
+  position:relative;
+}
+.pass-wrap svg{
+  position:absolute;
+  right:14px;
+  top:50%;
+  transform:translateY(-50%);
+  width:20px;
+  height:20px;
+  cursor:pointer;
+  color:#6b7280;
+}
 
-/* Simple pages */
-.page-header{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border);}
-.page-header svg{width:22px;height:22px;cursor:pointer;}
-.page-header h2{font-size:15px;font-weight:600;flex:1;}
-.simple-page{padding:40px 16px;text-align:center;color:var(--text-2);}
+.btn{
+  width:100%;
+  height:46px;
+  background:#8b5cf6;
+  border:none;
+  border-radius:10px;
+  color:#fff;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+  margin-top:8px;
+}
+.btn:active{
+  transform:scale(0.98);
+}
+.btn:disabled{
+  opacity:0.6;
+  cursor:not-allowed;
+}
+
+.error{
+  background:#ef444420;
+  border:1px solid #ef4444;
+  color:#ef4444;
+  padding:10px;
+  border-radius:10px;
+  font-size:12px;
+  margin-bottom:14px;
+  display:none;
+}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div class="screen active" id="screen-login">
-  <div class="login-wrap">
-    <div class="login-box">
-      <div class="logo">
-        <div class="logo-icon">
-          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        </div>
-        <h1>PRIME STORE</h1>
-        <span>VZ</span>
-      </div>
-      <div class="login-card">
-        <h2>Bem-vindo de volta!</h2>
-        <p class="subtitle">Faça login para continuar</p>
-        <div class="error" id="errorMsg"></div>
-        <div class="input-group">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 0.9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          <input type="email" id="email" placeholder="seu@email.com">
-        </div>
-        <div class="input-group">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          <input type="password" id="password" placeholder="Senha">
-          <button type="button" class="toggle-pass" onclick="togglePass()">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          </button>
-        </div>
-        <div class="forgot"><a href="#" onclick="forgotPass()">Esqueci minha senha</a></div>
-        <button class="btn" id="loginBtn" onclick="login()">Entrar</button>
-        <div class="divider">ou</div>
-        <div class="footer">Ainda não tem conta? <a href="#" onclick="register()">Criar conta</a></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- HOME -->
-<div class="screen" id="screen-home">
-  <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
-  <div class="menu" id="sideMenu">
-    <div class="menu-header">
-      <h3>Olá, <span id="menuUser">User</span></h3>
-      <small id="menuEmail">user@email.com</small>
-    </div>
-    <div class="menu-item" onclick="goTo('adm')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2T6 9v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg><span>Adm</span></div>
-    <div class="menu-item" onclick="goTo('redes')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-16h-9l1-4z"/></svg><span>Redes Sociais do Site</span></div>
-    <div class="menu-item" onclick="goTo('afiliados')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg><span>Afiliados</span></div>
-    <div class="menu-item" onclick="logout()"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg><span>Sair</span></div>
+<div class="card">
+  <div class="logo">
+    <svg viewBox="0 0 24 24" fill="#8b5cf6">
+      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+    </svg>
+    <h1>PREMIUM</h1>
+    <span>STORE</span>
   </div>
 
-  <div class="header">
-    <div style="display:flex;align-items:center;gap:12px;">
-      <svg class="hamb" onclick="toggleMenu()" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-      <h3>Olá, <span id="userName" style="color:var(--primary)">User</span> 👋</h3>
-    </div>
-    <div class="cart" onclick="goTo('carrinho')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><div class="cart-badge">1</div></div>
-  </div>
-
-  <div class="search">
-    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-    <input type="text" placeholder="Buscar produtos...">
-  </div>
-
-  <div class="banner">
-    <div><h3>MEGA PROMO</h3><p>ATÉ 50% OFF<br>Produtos selecionados!</p></div>
-    <img src="https://i.imgur.com/9Q2bZ8L.png">
-  </div>
-
-  <div class="section">
-    <div class="section-head"><h4>Categorias</h4><a onclick="goTo('categorias')">Ver todas</a></div>
-    <div class="grid-4">
-      <div class="card" onclick="openCat('games')"><img src="https://cdn-icons-png.flaticon.com/512/3616/3616212.png"><span>Games</span></div>
-      <div class="card" onclick="openCat('streaming')"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><span>Streaming</span></div>
-      <div class="card" onclick="openCat('social')"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"><span>Social</span></div>
-      <div class="card" onclick="openCat('gift')"><img src="https://cdn-icons-png.flaticon.com/512/833/833593.png"><span>Gift</span></div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-head"><h4>Destaques</h4></div>
-    <div class="grid-3">
-      <div class="prod-card"><img src="https://i.imgur.com/9Q2bZ8L.png"><div class="prod-info"><h5>ROBLOX</h5><p>400 Robux</p><div class="price">R$ 15,90</div></div></div>
-      <div class="prod-card"><img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" style="background:#000;padding:20px;"><div class="prod-info"><h5>NETFLIX</h5><p>1 Mês</p><div class="price">R$ 17,90</div></div></div>
-      <div class="prod-card"><img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg" style="background:#1DB954;padding:20px;"><div class="prod-info"><h5>SPOTIFY</h5><p>Premium</p><div class="price">R$ 10,90</div></div></div>
-    </div>
-  </div>
-
-  <div class="bottom-nav">
-    <div class="nav-item active" onclick="goTo('home')"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Home</span></div>
-    <div class="nav-item" onclick="goTo('categorias')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3h18M3 12h18M3 21h18"/></svg><span>Loja</span></div>
-    <div class="nav-item" onclick="goTo('carrinho')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span>Carrinho</span></div>
-    <div class="nav-item" onclick="goTo('pedidos')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg><span>Pedidos</span></div>
-    <div class="nav-item" onclick="goTo('perfil')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></div>
-  </div>
-</div>
-
-<!-- CATEGORIAS -->
-<div class="screen" id="screen-categorias">
-  <div class="header">
-    <svg onclick="history.back()" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-    <h2 style="flex:1;text-align:center">Categorias</h2>
-    <div style="width:22px"></div>
-  </div>
   <div class="tabs">
-    <div class="tab active" onclick="showTab('cat',this)">Categorias</div>
-    <div class="tab" onclick="showTab('sub',this)">Subcategorias</div>
+    <div class="tab active" id="tabLogin">Login</div>
+    <div class="tab" id="tabRegister">Criar conta</div>
   </div>
-  <div id="catList">
-    <div class="category-card" onclick="openCat('games')"><div class="category-icon" style="background:#7c3aed20;"><img src="https://cdn-icons-png.flaticon.com/512/3616/3616212.png"></div><div class="category-info"><h3>Games</h3><p>Produtos relacionados a jogos</p></div></div>
-    <div class="category-card" onclick="openCat('streaming')"><div class="category-icon" style="background:#e5091420;"><img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"></div><div class="category-info"><h3>Streaming</h3><p>Netflix, Spotify, Disney+ e mais</p></div></div>
-    <div class="category-card" onclick="openCat('social')"><div class="category-icon" style="background:#1877f220;"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"></div><div class="category-info"><h3>Redes Sociais</h3><p>Seguidores, curtidas e views</p></div></div>
-    <div class="category-card" onclick="openCat('gift')"><div class="category-icon" style="background:#f59e0b20;"><img src="https://cdn-icons-png.flaticon.com/512/833/833593.png"></div><div class="category-info"><h3>Gift Cards</h3><p>Cartões presente digitais</p></div></div>
-    <div class="category-card" onclick="openCat('apps')"><div class="category-icon" style="background:#3b82f620;"><img src="https://cdn-icons-png.flaticon.com/512/3208/3208723.png"></div><div class="category-info"><h3>Apps</h3><p>Aplicativos premium</p></div></div>
-    <div class="category-card" onclick="openCat('vip')"><div class="category-icon" style="background:#fbbf2420;"><img src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png"></div><div class="category-info"><h3>VIP</h3><p>Vantagens exclusivas</p></div></div>
-  </div>
-  <div id="subList" style="display:none;padding:16px;text-align:center;color:var(--text-2)">Em breve</div>
-  <div class="bottom-nav">
-    <div class="nav-item" onclick="goTo('home')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Home</span></div>
-    <div class="nav-item active"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h18M3 12h18M3 21h18"/></svg><span>Loja</span></div>
-    <div class="nav-item" onclick="goTo('carrinho')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span>Carrinho</span></div>
-    <div class="nav-item" onclick="goTo('pedidos')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg><span>Pedidos</span></div>
-    <div class="nav-item" onclick="goTo('perfil')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></div>
-  </div>
-</div>
 
-<!-- PRODUTOS -->
-<div class="screen" id="screen-produtos">
-  <div class="header">
-    <svg onclick="history.back()" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-    <h2 id="catTitle">Produtos</h2>
-    <div style="width:22px"></div>
-  </div>
-  <div class="grid-2" id="prodGrid" style="padding:16px"></div>
-  <div class="bottom-nav">
-    <div class="nav-item" onclick="goTo('home')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Home</span></div>
-    <div class="nav-item active"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M3 3h18M3 12h18M3 21h18"/></svg><span>Loja</span></div>
-    <div class="nav-item" onclick="goTo('carrinho')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span>Carrinho</span></div>
-    <div class="nav-item" onclick="goTo('pedidos')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg><span>Pedidos</span></div>
-    <div class="nav-item" onclick="goTo('perfil')"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Perfil</span></div>
-  </div>
-</div>
+  <div class="error" id="errorMsg"></div>
 
-<!-- SIMPLE PAGES -->
-<div class="screen" id="screen-adm"><div class="page-header"><svg onclick="history.back()" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg><h2>Adm</h2></div><div class="simple-page">Painel Admin em breve</div></div>
-<div class="screen" id="screen-redes"><div class="page-header"><svg onclick="history.back()" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg><h2>Redes Sociais</h2></div><div class="simple-page">
-  <div style="display:flex;flex-direction:column;gap:12px;max-width:300px;margin:0 auto">
-    <div class="card" onclick="window.open('https://instagram.com')"><svg fill="currentColor" viewBox="0 0 24 24" style="width:24px;height:24px;margin:0 auto 8px"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069z"/></svg><span>Instagram</span></div>
-    <div class="card" onclick="window.open('https://t.me')"><svg fill="currentColor" viewBox="0 0 24 24" style="width:24px;height:24px;margin:0 auto 8px"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.40-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 3.07-1.33 5.12-2.21 6.14-2.63 2.93-1.22 3.54-1.43 3.94-1.43.09 0 .28.02.41.13.11.09.14.21.15.3 0 .06.01.24 0 .38z"/></svg><span>Telegram</span></div>
-    <div class="card" onclick="window.open('https://wa.me')"><svg fill="currentColor" viewBox="0 0 24 24" style="width:24px;height:24px;margin:0 auto 8px"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.42a10.842 10.842 0 0 1-4.62-.54v10.58a8.109 8.109 0 0 1-9.18 8.06A8.106 8.106 0 0 1 3.49 12.5v-3.84c2.85.13 5.65-.94 7.9-2.89 1.11-1 2.
-          <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.42a10.842 10.842 0 0 1-4.62-.54v10.58a8.109 8.109 0 0 1-9.18 8.06A8.106 8.106 0 0 1 3.49 12.5v-3.84c2.85.13 5.65-.94 7.9-2.89 1.11-1 2.03-2.24 2.62-3.65.3-.65.52-1.34.61-2.03z"/></svg>
-      <span>TikTok</span>
+  <div class="input-group">
+    <label>E-mail ou telefone</label>
+    <input type="text" id="email" placeholder="Digite seu e-mail ou telefone">
+  </div>
+
+  <div class="input-group">
+    <label>Senha</label>
+    <div class="pass-wrap">
+      <input type="password" id="password" placeholder="Digite sua senha">
+      <svg id="togglePass" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
     </div>
   </div>
-</div>
 
-<div class="screen" id="screen-afiliados">
-  <div class="header">
-    <svg class="back-btn" onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-    <h2>Afiliados</h2>
-    <div style="width:22px"></div>
-  </div>
-  <div class="simple-page">
-    <h2>Programa de Afiliados</h2>
-    <p>Indique amigos e ganhe 10% de comissão em cada compra. Seu link de indicação aparecerá aqui em breve.</p>
-  </div>
-</div>
-
-<div class="screen" id="screen-carrinho">
-  <div class="header">
-    <svg class="back-btn" onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-    <h2>Carrinho</h2>
-    <div style="width:22px"></div>
-  </div>
-  <div class="simple-page">
-    <h2>Seu Carrinho</h2>
-    <p>Carrinho vazio. Adicione produtos na loja.</p>
-  </div>
-</div>
-
-<div class="screen" id="screen-pedidos">
-  <div class="header">
-    <svg class="back-btn" onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-    <h2>Pedidos</h2>
-    <div style="width:22px"></div>
-  </div>
-  <div class="simple-page">
-    <h2>Meus Pedidos</h2>
-    <p>Você ainda não fez nenhum pedido.</p>
-  </div>
-</div>
-
-<div class="screen" id="screen-perfil">
-  <div class="header">
-    <svg class="back-btn" onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-    <h2>Perfil</h2>
-    <div style="width:22px"></div>
-  </div>
-  <div class="simple-page">
-    <h2>Meu Perfil</h2>
-    <p>Email: <span id="profileEmail"></span></p>
-    <button class="btn" style="margin-top:20px" onclick="logout()">Sair da conta</button>
-  </div>
+  <button class="btn" id="actionBtn">ENTRAR</button>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
   authDomain: "premium-store-aa58b.firebaseapp.com",
+  databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
   projectId: "premium-store-aa58b",
   storageBucket: "premium-store-aa58b.firebasestorage.app",
   messagingSenderId: "462239500057",
-  appId: "1:462239500057:web:f1b7cea162ed308a866788"
+  appId: "1:462239500057:web:f1b7cea162ed308a866788",
+  measurementId: "G-CN88J28WRX"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-let currentUser = null;
+let mode = 'login';
 
-// Router
-function handleRoute(){
-  const hash = window.location.hash.slice(1) || 'login';
-  const [page, query] = hash.split('?');
+const tabLogin = document.getElementById('tabLogin');
+const tabRegister = document.getElementById('tabRegister');
+const actionBtn = document.getElementById('actionBtn');
+const togglePass = document.getElementById('togglePass');
+const passInput = document.getElementById('password');
 
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + page).classList.add('active');
-
-  if(page === 'produtos'){
-    const params = new URLSearchParams(query);
-    loadProdutos(params.get('cat'));
-  }
-
-  document.querySelectorAll('.bottom-nav.nav-item').forEach(n => n.classList.remove('active'));
-  if(['home','categorias','carrinho','pedidos','perfil'].includes(page)){
-    const navItems = document.querySelectorAll('#screen-' + page + '.bottom-nav.nav-item');
-    navItems.forEach((item, i) => {
-      if((page==='home' && i===0) || (page==='categorias' && i===1) ||
-         (page==='carrinho' && i===2) || (page==='pedidos' && i===3) ||
-         (page==='perfil' && i===4)){
-        item.classList.add('active');
-      }
-    });
-  }
+tabLogin.onclick = () => {
+  mode = 'login';
+  tabLogin.classList.add('active');
+  tabRegister.classList.remove('active');
+  actionBtn.innerText = 'ENTRAR';
 }
 
-function goTo(page){
-  window.location.hash = page;
-  toggleMenu(false);
+tabRegister.onclick = () => {
+  mode = 'register';
+  tabRegister.classList.add('active');
+  tabLogin.classList.remove('active');
+  actionBtn.innerText = 'CRIAR CONTA';
 }
 
-function openCat(cat){
-  window.location.hash = 'produtos?cat=' + cat;
+togglePass.onclick = () => {
+  passInput.type = passInput.type === 'password' ? 'text' : 'password';
 }
 
-function toggleMenu(force){
-  const menu = document.getElementById('sideMenu');
-  const overlay = document.getElementById('overlay');
-  if(force === false){
-    menu.classList.remove('open');
-    overlay.classList.remove('show');
-  }else{
-    menu.classList.toggle('open');
-    overlay.classList.toggle('show');
-  }
-}
-
-// Auth
-onAuthStateChanged(auth, (user) => {
-  currentUser = user;
-  if(user){
-    document.getElementById('userName').innerText = user.email.split('@')[0];
-    document.getElementById('menuUser').innerText = 'Olá, ' + user.email.split('@')[0];
-    document.getElementById('menuEmail').innerText = user.email;
-    document.getElementById('profileEmail').innerText = user.email;
-    if(window.location.hash === '' || window.location.hash === '#login'){
-      window.location.hash = 'home';
-    }
-  }else{
-    if(window.location.hash!== '#login'){
-      window.location.hash = 'login';
-    }
-  }
-});
-
-window.togglePass = function(){
-  const pass = document.getElementById('password');
-  pass.type = pass.type === 'password'? 'text' : 'password';
-}
-
-window.login = async function(){
-  const email = document.getElementById('email').value;
+actionBtn.onclick = async () => {
+  const email = document.getElementById('email').value.trim();
   const pass = document.getElementById('password').value;
-  if(!email ||!pass){showError('Preencha email e senha');return;}
-  document.getElementById('loginBtn').disabled = true;
+  if(!email || !pass){showError('Preencha todos os campos');return;}
+  
+  actionBtn.disabled = true;
+  
   try{
-    await signInWithEmailAndPassword(auth, email, pass);
-    window.location.hash = 'home';
-  }catch(e){showError('Email ou senha incorretos');document.getElementById('loginBtn').disabled = false;}
-}
-
-window.register = async function(){
-  const email = document.getElementById('email').value;
-  const pass = document.getElementById('password').value;
-  if(pass.length < 6){showError('Senha mínimo 6 caracteres');return;}
-  try{await createUserWithEmailAndPassword(auth, email, pass);window.location.hash = 'home';}
-  catch(e){showError('Erro ao criar conta');}
-}
-
-window.forgotPass = async function(){
-  const email = document.getElementById('email').value;
-  if(!email){showError('Digite seu email primeiro');return;}
-  try{await sendPasswordResetEmail(auth, email);showError('Email enviado!', 'success');}
-  catch(e){showError('Erro ao enviar email');}
-}
-
-window.logout = function(){
-  signOut(auth).then(() => {
-    window.location.hash = 'login';
-  });
-}
-
-function loadProdutos(cat){
-  const titles = {
-    games:'Games',
-    streaming:'Streaming',
-    social:'Redes Sociais',
-    gift:'Gift Cards',
-    apps:'Apps',
-    vip:'VIP'
-  };
-  document.getElementById('catTitle').innerText = titles[cat] || 'Produtos';
-
-  const produtosData = {
-    games:[
-      {nome:'ROBLOX',desc:'400 Robux',preco:'R$ 15,90',img:'https://i.imgur.com/9Q2bZ8L.png',bg:''},
-      {nome:'Free Fire',desc:'500 Diamantes',preco:'R$ 24,90',img:'https://i.imgur.com/9Q2bZ8L.png',bg:''}
-    ],
-    streaming:[
-      {nome:'NETFLIX',desc:'1 Mês',preco:'R$ 17,90',img:'https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg',bg:'background:#000;padding:20px;'},
-      {nome:'SPOTIFY',desc:'Premium 1 Mês',preco:'R$ 10,90',img:'https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg',bg:'background:#1DB954;padding:20px;'}
-    ],
-    social:[
-      {nome:'Instagram',desc:'1000 Seguidores',preco:'R$ 12,90',img:'https://cdn-icons-png.flaticon.com/512/2111/2111463.png',bg:''}
-    ],
-    gift:[
-      {nome:'Google Play',desc:'R$ 50 Gift Card',preco:'R$ 50,00',img:'https://cdn-icons-png.flaticon.com/512/833/833593.png',bg:''}
-    ],
-    apps:[],
-    vip:[]
-  };
-
-  const produtos = produtosData[cat] || [];
-
-  if(produtos.length === 0){
-    document.getElementById('prodGrid').innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text2);padding:40px 0;">Nenhum produto encontrado</p>';
-    return;
+    if(mode === 'login'){
+      await signInWithEmailAndPassword(auth, email, pass);
+      showError('Login ok! Redirecionando...', 'success');
+      setTimeout(()=>{window.location.href='home.html'},1000);
+    }else{
+      await createUserWithEmailAndPassword(auth, email, pass);
+      showError('Conta criada! Redirecionando...', 'success');
+      setTimeout(()=>{window.location.href='home.html'},1000);
+    }
+  }catch(e){
+    showError(mode==='login'?'Email ou senha incorretos':'Erro ao criar conta');
+    actionBtn.disabled = false;
   }
-
-  document.getElementById('prodGrid').innerHTML = produtos.map(p => `
-    <div class="prod-card" onclick="alert('Produto: ${p.nome}\\nPreço: ${p.preco}')">
-      <img src="${p.img}" style="${p.bg}">
-      <div class="prod-info">
-        <h3>${p.nome}</h3>
-        <p>${p.desc}</p>
-        <div class="price">${p.preco}</div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function showTab(tab, el){
-  document.querySelectorAll('#screen-categorias.tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('catList').style.display = tab==='cat'?'block':'none';
-  document.getElementById('subList').style.display = tab==='sub'?'block':'none';
 }
 
 function showError(msg, type='error'){
-  const e=document.getElementById('errorMsg');
-  e.innerText=msg;
-  e.className = 'error' + (type==='success'?' success':'');
-  e.style.display='block';
-  setTimeout(()=>{e.style.display='none';}, 3000);
+  const e = document.getElementById('errorMsg');
+  e.innerText = msg;
+  e.style.display = 'block';
+  e.style.background = type==='success'?'#10b98120':'#ef444420';
+  e.style.borderColor = type==='success'?'#10b981':'#ef4444';
+  e.style.color = type==='success'?'#10b981':'#ef4444';
+  setTimeout(()=>{e.style.display='none';},3000);
 }
-
-window.addEventListener('hashchange', handleRoute);
-window.addEventListener('load', handleRoute);
 </script>
 </body>
 </html>
