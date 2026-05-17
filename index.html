@@ -40,7 +40,7 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
 
 /* HEADER */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;}
-.topbar h2{font-size:15px;font-weight:700;letter-spacing:0.5px;color:var(--purple);}
+.topbar h2{font-size:15px;font-weight:700;letter-spacing:0.5px;color:var(--text);}
 .back-btn,.cart-icon{width:22px;height:22px;cursor:pointer;}
 .cart-icon{position:relative;}
 .cart-badge,.nav-badge{position:absolute;top:-5px;right:-5px;background:var(--purple);color:#fff;font-size:9px;font-weight:700;width:16px;height:16px;border-radius:50%;display:grid;place-items:center;}
@@ -51,23 +51,16 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
 .search-btn{width:40px;height:40px;background:var(--purple);border:none;border-radius:9px;display:grid;place-items:center;cursor:pointer;}
 .search-btn svg{width:18px;height:18px;color:#fff;}
 
-/* CATEGORIAS */
-.cat-grid{padding:0 16px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
-@media(min-width:768px){.cat-grid{grid-template-columns:repeat(3,1fr);}}
-.cat-card{background:var(--card-2);border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:.2s;}
-.cat-card:hover{border-color:var(--purple);transform:translateY(-2px);}
-.cat-card img{width:100%;height:90px;object-fit:cover;display:block;}
-.cat-info{padding:10px;}
-.cat-info h4{font-size:13px;font-weight:600;margin-bottom:2px;}
-.cat-info p{font-size:11px;color:var(--purple);}
-
-/* SUBCATEGORIAS */
-.subcat-section{padding:20px 16px 0;}
-.subcat-section h3{font-size:11px;color:var(--text-3);margin-bottom:10px;letter-spacing:1px;}
-.subcat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
-.subcat-card{text-align:center;cursor:pointer;}
-.subcat-card img{width:100%;aspect-ratio:1;border-radius:10px;object-fit:cover;margin-bottom:5px;}
-.subcat-card span{font-size:10px;color:var(--text-2);}
+/* CATEGORIAS LIST */
+.cat-tabs{display:flex;background:var(--card-2);margin:0 16px 16px;border-radius:10px;padding:4px;}
+.cat-tab{flex:1;text-align:center;padding:8px 0;font-size:13px;font-weight:600;color:var(--text-3);border-radius:8px;cursor:pointer;}
+.cat-tab.active{background:var(--purple);color:#fff;}
+.cat-list{padding:0 16px;display:flex;flex-direction:column;gap:10px;}
+.cat-item{display:flex;align-items:center;gap:12px;background:var(--card-2);border:1px solid var(--border);border-radius:12px;padding:12px;cursor:pointer;}
+.cat-item:hover{border-color:var(--purple);}
+.cat-icon{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-size:20px;}
+.cat-info h4{font-size:14px;font-weight:600;margin-bottom:2px;}
+.cat-info p{font-size:12px;color:var(--text-2);}
 
 /* DESTAQUES HOME */
 .section{padding:16px;}
@@ -154,7 +147,7 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
       <h3>Categoria em destaque</h3>
       <span class="see-all" onclick="goTo('categorias')">Ver todas</span>
     </div>
-    <div class="cat-grid" id="homeCatGrid"></div>
+    <div class="cat-list" id="homeCatList"></div>
   </div>
 
   <div class="section">
@@ -169,13 +162,13 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
       <svg fill="currentColor" viewBox="0 0 24 24">
         <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
       </svg>
-      <span>Início</span>
+      <span>Home</span>
     </div>
     <div class="nav-item" onclick="goTo('categorias')">
       <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path d="M4 6h16M4 12h16M4 18h16"/>
       </svg>
-      <span>Categorias</span>
+      <span>Loja</span>
     </div>
     <div class="nav-item" onclick="goTo('carrinho')">
       <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -209,42 +202,39 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
     <svg class="back-btn" onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
       <path d="M15 18l-6-6 6-6"/>
     </svg>
-    <h2>Prime Store Vz</h2>
-    <div class="cart-icon" onclick="goTo('carrinho')">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <circle cx="9" cy="21" r="1"/>
-        <circle cx="20" cy="21" r="1"/>
-        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-      </svg>
-      <span class="cart-badge">2</span>
-    </div>
+    <h2>Categorias</h2>
+    <svg class="cart-icon" onclick="goTo('carrinho')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="9" cy="21" r="1"/>
+      <circle cx="20" cy="21" r="1"/>
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+    </svg>
   </div>
-  <div class="search-box">
-    <input type="text" id="searchCat" placeholder="Buscar categorias...">
-    <button class="search-btn">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <circle cx="11" cy="11" r="8"/>
-        <path d="m21 21-4.3-4.3"/>
-      </svg>
-    </button>
+
+  <div class="cat-tabs">
+    <div class="cat-tab active" id="tabCategorias">Categorias</div>
+    <div class="cat-tab" id="tabSubcategorias">Subcategorias</div>
   </div>
-  <div class="cat-grid" id="catGrid"></div>
-  <div class="subcat-section">
-    <h3>SUBCATEGORIAS EM DESTAQUE</h3>
-    <div class="subcat-grid" id="subcatGrid"></div>
+
+  <div id="contentCategorias">
+    <div class="cat-list" id="catList"></div>
   </div>
+
+  <div id="contentSubcategorias" class="hidden">
+    <div class="cat-list" id="subcatList"></div>
+  </div>
+
   <div class="bottom-nav">
     <div class="nav-item" onclick="goTo('home')">
       <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
       </svg>
-      <span>Início</span>
+      <span>Home</span>
     </div>
     <div class="nav-item active">
       <svg fill="currentColor" viewBox="0 0 24 24">
         <path d="M4 6h16M4 12h16M4 18h16"/>
       </svg>
-      <span>Categorias</span>
+      <span>Loja</span>
     </div>
     <div class="nav-item" onclick="goTo('carrinho')">
       <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -329,23 +319,19 @@ let mode = 'login';
 let justLoggedIn = false;
 
 const categorias = [
-  {nome:'GAMES', img:'https://images.unsplash.com/photo-1612287230202-1ff1d85dfe14?w=400', sub:'Ver subcategorias'},
-  {nome:'ASSINATURAS', img:'https://images.unsplash.com/photo-1634942537034-2531766768d5?w=400', sub:'Ver subcategorias'},
-  {nome:'REDES SOCIAIS', img:'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=400', sub:'Ver subcategorias'},
-  {nome:'GIFT CARDS', img:'https://images.unsplash.com/photo-1556740738-b6a63e27c4df?w=400', sub:'Ver subcategorias'},
-  {nome:'PAINÉIS SMM', img:'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400', sub:'Ver subcategorias'},
-  {nome:'CONTAS PREMIUM', img:'https://images.unsplash.com/photo-1551650975-0dd04a55e0d6?w=400', sub:'Ver subcategorias'}
+  {nome:'Games', desc:'Produtos relacionados a jogos', icon:'🎮', color:'#4f46e5'},
+  {nome:'Streaming', desc:'Netflix, Spotify, Disney+ e mais', icon:'N', color:'#e50914'},
+  {nome:'Redes Sociais', desc:'Seguidores, curtidas e views', icon:'F', color:'#1877f2'},
+  {nome:'Gift Cards', desc:'Cartões presente digitais', icon:'🎁', color:'#a855f7'},
+  {nome:'Apps', desc:'Aplicativos premium', icon:'π', color:'#3b82f6'},
+  {nome:'VIP', desc:'Vantagens exclusivas', icon:'⭐', color:'#f59e0b'}
 ];
 
 const subcategorias = [
-  {nome:'Free Fire', img:'https://images.unsplash.com/photo-1512578047-dfb367046420?w=200'},
-  {nome:'Roblox', img:'https://images.unsplash.com/photo-1588497850257-1745bbaca3b7?w=200'},
-  {nome:'Fortnite', img:'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=200'},
-  {nome:'PUBG', img:'https://images.unsplash.com/photo-1603484477859-abe6a73f4e6a?w=200'}
-];
-
-const produtosTeste = [
-  {nome:'Netflix Premium', preco:'R$ 25,90', desc:'1 mês', img:'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=400'}
+  {nome:'Free Fire', desc:'Diamantes e passes', icon:'🔥', color:'#ff4500'},
+  {nome:'Roblox', desc:'Robux e itens', icon:'🎮', color:'#00a2ff'},
+  {nome:'Fortnite', desc:'V-Bucks e skins', icon:'🎯', color:'#9b59b6'},
+  {nome:'PUBG', desc:'UC e passes', icon:'🔫', color:'#f39c12'}
 ];
 
 function handleRoute(){
@@ -364,30 +350,28 @@ function updateUserUI(user){
 }
 
 function renderHomeDestaques(){
-  const homeCat = document.getElementById('homeCatGrid');
+  const homeCat = document.getElementById('homeCatList');
   if(homeCat){
-    const cat = categorias[0];
-    homeCat.innerHTML = `
-      <div class="cat-card" onclick="openCategoria('${cat.nome}')">
-        <img src="${cat.img}" alt="${cat.nome}">
+    homeCat.innerHTML = categorias.slice(0,2).map(cat => `
+      <div class="cat-item" onclick="openCategoria('${cat.nome}')">
+        <div class="cat-icon" style="background:${cat.color}20;color:${cat.color}">${cat.icon}</div>
         <div class="cat-info">
           <h4>${cat.nome}</h4>
-          <p>${cat.sub}</p>
+          <p>${cat.desc}</p>
         </div>
       </div>
-    `;
+    `).join('');
   }
 
   const homeProd = document.getElementById('homeProdGrid');
   if(homeProd){
-    const p = produtosTeste[0];
     homeProd.innerHTML = `
-      <div class="prod-card" onclick="alert('Produto: ${p.nome}\\nPreço: ${p.preco}')">
-        <img src="${p.img}" alt="${p.nome}">
+      <div class="prod-card" onclick="alert('Produto: Netflix Premium\\nPreço: R$ 25,90')">
+        <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=400" alt="Netflix">
         <div class="prod-info">
-          <h4>${p.nome}</h4>
-          <p>${p.desc}</p>
-          <div class="prod-price">${p.preco}</div>
+          <h4>Netflix Premium</h4>
+          <p>1 mês</p>
+          <div class="prod-price">R$ 25,90</div>
         </div>
       </div>
     `;
@@ -395,29 +379,45 @@ function renderHomeDestaques(){
 }
 
 function renderCategorias(){
-  const grid = document.getElementById('catGrid');
-  if(!grid) return;
-  grid.innerHTML = categorias.map(cat => `
-    <div class="cat-card" onclick="openCategoria('${cat.nome}')">
-      <img src="${cat.img}" alt="${cat.nome}">
+  const list = document.getElementById('catList');
+  list.innerHTML = categorias.map(cat => `
+    <div class="cat-item" onclick="openCategoria('${cat.nome}')">
+      <div class="cat-icon" style="background:${cat.color}20;color:${cat.color}">${cat.icon}</div>
       <div class="cat-info">
         <h4>${cat.nome}</h4>
-        <p>${cat.sub}</p>
+        <p>${cat.desc}</p>
       </div>
     </div>
   `).join('');
 
-  const subGrid = document.getElementById('subcatGrid');
-  subGrid.innerHTML = subcategorias.map(sub => `
-    <div class="subcat-card" onclick="openSubcategoria('${sub.nome}')">
-      <img src="${sub.img}" alt="${sub.nome}">
-      <span>${sub.nome}</span>
+  const sublist = document.getElementById('subcatList');
+  sublist.innerHTML = subcategorias.map(sub => `
+    <div class="cat-item" onclick="openSubcategoria('${sub.nome}')">
+      <div class="cat-icon" style="background:${sub.color}20;color:${sub.color}">${sub.icon}</div>
+      <div class="cat-info">
+        <h4>${sub.nome}</h4>
+        <p>${sub.desc}</p>
+      </div>
     </div>
   `).join('');
 }
 
 function openCategoria(nome){alert('Abrir categoria: ' + nome);}
 function openSubcategoria(nome){alert('Abrir subcategoria: ' + nome);}
+
+document.getElementById('tabCategorias').onclick = () => {
+  document.getElementById('tabCategorias').classList.add('active');
+  document.getElementById('tabSubcategorias').classList.remove('active');
+  document.getElementById('contentCategorias').classList.remove('hidden');
+  document.getElementById('contentSubcategorias').classList.add('hidden');
+}
+
+document.getElementById('tabSubcategorias').onclick = () => {
+  document.getElementById('tabSubcategorias').classList.add('active');
+  document.getElementById('tabCategorias').classList.remove('active');
+  document.getElementById('contentSubcategorias').classList.remove('hidden');
+  document.getElementById('contentCategorias').classList.add('hidden');
+}
 
 onAuthStateChanged(auth, (user) => {
   if(user &&!justLoggedIn){
@@ -487,20 +487,6 @@ function showError(msg, type='error'){
 }
 
 function logout(){signOut(auth);}
-
-document.getElementById('searchCat')?.addEventListener('input', (e)=>{
-  const q = e.target.value.toLowerCase();
-  const filtered = categorias.filter(c => c.nome.toLowerCase().includes(q));
-  document.getElementById('catGrid').innerHTML = filtered.map(cat => `
-    <div class="cat-card" onclick="openCategoria('${cat.nome}')">
-      <img src="${cat.img}" alt="${cat.nome}">
-      <div class="cat-info">
-        <h4>${cat.nome}</h4>
-        <p>${cat.sub}</p>
-      </div>
-    </div>
-  `).join('');
-});
 
 window.addEventListener('hashchange', handleRoute);
 window.addEventListener('load', handleRoute);
