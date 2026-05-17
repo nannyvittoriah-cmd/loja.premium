@@ -309,7 +309,7 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, reload } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -358,7 +358,8 @@ function handleRoute(){
 
 function goTo(page){window.location.hash = page;}
 
-function updateUserUI(user){
+async function updateUserUI(user){
+  await reload(user);
   const name = user.displayName || user.email.split('@')[0];
   document.getElementById('userName').innerText = name;
   document.getElementById('profileName').innerText = name;
