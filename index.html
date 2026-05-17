@@ -11,12 +11,13 @@
   --neon:#a855f7;--text:#fff;--text-2:#9ca3af;--text-3:#6b7280;--error:#ef4444;
   --success:#10b981;--warning:#f59e0b;
 }
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent;}
 body{background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;overflow-x:hidden;}
 .screen{display:none;}
 .screen.active{display:block;}
 .hidden{display:none;}
-.btn{width:100%;height:38px;background:var(--purple);border:none;border-radius:9px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;transition:.2s;box-shadow:0 0 15px rgba(124,58,237,0.4);}
+button{cursor:pointer;}
+.btn{width:100%;height:38px;background:var(--purple);border:none;border-radius:9px;color:#fff;font-size:12px;font-weight:600;transition:.2s;box-shadow:0 0 15px rgba(124,58,237,0.4);}
 .btn:active{transform:scale(0.98);}
 .btn:disabled{opacity:0.6;cursor:not-allowed;}
 .btn-secondary{background:var(--card-2);border:1px solid #2a2a35;}
@@ -67,7 +68,7 @@ body{background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;over
 .drawer.active{left:0;}
 .drawer-header{display:flex;justify-content:space-between;align-items:center;padding:16px 14px;border-bottom:1px solid #222;}
 .drawer-menu{flex:1;overflow-y:auto;padding:8px 0;}
-.drawer-item{display:flex;align-items:center;gap:12px;padding:12px 16px;color:var(--text-2);font-size:12px;font-weight:500;cursor:pointer;}
+.drawer-item{display:flex;align-items:center;gap:12px;padding:12px 16px;color:var(--text-2);font-size:12px;font-weight:500;cursor:pointer;position:relative;z-index:101;}
 .drawer-item:hover{background:rgba(124,58,237,0.1);color:var(--purple-light);}
 .drawer-item.admin{color:var(--warning);}
 
@@ -81,11 +82,11 @@ body{background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;over
 .admin-logo h1{font-size:14px;font-weight:700;color:#fff;}
 .admin-label{font-size:8px;color:#6b7280;padding:0 16px;margin-bottom:8px;letter-spacing:1px;}
 .admin-menu{display:flex;flex-direction:column;gap:2px;}
-.admin-menu-item{display:flex;align-items:center;gap:10px;padding:10px 16px;color:#9ca3af;font-size:11px;cursor:pointer;}
+.admin-menu-item{display:flex;align-items:center;gap:10px;padding:10px 16px;color:#9ca3af;font-size:11px;cursor:pointer;position:relative;z-index:202;}
 .admin-menu-item:hover{background:rgba(124,58,237,0.1);color:#fff;}
 .admin-menu-item.active{background:#7c3aed;color:#fff;border-radius:6px;margin:0 8px;padding:10px 8px;}
 .admin-content{width:100%;height:100vh;padding:20px;overflow-y:auto;position:relative;}
-.admin-close{position:absolute;top:16px;right:16px;width:22px;height:22px;color:#9ca3af;cursor:pointer;background:#15151d;border:1px solid #2a2a35;border-radius:6px;padding:4px;}
+.admin-close{position:absolute;top:16px;right:16px;width:22px;height:22px;color:#9ca3af;cursor:pointer;background:#15151d;border:1px solid #2a2a35;border-radius:6px;padding:4px;z-index:203;}
 .table{width:100%;border-collapse:collapse;margin-top:12px;}
 .table th,.table td{padding:8px;text-align:left;border-bottom:1px solid #2a2a35;font-size:11px;}
 .table th{color:var(--text-2);font-weight:600;}
@@ -124,10 +125,9 @@ body{background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;over
         <h1>PRIME</h1><span>STORE</span>
       </div>
 
-      <!-- LOGIN FORM -->
       <div id="loginForm">
         <h2>Login</h2>
-        <p class="subtitle" style="font-size:10px;color:var(--text-2);margin-bottom:16px;">Entre na sua conta</p>
+        <p style="font-size:10px;color:var(--text-2);margin-bottom:16px;">Entre na sua conta</p>
         <div class="error" id="loginError"></div>
         <div class="success" id="loginSuccess"></div>
 
@@ -146,10 +146,9 @@ body{background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;over
         </div>
       </div>
 
-      <!-- REGISTER FORM -->
       <div id="registerForm" class="hidden">
         <h2>Cadastro</h2>
-        <p class="subtitle" style="font-size:10px;color:var(--text-2);margin-bottom:16px;">Crie sua conta</p>
+        <p style="font-size:10px;color:var(--text-2);margin-bottom:16px;">Crie sua conta</p>
         <div class="error" id="registerError"></div>
         <div class="success" id="registerSuccess"></div>
 
@@ -183,7 +182,7 @@ body{background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;over
     <div style="width:20px;"></div>
   </div>
   <div class="search-box">
-    <input type="text" id="searchInput" placeholder="Buscar produtos..." onkeyup="searchProducts()">
+    <input type="text" id="searchInput" placeholder="Buscar produtos..." oninput="searchProducts()">
   </div>
   <div class="section">
     <div class="section-header"><h3>Categorias</h3></div>
@@ -249,8 +248,8 @@ body{background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;over
 </div>
 
 <!-- MODAL -->
-<div class="modal" id="modal">
-  <div class="modal-content" id="modalContent"></div>
+<div class="modal" id="modal" onclick="closeModal()">
+  <div class="modal-content" onclick="event.stopPropagation()"></div>
 </div>
 
 <script type="module">
@@ -276,7 +275,26 @@ let allCategories = [];
 let allOrders = [];
 let allUsers = [];
 
-// AUTH STATE
+// CORREÇÃO: Usar addEventListener ao invés de onclick inline em elementos dinâmicos
+window.openDrawer = function(){
+  document.getElementById('drawer').classList.add('active');
+  document.getElementById('drawerOverlay').classList.add('active');
+}
+window.closeDrawer = function(){
+  document.getElementById('drawer').classList.remove('active');
+  document.getElementById('drawerOverlay').classList.remove('active');
+}
+
+window.showRegister = function(){
+  document.getElementById('loginForm').classList.add('hidden');
+  document.getElementById('registerForm').classList.remove('hidden');
+}
+window.showLogin = function(){
+  document.getElementById('registerForm').classList.add('hidden');
+  document.getElementById('loginForm').classList.remove('hidden');
+}
+
+// AUTH
 onAuthStateChanged(auth, async (user) => {
   if(user){
     currentUser = user;
@@ -295,18 +313,7 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// TOGGLE AUTH FORMS
-window.showRegister = function(){
-  document.getElementById('loginForm').classList.add('hidden');
-  document.getElementById('registerForm').classList.remove('hidden');
-}
-window.showLogin = function(){
-  document.getElementById('registerForm').classList.add('hidden');
-  document.getElementById('loginForm').classList.remove('hidden');
-}
-
-// LOGIN
-document.getElementById('loginBtn').onclick = async function(){
+document.getElementById('loginBtn').addEventListener('click', async function(){
   const email = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value;
   if(!email ||!password){showError('loginError','Preencha todos os campos');return;}
@@ -317,10 +324,9 @@ document.getElementById('loginBtn').onclick = async function(){
     showError('loginError','Email ou senha incorretos');
     this.disabled = false;
   }
-}
+});
 
-// REGISTER
-document.getElementById('registerBtn').onclick = async function(){
+document.getElementById('registerBtn').addEventListener('click', async function(){
   const name = document.getElementById('registerName').value.trim();
   const email = document.getElementById('registerEmail').value.trim();
   const password = document.getElementById('registerPassword').value;
@@ -337,12 +343,11 @@ document.getElementById('registerBtn').onclick = async function(){
     showError('registerError','Erro ao criar conta');
     this.disabled = false;
   }
-}
+});
 
 function showError(id, msg){
   document.getElementById(id).innerText = msg;
   document.getElementById(id).style.display = 'block';
-  document.getElementById(id).nextElementSibling?.style && (document.getElementById(id).nextElementSibling.style.display = 'none');
 }
 function showSuccess(id, msg){
   document.getElementById(id).innerText = msg;
@@ -353,7 +358,6 @@ window.logout = async function(){
   await signOut(auth);
 }
 
-// DATA LOAD
 async function loadData(){
   const catSnap = await getDocs(collection(db, 'categorias'));
   allCategories = [];
@@ -370,14 +374,14 @@ async function loadData(){
 function renderHome(){
   document.getElementById('catGrid').innerHTML = allCategories.map(cat => `
     <div class="cat-item" onclick="openCategoria('${cat.id}')">
-      <img src="${cat.img || 'https://via.placeholder.com/100'}">
+      <img src="${cat.img || 'https://via.placeholder.com/100'}" onerror="this.src='https://via.placeholder.com/100'">
       <span>${cat.nome}</span>
     </div>
   `).join('');
 
   document.getElementById('prodGrid').innerHTML = allProducts.slice(0,6).map(prod => `
     <div class="prod-item" onclick="addToCart('${prod.id}')">
-      <img src="${prod.img || 'https://via.placeholder.com/100'}">
+      <img src="${prod.img || 'https://via.placeholder.com/100'}" onerror="this.src='https://via.placeholder.com/100'">
       <div class="prod-info">
         <h4>${prod.nome}</h4>
         <div class="prod-price">R$ ${prod.preco}</div>
@@ -391,7 +395,7 @@ window.searchProducts = function(){
   const filtered = allProducts.filter(p => p.nome.toLowerCase().includes(term));
   document.getElementById('prodGrid').innerHTML = filtered.map(prod => `
     <div class="prod-item" onclick="addToCart('${prod.id}')">
-      <img src="${prod.img || 'https://via.placeholder.com/100'}">
+      <img src="${prod.img || 'https://via.placeholder.com/100'}" onerror="this.src='https://via.placeholder.com/100'">
       <div class="prod-info">
         <h4>${prod.nome}</h4>
         <div class="prod-price">R$ ${prod.preco}</div>
@@ -400,7 +404,6 @@ window.searchProducts = function(){
   `).join('');
 }
 
-// LOJA
 window.openLoja = function(){
   document.getElementById('screen-home').classList.remove('active');
   document.getElementById('screen-loja').classList.add('active');
@@ -420,7 +423,7 @@ window.openCategoria = function(catId){
 function renderLoja(products){
   document.getElementById('lojaGrid').innerHTML = products.map(prod => `
     <div class="prod-item" onclick="addToCart('${prod.id}')">
-      <img src="${prod.img || 'https://via.placeholder.com/100'}">
+      <img src="${prod.img || 'https://via.placeholder.com/100'}" onerror="this.src='https://via.placeholder.com/100'">
       <div class="prod-info">
         <h4>${prod.nome}</h4>
         <div class="prod-price">R$ ${prod.preco}</div>
@@ -429,11 +432,10 @@ function renderLoja(products){
   `).join('');
 }
 
-// CARRINHO
 window.addToCart = function(prodId){
   const prod = allProducts.find(p => p.id === prodId);
   cart.push(prod);
-  alert('Produto adicionado ao carrinho!');
+  alert('Produto adicionado!');
 }
 
 window.openCart = function(){
@@ -452,12 +454,12 @@ function renderCart(){
     total += parseFloat(item.preco);
     return `
       <div style="display:flex;gap:10px;margin-bottom:10px;background:var(--card);padding:10px;border-radius:8px;">
-        <img src="${item.img}" style="width:50px;height:50px;border-radius:6px;">
+        <img src="${item.img}" style="width:50px;height:50px;border-radius:6px;" onerror="this.src='https://via.placeholder.com/50'">
         <div style="flex:1;">
           <h4 style="font-size:12px;">${item.nome}</h4>
           <p style="color:var(--purple-light);font-weight:600;">R$ ${item.preco}</p>
         </div>
-        <button onclick="removeFromCart(${i})" style="background:none;border:none;color:var(--error);cursor:pointer;">X</button>
+        <button onclick="removeFromCart(${i})" style="background:none;border:none;color:var(--error);cursor:pointer;font-size:16px;">×</button>
       </div>
     `;
   }).join('') + `<h3 style="text-align:right;margin-top:12px;">Total: R$ ${total.toFixed(2)}</h3>`;
@@ -484,7 +486,6 @@ window.finalizarPedido = async function(){
   openPedidos();
 }
 
-// PEDIDOS
 function loadOrders(){
   if(!currentUser) return;
   const q = query(collection(db, 'pedidos'), where('userId','==',currentUser.uid), orderBy('createdAt','desc'));
@@ -526,17 +527,6 @@ window.goBack = function(){
   document.getElementById('screen-home').classList.add('active');
 }
 
-// DRAWER
-window.openDrawer = function(){
-  document.getElementById('drawer').classList.add('active');
-  document.getElementById('drawerOverlay').classList.add('active');
-}
-window.closeDrawer = function(){
-  document.getElementById('drawer').classList.remove('active');
-  document.getElementById('drawerOverlay').classList.remove('active');
-}
-
-// ADMIN
 window.openAdmin = function(){
   document.getElementById('screen-home').classList.remove('active');
   document.getElementById('screen-admin').classList.add('active');
@@ -549,7 +539,7 @@ function openAdminMenu(){
   document.getElementById('adminOverlay').classList.add('active');
 }
 
-function closeAdminMenu(){
+window.closeAdminMenu = function(){
   document.getElementById('adminSidebar').classList.remove('active');
   document.getElementById('adminOverlay').classList.remove('active');
 }
@@ -583,7 +573,7 @@ window.adminProdutos = function(){
         <td>${p.nome}</td>
         <td>R$ ${p.preco}</td>
         <td>
-          <button class="btn-secondary" style="padding:4px 8px;font-size:10px;" onclick="openProdutoModal('${p.id}')">Editar</button>
+          <button class="btn-secondary" style="padding:4px 8px;font-size:10px;margin-right:4px;" onclick="openProdutoModal('${p.id}')">Editar</button>
           <button class="btn-danger" style="padding:4px 8px;font-size:10px;" onclick="deleteProduto('${p.id}')">Del</button>
         </td>
       </tr>`).join('')}</tbody>
@@ -594,7 +584,7 @@ window.adminProdutos = function(){
 window.openProdutoModal = function(id=null){
   const prod = id? allProducts.find(p => p.id === id) : {};
   document.getElementById('modal').classList.add('active');
-  document.getElementById('modalContent').innerHTML = `
+  document.getElementById('modal').querySelector('.modal-content').innerHTML = `
     <h3 style="margin-bottom:12px;">${id? 'Editar' : 'Novo'} Produto</h3>
     <input type="text" id="prodNome" placeholder="Nome" value="${prod.nome || ''}" style="width:100%;margin-bottom:8px;padding:8px;background:var(--card-2);border:1px solid #2a2a35;border-radius:6px;color:#fff;">
     <input type="text" id="prodPreco" placeholder="Preço" value="${prod.preco || ''}" style="width:100%;margin-bottom:8px;padding:8px;background:var(--card-2);border:1px solid #2a2a35;border-radius:6px;color:#fff;">
@@ -606,7 +596,7 @@ window.openProdutoModal = function(id=null){
       <button class="btn" onclick="saveProduto('${id || ''}')">Salvar</button>
       <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
     </div>
-  `;
+      `;
 }
 
 window.saveProduto = async function(id){
@@ -614,7 +604,7 @@ window.saveProduto = async function(id){
     nome: document.getElementById('prodNome').value,
     preco: document.getElementById('prodPreco').value,
     img: document.getElementById('prodImg').value,
-    categoriaId: document.getElementByIdprodCat").value
+    categoriaId: document.getElementById('prodCat').value
   };
   if(id){
     await updateDoc(doc(db,'produtos',id),data);
@@ -656,7 +646,7 @@ window.adminCategorias = function(){
 
 window.openCategoriaModal = function(){
   document.getElementById('modal').classList.add('active');
-  document.getElementById('modalContent').innerHTML = `
+  document.getElementById('modal').querySelector('.modal-content').innerHTML = `
     <h3 style="margin-bottom:12px;">Nova Categoria</h3>
     <input type="text" id="catNome" placeholder="Nome" style="width:100%;margin-bottom:8px;padding:8px;background:var(--card-2);border:1px solid #2a2a35;border-radius:6px;color:#fff;">
     <input type="text" id="catImg" placeholder="URL Imagem" style="width:100%;margin-bottom:12px;padding:8px;background:var(--card-2);border:1px solid #2a2a35;border-radius:6px;color:#fff;">
