@@ -7,14 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#000;
-  --card:#0f0f0f;
-  --card-2:#1a1a1a;
-  --border:#2a2a2a;
-  --purple:#8b5cf6;
-  --text:#fff;
-  --text-2:#9ca3af;
-  --text-3:#6b7280;
+  --bg:#000;--card:#0f0f0f;--card-2:#1a1a1a;--border:#2a2a2a;
+  --purple:#8b5cf6;--text:#fff;--text-2:#9ca3af;--text-3:#6b7280;
 }
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
 body{background:var(--bg);color:var(--text);}
@@ -57,11 +51,9 @@ body{background:var(--bg);color:var(--text);}
 .search-btn{width:44px;height:44px;background:var(--purple);border:none;border-radius:10px;display:grid;place-items:center;cursor:pointer;}
 .search-btn svg{width:20px;height:20px;color:#fff;}
 
-/* CATEGORIAS - 2 colunas mobile, 3 colunas desktop */
+/* CATEGORIAS */
 .cat-grid{padding:0 20px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
-@media(min-width:768px){
- .cat-grid{grid-template-columns:repeat(3,1fr);}
-}
+@media(min-width:768px){.cat-grid{grid-template-columns:repeat(3,1fr);}}
 .cat-card{background:var(--card-2);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:.2s;}
 .cat-card:hover{border-color:var(--purple);transform:translateY(-2px);}
 .cat-icon{width:36px;height:36px;color:var(--purple);flex-shrink:0;}
@@ -78,13 +70,24 @@ body{background:var(--bg);color:var(--text);}
 .subcat-card img{width:100%;aspect-ratio:1;border-radius:12px;object-fit:cover;margin-bottom:6px;}
 .subcat-card span{font-size:11px;color:var(--text-2);}
 
+/* DESTAQUES HOME */
+.section{padding:20px;}
+.section h3{font-size:14px;font-weight:700;margin-bottom:12px;color:var(--text-2);}
+.prod-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+@media(min-width:768px){.prod-grid{grid-template-columns:repeat(3,1fr);}}
+.prod-card{background:var(--card-2);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:.2s;}
+.prod-card:hover{border-color:var(--purple);}
+.prod-card img{width:100%;height:120px;object-fit:cover;background:#000;}
+.prod-info{padding:12px;}
+.prod-info h4{font-size:14px;font-weight:600;margin-bottom:4px;}
+.prod-info p{font-size:12px;color:var(--text-2);}
+.prod-price{font-size:15px;font-weight:700;color:var(--purple);margin-top:6px;}
+
 /* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:8px 0;}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;color:var(--text-3);cursor:pointer;position:relative;padding:4px 0;}
 .nav-item.active{color:var(--purple);}
 .nav-item svg{width:22px;height:22px;}
-
-/* SIMPLE PAGES */
 .simple-page{padding:40px 20px;text-align:center;color:var(--text-2);}
 .simple-page h2{font-size:18px;color:var(--text);margin-bottom:10px;}
 </style>
@@ -126,6 +129,69 @@ body{background:var(--bg);color:var(--text);}
         </div>
       </div>
       <button class="btn" id="actionBtn">ENTRAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="screen" id="screen-home">
+  <div class="topbar">
+    <h2>Olá, <span id="userName" style="color:var(--purple)">User</span></h2>
+    <div class="cart-icon" onclick="goTo('carrinho')">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="9" cy="21" r="1"/>
+        <circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+      </svg>
+      <span class="cart-badge">2</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Categoria em destaque</h3>
+    <div class="cat-grid" id="homeCatGrid"></div>
+  </div>
+
+  <div class="section">
+    <h3>Produto em destaque</h3>
+    <div class="prod-grid" id="homeProdGrid"></div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item active">
+      <svg fill="currentColor" viewBox="0 0 24 24">
+        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+      </svg>
+      <span>Início</span>
+    </div>
+    <div class="nav-item" onclick="goTo('categorias')">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+      <span>Categorias</span>
+    </div>
+    <div class="nav-item" onclick="goTo('carrinho')">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="9" cy="21" r="1"/>
+        <circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+      </svg>
+      <span>Carrinho</span>
+      <span class="nav-badge">2</span>
+    </div>
+    <div class="nav-item" onclick="goTo('pedidos')">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+        <rect x="9" y="3" width="6" height="4" rx="1"/>
+      </svg>
+      <span>Pedidos</span>
+    </div>
+    <div class="nav-item" onclick="goTo('perfil')">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+      <span>Perfil</span>
     </div>
   </div>
 </div>
@@ -199,65 +265,7 @@ body{background:var(--bg);color:var(--text);}
   </div>
 </div>
 
-<!-- HOME -->
-<div class="screen" id="screen-home">
-  <div class="topbar">
-    <h2>Olá, <span id="userName" style="color:var(--purple)">User</span></h2>
-    <div class="cart-icon" onclick="goTo('carrinho')">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <circle cx="9" cy="21" r="1"/>
-        <circle cx="20" cy="21" r="1"/>
-        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-      </svg>
-      <span class="cart-badge">2</span>
-    </div>
-  </div>
-  <div class="simple-page">
-    <h2>Home</h2>
-    <p>Bem-vindo à Premium Store</p>
-    <button class="btn" style="margin-top:20px;max-width:200px" onclick="goTo('categorias')">Ver Categorias</button>
-    <button class="btn" style="margin-top:10px;max-width:200px;background:#1a1a1a" onclick="logout()">Sair</button>
-  </div>
-  <div class="bottom-nav">
-    <div class="nav-item active">
-      <svg fill="currentColor" viewBox="0 0 24 24">
-        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-      </svg>
-      <span>Início</span>
-    </div>
-    <div class="nav-item" onclick="goTo('categorias')">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
-      <span>Categorias</span>
-    </div>
-    <div class="nav-item" onclick="goTo('carrinho')">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <circle cx="9" cy="21" r="1"/>
-        <circle cx="20" cy="21" r="1"/>
-        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-      </svg>
-      <span>Carrinho</span>
-      <span class="nav-badge">2</span>
-    </div>
-    <div class="nav-item" onclick="goTo('pedidos')">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
-        <rect x="9" y="3" width="6" height="4" rx="1"/>
-      </svg>
-      <span>Pedidos</span>
-    </div>
-    <div class="nav-item" onclick="goTo('perfil')">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-        <circle cx="12" cy="7" r="4"/>
-      </svg>
-      <span>Perfil</span>
-    </div>
-  </div>
-</div>
-
-<!-- OUTRAS TELAS -->
+<!-- CARRINHO -->
 <div class="screen" id="screen-carrinho">
   <div class="topbar">
     <svg class="back-btn" onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
@@ -267,6 +275,7 @@ body{background:var(--bg);color:var(--text);}
   <div class="simple-page"><h2>Carrinho vazio</h2><p>Adicione produtos na loja</p></div>
 </div>
 
+<!-- PEDIDOS -->
 <div class="screen" id="screen-pedidos">
   <div class="topbar">
     <svg class="back-btn" onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
@@ -276,6 +285,7 @@ body{background:var(--bg);color:var(--text);}
   <div class="simple-page"><h2>Sem pedidos</h2><p>Você ainda não fez nenhum pedido</p></div>
 </div>
 
+<!-- PERFIL -->
 <div class="screen" id="screen-perfil">
   <div class="topbar">
     <svg class="back-btn" onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
@@ -325,16 +335,56 @@ const subcategorias = [
   {nome:'PUBG', img:'https://i.imgur.com/9Q2bZ8L.png'}
 ];
 
-// Router
+const produtosTeste = [
+  {nome:'Netflix Premium', preco:'R$ 25,90', desc:'1 mês', img:'https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg'}
+];
+
 function handleRoute(){
   const hash = window.location.hash.slice(1) || 'login';
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + hash)?.classList.add('active');
   if(hash === 'categorias') renderCategorias();
+  if(hash === 'home') renderHomeDestaques();
 }
 
-function goTo(page){
-  window.location.hash = page;
+function goTo(page){window.location.hash = page;}
+
+function renderHomeDestaques(){
+  // Categoria destaque - só a primeira
+  const homeCat = document.getElementById('homeCatGrid');
+  if(homeCat){
+    const cat = categorias[0];
+    homeCat.innerHTML = `
+      <div class="cat-card" onclick="openCategoria('${cat.nome}')">
+        <svg class="cat-icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path d="${cat.icon}"/>
+        </svg>
+        <div class="cat-info">
+          <h4>${cat.nome}</h4>
+          <p>${cat.sub}</p>
+        </div>
+        <svg class="cat-arrow" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M9 5l7 7-7 7"/>
+        </svg>
+      </div>
+    `;
+  }
+
+  // Produto destaque
+  const homeProd = document.getElementById('homeProdGrid');
+  if(homeProd){
+    const p = produtosTeste[0];
+    homeProd.innerHTML = `
+      <div class="prod-card" onclick="alert('Produto: ${p.nome}\\nPreço: ${p.preco}')">
+        <img src="${p.img}" alt="${p.nome}">
+        <div class="prod-info">
+          <h4>${p.nome}</h4>
+          <p>${p.desc}</p>
+          <div class="prod-price">${p.preco}</div>
+        </div>
+      </div>
+    `;
+  }
 }
 
 function renderCategorias(){
@@ -367,7 +417,6 @@ function renderCategorias(){
 function openCategoria(nome){alert('Abrir categoria: ' + nome);}
 function openSubcategoria(nome){alert('Abrir subcategoria: ' + nome);}
 
-// Auth
 onAuthStateChanged(auth, (user) => {
   if(user){
     document.getElementById('userName').innerText = user.displayName || user.email.split('@')[0];
@@ -382,7 +431,6 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// Login/Register UI
 document.getElementById('tabLogin').onclick = () => {
   mode = 'login';
   document.getElementById('tabLogin').classList.add('active');
@@ -436,9 +484,7 @@ function showError(msg, type='error'){
   setTimeout(()=>{e.style.display='none';},3000);
 }
 
-function logout(){
-  signOut(auth);
-}
+function logout(){signOut(auth);}
 
 document.getElementById('searchCat')?.addEventListener('input', (e)=>{
   const q = e.target.value.toLowerCase();
