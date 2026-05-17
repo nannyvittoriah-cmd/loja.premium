@@ -22,7 +22,7 @@ body{background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;over
 .btn-secondary{background:var(--card-2);border:1px solid #2a2a35;}
 .btn-danger{background:var(--error);}
 
-/* LOGIN */
+/* LOGIN/CADASTRO */
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:12px;}
 .login-card{width:100%;max-width:300px;background:var(--card);border-radius:14px;padding:20px 18px;box-shadow:0 0 20px rgba(168,85,247,0.2);}
 .logo{display:flex;flex-direction:column;align-items:center;margin-bottom:20px;}
@@ -35,6 +35,9 @@ body{background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;over
 .input-box:focus-within{border-color:var(--neon);box-shadow:0 0 8px rgba(168,85,247,0.3);}
 .input-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:11px;}
 .error{background:rgba(239,68,68,0.1);border:1px solid var(--error);color:var(--error);padding:7px;border-radius:7px;font-size:9px;margin-bottom:10px;display:none;}
+.success{background:rgba(16,185,129,0.1);border:1px solid var(--success);color:var(--success);padding:7px;border-radius:7px;font-size:9px;margin-bottom:10px;display:none;}
+.auth-switch{text-align:center;margin-top:12px;font-size:10px;color:var(--text-2);}
+.auth-switch a{color:var(--purple-light);cursor:pointer;text-decoration:none;}
 
 /* HOME */
 .home-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;}
@@ -112,24 +115,62 @@ body{background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;over
   </div>
 </div>
 
-<!-- LOGIN -->
-<div class="screen active" id="screen-login">
+<!-- LOGIN/CADASTRO -->
+<div class="screen active" id="screen-auth">
   <div class="login-wrap">
     <div class="login-card">
       <div class="logo">
         <svg viewBox="0 0 24 24" fill="#7c3aed"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>
         <h1>PRIME</h1><span>STORE</span>
       </div>
-      <div class="error" id="errorMsg"></div>
-      <div class="input-group">
-        <label>E-mail</label>
-        <div class="input-box"><input type="email" id="loginEmail"></div>
+
+      <!-- LOGIN FORM -->
+      <div id="loginForm">
+        <h2>Login</h2>
+        <p class="subtitle" style="font-size:10px;color:var(--text-2);margin-bottom:16px;">Entre na sua conta</p>
+        <div class="error" id="loginError"></div>
+        <div class="success" id="loginSuccess"></div>
+
+        <div class="input-group">
+          <label>E-mail</label>
+          <div class="input-box"><input type="email" id="loginEmail"></div>
+        </div>
+        <div class="input-group">
+          <label>Senha</label>
+          <div class="input-box"><input type="password" id="loginPassword"></div>
+        </div>
+        <button class="btn" id="loginBtn">Entrar</button>
+
+        <div class="auth-switch">
+          Não tem conta? <a onclick="showRegister()">Cadastre-se</a>
+        </div>
       </div>
-      <div class="input-group">
-        <label>Senha</label>
-        <div class="input-box"><input type="password" id="loginPassword"></div>
+
+      <!-- REGISTER FORM -->
+      <div id="registerForm" class="hidden">
+        <h2>Cadastro</h2>
+        <p class="subtitle" style="font-size:10px;color:var(--text-2);margin-bottom:16px;">Crie sua conta</p>
+        <div class="error" id="registerError"></div>
+        <div class="success" id="registerSuccess"></div>
+
+        <div class="input-group">
+          <label>Nome</label>
+          <div class="input-box"><input type="text" id="registerName"></div>
+        </div>
+        <div class="input-group">
+          <label>E-mail</label>
+          <div class="input-box"><input type="email" id="registerEmail"></div>
+        </div>
+        <div class="input-group">
+          <label>Senha</label>
+          <div class="input-box"><input type="password" id="registerPassword"></div>
+        </div>
+        <button class="btn" id="registerBtn">Cadastrar</button>
+
+        <div class="auth-switch">
+          Já tem conta? <a onclick="showLogin()">Fazer login</a>
+        </div>
       </div>
-      <button class="btn" id="loginBtn">Entrar</button>
     </div>
   </div>
 </div>
@@ -214,7 +255,7 @@ body{background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;over
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot, getDocs, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -235,13 +276,13 @@ let allCategories = [];
 let allOrders = [];
 let allUsers = [];
 
-// AUTH
+// AUTH STATE
 onAuthStateChanged(auth, async (user) => {
   if(user){
     currentUser = user;
-    document.getElementById('screen-login').classList.remove('active');
+    document.getElementById('screen-auth').classList.remove('active');
     document.getElementById('screen-home').classList.add('active');
-    document.getElementById('userName').innerText = user.email.split('@')[0];
+    document.getElementById('userName').innerText = user.displayName || user.email.split('@')[0];
     if(user.email === ADMIN_EMAIL){
       document.getElementById('menuAdm').classList.remove('hidden');
     }
@@ -249,27 +290,63 @@ onAuthStateChanged(auth, async (user) => {
   }else{
     currentUser = null;
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById('screen-login').classList.add('active');
+    document.getElementById('screen-auth').classList.add('active');
     document.getElementById('menuAdm').classList.add('hidden');
   }
 });
 
+// TOGGLE AUTH FORMS
+window.showRegister = function(){
+  document.getElementById('loginForm').classList.add('hidden');
+  document.getElementById('registerForm').classList.remove('hidden');
+}
+window.showLogin = function(){
+  document.getElementById('registerForm').classList.add('hidden');
+  document.getElementById('loginForm').classList.remove('hidden');
+}
+
+// LOGIN
 document.getElementById('loginBtn').onclick = async function(){
   const email = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value;
-  if(!email ||!password){showError('Preencha todos os campos');return;}
+  if(!email ||!password){showError('loginError','Preencha todos os campos');return;}
   this.disabled = true;
   try{
     await signInWithEmailAndPassword(auth, email, password);
   }catch(e){
-    showError('Email ou senha incorretos');
+    showError('loginError','Email ou senha incorretos');
     this.disabled = false;
   }
 }
 
-function showError(msg){
-  document.getElementById('errorMsg').innerText = msg;
-  document.getElementById('errorMsg').style.display = 'block';
+// REGISTER
+document.getElementById('registerBtn').onclick = async function(){
+  const name = document.getElementById('registerName').value.trim();
+  const email = document.getElementById('registerEmail').value.trim();
+  const password = document.getElementById('registerPassword').value;
+  if(!name ||!email ||!password){showError('registerError','Preencha todos os campos');return;}
+  if(password.length < 6){showError('registerError','Senha deve ter 6+ caracteres');return;}
+
+  this.disabled = true;
+  try{
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(userCredential.user, {displayName: name});
+    showSuccess('registerSuccess','Conta criada com sucesso!');
+    setTimeout(()=> showLogin(), 1500);
+  }catch(e){
+    showError('registerError','Erro ao criar conta');
+    this.disabled = false;
+  }
+}
+
+function showError(id, msg){
+  document.getElementById(id).innerText = msg;
+  document.getElementById(id).style.display = 'block';
+  document.getElementById(id).nextElementSibling?.style && (document.getElementById(id).nextElementSibling.style.display = 'none');
+}
+function showSuccess(id, msg){
+  document.getElementById(id).innerText = msg;
+  document.getElementById(id).style.display = 'block';
 }
 
 window.logout = async function(){
@@ -537,7 +614,7 @@ window.saveProduto = async function(id){
     nome: document.getElementById('prodNome').value,
     preco: document.getElementById('prodPreco').value,
     img: document.getElementById('prodImg').value,
-    categoriaId: document.getElementById('prodCat').value
+    categoriaId: document.getElementByIdprodCat").value
   };
   if(id){
     await updateDoc(doc(db,'produtos',id),data);
@@ -619,7 +696,7 @@ window.adminPedidos = function(){
       <tbody>${allOrders.map(o => `<tr>
         <td>${o.userEmail}</td>
         <td>R$ ${o.total}</td>
-        <td><span class="badge badge-${o'warning' : 'danger'}">${o.status}</span></td>
+        <td><span class="badge badge-${o.status === 'concluido'? 'success' : o.status === 'aguardando'? 'warning' : 'danger'}">${o.status}</span></td>
         <td>
           <select onchange="updatePedidoStatus('${o.id}', this.value)" style="background:var(--card-2);border:1px solid #2a2a35;border-radius:6px;color:#fff;padding:4px;font-size:10px;">
             <option value="aguardando" ${o.status==='aguardando'?'selected':''}>Aguardando</option>
@@ -664,4 +741,3 @@ window.goBackFromAdmin = function(){
 </script>
 </body>
 </html>
-  
