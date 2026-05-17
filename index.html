@@ -99,6 +99,7 @@ h2{font-size:16px;font-weight:600;margin-bottom:4px;}
 .cat-info{flex:1;}
 .cat-info h4{font-size:13px;font-weight:600;margin-bottom:3px;}
 .cat-info p{font-size:11px;color:var(--text-2);}
+.cat-card svg{margin-left:auto;}
 
 /* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid #222;display:flex;justify-content:space-around;padding:8px 0;}
@@ -402,18 +403,44 @@ const categorias = [
   {nome:'VIP', desc:'Vantagens exclusivas', img:'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=200'}
 ];
 
-const subcategorias = [
-  {nome:'Free Fire', desc:'Diamantes e passes', img:'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=200'},
-  {nome:'Roblox', desc:'Robux e itens', img:'https://images.unsplash.com/photo-1588497850257-1745bbaca3b7?w=200'},
-  {nome:'Fortnite', desc:'V-Bucks e skins', img:'https://images.unsplash.com/photo-1560253023-3ec5d502959f?w=200'},
-  {nome:'PUBG', desc:'UC e passes', img:'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=200'}
-];
+const subcategoriasPorCategoria = {
+  'Games': [
+    {nome:'Free Fire', desc:'Diamantes e passes', img:'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=200'},
+    {nome:'Roblox', desc:'Robux e itens', img:'https://images.unsplash.com/photo-1588497850257-1745bbaca3b7?w=200'},
+    {nome:'Fortnite', desc:'V-Bucks e skins', img:'https://images.unsplash.com/photo-1560253023-3ec5d502959f?w=200'},
+    {nome:'Valorant', desc:'Points e skins', img:'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=200'},
+    {nome:'Minecraft', desc:'Coins e itens', img:'https://images.unsplash.com/photo-1509198397868-b56eb7d05056?w=200'},
+    {nome:'Brawl Stars', desc:'Gems e passes', img:'https://images.unsplash.com/photo-1612287230202-1ff1d85dfe14?w=200'},
+    {nome:'Clash Royale', desc:'Gems e passes', img:'https://images.unsplash.com/photo-1612287230202-1ff1d85dfe14?w=200'},
+    {nome:'League of Legends', desc:'RP e skins', img:'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=200'}
+  ],
+  'Streaming': [
+    {nome:'Netflix', desc:'1 Mês, 3 Meses', img:'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=200'},
+    {nome:'Spotify', desc:'Premium Individual', img:'https://images.unsplash.com/photo-1614680376573-d13c9d51e3b2?w=200'},
+    {nome:'Disney+', desc:'1 Mês, 12 Meses', img:'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=200'}
+  ],
+  'Redes Sociais': [
+    {nome:'Instagram', desc:'Seguidores, Curtidas', img:'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=200'},
+    {nome:'TikTok', desc:'Seguidores, Views', img:'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=200'}
+  ],
+  'Gift Cards': [
+    {nome:'Google Play', desc:'R$ 10 a R$ 200', img:'https://images.unsplash.com/photo-1556740738-b6a63e27c4df?w=200'},
+    {nome:'Steam', desc:'R$ 20 a R$ 100', img:'https://images.unsplash.com/photo-1556740738-b6a63e27c4df?w=200'}
+  ],
+  'Apps': [
+    {nome:'Canva Pro', desc:'1 Mês, 12 Meses', img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=200'},
+    {nome:'CapCut Pro', desc:'1 Mês', img:'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=200'}
+  ],
+  'VIP': [
+    {nome:'VIP Mensal', desc:'Acesso ilimitado', img:'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=200'}
+  ]
+};
 
 const destaques = [
   {nome:'ROBUX', sub:'400 Robux', preco:'R$ 15,90', img:'https://images.unsplash.com/photo-1588497850257-1745bbaca3b7?w=200'},
   {nome:'NETFLIX', sub:'1 Mês', preco:'R$ 17,90', img:'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=200'},
   {nome:'SPOTIFY', sub:'Premium 1 Mês', preco:'R$ 10,90', img:'https://images.unsplash.com/photo-1614680376573-d13c9d51e3b2?w=200'}
-];
+};
 
 // Auth state
 onAuthStateChanged(auth, (user) => {
@@ -457,18 +484,25 @@ function renderDestaques(){
 window.openCategoriasPage = function(){
   document.getElementById('screen-home').classList.remove('active');
   document.getElementById('screen-categorias').classList.add('active');
+  document.querySelector('#screen-categorias.page-header h2').innerText = 'Categorias';
   renderCategoriasList();
-  renderSubcategoriasList();
-}
-
-window.goBack = function(){
-  document.getElementById('screen-categorias').classList.remove('active');
-  document.getElementById('screen-home').classList.add('active');
+  switchTab('categorias');
 }
 
 window.goHome = function(){
   document.getElementById('screen-categorias').classList.remove('active');
   document.getElementById('screen-home').classList.add('active');
+}
+
+window.goBack = function(){
+  const titulo = document.querySelector('#screen-categorias.page-header h2').innerText;
+  if(titulo!== 'Categorias'){
+    document.querySelector('#screen-categorias.page-header h2').innerText = 'Categorias';
+    switchTab('categorias');
+  }else{
+    document.getElementById('screen-categorias').classList.remove('active');
+    document.getElementById('screen-home').classList.add('active');
+  }
 }
 
 function renderCategoriasList(){
@@ -480,21 +514,37 @@ function renderCategoriasList(){
         <h4>${cat.nome}</h4>
         <p>${cat.desc}</p>
       </div>
+      <svg width="18" height="18" fill="none" stroke="#6b7280" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
     </div>
   `).join('');
 }
 
-function renderSubcategoriasList(){
+window.openCategoria = function(nome){
+  document.querySelector('#screen-categorias.page-header h2').innerText = nome;
+  switchTab('subcategorias');
+
   const list = document.getElementById('contentSubcategorias');
-  list.innerHTML = subcategorias.map(sub => `
-    <div class="cat-card" onclick="openSubcategoria('${sub.nome}')">
+  const subs = subcategoriasPorCategoria[nome] || [];
+
+  list.innerHTML = subs.map(sub => `
+    <div class="cat-card" onclick="abrirProdutos('${sub.nome}')">
       <div class="cat-icon"><img src="${sub.img}" alt="${sub.nome}"></div>
       <div class="cat-info">
         <h4>${sub.nome}</h4>
         <p>${sub.desc}</p>
       </div>
+      <svg width="18" height="18" fill="none" stroke="#6b7280" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
     </div>
   `).join('');
+}
+
+function abrirProdutos(nomeSub){
+  alert('Abrir produtos de: ' + nomeSub);
+  // Aqui você cria a tela de produtos depois
 }
 
 window.switchTab = function(tab){
@@ -509,15 +559,6 @@ window.switchTab = function(tab){
     document.getElementById('contentSubcategorias').classList.remove('hidden');
     document.getElementById('contentCategorias').classList.add('hidden');
   }
-}
-
-window.openCategoria = function(nome){
-  alert('Abrir categoria: ' + nome);
-  switchTab('subcategorias');
-}
-
-window.openSubcategoria = function(nome){
-  alert('Abrir subcategoria: ' + nome);
 }
 
 // LOGIN FUNCTIONS
