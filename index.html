@@ -275,7 +275,8 @@ onAuthStateChanged(auth, (user) => {
     document.getElementById('screen-login').classList.remove('active');
     document.getElementById('screen-home').classList.add('active');
 
-    const name = user.displayName || user.email.split('@')[0] || 'Usuário';
+    // Usa só o email antes do @ pra não duplicar
+    const name = user.email.split('@')[0] || 'Usuário';
     document.getElementById('userName').innerText = name;
 
     renderCategoriasHome();
