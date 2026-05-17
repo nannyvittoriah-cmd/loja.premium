@@ -130,7 +130,7 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
           </svg>
         </div>
       </div>
-      <button class="btn" id="actionBtn">ENTRAR</button>
+      <button type="button" class="btn" id="actionBtn">ENTRAR</button>
     </div>
   </div>
 </div>
@@ -303,7 +303,7 @@ body{background:var(--bg);color:var(--text);font-size:14px;}
     <h2>Meu Perfil</h2>
     <p>Nome: <span id="profileName"></span></p>
     <p>Email: <span id="profileEmail"></span></p>
-    <button class="btn" style="margin-top:16px;max-width:180px" onclick="logout()">Sair</button>
+    <button type="button" class="btn" style="margin-top:16px;max-width:180px" onclick="logout()">Sair</button>
   </div>
 </div>
 
@@ -475,7 +475,7 @@ document.getElementById('actionBtn').onclick = async () => {
       setTimeout(()=>{window.location.hash='home';justLoggedIn=false;},1200);
     }
   }catch(e){
-    showError(mode==='login'?'Email ou senha incorretos':'Erro ao criar conta');
+    showError(e.message || 'Erro ao fazer login');
     document.getElementById('actionBtn').disabled = false;
   }
 }
@@ -485,7 +485,7 @@ function showError(msg, type='error'){
   e.innerText = msg;
   e.className = 'error' + (type==='success'?' success':'');
   e.style.display = 'block';
-  setTimeout(()=>{e.style.display='none';},2500);
+  setTimeout(()=>{e.style.display='none';},3000);
 }
 
 function logout(){signOut(auth);}
