@@ -3,32 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Prime Store VZ - Login</title>
+<title>Prime Store VZ</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
 body{background:#0a0a0f;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
-.container{width:100%;max-width:400px;}
+.screen{display:none;width:100%;max-width:400px;}
+.screen.active{display:block;}
 
-.logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:40px;}
-.logo-icon{width:40px;height:40px;background:linear-gradient(135deg,#7c3aed,#a855f7);border-radius:10px;display:flex;align-items:center;justify-content:center;}
-.logo-icon svg{width:24px;height:24px;fill:#fff;}
-.logo h1{font-size:20px;font-weight:700;letter-spacing:0.5px;}
+.logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:32px;}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#7c3aed,#a855f7);border-radius:10px;display:flex;align-items:center;justify-content:center;}
+.logo-icon svg{width:20px;height:20px;fill:#fff;}
+.logo h1{font-size:18px;font-weight:700;letter-spacing:0.5px;}
 
-h2{font-size:24px;font-weight:700;text-align:center;margin-bottom:8px;}
-.subtitle{font-size:14px;color:#9ca3af;text-align:center;margin-bottom:32px;}
+h2{font-size:22px;font-weight:700;text-align:center;margin-bottom:6px;text-transform:uppercase;}
+.subtitle{font-size:13px;color:#9ca3af;text-align:center;margin-bottom:28px;}
 
-.input-group{margin-bottom:16px;position:relative;}
+.input-group{margin-bottom:14px;}
 .input-box{
-  width:100%;height:50px;background:#15151d;
+  width:100%;height:48px;background:#15151d;
   border:1px solid #2a2a35;border-radius:12px;
-  display:flex;align-items:center;padding:0 16px;
-  transition:0.2s;
+  display:flex;align-items:center;padding:0 14px;
 }
-.input-box:focus-within{border-color:#7c3aed;box-shadow:0 0 0 2px rgba(124,58,237,0.2);}
-.input-box svg{width:20px;height:20px;stroke:#6b7280;margin-right:12px;flex-shrink:0;}
+.input-box:focus-within{border-color:#7c3aed;}
 .input-box input{
   flex:1;background:transparent;border:none;outline:none;
-  color:#fff;font-size:15px;
+  color:#fff;font-size:14px;
 }
 .input-box input::placeholder{color:#6b7280;}
 .toggle-pass{
@@ -36,24 +35,23 @@ h2{font-size:24px;font-weight:700;text-align:center;margin-bottom:8px;}
 }
 .toggle-pass svg{width:20px;height:20px;stroke:#6b7280;}
 
-.forgot{
-  text-align:right;margin-bottom:24px;
-}
-.forgot a{color:#a855f7;font-size:13px;text-decoration:none;font-weight:500;}
+.checkbox-wrap{display:flex;align-items:flex-start;gap:8px;margin:16px 0;font-size:12px;color:#9ca3af;}
+.checkbox-wrap input{margin-top:2px;accent-color:#7c3aed;}
+.checkbox-wrap a{color:#a855f7;text-decoration:none;}
 
 .btn{
-  width:100%;height:50px;background:#7c3aed;
+  width:100%;height:48px;background:#7c3aed;
   border:none;border-radius:12px;color:#fff;
-  font-size:16px;font-weight:600;cursor:pointer;
-  transition:0.2s;
+  font-size:15px;font-weight:600;cursor:pointer;
+  text-transform:uppercase;
 }
 .btn:active{transform:scale(0.98);background:#6d28d9;}
 .btn:disabled{opacity:0.6;cursor:not-allowed;}
 
-.register{
-  text-align:center;margin-top:24px;font-size:14px;color:#9ca3af;
+.link-row{
+  text-align:center;margin-top:20px;font-size:13px;color:#9ca3af;
 }
-.register a{color:#a855f7;text-decoration:none;font-weight:600;}
+.link-row a{color:#a855f7;text-decoration:none;font-weight:600;}
 
 .alert{
   padding:12px 16px;border-radius:10px;font-size:13px;
@@ -68,64 +66,130 @@ h2{font-size:24px;font-weight:700;text-align:center;margin-bottom:8px;}
 </style>
 </head>
 <body>
-<div class="container">
-  
+
+<!-- LOGIN -->
+<div class="screen active" id="screen-login">
   <div class="logo">
-    <div class="logo-icon">
-      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-    </div>
+    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
     <h1>PRIME STORE VZ</h1>
   </div>
-
   <h2>Bem-vindo de volta!</h2>
   <p class="subtitle">Faça login para continuar</p>
-
-  <div class="alert error" id="errorAlert"></div>
-  <div class="alert success" id="successAlert"></div>
-
+  
+  <div class="alert error" id="loginError"></div>
+  <div class="alert success" id="loginSuccess"></div>
+  
   <div class="input-group">
     <div class="input-box">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-        <polyline points="22,6 12,13 2,6"/>
-      </svg>
-      <input type="email" id="email" placeholder="seu@email.com" autocomplete="email">
+      <input type="email" id="loginEmail" placeholder="E-mail">
     </div>
   </div>
-
   <div class="input-group">
     <div class="input-box">
-      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-        <path d="M7 11V7a5 5 0 0110 0v4"/>
-      </svg>
-      <input type="password" id="password" placeholder="Senha" autocomplete="current-password">
-      <button type="button" class="toggle-pass" onclick="togglePassword()">
-        <svg id="eyeIcon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-          <circle cx="12" cy="12" r="3"/>
-        </svg>
+      <input type="password" id="loginPassword" placeholder="Senha">
+      <button type="button" class="toggle-pass" onclick="togglePassword('loginPassword', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
       </button>
     </div>
   </div>
-
-  <div class="forgot">
-    <a href="#" onclick="forgotPassword(event)">Esqueci minha senha</a>
+  
+  <div style="text-align:right;margin-bottom:20px;">
+    <a href="#" onclick="showScreen('forgot', event)" style="color:#a855f7;font-size:13px;text-decoration:none;">Esqueci minha senha</a>
   </div>
-
+  
   <button class="btn" id="loginBtn" onclick="login()">
-    <span id="btnText">Entrar</span>
-    <span class="loading" id="loading"></span>
+    <span id="loginBtnText">ENTRAR</span>
+    <span class="loading" id="loginLoading"></span>
   </button>
+  
+  <div class="link-row">
+    Não tem conta? <a href="#" onclick="showScreen('register', event)">Criar conta</a>
+  </div>
+</div>
 
-  <div class="register">
-    Ainda não tem conta? <a href="#" onclick="register(event)">Criar conta</a>
+<!-- CADASTRO -->
+<div class="screen" id="screen-register">
+  <div class="logo">
+    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+    <h1>PRIME STORE VZ</h1>
+  </div>
+  <h2>CADASTRO</h2>
+  <p class="subtitle">Crie sua conta</p>
+  
+  <div class="alert error" id="registerError"></div>
+  <div class="alert success" id="registerSuccess"></div>
+  
+  <div class="input-group">
+    <div class="input-box">
+      <input type="text" id="regName" placeholder="Nome completo">
+    </div>
+  </div>
+  <div class="input-group">
+    <div class="input-box">
+      <input type="email" id="regEmail" placeholder="E-mail">
+    </div>
+  </div>
+  <div class="input-group">
+    <div class="input-box">
+      <input type="tel" id="regPhone" placeholder="(11) 99999-9999">
+    </div>
+  </div>
+  <div class="input-group">
+    <div class="input-box">
+      <input type="password" id="regPassword" placeholder="Senha">
+      <button type="button" class="toggle-pass" onclick="togglePassword('regPassword', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+    </div>
+  </div>
+  
+  <div class="checkbox-wrap">
+    <input type="checkbox" id="terms">
+    <label for="terms">Li e aceito os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a></label>
+  </div>
+  
+  <button class="btn" id="registerBtn" onclick="register()">
+    <span id="registerBtnText">CADASTRAR</span>
+    <span class="loading" id="registerLoading"></span>
+  </button>
+  
+  <div class="link-row">
+    Já tem uma conta? <a href="#" onclick="showScreen('login', event)">Entrar</a>
+  </div>
+</div>
+
+<!-- ESQUECEU SENHA -->
+<div class="screen" id="screen-forgot">
+  <div class="logo">
+    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+    <h1>PRIME STORE VZ</h1>
+  </div>
+  <h2>ESQUECEU A SENHA</h2>
+  <p class="subtitle">Recuperar senha</p>
+  <p class="subtitle" style="font-size:12px;margin-bottom:20px;">Informe seu e-mail para receber o link de recuperação.</p>
+  
+  <div class="alert error" id="forgotError"></div>
+  <div class="alert success" id="forgotSuccess"></div>
+  
+  <div class="input-group">
+    <div class="input-box">
+      <input type="email" id="forgotEmail" placeholder="E-mail">
+    </div>
+  </div>
+  
+  <button class="btn" id="forgotBtn" onclick="forgotPassword()">
+    <span id="forgotBtnText">ENVIAR CÓDIGO</span>
+    <span class="loading" id="forgotLoading"></span>
+  </button>
+  
+  <div class="link-row">
+    <a href="#" onclick="showScreen('login', event)">Voltar para o login</a>
   </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -141,106 +205,111 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+// Navegação entre telas
+window.showScreen = (screen, e) => {
+  if(e) e.preventDefault();
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(`screen-${screen}`).classList.add('active');
+  hideAllAlerts();
+}
+
 // Mostrar/ocultar senha
-window.togglePassword = () => {
-  const pass = document.getElementById('password');
-  const icon = document.getElementById('eyeIcon');
-  if(pass.type === 'password'){
-    pass.type = 'text';
-    icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+window.togglePassword = (id, btn) => {
+  const input = document.getElementById(id);
+  const svg = btn.querySelector('svg');
+  if(input.type === 'password'){
+    input.type = 'text';
+    svg.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
   }else{
-    pass.type = 'password';
-    icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+    input.type = 'password';
+    svg.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
   }
 }
 
 // Login
 window.login = async () => {
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value;
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
   
-  if(!email || !password) return showAlert('errorAlert', 'Preencha email e senha');
+  if(!email || !password) return showAlert('loginError', 'Preencha email e senha');
   
-  setLoading(true);
-  hideAlerts();
-  
+  setLoading('login', true);
   try{
     await signInWithEmailAndPassword(auth, email, password);
-    showAlert('successAlert', 'Login realizado! Redirecionando...');
-    setTimeout(()=>{ 
-      alert('Logado! Agora cria a tela home'); 
-    }, 1500);
+    showAlert('loginSuccess', 'Login realizado!');
+    setTimeout(()=>alert('Redireciona pra home aqui'), 1500);
   }catch(e){
-    let msg = 'Erro ao fazer login';
-    if(e.code === 'auth/user-not-found') msg = 'Usuário não encontrado';
-    if(e.code === 'auth/wrong-password') msg = 'Senha incorreta';
-    if(e.code === 'auth/invalid-email') msg = 'Email inválido';
-    if(e.code === 'auth/too-many-requests') msg = 'Muitas tentativas. Tenta mais tarde';
-    showAlert('errorAlert', msg);
-    setLoading(false);
+    showAlert('loginError', getErrorMsg(e.code));
+    setLoading('login', false);
+  }
+}
+
+// Cadastro
+window.register = async () => {
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const phone = document.getElementById('regPhone').value.trim();
+  const password = document.getElementById('regPassword').value;
+  const terms = document.getElementById('terms').checked;
+  
+  if(!name || !email || !password) return showAlert('registerError', 'Preencha todos os campos');
+  if(!terms) return showAlert('registerError', 'Aceite os termos de uso');
+  if(password.length < 6) return showAlert('registerError', 'Senha deve ter 6+ caracteres');
+  
+  setLoading('register', true);
+  try{
+    const userCred = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(userCred.user, {displayName: name});
+    showAlert('registerSuccess', 'Conta criada com sucesso!');
+    setTimeout(()=>showScreen('login'), 1500);
+  }catch(e){
+    showAlert('registerError', getErrorMsg(e.code));
+    setLoading('register', false);
   }
 }
 
 // Esqueci senha
-window.forgotPassword = async (e) => {
-  e.preventDefault();
-  const email = document.getElementById('email').value.trim();
-  if(!email) return showAlert('errorAlert', 'Digite seu email primeiro');
+window.forgotPassword = async () => {
+  const email = document.getElementById('forgotEmail').value.trim();
+  if(!email) return showAlert('forgotError', 'Digite seu e-mail');
   
+  setLoading('forgot', true);
   try{
     await sendPasswordResetEmail(auth, email);
-    showAlert('successAlert', 'Link de recuperação enviado! Checa tua caixa de email');
+    showAlert('forgotSuccess', 'Link enviado! Checa teu email');
+    setLoading('forgot', false);
   }catch(e){
-    let msg = 'Erro ao enviar email';
-    if(e.code === 'auth/user-not-found') msg = 'Email não cadastrado';
-    if(e.code === 'auth/invalid-email') msg = 'Email inválido';
-    showAlert('errorAlert', msg);
+    showAlert('forgotError', getErrorMsg(e.code));
+    setLoading('forgot', false);
   }
 }
 
-// Criar conta
-window.register = async (e) => {
-  e.preventDefault();
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value;
-  
-  if(!email || !password) return showAlert('errorAlert', 'Preencha email e senha');
-  if(password.length < 6) return showAlert('errorAlert', 'Senha deve ter 6+ caracteres');
-  
-  setLoading(true);
-  hideAlerts();
-  
-  try{
-    await createUserWithEmailAndPassword(auth, email, password);
-    showAlert('successAlert', 'Conta criada com sucesso!');
-    setTimeout(()=>login(), 1500);
-  }catch(e){
-    let msg = 'Erro ao criar conta';
-    if(e.code === 'auth/email-already-in-use') msg = 'Email já cadastrado';
-    if(e.code === 'auth/weak-password') msg = 'Senha muito fraca';
-    if(e.code === 'auth/invalid-email') msg = 'Email inválido';
-    showAlert('errorAlert', msg);
-    setLoading(false);
-  }
+function getErrorMsg(code){
+  if(code === 'auth/email-already-in-use') return 'Email já cadastrado';
+  if(code === 'auth/user-not-found') return 'Usuário não encontrado';
+  if(code === 'auth/wrong-password') return 'Senha incorreta';
+  if(code === 'auth/invalid-email') return 'Email inválido';
+  if(code === 'auth/weak-password') return 'Senha muito fraca';
+  if(code === 'auth/too-many-requests') return 'Muitas tentativas. Tenta mais tarde';
+  return 'Erro. Tenta novamente';
 }
 
 function showAlert(id, msg){
-  hideAlerts();
+  hideAllAlerts();
   const el = document.getElementById(id);
   el.innerText = msg;
   el.style.display = 'block';
-  setTimeout(()=>{ el.style.display = 'none'; }, 4000);
+  setTimeout(()=>el.style.display='none', 4000);
 }
 
-function hideAlerts(){
-  document.getElementById('errorAlert').style.display = 'none';
-  document.getElementById('successAlert').style.display = 'none';
+function hideAllAlerts(){
+  document.querySelectorAll('.alert').forEach(a => a.style.display='none');
 }
 
-function setLoading(isLoading){
-  document.getElementById('loginBtn').disabled = isLoading;
-  document.getElementById('btnText').style.display = isLoading ? 'none' : 'inline';
-  document.getElementById('loading').classList.toggle('show', isLoading);
+function setLoading(type, isLoading){
+  document.getElementById(type+'Btn').disabled = isLoading;
+  document.getElementById(type+'BtnText').style.display = isLoading ? 'none' : 'inline';
+  document.getElementById(type+'Loading').classList.toggle('show', isLoading);
 }
 </script>
 </body>
