@@ -3,313 +3,270 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Prime Store VZ</title>
+<title>Prime Store VZ - Home</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
-body{background:#0a0a0f;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
-.screen{display:none;width:100%;max-width:400px;}
-.screen.active{display:block;}
+body{background:#0a0a0f;color:#fff;min-height:100vh;padding-bottom:80px;}
 
-.logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:32px;}
-.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#7c3aed,#a855f7);border-radius:10px;display:flex;align-items:center;justify-content:center;}
-.logo-icon svg{width:20px;height:20px;fill:#fff;}
-.logo h1{font-size:18px;font-weight:700;letter-spacing:0.5px;}
-
-h2{font-size:22px;font-weight:700;text-align:center;margin-bottom:6px;text-transform:uppercase;}
-.subtitle{font-size:13px;color:#9ca3af;text-align:center;margin-bottom:28px;}
-
-.input-group{margin-bottom:14px;}
-.input-box{
-  width:100%;height:48px;background:#15151d;
-  border:1px solid #2a2a35;border-radius:12px;
-  display:flex;align-items:center;padding:0 14px;
+.header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 16px 12px;
 }
-.input-box:focus-within{border-color:#7c3aed;}
-.input-box input{
+.header h1{font-size:18px;font-weight:700;}
+.header h1 span{color:#a855f7;}
+.header-icons{display:flex;align-items:center;gap:16px;}
+.icon-btn{position:relative;cursor:pointer;}
+.icon-btn svg{width:24px;height:24px;stroke:#fff;}
+.badge{
+  position:absolute;top:-2px;right:-2px;
+  width:10px;height:10px;background:#a855f7;
+  border-radius:50%;border:2px solid #0a0a0f;
+}
+
+.search-box{
+  margin:0 16px 20px;
+  background:#15151d;border:1px solid #2a2a35;
+  border-radius:12px;padding:12px 16px;
+  display:flex;align-items:center;gap:10px;
+}
+.search-box svg{width:20px;height:20px;stroke:#6b7280;}
+.search-box input{
   flex:1;background:transparent;border:none;outline:none;
   color:#fff;font-size:14px;
 }
-.input-box input::placeholder{color:#6b7280;}
-.toggle-pass{
-  cursor:pointer;background:none;border:none;padding:4px;
+.search-box input::placeholder{color:#6b7280;}
+
+.banner{
+  margin:0 16px 28px;
+  position:relative;border-radius:16px;overflow:hidden;
+  border:1px solid #2a2a35;min-height:160px;
+  background:#15151d;display:flex;align-items:center;
 }
-.toggle-pass svg{width:20px;height:20px;stroke:#6b7280;}
-
-.checkbox-wrap{display:flex;align-items:flex-start;gap:8px;margin:16px 0;font-size:12px;color:#9ca3af;}
-.checkbox-wrap input{margin-top:2px;accent-color:#7c3aed;}
-.checkbox-wrap a{color:#a855f7;text-decoration:none;}
-
-.btn{
-  width:100%;height:48px;background:#7c3aed;
-  border:none;border-radius:12px;color:#fff;
-  font-size:15px;font-weight:600;cursor:pointer;
-  text-transform:uppercase;
+.banner img{
+  width:100%;height:100%;object-fit:cover;
+  position:absolute;inset:0;
 }
-.btn:active{transform:scale(0.98);background:#6d28d9;}
-.btn:disabled{opacity:0.6;cursor:not-allowed;}
-
-.link-row{
-  text-align:center;margin-top:20px;font-size:13px;color:#9ca3af;
+.banner-content{
+  position:relative;z-index:2;padding:20px;
+  background:linear-gradient(90deg,rgba(10,10,15,0.9) 0%,rgba(10,10,15,0.4) 100%);
 }
-.link-row a{color:#a855f7;text-decoration:none;font-weight:600;}
-
-.alert{
-  padding:12px 16px;border-radius:10px;font-size:13px;
-  margin-bottom:16px;display:none;
+.banner h2{font-size:20px;font-weight:700;margin-bottom:4px;}
+.banner h2 span{color:#a855f7;}
+.banner p{font-size:16px;margin-bottom:12px;}
+.banner button{
+  background:#7c3aed;border:none;border-radius:8px;
+  padding:8px 20px;color:#fff;font-weight:600;
+  font-size:13px;cursor:pointer;
 }
-.alert.error{background:rgba(239,68,68,0.1);border:1px solid #ef4444;color:#ef4444;}
-.alert.success{background:rgba(16,185,129,0.1);border:1px solid #10b981;color:#10b981;}
+.banner-upload{
+  position:absolute;top:10px;right:10px;z-index:3;
+  background:rgba(124,58,237,0.9);border:none;
+  border-radius:8px;padding:6px 12px;color:#fff;
+  font-size:11px;cursor:pointer;
+}
+.banner input[type="file"]{display:none;}
 
-.loading{display:none;}
-.loading.show{display:inline-block;width:18px;height:18px;border:2px solid #fff;border-top:2px solid transparent;border-radius:50%;animation:spin 1s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
+.section-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 16px;margin-bottom:14px;
+}
+.section-header h3{font-size:16px;font-weight:600;}
+.section-header a{color:#a855f7;font-size:13px;text-decoration:none;display:flex;align-items:center;gap:4px;}
+
+.grid{
+  padding:0 16px;
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+.card{
+  background:#15151d;border:1px solid #2a2a35;
+  border-radius:14px;padding:16px 8px;
+  text-align:center;cursor:pointer;
+  transition:0.2s;
+}
+.card:active{transform:scale(0.96);}
+.card-icon{
+  width:50px;height:50px;margin:0 auto 10px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.card-icon::after{
+  content:'';position:absolute;inset:0;
+  border-radius:50%;background:#a855f7;
+  filter:blur(20px);opacity:0.4;z-index:0;
+}
+.card-icon img{width:100%;height:100%;object-fit:contain;position:relative;z-index:1;}
+.card span{font-size:12px;font-weight:500;}
+
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:#0a0a0f;border-top:1px solid #2a2a35;
+  display:flex;justify-content:space-around;padding:10px 0;
+}
+.nav-item{
+  text-align:center;color:#6b7280;font-size:11px;
+  cursor:pointer;
+}
+.nav-item.active{color:#a855f7;}
+.nav-item svg{width:24px;height:24px;margin-bottom:4px;}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div class="screen active" id="screen-login">
-  <div class="logo">
-    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
-    <h1>PRIME STORE VZ</h1>
-  </div>
-  <h2>Bem-vindo de volta!</h2>
-  <p class="subtitle">Faça login para continuar</p>
-  
-  <div class="alert error" id="loginError"></div>
-  <div class="alert success" id="loginSuccess"></div>
-  
-  <div class="input-group">
-    <div class="input-box">
-      <input type="email" id="loginEmail" placeholder="E-mail">
+<!-- HEADER -->
+<div class="header">
+  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="cursor:pointer;">
+    <line x1="3" y1="12" x2="21" y2="12"/>
+    <line x1="3" y1="6" x2="21" y2="6"/>
+    <line x1="3" y1="18" x2="21" y2="18"/>
+  </svg>
+
+  <h1>Prime <span>Store VZ</span></h1>
+
+  <div class="header-icons">
+    <div class="icon-btn" onclick="alert('Notificações em breve')">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/>
+      </svg>
+      <div class="badge"></div>
     </div>
-  </div>
-  <div class="input-group">
-    <div class="input-box">
-      <input type="password" id="loginPassword" placeholder="Senha">
-      <button type="button" class="toggle-pass" onclick="togglePassword('loginPassword', this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-      </button>
+    <div class="icon-btn" onclick="alert('Perfil em breve')">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
     </div>
-  </div>
-  
-  <div style="text-align:right;margin-bottom:20px;">
-    <a href="#" onclick="showScreen('forgot', event)" style="color:#a855f7;font-size:13px;text-decoration:none;">Esqueci minha senha</a>
-  </div>
-  
-  <button class="btn" id="loginBtn" onclick="login()">
-    <span id="loginBtnText">ENTRAR</span>
-    <span class="loading" id="loginLoading"></span>
-  </button>
-  
-  <div class="link-row">
-    Não tem conta? <a href="#" onclick="showScreen('register', event)">Criar conta</a>
   </div>
 </div>
 
-<!-- CADASTRO -->
-<div class="screen" id="screen-register">
-  <div class="logo">
-    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
-    <h1>PRIME STORE VZ</h1>
+<!-- SEARCH -->
+<div class="search-box">
+  <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <circle cx="11" cy="11" r="8"/>
+    <path d="M21 21l-4.35-4.35"/>
+  </svg>
+  <input type="text" id="searchInput" placeholder="Buscar produtos..." onkeyup="searchProducts()">
+</div>
+
+<!-- BANNER -->
+<div class="banner">
+  <img id="bannerImg" src="" style="display:none;">
+  <div class="banner-content" id="bannerContent">
+    <h2>OFERTAS EXCLUSIVAS</h2>
+    <p>ATÉ <span>70% OFF</span></p>
+    <button onclick="alert('Ir para ofertas')">VER OFERTAS</button>
   </div>
-  <h2>CADASTRO</h2>
-  <p class="subtitle">Crie sua conta</p>
-  
-  <div class="alert error" id="registerError"></div>
-  <div class="alert success" id="registerSuccess"></div>
-  
-  <div class="input-group">
-    <div class="input-box">
-      <input type="text" id="regName" placeholder="Nome completo">
+  <button class="banner-upload" onclick="document.getElementById('bannerFile').click()">Trocar Imagem</button>
+  <input type="file" id="bannerFile" accept="image/*" onchange="uploadBanner(event)">
+</div>
+
+<!-- CATEGORIAS -->
+<div class="section-header">
+  <h3>Categorias</h3>
+  <a href="#">Ver todas <span>›</span></a>
+</div>
+
+<div class="grid" id="categoriesGrid">
+  <div class="card" onclick="openCategory('Streaming')">
+    <div class="card-icon">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg">
     </div>
+    <span>Streaming</span>
   </div>
-  <div class="input-group">
-    <div class="input-box">
-      <input type="email" id="regEmail" placeholder="E-mail">
+
+  <div class="card" onclick="openCategory('Gift Cards')">
+    <div class="card-icon">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg">
     </div>
+    <span>Gift Cards</span>
   </div>
-  <div class="input-group">
-    <div class="input-box">
-      <input type="tel" id="regPhone" placeholder="(11) 99999-9999">
+
+  <div class="card" onclick="openCategory('Redes Sociais')">
+    <div class="card-icon">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/a5/Instagram_icon.png">
     </div>
+    <span>Redes Sociais</span>
   </div>
-  <div class="input-group">
-    <div class="input-box">
-      <input type="password" id="regPassword" placeholder="Senha">
-      <button type="button" class="toggle-pass" onclick="togglePassword('regPassword', this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-      </button>
+
+  <div class="card" onclick="openCategory('Games')">
+    <div class="card-icon">
+      <img src="https://cdn-icons-png.flaticon.com/512/3616/3616993.png">
     </div>
+    <span>Games</span>
   </div>
-  
-  <div class="checkbox-wrap">
-    <input type="checkbox" id="terms">
-    <label for="terms">Li e aceito os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a></label>
+
+  <div class="card" onclick="openCategory('Apps Premium')">
+    <div class="card-icon">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg">
+    </div>
+    <span>Apps Premium</span>
   </div>
-  
-  <button class="btn" id="registerBtn" onclick="register()">
-    <span id="registerBtnText">CADASTRAR</span>
-    <span class="loading" id="registerLoading"></span>
-  </button>
-  
-  <div class="link-row">
-    Já tem uma conta? <a href="#" onclick="showScreen('login', event)">Entrar</a>
+
+  <div class="card" onclick="openCategory('Outros')">
+    <div class="card-icon">
+      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png">
+    </div>
+    <span>Outros</span>
   </div>
 </div>
 
-<!-- ESQUECEU SENHA -->
-<div class="screen" id="screen-forgot">
-  <div class="logo">
-    <div class="logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
-    <h1>PRIME STORE VZ</h1>
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <div class="nav-item active">
+    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    <div>Home</div>
   </div>
-  <h2>ESQUECEU A SENHA</h2>
-  <p class="subtitle">Recuperar senha</p>
-  <p class="subtitle" style="font-size:12px;margin-bottom:20px;">Informe seu e-mail para receber o link de recuperação.</p>
-  
-  <div class="alert error" id="forgotError"></div>
-  <div class="alert success" id="forgotSuccess"></div>
-  
-  <div class="input-group">
-    <div class="input-box">
-      <input type="email" id="forgotEmail" placeholder="E-mail">
-    </div>
+  <div class="nav-item" onclick="alert('Categorias')">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    <div>Categorias</div>
   </div>
-  
-  <button class="btn" id="forgotBtn" onclick="forgotPassword()">
-    <span id="forgotBtnText">ENVIAR CÓDIGO</span>
-    <span class="loading" id="forgotLoading"></span>
-  </button>
-  
-  <div class="link-row">
-    <a href="#" onclick="showScreen('login', event)">Voltar para o login</a>
+  <div class="nav-item" onclick="alert('Carrinho')">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+    <div>Carrinho</div>
+  </div>
+  <div class="nav-item" onclick="alert('Perfil')">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <div>Perfil</div>
   </div>
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
-  authDomain: "premium-store-aa58b.firebaseapp.com",
-  databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
-  projectId: "premium-store-aa58b",
-  storageBucket: "premium-store-aa58b.firebasestorage.app",
-  messagingSenderId: "462239500057",
-  appId: "1:462239500057:web:f1b7cea162ed308a866788",
-  measurementId: "G-CN88J28WRX"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-// Navegação entre telas
-window.showScreen = (screen, e) => {
-  if(e) e.preventDefault();
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(`screen-${screen}`).classList.add('active');
-  hideAllAlerts();
-}
-
-// Mostrar/ocultar senha
-window.togglePassword = (id, btn) => {
-  const input = document.getElementById(id);
-  const svg = btn.querySelector('svg');
-  if(input.type === 'password'){
-    input.type = 'text';
-    svg.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
-  }else{
-    input.type = 'password';
-    svg.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+<script>
+// Carrega banner salvo
+window.addEventListener('load', () => {
+  const savedBanner = localStorage.getItem('prime_banner');
+  if(savedBanner){
+    document.getElementById('bannerImg').src = savedBanner;
+    document.getElementById('bannerImg').style.display = 'block';
   }
+});
+
+// Upload banner da galeria
+function uploadBanner(event){
+  const file = event.target.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const imgData = e.target.result;
+    localStorage.setItem('prime_banner', imgData);
+    document.getElementById('bannerImg').src = imgData;
+    document.getElementById('bannerImg').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
 }
 
-// Login
-window.login = async () => {
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  
-  if(!email || !password) return showAlert('loginError', 'Preencha email e senha');
-  
-  setLoading('login', true);
-  try{
-    await signInWithEmailAndPassword(auth, email, password);
-    showAlert('loginSuccess', 'Login realizado!');
-    setTimeout(()=>alert('Redireciona pra home aqui'), 1500);
-  }catch(e){
-    showAlert('loginError', getErrorMsg(e.code));
-    setLoading('login', false);
-  }
+// Abrir categoria
+function openCategory(name){
+  alert('Abrir categoria: ' + name);
+  // Aqui você redireciona pra tela de produtos da categoria
+  // window.location.href = 'produtos.html?cat=' + encodeURIComponent(name);
 }
 
-// Cadastro
-window.register = async () => {
-  const name = document.getElementById('regName').value.trim();
-  const email = document.getElementById('regEmail').value.trim();
-  const phone = document.getElementById('regPhone').value.trim();
-  const password = document.getElementById('regPassword').value;
-  const terms = document.getElementById('terms').checked;
-  
-  if(!name || !email || !password) return showAlert('registerError', 'Preencha todos os campos');
-  if(!terms) return showAlert('registerError', 'Aceite os termos de uso');
-  if(password.length < 6) return showAlert('registerError', 'Senha deve ter 6+ caracteres');
-  
-  setLoading('register', true);
-  try{
-    const userCred = await createUserWithEmailAndPassword(auth, email, password);
-    await updateProfile(userCred.user, {displayName: name});
-    showAlert('registerSuccess', 'Conta criada com sucesso!');
-    setTimeout(()=>showScreen('login'), 1500);
-  }catch(e){
-    showAlert('registerError', getErrorMsg(e.code));
-    setLoading('register', false);
-  }
-}
-
-// Esqueci senha
-window.forgotPassword = async () => {
-  const email = document.getElementById('forgotEmail').value.trim();
-  if(!email) return showAlert('forgotError', 'Digite seu e-mail');
-  
-  setLoading('forgot', true);
-  try{
-    await sendPasswordResetEmail(auth, email);
-    showAlert('forgotSuccess', 'Link enviado! Checa teu email');
-    setLoading('forgot', false);
-  }catch(e){
-    showAlert('forgotError', getErrorMsg(e.code));
-    setLoading('forgot', false);
-  }
-}
-
-function getErrorMsg(code){
-  if(code === 'auth/email-already-in-use') return 'Email já cadastrado';
-  if(code === 'auth/user-not-found') return 'Usuário não encontrado';
-  if(code === 'auth/wrong-password') return 'Senha incorreta';
-  if(code === 'auth/invalid-email') return 'Email inválido';
-  if(code === 'auth/weak-password') return 'Senha muito fraca';
-  if(code === 'auth/too-many-requests') return 'Muitas tentativas. Tenta mais tarde';
-  return 'Erro. Tenta novamente';
-}
-
-function showAlert(id, msg){
-  hideAllAlerts();
-  const el = document.getElementById(id);
-  el.innerText = msg;
-  el.style.display = 'block';
-  setTimeout(()=>el.style.display='none', 4000);
-}
-
-function hideAllAlerts(){
-  document.querySelectorAll('.alert').forEach(a => a.style.display='none');
-}
-
-function setLoading(type, isLoading){
-  document.getElementById(type+'Btn').disabled = isLoading;
-  document.getElementById(type+'BtnText').style.display = isLoading ? 'none' : 'inline';
-  document.getElementById(type+'Loading').classList.toggle('show', isLoading);
+// Buscar produtos
+function searchProducts(){
+  const query = document.getElementById('searchInput').value.toLowerCase();
+  console.log('Buscar:', query);
+  // Filtra produtos aqui
 }
 </script>
 </body>
