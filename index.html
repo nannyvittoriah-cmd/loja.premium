@@ -3,51 +3,91 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Prime Store Vz</title>
+<title>Prime Store VZ</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#0a0a0f;--card:#15151d;--card-2:#1e1e28;--purple:#7c3aed;--purple-light:#a78bfa;
-  --neon:#a855f7;--text:#fff;--text-2:#9ca3af;--error:#ef4444;
+  --neon:#a855f7;--text:#fff;--text-2:#9ca3af;--error:#ef4444;--border:#2a2a35;
 }
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent;}
 body{background:var(--bg);color:var(--text);font-size:11px;overflow-x:hidden;}
 .screen{display:none;}
 .screen.active{display:block;}
 
-/* Loader pra evitar piscada */
-.loader{
+/* Splash */
+.splash{
   position:fixed;top:0;left:0;width:100%;height:100vh;
-  display:flex;align-items:center;justify-content:center;
-  background:var(--bg);z-index:9999;
+  background: radial-gradient(circle at 50% 30%, rgba(124,58,237,0.3) 0%, #0a0a0f 70%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:9999;padding:40px 30px;text-align:center;
 }
-.loader.hidden{display:none;}
-.spinner{
-  width:32px;height:32px;border:3px solid #2a2a35;
-  border-top:3px solid var(--purple);border-radius:50%;
-  animation:spin 0.8s linear infinite;
+.splash.hidden{opacity:0;pointer-events:none;transition:0.5s;}
+.splash-logo{width:80px;height:80px;margin-bottom:20px;}
+.splash-logo svg{width:100%;height:100%;filter:drop-shadow(0 0 20px var(--neon));}
+.splash h1{font-size:20px;font-weight:700;margin-bottom:8px;letter-spacing:1px;}
+.splash p{font-size:12px;color:var(--text-2);margin-bottom:40px;line-height:1.4;}
+.splash-btn{
+  width:100%;max-width:280px;height:48px;background:var(--purple);
+  border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:600;
+  box-shadow:0 0 20px rgba(124,58,237,0.5);
 }
-@keyframes spin{to{transform:rotate(360deg);}}
+.splash-character{
+  width:160px;height:200px;margin-bottom:20px;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120"><rect x="30" y="40" width="40" height="50" rx="5" fill="%2315151d"/><circle cx="50" cy="35" r="15" fill="%2315151d"/><rect x="40" y="45" width="20" height="5" fill="%237c3aed"/></svg>') center/contain no-repeat;
+}
 
-/* resto do CSS igual */
-.hidden{display:none;} button{cursor:pointer;}
-.btn{width:100%;height:42px;background:var(--purple);border:none;border-radius:10px;color:#fff;font-size:12px;font-weight:600;}
-.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
-.login-card{width:100%;max-width:340px;background:var(--card);border-radius:16px;padding:24px;}
-.logo{display:flex;gap:10px;align-items:center;margin-bottom:24px;}
-.logo svg{width:32px;height:32px;}
-.logo h1{font-size:14px;font-weight:700;}
-.logo span{font-size:9px;color:var(--purple-light);}
+/* Auth Screens */
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.auth-card{
+  width:100%;max-width:340px;background:var(--bg);
+  border:1px solid var(--border);border-radius:16px;padding:24px;
+  box-shadow:0 0 0 1px rgba(124,58,237,0.2);
+}
+.auth-header{text-align:center;margin-bottom:24px;}
+.auth-header h2{font-size:11px;color:var(--text-2);margin-bottom:12px;font-weight:400;}
+.auth-header h1{font-size:18px;font-weight:700;margin-bottom:4px;}
+.auth-header p{font-size:11px;color:var(--text-2);}
 .input-group{margin-bottom:14px;}
-.input-box{display:flex;align-items:center;background:var(--card-2);border:1px solid #2a2a35;border-radius:10px;padding:0 12px;height:44px;}
-.input-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:12px;}
+.input-label{font-size:11px;color:var(--text-2);margin-bottom:6px;display:block;}
+.input-box{
+  width:100%;height:44px;background:var(--card-2);
+  border:1px solid var(--border);border-radius:10px;
+  padding:0 12px;display:flex;align-items:center;
+}
+.input-box input{
+  flex:1;background:transparent;border:none;outline:none;
+  color:var(--text);font-size:12px;
+}
+.input-box input::placeholder{color:#555;}
+.checkbox-wrap{display:flex;align-items:center;justify-content:space-between;margin:16px 0;}
+.checkbox{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--text-2);}
+.checkbox input{width:14px;height:14px;}
+.forgot-link{font-size:10px;color:var(--purple-light);cursor:pointer;}
+.btn-primary{
+  width:100%;height:44px;background:var(--purple);
+  border:none;border-radius:10px;color:#fff;
+  font-size:13px;font-weight:600;margin-top:8px;
+}
+.auth-footer{text-align:center;margin-top:16px;font-size:10px;color:var(--text-2);}
+.auth-footer a{color:var(--purple-light);cursor:pointer;font-weight:600;}
+.checkbox-terms{display:flex;gap:8px;margin:16px 0;font-size:9px;color:var(--text-2);}
+.checkbox-terms input{margin-top:2px;}
 .error{background:rgba(239,68,68,0.1);border:1px solid var(--error);color:var(--error);padding:8px;border-radius:8px;font-size:10px;margin-bottom:12px;display:none;}
+.success{background:rgba(16,185,129,0.1);border:1px solid #10b981;color:#10b981;padding:8px;border-radius:8px;font-size:10px;margin-bottom:12px;display:none;}
+
+/* Resto do app */
+.loader{position:fixed;top:0;left:0;width:100%;height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:9998;}
+.loader.hidden{display:none;}
+.spinner{width:32px;height:32px;border:3px solid #2a2a35;border-top:3px solid var(--purple);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.hidden{display:none;} button{cursor:pointer;}
 .header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;}
 .header-left{display:flex;flex-direction:column;gap:2px;}
 .greeting{font-size:11px;color:var(--text-2);}
 .username{font-size:13px;font-weight:600;color:#fff;}
 .search-box{padding:0 16px;margin-bottom:12px;}
-.search-box input{width:100%;height:38px;background:var(--card);border:1px solid #2a2a35;border-radius:10px;padding:0 12px;color:var(--text);font-size:11px;outline:none;}
+.search-box input{width:100%;height:38px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0 12px;color:var(--text);font-size:11px;outline:none;}
 .section{padding:0 16px;margin-bottom:18px;}
 .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
 .section-header h3{font-size:12px;font-weight:600;}
@@ -58,7 +98,7 @@ body{background:var(--bg);color:var(--text);font-size:11px;overflow-x:hidden;}
 .cat-item.icon-box img{width:60%;height:60%;object-fit:contain;}
 .cat-item span{font-size:9px;color:var(--text-2);display:block;}
 .prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-.prod-item{background:var(--card);border:1px solid #2a2a35;border-radius:10px;overflow:hidden;cursor:pointer;}
+.prod-item{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;}
 .prod-item img{width:100%;aspect-ratio:1;object-fit:cover;border-bottom:1px solid var(--neon);}
 .prod-info{padding:6px;}
 .prod-info h4{font-size:9px;font-weight:600;margin-bottom:2px;}
@@ -66,7 +106,7 @@ body{background:var(--bg);color:var(--text);font-size:11px;overflow-x:hidden;}
 .tabs{display:flex;background:var(--card-2);border-radius:10px;padding:4px;margin:0 16px 16px;}
 .tab{flex:1;text-align:center;padding:8px;font-size:10px;border-radius:8px;cursor:pointer;color:var(--text-2);}
 .tab.active{background:var(--purple);color:#fff;}
-.list-item{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card);border-radius:10px;margin-bottom:8px;cursor:pointer;border:1px solid #2a2a35;}
+.list-item{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card);border-radius:10px;margin-bottom:8px;cursor:pointer;border:1px solid var(--border);}
 .list-item img{width:36px;height:36px;border-radius:8px;border:1px solid var(--neon);}
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--bg);border-top:1px solid #222;display:flex;justify-content:space-around;padding:8px 0;}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-2);font-size:9px;cursor:pointer;}
@@ -76,29 +116,115 @@ body{background:var(--bg);color:var(--text);font-size:11px;overflow-x:hidden;}
 </head>
 <body>
 
-<!-- Loader inicial -->
-<div class="loader" id="loader">
+<!-- Splash Screen -->
+<div class="splash" id="splash">
+  <div class="splash-logo">
+    <svg viewBox="0 0 100 100" fill="#a855f7">
+      <path d="M50 10 L65 35 L90 35 L72 52 L78 75 L50 60 L22 75 L28 52 L10 35 L35 35 Z"/>
+    </svg>
+  </div>
+  <h1>Prime Store VZ</h1>
+  <p>Seja bem-vindo à<br>melhor loja digital!</p>
+  <div class="splash-character"></div>
+  <button class="splash-btn" onclick="skipSplash()">COMEÇAR</button>
+</div>
+
+<!-- Loader -->
+<div class="loader hidden" id="loader">
   <div class="spinner"></div>
 </div>
 
-<!-- Auth -->
-<div class="screen" id="screen-auth">
-  <div class="login-wrap">
-    <div class="login-card">
-      <div class="logo">
-        <svg viewBox="0 0 24 24" fill="#7c3aed"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>
-        <div><h1>PRIME</h1><span>STORE</span></div>
+<!-- Login -->
+<div class="screen" id="screen-login">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2>LOGIN - E-MAIL</h2>
+        <h1>Prime Store VZ</h1>
+        <p>Entre na sua conta</p>
       </div>
-      <h2 style="font-size:14px;margin-bottom:4px;">Bem-vindo de volta!</h2>
-      <p style="font-size:10px;color:var(--text-2);margin-bottom:20px;">Faça login para continuar</p>
       <div class="error" id="loginError"></div>
       <div class="input-group">
-        <div class="input-box"><input type="email" id="loginEmail" placeholder="E-mail"></div>
+        <label class="input-label">E-mail</label>
+        <div class="input-box"><input type="email" id="loginEmail" placeholder="seuemail@gmail.com"></div>
       </div>
       <div class="input-group">
-        <div class="input-box"><input type="password" id="loginPassword" placeholder="Senha"></div>
+        <label class="input-label">Senha</label>
+        <div class="input-box"><input type="password" id="loginPassword" placeholder="••••"></div>
       </div>
-      <button class="btn" id="loginBtn">Entrar</button>
+      <div class="checkbox-wrap">
+        <label class="checkbox"><input type="checkbox" id="rememberMe"> Lembrar-me</label>
+        <span class="forgot-link" onclick="showForgot()">Esqueceu a senha?</span>
+      </div>
+      <button class="btn-primary" id="loginBtn">ENTRAR</button>
+      <div class="auth-footer">
+        Não tem uma conta? <a onclick="showRegister()">Cadastre-se</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cadastro -->
+<div class="screen" id="screen-register">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2>CADASTRO</h2>
+        <h1>Prime Store VZ</h1>
+        <p>Crie sua conta</p>
+      </div>
+      <div class="error" id="registerError"></div>
+      <div class="success" id="registerSuccess"></div>
+      <div class="input-group">
+        <label class="input-label">Nome completo</label>
+        <div class="input-box"><input type="text" id="registerName" placeholder="João da Silva"></div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">E-mail</label>
+        <div class="input-box"><input type="email" id="registerEmail" placeholder="joao@email.com"></div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Telefone</label>
+        <div class="input-box"><input type="tel" id="registerPhone" placeholder="(11) 99999-9999"></div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Senha</label>
+        <div class="input-box"><input type="password" id="registerPassword" placeholder="••••"></div>
+      </div>
+      <label class="checkbox-terms">
+        <input type="checkbox" id="acceptTerms">
+        <span>Li e aceito os <span style="color:var(--purple-light)">Termos de Uso</span> e <span style="color:var(--purple-light)">Política de Privacidade</span></span>
+      </label>
+      <button class="btn-primary" id="registerBtn">CADASTRAR</button>
+      <div class="auth-footer">
+        Já tem uma conta? <a onclick="showLogin()">Entrar</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Esqueci Senha -->
+<div class="screen" id="screen-forgot">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h2>ESQUECEU A SENHA</h2>
+        <h1>Prime Store VZ</h1>
+        <p>Recuperar senha</p>
+      </div>
+      <div class="error" id="forgotError"></div>
+      <div class="success" id="forgotSuccess"></div>
+      <p style="font-size:10px;color:var(--text-2);margin-bottom:16px;text-align:center;">
+        Informe seu e-mail para receber o código de recuperação.
+      </p>
+      <div class="input-group">
+        <label class="input-label">E-mail ou telefone</label>
+        <div class="input-box"><input type="email" id="forgotEmail" placeholder="seuemail@gmail.com"></div>
+      </div>
+      <button class="btn-primary" id="forgotBtn">ENVIAR CÓDIGO</button>
+      <div class="auth-footer">
+        <a onclick="showLogin()">Voltar para o login</a>
+      </div>
     </div>
   </div>
 </div>
@@ -150,7 +276,7 @@ body{background:var(--bg);color:var(--text);font-size:11px;overflow-x:hidden;}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -166,32 +292,123 @@ const db = getFirestore(app);
 let allCategories = [];
 let allProducts = [];
 
+// Splash
+let splashTimer = setTimeout(hideSplash, 5000);
+function hideSplash(){
+  document.getElementById('splash').classList.add('hidden');
+  document.getElementById('loader').classList.remove('hidden');
+  checkAuth();
+}
+window.skipSplash = () => {
+  clearTimeout(splashTimer);
+  hideSplash();
+}
+
+// Navegação entre telas de auth
+window.showLogin = () => {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-login').classList.add('active');
+}
+window.showRegister = () => {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-register').classList.add('active');
+}
+window.showForgot = () => {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-forgot').classList.add('active');
+}
+
+// Check Auth
+function checkAuth(){
+  onAuthStateChanged(auth, async (user) => {
+    document.getElementById('loader').classList.add('hidden');
+    if(user){
+      const nome = user.displayName || user.email.split('@')[0];
+      document.getElementById('userName').innerText = nome;
+      document.getElementById('screen-login').classList.remove('active');
+      document.getElementById('screen-home').classList.add('active');
+      await loadData();
+    }else{
+      document.getElementById('screen-login').classList.add('active');
+    }
+  });
+}
+
+// Login
 document.getElementById('loginBtn').addEventListener('click', async () => {
-  const email = document.getElementById('loginEmail').value;
+  const email = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value;
+  if(!email ||!password){
+    showError('loginError','Preencha e-mail e senha');
+    return;
+  }
   try{
     await signInWithEmailAndPassword(auth, email, password);
   }catch(e){
-    document.getElementById('loginError').innerText='Email ou senha inválidos';
-    document.getElementById('loginError').style.display='block';
+    showError('loginError','E-mail ou senha inválidos');
   }
 });
 
-// CORREÇÃO: Espera verificar o auth antes de mostrar qualquer tela
-onAuthStateChanged(auth, async (user) => {
-  document.getElementById('loader').classList.add('hidden');
+// Cadastro
+document.getElementById('registerBtn').addEventListener('click', async () => {
+  const name = document.getElementById('registerName').value.trim();
+  const email = document.getElementById('registerEmail').value.trim();
+  const phone = document.getElementById('registerPhone').value.trim();
+  const password = document.getElementById('registerPassword').value;
+  const acceptTerms = document.getElementById('acceptTerms').checked;
 
-  if(user){
-    const nome = user.displayName || user.email.split('@')[0];
-    document.getElementById('userName').innerText = nome;
-    document.getElementById('screen-auth').classList.remove('active');
-    document.getElementById('screen-home').classList.add('active');
-    await loadData();
-  }else{
-    document.getElementById('screen-home').classList.remove('active');
-    document.getElementById('screen-auth').classList.add('active');
+  if(!name ||!email ||!password){
+    showError('registerError','Preencha todos os campos obrigatórios');
+    return;
+  }
+  if(password.length < 6){
+    showError('registerError','A senha deve ter no mínimo 6 caracteres');
+    return;
+  }
+  if(!acceptTerms){
+    showError('registerError','Aceite os termos de uso');
+    return;
+  }
+
+  try{
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(cred.user, {displayName: name});
+    showSuccess('registerSuccess','Conta criada com sucesso!');
+    setTimeout(showLogin, 1500);
+  }catch(e){
+    if(e.code === 'auth/email-already-in-use'){
+      showError('registerError','Este e-mail já está em uso');
+    }else{
+      showError('registerError','Erro ao criar conta');
+    }
   }
 });
+
+// Esqueci senha
+document.getElementById('forgotBtn').addEventListener('click', async () => {
+  const email = document.getElementById('forgotEmail').value.trim();
+  if(!email){
+    showError('forgotError','Digite seu e-mail');
+    return;
+  }
+  try{
+    await sendPasswordResetEmail(auth, email);
+    showSuccess('forgotSuccess','E-mail de recuperação enviado!');
+  }catch(e){
+    showError('forgotError','E-mail não encontrado');
+  }
+});
+
+function showError(id, msg){
+  document.getElementById(id).innerText = msg;
+  document.getElementById(id).style.display = 'block';
+  setTimeout(()=>{document.getElementById(id).style.display='none';}, 3000);
+}
+function showSuccess(id, msg){
+  document.getElementById(id).innerText = msg;
+  document.getElementById(id).style.display = 'block';
+  setTimeout(()=>{document.getElementById(id).style.display='none';}, 3000);
+}
 
 async function loadData(){
   const catSnap = await getDocs(collection(db,'categorias'));
