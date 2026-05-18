@@ -1,3 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Prime Store VZ</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0f; --card:#15151d; --card-2:#1e1e28; --border:#2a2a35;
+  --purple:#7c3aed; --purple-light:#a78bfa; --neon:#a855f7;
+  --text:#fff; --text-2:#9ca3af; --green:#10b981; --error:#ef4444;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--text);font-size:11px;overflow-x:hidden;}
+.screen{display:none;min-height:100vh;padding-bottom:60px;}
+.screen.active{display:block;}
+button{cursor:pointer;border:none;outline:none;}
+
+/* SPLASH */
+.splash{
+  position:fixed;inset:0;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;z-index:9999;
+  transition:opacity 0.5s;
+}
+.splash.hide{opacity:0;pointer-events:none;}
+.splash img{
+  width:220px;max-width:70%;
+  filter:drop-shadow(0 0 20px rgba(124,58,237,0.6));
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.05);opacity:0.8;}}
+.loader{
+  position:absolute;bottom:80px;width:40px;height:40px;
+  border:3px solid var(--border);border-top:3px solid var(--purple);
+  border-radius:50%;animation:spin 1s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.bottom-nav{display:none;}
+.bottom-nav.show{display:flex;}
+
+/* resto do CSS igual ao anterior */
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.auth-card{width:100%;max-width:360px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 24px;}
+.auth-header{text-align:center;margin-bottom:28px;}
+.auth-header h3{font-size:10px;color:var(--text-2);letter-spacing:0.5px;margin-bottom:12px;font-weight:500;}
+.auth-header h1{font-size:20px;font-weight:700;margin-bottom:6px;}
+.input-group{margin-bottom:16px;}
+.input-label{font-size:11px;color:var(--text-2);margin-bottom:6px;display:block;}
+.input-box{width:100%;height:46px;background:var(--card-2);border:1px solid var(--border);border-radius:10px;padding:0 14px;display:flex;align-items:center;}
+.input-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:13px;}
+.btn{width:100%;height:46px;background:var(--purple);border-radius:10px;color:#fff;font-size:14px;font-weight:600;}
+.row-between{display:flex;align-items:center;justify-content:space-between;margin:18px 0;}
+.checkbox{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-2);}
+.link{font-size:11px;color:var(--purple);cursor:pointer;font-weight:500;}
+.auth-footer{text-align:center;margin-top:20px;font-size:11px;color:var(--text-2);}
+.auth-footer a{color:var(--purple);cursor:pointer;font-weight:600;}
+.alert{padding:10px 12px;border-radius:8px;font-size:11px;margin-bottom:16px;display:none;}
+.alert.error{background:rgba(239,68,68,0.1);border:1px solid var(--error);color:var(--error);}
+.alert.success{background:rgba(16,185,129,0.1);border:1px solid var(--green);color:var(--green);}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;}
+.topbar h2{font-size:14px;font-weight:700;}
+.search-box{padding:0 16px;margin-bottom:14px;}
+.search-box input{width:100%;height:38px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0 12px;color:var(--text);font-size:11px;outline:none;}
+.banner{margin:0 16px 18px;background:linear-gradient(135deg,#7c3aed,#a855f7);border-radius:14px;padding:16px;}
+.banner h3{font-size:12px;margin-bottom:4px;}
+.banner p{font-size:10px;opacity:0.9;margin-bottom:10px;}
+.banner button{background:#fff;color:#000;padding:6px 12px;border-radius:8px;font-size:10px;font-weight:600;}
+.section{padding:0 16px;margin-bottom:18px;}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.section-header h3{font-size:12px;font-weight:600;}
+.section-header a{font-size:10px;color:var(--purple-light);cursor:pointer;}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.cat-item{text-align:center;cursor:pointer;}
+.cat-icon{width:100%;aspect-ratio:1;border-radius:12px;background:var(--card);border:1px solid var(--neon);display:flex;align-items:center;justify-content:center;margin-bottom:6px;}
+.cat-item span{font-size:9px;color:var(--text-2);display:block;}
+.prod-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.prod-item{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;}
+.prod-item img{width:100%;aspect-ratio:1;object-fit:cover;border-bottom:1px solid var(--neon);}
+.prod-info{padding:8px;}
+.prod-info h4{font-size:10px;font-weight:600;margin-bottom:3px;}
+.prod-price{font-size:11px;font-weight:700;color:var(--purple-light);margin-top:4px;}
+.cat-grid-main{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 16px 20px;}
+.cat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 8px;text-align:center;cursor:pointer;transition:0.2s;}
+.cat-card:active{transform:scale(0.97);}
+.cat-card .icon{width:42px;height:42px;margin:0 auto 8px;border-radius:10px;display:flex;align-items:center;justify-content:center;}
+.cat-card span{font-size:10px;font-weight:500;color:var(--text);}
+.icon.games{background:#7c3aed;}
+.icon.streaming{background:#ef4444;}
+.icon.social{background:#ec4899;}
+.icon.gift{background:#f59e0b;}
+.icon.apps{background:#10b981;}
+.icon.plus{background:#6b7280;}
+.subcat-block{padding:0 16px;margin-bottom:20px;}
+.subcat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px;}
+.subcat-card{border-radius:12px;overflow:hidden;cursor:pointer;position:relative;}
+.subcat-card img{width:100%;aspect-ratio:1;object-fit:cover;}
+.subcat-card .label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent, rgba(0,0,0,0.8));padding:6px 4px;font-size:9px;text-align:center;font-weight:600;}
+.tabs{display:flex;background:var(--card-2);border-radius:10px;padding:4px;margin:0 16px 16px;overflow-x:auto;}
+.tab{flex:0 0 auto;padding:8px 14px;font-size:10px;border-radius:8px;cursor:pointer;color:var(--text-2);white-space:nowrap;}
+.tab.active{background:var(--purple);color:#fff;}
+.list-item{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card);border-radius:10px;margin-bottom:8px;border:1px solid var(--border);cursor:pointer;}
+.list-item img{width:40px;height:40px;border-radius:8px;border:1px solid var(--neon);}
+.list-item-info{flex:1;}
+.list-item-info h4{font-size:11px;font-weight:600;margin-bottom:2px;}
+.prod-detail-img{width:100%;aspect-ratio:1;background:var(--card);border-bottom:1px solid var(--neon);}
+.prod-detail-info{padding:16px;}
+.prod-detail-info h2{font-size:14px;margin-bottom:4px;}
+.prod-detail-info.price{font-size:16px;font-weight:700;color:var(--purple-light);margin:10px 0;}
+.btn-buy{position:fixed;bottom:70px;left:16px;right:16px;background:var(--purple);color:#fff;height:44px;border-radius:10px;font-size:12px;font-weight:600;}
+.cart-item{display:flex;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);}
+.cart-item img{width:50px;height:50px;border-radius:8px;border:1px solid var(--neon);}
+.cart-info{flex:1;}
+.cart-summary{padding:16px;border-top:1px solid var(--border);}
+.summary-row{display:flex;justify-content:space-between;margin-bottom:8px;font-size:11px;}
+.summary-row.total{font-size:13px;font-weight:700;margin-top:12px;}
+.btn-checkout{width:100%;height:44px;background:var(--purple);border-radius:10px;color:#fff;font-size:12px;font-weight:600;}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--bg);border-top:1px solid #222;display:flex;justify-content:space-around;padding:8px 0;z-index:10;}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-2);font-size:9px;cursor:pointer;}
+.nav-item.active{color:var(--purple-light);}
+.nav-item svg{width:20px;height:20px;}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div class="splash" id="splash">
+  <img src="https://via.placeholder.com/240x240/7c3aed/ffffff?text=PRIME" alt="Prime Store VZ">
+  <div class="loader"></div>
+</div>
+
+<!-- LOGIN -->
+<div class="screen" id="screen-login">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h3>LOGIN - E-MAIL</h3>
+        <h1>Prime Store VZ</h1>
+        <p>Entre na sua conta</p>
+      </div>
+      <div class="alert error" id="loginError"></div>
+      <div class="input-group">
+        <label class="input-label">E-mail</label>
+        <div class="input-box"><input type="email" id="loginEmail" placeholder="seuemail@gmail.com"></div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Senha</label>
+        <div class="input-box"><input type="password" id="loginPassword" placeholder="••••"></div>
+      </div>
+      <div class="row-between">
+        <label class="checkbox"><input type="checkbox" id="rememberMe"> Lembrar-me</label>
+        <span class="link" onclick="showScreen('forgot')">Esqueceu a senha?</span>
+      </div>
+      <button class="btn" id="loginBtn">ENTRAR</button>
+      <div class="auth-footer">Não tem uma conta? <a onclick="showScreen('register')">Cadastre-se</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div class="screen" id="screen-register">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h3>CADASTRO</h3>
+        <h1>Prime Store VZ</h1>
+        <p>Crie sua conta</p>
+      </div>
+      <div class="alert error" id="registerError"></div>
+      <div class="alert success" id="registerSuccess"></div>
+      <div class="input-group">
+        <label class="input-label">Nome completo</label>
+        <div class="input-box"><input type="text" id="registerName" placeholder="João da Silva"></div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">E-mail</label>
+        <div class="input-box"><input type="email" id="registerEmail" placeholder="joao@email.com"></div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Senha</label>
+        <div class="input-box"><input type="password" id="registerPassword" placeholder="••••"></div>
+      </div>
+      <label class="checkbox" style="margin:18px 0;">
+        <input type="checkbox" id="acceptTerms">
+        <span>Li e aceito os <a>Termos de Uso</a> e <a>Política de Privacidade</a></span>
+      </label>
+      <button class="btn" id="registerBtn">CADASTRAR</button>
+      <div class="auth-footer">Já tem uma conta? <a onclick="showScreen('login')">Entrar</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- FORGOT -->
+<div class="screen" id="screen-forgot">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h3>ESQUECEU A SENHA</h3>
+        <h1>Prime Store VZ</h1>
+        <p>Recuperar senha</p>
+      </div>
+      <div class="alert error" id="forgotError"></div>
+      <div class="alert success" id="forgotSuccess"></div>
+      <div class="input-group">
+        <label class="input-label">E-mail</label>
+        <div class="input-box"><input type="email" id="forgotEmail" placeholder="seuemail@gmail.com"></div>
+      </div>
+      <button class="btn" id="forgotBtn">ENVIAR LINK</button>
+      <div class="auth-footer"><a onclick="showScreen('login')">Voltar para o login</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="screen" id="screen-home">
+  <div class="topbar">
+    <h2>Prime Store VZ</h2>
+    <svg onclick="logout()" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+    </svg>
+  </div>
+  <div class="search-box"><input type="text" placeholder="Buscar produtos..." id="searchHome"></div>
+  <div class="banner">
+    <h3>OFERTAS EXCLUSIVAS</h3>
+    <p>ATÉ 70% OFF</p>
+    <button>VER OFERTAS</button>
+  </div>
+  <div class="section">
+    <div class="section-header"><h3>Categorias</h3><a onclick="goTo('categorias')">Ver todas</a></div>
+    <div class="cat-grid" id="catGrid"></div>
+  </div>
+  <div class="section">
+    <div class="section-header"><h3>Produtos em destaque</h3></div>
+    <div class="prod-grid" id="prodGrid"></div>
+  </div>
+</div>
+
+<!-- CATEGORIAS -->
+<div class="screen" id="screen-categorias">
+  <div class="topbar">
+    <svg onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    <h2>Categorias</h2>
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg>
+  </div>
+  <div class="search-box">
+    <input type="text" placeholder="Buscar categorias..." oninput="searchCats(this.value)">
+  </div>
+  <div class="cat-grid-main" id="catGridMain"></div>
+  <div class="subcat-block">
+    <div class="section-header">
+      <h3>Subcategorias - Games</h3>
+      <a onclick="openSubcat('games')">Ver todas</a>
+    </div>
+    <div class="subcat-grid" id="subcatGridGames"></div>
+  </div>
+</div>
+
+<!-- SUBCATEGORIAS -->
+<div class="screen" id="screen-subcat">
+  <div class="topbar">
+    <svg onclick="goTo('categorias')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    <h2 id="subcatTitle">Free Fire</h2>
+    <div style="width:18px"></div>
+  </div>
+  <div class="search-box"><input type="text" placeholder="Buscar produtos..." id="searchProd" oninput="filterProducts()"></div>
+  <div class="tabs" id="subTabs"></div>
+  <div class="prod-grid" id="subProdGrid" style="padding:0 16px;"></div>
+</div>
+
+<!-- DETALHES -->
+<div class="screen" id="screen-detail">
+  <div class="topbar">
+    <svg onclick="goBack()" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    <div style="width:18px"></div>
+  </div>
+  <img class="prod-detail-img" id="detailImg">
+  <div class="prod-detail-info">
+    <h2 id="detailName">520 Diamantes</h2>
+    <p id="detailSub">Free Fire</p>
+    <div class="price" id="detailPrice">R$ 20,90</div>
+    <div class="desc-box" style="margin-top:16px;">
+      <h4>DESCRIÇÃO</h4>
+      <p id="detailDesc">520 diamantes para sua conta do Free Fire.</p>
+    </div>
+  </div>
+  <button class="btn-buy" id="buyBtn">COMPRAR AGORA</button>
+</div>
+
+<!-- CARRINHO -->
+<div class="screen" id="screen-cart">
+  <div class="topbar">
+    <svg onclick="goTo('home')" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    <h2>Meu carrinho</h2>
+    <div style="width:18px"></div>
+  </div>
+  <div id="cartItems"></div>
+  <div class="cart-summary">
+    <div class="summary-row"><span>Subtotal</span><span id="subtotal">R$ 0,00</span></div>
+    <div class="summary-row total"><span>Total</span><span id="total">R$ 0,00</span></div>
+    <button class="btn-checkout">FINALIZAR COMPRA</button>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav" id="bottomNav">
+  <div class="nav-item active" onclick="goTo('home')">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+    Home
+  </div>
+  <div class="nav-item" onclick="goTo('categorias')">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    Categorias
+  </div>
+  <div class="nav-item" onclick="goTo('cart')">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    Carrinho
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, updateProfile, signOut, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -19,39 +339,30 @@ let allProducts = [], allCategories = [], cart = [];
 let currentCategory = null, currentProduct = null, currentSubcat = 'Todos', prevScreen = 'home';
 
 const LOGIN_KEY = 'prime_login_time';
-const LOGIN_DURATION = 24 * 60 * 60 * 1000; // 24h
+const LOGIN_DURATION = 24 * 60 * 60 * 1000;
 
-// Inicializa Firebase com try/catch pra ver erro no console
 try {
   app = initializeApp(firebaseConfig);
   auth = getAuth(app);
   db = getFirestore(app);
-  console.log('Firebase conectado');
+  console.log('Firebase OK');
 } catch(e) {
   console.error('Erro Firebase:', e);
-  alert('Erro ao conectar Firebase: ' + e.message);
+  alert('Erro Firebase: ' + e.message);
 }
 
-// SPLASH 5s
 window.addEventListener('load', () => {
-  console.log('Página carregou');
-  
+  console.log('Load');
   setTimeout(() => {
-    const splash = document.getElementById('splash');
-    if(splash) {
-      splash.classList.add('hide');
-      console.log('Splash removido');
-    }
+    document.getElementById('splash').classList.add('hide');
     checkLoginExpiry();
   }, 5000);
   
-  // Fallback: se der erro, esconde splash em 7s de qualquer jeito
   setTimeout(() => {
     const splash = document.getElementById('splash');
     if(splash && !splash.classList.contains('hide')) {
       splash.classList.add('hide');
       showScreen('login');
-      console.log('Fallback ativado');
     }
   }, 7000);
 });
@@ -69,7 +380,6 @@ async function checkLoginExpiry(){
     }
 
     onAuthStateChanged(auth, async (user) => {
-      console.log('Auth state:', user ? 'logado' : 'deslogado');
       if(user){
         document.getElementById('bottomNav').classList.add('show');
         showScreen('home');
@@ -79,12 +389,11 @@ async function checkLoginExpiry(){
       }
     });
   } catch(e) {
-    console.error('Erro no checkLoginExpiry:', e);
+    console.error(e);
     showScreen('login');
   }
 }
 
-// LOGIN
 document.getElementById('loginBtn').onclick = async () => {
   const email = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value;
@@ -97,12 +406,10 @@ document.getElementById('loginBtn').onclick = async () => {
     await signInWithEmailAndPassword(auth, email, password);
     localStorage.setItem(LOGIN_KEY, Date.now().toString());
   }catch(e){
-    console.error('Erro login:', e);
     showAlert('loginError', e.message);
   }
 };
 
-// REGISTER
 document.getElementById('registerBtn').onclick = async () => {
   const name = document.getElementById('registerName').value.trim();
   const email = document.getElementById('registerEmail').value.trim();
@@ -116,12 +423,10 @@ document.getElementById('registerBtn').onclick = async () => {
     showAlert('registerSuccess', 'Conta criada!', 'success');
     setTimeout(() => showScreen('login'), 1500);
   }catch(e){
-    console.error('Erro cadastro:', e);
     showAlert('registerError', e.message);
   }
 };
 
-// FORGOT
 document.getElementById('forgotBtn').onclick = async () => {
   const email = document.getElementById('forgotEmail').value.trim();
   if(!email) return showAlert('forgotError', 'Digite seu e-mail');
@@ -150,7 +455,7 @@ async function loadData(){
     renderHome();
     renderCategorias();
   } catch(e) {
-    console.error('Erro ao carregar dados:', e);
+    console.error('Erro dados:', e);
   }
 }
 
@@ -222,7 +527,7 @@ window.searchCats = (q) => {
 window.openSubcat = (catId) => {
   currentCategory = allCategories.find(c=>c.id===catId) || {id:catId, nome:catId};
   document.getElementById('subcatTitle').innerText = currentCategory.nome;
-  const subcats = ['Todos',...new Set(allProducts.filter(p=>p.categoriaId===catId).map(p=>p.subcat).filter(Boolean))];
+    const subcats = ['Todos',...new Set(allProducts.filter(p=>p.categoriaId===catId).map(p=>p.subcat).filter(Boolean))];
   document.getElementById('subTabs').innerHTML = subcats.map(s=>`
     <div class="tab ${s==='Todos'?'active':''}" onclick="setSubcat('${s}')">${s}</div>
   `).join('');
@@ -315,3 +620,5 @@ function showAlert(id, msg, type='error'){
   setTimeout(()=>el.style.display='none', 3000);
 }
 </script>
+</body>
+</html>
