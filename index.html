@@ -14,42 +14,74 @@ const firebaseConfig = {
   measurementId: "G-CN88J28WRX"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+let app, auth, db;
+let allProducts = [], allCategories = [], cart = [];
+let currentCategory = null, currentProduct = null, currentSubcat = 'Todos', prevScreen = 'home';
 
 const LOGIN_KEY = 'prime_login_time';
-const LOGIN_DURATION = 24 * 60 * 60 * 1000; // 24h em ms
+const LOGIN_DURATION = 24 * 60 * 60 * 1000; // 24h
 
-// SPLASH 5s + VERIFICA LOGIN 24H
+// Inicializa Firebase com try/catch pra ver erro no console
+try {
+  app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = getFirestore(app);
+  console.log('Firebase conectado');
+} catch(e) {
+  console.error('Erro Firebase:', e);
+  alert('Erro ao conectar Firebase: ' + e.message);
+}
+
+// SPLASH 5s
 window.addEventListener('load', () => {
+  console.log('Página carregou');
+  
   setTimeout(() => {
-    document.getElementById('splash').classList.add('hide');
+    const splash = document.getElementById('splash');
+    if(splash) {
+      splash.classList.add('hide');
+      console.log('Splash removido');
+    }
     checkLoginExpiry();
   }, 5000);
+  
+  // Fallback: se der erro, esconde splash em 7s de qualquer jeito
+  setTimeout(() => {
+    const splash = document.getElementById('splash');
+    if(splash && !splash.classList.contains('hide')) {
+      splash.classList.add('hide');
+      showScreen('login');
+      console.log('Fallback ativado');
+    }
+  }, 7000);
 });
 
 async function checkLoginExpiry(){
-  const lastLogin = localStorage.getItem(LOGIN_KEY);
-  const now = Date.now();
-  
-  if(lastLogin && (now - parseInt(lastLogin)) > LOGIN_DURATION){
-    // Passou 24h, desloga
-    await signOut(auth);
-    localStorage.removeItem(LOGIN_KEY);
-    showScreen('login');
-    return;
-  }
-
-  onAuthStateChanged(auth, async (user) => {
-    if(user){
-      document.getElementById('bottomNav').classList.add('show');
-      showScreen('home');
-      await loadData();
-    }else{
+  try {
+    const lastLogin = localStorage.getItem(LOGIN_KEY);
+    const now = Date.now();
+    
+    if(lastLogin && (now - parseInt(lastLogin)) > LOGIN_DURATION){
+      await signOut(auth);
+      localStorage.removeItem(LOGIN_KEY);
       showScreen('login');
+      return;
     }
-  });
+
+    onAuthStateChanged(auth, async (user) => {
+      console.log('Auth state:', user ? 'logado' : 'deslogado');
+      if(user){
+        document.getElementById('bottomNav').classList.add('show');
+        showScreen('home');
+        await loadData();
+      }else{
+        showScreen('login');
+      }
+    });
+  } catch(e) {
+    console.error('Erro no checkLoginExpiry:', e);
+    showScreen('login');
+  }
 }
 
 // LOGIN
@@ -61,20 +93,16 @@ document.getElementById('loginBtn').onclick = async () => {
   if(!email || !password) return showAlert('loginError', 'Preencha e-mail e senha');
   
   try{
-    // Se "Lembrar-me" marcado = persiste 24h. Se não, persiste só na sessão
     await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
-    
     await signInWithEmailAndPassword(auth, email, password);
-    
-    // Salva timestamp do login
     localStorage.setItem(LOGIN_KEY, Date.now().toString());
-    
   }catch(e){
-    showAlert('loginError', 'E-mail ou senha inválidos');
+    console.error('Erro login:', e);
+    showAlert('loginError', e.message);
   }
 };
 
-// REGISTER - mesmo código de antes
+// REGISTER
 document.getElementById('registerBtn').onclick = async () => {
   const name = document.getElementById('registerName').value.trim();
   const email = document.getElementById('registerEmail').value.trim();
@@ -88,15 +116,202 @@ document.getElementById('registerBtn').onclick = async () => {
     showAlert('registerSuccess', 'Conta criada!', 'success');
     setTimeout(() => showScreen('login'), 1500);
   }catch(e){
-    showAlert('registerError', 'Erro ao criar conta');
+    console.error('Erro cadastro:', e);
+    showAlert('registerError', e.message);
   }
 };
 
-// LOGOUT manual também limpa o timer
+// FORGOT
+document.getElementById('forgotBtn').onclick = async () => {
+  const email = document.getElementById('forgotEmail').value.trim();
+  if(!email) return showAlert('forgotError', 'Digite seu e-mail');
+  try{
+    await sendPasswordResetEmail(auth, email);
+    showAlert('forgotSuccess', 'Link enviado!', 'success');
+    setTimeout(() => showScreen('login'), 2000);
+  }catch(e){
+    showAlert('forgotError', e.message);
+  }
+};
+
 window.logout = async () => {
   await signOut(auth);
   localStorage.removeItem(LOGIN_KEY);
   document.getElementById('bottomNav').classList.remove('show');
   showScreen('login');
+}
+
+async function loadData(){
+  try {
+    const catSnap = await getDocs(collection(db,'categorias'));
+    allCategories = []; catSnap.forEach(d=>allCategories.push({id:d.id,...d.data()}));
+    const prodSnap = await getDocs(collection(db,'produtos'));
+    allProducts = []; prodSnap.forEach(d=>allProducts.push({id:d.id,...d.data()}));
+    renderHome();
+    renderCategorias();
+  } catch(e) {
+    console.error('Erro ao carregar dados:', e);
+  }
+}
+
+function renderHome(){
+  document.getElementById('catGrid').innerHTML = allCategories.slice(0,6).map(cat=>`
+    <div class="cat-item" onclick="openSubcat('${cat.id}')">
+      <div class="cat-icon">
+        <svg width="28" height="28" fill="#a855f7" viewBox="0 0 24 24"><path d="M21.58 7.19c-.23-.86-.9-1.54-1.76-1.77C18.25 5 12 5 12 5s-6.26 0-7.82.42c-.86.23-1.53.91-1.76 1.77C2 8.75 2 12 2 12s0 3.26.42 4.81c.23.86.9 1.54 1.76 1.77C5.74 19 12 19 12 19s6.26 0 7.82-.42c.86-.23 1.53-.91 1.76-1.77C22 15.26 22 12 22 12s0-3.25-.42-4.81zM10 15V9l5.2 3-5.2 3z"/></svg>
+      </div>
+      <span>${cat.nome}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('prodGrid').innerHTML = allProducts.slice(0,4).map(prod=>`
+    <div class="prod-item" onclick="openDetail('${prod.id}')">
+      <img src="${prod.img}" onerror="this.src='https://via.placeholder.com/200'">
+      <div class="prod-info">
+        <h4>${prod.nome}</h4>
+        <div class="prod-price">R$ ${prod.preco}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderCategorias(){
+  const cats = [
+    {id:'games', nome:'Games', icon:'games', color:'games'},
+    {id:'streaming', nome:'Streaming', icon:'streaming', color:'streaming'},
+    {id:'social', nome:'Redes Sociais', icon:'social', color:'social'},
+    {id:'gift', nome:'Gift Cards', icon:'gift', color:'gift'},
+    {id:'apps', nome:'Apps Premium', icon:'apps', color:'apps'},
+    {id:'outros', nome:'Outros', icon:'plus', color:'plus'}
+  ];
+
+  const icons = {
+    games:`<svg width="24" height="24" fill="#fff" viewBox="0 0 24 24"><path d="M21.58 7.19c-.23-.86-.9-1.54-1.76-1.77C18.25 5 12 5 12 5s-6.26 0-7.82.42c-.86.23-1.53.91-1.76 1.77C2 8.75 2 12 2 12s0 3.26.42 4.81c.23.86.9 1.54 1.76 1.77C5.74 19 12 19 12 19s6.26 0 7.82-.42c.86-.23 1.53-.91 1.76-1.77C22 15.26 22 12 22 12s0-3.25-.42-4.81zM10 15V9l5.2 3-5.2 3z"/></svg>`,
+    streaming:`<svg width="24" height="24" fill="#fff" viewBox="0 0 24 24"><path d="M10 8.64L15.27 12 10 15.36V8.64M8 5v14l11-7L8 5z"/></svg>`,
+    social:`<svg width="24" height="24" fill="#fff" viewBox="0 0 24 24"><path d="M12 2.04C6.5 2.04 2 6.53 2 12.06c0 4.42 3.29 8.09 7.58 8.92v-6.31h-2.29v-2.61h2.29V9.85c0-2.26 1.35-3.51 3.42-3.51.99 0 2.03.18 2.03.18v2.23h-1.14c-1.12 0-1.47.7-1.47 1.41v1.7h2.52l-.4 2.61h-2.12v6.31C18.71 20.15 22 16.48 22 12.06c0-5.53-4.5-10.02-10-10.02z"/></svg>`,
+    gift:`<svg width="24" height="24" fill="#fff" viewBox="0 0 24 24"><path d="M20 12V8H4v4H2v8h2v-4h16v4h2v-8h-2zM6 10h12v2H6v-2z"/></svg>`,
+    apps:`<svg width="24" height="24" fill="#fff" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h7"/></svg>`,
+    plus:`<svg width="24" height="24" fill="#fff" viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"/></svg>`
+  };
+
+  document.getElementById('catGridMain').innerHTML = cats.map(cat=>`
+    <div class="cat-card" onclick="openSubcat('${cat.id}')">
+      <div class="icon ${cat.color}">${icons[cat.icon]}</div>
+      <span>${cat.nome}</span>
+    </div>
+  `).join('');
+
+  const gamesSubs = allProducts.filter(p=>p.categoriaId==='games').slice(0,6);
+  document.getElementById('subcatGridGames').innerHTML = gamesSubs.map(prod=>`
+    <div class="subcat-card" onclick="openDetail('${prod.id}')">
+      <img src="${prod.img}" onerror="this.src='https://via.placeholder.com/200'">
+      <div class="label">${prod.nome}</div>
+    </div>
+  `).join('');
+}
+
+window.searchCats = (q) => {
+  const cards = document.querySelectorAll('.cat-card');
+  q = q.toLowerCase();
+  cards.forEach(card=>{
+    const name = card.querySelector('span').innerText.toLowerCase();
+    card.style.display = name.includes(q) ? 'block' : 'none';
+  });
+}
+
+window.openSubcat = (catId) => {
+  currentCategory = allCategories.find(c=>c.id===catId) || {id:catId, nome:catId};
+  document.getElementById('subcatTitle').innerText = currentCategory.nome;
+  const subcats = ['Todos',...new Set(allProducts.filter(p=>p.categoriaId===catId).map(p=>p.subcat).filter(Boolean))];
+  document.getElementById('subTabs').innerHTML = subcats.map(s=>`
+    <div class="tab ${s==='Todos'?'active':''}" onclick="setSubcat('${s}')">${s}</div>
+  `).join('');
+  filterProducts();
+  goTo('subcat');
+}
+
+window.setSubcat = (subcat) => {
+  currentSubcat = subcat;
+  document.querySelectorAll('#subTabs .tab').forEach(t=>{
+    t.classList.toggle('active', t.innerText===subcat);
+  });
+  filterProducts();
+}
+
+window.filterProducts = () => {
+  const search = document.getElementById('searchProd').value.toLowerCase();
+  let prods = allProducts.filter(p=>p.categoriaId===currentCategory.id);
+  if(currentSubcat!=='Todos') prods = prods.filter(p=>p.subcat===currentSubcat);
+  if(search) prods = prods.filter(p=>p.nome.toLowerCase().includes(search));
+  document.getElementById('subProdGrid').innerHTML = prods.map(prod=>`
+    <div class="prod-item" onclick="openDetail('${prod.id}')">
+      <img src="${prod.img}" onerror="this.src='https://via.placeholder.com/200'">
+      <div class="prod-info">
+        <h4>${prod.nome}</h4>
+        <div class="prod-price">R$ ${prod.preco}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+window.openDetail = (prodId) => {
+  currentProduct = allProducts.find(p=>p.id===prodId);
+  prevScreen = document.querySelector('.screen.active').id.replace('screen-','');
+  document.getElementById('detailImg').src = currentProduct.img;
+  document.getElementById('detailName').innerText = currentProduct.nome;
+  document.getElementById('detailSub').innerText = currentProduct.subcat || '';
+  document.getElementById('detailPrice').innerText = `R$ ${currentProduct.preco}`;
+  document.getElementById('detailDesc').innerText = currentProduct.desc || 'Sem descrição';
+  goTo('detail');
+}
+
+document.getElementById('buyBtn').onclick = () => {
+  const existing = cart.find(i=>i.id===currentProduct.id);
+  if(existing) existing.qty++;
+  else cart.push({...currentProduct,qty:1});
+  renderCart();
+  goTo('cart');
+}
+
+function renderCart(){
+  const total = cart.reduce((sum,i)=>sum + parseFloat(i.preco) * i.qty,0);
+  document.getElementById('cartItems').innerHTML = cart.map(item=>`
+    <div class="cart-item">
+      <img src="${item.img}" onerror="this.src='https://via.placeholder.com/200'">
+      <div class="cart-info">
+        <h4>${item.nome}</h4>
+        <p>R$ ${item.preco} x ${item.qty}</p>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('subtotal').innerText = `R$ ${total.toFixed(2)}`;
+  document.getElementById('total').innerText = `R$ ${total.toFixed(2)}`;
+}
+
+window.showScreen = (screen) => {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById(`screen-${screen}`);
+  if(target) target.classList.add('active');
+  document.querySelectorAll('.alert').forEach(a => a.style.display='none');
+}
+
+window.goTo = (screen) => {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(`screen-${screen}`).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(screen==='home') document.querySelectorAll('.nav-item')[0].classList.add('active');
+  if(screen==='categorias') document.querySelectorAll('.nav-item')[1].classList.add('active');
+  if(screen==='cart') document.querySelectorAll('.nav-item')[2].classList.add('active');
+}
+
+window.goBack = () => goTo(prevScreen);
+
+function showAlert(id, msg, type='error'){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.className = `alert ${type}`;
+  el.innerText = msg;
+  el.style.display = 'block';
+  setTimeout(()=>el.style.display='none', 3000);
 }
 </script>
