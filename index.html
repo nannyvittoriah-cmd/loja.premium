@@ -1,241 +1,14 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Prime Store VZ</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#0a0a0f;
-  --card:#0f0f14;
-  --input:#1a1a22;
-  --border:#2a2a35;
-  --purple:#7c3aed;
-  --purple-hover:#6d28d9;
-  --text:#ffffff;
-  --text-2:#8b8b9b;
-  --error:#ef4444;
-  --success:#10b981;
-}
-
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
-body{background:var(--bg);color:var(--text);}
-.screen{display:none;}
-.screen.active{display:block;}
-
-/* Container */
-.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
-.auth-card{
-  width:100%;max-width:360px;
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:28px 24px;
-}
-
-/* Header */
-.auth-header{text-align:center;margin-bottom:28px;}
-.auth-header h3{font-size:10px;color:var(--text-2);letter-spacing:0.5px;margin-bottom:12px;font-weight:500;}
-.auth-header h1{font-size:20px;font-weight:700;margin-bottom:6px;}
-.auth-header p{font-size:11px;color:var(--text-2);}
-
-/* Input */
-.input-group{margin-bottom:16px;}
-.input-label{font-size:11px;color:var(--text-2);margin-bottom:6px;display:block;}
-.input-box{
-  width:100%;height:46px;
-  background:var(--input);
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:0 14px;
-  display:flex;align-items:center;
-  transition:0.2s;
-}
-.input-box:focus-within{border-color:var(--purple);}
-.input-box input{
-  flex:1;background:transparent;border:none;outline:none;
-  color:var(--text);font-size:13px;
-}
-.input-box input::placeholder{color:#4a4a55;}
-
-/* Checkbox & Links */
-.row-between{display:flex;align-items:center;justify-content:space-between;margin:18px 0;}
-.checkbox{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-2);}
-.checkbox input{width:16px;height:16px;accent-color:var(--purple);}
-.link{font-size:11px;color:var(--purple);cursor:pointer;font-weight:500;}
-.link:hover{color:var(--purple-hover);}
-
-/* Button */
-.btn{
-  width:100%;height:46px;
-  background:var(--purple);
-  border:none;border-radius:10px;
-  color:#fff;font-size:14px;font-weight:600;
-  cursor:pointer;transition:0.2s;
-}
-.btn:hover{background:var(--purple-hover);}
-.btn:disabled{opacity:0.5;cursor:not-allowed;}
-
-/* Footer */
-.auth-footer{text-align:center;margin-top:20px;font-size:11px;color:var(--text-2);}
-.auth-footer a{color:var(--purple);cursor:pointer;font-weight:600;}
-
-/* Alert */
-.alert{
-  padding:10px 12px;border-radius:8px;
-  font-size:11px;margin-bottom:16px;display:none;
-}
-.alert.error{background:rgba(239,68,68,0.1);border:1px solid var(--error);color:var(--error);}
-.alert.success{background:rgba(16,185,129,0.1);border:1px solid var(--success);color:var(--success);}
-
-/* Checkbox termos */
-.terms{font-size:10px;color:var(--text-2);line-height:1.4;}
-.terms a{color:var(--purple);}
-</style>
-</head>
-<body>
-
-<!-- LOGIN -->
-<div class="screen active" id="screen-login">
-  <div class="auth-wrap">
-    <div class="auth-card">
-      <div class="auth-header">
-        <h3>LOGIN - E-MAIL</h3>
-        <h1>Prime Store VZ</h1>
-        <p>Entre na sua conta</p>
-      </div>
-      
-      <div class="alert error" id="loginError"></div>
-      
-      <div class="input-group">
-        <label class="input-label">E-mail</label>
-        <div class="input-box">
-          <input type="email" id="loginEmail" placeholder="seuemail@gmail.com" autocomplete="email">
-        </div>
-      </div>
-      
-      <div class="input-group">
-        <label class="input-label">Senha</label>
-        <div class="input-box">
-          <input type="password" id="loginPassword" placeholder="••••" autocomplete="current-password">
-        </div>
-      </div>
-      
-      <div class="row-between">
-        <label class="checkbox">
-          <input type="checkbox" id="rememberMe">
-          Lembrar-me
-        </label>
-        <span class="link" onclick="showScreen('forgot')">Esqueceu a senha?</span>
-      </div>
-      
-      <button class="btn" id="loginBtn">ENTRAR</button>
-      
-      <div class="auth-footer">
-        Não tem uma conta? <a onclick="showScreen('register')">Cadastre-se</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- CADASTRO -->
-<div class="screen" id="screen-register">
-  <div class="auth-wrap">
-    <div class="auth-card">
-      <div class="auth-header">
-        <h3>CADASTRO</h3>
-        <h1>Prime Store VZ</h1>
-        <p>Crie sua conta</p>
-      </div>
-      
-      <div class="alert error" id="registerError"></div>
-      <div class="alert success" id="registerSuccess"></div>
-      
-      <div class="input-group">
-        <label class="input-label">Nome completo</label>
-        <div class="input-box">
-          <input type="text" id="registerName" placeholder="João da Silva">
-        </div>
-      </div>
-      
-      <div class="input-group">
-        <label class="input-label">E-mail</label>
-        <div class="input-box">
-          <input type="email" id="registerEmail" placeholder="joao@email.com" autocomplete="email">
-        </div>
-      </div>
-      
-      <div class="input-group">
-        <label class="input-label">Telefone</label>
-        <div class="input-box">
-          <input type="tel" id="registerPhone" placeholder="(11) 99999-9999">
-        </div>
-      </div>
-      
-      <div class="input-group">
-        <label class="input-label">Senha</label>
-        <div class="input-box">
-          <input type="password" id="registerPassword" placeholder="••••" autocomplete="new-password">
-        </div>
-      </div>
-      
-      <label class="checkbox" style="margin:18px 0;">
-        <input type="checkbox" id="acceptTerms">
-        <span class="terms">Li e aceito os <a>Termos de Uso</a> e <a>Política de Privacidade</a></span>
-      </label>
-      
-      <button class="btn" id="registerBtn">CADASTRAR</button>
-      
-      <div class="auth-footer">
-        Já tem uma conta? <a onclick="showScreen('login')">Entrar</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ESQUECI SENHA -->
-<div class="screen" id="screen-forgot">
-  <div class="auth-wrap">
-    <div class="auth-card">
-      <div class="auth-header">
-        <h3>ESQUECEU A SENHA</h3>
-        <h1>Prime Store VZ</h1>
-        <p>Recuperar senha</p>
-      </div>
-      
-      <div class="alert error" id="forgotError"></div>
-      <div class="alert success" id="forgotSuccess"></div>
-      
-      <p style="font-size:11px;color:var(--text-2);text-align:center;margin-bottom:20px;line-height:1.4;">
-        Informe seu e-mail para receber o link de recuperação de senha.
-      </p>
-      
-      <div class="input-group">
-        <label class="input-label">E-mail</label>
-        <div class="input-box">
-          <input type="email" id="forgotEmail" placeholder="seuemail@gmail.com">
-        </div>
-      </div>
-      
-      <button class="btn" id="forgotBtn">ENVIAR LINK</button>
-      
-      <div class="auth-footer">
-        <a onclick="showScreen('login')">Voltar para o login</a>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { 
-  getAuth, 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword, 
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   sendPasswordResetEmail,
-  updateProfile 
+  updateProfile
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -245,55 +18,64 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
-// Navegação entre telas
-window.showScreen = (screen) => {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(`screen-${screen}`).classList.add('active');
-  clearAlerts();
-}
+let allCategories = [];
+let allProducts = [];
+let cart = [];
+let currentCategory = null;
+let currentProduct = null;
+let currentSubcat = 'Todos';
+let prevScreen = 'home';
 
-function showAlert(id, message, type='error'){
-  const el = document.getElementById(id);
-  el.className = `alert ${type}`;
-  el.innerText = message;
-  el.style.display = 'block';
-}
+// 1. VERIFICA SE JÁ TEM USUÁRIO LOGADO
+onAuthStateChanged(auth, async (user) => {
+  if(user){
+    // Usuário logado: vai pra Home
+    const nome = user.displayName || user.email.split('@')[0];
+    document.getElementById('userName').innerText = nome;
 
-function clearAlerts(){
-  document.querySelectorAll('.alert').forEach(a => a.style.display = 'none');
-}
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-home').classList.add('active');
 
-// LOGIN
+    await loadData();
+  }else{
+    // Não logado: fica no Login
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-login').classList.add('active');
+  }
+});
+
+// 2. LOGIN
 document.getElementById('loginBtn').addEventListener('click', async () => {
   const email = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value;
-  
-  if(!email || !password){
+
+  if(!email ||!password){
     showAlert('loginError', 'Preencha e-mail e senha');
     return;
   }
-  
+
   document.getElementById('loginBtn').disabled = true;
-  
+
   try{
     await signInWithEmailAndPassword(auth, email, password);
-    alert('Login realizado! Próximo passo: criar a home.');
+    // O onAuthStateChanged já cuida de ir pra Home
   }catch(e){
     showAlert('loginError', 'E-mail ou senha inválidos');
     document.getElementById('loginBtn').disabled = false;
   }
 });
 
-// CADASTRO
+// 3. CADASTRO
 document.getElementById('registerBtn').addEventListener('click', async () => {
   const name = document.getElementById('registerName').value.trim();
   const email = document.getElementById('registerEmail').value.trim();
   const phone = document.getElementById('registerPhone').value.trim();
   const password = document.getElementById('registerPassword').value;
   const acceptTerms = document.getElementById('acceptTerms').checked;
-  
-  if(!name || !email || !password){
+
+  if(!name ||!email ||!password){
     showAlert('registerError', 'Preencha todos os campos');
     return;
   }
@@ -305,9 +87,9 @@ document.getElementById('registerBtn').addEventListener('click', async () => {
     showAlert('registerError', 'Aceite os termos de uso');
     return;
   }
-  
+
   document.getElementById('registerBtn').disabled = true;
-  
+
   try{
     const cred = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(cred.user, {displayName: name});
@@ -323,17 +105,17 @@ document.getElementById('registerBtn').addEventListener('click', async () => {
   }
 });
 
-// ESQUECI SENHA
+// 4. ESQUECI SENHA
 document.getElementById('forgotBtn').addEventListener('click', async () => {
   const email = document.getElementById('forgotEmail').value.trim();
-  
+
   if(!email){
     showAlert('forgotError', 'Digite seu e-mail');
     return;
   }
-  
+
   document.getElementById('forgotBtn').disabled = true;
-  
+
   try{
     await sendPasswordResetEmail(auth, email);
     showAlert('forgotSuccess', 'Link enviado para seu e-mail!', 'success');
@@ -343,6 +125,64 @@ document.getElementById('forgotBtn').addEventListener('click', async () => {
     document.getElementById('forgotBtn').disabled = false;
   }
 });
+
+// 5. CARREGA DADOS DEPOIS DO LOGIN
+async function loadData(){
+  const catSnap = await getDocs(collection(db,'categorias'));
+  allCategories = [];
+  catSnap.forEach(d=>allCategories.push({id:d.id,...d.data()}));
+
+  const prodSnap = await getDocs(collection(db,'produtos'));
+  allProducts = [];
+  prodSnap.forEach(d=>allProducts.push({id:d.id,...d.data()}));
+
+  renderHome();
+  renderCategorias();
+}
+
+// 6. RENDER HOME
+function renderHome(){
+  document.getElementById('catGrid').innerHTML = allCategories.slice(0,6).map(cat=>`
+    <div class="cat-item" onclick="openSubcat('${cat.id}')">
+      <div class="cat-icon">
+        <svg width="28" height="28" fill="#a855f7" viewBox="0 0 24 24">
+          <path d="M21.58 7.19c-.23-.86-.9-1.54-1.76-1.77C18.25 5 12 5 12 5s-6.26 0-7.82.42c-.86.23-1.53.91-1.76 1.77C2 8.75 2 12 2 12s0 3.26.42 4.81c.23.86.9 1.54 1.76 1.77C5.74 19 12 19 12 19s6.26 0 7.82-.42c.86-.23 1.53-.91 1.76-1.77C22 15.26 22 12 22 12s0-3.25-.42-4.81zM10 15V9l5.2 3-5.2 3z"/>
+        </svg>
+      </div>
+      <span>${cat.nome}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('prodGrid').innerHTML = allProducts.slice(0,4).map(prod=>`
+    <div class="prod-item" onclick="openDetail('${prod.id}')">
+      <img src="${prod.img}" onerror="this.src='https://via.placeholder.com/200'">
+      <div class="prod-info">
+        <h4>${prod.nome}</h4>
+        <p>${prod.subcat || ''}</p>
+        <div class="prod-price">R$ ${prod.preco}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// 7. NAVEGAÇÃO
+window.showScreen = (screen) => {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(`screen-${screen}`).classList.add('active');
+  clearAlerts();
+}
+
+window.goTo = (screen) => {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(`screen-${screen}`).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+
+  if(screen==='home') document.querySelectorAll('.nav-item')[0].classList.add('active');
+  if(screen==='categorias') document.querySelectorAll('.nav-item')[1].classList.add('active');
+  if(screen==='cart') document.querySelectorAll('.nav-item')[2].classList.add('active');
+}
+
+window.logout = async () => {
+  await auth.signOut();
+}
 </script>
-</body>
-</html>
