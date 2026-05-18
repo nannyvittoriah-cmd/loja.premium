@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Prime Store VZ - Auth</title>
+<title>Prime Store VZ</title>
 <style>
 :root{
   --bg:#0a0a0f;
@@ -16,16 +16,18 @@
   --text-dim:#9ca3af;
 }
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
-body{background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
-.screen{display:none;width:100%;max-width:380px;}
+body{background:var(--bg);color:var(--text);min-height:100vh;}
+.screen{display:none;min-height:100vh;}
 .screen.active{display:block;}
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 24px;}
+
+/* ===== AUTH SCREENS ===== */
+.auth-wrap{display:flex;align-items:center;justify-content:center;padding:20px;min-height:100vh;}
+.auth-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 24px;width:100%;max-width:380px;}
 h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px;}
 .subtitle{font-size:13px;color:var(--text-dim);text-align:center;margin-bottom:24px;}
 .logo{font-size:20px;font-weight:700;color:var(--purple-light);text-align:center;margin-bottom:4px;}
 .logo-sub{font-size:13px;color:var(--text-dim);text-align:center;margin-bottom:20px;}
-.input-group{margin-bottom:16px;}
-.input-box{width:100%;height:48px;background:var(--input);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;padding:0 14px;}
+.input-box{width:100%;height:48px;background:var(--input);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;padding:0 14px;margin-bottom:16px;}
 .input-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px;}
 .input-box input::placeholder{color:#6b7280;}
 .input-box .toggle{cursor:pointer;color:#6b7280;}
@@ -43,93 +45,193 @@ h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px;}
 .alert{padding:12px 14px;border-radius:10px;font-size:13px;margin-bottom:16px;display:none;}
 .alert.error{background:rgba(239,68,68,0.1);border:1px solid #ef4444;color:#ef4444;}
 .alert.success{background:rgba(16,185,129,0.1);border:1px solid #10b981;color:#10b981;}
+
+/* ===== HOME ===== */
+.home-wrap{padding-bottom:30px;}
+.header{display:flex;align-items:center;justify-content:space-between;padding:16px;}
+.menu-btn,.profile-btn{background:none;border:none;cursor:pointer;}
+.menu-btn svg,.profile-btn svg{width:24px;height:24px;stroke:var(--text);}
+.profile-btn svg{stroke:var(--purple-light);}
+.logo-header{font-size:18px;font-weight:700;}
+.logo-header span{color:var(--purple-light);}
+.header-right{display:flex;align-items:center;gap:16px;position:relative;}
+.notif-btn{background:none;border:none;cursor:pointer;position:relative;}
+.notif-btn svg{width:24px;height:24px;stroke:var(--text);}
+.notif-dot{position:absolute;top:0;right:0;width:8px;height:8px;background:var(--purple-light);border-radius:50%;}
+
+.search-box{margin:0 16px 24px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:12px;}
+.search-box svg{width:20px;height:20px;stroke:#6b7280;}
+.search-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px;}
+.search-box input::placeholder{color:#6b7280;}
+
+.section-header{display:flex;justify-content:space-between;align-items:center;padding:0 16px;margin-bottom:16px;}
+.section-header h3{font-size:16px;font-weight:600;}
+.section-header a{color:var(--purple-light);font-size:14px;text-decoration:none;display:flex;align-items:center;gap:4px;}
+
+.grid{padding:0 16px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.cat-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 8px;text-align:center;cursor:pointer;position:relative;overflow:hidden;transition:transform 0.2s;}
+.cat-card:active{transform:scale(0.96);}
+.cat-card::after{
+  content:'';position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
+  width:60%;height:8px;background:var(--purple-light);filter:blur(12px);opacity:0.7;border-radius:50%;
+}
+.cat-icon{width:56px;height:56px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;}
+.cat-icon img{width:100%;height:100%;object-fit:contain;border-radius:12px;}
+.cat-card span{font-size:12px;font-weight:500;position:relative;z-index:1;}
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
 <div class="screen active" id="screen-login">
-  <div class="card">
-    <div class="logo">LOGIN - E-MAIL</div>
-    <div class="logo-sub">Prime Store VZ</div>
-    <div class="subtitle">Entre na sua conta</div>
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="logo">LOGIN - E-MAIL</div>
+      <div class="logo-sub">Prime Store VZ</div>
+      <div class="subtitle">Entre na sua conta</div>
 
-    <div class="alert error" id="loginError"></div>
-    <div class="alert success" id="loginSuccess"></div>
+      <div class="alert error" id="loginError"></div>
+      <div class="alert success" id="loginSuccess"></div>
 
-    <div class="input-group">
       <div class="input-box"><input type="email" id="loginEmail" placeholder="E-mail"></div>
-    </div>
-
-    <div class="input-group">
       <div class="input-box">
         <input type="password" id="loginPassword" placeholder="Senha">
         <span class="toggle" onclick="togglePass('loginPassword', this)">👁️</span>
       </div>
-    </div>
 
-    <div class="row">
-      <label><input type="checkbox" id="remember"> Lembrar-me</label>
-      <a href="#" onclick="showScreen('forgot', event)">Esqueceu a senha?</a>
-    </div>
+      <div class="row">
+        <label><input type="checkbox" id="remember"> Lembrar-me</label>
+        <a href="#" onclick="showScreen('forgot', event)">Esqueceu a senha?</a>
+      </div>
 
-    <button class="btn" id="btnLogin" onclick="login()">ENTRAR</button>
+      <button class="btn" id="btnLogin" onclick="login()">ENTRAR</button>
 
-    <div class="footer-link">
-      Não tem uma conta? <a href="#" onclick="showScreen('register', event)">Cadastre-se</a>
+      <div class="footer-link">
+        Não tem uma conta? <a href="#" onclick="showScreen('register', event)">Cadastre-se</a>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- CADASTRO -->
 <div class="screen" id="screen-register">
-  <div class="card">
-    <div class="logo">CADASTRO</div>
-    <div class="logo-sub">Prime Store VZ</div>
-    <div class="subtitle">Crie sua conta</div>
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="logo">CADASTRO</div>
+      <div class="logo-sub">Prime Store VZ</div>
+      <div class="subtitle">Crie sua conta</div>
 
-    <div class="alert error" id="registerError"></div>
-    <div class="alert success" id="registerSuccess"></div>
+      <div class="alert error" id="registerError"></div>
+      <div class="alert success" id="registerSuccess"></div>
 
-    <div class="input-group"><div class="input-box"><input type="text" id="regName" placeholder="Nome completo"></div></div>
-    <div class="input-group"><div class="input-box"><input type="email" id="regEmail" placeholder="Email"></div></div>
-    <div class="input-group"><div class="input-box"><input type="tel" id="regPhone" placeholder="Telefone"></div></div>
-    <div class="input-group">
+      <div class="input-box"><input type="text" id="regName" placeholder="Nome completo"></div>
+      <div class="input-box"><input type="email" id="regEmail" placeholder="Email"></div>
+      <div class="input-box"><input type="tel" id="regPhone" placeholder="Telefone"></div>
       <div class="input-box">
         <input type="password" id="regPassword" placeholder="Senha">
         <span class="toggle" onclick="togglePass('regPassword', this)">👁️</span>
       </div>
-    </div>
 
-    <div class="checkbox-row">
-      <input type="checkbox" id="terms">
-      <label for="terms">Li e aceito os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a></label>
-    </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="terms">
+        <label for="terms">Li e aceito os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a></label>
+      </div>
 
-    <button class="btn" id="btnRegister" onclick="register()">CADASTRAR</button>
+      <button class="btn" id="btnRegister" onclick="register()">CADASTRAR</button>
 
-    <div class="footer-link">
-      Já tem uma conta? <a href="#" onclick="showScreen('login', event)">Entrar</a>
+      <div class="footer-link">
+        Já tem uma conta? <a href="#" onclick="showScreen('login', event)">Entrar</a>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- ESQUECEU SENHA -->
 <div class="screen" id="screen-forgot">
-  <div class="card">
-    <div class="logo">ESQUECEU A SENHA</div>
-    <div class="logo-sub">Prime Store VZ</div>
-    <div class="subtitle">Informe seu e-mail ou telefone para receber o código de recuperação</div>
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="logo">ESQUECEU A SENHA</div>
+      <div class="logo-sub">Prime Store VZ</div>
+      <div class="subtitle">Informe seu e-mail para receber o código de recuperação</div>
 
-    <div class="alert error" id="forgotError"></div>
-    <div class="alert success" id="forgotSuccess"></div>
+      <div class="alert error" id="forgotError"></div>
+      <div class="alert success" id="forgotSuccess"></div>
 
-    <div class="input-group"><div class="input-box"><input type="text" id="forgotEmail" placeholder="E-mail ou telefone"></div></div>
+      <div class="input-box"><input type="email" id="forgotEmail" placeholder="E-mail"></div>
 
-    <button class="btn" id="btnForgot" onclick="forgotPassword()">ENVIAR CÓDIGO</button>
+      <button class="btn" id="btnForgot" onclick="forgotPassword()">ENVIAR CÓDIGO</button>
 
-    <div class="footer-link">
-      <a href="#" onclick="showScreen('login', event)">Voltar para o login</a>
+      <div class="footer-link">
+        <a href="#" onclick="showScreen('login', event)">Voltar para o login</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="screen" id="screen-home">
+  <div class="home-wrap">
+    <div class="header">
+      <button class="menu-btn" onclick="alert('Menu')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+      
+      <div class="logo-header">Prime <span>Store VZ</span></div>
+      
+      <div class="header-right">
+        <button class="notif-btn" onclick="alert('Notificações')">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/>
+          </svg>
+          <div class="notif-dot"></div>
+        </button>
+        <button class="profile-btn" onclick="logout()">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="search-box">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+      </svg>
+      <input type="text" id="searchInput" placeholder="Buscar produtos..." oninput="searchCategories()">
+    </div>
+
+    <div class="section-header">
+      <h3>Categorias</h3>
+      <a href="#" onclick="alert('Ver todas')">Ver todas ›</a>
+    </div>
+
+    <div class="grid" id="categoriesGrid">
+      <div class="cat-card" onclick="openCategory('streaming')">
+        <div class="cat-icon"><img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"></div>
+        <span>Streaming</span>
+      </div>
+      <div class="cat-card" onclick="openCategory('giftcards')">
+        <div class="cat-icon"><img src="https://play-lh.googleusercontent.com/1hf8_u1Zp2WHo3IT8hbtD5Z2Vq4_7Q6W8vQk7F9k3Z1m3vJ5Z5Z5Z5Z5Z5Z5Z5Z5Z5Z5"></div>
+        <span>Gift Cards</span>
+      </div>
+      <div class="cat-card" onclick="openCategory('social')">
+        <div class="cat-icon"><img src="https://upload.wikimedia.org/wikipedia/commons/a5/Instagram_icon.png"></div>
+        <span>Redes Sociais</span>
+      </div>
+      <div class="cat-card" onclick="openCategory('games')">
+        <div class="cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/3616/3616993.png"></div>
+        <span>Games</span>
+      </div>
+      <div class="cat-card" onclick="openCategory('apps')">
+        <div class="cat-icon"><img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"></div>
+        <span>Apps Premium</span>
+      </div>
+      <div class="cat-card" onclick="openCategory('outros')">
+        <div class="cat-icon"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNTYiIHZpZXdCb3g9IjAgMCA1NiA1NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNTYiIGhlaWdodD0iNTYiIHJ4PSIxNiIgZmlsbD0iIzdDMzNFRCIvPjxwYXRoIGQ9Ik0yOCAxOEMyOCAxOEwyOCAzOE0xOSAzOEwzNyAzOCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48L3N2Zz4="></div>
+        <span>Outros</span>
+      </div>
     </div>
   </div>
 </div>
@@ -144,7 +246,9 @@ import {
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   sendPasswordResetEmail,
-  updateProfile 
+  updateProfile,
+  onAuthStateChanged,
+  signOut 
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
@@ -161,13 +265,24 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-window.showScreen = (screen, e) => {
+// Controle de telas
+function showScreen(screen, e){
   if(e) e.preventDefault();
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(`screen-${screen}`).classList.add('active');
   hideAllAlerts();
 }
 
+// Verifica se está logado
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    showScreen('home');
+  } else {
+    showScreen('login');
+  }
+});
+
+// Mostrar/esconder senha
 window.togglePass = (id, el) => {
   const input = document.getElementById(id);
   input.type = input.type === 'password' ? 'text' : 'password';
@@ -187,10 +302,7 @@ window.login = async () => {
   try{
     await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
     await signInWithEmailAndPassword(auth, email, password);
-    showAlert('loginSuccess', 'Login realizado! Redirecionando...');
-    setTimeout(() => {
-      alert('Aqui você redireciona para a home. Ex: window.location.href = "home.html"');
-    }, 1200);
+    showAlert('loginSuccess', 'Login realizado!');
   }catch(e){
     let msg = 'Erro ao fazer login';
     if(e.code === 'auth/user-not-found' || e.code === 'auth/wrong-password') msg = 'E-mail ou senha incorretos';
@@ -218,10 +330,6 @@ window.register = async () => {
   try{
     const userCred = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(userCred.user, {displayName: name});
-    
-    // Aqui você pode salvar telefone no Firestore/Realtime DB se quiser
-    // await setDoc(doc(db, "users", userCred.user.uid), {name, email, phone});
-
     showAlert('registerSuccess', 'Conta criada com sucesso!');
     setTimeout(() => showScreen('login'), 1500);
   }catch(e){
@@ -244,7 +352,7 @@ window.forgotPassword = async () => {
   btn.disabled = true;
   try{
     await sendPasswordResetEmail(auth, email);
-    showAlert('forgotSuccess', 'Link de recuperação enviado! Verifique seu e-mail.');
+    showAlert('forgotSuccess', 'Link de recuperação enviado!');
   }catch(e){
     let msg = 'Erro ao enviar código';
     if(e.code === 'auth/user-not-found') msg = 'E-mail não encontrado';
@@ -255,11 +363,32 @@ window.forgotPassword = async () => {
   }
 }
 
+// LOGOUT
+window.logout = async () => {
+  await signOut(auth);
+}
+
+// BUSCA
+window.searchCategories = () => {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const cards = document.querySelectorAll('.cat-card');
+  cards.forEach(card => {
+    const name = card.querySelector('span').textContent.toLowerCase();
+    card.style.display = name.includes(search) ? 'block' : 'none';
+  });
+}
+
+// ABRIR CATEGORIA
+window.openCategory = (cat) => {
+  alert(`Abrir categoria: ${cat}\nAqui você carrega os produtos dessa categoria`);
+}
+
 function showAlert(id, msg){
   hideAllAlerts();
   const el = document.getElementById(id);
   el.innerText = msg;
   el.style.display = 'block';
+  setTimeout(()=>el.style.display='none', 3500);
 }
 
 function hideAllAlerts(){
@@ -267,4 +396,4 @@ function hideAllAlerts(){
 }
 </script>
 </body>
-</html
+</html>
