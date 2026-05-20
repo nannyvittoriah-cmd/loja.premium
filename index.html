@@ -20,8 +20,6 @@ body{background:var(--bg);color:var(--text);min-height:100vh;}
 .screen{display:none;width:100%;max-width:420px;margin:0 auto;min-height:100vh;}
 .screen.active{display:block;}
 .center{display:flex;align-items:center;justify-content:center;padding:20px;min-height:100vh;}
-
-/* LOGIN / CADASTRO */
 .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 24px;}
 h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px;}
 .logo{font-size:20px;font-weight:700;color:var(--purple);text-align:center;margin-bottom:4px;}
@@ -47,8 +45,6 @@ h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px;}
 .alert{padding:12px 14px;border-radius:10px;font-size:13px;margin-bottom:16px;display:none;}
 .alert.error{background:rgba(239,68,68,0.1);border:1px solid #ef4444;color:#ef4444;}
 .alert.success{background:rgba(16,185,129,0.1);border:1px solid #10b981;color:#10b981;}
-
-/* HOME */
 #screen-home{padding-bottom:20px;}
 .header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;}
 .header-title{font-size:16px;font-weight:700;}
@@ -249,10 +245,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Verifica se tá logado
+// Corrigido: só checa 1x no load
+let firstLoad = true;
 onAuthStateChanged(auth, (user) => {
-  if(user) showScreen('home');
-  else showScreen('login');
+  if(firstLoad){
+    firstLoad = false;
+    if(user) showScreen('home');
+    else showScreen('login');
+  }
 });
 
 // Troca de telas
@@ -280,8 +280,7 @@ window.login = async () => {
   try{
     await setPersistence(auth, remember? browserLocalPersistence : browserSessionPersistence);
     await signInWithEmailAndPassword(auth, email, password);
-    showAlert('loginSuccess', 'Login realizado!');
-    setTimeout(() => showScreen('home'), 800);
+    showScreen('home'); // Agora troca na hora
   }catch(e){
     showAlert('loginError', traduzErro(e.code));
   }finally{
@@ -293,7 +292,6 @@ window.login = async () => {
 window.register = async () => {
   const name = document.getElementById('regName').value.trim();
   const email = document.getElementById('regEmail').value.trim();
-  const phone = document.getElementById('regPhone').value.trim();
   const password = document.getElementById('regPassword').value;
   const terms = document.getElementById('terms').checked;
   const btn = document.getElementById('btnRegister');
