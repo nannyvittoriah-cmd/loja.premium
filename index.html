@@ -18,8 +18,8 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
 body{background:var(--bg);color:var(--text);min-height:100vh;}
-.screen{display:none;width:100%;max-width:420px;margin:0 auto;min-height:100vh;}
-.screen.active{display:block;}
+.screen{display:none!important;width:100%;max-width:420px;margin:0 auto;min-height:100vh;}
+.screen.active{display:block!important;}
 .center{display:flex;align-items:center;justify-content:center;padding:20px;min-height:100vh;}
 .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 24px;}
 h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px;}
@@ -78,83 +78,88 @@ h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px;}
 <body>
 
 <!-- LOGIN -->
-<div class="screen center active" id="screen-login">
-  <div class="card">
-    <h2>LOGIN - E-MAIL</h2>
-    <div class="logo">Prime Store VZ</div>
-    <div class="subtitle">Entre na sua conta</div>
-    <div class="alert error" id="loginError"></div>
-    <div class="input-group">
-      <label>E-mail</label>
-      <div class="input-box"><input type="email" id="loginEmail" placeholder="seuemail@gmail.com"></div>
-    </div>
-    <div class="input-group">
-      <label>Senha</label>
-      <div class="input-box">
-        <input type="password" id="loginPassword" placeholder="••••••••">
-        <span class="toggle" onclick="togglePass('loginPassword', this)">👁️</span>
+<div class="screen active" id="screen-login">
+  <div class="center">
+    <div class="card">
+      <h2>LOGIN - E-MAIL</h2>
+      <div class="logo">Prime Store VZ</div>
+      <div class="subtitle">Entre na sua conta</div>
+      <div class="alert error" id="loginError"></div>
+      <div class="input-group">
+        <label>E-mail</label>
+        <div class="input-box"><input type="email" id="loginEmail" placeholder="seuemail@gmail.com"></div>
       </div>
+      <div class="input-group">
+        <label>Senha</label>
+        <div class="input-box">
+          <input type="password" id="loginPassword" placeholder="••••••••">
+          <span class="toggle" onclick="togglePass('loginPassword', this)">👁️</span>
+        </div>
+      <div class="row">
+        <label><input type="checkbox" id="remember"> Lembrar-me</label>
+        <a href="#" onclick="showScreen('forgot')">Esqueceu a senha?</a>
+      </div>
+      <button class="btn" id="btnLogin">ENTRAR</button>
+      <div class="footer-link">Não tem uma conta? <a href="#" onclick="showScreen('register')">Cadastre-se</a></div>
     </div>
-    <div class="row">
-      <label><input type="checkbox" id="remember"> Lembrar-me</label>
-      <a href="#" onclick="showScreen('forgot')">Esqueceu a senha?</a>
-    </div>
-    <button class="btn" id="btnLogin" onclick="login()">ENTRAR</button>
-    <div class="footer-link">Não tem uma conta? <a href="#" onclick="showScreen('register')">Cadastre-se</a></div>
   </div>
 </div>
 
 <!-- CADASTRO -->
-<div class="screen center" id="screen-register">
-  <div class="card">
-    <h2>CADASTRO</h2>
-    <div class="logo">Prime Store VZ</div>
-    <div class="subtitle">Crie sua conta</div>
-    <div class="alert error" id="registerError"></div>
-    <div class="alert success" id="registerSuccess"></div>
-    <div class="input-group">
-      <label>Nome completo</label>
-      <div class="input-box"><input type="text" id="regName" placeholder="João da Silva"></div>
-    </div>
-    <div class="input-group">
-      <label>E-mail</label>
-      <div class="input-box"><input type="email" id="regEmail" placeholder="joao@email.com"></div>
-    </div>
-    <div class="input-group">
-      <label>Telefone</label>
-      <div class="input-box"><input type="tel" id="regPhone" placeholder="(00) 9 9999-9999"></div>
-    </div>
-    <div class="input-group">
-      <label>Senha</label>
-      <div class="input-box">
-        <input type="password" id="regPassword" placeholder="••••••••">
-        <span class="toggle" onclick="togglePass('regPassword', this)">👁️</span>
+<div class="screen" id="screen-register">
+  <div class="center">
+    <div class="card">
+      <h2>CADASTRO</h2>
+      <div class="logo">Prime Store VZ</div>
+      <div class="subtitle">Crie sua conta</div>
+      <div class="alert error" id="registerError"></div>
+      <div class="alert success" id="registerSuccess"></div>
+      <div class="input-group">
+        <label>Nome completo</label>
+        <div class="input-box"><input type="text" id="regName" placeholder="João da Silva"></div>
       </div>
+      <div class="input-group">
+        <label>E-mail</label>
+        <div class="input-box"><input type="email" id="regEmail" placeholder="joao@email.com"></div>
+      </div>
+      <div class="input-group">
+        <label>Telefone</label>
+        <div class="input-box"><input type="tel" id="regPhone" placeholder="(00) 9 9999-9999"></div>
+      </div>
+      <div class="input-group">
+        <label>Senha</label>
+        <div class="input-box">
+          <input type="password" id="regPassword" placeholder="••••••••">
+          <span class="toggle" onclick="togglePass('regPassword', this)">👁️</span>
+        </div>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="terms">
+        <label for="terms">Li e aceito os <a href="#">Termos de Uso</a></label>
+      </div>
+      <button class="btn" id="btnRegister">CADASTRAR</button>
+      <div class="footer-link">Já tem uma conta? <a href="#" onclick="showScreen('login')">Entrar</a></div>
     </div>
-    <div class="checkbox-row">
-      <input type="checkbox" id="terms">
-      <label for="terms">Li e aceito os <a href="#">Termos de Uso</a></label>
-    </div>
-    <button class="btn" id="btnRegister" onclick="register()">CADASTRAR</button>
-    <div class="footer-link">Já tem uma conta? <a href="#" onclick="showScreen('login')">Entrar</a></div>
   </div>
 </div>
 
 <!-- ESQUECEU SENHA -->
-<div class="screen center" id="screen-forgot">
-  <div class="card">
-    <h2>ESQUECEU A SENHA</h2>
-    <div class="logo">Prime Store VZ</div>
-    <div class="subtitle">Recuperar senha</div>
-    <p style="font-size:13px;color:var(--text-dim);text-align:center;margin-bottom:24px;">Informe seu e-mail para receber o código de recuperação.</p>
-    <div class="alert error" id="forgotError"></div>
-    <div class="alert success" id="forgotSuccess"></div>
-    <div class="input-group">
-      <label>E-mail</label>
-      <div class="input-box"><input type="email" id="forgotEmail" placeholder="seuemail@gmail.com"></div>
+<div class="screen" id="screen-forgot">
+  <div class="center">
+    <div class="card">
+      <h2>ESQUECEU A SENHA</h2>
+      <div class="logo">Prime Store VZ</div>
+      <div class="subtitle">Recuperar senha</div>
+      <p style="font-size:13px;color:var(--text-dim);text-align:center;margin-bottom:24px;">Informe seu e-mail para receber o código de recuperação.</p>
+      <div class="alert error" id="forgotError"></div>
+      <div class="alert success" id="forgotSuccess"></div>
+      <div class="input-group">
+        <label>E-mail</label>
+        <div class="input-box"><input type="email" id="forgotEmail" placeholder="seuemail@gmail.com"></div>
+      </div>
+      <button class="btn" id="btnForgot">ENVIAR CÓDIGO</button>
+      <div class="footer-link"><a href="#" onclick="showScreen('login')">Voltar para o login</a></div>
     </div>
-    <button class="btn" id="btnForgot" onclick="forgotPassword()">ENVIAR CÓDIGO</button>
-    <div class="footer-link"><a href="#" onclick="showScreen('login')">Voltar para o login</a></div>
   </div>
 </div>
 
@@ -165,12 +170,12 @@ h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px;}
     <div class="header-title">Prime <span style="color:var(--purple)">Store VZ</span></div>
     <div class="header-icons">
       <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/><circle cx="18" cy="6" r="3" fill="var(--purple)" stroke="none"/></svg>
-      <svg class="icon purple" onclick="logout()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <svg class="icon purple" id="logoutBtn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     </div>
   </header>
   <div class="search">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input type="text" placeholder="Buscar produtos..." id="searchInput" oninput="filterCards()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35"/></svg>
+    <input type="text" placeholder="Buscar produtos..." id="searchInput">
   </div>
   <div class="banner"></div>
   <div class="section-header">
@@ -192,7 +197,7 @@ h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px;}
   <header class="header">
     <div class="back-btn" onclick="showScreen('home')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Voltar</div>
     <div class="header-title">Streaming</div>
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35"/></svg>
   </header>
   <div class="product-list">
     <div class="product"><img src="https://i.imgur.com/7Q4aP3K.png" alt="Netflix"><div class="product-info"><div class="product-title">Netflix 1 Tela - 30 dias</div><div class="product-desc">Conta compartilhada, perfil único</div><div class="product-price">R$ 18,90</div></div><button class="product-btn" onclick="comprar('Netflix 1 Tela')">Comprar</button></div>
@@ -274,19 +279,20 @@ const firebaseConfig = {apiKey:"AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",authDom
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-let firstLoad = true;
 onAuthStateChanged(auth, (user) => {
-  if(firstLoad){
-    firstLoad = false;
-    const hash = window.location.hash.replace('#','');
-    if(user) showScreen(hash || 'home');
-    else showScreen('login');
+  const hash = window.location.hash.replace('#','');
+  if(user){
+    if(!hash || hash === 'login' || hash === 'register' || hash === 'forgot') showScreen('home');
+    else showScreen(hash);
+  }else{
+    showScreen('login');
   }
 });
 
 window.showScreen = (screen) => {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(`screen-${screen}`).classList.add('active');
+  const el = document.getElementById(`screen-${screen}`);
+  if(el) el.classList.add('active');
   window.scrollTo(0,0);
   hideAllAlerts();
   window.location.hash = screen;
@@ -298,7 +304,7 @@ window.togglePass = (id, el) => {
   el.textContent = input.type === 'password'? '👁️' : '🙈';
 }
 
-window.login = async () => {
+document.getElementById('btnLogin').onclick = async () => {
   const email = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value;
   const remember = document.getElementById('remember').checked;
@@ -308,11 +314,10 @@ window.login = async () => {
   try{
     await setPersistence(auth, remember? browserLocalPersistence : browserSessionPersistence);
     await signInWithEmailAndPassword(auth, email, password);
-    showScreen('home');
   }catch(e){showAlert('loginError', traduzErro(e.code));}finally{btn.disabled = false;}
 }
 
-window.register = async () => {
+document.getElementById('btnRegister').onclick = async () => {
   const name = document.getElementById('regName').value.trim();
   const email = document.getElementById('regEmail').value.trim();
   const password = document.getElementById('regPassword').value;
@@ -330,7 +335,7 @@ window.register = async () => {
   }catch(e){showAlert('registerError', traduzErro(e.code));}finally{btn.disabled = false;}
 }
 
-window.forgotPassword = async () => {
+document.getElementById('btnForgot').onclick = async () => {
   const email = document.getElementById('forgotEmail').value.trim();
   const btn = document.getElementById('btnForgot');
   if(!email) return showAlert('forgotError', 'Digite seu e-mail');
@@ -341,18 +346,18 @@ window.forgotPassword = async () => {
   }catch(e){showAlert('forgotError', 'E-mail não encontrado');}finally{btn.disabled = false;}
 }
 
-window.logout = () => signOut(auth).then(() => showScreen('login'));
+document.getElementById('logoutBtn').onclick = () => signOut(auth);
 
-window.comprar = (produto) => {
-  alert('Comprar: ' + produto + '\n\nIntegração com pagamento em breve');
-}
-
-window.filterCards = () => {
-  const term = document.getElementById('searchInput').value.toLowerCase();
+document.getElementById('searchInput').oninput = (e) => {
+  const term = e.target.value.toLowerCase();
   document.querySelectorAll('.card-cat').forEach(card => {
     const name = card.dataset.name;
     card.style.display = name.includes(term)? 'block' : 'none';
   });
+}
+
+window.comprar = (produto) => {
+  alert('Comprar: ' + produto + '\n\nIntegração com pagamento em breve');
 }
 
 function showAlert(id, msg){
