@@ -239,7 +239,7 @@ h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px}
 </div>
 <div class="screen" id="screen-products">
   <header class="header">
-    <div class="back-btn" onclick="history.back()"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Voltar</div>
+    <div class="back-btn" onclick="showScreen('home')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Voltar</div>
     <div class="header-title" id="productTitle">Produtos</div>
     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35"/></svg>
   </header>
@@ -251,6 +251,42 @@ import {getAuth,setPersistence,browserLocalPersistence,browserSessionPersistence
 const firebaseConfig = {apiKey:"AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",authDomain:"premium-store-aa58b.firebaseapp.com",databaseURL:"https://premium-store-aa58b-default-rtdb.firebaseio.com",projectId:"premium-store-aa58b",storageBucket:"premium-store-aa58b.firebasestorage.app",messagingSenderId:"462239500057",appId:"1:462239500057:web:f1b7cea162ed308a866788"};
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+
+window.showScreen = (screen) => {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(`screen-${screen}`);
+  if(el) el.classList.add('active');
+  window.scrollTo(0,0);
+  hideAllAlerts();
+  window.location.hash = screen;
+}
+
+window.togglePass = (id, el) => {
+  const input = document.getElementById(id);
+  input.type = input.type === 'password'? 'text' : 'password';
+  el.textContent = input.type === 'password'? '👁️' : '🙈';
+}
+
+window.showProducts = (service, cat) => {
+  const list = produtos[service] || [];
+  const container = document.getElementById('productList');
+  const title = document.getElementById('productTitle');
+  title.textContent = service.toUpperCase().replace('YT','YOUTUBE ');
+  container.innerHTML = '';
+  if(list.length === 0){
+    container.innerHTML = '<div class="product"><div class="plus-icon">+</div><div class="product-info"><div class="product-title">Em breve</div><div class="product-desc">Produtos chegando</div><div class="product-price">R$ --</div></div><button class="product-btn" disabled>Avisar</button></div>';
+  }else{
+    list.forEach(p => {
+      container.innerHTML += `<div class="product"><img src="${p.img}" alt=""><div class="product-info"><div class="product-title">${p.title}</div><div class="product-desc">${p.desc}</div><div class="product-price">${p.price}</div></div><button class="product-btn" onclick="comprar('${p.title}')">Comprar</button></div>`;
+    });
+  }
+  showScreen('products');
+}
+
+window.comprar = (produto) => {
+  alert('Comprar: ' + produto + '\n\nIntegração com pagamento em breve');
+}
+
 onAuthStateChanged(auth, (user) => {
   const hash = window.location.hash.replace('#','');
   if(user){
@@ -260,19 +296,7 @@ onAuthStateChanged(auth, (user) => {
     showScreen('login');
   }
 });
-window.showScreen = (screen) => {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  const el = document.getElementById(`screen-${screen}`);
-  if(el) el.classList.add('active');
-  window.scrollTo(0,0);
-  hideAllAlerts();
-  window.location.hash = screen;
-}
-window.togglePass = (id, el) => {
-  const input = document.getElementById(id);
-  input.type = input.type === 'password'? 'text' : 'password';
-  el.textContent = input.type === 'password'? '👁️' : '🙈';
-}
+
 document.getElementById('btnLogin').onclick = async () => {
   const email = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value;
@@ -285,6 +309,7 @@ document.getElementById('btnLogin').onclick = async () => {
     await signInWithEmailAndPassword(auth, email, password);
   }catch(e){showAlert('loginError', traduzErro(e.code));}finally{btn.disabled = false;}
 }
+
 document.getElementById('btnRegister').onclick = async () => {
   const name = document.getElementById('regName').value.trim();
   const email = document.getElementById('regEmail').value.trim();
@@ -302,6 +327,7 @@ document.getElementById('btnRegister').onclick = async () => {
     setTimeout(() => showScreen('login'), 1500);
   }catch(e){showAlert('registerError', traduzErro(e.code));}finally{btn.disabled = false;}
 }
+
 document.getElementById('btnForgot').onclick = async () => {
   const email = document.getElementById('forgotEmail').value.trim();
   const btn = document.getElementById('btnForgot');
@@ -312,7 +338,9 @@ document.getElementById('btnForgot').onclick = async () => {
     showAlert('forgotSuccess', 'Link enviado para seu e-mail!');
   }catch(e){showAlert('forgotError', 'E-mail não encontrado');}finally{btn.disabled = false;}
 }
+
 document.getElementById('logoutBtn').onclick = () => signOut(auth);
+
 document.getElementById('searchInput').oninput = (e) => {
   const term = e.target.value.toLowerCase();
   document.querySelectorAll('.card-cat').forEach(card => {
@@ -320,6 +348,7 @@ document.getElementById('searchInput').oninput = (e) => {
     card.style.display = name.includes(term)? 'block' : 'none';
   });
 }
+
 const subcategorias = {
   streaming: [
     {id:'netflix',img:'img/netflix.png',title:'NETFLIX',desc:'FILMES E SÉRIES'},
@@ -372,7 +401,7 @@ const subcategorias = {
     {id:'threads',img:'img/threads.png',title:'THREADS',desc:'SEGUIDORES'}
   ],
   games: [
-    {id:'freefire',img:'img/freefire.png',title:'FIRE',desc:'DIAMANTES'},
+    {id:'freefire',img:'img/freefire.png',title:'FREE FIRE',desc:'DIAMANTES'},
     {id:'roblox',img:'img/roblox.png',title:'ROBLOX',desc:'ROBUX'},
     {id:'valorant',img:'img/valorant.png',title:'VALORANT',desc:'VP'},
     {id:'lol',img:'img/lol.png',title:'LEAGUE OF LEGENDS',desc:'RP'},
@@ -489,7 +518,8 @@ const produtos = {
     {img:'img/tiktok.png', title:'TikTok Coins 1000', desc:'Moedas para presente', price:'R$ 39,90'}
   ],
   googleplay: [
-    {img:'img/googleplay.png', title:'Google Play R$ 50', desc:'Créditos para apps e jogos', price:'R$ 52,90'}
+    {img:'img/googleplay.png', title:'Google Play R$ 50', desc:'Créditos para apps e jogos', price:'R$ 52,90'},
+    {img:'img/googleplay.png', title:'Google Play R$ 100', desc:'Créditos para apps e jogos', price:'R$ 104,90'}
   ],
   applegift: [
     {img:'img/applegift.png', title:'Apple Gift Card R$ 50', desc:'App Store e iTunes', price:'R$ 52,90'}
@@ -517,25 +547,6 @@ const produtos = {
   ]
 };
 
-window.showProducts = (service, cat) => {
-  const list = produtos[service] || [];
-  const container = document.getElementById('productList');
-  const title = document.getElementById('productTitle');
-  title.textContent = service.toUpperCase().replace('YT','YOUTUBE ');
-  container.innerHTML = '';
-  if(list.length === 0){
-    container.innerHTML = '<div class="product"><div class="plus-icon">+</div><div class="product-info"><div class="product-title">Em breve</div><div class="product-desc">Produtos chegando</div><div class="product-price">R$ --</div></div><button class="product-btn" disabled>Avisar</button></div>';
-  }else{
-    list.forEach(p => {
-      container.innerHTML += `<div class="product"><img src="${p.img}" alt=""><div class="product-info"><div class="product-title">${p.title}</div><div class="product-desc">${p.desc}</div><div class="product-price">${p.price}</div></div><button class="product-btn" onclick="comprar('${p.title}')">Comprar</button></div>`;
-    });
-  }
-  showScreen('products');
-}
-
-window.comprar = (produto) => {
-  alert('Comprar: ' + produto + '\n\nIntegração com pagamento em breve');
-}
 function showAlert(id, msg){
   hideAllAlerts();
   const el = document.getElementById(id);
