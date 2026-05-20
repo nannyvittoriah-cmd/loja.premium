@@ -51,10 +51,21 @@ h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 20px 20px}
 .card-cat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;cursor:pointer;position:relative;overflow:hidden;transition:0.2s}
 .card-cat:active{transform:scale(0.95)}
-.card-cat img,.card-cat svg{width:32px;height:32px;margin:0 auto 8px;display:block}
+.card-cat img,.card-cat svg{width:32px;height:32px;margin:0 auto 8px;display:block;object-fit:contain}
 .plus-icon{width:32px;height:32px;margin:0 auto 8px;background:var(--purple);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700}
 .card-cat span{font-size:11px;font-weight:500;color:var(--text-dim);line-height:1.2}
 .glow{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:40px;height:8px;background:var(--purple);filter:blur(12px);opacity:0.6;border-radius:50%}
+.subcat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:20px}
+.subcat-card{background:var(--card);border:2px solid transparent;border-radius:16px;padding:16px 8px;text-align:center;cursor:pointer;position:relative;transition:0.2s;background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg,#7c3aed,#a855f7) border-box}
+.subcat-card:active{transform:scale(0.95)}
+.subcat-card::before{content:'';position:absolute;inset:-2px;background:linear-gradient(135deg,#7c3aed,#a855f7);border-radius:16px;z-index:-1;opacity:0;transition:0.2s}
+.subcat-card:hover::before{opacity:1}
+.subcat-card img{width:48px;height:48px;margin:0 auto 8px;display:block;object-fit:contain;filter:drop-shadow(0 0 8px rgba(124,58,237,0.6))}
+.subcat-title{font-size:12px;font-weight:700;color:#fff;margin-bottom:2px}
+.subcat-desc{font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px}
+.subcat-glow{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);width:60px;height:20px;background:var(--purple);filter:blur(20px);opacity:0.8;border-radius:50%}
+.title-subcat{text-align:center;font-size:12px;font-weight:700;letter-spacing:2px;color:var(--text-dim);padding:20px 0 10px;display:flex;align-items:center;justify-content:center;gap:12px}
+.title-subcat::before,.title-subcat::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--purple),transparent)}
 .product-list{padding:0 20px 20px;display:flex;flex-direction:column;gap:12px}
 .product{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px}
 .product img{width:48px;height:48px;border-radius:8px}
@@ -152,7 +163,7 @@ h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px}
     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     <div class="header-title">Prime <span style="color:var(--purple)">Store VZ</span></div>
     <div class="header-icons">
-      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/><circle cx="18" cy="6" r="3" fill="var(--purple)" stroke="none"/></svg>
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/><circle cx="18" cy="6" r="3" fill="var(--purple)" stroke="none"/></svg>
       <svg class="icon purple" id="logoutBtn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     </div>
   </header>
@@ -166,26 +177,51 @@ h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px}
     <a href="#">Ver todas <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
   </div>
   <div class="grid" id="catGrid">
-    <div class="card-cat" data-name="streaming" onclick="showScreen('streaming')"><div class="glow"></div><img src="https://i.imgur.com/7Q4aP3K.png" alt="Netflix"><span>Streaming</span></div>
-    <div class="card-cat" data-name="gift cards" onclick="showScreen('gift')"><div class="glow"></div><img src="https://i.imgur.com/fG8hA0v.png" alt="Play Store"><span>Gift Cards</span></div>
-    <div class="card-cat" data-name="redes sociais" onclick="showScreen('social')"><div class="glow"></div><img src="https://i.imgur.com/kS5jH9c.png" alt="Instagram"><span>Redes Sociais</span></div>
+    <div class="card-cat" data-name="streaming" onclick="showScreen('sub-streaming')"><div class="glow"></div><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg" style="filter:brightness(0) invert(1)"><span>Streaming</span></div>
+    <div class="card-cat" data-name="gift cards" onclick="showScreen('gift')"><div class="glow"></div><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" style="filter:brightness(0) invert(1)"><span>Gift Cards</span></div>
+    <div class="card-cat" data-name="redes sociais" onclick="showScreen('social')"><div class="glow"></div><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg"><span>Redes Sociais</span></div>
     <div class="card-cat" data-name="games" onclick="showScreen('games')"><div class="glow"></div><svg width="32" height="32" viewBox="0 0 24 24" fill="var(--purple)"><path d="M21.58 16.09l-1.09-7.33A2 2 0 0 0 18.5 7h-1.42a3.99 0 0 0-3.08 1.47L12 10.5 10 8.47A3.99 0 0 0 6.92 7H5.5a2 2 0 0 0-1.99 1.76l-1.09 7.33A4 4 0 0 0 6.36 21h11.28a4 4 0 0 0 3.94-4.91zM7 12a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg><span>Games</span></div>
-    <div class="card-cat" data-name="apps premium" onclick="showScreen('apps')"><div class="glow"></div><img src="https://i.imgur.com/G8jVq0t.png" alt="Spotify"><span>Apps Premium</span></div>
+    <div class="card-cat" data-name="apps premium" onclick="showScreen('apps')"><div class="glow"></div><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg" style="filter:brightness(0) invert(1)"><span>Apps Premium</span></div>
     <div class="card-cat" data-name="outros" onclick="showScreen('outros')"><div class="glow"></div><div class="plus-icon">+</div><span>Outros</span></div>
   </div>
 </div>
-<div class="screen" id="screen-streaming">
+<div class="screen" id="screen-sub-streaming">
   <header class="header">
     <div class="back-btn" onclick="showScreen('home')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Voltar</div>
     <div class="header-title">Streaming</div>
     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
   </header>
-  <div class="product-list">
-    <div class="product"><img src="https://i.imgur.com/7Q4aP3K.png" alt="Netflix"><div class="product-info"><div class="product-title">Netflix 1 Tela - 30 dias</div><div class="product-desc">Conta compartilhada, perfil único</div><div class="product-price">R$ 18,90</div></div><button class="product-btn" onclick="comprar('Netflix 1 Tela')">Comprar</button></div>
-    <div class="product"><img src="https://i.imgur.com/7Q4aP3K.png" alt="Netflix"><div class="product-info"><div class="product-title">Netflix 4K - 30 dias</div><div class="product-desc">4 telas simultâneas, Ultra HD</div><div class="product-price">R$ 32,90</div></div><button class="product-btn" onclick="comprar('Netflix 4K')">Comprar</button></div>
-    <div class="product"><img src="https://i.imgur.com/vT0y1uG.png" alt="Prime Video"><div class="product-info"><div class="product-title">Prime Video - 30 dias</div><div class="product-desc">Acesso completo ao catálogo</div><div class="product-price">R$ 14,90</div></div><button class="product-btn" onclick="comprar('Prime Video')">Comprar</button></div>
-    <div class="product"><img src="https://i.imgur.com/1ZQZ1Zm.png" alt="Disney+"><div class="product-info"><div class="product-title">Disney+ - 30 dias</div><div class="product-desc">Marvel, Star Wars, Pixar</div><div class="product-price">R$ 16,90</div></div><button class="product-btn" onclick="comprar('Disney+')">Comprar</button></div>
+  <div class="title-subcat">SUBCATEGORIAS</div>
+  <div class="subcat-grid">
+    <div class="subcat-card" onclick="showProducts('netflix')"><div class="subcat-glow"></div><img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png" alt="Netflix"><div class="subcat-title">NETFLIX</div><div class="subcat-desc">FILMES E SÉRIES</div></div>
+    <div class="subcat-card" onclick="showProducts('hbo')"><div class="subcat-glow"></div><img src="https://upload.wikimedia.org/wikipedia/commons/1/17/HBO_Max_Logo.svg" alt="HBO Max"><div class="subcat-title">HBO MAX</div><div class="subcat-desc">FILMES E SÉRIES</div></div>
+    <div class="subcat-card" onclick="showProducts('disney')"><div class="subcat-glow"></div><img src="https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg" alt="Disney+"><div class="subcat-title">DISNEY+</div><div class="subcat-desc">FILMES E SÉRIES</div></div>
+    <div class="subcat-card" onclick="showProducts('prime')"><div class="subcat-glow"></div><img src="https://upload.wikimedia.org/wikipedia/commons/f/f1/Prime_Video.png" alt="Prime Video"><div class="subcat-title">AMAZON PRIME</div><div class="subcat-desc">FILMES E SÉRIES</div></div>
+    <div class="subcat-card" onclick="showProducts('apple')"><div class="subcat-glow"></div><img src="https://upload.wikimedia.org/wikipedia/commons/2/28/Apple_TV_Plus_Logo.svg" alt="Apple TV+"><div class="subcat-title">APPLE TV+</div><div class="subcat-desc">FILMES E SÉRIES</div></div>
+    <div class="subcat-card" onclick="showProducts('youtube')"><div class="subcat-glow"></div><img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" alt="YouTube"><div class="subcat-title">YOUTUBE PREMIUM</div><div class="subcat-desc">FILMES E VÍDEOS</div></div>
+    <div class="subcat-card" onclick="showProducts('spotify')"><div class="subcat-glow"></div><img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg" alt="Spotify"><div class="subcat-title">SPOTIFY</div><div class="subcat-desc">MÚSICAS E PODCASTS</div></div>
+    <div class="subcat-card" onclick="showProducts('deezer')"><div class="subcat-glow"></div><img src="https://upload.wikimedia.org/wikipedia/commons/d/da/Deezer_logo.svg" alt="Deezer"><div class="subcat-title">DEEZER</div><div class="subcat-desc">MÚSICAS E PODCASTS</div></div>
+    <div class="subcat-card" onclick="showProducts('crunchyroll')"><div class="subcat-glow"></div><img src="https://upload.wikimedia.org/wikipedia/commons/f/f6/Crunchyroll_Logo.svg" alt="Crunchyroll"><div class="subcat-title">CRUNCHYROLL</div><div class="subcat-desc">ANIMES</div></div>
+    <div class="subcat-card" onclick="showProducts('funimation')"><div class="subcat-glow"></div><img src="https://upload.wikimedia.org/wikipedia/commons/d/d6/FunimationLogo.svg" alt="Funimation"><div class="subcat-title">FUNIMATION</div><div class="subcat-desc">ANIMES</div></div>
+    <div class="subcat-card" onclick="showProducts('paramount')"><div class="subcat-glow"></div><img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Paramount%2B_logo.svg" alt="Paramount+"><div class="subcat-title">PARAMOUNT+</div><div class="subcat-desc">FILMES E SÉRIES</div></div>
+    <div class="subcat-card" onclick="showProducts('star')"><div class="subcat-glow"></div><img src="https://upload.wikimedia.org/wikipedia/commons/1/1e/Star%2B_Logo.svg" alt="Star+"><div class="subcat-title">STAR+</div><div class="subcat-desc">FILMES E SÉRIES</div></div>
+    <div class="subcat-card" onclick="showProducts('globoplay')"><div class="subcat-glow"></div><img src="https://upload.wikimedia.org/wikipedia/commons/6/64/Globoplay_logo_2020.svg" alt="Globoplay"><div class="subcat-title">GLOBOPLAY</div><div class="subcat-desc">FILMES E SÉRIES</div></div>
+    <div class="subcat-card" onclick="showProducts('telecine')"><div class="subcat-glow"></div><img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Telecine_2019.svg" alt="Telecine"><div class="subcat-title">TELECINE</div><div class="subcat-desc">FILMES</div></div>
+    <div class="subcat-card" onclick="showProducts('mubi')"><div class="subcat-glow"></div><img src="https://upload.wikimedia.org/wikipedia/commons/c/c4/MUBI_logo.svg" alt="MUBI"><div class="subcat-title">MUBI</div><div class="subcat-desc">FILMES E CULTURA</div></div>
+    <div class="subcat-card" onclick="showProducts('dazn')"><div class="subcat-glow"></div><img src="https://upload.wikimedia.org/wikipedia/commons/0/06/DAZN_Logo_Master.svg" alt="DAZN"><div class="subcat-title">DAZN</div><div class="subcat-desc">ESPORTES</div></div>
+    <div class="subcat-card" onclick="showProducts('espn')"><div class="subcat-glow"></div><img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/ESPN_wordmark.svg" alt="ESPN"><div class="subcat-title">ESPN</div><div class="subcat-desc">ESPORTES</div></div>
+    <div class="subcat-card" onclick="showProducts('twitch')"><div class="subcat-glow"></div><img src="https://upload.wikimedia.org/wikipedia/commons/2/26/Twitch_logo.svg" alt="Twitch"><div class="subcat-title">TWITCH</div><div class="subcat-desc">LIVES E GAMES</div></div>
+    <div class="subcat-card" onclick="showProducts('ytkids')"><div class="subcat-glow"></div><img src="https://upload.wikimedia.org/wikipedia/commons/7/75/YouTube_Kids_Logo_2017.svg" alt="YouTube Kids"><div class="subcat-title">YOUTUBE KIDS</div><div class="subcat-desc">CONTEÚDO INFANTIL</div></div>
+    <div class="subcat-card" onclick="showProducts('tiktok')"><div class="subcat-glow"></div><img src="https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg" alt="TikTok"><div class="subcat-title">TIKTOK</div><div class="subcat-desc">VÍDEOS CURTOS</div></div>
   </div>
+</div>
+<div class="screen" id="screen-products">
+  <header class="header">
+    <div class="back-btn" onclick="showScreen('sub-streaming')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Voltar</div>
+    <div class="header-title" id="productTitle">Produtos</div>
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35"/></svg>
+  </header>
+  <div class="product-list" id="productList"></div>
 </div>
 <div class="screen" id="screen-gift">
   <header class="header">
@@ -194,8 +230,7 @@ h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px}
     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
   </header>
   <div class="product-list">
-    <div class="product"><img src="https://i.imgur.com/fG8hA0v.png" alt="Google Play"><div class="product-info"><div class="product-title">Google Play R$ 50</div><div class="product-desc">Entrega imediata por e-mail</div><div class="product-price">R$ 52,90</div></div><button class="product-btn" onclick="comprar('Google Play 50')">Comprar</button></div>
-    <div class="product"><img src="https://i.imgur.com/fG8hA0v.png" alt="Google Play"><div class="product-info"><div class="product-title">Google Play R$ 100</div><div class="product-desc">Entrega imediata por e-mail</div><div class="product-price">R$ 104,90</div></div><button class="product-btn" onclick="comprar('Google Play 100')">Comprar</button></div>
+    <div class="product"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"><div class="product-info"><div class="product-title">Google Play R$ 50</div><div class="product-desc">Entrega imediata</div><div class="product-price">R$ 52,90</div></div><button class="product-btn" onclick="comprar('Google Play 50')">Comprar</button></div>
   </div>
 </div>
 <div class="screen" id="screen-social">
@@ -205,8 +240,7 @@ h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px}
     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35"/></svg>
   </header>
   <div class="product-list">
-    <div class="product"><img src="https://i.imgur.com/kS5jH9c.png" alt="Instagram"><div class="product-info"><div class="product-title">1k Seguidores Instagram</div><div class="product-desc">Entrega em até 24h</div><div class="product-price">R$ 14,90</div></div><button class="product-btn" onclick="comprar('1k Seguidores')">Comprar</button></div>
-    <div class="product"><img src="https://i.imgur.com/kS5jH9c.png" alt="Instagram"><div class="product-info"><div class="product-title">5k Seguidores Instagram</div><div class="product-desc">Entrega em até 48h</div><div class="product-price">R$ 59,90</div></div><button class="product-btn" onclick="comprar('5k Seguidores')">Comprar</button></div>
+    <div class="product"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg"><div class="product-info"><div class="product-title">1k Seguidores Instagram</div><div class="product-desc">Entrega em até 24h</div><div class="product-price">R$ 14,90</div></div><button class="product-btn" onclick="comprar('1k Seguidores')">Comprar</button></div>
   </div>
 </div>
 <div class="screen" id="screen-games">
@@ -216,8 +250,7 @@ h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px}
     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
   </header>
   <div class="product-list">
-    <div class="product"><img src="https://i.imgur.com/8Q8Q8Q8.png" alt="Steam"><div class="product-info"><div class="product-title">Steam R$ 50</div><div class="product-desc">Código carteira Steam</div><div class="product-price">R$ 52,90</div></div><button class="product-btn" onclick="comprar('Steam 50')">Comprar</button></div>
-    <div class="product"><img src="https://i.imgur.com/8Q8Q8Q8.png" alt="Xbox"><div class="product-info"><div class="product-title">Xbox Game Pass - 1 mês</div><div class="product-desc">100+ jogos liberados</div><div class="product-price">R$ 29,90</div></div><button class="product-btn" onclick="comprar('Game Pass')">Comprar</button></div>
+    <div class="product"><svg width="48" height="48" viewBox="0 0 24 24" fill="var(--purple)"><path d="M21.58 16.09l-1.09-7.33A2 2 0 0 0 18.5 7h-1.42a3.99 0 0 0-3.08 1.47L12 10.5 10 8.47A3.99 0 0 0 6.92 7H5.5a2 2 0 0 0-1.99 1.76l-1.09 7.33A4 4 0 0 0 6.36 21h11.28a4 4 0 0 0 3.94-4.91z"/></svg><div class="product-info"><div class="product-title">Xbox Game Pass - 1 mês</div><div class="product-desc">100+ jogos liberados</div><div class="product-price">R$ 29,90</div></div><button class="product-btn" onclick="comprar('Game Pass')">Comprar</button></div>
   </div>
 </div>
 <div class="screen" id="screen-apps">
@@ -227,8 +260,7 @@ h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px}
     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
   </header>
   <div class="product-list">
-    <div class="product"><img src="https://i.imgur.com/G8jVq0t.png" alt="Spotify"><div class="product-info"><div class="product-title">Spotify Premium - 30 dias</div><div class="product-desc">Sem anúncios, offline</div><div class="product-price">R$ 12,90</div></div><button class="product-btn" onclick="comprar('Spotify')">Comprar</button></div>
-    <div class="product"><img src="https://i.imgur.com/8Q8Q8Q8.png" alt="YouTube"><div class="product-info"><div class="product-title">YouTube Premium - 30 dias</div><div class="product-desc">Sem anúncios + Music</div><div class="product-price">R$ 16,90</div></div><button class="product-btn" onclick="comprar('YouTube Premium')">Comprar</button></div>
+    <div class="product"><img src="https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"><div class="product-info"><div class="product-title">Spotify Premium - 30 dias</div><div class="product-desc">Sem anúncios, offline</div><div class="product-price">R$ 12,90</div></div><button class="product-btn" onclick="comprar('Spotify')">Comprar</button></div>
   </div>
 </div>
 <div class="screen" id="screen-outros">
@@ -243,8 +275,7 @@ h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px}
 </div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {getAuth,setPersistence,browserLocalPersistence,browserSessionPersistence,signInWithEmailAndPassword,createUserWithEmailAndPassword,sendPasswordResetEmail,updateProfile,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-const firebaseConfig = {apiKey:"AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",authDomain:"premium-store-aa58b.firebaseapp.com",databaseURL:"https://premium-store-aa58b-default-rtdb.firebaseio.com",projectId:"premium-store-aa58b",storageBucket:"premium-store-aa58b.firebasestorage.app",messagingSenderId:"462239500057",appId:"1:462239500057:web:f1b7cea162ed308a866788"};
+import {getAuth,setPersistence,browserLocalPersistence,browserSessionPersistence,signInWithEmailAndPassword,createUserWithEmailAndPassword,sendPasswordResetEmail,updateProfile,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10. appId:"1:462239500057:web:f1b7cea162ed308a866788"};
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 onAuthStateChanged(auth, (user) => {
@@ -315,6 +346,45 @@ document.getElementById('searchInput').oninput = (e) => {
     const name = card.dataset.name;
     card.style.display = name.includes(term)? 'block' : 'none';
   });
+}
+const produtos = {
+  netflix: [
+    {img:'https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png', title:'Netflix 1 Tela - 30 dias', desc:'Conta compartilhada, perfil único', price:'R$ 18,90'},
+    {img:'https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png', title:'Netflix 4K - 30 dias', desc:'4 telas simultâneas, Ultra HD', price:'R$ 32,90'}
+  ],
+  hbo: [
+    {img:'https://upload.wikimedia.org/wikipedia/commons/1/17/HBO_Max_Logo.svg', title:'HBO Max - 30 dias', desc:'Acesso completo ao catálogo', price:'R$ 19,90'}
+  ],
+  disney: [
+    {img:'https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg', title:'Disney+ - 30 dias', desc:'Marvel, Star Wars, Pixar', price:'R$ 16,90'}
+  ],
+  prime: [
+    {img:'https://upload.wikimedia.org/wikipedia/commons/f/f1/Prime_Video.png', title:'Prime Video - 30 dias', desc:'Acesso completo ao catálogo', price:'R$ 14,90'}
+  ],
+  spotify: [
+    {img:'https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg', title:'Spotify Premium - 30 dias', desc:'Sem anúncios, offline', price:'R$ 12,90'}
+  ],
+  youtube: [
+    {img:'https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg', title:'YouTube Premium - 30 dias', desc:'Sem anúncios + Music', price:'R$ 16,90'}
+  ],
+  crunchyroll: [
+    {img:'https://upload.wikimedia.org/wikipedia/commons/f/f6/Crunchyroll_Logo.svg', title:'Crunchyroll - 30 dias', desc:'Animes sem anúncios', price:'R$ 14,90'}
+  ]
+};
+window.showProducts = (service) => {
+  const list = produtos[service] || [];
+  const container = document.getElementById('productList');
+  const title = document.getElementById('productTitle');
+  title.textContent = service.toUpperCase();
+  container.innerHTML = '';
+  if(list.length === 0){
+    container.innerHTML = '<div class="product"><div class="plus-icon">+</div><div class="product-info"><div class="product-title">Em breve</div><div class="product-desc">Produtos chegando</div><div class="product-price">R$ --</div></div><button class="product-btn" disabled>Avisar</button></div>';
+  }else{
+    list.forEach(p => {
+      container.innerHTML += `<div class="product"><img src="${p.img}" alt=""><div class="product-info"><div class="product-title">${p.title}</div><div class="product-desc">${p.desc}</div><div class="product-price">${p.price}</div></div><button class="product-btn" onclick="comprar('${p.title}')">Comprar</button></div>`;
+    });
+  }
+  showScreen('products');
 }
 window.comprar = (produto) => {
   alert('Comprar: ' + produto + '\n\nIntegração com pagamento em breve');
