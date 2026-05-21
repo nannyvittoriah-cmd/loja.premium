@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Prime Store VZ</title>
 <style>
-:root{--bg:#0a0a0f;--card:#0f0f15;--input:#15151d;--border:#2a2a35;--purple:#7c3aed;--purple-hover:#6d28d9;--text:#fff;--text-dim:#6b7280;--glow:rgba(124,58,237,0.3);--green:#10b981}
+:root{--bg:#0a0a0f;--card:#0f0f15;--input:#15151d;--border:#2a2a35;--purple:#7c3aed;--purple-hover:#6d28d9;--text:#fff;--text-dim:#6b7280;--glow:rgba(124,58,237,0.3);--green:#10b981;--red:#ef4444;--yellow:#f59e0b}
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-.screen{display:none;width:100%;max-width:420px;margin:0 auto;min-height:100vh;position:relative}
+.screen{display:none;width:100%;max-width:420px;margin:0 auto;min-height:100vh}
 .screen.active{display:block}
 .center{display:flex;align-items:center;justify-content:center;padding:20px;min-height:100vh;background:radial-gradient(circle at 50% 0%, var(--glow) 0%, transparent 50%)}
 .card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px 28px;box-shadow:0 0 40px rgba(124,58,237,0.15),inset 0 1px 0 rgba(255,255,255,0.05);width:100%;max-width:360px}
@@ -48,19 +48,16 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .search{margin:0 20px 16px;position:relative}
 .search input{width:100%;height:44px;background:var(--input);border:1px solid var(--border);border-radius:14px;padding:0 14px 0 44px;color:var(--text);font-size:13px;outline:none}
 .search svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:18px;height:18px;stroke:#6b7280}
-.banner{margin:0 20px 24px;height:140px;background:linear-gradient(135deg,#1e1e2a 0%,#2a2a35 100%);border-radius:16px;border:1px solid var(--border);position:relative;overflow:hidden}
-.banner img{width:100%;height:100%;object-fit:cover}
+.banner{margin:0 20px 24px;height:140px;background:linear-gradient(135deg,#1e1e2a 0%,#2a2a35 100%);border-radius:16px;border:1px solid var(--border)}
 .section-header{display:flex;justify-content:space-between;align-items:center;padding:0 20px 14px;font-size:15px;font-weight:700}
 .section-header a{color:var(--purple);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:4px;cursor:pointer}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 20px 20px}
-.card-cat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px 8px;text-align:center;cursor:pointer;transition:0.2s;box-shadow:inset 0 1px 0 rgba(255,255,255,0.05)}
+.card-cat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px 8px;text-align:center;cursor:pointer;transition:0.2s}
 .card-cat:active{transform:scale(0.96)}
-.card-cat-icon{width:48px;height:48px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;position:relative}
-.card-cat-icon img{width:40px;height:40px;object-fit:contain;z-index:2;filter:drop-shadow(0 0 12px rgba(124,58,237,0.8))}
-.card-cat-icon::after{content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:50px;height:12px;background:var(--purple);filter:blur(12px);opacity:0.7;border-radius:50%}
+.card-cat-icon{width:48px;height:48px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center}
+.card-cat-icon img{width:40px;height:40px;object-fit:contain;filter:drop-shadow(0 0 12px rgba(124,58,237,0.8))}
 .card-cat span{font-size:12px;font-weight:600;color:var(--text)}
 .card-cat.outros .card-cat-icon{background:var(--purple);border-radius:12px}
-.card-cat.outros .card-cat-icon::after{display:none}
 .title-glow{text-align:center;font-size:11px;font-weight:800;letter-spacing:4px;color:#fff;padding:24px 0 20px;display:flex;align-items:center;justify-content:center;gap:16px;position:relative}
 .title-glow::before,.title-glow::after{content:'';flex:1;max-width:80px;height:2px;background:linear-gradient(90deg,transparent,#7c3aed)}
 .title-glow::after{background:linear-gradient(90deg,#7c3aed,transparent)}
@@ -68,11 +65,10 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .dot-left{left:calc(50% - 84px)}
 .dot-right{right:calc(50% - 84px)}
 .card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 16px 20px}
-.glow-card{background:#0a0a0f;border:1px solid #2a2a35;border-radius:14px;padding:14px 6px 10px;text-align:center;transition:0.2s;box-shadow:inset 0 0 0 1px rgba(124,58,237,0.1),0 0 20px rgba(124,58,237,0.05);cursor:pointer}
-.glow-card:active{transform:scale(0.96);box-shadow:inset 0 0 0 1px rgba(124,58,237,0.3),0 0 30px rgba(124,58,237,0.2)}
-.glow-card-img{width:60px;height:60px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;position:relative;border-radius:50%;background:#000}
-.glow-card-img::before{content:'';position:absolute;inset:-2px;border-radius:50%;background:conic-gradient(from 0deg,#7c3aed,#a855f7,#7c3aed);filter:blur(8px);opacity:0.8;z-index:0}
-.glow-card-img img{width:48px;height:48px;object-fit:contain;position:relative;z-index:2;border-radius:50%;background:#000;padding:4px}
+.glow-card{background:#0a0a0f;border:1px solid #2a2a35;border-radius:14px;padding:14px 6px 10px;text-align:center;transition:0.2s;cursor:pointer}
+.glow-card:active{transform:scale(0.96)}
+.glow-card-img{width:60px;height:60px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#000}
+.glow-card-img img{width:48px;height:48px;object-fit:contain;border-radius:50%;background:#000;padding:4px}
 .glow-card-title{font-size:9px;font-weight:800;color:#fff;margin-bottom:3px;letter-spacing:0.5px;line-height:1.2}
 .glow-card-desc{font-size:7px;color:#a855f7;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;line-height:1;margin-bottom:8px}
 .glow-card-btn{width:100%;height:28px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);border:none;border-radius:8px;color:#fff;font-size:9px;font-weight:800;cursor:pointer;letter-spacing:0.5px;display:flex;align-items:center;justify-content:center;gap:4px}
@@ -286,30 +282,18 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
       <div class="menu-item-text">Loja</div>
     </div>
-    <div class="menu-item" onclick="showScreen('home');toggleMenu()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      <div class="menu-item-text">Categorias</div>
-    </div>
     <div class="menu-item admin" onclick="checkAdmin();toggleMenu()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
       <div class="menu-item-text">Adm</div>
     </div>
     <div class="menu-item" onclick="alert('Suporte: WhatsApp (98) 98485-3563');toggleMenu()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       <div class="menu-item-text">Suporte</div>
     </div>
-    <div class="menu-item" onclick="alert('Em breve');toggleMenu()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-      <div class="menu-item-text">Sobre Nós</div>
-    </div>
-    <div class="menu-item" onclick="alert('Em breve');toggleMenu()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-      <div class="menu-item-text">Termos de Uso</div>
-    </div>
   </div>
 </div>
 
-<!-- TELA LOGIN -->
+<!-- LOGIN -->
 <div class="screen active" id="screen-login">
   <div class="center">
     <div class="card">
@@ -330,7 +314,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
       </div>
       <div class="row">
         <label><input type="checkbox" id="remember"> Lembrar-me</label>
-        <a onclick="showScreen('forgot')">Esqueceu a senha?</a>
+                <a onclick="showScreen('forgot')">Esqueceu a senha?</a>
       </div>
       <button class="btn" id="btnLogin">ENTRAR</button>
       <div class="footer-link">Não tem uma conta? <a onclick="showScreen('register')">Cadastre-se</a></div>
@@ -338,7 +322,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
-<!-- TELA CADASTRO -->
+<!-- CADASTRO -->
 <div class="screen" id="screen-register">
   <div class="center">
     <div class="card">
@@ -376,18 +360,18 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
-<!-- TELA ESQUECEU SENHA -->
+<!-- ESQUECEU SENHA -->
 <div class="screen" id="screen-forgot">
   <div class="center">
     <div class="card">
       <h2>ESQUECEU A SENHA</h2>
       <div class="logo">Prime Store VZ</div>
       <div class="subtitle">Recuperar senha</div>
-      <p class="text-info">Informe seu e-mail ou telefone<br>para receber o código de recuperação.</p>
+      <p class="text-info">Informe seu e-mail<br>para receber o código de recuperação.</p>
       <div class="alert error" id="forgotError"></div>
       <div class="alert success" id="forgotSuccess"></div>
       <div class="input-group">
-        <label>E-mail ou telefone</label>
+        <label>E-mail</label>
         <div class="input-box"><input type="text" id="forgotEmail" placeholder="seuemail@gmail.com"></div>
       </div>
       <button class="btn" id="btnForgot">ENVIAR CÓDIGO</button>
@@ -396,7 +380,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
-<!-- TELA HOME CLIENTE -->
+<!-- HOME CLIENTE -->
 <div class="screen" id="screen-home">
   <header class="header">
     <div class="header-left">
@@ -415,9 +399,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35"/></svg>
     <input type="text" placeholder="Buscar produtos..." id="searchInput">
   </div>
-  <div class="banner">
-    <img src="https://i.imgur.com/YJ7s4XK.png" alt="banner">
-  </div>
+  <div class="banner"></div>
   <div class="section-header">
     <span>Categorias</span>
     <a>Ver todas <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
@@ -440,7 +422,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
       <span>Games</span>
     </div>
     <div class="card-cat" onclick="showSubcat('apps')">
-      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/174872.png"></div>
+      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968705.png"></div>
       <span>Apps Premium</span>
     </div>
     <div class="card-cat outros" onclick="showSubcat('outros')">
@@ -558,7 +540,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
       <div class="pay-method-title">MÉTODO DE PAGAMENTO</div>
       <div class="pay-option">
         <div class="pay-option-left">
-          <svg class="pay-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          <svg class="pay-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
           <div class="pay-option-text">PIX</div>
         </div>
         <div class="pay-radio"></div>
@@ -577,14 +559,12 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         </button>
       </div>
-    </div>
     <div class="total-box">
       <div class="total-row">
         <span>Total</span>
         <span id="payTotal">R$ 0,00</span>
       </div>
     </div>
-  </div>
   <div class="buy-btn-fixed">
     <button class="buy-btn" onclick="pagarPix()">JÁ PAGUEI</button>
   </div>
@@ -647,17 +627,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <div class="order-status concluido" style="margin-top:6px">Concluído</div>
       </div>
     </div>
-    <div class="order-card">
-      <div class="order-icon"><img src="https://i.imgur.com/0Z8F8qk.png"></div>
-      <div class="order-info">
-        <div class="order-id">#PSVZ-202405180002</div>
-        <div class="order-date">17/05/2024 às 14:20</div>
-      </div>
-      <div style="text-align:right">
-        <div class="order-price">R$ 20,90</div>
-        <div class="order-status concluido" style="margin-top:6px">Concluído</div>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -680,31 +649,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
       <div class="profile-menu-text">Meus pedidos</div>
       <svg class="profile-menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
-    <div class="profile-menu-item" onclick="alert('Em breve')">
-      <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06a5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 0 0 0 0-7.78z"/></svg>
-      <div class="profile-menu-text">Produtos favoritos</div>
-      <svg class="profile-menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-    </div>
-    <div class="profile-menu-item" onclick="alert('Em breve')">
-      <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-      <div class="profile-menu-text">Cupons de desconto</div>
-      <svg class="profile-menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-    </div>
-    <div class="profile-menu-item" onclick="alert('Em breve')">
-      <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-      <div class="profile-menu-text">Métodos de pagamento</div>
-      <svg class="profile-menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-    </div>
-    <div class="profile-menu-item" onclick="alert('Em breve')">
-      <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M23 12h-6m-6 0H1m18.2 5.2l-4.2-4.2m0-6l4.2-4.2"/></svg>
-      <div class="profile-menu-text">Configurações da conta</div>
-      <svg class="profile-menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-    </div>
-    <div class="profile-menu-item" onclick="alert('Em breve')">
-      <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      <div class="profile-menu-text">Central de ajuda</div>
-      <svg class="profile-menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-    </div>
     <div class="profile-menu-item" onclick="auth.signOut()">
       <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
       <div class="profile-menu-text profile-logout">Sair da conta</div>
@@ -723,50 +667,31 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
   <div class="admin-cards">
     <div class="admin-card">
-      <div class="admin-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+      <div class="admin-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
       <div class="admin-card-info">
         <div class="admin-card-label">Vendas hoje</div>
-        <div class="admin-card-value" id="vendasHoje">R$ 1.250,00</div>
+        <div class="admin-card-value">R$ 1.250,00</div>
       </div>
     </div>
     <div class="admin-card">
-      <div class="admin-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg></div>
+      <div class="admin-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/></svg></div>
       <div class="admin-card-info">
-                <div class="admin-card-label">Pedidos hoje</div>
-        <div class="admin-card-value" id="pedidosHoje">38</div>
+        <div class="admin-card-label">Pedidos hoje</div>
+        <div class="admin-card-value">38</div>
       </div>
+    </div>
     <div class="admin-card">
-      <div class="admin-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div class="admin-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
       <div class="admin-card-info">
         <div class="admin-card-label">Clientes</div>
-        <div class="admin-card-value" id="totalClientes">1.245</div>
+        <div class="admin-card-value">1.245</div>
       </div>
-    </div>
     <div class="admin-card">
       <div class="admin-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
       <div class="admin-card-info">
         <div class="admin-card-label">Produtos</div>
-        <div class="admin-card-value" id="totalProdutos">342</div>
+        <div class="admin-card-value">342</div>
       </div>
-    </div>
-  </div>
-
-  <div class="admin-stats">
-    <div class="admin-stats-title">Pedidos por status</div>
-    <div class="admin-stat-row">
-      <div class="admin-stat-icon green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
-      <div class="admin-stat-info"><div class="admin-stat-label">Concluídos</div></div>
-      <div class="admin-stat-value">120</div>
-    </div>
-    <div class="admin-stat-row">
-      <div class="admin-stat-icon yellow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-      <div class="admin-stat-info"><div class="admin-stat-label">Pendentes</div></div>
-      <div class="admin-stat-value">15</div>
-    </div>
-    <div class="admin-stat-row">
-      <div class="admin-stat-icon red"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
-      <div class="admin-stat-info"><div class="admin-stat-label">Cancelados</div></div>
-      <div class="admin-stat-value">5</div>
     </div>
   </div>
 
@@ -786,24 +711,9 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
       <div class="admin-menu-text">Produtos</div>
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
-    <div class="admin-menu-item" onclick="showScreen('admin-categorias')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      <div class="admin-menu-text">Categorias</div>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-    </div>
-    <div class="admin-menu-item" onclick="showScreen('admin-subcategorias')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-      <div class="admin-menu-text">Subcategorias</div>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-    </div>
     <div class="admin-menu-item" onclick="showScreen('admin-cupons')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
       <div class="admin-menu-text">Cupons</div>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-    </div>
-    <div class="admin-menu-item" onclick="showScreen('admin-config')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M23 12h-6m-6 0H1m18.2 5.2l-4.2-4.2m0-6l4.2-4.2"/></svg>
-      <div class="admin-menu-text">Configurações</div>
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
   </div>
@@ -819,56 +729,11 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   <div style="padding:20px">
     <table class="admin-table">
       <thead><tr><th>ID</th><th>Cliente</th><th>Valor</th><th>Status</th><th>Ação</th></tr></thead>
-      <tbody id="adminPedidosTable">
-        <tr><td>#001</td><td>João Silva</td><td>R$ 20,90</td><td><span style="color:#10b981">Concluído</span></td><td><button class="admin-btn admin-btn-sm" onclick="verPedido('001')">Ver</button></td></tr>
-        <tr><td>#002</td><td>Maria Costa</td><td>R$ 32,90</td><td><span style="color:#f59e0b">Pendente</span></td><td><button class="admin-btn admin-btn-sm" onclick="verPedido('002')">Ver</button></td></tr>
-        <tr><td>#003</td><td>Pedro Santos</td><td>R$ 14,90</td><td><span style="color:#ef4444">Cancelado</span></td><td><button class="admin-btn admin-btn-sm" onclick="verPedido('003')">Ver</button></td></tr>
+      <tbody>
+        <tr><td>#001</td><td>João Silva</td><td>R$ 20,90</td><td><span style="color:#10b981">Concluído</span></td><td><button class="admin-btn admin-btn-sm">Ver</button></td></tr>
+        <tr><td>#002</td><td>Maria Costa</td><td>R$ 32,90</td><td><span style="color:#f59e0b">Pendente</span></td><td><button class="admin-btn admin-btn-sm">Ver</button></td></tr>
       </tbody>
     </table>
-  </div>
-</div>
-
-<!-- ADMIN PEDIDO DETALHE -->
-<div class="screen" id="screen-admin-pedido-detalhe">
-  <div class="admin-header">
-    <svg class="icon" onclick="showScreen('admin-pedidos')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    <div class="admin-title">DETALHE PEDIDO</div>
-    <div style="width:24px"></div>
-  </div>
-  <div style="padding:20px">
-    <div class="admin-form-group">
-      <label>ID do Pedido</label>
-      <input type="text" class="admin-input" id="pedidoId" value="#001" readonly>
-    </div>
-    <div class="admin-form-group">
-      <label>Cliente</label>
-      <input type="text" class="admin-input" id="pedidoCliente" value="João Silva">
-    </div>
-    <div class="admin-form-group">
-      <label>E-mail</label>
-      <input type="text" class="admin-input" id="pedidoEmail" value="joao@email.com">
-    </div>
-    <div class="admin-form-group">
-      <label>Telefone</label>
-      <input type="text" class="admin-input" id="pedidoTelefone" value="(98) 99999-9999">
-    </div>
-    <div class="admin-form-group">
-      <label>Produto</label>
-      <input type="text" class="admin-input" id="pedidoProduto" value="Netflix 1 Tela" readonly>
-    </div>
-    <div class="admin-form-group">
-      <label>Valor</label>
-      <input type="text" class="admin-input" id="pedidoValor" value="R$ 20,90" readonly>
-    </div>
-    <div class="admin-form-group">
-      <label>Status</label>
-      <select class="admin-input" id="pedidoStatus">
-        <option value="pendente">Pendente</option>
-        <option value="concluido" selected>Concluído</option>
-        <option value="cancelado">Cancelado</option>
-      </select>
-    </div>
-    <button class="btn" onclick="salvarPedido()">SALVAR ALTERAÇÕES</button>
   </div>
 </div>
 
@@ -883,43 +748,10 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
     <table class="admin-table">
       <thead><tr><th>Nome</th><th>E-mail</th><th>Pedidos</th><th>Ação</th></tr></thead>
       <tbody>
-        <tr><td>João Silva</td><td>joao@email.com</td><td>5</td><td><button class="admin-btn admin-btn-sm" onclick="verCliente('joao')">Ver</button></td></tr>
-        <tr><td>Maria Costa</td><td>maria@email.com</td><td>3</td><td><button class="admin-btn admin-btn-sm" onclick="verCliente('maria')">Ver</button></td></tr>
-        <tr><td>Pedro Santos</td><td>pedro@email.com</td><td>1</td><td><button class="admin-btn admin-btn-sm" onclick="verCliente('pedro')">Ver</button></td></tr>
+        <tr><td>João Silva</td><td>joao@email.com</td><td>5</td><td><button class="admin-btn admin-btn-sm">Ver</button></td></tr>
+        <tr><td>Maria Costa</td><td>maria@email.com</td><td>3</td><td><button class="admin-btn admin-btn-sm">Ver</button></td></tr>
       </tbody>
     </table>
-  </div>
-</div>
-
-<!-- ADMIN CLIENTE DETALHE -->
-<div class="screen" id="screen-admin-cliente-detalhe">
-  <div class="admin-header">
-    <svg class="icon" onclick="showScreen('admin-clientes')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    <div class="admin-title">DETALHE CLIENTE</div>
-    <div style="width:24px"></div>
-  </div>
-  <div style="padding:20px">
-    <div class="admin-form-group">
-      <label>Nome</label>
-      <input type="text" class="admin-input" id="clienteNome" value="João Silva">
-    </div>
-    <div class="admin-form-group">
-      <label>E-mail</label>
-      <input type="text" class="admin-input" id="clienteEmail" value="joao@email.com">
-    </div>
-    <div class="admin-form-group">
-      <label>Telefone</label>
-      <input type="text" class="admin-input" id="clienteTelefone" value="(98) 99999-9999">
-    </div>
-    <div class="admin-form-group">
-      <label>Data cadastro</label>
-      <input type="text" class="admin-input" id="clienteData" value="15/01/2024" readonly>
-    </div>
-    <div class="admin-form-group">
-      <label>Total gasto</label>
-      <input type="text" class="admin-input" id="clienteTotal" value="R$ 156,70" readonly>
-    </div>
-    <button class="btn" onclick="salvarCliente()">SALVAR ALTERAÇÕES</button>
   </div>
 </div>
 
@@ -928,170 +760,25 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   <div class="admin-header">
     <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
     <div class="admin-title">PRODUTOS</div>
-    <button class="admin-btn" onclick="showScreen('admin-produto-add')">+ NOVO</button>
+    <button class="admin-btn" onclick="alert('Em breve')">+ NOVO</button>
   </div>
   <div style="padding:20px">
     <table class="admin-table">
       <thead><tr><th>Nome</th><th>Categoria</th><th>Preço</th><th>Ação</th></tr></thead>
-      <tbody id="adminProdutosTable">
+      <tbody>
         <tr><td>Netflix 1 Tela</td><td>Streaming</td><td>R$ 20,90</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
         <tr><td>Spotify Premium</td><td>Streaming</td><td>R$ 12,90</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
-        <tr><td>Free Fire 520</td><td>Games</td><td>R$ 20,90</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
       </tbody>
     </table>
-  </div>
-</div>
-
-<!-- ADMIN ADD PRODUTO -->
-<div class="screen" id="screen-admin-produto-add">
-  <div class="admin-header">
-    <svg class="icon" onclick="showScreen('admin-produtos')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    <div class="admin-title">NOVO PRODUTO</div>
-    <div style="width:24px"></div>
-  </div>
-  <div style="padding:20px">
-    <div class="admin-form-group">
-      <label>Nome do produto</label>
-      <input type="text" class="admin-input" id="produtoNome" placeholder="Ex: Netflix 4K">
-    </div>
-    <div class="admin-form-group">
-      <label>Categoria</label>
-      <select class="admin-input" id="produtoCategoria">
-        <option value="streaming">Streaming</option>
-        <option value="games">Games</option>
-        <option value="social">Redes Sociais</option>
-        <option value="apps">Apps Premium</option>
-        <option value="gift">Gift Cards</option>
-        <option value="outros">Outros</option>
-      </select>
-    </div>
-    <div class="admin-form-group">
-      <label>Subcategoria</label>
-      <select class="admin-input" id="produtoSubcategoria">
-        <option value="netflix">Netflix</option>
-        <option value="spotify">Spotify</option>
-        <option value="freefire">Free Fire</option>
-      </select>
-    </div>
-    <div class="admin-form-group">
-      <label>Preço</label>
-      <input type="text" class="admin-input" id="produtoPreco" placeholder="R$ 20,90">
-    </div>
-    <div class="admin-form-group">
-      <label>Descrição</label>
-      <textarea class="admin-input admin-textarea" id="produtoDesc" placeholder="Descrição do produto"></textarea>
-    </div>
-    <div class="admin-form-group">
-      <label>URL da imagem</label>
-      <input type="text" class="admin-input" id="produtoImg" placeholder="https://i.imgur.com/...">
-    </div>
-    <button class="btn" onclick="salvarProduto()">SALVAR PRODUTO</button>
-  </div>
-</div>
-
-<!-- ADMIN CATEGORIAS -->
-<div class="screen" id="screen-admin-categorias">
-  <div class="admin-header">
-    <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    <div class="admin-title">CATEGORIAS</div>
-    <button class="admin-btn" onclick="showScreen('admin-categoria-add')">+ NOVA</button>
-  </div>
-  <div style="padding:20px">
-    <table class="admin-table">
-      <thead><tr><th>Nome</th><th>Produtos</th><th>Ação</th></tr></thead>
-      <tbody>
-        <tr><td>Streaming</td><td>18</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
-        <tr><td>Games</td><td>12</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
-        <tr><td>Gift Cards</td><td>8</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
-        <tr><td>Redes Sociais</td><td>5</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
-        <tr><td>Apps Premium</td><td>6</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
-        <tr><td>Outros</td><td>4</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<!-- ADMIN ADD CATEGORIA -->
-<div class="screen" id="screen-admin-categoria-add">
-  <div class="admin-header">
-    <svg class="icon" onclick="showScreen('admin-categorias')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    <div class="admin-title">NOVA CATEGORIA</div>
-    <div style="width:24px"></div>
-  </div>
-  <div style="padding:20px">
-    <div class="admin-form-group">
-      <label>Nome da categoria</label>
-      <input type="text" class="admin-input" id="catNome" placeholder="Ex: Música">
-    </div>
-    <div class="admin-form-group">
-      <label>Ícone URL</label>
-      <input type="text" class="admin-input" id="catIcon" placeholder="https://cdn-icons-png...">
-    </div>
-    <button class="btn" onclick="salvarCategoria()">SALVAR CATEGORIA</button>
-  </div>
-</div>
-
-<!-- ADMIN SUBCATEGORIAS -->
-<div class="screen" id="screen-admin-subcategorias">
-  <div class="admin-header">
-    <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    <div class="admin-title">SUBCATEGORIAS</div>
-    <button class="admin-btn" onclick="showScreen('admin-subcategoria-add')">+ NOVA</button>
-  </div>
-  <div style="padding:20px">
-    <table class="admin-table">
-      <thead><tr><th>Nome</th><th>Categoria</th><th>Produtos</th><th>Ação</th></tr></thead>
-      <tbody>
-        <tr><td>Netflix</td><td>Streaming</td><td>3</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
-        <tr><td>Spotify</td><td>Streaming</td><td>1</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
-        <tr><td>Free Fire</td><td>Games</td><td>2</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
-        <tr><td>Instagram</td><td>Redes Sociais</td><td>1</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<!-- ADMIN ADD SUBCATEGORIA -->
-<div class="screen" id="screen-admin-subcategoria-add">
-  <div class="admin-header">
-    <svg class="icon" onclick="showScreen('admin-subcategorias')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    <div class="admin-title">NOVA SUBCATEGORIA</div>
-    <div style="width:24px"></div>
-  </div>
-  <div style="padding:20px">
-    <div class="admin-form-group">
-      <label>Nome da subcategoria</label>
-      <input type="text" class="admin-input" id="subcatNome" placeholder="Ex: Disney+">
-    </div>
-    <div class="admin-form-group">
-      <label>Categoria pai</label>
-      <select class="admin-input" id="subcatCat">
-        <option value="streaming">Streaming</option>
-        <option value="games">Games</option>
-        <option value="social">Redes Sociais</option>
-        <option value="apps">Apps Premium</option>
-        <option value="gift">Gift Cards</option>
-        <option value="outros">Outros</option>
-      </select>
-    </div>
-    <div class="admin-form-group">
-      <label>Ícone URL</label>
-      <input type="text" class="admin-input" id="subcatIcon" placeholder="https://i.imgur.com/...">
-    </div>
-    <div class="admin-form-group">
-      <label>Descrição</label>
-      <input type="text" class="admin-input" id="subcatDesc" placeholder="Ex: FILMES E SÉRIES">
-    </div>
-    <button class="btn" onclick="salvarSubcategoria()">SALVAR SUBCATEGORIA</button>
   </div>
 </div>
 
 <!-- ADMIN CUPONS -->
 <div class="screen" id="screen-admin-cupons">
   <div class="admin-header">
-    <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+       <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
     <div class="admin-title">CUPONS</div>
-    <button class="admin-btn" onclick="novoCupom()">+ NOVO</button>
+    <button class="admin-btn" onclick="showScreen('admin-cupom-add')">+ NOVO</button>
   </div>
   <div style="padding:20px">
     <table class="admin-table">
@@ -1099,7 +786,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
       <tbody id="adminCuponsTable">
         <tr><td>PRIME10</td><td>10%</td><td>0/100</td><td><div class="admin-switch active" onclick="toggleSwitch(this)"></div></td><td><button class="admin-btn admin-btn-sm admin-btn-red">Excluir</button></td></tr>
         <tr><td>WELCOME20</td><td>R$ 20</td><td>5/50</td><td><div class="admin-switch active" onclick="toggleSwitch(this)"></div></td><td><button class="admin-btn admin-btn-sm admin-btn-red">Excluir</button></td></tr>
-        <tr><td>GAME15</td><td>15%</td><td>12/200</td><td><div class="admin-switch" onclick="toggleSwitch(this)"></div></td><td><button class="admin-btn admin-btn-sm admin-btn-red">Excluir</button></td></tr>
       </tbody>
     </table>
   </div>
@@ -1146,34 +832,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
-<!-- ADMIN CONFIG -->
-<div class="screen" id="screen-admin-config">
-  <div class="admin-header">
-    <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    <div class="admin-title">CONFIGURAÇÕES</div>
-    <div style="width:24px"></div>
-  </div>
-  <div style="padding:20px">
-    <div class="admin-form-group">
-      <label>Chave PIX</label>
-      <input type="text" class="admin-input" id="configPix" value="(98) 98485-3563">
-    </div>
-    <div class="admin-form-group">
-      <label>Nome no PIX</label>
-      <input type="text" class="admin-input" id="configNomePix" value="Lorrane Vitória Alves Vaz">
-    </div>
-    <div class="admin-form-group">
-      <label>WhatsApp Suporte</label>
-      <input type="text" class="admin-input" id="configWhats" value="5598984853563">
-    </div>
-    <div class="admin-form-group">
-      <label>Taxa de entrega padrão</label>
-      <input type="text" class="admin-input" id="configTaxa" value="Automática">
-    </div>
-    <button class="btn" onclick="salvarConfig()">SALVAR CONFIGURAÇÕES</button>
-  </div>
-</div>
-
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script>
@@ -1184,8 +842,7 @@ const firebaseConfig = {
   projectId: "premium-store-aa58b",
   storageBucket: "premium-store-aa58b.firebasestorage.app",
   messagingSenderId: "462239500057",
-  appId: "1:462239500057:web:f1b7cea162ed308a866788",
-  measurementId: "G-CN88J28WRX"
+  appId: "1:462239500057:web:f1b7cea162ed308a866788"
 };
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
@@ -1222,7 +879,7 @@ function toggleMenu(){
   const menu = document.getElementById('sideMenu');
   const overlay = document.getElementById('menuOverlay');
   menu.classList.toggle('active');
-    overlay.classList.toggle('active');
+  overlay.classList.toggle('active');
 }
 
 auth.onAuthStateChanged((user) => {
@@ -1342,11 +999,7 @@ const produtos = {
   vpn: [{id:'vpn-1',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'NORDVPN', desc:'Navegação segura 30 dias', price:'R$ 19,90', platform:'NordVPN'}]
 };
 
-let currentCat = '';
-let currentSub = '';
-
 function showSubcat(cat){
-  currentCat = cat;
   const nomes = {streaming:'Streaming',gift:'Gift Cards',social:'Redes Sociais',games:'Games',apps:'Apps Premium',outros:'Outros'};
   document.getElementById('subcatTitle').textContent = nomes[cat];
   const grid = document.getElementById('subcatGrid');
@@ -1359,7 +1012,6 @@ function showSubcat(cat){
 }
 
 function showProducts(service) {
-  currentSub = service;
   const list = produtos[service] || [];
   const grid = document.getElementById('productGrid');
   const title = document.getElementById('productTitle');
@@ -1600,60 +1252,6 @@ function filterOrders(tipo){
   });
 }
 
-// ADMIN FUNCTIONS
-function verPedido(id){
-  showScreen('admin-pedido-detalhe');
-}
-
-function salvarPedido(){
-  alert('Pedido atualizado com sucesso!');
-  showScreen('admin-pedidos');
-}
-
-function verCliente(id){
-  showScreen('admin-cliente-detalhe');
-}
-
-function salvarCliente(){
-  alert('Cliente atualizado com sucesso!');
-  showScreen('admin-clientes');
-}
-
-function salvarProduto(){
-  const nome = document.getElementById('produtoNome').value;
-  const preco = document.getElementById('produtoPreco').value;
-  if(!nome ||!preco){
-    alert('Preencha nome e preço');
-    return;
-  }
-  alert(`Produto ${nome} criado!\nPreço: ${preco}`);
-  showScreen('admin-produtos');
-}
-
-function salvarCategoria(){
-  const nome = document.getElementById('catNome').value;
-  if(!nome){
-    alert('Preencha o nome');
-    return;
-  }
-  alert(`Categoria ${nome} criada!`);
-  showScreen('admin-categorias');
-}
-
-function salvarSubcategoria(){
-  const nome = document.getElementById('subcatNome').value;
-  if(!nome){
-    alert('Preencha o nome');
-    return;
-  }
-  alert(`Subcategoria ${nome} criada!`);
-  showScreen('admin-subcategorias');
-}
-
-function novoCupom(){
-  showScreen('admin-cupom-add');
-}
-
 function salvarCupom(){
   const codigo = document.getElementById('cupomCodigo').value;
   const tipo = document.getElementById('cupomTipo').value;
@@ -1666,10 +1264,6 @@ function salvarCupom(){
   }
   alert(`Cupom ${codigo} criado!\nDesconto: ${valor}${tipo==='porcentagem'?'%':' R$'}\nLimite: ${limite}x por cliente\nTotal: ${total} usos`);
   showScreen('admin-cupons');
-}
-
-function salvarConfig(){
-  alert('Configurações salvas com sucesso!');
 }
 
 function toggleSwitch(el){
@@ -1707,13 +1301,6 @@ document.getElementById('regPhone').addEventListener('input', (e) => {
   else if(v.length >= 7) v = v.replace(/(\d{2})(\d{4})(\d{0,4})/,'($1) $2-$3');
   else if(v.length >= 3) v = v.replace(/(\d{2})(\d{0,5})/,'($1) $2');
   e.target.value = v;
-});
-
-document.getElementById('searchInput').addEventListener('input', (e) => {
-  const term = e.target.value.toLowerCase();
-  if(term.length > 2){
-    console.log('Buscando:', term);
-  }
 });
 </script>
 </body>
