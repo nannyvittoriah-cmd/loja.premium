@@ -3,15 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prime Store VZ - Admin</title>
+<title>Prime Store VZ</title>
 <style>
 :root{--bg:#0a0a0f;--card:#111117;--input:#1a1a23;--border:#2d2d3a;--purple:#8b5cf6;--purple-glow:rgba(139,92,246,0.4);--text:#fff;--text-dim:#8b8b9e}
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
 body{background:var(--bg);color:var(--text);min-height:100vh}
-.screen{display:none;width:100%;min-height:100vh}
-.screen.active{display:block}
 
-/* ADMIN LAYOUT CORRIGIDO */
+/* TELAS MOBILE - LOGIN/HOME */
+.screen-mobile{display:none;width:100%;max-width:420px;margin:0 auto;min-height:100vh}
+.screen-mobile.active{display:block}
+
+/* TELA ADMIN - FULL WIDTH */
+.screen-admin{display:none;width:100%;min-height:100vh}
+.screen-admin.active{display:block}
+
+.center{display:flex;align-items:center;justify-content:center;padding:20px;min-height:100vh}
+
+/* LOGIN */
+.card{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:36px 28px;width:100%;max-width:360px;box-shadow:0 0 40px var(--purple-glow), inset 0 1px 0 rgba(255,255,255,0.05)}
+h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var(--purple);letter-spacing:2px;text-transform:uppercase}
+.logo{font-size:24px;font-weight:800;text-align:center;margin-bottom:6px;background:linear-gradient(135deg,#fff 0%,#8b5cf6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.subtitle{font-size:13px;color:var(--text-dim);text-align:center;margin-bottom:32px}
+.input-group{margin-bottom:18px}
+.input-group label{display:block;font-size:12px;color:var(--text-dim);margin-bottom:8px;font-weight:500}
+.input-box{width:100%;min-height:52px;background:var(--input);border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;padding:0 18px;transition:all 0.3s}
+.input-box:focus-within{border-color:var(--purple);box-shadow:0 0 0 3px var(--purple-glow)}
+.input-box input,.input-box select,.input-box textarea{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px;font-family:inherit}
+.input-box textarea{padding:12px 0;min-height:80px;resize:vertical}
+.input-box input::placeholder{color:#4a4a5e}
+.toggle{cursor:pointer;color:#6b7280;font-size:18px;user-select:none}
+.btn{width:100%;height:54px;background:linear-gradient(135deg,#8b5cf6 0%,#7c3aed 100%);border:none;border-radius:14px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;letter-spacing:1px;box-shadow:0 8px 24px var(--purple-glow);transition:all 0.2s;margin-bottom:12px}
+.btn:active{transform:scale(0.98)}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
+.btn-secondary{background:var(--input);border:1px solid var(--border);box-shadow:none}
+.btn-small{height:40px;font-size:12px;padding:0 20px;width:auto}
+.btn-danger{background:linear-gradient(135deg,#ef4444 0%,#dc2626 100%);box-shadow:0 8px 24px rgba(239,68,68,0.4)}
+.btn-success{background:linear-gradient(135deg,#10b981 0%,#059669 100%);box-shadow:0 8px 24px rgba(16,185,129,0.4)}
+.alert{padding:14px 16px;border-radius:12px;font-size:12px;margin-bottom:18px;display:none;text-align:center;font-weight:600}
+.alert.error{background:rgba(239,68,68,0.15);border:1px solid #ef4444;color:#fca5a5}
+.alert.success{background:rgba(16,185,129,0.15);border:1px solid #10b981;color:#6ee7b7}
+
+/* ADMIN LAYOUT */
 .admin-wrapper{display:flex;min-height:100vh;width:100%}
 .admin-sidebar{width:260px;min-width:260px;background:#0d0d14;border-right:2px solid var(--purple);overflow-y:auto;flex-shrink:0}
 .admin-logo{text-align:center;padding:30px 20px;border-bottom:1px solid var(--border)}
@@ -32,23 +64,6 @@ body{background:var(--bg);color:var(--text);min-height:100vh}
 .admin-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;margin-bottom:20px}
 .admin-card h3{font-size:16px;font-weight:800;color:var(--purple);margin-bottom:20px}
 
-/* BOTÕES */
-.btn{width:100%;height:54px;background:linear-gradient(135deg,#8b5cf6 0%,#7c3aed 100%);border:none;border-radius:14px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;letter-spacing:1px;box-shadow:0 8px 24px var(--purple-glow);transition:all 0.2s;margin-bottom:12px}
-.btn:active{transform:scale(0.98)}
-.btn:disabled{opacity:0.5;cursor:not-allowed}
-.btn-secondary{background:var(--input);border:1px solid var(--border);box-shadow:none}
-.btn-small{height:40px;font-size:12px;padding:0 20px;width:auto}
-.btn-danger{background:linear-gradient(135deg,#ef4444 0%,#dc2626 100%);box-shadow:0 8px 24px rgba(239,68,68,0.4)}
-.btn-success{background:linear-gradient(135deg,#10b981 0%,#059669 100%);box-shadow:0 8px 24px rgba(16,185,129,0.4)}
-
-/* INPUTS */
-.input-group{margin-bottom:18px}
-.input-group label{display:block;font-size:12px;color:var(--text-dim);margin-bottom:8px;font-weight:500}
-.input-box{width:100%;min-height:52px;background:var(--input);border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;padding:0 18px;transition:all 0.3s}
-.input-box:focus-within{border-color:var(--purple);box-shadow:0 0 0 3px var(--purple-glow)}
-.input-box input,.input-box select,.input-box textarea{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px;font-family:inherit}
-.input-box textarea{padding:12px 0;min-height:80px;resize:vertical}
-
 /* TABELA */
 .table{width:100%;border-collapse:collapse}
 .table th{text-align:left;padding:12px;font-size:11px;color:var(--text-dim);font-weight:700;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--border)}
@@ -59,15 +74,15 @@ body{background:var(--bg);color:var(--text);min-height:100vh}
 .status-approved{background:rgba(16,185,129,0.15);color:#10b981;border:1px solid #10b981}
 .status-cancelled{background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid #ef4444}
 
-/* PREVIEW BANNER */
-.preview-banner{height:120px;background:linear-gradient(135deg,#1e1e2a 0%,#2a1e35 50%,#1e1e2a 100%);border-radius:16px;border:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden;padding:16px;display:flex;flex-direction:column;justify-content:center}
-.preview-banner img{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:80px;height:80px;object-fit:contain}
-
-/* STATS CARDS */
+/* STATS */
 .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:30px}
 .stat-card{background:var(--input);padding:24px;border-radius:16px;border:1px solid var(--border)}
 .stat-label{font-size:12px;color:var(--text-dim);margin-bottom:8px}
 .stat-value{font-size:28px;font-weight:900}
+
+/* BANNER PREVIEW */
+.preview-banner{height:120px;background:linear-gradient(135deg,#1e1e2a 0%,#2a1e35 50%,#1e1e2a 100%);border-radius:16px;border:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden;padding:16px;display:flex;flex-direction:column;justify-content:center}
+.preview-banner img{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:80px;height:80px;object-fit:contain}
 
 /* MODAL */
 .modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:9999;align-items:center;justify-content:center;padding:20px}
@@ -75,24 +90,44 @@ body{background:var(--bg);color:var(--text);min-height:100vh}
 .modal-content{background:var(--card);border:1px solid var(--purple);border-radius:24px;padding:32px;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 0 60px var(--purple-glow)}
 .modal-title{font-size:20px;font-weight:900;margin-bottom:24px}
 
-.alert{padding:14px 16px;border-radius:12px;font-size:12px;margin-bottom:18px;display:none;text-align:center;font-weight:600}
-.alert.error{background:rgba(239,68,68,0.15);border:1px solid #ef4444;color:#fca5a5}
-.alert.success{background:rgba(16,185,129,0.15);border:1px solid #10b981;color:#6ee7b7}
-
 /* MOBILE ADMIN */
+.admin-menu-toggle{display:none;position:fixed;top:20px;left:20px;z-index:1000;background:var(--purple);border:none;width:44px;height:44px;border-radius:12px;cursor:pointer}
 @media(max-width:768px){
  .admin-sidebar{position:fixed;left:-260px;transition:left 0.3s;z-index:999}
  .admin-sidebar.active{left:0}
- .admin-content{padding:20px}
- .admin-menu-toggle{display:block;position:fixed;top:20px;left:20px;z-index:1000;background:var(--purple);border:none;width:44px;height:44px;border-radius:12px;cursor:pointer}
+ .admin-content{padding:80px 20px 20px}
+ .admin-menu-toggle{display:block}
 }
-.admin-menu-toggle{display:none}
 </style>
 </head>
 <body>
 
-<!-- TELA ADMIN -->
-<div class="screen active" id="screen-admin">
+<!-- LOGIN -->
+<div class="screen-mobile active" id="screen-login">
+  <div class="center">
+    <div class="card">
+      <h2>LOGIN - E-MAIL</h2>
+      <div class="logo">Prime Store VZ</div>
+      <div class="subtitle">Painel Administrativo</div>
+      <div class="alert error" id="loginError"></div>
+      <div class="input-group">
+        <label>E-mail</label>
+        <div class="input-box"><input type="email" id="loginEmail" placeholder="seuemail@gmail.com"></div>
+      </div>
+      <div class="input-group">
+        <label>Senha</label>
+        <div class="input-box">
+          <input type="password" id="loginPassword" placeholder="••••••••">
+          <span class="toggle" onclick="togglePass('loginPassword', this)">👁️</span>
+        </div>
+      </div>
+      <button class="btn" id="btnLogin">ENTRAR NO PAINEL</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div class="screen-admin" id="screen-admin">
   <button class="admin-menu-toggle" onclick="document.querySelector('.admin-sidebar').classList.toggle('active')">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
   </button>
@@ -135,7 +170,7 @@ body{background:var(--bg);color:var(--text);min-height:100vh}
         <span>Slider / Banners</span>
       </div>
       <div class="admin-menu-item" onclick="showAdminPanel('config',this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0.33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0.33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0.33 1.82l.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 0 0 1-2-2v-.09A1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0.33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 0 0 0 1.82.33H9a1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 0 0 1-2 2h-.09a1.65 0 0 0-1.51 1z"/></svg>
         <span>Configurações</span>
       </div>
       <div class="admin-menu-item" onclick="showAdminPanel('relatorios',this)">
@@ -394,9 +429,19 @@ const db = firebase.database();
 const ADMIN_EMAIL = 'vittoriahvahz@gmail.com';
 
 function showScreen(name){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.screen-mobile, .screen-admin').forEach(s=>s.classList.remove('active'));
   document.getElementById(`screen-${name}`).classList.add('active');
-  if(name === 'admin') carregarDadosAdmin('dashboard');
+}
+
+function togglePass(id, el){
+  const input = document.getElementById(id);
+  if(input.type === 'password'){
+    input.type = 'text';
+    el.textContent = '🙈';
+  }else{
+    input.type = 'password';
+    el.textContent = '👁️';
+  }
 }
 
 function showAdminPanel(panel, el){
@@ -405,6 +450,7 @@ function showAdminPanel(panel, el){
   document.getElementById(`panel-${panel}`).classList.add('active');
   if(el) el.classList.add('active');
   carregarDadosAdmin(panel);
+  document.querySelector('.admin-sidebar').classList.remove('active');
 }
 
 function abrirModal(id){document.getElementById(id).classList.add('active')}
@@ -414,9 +460,6 @@ function carregarBanner(){
   db.ref('config/banner').once('value').then(snap => {
     const data = snap.val();
     if(data){
-      document.getElementById('bannerTitle').textContent = data.title;
-      document.getElementById('bannerOffer').textContent = data.offer;
-      document.getElementById('bannerImg').src = data.img;
       document.getElementById('previewTitle').textContent = data.title;
       document.getElementById('previewOffer').textContent = data.offer;
       document.getElementById('previewImg').src = data.img;
@@ -450,15 +493,12 @@ function salvarBanner(){
 function carregarCategorias(){
   db.ref('categorias').once('value').then(snap => {
     const data = snap.val() || {};
-    const grid = document.getElementById('categoriasGrid');
     const tabela = document.getElementById('tabelaCategorias');
-    if(grid) grid.innerHTML = '';
-    if(tabela) tabela.innerHTML = '';
+    tabela.innerHTML = '';
     
     Object.keys(data).forEach(key => {
       const cat = data[key];
-      if(grid) grid.innerHTML += `<div class="card-cat"><div class="card-cat-icon"><img src="${cat.icon}"></div><span>${cat.nome}</span></div>`;
-      if(tabela) tabela.innerHTML += `<tr><td>${cat.nome}</td><td>${cat.subcategorias? cat.subcategorias.join(', ') : '-'}</td><td><button class="btn btn-danger btn-small" onclick="excluirCategoria('${key}')">Excluir</button></td></tr>`;
+      tabela.innerHTML += `<tr><td>${cat.nome}</td><td>${cat.subcategorias? cat.subcategorias.join(', ') : '-'}</td><td><button class="btn btn-danger btn-small" onclick="excluirCategoria('${key}')">Excluir</button></td></tr>`;
     });
   });
 }
@@ -466,7 +506,7 @@ function carregarCategorias(){
 function carregarCategoriasSelect(){
   db.ref('categorias').once('value').then(snap => {
     const data = snap.val() || {};
-        const select = document.getElementById('produtoCategoria');
+    const select = document.getElementById('produtoCategoria');
     select.innerHTML = '<option value="">Selecione</option>';
     Object.keys(data).forEach(key => {
       select.innerHTML += `<option value="${key}">${data[key].nome}</option>`;
@@ -514,21 +554,12 @@ function excluirCategoria(id){
 function carregarProdutos(){
   db.ref('produtos').once('value').then(snap => {
     const data = snap.val() || {};
-    const grid = document.getElementById('produtosGrid');
     const tabela = document.getElementById('tabelaProdutos');
-    if(grid) grid.innerHTML = '';
-    if(tabela) tabela.innerHTML = '';
+    tabela.innerHTML = '';
     
     Object.keys(data).forEach(key => {
       const prod = data[key];
-      if(grid) grid.innerHTML += `
-        <div class="product-card">
-          <div class="product-img"><img src="${prod.img}"></div>
-          <div class="product-name">${prod.nome}</div>
-          <div class="product-desc">${prod.categoria}</div>
-          <div class="product-price">R$ ${prod.preco.toFixed(2)}</div>
-        </div>`;
-      if(tabela) tabela.innerHTML += `
+      tabela.innerHTML += `
         <tr>
           <td>${prod.nome}</td>
           <td>${prod.categoria}</td>
@@ -577,7 +608,7 @@ function excluirProduto(id){
   }
 }
 
-// PEDIDOS - APROVAR PAGAMENTOS
+// PEDIDOS - APROVAR PAGAMENTOS + ENVIAR COMPROVANTE
 function carregarPedidos(){
   db.ref('pedidos').once('value').then(snap => {
     const data = snap.val() || {};
