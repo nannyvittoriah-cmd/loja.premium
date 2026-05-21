@@ -182,6 +182,42 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .receipt-btn-primary{background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);color:#fff;box-shadow:0 4px 20px rgba(124,58,237,0.4)}
 .receipt-btn-secondary{background:var(--input);border:1px solid var(--border);color:#fff}
 .receipt-btn:active{transform:scale(0.98)}
+/* MEUS PEDIDOS */
+.orders-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.orders-title{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#fff}
+.orders-tabs{display:flex;gap:24px;padding:0 20px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.order-tab{padding:14px 0;font-size:13px;font-weight:600;color:var(--text-dim);cursor:pointer;position:relative;border-bottom:2px solid transparent}
+.order-tab.active{color:var(--purple);border-bottom-color:var(--purple)}
+.orders-content{padding:0 20px 100px}
+.order-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;display:flex;gap:12px;align-items:center;cursor:pointer}
+.order-card:active{transform:scale(0.98)}
+.order-icon{width:48px;height:48px;border-radius:10px;background:var(--input);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.order-icon img{width:32px;height:32px;object-fit:contain}
+.order-info{flex:1}
+.order-id{font-size:12px;font-weight:700;color:#fff;margin-bottom:4px}
+.order-date{font-size:11px;color:var(--text-dim);margin-bottom:2px}
+.order-price{font-size:14px;font-weight:800;color:var(--purple)}
+.order-status{padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase}
+.order-status.concluido{background:rgba(16,185,129,0.15);border:1px solid #10b981;color:#10b981}
+.order-status.pendente{background:rgba(245,158,11,0.15);border:1px solid #f59e0b;color:#f59e0b}
+.order-status.cancelado{background:rgba(239,68,68,0.15);border:1px solid #ef4444;color:#ef4444}
+/* PERFIL */
+.profile-header{display:flex;align-items:center;gap:12px;padding:20px;border-bottom:1px solid var(--border)}
+.profile-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff}
+.profile-info{flex:1}
+.profile-name{font-size:15px;font-weight:700;color:#fff;margin-bottom:2px}
+.profile-since{font-size:11px;color:var(--text-dim)}
+.profile-balance-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin:16px 20px;display:flex;justify-content:space-between;align-items:center}
+.profile-balance-label{font-size:12px;color:var(--text-dim);margin-bottom:4px}
+.profile-balance-value{font-size:22px;font-weight:800;color:#fff}
+.profile-add-btn{padding:8px 16px;background:var(--input);border:1px solid var(--border);border-radius:10px;color:var(--purple);font-size:12px;font-weight:700;cursor:pointer}
+.profile-menu{padding:0 20px}
+.profile-menu-item{display:flex;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.profile-menu-item:active{background:var(--input)}
+.profile-menu-icon{width:20px;height:20px;stroke:var(--text-dim)}
+.profile-menu-text{flex:1;font-size:14px;font-weight:600;color:#fff}
+.profile-menu-arrow{width:16px;height:16px;stroke:var(--text-dim)}
+.profile-logout{color:#ef4444!important}
 </style>
 </head>
 <body>
@@ -281,7 +317,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
         <div class="cart-badge" id="cartBadge" style="display:none">0</div>
       </div>
-      <svg class="icon purple" id="logoutBtn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <svg class="icon purple" id="profileBtn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     </div>
   </header>
   <div class="search">
@@ -297,6 +333,10 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
   <div class="grid">
     <div class="card-cat" onclick="showSubcat('streaming')">
+      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/5977/5977590.png"></div>
+      <span>Streaming</span>
+    </div>
+        <div class="card-cat" onclick="showSubcat('streaming')">
       <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/5977/5977590.png"></div>
       <span>Streaming</span>
     </div>
@@ -355,8 +395,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   <div class="detail-header">
     <svg class="icon" onclick="showScreen('products')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
     <h1>DETALHES DO PRODUTO</h1>
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14"
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
   </div>
   <div class="detail-content">
     <div class="detail-image" id="detailImage"></div>
@@ -430,7 +469,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
       <div class="pay-method-title">MÉTODO DE PAGAMENTO</div>
       <div class="pay-option">
         <div class="pay-option-left">
-          <svg class="pay-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          <svg class="pay-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
           <div class="pay-option-text">PIX</div>
         </div>
         <div class="pay-radio"></div>
@@ -450,7 +489,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
       <div class="pix-copy-box">
         <div class="pix-code" id="pixCode">(98) 98485-3563</div>
         <button class="copy-btn" onclick="copyPix()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         </button>
       </div>
     </div>
@@ -503,6 +542,140 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
+<!-- MEUS PEDIDOS -->
+<div class="screen" id="screen-orders">
+  <div class="orders-header">
+    <svg class="icon" onclick="showScreen('home')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    <div class="orders-title">MEUS PEDIDOS</div>
+    <div style="width:24px"></div>
+  </div>
+  
+  <div class="orders-tabs">
+    <div class="order-tab active" onclick="filterOrders('todos')">Todos</div>
+    <div class="order-tab" onclick="filterOrders('pendentes')">Pendentes</div>
+    <div class="order-tab" onclick="filterOrders('concluidos')">Concluídos</div>
+    <div class="order-tab" onclick="filterOrders('cancelados')">Cancelados</div>
+  </div>
+  
+  <div class="orders-content" id="ordersList">
+    <div class="order-card">
+      <div class="order-icon"><img src="https://i.imgur.com/0Z8F8qk.png"></div>
+      <div class="order-info">
+        <div class="order-id">#PSVZ-202405180001</div>
+        <div class="order-date">18/05/2024 às 15:30</div>
+      </div>
+      <div style="text-align:right">
+        <div class="order-price">R$ 20,80</div>
+        <div class="order-status concluido" style="margin-top:6px">Concluído</div>
+      </div>
+    </div>
+    
+    <div class="order-card">
+      <div class="order-icon"><img src="https://i.imgur.com/0Z8F8qk.png"></div>
+      <div class="order-info">
+        <div class="order-id">#PSVZ-202405180002</div>
+        <div class="order-date">17/05/2024 às 14:20</div>
+      </div>
+      <div style="text-align:right">
+        <div class="order-price">R$ 20,90</div>
+        <div class="order-status concluido" style="margin-top:6px">Concluído</div>
+      </div>
+    </div>
+    
+    <div class="order-card">
+      <div class="order-icon"><img src="https://i.imgur.com/0Z8F8qk.png"></div>
+      <div class="order-info">
+        <div class="order-id">#PSVZ-202405180003</div>
+        <div class="order-date">16/05/2024 às 13:10</div>
+      </div>
+      <div style="text-align:right">
+        <div class="order-price">R$ 17,90</div>
+        <div class="order-status pendente" style="margin-top:6px">Pendente</div>
+      </div>
+    </div>
+    
+    <div class="order-card">
+      <div class="order-icon"><img src="https://i.imgur.com/0Z8F8qk.png"></div>
+      <div class="order-info">
+        <div class="order-id">#PSVZ-202405180004</div>
+        <div class="order-date">15/05/2024 às 12:00</div>
+      </div>
+      <div style="text-align:right">
+        <div class="order-price">R$ 79,90</div>
+        <div class="order-status pendente" style="margin-top:6px">Pendente</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PERFIL -->
+<div class="screen" id="screen-profile">
+  <div class="orders-header">
+    <svg class="icon" onclick="showScreen('home')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    <div class="orders-title">PERFIL</div>
+    <div style="width:24px"></div>
+  </div>
+  
+  <div class="profile-header">
+    <div class="profile-avatar">VZ</div>
+    <div class="profile-info">
+      <div class="profile-name" id="profileName">VZ Prime</div>
+      <div class="profile-since">Cliente desde 2024</div>
+    </div>
+  </div>
+  
+  <div class="profile-balance-box">
+    <div>
+      <div class="profile-balance-label">Saldo na conta</div>
+      <div class="profile-balance-value">R$ 250,00</div>
+    </div>
+    <button class="profile-add-btn" onclick="alert('Em breve')">Adicionar saldo</button>
+  </div>
+  
+  <div class="profile-menu">
+    <div class="profile-menu-item" onclick="showScreen('orders')">
+      <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <div class="profile-menu-text">Meus pedidos</div>
+      <svg class="profile-menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    
+    <div class="profile-menu-item" onclick="alert('Em breve')">
+      <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 0 0 0-7.78 0L12 5.67l-1.06a5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 0 0 0 0-7.78z"/></svg>
+      <div class="profile-menu-text">Produtos favoritos</div>
+      <svg class="profile-menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    
+    <div class="profile-menu-item" onclick="alert('Em breve')">
+      <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      <div class="profile-menu-text">Cupons de desconto</div>
+      <svg class="profile-menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    
+    <div class="profile-menu-item" onclick="alert('Em breve')">
+      <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      <div class="profile-menu-text">Métodos de pagamento</div>
+      <svg class="profile-menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    
+    <div class="profile-menu-item" onclick="alert('Em breve')">
+      <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M23 12h-6m-6 0H1m18.2 5.2l-4.2-4.2m0-6l4.2-4.2"/></svg>
+      <div class="profile-menu-text">Configurações da conta</div>
+      <svg class="profile-menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    
+    <div class="profile-menu-item" onclick="alert('Em breve')">
+      <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <div class="profile-menu-text">Central de ajuda</div>
+      <svg class="profile-menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    
+    <div class="profile-menu-item" onclick="auth.signOut()">
+      <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      <div class="profile-menu-text profile-logout">Sair da conta</div>
+    </div>
+  </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script>
@@ -538,8 +711,14 @@ function togglePass(id, el) {
 }
 
 auth.onAuthStateChanged((user) => {
-  if(user) showScreen('home');
-  else showScreen('login');
+  if(user){
+    showScreen('home');
+    if(user.displayName){
+      document.getElementById('profileName').textContent = user.displayName;
+    }
+  }else{
+    showScreen('login');
+  }
 });
 
 document.getElementById('btnLogin').onclick = async () => {
@@ -587,7 +766,7 @@ document.getElementById('btnForgot').onclick = async () => {
   finally{btn.disabled = false;}
 }
 
-document.getElementById('logoutBtn').onclick = () => auth.signOut();
+document.getElementById('profileBtn').onclick = () => showScreen('profile');
 
 const subcategorias = {
   streaming: [
@@ -596,7 +775,7 @@ const subcategorias = {
     {id:'disney',img:'https://i.imgur.com/9R9R9R9.png',title:'DISNEY+',desc:'FILMES E SÉRIES'},
     {id:'prime',img:'https://i.imgur.com/7P7P7P7.png',title:'AMAZON PRIME',desc:'FILMES E SÉRIES'},
     {id:'appletv',img:'https://i.imgur.com/6A6A6A6.png',title:'APPLE TV+',desc:'FILMES E SÉRIES'},
-    {id:'youtube',img:'https://i.imgur.com/5Y5.png',title:'YOUTUBE PREMIUM',desc:'FILMES E VÍDEOS'},
+    {id:'youtube',img:'https://i.imgur.com/5Y5Y5Y5.png',title:'YOUTUBE PREMIUM',desc:'FILMES E VÍDEOS'},
     {id:'spotify',img:'https://i.imgur.com/4S4S4S4.png',title:'SPOTIFY',desc:'MÚSICAS E PODCASTS'},
     {id:'deezer',img:'https://i.imgur.com/3D3D3D3.png',title:'DEEZER',desc:'MÚSICAS E PODCASTS'},
     {id:'crunchyroll',img:'https://i.imgur.com/2C2C2C2.png',title:'CRUNCHYROLL',desc:'ANIMES'},
@@ -604,7 +783,7 @@ const subcategorias = {
     {id:'paramount',img:'https://i.imgur.com/0P0P0P0.png',title:'PARAMOUNT+',desc:'FILMES E SÉRIES'},
     {id:'star',img:'https://i.imgur.com/9S9S9S9.png',title:'STAR+',desc:'FILMES E SÉRIES'},
     {id:'globoplay',img:'https://i.imgur.com/8G8G8G8.png',title:'GLOBOPLAY',desc:'FILMES E SÉRIES'},
-    {id:'telecine',img:'https://i.imgur.com/7T7T7.png',title:'TELECINE',desc:'FILMES E SÉRIES'},
+    {id:'telecine',img:'https://i.imgur.com/7T7T7T7.png',title:'TELECINE',desc:'FILMES E SÉRIES'},
     {id:'mubi',img:'https://i.imgur.com/6M6M6M6.png',title:'MUBI',desc:'FILMES E CULTURA'},
     {id:'dazn',img:'https://i.imgur.com/5D5D5D5.png',title:'DAZN',desc:'ESPORTES'},
     {id:'espn',img:'https://i.imgur.com/4E4E4E4.png',title:'ESPN',desc:'ESPORTES'},
@@ -640,7 +819,7 @@ const produtos = {
     {id:'netflix-4k',img:'https://i.imgur.com/0Z8F8qk.png', title:'NETFLIX 4K', desc:'4 telas + Ultra HD 30 dias', price:'R$ 32,90', platform:'Netflix'},
     {id:'netflix-2',img:'https://i.imgur.com/0Z8F8qk.png', title:'NETFLIX 2 TELAS', desc:'2 telas simultâneas 30 dias', price:'R$ 24,90', platform:'Netflix'}
   ],
-  hbo: [{id:'hbo-1',img:'https://i.imgur.com/8QJ8Q.png', title:'HBO MAX', desc:'Acesso completo 30 dias', price:'R$ 19,90', platform:'HBO Max'}],
+    hbo: [{id:'hbo-1',img:'https://i.imgur.com/8QJ8Q.png', title:'HBO MAX', desc:'Acesso completo 30 dias', price:'R$ 19,90', platform:'HBO Max'}],
   disney: [{id:'disney-1',img:'https://i.imgur.com/9R9R9R9.png', title:'DISNEY+', desc:'Filmes e séries Disney 30 dias', price:'R$ 16,90', platform:'Disney+'}],
   prime: [{id:'prime-1',img:'https://i.imgur.com/7P7P7P7.png', title:'PRIME VIDEO', desc:'Amazon Prime 30 dias', price:'R$ 14,90', platform:'Prime Video'}],
   appletv: [{id:'appletv-1',img:'https://i.imgur.com/6A6A6A6.png', title:'APPLE TV+', desc:'Originais Apple 30 dias', price:'R$ 21,90', platform:'Apple TV+'}],
@@ -650,7 +829,7 @@ const produtos = {
   crunchyroll: [{id:'crunchy-1',img:'https://i.imgur.com/2C2C2C2.png', title:'CRUNCHYROLL', desc:'Animes premium 30 dias', price:'R$ 14,90', platform:'Crunchyroll'}],
   funimation: [{id:'funi-1',img:'https://i.imgur.com/1F1F1F1.png', title:'FUNIMATION', desc:'Animes dublados 30 dias', price:'R$ 14,90', platform:'Funimation'}],
   paramount: [{id:'para-1',img:'https://i.imgur.com/0P0P0P0.png', title:'PARAMOUNT+', desc:'Filmes e séries 30 dias', price:'R$ 19,90', platform:'Paramount+'}],
-  star: [{id:'star-1',img:'https://i.imgur.com/9S9S9.png', title:'STAR+', desc:'Conteúdo adulto Disney 30 dias', price:'R$ 19,90', platform:'Star+'}],
+  star: [{id:'star-1',img:'https://i.imgur.com/9S9S9S9.png', title:'STAR+', desc:'Conteúdo adulto Disney 30 dias', price:'R$ 19,90', platform:'Star+'}],
   globoplay: [{id:'globo-1',img:'https://i.imgur.com/8G8G8G8.png', title:'GLOBOPLAY', desc:'Novelas e séries 30 dias', price:'R$ 22,90', platform:'Globoplay'}],
   telecine: [{id:'tele-1',img:'https://i.imgur.com/7T7T7T7.png', title:'TELECINE', desc:'Filmes lançamentos 30 dias', price:'R$ 24,90', platform:'Telecine'}],
   mubi: [{id:'mubi-1',img:'https://i.imgur.com/6M6M6M6.png', title:'MUBI', desc:'Cinema cult 30 dias', price:'R$ 29,90', platform:'MUBI'}],
@@ -752,7 +931,7 @@ function addToCartDirect(serviceId, productId){
   const list = produtos[serviceId] || [];
   const p = list.find(x => x.id === productId);
   if(!p) return;
-  
+
   const product = {...p, serviceId};
   const existing = cart.find(i => i.id === product.id);
   if(existing){
@@ -795,7 +974,7 @@ function renderCart(){
               <button class="qty-btn" onclick="changeQty(${idx}, 1)">+</button>
             </div>
             <button class="delete-btn" onclick="removeItem(${idx})">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
             </button>
           </div>
         </div>`;
@@ -823,14 +1002,14 @@ function updateTotals(){
     const price = parseFloat(item.price.replace('R$ ','').replace(',','.'));
     subtotal += price * item.qty;
   });
-  
+
   let discount = 0;
   if(currentCoupon === 'PRIME10'){
     discount = subtotal * 0.1;
   }
-  
+
   const total = subtotal - discount;
-  
+
   document.getElementById('subtotal').textContent = `R$ ${subtotal.toFixed(2).replace('.',',')}`;
   document.getElementById('discount').textContent = `- R$ ${discount.toFixed(2).replace('.',',')}`;
   document.getElementById('total').textContent = `R$ ${total.toFixed(2).replace('.',',')}`;
@@ -876,22 +1055,22 @@ function gerarComprovante(){
   const agora = new Date();
   const id = `#PSVZ-${agora.getFullYear()}${String(agora.getMonth()+1).padStart(2,'0')}${String(agora.getDate()).padStart(2,'0')}${String(Math.floor(Math.random()*9000)+1000)}`;
   const data = `${String(agora.getDate()).padStart(2,'0')}/${String(agora.getMonth()+1).padStart(2,'0')}/${agora.getFullYear()} às ${String(agora.getHours()).padStart(2,'0')}:${String(agora.getMinutes()).padStart(2,'0')}`;
-  
+
   document.getElementById('receiptId').textContent = id;
   document.getElementById('receiptDate').textContent = data;
-  
+
   let total = 0;
   cart.forEach(item => {
     const price = parseFloat(item.price.replace('R$ ','').replace(',','.'));
     total += price * item.qty;
   });
-  
+
   if(currentCoupon === 'PRIME10'){
     total = total * 0.9;
   }
-  
+
   document.getElementById('receiptTotal').textContent = `R$ ${total.toFixed(2).replace('.',',')}`;
-  
+
   const container = document.getElementById('receiptItems');
   container.innerHTML = '';
   cart.forEach(item => {
@@ -905,7 +1084,7 @@ function gerarComprovante(){
         <div class="receipt-item-price">${item.price}</div>
       </div>`;
   });
-  
+
   showScreen('receipt');
 }
 
@@ -915,15 +1094,36 @@ function enviarComprovante(){
   texto += `Data: ${document.getElementById('receiptDate').textContent}%0A`;
   texto += `Status: Pagamento aprovado ✅%0A%0A`;
   texto += '*Itens:*%0A';
-  
+
   cart.forEach(item => {
     texto += `• ${item.title} - ${item.price}%0A`;
   });
-  
+
   texto += `%0A*Total pago: ${document.getElementById('receiptTotal').textContent}*`;
-  
+
   const numeroWhats = '5598984853563';
   window.open(`https://wa.me/${numeroWhats}?text=${texto}`, '_blank');
+}
+
+function filterOrders(tipo){
+  document.querySelectorAll('.order-tab').forEach(t=>t.classList.remove('active'));
+  event.target.classList.add('active');
+
+  const cards = document.querySelectorAll('.order-card');
+  cards.forEach(card => {
+    const status = card.querySelector('.order-status').textContent.toLowerCase();
+    if(tipo === 'todos'){
+      card.style.display = 'flex';
+    }else if(tipo === 'pendentes' && status === 'pendente'){
+      card.style.display = 'flex';
+    }else if(tipo === 'concluidos' && status === 'concluído'){
+      card.style.display = 'flex';
+    }else if(tipo === 'cancelados' && status === 'cancelado'){
+      card.style.display = 'flex';
+    }else{
+      card.style.display = 'none';
+    }
+  });
 }
 
 function showAlert(id, msg){
@@ -968,4 +1168,3 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
 </script>
 </body>
 </html>
-              
