@@ -79,6 +79,29 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .glow-card-title{font-size:9px;font-weight:800;color:#fff;margin-bottom:3px;letter-spacing:0.5px;line-height:1.2;pointer-events:none}
 .glow-card-desc{font-size:7px;color:#a855f7;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;line-height:1;pointer-events:none}
 .back-btn{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;cursor:pointer}
+
+/* DETALHES DO PRODUTO */
+.detail-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;position:sticky;top:0;background:var(--bg);z-index:10}
+.detail-header h1{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
+.detail-header .icons{display:flex;gap:16px}
+.detail-content{padding:0 20px 100px}
+.detail-image{width:100%;height:200px;margin:20px 0;border-radius:16px;overflow:hidden;position:relative;background:linear-gradient(135deg,#1e1e2a 0%,#2a2a35 100%)}
+.detail-image img{width:100%;height:100%;object-fit:contain}
+.detail-title{font-size:20px;font-weight:800;margin-bottom:4px}
+.detail-subtitle{font-size:13px;color:var(--text-dim);margin-bottom:16px}
+.detail-price-row{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.detail-price{font-size:24px;font-weight:800;color:#fff}
+.detail-badge{padding:4px 12px;background:rgba(16,185,129,0.15);border:1px solid var(--green);border-radius:6px;font-size:11px;color:var(--green);font-weight:600}
+.detail-section{margin-bottom:24px}
+.detail-section-title{font-size:12px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.detail-desc{font-size:13px;line-height:1.6;color:#9ca3af;margin-bottom:16px}
+.detail-info{border-top:1px solid var(--border);padding-top:16px}
+.detail-info-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+.detail-info-row span:first-child{color:var(--text-dim)}
+.detail-info-row span:last-child{color:#fff;font-weight:600}
+.buy-btn-fixed{position:fixed;bottom:0;left:0;right:0;max-width:420px;margin:0 auto;padding:16px 20px;background:var(--bg);border-top:1px solid var(--border);z-index:20}
+.buy-btn{width:100%;height:54px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);border:none;border-radius:14px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;letter-spacing:1px;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 20px rgba(124,58,237,0.5)}
+.buy-btn:active{transform:scale(0.98)}
 </style>
 </head>
 <body>
@@ -254,6 +277,43 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   <div class="card-grid" id="productGrid"></div>
 </div>
 
+<!-- DETALHES DO PRODUTO -->
+<div class="screen" id="screen-detail">
+  <div class="detail-header">
+    <svg class="icon" onclick="showScreen('products')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    <h1>DETALHES DO PRODUTO</h1>
+    <div class="icons">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM12 8v8M8 12h8"/></svg>
+    </div>
+  <div class="detail-content">
+    <div class="detail-image" id="detailImage"></div>
+    <div class="detail-title" id="detailTitle"></div>
+    <div class="detail-subtitle" id="detailSubtitle"></div>
+    <div class="detail-price-row">
+      <div class="detail-price" id="detailPrice"></div>
+      <div class="detail-badge">Em estoque</div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">DESCRIÇÃO</div>
+      <div class="detail-desc" id="detailDesc"></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">INFORMAÇÕES</div>
+      <div class="detail-info">
+        <div class="detail-info-row"><span>Entrega:</span><span>Automática</span></div>
+        <div class="detail-info-row"><span>Prazo:</span><span>Imediato</span></div>
+        <div class="detail-info-row"><span>Plataforma:</span><span id="detailPlatform"></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="buy-btn-fixed">
+    <button class="buy-btn" onclick="alert('Compra realizada!')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      COMPRAR AGORA
+    </button>
+  </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script>
@@ -367,7 +427,7 @@ const subcategorias = {
     {id:'tiktok',img:'https://cdn-icons-png.flaticon.com/512/3046/3046121.png',title:'TIKTOK',desc:'SEGUIDORES E VIEWS'}
   ],
   games: [
-    {id:'freefire',img:'https://cdn-icons-png.flaticon.com/512/686/686589.png',title:'FREE FIRE',desc:'DIAMANTES'},
+        {id:'freefire',img:'https://cdn-icons-png.flaticon.com/512/686/686589.png',title:'FREE FIRE',desc:'DIAMANTES'},
     {id:'roblox',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'ROBLOX',desc:'ROBUX'}
   ],
   apps: [
@@ -382,38 +442,41 @@ const subcategorias = {
 
 const produtos = {
   netflix: [
-    {img:'https://i.imgur.com/0Z8F8qk.png', title:'NETFLIX 1 TELA', desc:'R$ 18,90 - 30 DIAS'},
-    {img:'https://i.imgur.com/0Z8F8qk.png', title:'NETFLIX 4K', desc:'R$ 32,90 - 30 DIAS'},
-    {img:'https://i.imgur.com/0Z8F8qk.png', title:'NETFLIX 2 TELAS', desc:'R$ 24,90 - 30 DIAS'}
+    {id:'netflix-1',img:'https://i.imgur.com/0Z8F8qk.png', title:'NETFLIX 1 TELA', desc:'Conta individual 30 dias', price:'R$ 18,90', platform:'Netflix'},
+    {id:'netflix-4k',img:'https://i.imgur.com/0Z8F8qk.png', title:'NETFLIX 4K', desc:'4 telas + Ultra HD 30 dias', price:'R$ 32,90', platform:'Netflix'},
+    {id:'netflix-2',img:'https://i.imgur.com/0Z8F8qk.png', title:'NETFLIX 2 TELAS', desc:'2 telas simultâneas 30 dias', price:'R$ 24,90', platform:'Netflix'}
   ],
-  hbo: [{img:'https://i.imgur.com/8QJ8Q.png', title:'HBO MAX', desc:'R$ 19,90 - 30 DIAS'}],
-  disney: [{img:'https://i.imgur.com/9R9R9R9.png', title:'DISNEY+', desc:'R$ 16,90 - 30 DIAS'}],
-  prime: [{img:'https://i.imgur.com/7P7P7P7.png', title:'PRIME VIDEO', desc:'R$ 14,90 - 30 DIAS'}],
-  appletv: [{img:'https://i.imgur.com/6A6A6A6.png', title:'APPLE TV+', desc:'R$ 21,90 - 30 DIAS'}],
-  youtube: [{img:'https://i.imgur.com/5Y5Y5Y5.png', title:'YOUTUBE PREMIUM', desc:'R$ 16,90 - 30 DIAS'}],
-  spotify: [{img:'https://i.imgur.com/4S4S4S4.png', title:'SPOTIFY PREMIUM', desc:'R$ 12,90 - 30 DIAS'}],
-  deezer: [{img:'https://i.imgur.com/3D3D3D3.png', title:'DEEZER PREMIUM', desc:'R$ 12,90 - 30 DIAS'}],
-  crunchyroll: [{img:'https://i.imgur.com/2C2C2C2.png', title:'CRUNCHYROLL', desc:'R$ 14,90 - 30 DIAS'}],
-  funimation: [{img:'https://i.imgur.com/1F1F1F1.png', title:'FUNIMATION', desc:'R$ 14,90 - 30 DIAS'}],
-  paramount: [{img:'https://i.imgur.com/0P0P0P0.png', title:'PARAMOUNT+', desc:'R$ 19,90 - 30 DIAS'}],
-  star: [{img:'https://i.imgur.com/9S9S9S9.png', title:'STAR+', desc:'R$ 19,90 - 30 DIAS'}],
-  globoplay: [{img:'https://i.imgur.com/8G8G8G8.png', title:'GLOBOPLAY', desc:'R$ 22,90 - 30 DIAS'}],
-  telecine: [{img:'https://i.imgur.com/7T7T7T7.png', title:'TELECINE', desc:'R$ 24,90 - 30 DIAS'}],
-  mubi: [{img:'https://i.imgur.com/6M6M6M6.png', title:'MUBI', desc:'R$ 29,90 - 30 DIAS'}],
-  dazn: [{img:'https://i.imgur.com/5D5D5D5.png', title:'DAZN', desc:'R$ 34,90 - 30 DIAS'}],
-  espn: [{img:'https://i.imgur.com/4E4E4E4.png', title:'ESPN', desc:'R$ 19,90 - 30 DIAS'}],
-  twitch: [{img:'https://i.imgur.com/3T3T3T3.png', title:'TWITCH TURBO', desc:'R$ 9,90 - 30 DIAS'}],
-  ytkids: [{img:'https://i.imgur.com/2Y2Y2Y2.png', title:'YOUTUBE KIDS', desc:'R$ 8,90 - 30 DIAS'}],
-  tiktok: [{img:'https://i.imgur.com/1T1T1T1.png', title:'1K SEGUIDORES', desc:'R$ 12,90'}],
-  googleplay: [{img:'https://cdn-icons-png.flaticon.com/512/300/300221.png', title:'GOOGLE PLAY R$50', desc:'R$ 52,90'}],
-  steam: [{img:'https://cdn-icons-png.flaticon.com/512/588/588249.png', title:'STEAM R$50', desc:'R$ 52,90'}],
-    instagram: [{img:'https://cdn-icons-png.flaticon.com/512/174/174855.png', title:'1K SEGUIDORES', desc:'R$ 14,90'}],
-  freefire: [{img:'https://cdn-icons-png.flaticon.com/512/686/686589.png', title:'500 DIAMANTES', desc:'R$ 19,90'}],
-  roblox: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'800 ROBUX', desc:'R$ 34,90'}],
-  canva: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'CANVA PRO', desc:'R$ 24,90 - 30 DIAS'}],
-  chatgpt: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'CHATGPT PLUS', desc:'R$ 89,90 - 30 DIAS'}],
-  iptv: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'IPTV COMPLETO', desc:'R$ 29,90 - 30 DIAS'}],
-  vpn: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'NORDVPN', desc:'R$ 19,90 - 30 DIAS'}]
+  hbo: [{id:'hbo-1',img:'https://i.imgur.com/8QJ8Q.png', title:'HBO MAX', desc:'Acesso completo 30 dias', price:'R$ 19,90', platform:'HBO Max'}],
+  disney: [{id:'disney-1',img:'https://i.imgur.com/9R9R9R9.png', title:'DISNEY+', desc:'Filmes e séries Disney 30 dias', price:'R$ 16,90', platform:'Disney+'}],
+  prime: [{id:'prime-1',img:'https://i.imgur.com/7P7P7P7.png', title:'PRIME VIDEO', desc:'Amazon Prime 30 dias', price:'R$ 14,90', platform:'Prime Video'}],
+  appletv: [{id:'appletv-1',img:'https://i.imgur.com/6A6A6A6.png', title:'APPLE TV+', desc:'Originais Apple 30 dias', price:'R$ 21,90', platform:'Apple TV+'}],
+  youtube: [{id:'youtube-1',img:'https://i.imgur.com/5Y5Y5Y5.png', title:'YOUTUBE PREMIUM', desc:'Sem anúncios + Music 30 dias', price:'R$ 16,90', platform:'YouTube'}],
+  spotify: [{id:'spotify-1',img:'https://i.imgur.com/4S4S4S4.png', title:'SPOTIFY PREMIUM', desc:'Música sem anúncios 30 dias', price:'R$ 12,90', platform:'Spotify'}],
+  deezer: [{id:'deezer-1',img:'https://i.imgur.com/3D3D3D3.png', title:'DEEZER PREMIUM', desc:'Streaming de música 30 dias', price:'R$ 12,90', platform:'Deezer'}],
+  crunchyroll: [{id:'crunchy-1',img:'https://i.imgur.com/2C2C2C2.png', title:'CRUNCHYROLL', desc:'Animes premium 30 dias', price:'R$ 14,90', platform:'Crunchyroll'}],
+  funimation: [{id:'funi-1',img:'https://i.imgur.com/1F1F1F1.png', title:'FUNIMATION', desc:'Animes dublados 30 dias', price:'R$ 14,90', platform:'Funimation'}],
+  paramount: [{id:'para-1',img:'https://i.imgur.com/0P0P0P0.png', title:'PARAMOUNT+', desc:'Filmes e séries 30 dias', price:'R$ 19,90', platform:'Paramount+'}],
+  star: [{id:'star-1',img:'https://i.imgur.com/9S9S9S9.png', title:'STAR+', desc:'Conteúdo adulto Disney 30 dias', price:'R$ 19,90', platform:'Star+'}],
+  globoplay: [{id:'globo-1',img:'https://i.imgur.com/8G8G8G8.png', title:'GLOBOPLAY', desc:'Novelas e séries 30 dias', price:'R$ 22,90', platform:'Globoplay'}],
+  telecine: [{id:'tele-1',img:'https://i.imgur.com/7T7T7T7.png', title:'TELECINE', desc:'Filmes lançamentos 30 dias', price:'R$ 24,90', platform:'Telecine'}],
+  mubi: [{id:'mubi-1',img:'https://i.imgur.com/6M6M6M6.png', title:'MUBI', desc:'Cinema cult 30 dias', price:'R$ 29,90', platform:'MUBI'}],
+  dazn: [{id:'dazn-1',img:'https://i.imgur.com/5D5D5D5.png', title:'DAZN', desc:'Esportes ao vivo 30 dias', price:'R$ 34,90', platform:'DAZN'}],
+  espn: [{id:'espn-1',img:'https://i.imgur.com/4E4E4E4.png', title:'ESPN', desc:'Futebol e NBA 30 dias', price:'R$ 19,90', platform:'ESPN'}],
+  twitch: [{id:'twitch-1',img:'https://i.imgur.com/3T3T3T3.png', title:'TWITCH TURBO', desc:'Sem anúncios 30 dias', price:'R$ 9,90', platform:'Twitch'}],
+  ytkids: [{id:'ytkids-1',img:'https://i.imgur.com/2Y2Y2Y2.png', title:'YOUTUBE KIDS', desc:'Conteúdo seguro 30 dias', price:'R$ 8,90', platform:'YouTube Kids'}],
+  tiktok: [{id:'tiktok-1k',img:'https://i.imgur.com/1T1T1T1.png', title:'1K SEGUIDORES', desc:'Entrega em até 24h', price:'R$ 12,90', platform:'TikTok'}],
+  googleplay: [{id:'google-50',img:'https://cdn-icons-png.flaticon.com/512/300/300221.png', title:'GOOGLE PLAY R$50', desc:'Créditos para apps e jogos', price:'R$ 52,90', platform:'Google Play'}],
+  steam: [{id:'steam-50',img:'https://cdn-icons-png.flaticon.com/512/588/588249.png', title:'STEAM R$50', desc:'Carteira Steam', price:'R$ 52,90', platform:'Steam'}],
+  instagram: [{id:'insta-1k',img:'https://cdn-icons-png.flaticon.com/512/174/174855.png', title:'1K SEGUIDORES', desc:'Entrega em até 24h', price:'R$ 14,90', platform:'Instagram'}],
+  freefire: [
+    {id:'ff-520',img:'https://cdn-icons-png.flaticon.com/512/686/686589.png', title:'520 DIAMANTES', desc:'Diamantes para sua conta de Free Fire. Entrega automática após a confirmação do pagamento.', price:'R$ 20,90', platform:'Free Fire'},
+    {id:'ff-1080',img:'https://cdn-icons-png.flaticon.com/512/686/686589.png', title:'1080 DIAMANTES', desc:'Pacote com bônus', price:'R$ 39,90', platform:'Free Fire'}
+  ],
+  roblox: [{id:'rbx-800',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'800 ROBUX', desc:'Entrega via Game Pass', price:'R$ 34,90', platform:'Roblox'}],
+  canva: [{id:'canva-1',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'CANVA PRO', desc:'Templates premium 30 dias', price:'R$ 24,90', platform:'Canva'}],
+  chatgpt: [{id:'gpt-1',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'CHATGPT PLUS', desc:'GPT-4 liberado 30 dias', price:'R$ 89,90', platform:'ChatGPT'}],
+  iptv: [{id:'iptv-1',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'IPTV COMPLETO', desc:'Canais, filmes e séries 30 dias', price:'R$ 29,90', platform:'IPTV'}],
+  vpn: [{id:'vpn-1',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'NORDVPN', desc:'Navegação segura 30 dias', price:'R$ 19,90', platform:'NordVPN'}]
 };
 
 let currentCat = '';
@@ -445,10 +508,25 @@ function showProducts(service) {
     grid.innerHTML = '<div class="glow-card"><div class="glow-card-title">EM BREVE</div><div class="glow-card-desc">PRODUTOS CHEGANDO</div></div>';
   }else{
     list.forEach(p => {
-      grid.innerHTML += `<div class="glow-card" onclick="alert('Comprar: ${p.title}')"><div class="glow-card-img"><img src="${p.img}"></div><div class="glow-card-title">${p.title}</div><div class="glow-card-desc">${p.desc}</div></div>`;
+      grid.innerHTML += `<div class="glow-card" onclick="showDetail('${service}','${p.id}')"><div class="glow-card-img"><img src="${p.img}"></div><div class="glow-card-title">${p.title}</div><div class="glow-card-desc">${p.price}</div></div>`;
     });
   }
   showScreen('products');
+}
+
+function showDetail(serviceId, productId){
+  const list = produtos[serviceId] || [];
+  const p = list.find(x => x.id === productId);
+  if(!p) return;
+  
+  document.getElementById('detailImage').innerHTML = `<img src="${p.img}">`;
+  document.getElementById('detailTitle').textContent = p.title;
+  document.getElementById('detailSubtitle').textContent = p.platform;
+  document.getElementById('detailPrice').textContent = p.price;
+  document.getElementById('detailDesc').textContent = p.desc;
+  document.getElementById('detailPlatform').textContent = p.platform;
+  
+  showScreen('detail');
 }
 
 document.getElementById('searchInput').oninput = (e) => {
