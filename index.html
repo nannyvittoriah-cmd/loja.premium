@@ -156,6 +156,32 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .total-box{border-top:1px solid var(--border);padding-top:16px;margin-top:20px}
 .total-row{display:flex;justify-content:space-between;padding:8px 0;font-size:16px;font-weight:800}
 .total-row span:last-child{color:var(--purple);font-size:18px}
+.receipt-header{display:flex;align-items:center;justify-content:center;padding:24px 20px;position:relative}
+.receipt-close{position:absolute;left:20px;width:24px;height:24px;stroke:#6b7280;cursor:pointer}
+.receipt-success-icon{width:80px;height:80px;background:rgba(16,185,129,0.15);border:2px solid #10b981;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.receipt-success-icon svg{width:40px;height:40px;stroke:#10b981;stroke-width:3}
+.receipt-title{font-size:20px;font-weight:800;text-align:center;color:#fff;margin-bottom:8px}
+.receipt-id{font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:4px}
+.receipt-date{font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:20px}
+.receipt-status{display:inline-block;padding:6px 16px;background:rgba(16,185,129,0.15);border:1px solid #10b981;border-radius:8px;font-size:12px;font-weight:700;color:#10b981;margin:0 auto 24px;display:block;width:fit-content}
+.receipt-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin:0 20px 20px}
+.receipt-section-title{font-size:11px;font-weight:800;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:16px}
+.receipt-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.receipt-item:last-child{border-bottom:none}
+.receipt-item-icon{width:40px;height:40px;border-radius:10px;background:var(--input);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.receipt-item-icon img{width:28px;height:28px;object-fit:contain}
+.receipt-item-info{flex:1}
+.receipt-item-name{font-size:13px;font-weight:700;color:#fff;margin-bottom:2px}
+.receipt-item-desc{font-size:11px;color:var(--text-dim)}
+.receipt-item-price{font-size:14px;font-weight:800;color:var(--purple)}
+.receipt-total{border-top:1px solid var(--border);padding-top:16px;margin-top:16px;display:flex;justify-content:space-between;align-items:center}
+.receipt-total-label{font-size:14px;font-weight:700;color:var(--text-dim)}
+.receipt-total-value{font-size:18px;font-weight:800;color:var(--purple)}
+.receipt-actions{padding:0 20px 100px;display:flex;flex-direction:column;gap:12px}
+.receipt-btn{width:100%;height:50px;border-radius:12px;font-size:13px;font-weight:800;cursor:pointer;letter-spacing:1px;border:none;display:flex;align-items:center;justify-content:center;gap:8px}
+.receipt-btn-primary{background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);color:#fff;box-shadow:0 4px 20px rgba(124,58,237,0.4)}
+.receipt-btn-secondary{background:var(--input);border:1px solid var(--border);color:#fff}
+.receipt-btn:active{transform:scale(0.98)}
 </style>
 </head>
 <body>
@@ -334,7 +360,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   <div class="detail-content">
     <div class="detail-image" id="detailImage"></div>
     <div class="detail-title" id="detailTitle"></div>
-    <div class="detail-subtitle" id="detailSubtitle"></div>
+        <div class="detail-subtitle" id="detailSubtitle"></div>
     <div class="detail-price-row">
       <div class="detail-price" id="detailPrice"></div>
       <div class="detail-badge">Em estoque</div>
@@ -395,8 +421,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 
 <div class="screen" id="screen-payment">
   <div class="pay-header">
-    <svg class="icon" onclick="showScreen('cart')" viewBox="0 0 24 24"
-        <svg class="icon" onclick="showScreen('cart')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    <svg class="icon" onclick="showScreen('cart')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
     <div class="pay-title">PAGAMENTO</div>
   </div>
   <div class="pay-content">
@@ -438,6 +463,43 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
   <div class="buy-btn-fixed">
     <button class="buy-btn" onclick="pagarPix()">JÁ PAGUEI</button>
+  </div>
+</div>
+
+<!-- COMPROVANTE DO PEDIDO -->
+<div class="screen" id="screen-receipt">
+  <div class="receipt-header">
+    <svg class="receipt-close" onclick="showScreen('home')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </div>
+  
+  <div class="receipt-success-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg>
+  </div>
+  
+  <div class="receipt-title">Pedido realizado!</div>
+  <div class="receipt-id" id="receiptId">#PSVZ-202405180001</div>
+  <div class="receipt-date" id="receiptDate">18/05/2024 às 15:30</div>
+  <div class="receipt-status">Pagamento aprovado</div>
+  
+  <div class="receipt-box">
+    <div class="receipt-section-title">ITENS DO PEDIDO</div>
+    <div id="receiptItems"></div>
+    
+    <div class="receipt-total">
+      <div class="receipt-total-label">Total pago</div>
+      <div class="receipt-total-value" id="receiptTotal">R$ 0,00</div>
+    </div>
+  </div>
+  
+  <div class="receipt-actions">
+    <button class="receipt-btn receipt-btn-primary" onclick="showScreen('home')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 22"/></svg>
+      VER MEUS PEDIDOS
+    </button>
+    <button class="receipt-btn receipt-btn-secondary" onclick="enviarComprovante()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      ENVIAR COMPROVANTE
+    </button>
   </div>
 </div>
 
@@ -756,127 +818,3 @@ function removeItem(idx){
 }
 
 function updateTotals(){
-  let subtotal = 0;
-  cart.forEach(item => {
-    const price = parseFloat(item.price.replace('R$ ','').replace(',','.'));
-    subtotal += price * item.qty;
-  });
-
-  let discount = 0;
-  if(currentCoupon === 'PRIME10'){
-    discount = subtotal * 0.1;
-  }
-
-  const total = subtotal - discount;
-
-  document.getElementById('subtotal').textContent = `R$ ${subtotal.toFixed(2).replace('.',',')}`;
-  document.getElementById('discount').textContent = `- R$ ${discount.toFixed(2).replace('.',',')}`;
-  document.getElementById('total').textContent = `R$ ${total.toFixed(2).replace('.',',')}`;
-}
-
-function applyCoupon(){
-  const code = document.getElementById('couponInput').value.trim().toUpperCase();
-  if(code === 'PRIME10'){
-    currentCoupon = code;
-    alert('Cupom aplicado: 10% de desconto');
-    updateTotals();
-  }else{
-    alert('Cupom inválido');
-  }
-}
-
-function finalizarCompra(){
-  if(cart.length === 0) return alert('Carrinho vazio');
-  
-  let total = 0;
-  cart.forEach(item => {
-    const price = parseFloat(item.price.replace('R$ ','').replace(',','.'));
-    total += price * item.qty;
-  });
-  
-  if(currentCoupon === 'PRIME10'){
-    total = total * 0.9;
-  }
-  
-  document.getElementById('payTotal').textContent = `R$ ${total.toFixed(2).replace('.',',')}`;
-  showScreen('payment');
-}
-
-function copyPix(){
-  const code = document.getElementById('pixCode').textContent;
-  navigator.clipboard.writeText(code).then(() => {
-    alert('Chave PIX copiada!');
-  }).catch(() => {
-    alert('Erro ao copiar. Copie manualmente.');
-  });
-}
-
-function pagarPix(){
-  let resumo = '*Novo Pedido Prime Store VZ*%0A%0A';
-  cart.forEach(item => {
-    resumo += `• ${item.title} - Qtd: ${item.qty} - ${item.price}%0A`;
-  });
-  
-  let subtotal = 0;
-  cart.forEach(item => {
-    const price = parseFloat(item.price.replace('R$ ','').replace(',','.'));
-    subtotal += price * item.qty;
-  });
-  
-  let desconto = 0;
-  if(currentCoupon === 'PRIME10'){
-    desconto = subtotal * 0.1;
-    resumo += `%0ACupom: PRIME10 (-10%)%0A`;
-  }
-  
-  const total = subtotal - desconto;
-  resumo += `%0A*Total: R$ ${total.toFixed(2).replace('.',',')}*%0A%0A`;
-  resumo += 'Já realizei o pagamento via PIX.%0A';
-  resumo += 'Por favor, me envia a chave PIX pra confirmar.';
-  
-  // WhatsApp: (98) 98485-3563
-  const numeroWhats = '5598984853563';
-  
-  window.open(`https://wa.me/${numeroWhats}?text=${resumo}`, '_blank');
-  
-  setTimeout(() => {
-    cart = [];
-    currentCoupon = null;
-    updateCartBadge();
-    showScreen('home');
-  }, 1000);
-}
-
-document.getElementById('searchInput').oninput = (e) => {
-  const term = e.target.value.toLowerCase();
-  document.querySelectorAll('.card-cat').forEach(card => {
-    const name = card.querySelector('span').textContent.toLowerCase();
-    card.style.display = name.includes(term)? 'block' : 'none';
-  });
-}
-
-function showAlert(id, msg){
-  hideAllAlerts();
-  const el = document.getElementById(id);
-  el.innerText = msg;
-  el.style.display = 'block';
-  setTimeout(()=>el.style.display='none', 4000);
-}
-function hideAllAlerts(){
-  document.querySelectorAll('.alert').forEach(a => a.style.display='none');
-}
-function traduzErro(code){
-  const erros = {
-    'auth/invalid-email': 'E-mail inválido',
-    'auth/user-not-found': 'Usuário não encontrado',
-    'auth/wrong-password': 'Senha incorreta',
-    'auth/email-already-in-use': 'Este e-mail já está em uso',
-    'auth/weak-password': 'Senha muito fraca',
-    'auth/too-many-requests': 'Muitas tentativas. Tente mais tarde',
-    'auth/network-request-failed': 'Erro de conexão'
-  };
-  return erros[code] || 'Erro ao processar';
-}
-</script>
-</body>
-</html>
