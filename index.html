@@ -3,324 +3,214 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prime Store VZ - Login</title>
+<title>Prime Store VZ - Home</title>
 <style>
 :root{--bg:#0a0a0f;--card:#111117;--input:#1a1a23;--border:#2d2d3a;--purple:#8b5cf6;--purple-glow:rgba(139,92,246,0.4);--text:#fff;--text-dim:#8b8b9e}
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
 body{background:var(--bg);color:var(--text);min-height:100vh}
 .screen{display:none;width:100%;max-width:420px;margin:0 auto;min-height:100vh}
 .screen.active{display:block}
-.center{display:flex;align-items:center;justify-content:center;padding:20px;min-height:100vh}
-.card{
-  background:var(--card);
+
+/* HEADER */
+.header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;position:sticky;top:0;background:var(--bg);z-index:100;border-bottom:1px solid var(--border)}
+.header-left svg{width:24px;height:24px;stroke:var(--text);cursor:pointer}
+.header-title{font-size:18px;font-weight:800;background:linear-gradient(135deg,#fff 0%,#8b5cf6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header-icons{display:flex;gap:16px;align-items:center}
+.icon{width:22px;height:22px;stroke:var(--text);cursor:pointer}
+.icon.purple{stroke:var(--purple)}
+.cart-badge{position:absolute;top:-4px;right:-4px;background:var(--purple);color:#fff;font-size:10px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px var(--purple-glow)}
+
+/* SEARCH */
+.search{margin:0 20px 16px;position:relative}
+.search input{width:100%;height:48px;background:var(--input);border:1px solid var(--border);border-radius:16px;padding:0 14px 0 48px;color:var(--text);font-size:13px;outline:none}
+.search input:focus{border-color:var(--purple);box-shadow:0 0 0 3px var(--purple-glow)}
+.search svg{position:absolute;left:18px;top:50%;transform:translateY(-50%);width:18px;height:18px;stroke:#6b7280}
+
+/* BANNER */
+.banner{
+  margin:0 20px 24px;
+  height:160px;
+  background:linear-gradient(135deg,#1e1e2a 0%,#2a1e35 50%,#1e1e2a 100%);
+  border-radius:20px;
   border:1px solid var(--border);
-  border-radius:24px;
-  padding:36px 28px;
-  width:100%;
-  max-width:360px;
-  box-shadow:0 0 40px var(--purple-glow), inset 0 1px 0 rgba(255,255,255,0.05);
-}
-h2{
-  font-size:11px;
-  font-weight:700;
-  text-align:center;
-  margin-bottom:16px;
-  color:var(--purple);
-  letter-spacing:2px;
-  text-transform:uppercase;
-}
-.logo{
-  font-size:24px;
-  font-weight:800;
-  text-align:center;
-  margin-bottom:6px;
-  background:linear-gradient(135deg,#fff 0%,#8b5cf6 100%);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-.subtitle{font-size:13px;color:var(--text-dim);text-align:center;margin-bottom:32px}
-.input-group{margin-bottom:18px}
-.input-group label{display:block;font-size:12px;color:var(--text-dim);margin-bottom:8px;font-weight:500}
-.input-box{
-  width:100%;
-  height:52px;
-  background:var(--input);
-  border:1px solid var(--border);
-  border-radius:14px;
+  box-shadow:0 8px 32px rgba(139,92,246,0.15);
+  position:relative;
+  overflow:hidden;
+  padding:20px;
   display:flex;
-  align-items:center;
-  padding:0 18px;
-  transition:all 0.3s;
+  flex-direction:column;
+  justify-content:center;
 }
-.input-box:focus-within{
-  border-color:var(--purple);
-  box-shadow:0 0 0 3px var(--purple-glow);
-}
-.input-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px}
-.input-box input::placeholder{color:#4a4a5e}
-.toggle{cursor:pointer;color:#6b7280;font-size:18px;user-select:none}
-.row{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;font-size:12px}
-.row label{display:flex;align-items:center;gap:8px;color:var(--text-dim);cursor:pointer}
-.row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--purple)}
-.row a{color:var(--purple);text-decoration:none;cursor:pointer;font-weight:600}
-.btn{
-  width:100%;
-  height:54px;
+.banner-title{font-size:12px;font-weight:700;color:var(--purple);letter-spacing:1px;margin-bottom:6px}
+.banner-offer{font-size:28px;font-weight:900;color:#fff;margin-bottom:12px}
+.banner-btn{
+  width:fit-content;
+  padding:10px 24px;
   background:linear-gradient(135deg,#8b5cf6 0%,#7c3aed 100%);
   border:none;
-  border-radius:14px;
+  border-radius:12px;
   color:#fff;
-  font-size:14px;
+  font-size:12px;
   font-weight:800;
   cursor:pointer;
-  letter-spacing:1px;
-  box-shadow:0 8px 24px var(--purple-glow);
-  transition:all 0.2s;
+  box-shadow:0 4px 16px var(--purple-glow);
 }
-.btn:active{transform:scale(0.98);box-shadow:0 4px 12px var(--purple-glow)}
-.btn:disabled{opacity:0.5;cursor:not-allowed}
-.footer-link{text-align:center;margin-top:28px;font-size:13px;color:var(--text-dim)}
-.footer-link a{color:var(--purple);text-decoration:none;font-weight:700;cursor:pointer}
-.alert{padding:14px 16px;border-radius:12px;font-size:12px;margin-bottom:18px;display:none;text-align:center;font-weight:600}
-.alert.error{background:rgba(239,68,68,0.15);border:1px solid #ef4444;color:#fca5a5}
-.alert.success{background:rgba(16,185,129,0.15);border:1px solid #10b981;color:#6ee7b7}
-.text-info{font-size:13px;color:var(--text-dim);text-align:center;margin-bottom:24px;line-height:1.6}
-.checkbox-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:24px;font-size:12px;color:var(--text-dim)}
-.checkbox-row input{margin-top:2px;accent-color:var(--purple)}
-.checkbox-row a{color:var(--purple);text-decoration:none;font-weight:600}
+.banner-img{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:120px;opacity:0.8}
+
+/* SECTION */
+.section-header{display:flex;justify-content:space-between;align-items:center;padding:0 20px 16px;font-size:16px;font-weight:800}
+.section-header a{color:var(--purple);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:4px;cursor:pointer;font-weight:700}
+
+/* CATEGORIAS */
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:0 20px 24px}
+.card-cat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px 6px;text-align:center;cursor:pointer;transition:all 0.3s}
+.card-cat:active{transform:scale(0.95);border-color:var(--purple);box-shadow:0 0 20px var(--purple-glow)}
+.card-cat-icon{width:44px;height:44px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;background:var(--input);border-radius:12px}
+.card-cat-icon img{width:28px;height:28px;object-fit:contain}
+.card-cat span{font-size:11px;font-weight:700;color:var(--text);display:block}
+
+/* PRODUTOS DESTAQUE */
+.products-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 20px 120px}
+.product-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 8px;text-align:center;cursor:pointer;transition:all 0.3s}
+.product-card:active{transform:scale(0.95);border-color:var(--purple);box-shadow:0 0 20px var(--purple-glow)}
+.product-img{width:60px;height:60px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#000;box-shadow:0 0 16px rgba(139,92,246,0.2)}
+.product-img img{width:48px;height:48px;object-fit:contain;border-radius:50%}
+.product-name{font-size:12px;font-weight:800;color:#fff;margin-bottom:2px}
+.product-desc{font-size:10px;color:var(--text-dim);margin-bottom:8px}
+.product-price{font-size:13px;font-weight:900;color:var(--purple)}
+
+/* MENU LATERAL */
+.menu-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:999;display:none}
+.menu-overlay.active{display:block}
+.side-menu{position:fixed;top:0;left:-300px;width:280px;height:100vh;background:var(--bg);border-right:2px solid var(--purple);z-index:1000;transition:left 0.3s ease;overflow-y:auto;box-shadow:4px 0 24px rgba(139,92,246,0.3)}
+.side-menu.active{left:0}
+.menu-header{display:flex;align-items:center;justify-content:space-between;padding:20px;border-bottom:1px solid var(--border)}
+.menu-title{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--purple)}
+.menu-close{width:24px;height:24px;stroke:#6b7280;cursor:pointer}
+.menu-list{padding:12px 0}
+.menu-item{display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;transition:all 0.2s}
+.menu-item:active{background:var(--input)}
+.menu-item svg{width:20px;height:20px;stroke:var(--purple)}
+.menu-item-text{font-size:14px;font-weight:700;color:#fff}
 </style>
 </head>
 <body>
 
-<div class="screen active" id="screen-login">
-  <div class="center">
-    <div class="card">
-      <h2>LOGIN - E-MAIL</h2>
-      <div class="logo">Prime Store VZ</div>
-      <div class="subtitle">Entre na sua conta</div>
-      <div class="alert error" id="loginError"></div>
-      <div class="input-group">
-        <label>E-mail</label>
-        <div class="input-box"><input type="email" id="loginEmail" placeholder="seuemail@gmail.com"></div>
-      </div>
-      <div class="input-group">
-        <label>Senha</label>
-        <div class="input-box">
-          <input type="password" id="loginPassword" placeholder="••••••••">
-          <span class="toggle" onclick="togglePass('loginPassword', this)">👁️</span>
-        </div>
-      </div>
-      <div class="row">
-        <label><input type="checkbox" id="remember"> Lembrar-me</label>
-        <a onclick="showScreen('forgot')">Esqueceu a senha?</a>
-      </div>
-      <button class="btn" id="btnLogin">ENTRAR</button>
-      <div class="footer-link">Não tem uma conta? <a onclick="showScreen('register')">Cadastre-se</a></div>
+<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+<div class="side-menu" id="sideMenu">
+  <div class="menu-header">
+    <div class="menu-title">MENU</div>
+    <svg class="menu-close" onclick="toggleMenu()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </div>
+  <div class="menu-list">
+    <div class="menu-item" onclick="alert('Home');toggleMenu()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      <div class="menu-item-text">Início</div>
+    </div>
+    <div class="menu-item" onclick="alert('Loja')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <div class="menu-item-text">Loja</div>
+    </div>
+    <div class="menu-item" onclick="alert('Admin')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>
+      <div class="menu-item-text">Adm</div>
+    </div>
+    <div class="menu-item" onclick="alert('Suporte: (98) 98485-3563')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/></svg>
+      <div class="menu-item-text">Suporte</div>
     </div>
   </div>
 </div>
 
-<div class="screen" id="screen-register">
-  <div class="center">
-    <div class="card">
-      <h2>CADASTRO</h2>
-      <div class="logo">Prime Store VZ</div>
-      <div class="subtitle">Crie sua conta</div>
-      <div class="alert error" id="registerError"></div>
-      <div class="alert success" id="registerSuccess"></div>
-      <div class="input-group">
-        <label>Nome completo</label>
-        <div class="input-box"><input type="text" id="regName" placeholder="João da Silva"></div>
+<div class="screen active" id="screen-home">
+  <header class="header">
+    <div class="header-left">
+      <svg onclick="toggleMenu()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </div>
+    <div class="header-title">Prime Store VZ</div>
+    <div class="header-icons">
+      <div style="position:relative" onclick="alert('Carrinho')">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <div class="cart-badge" id="cartBadge">3</div>
       </div>
-      <div class="input-group">
-        <label>E-mail</label>
-        <div class="input-box"><input type="email" id="regEmail" placeholder="joao@email.com"></div>
-      </div>
-      <div class="input-group">
-        <label>Telefone</label>
-        <div class="input-box"><input type="tel" id="regPhone" placeholder="(00) 9 9999-9999"></div>
-      </div>
-      <div class="input-group">
-        <label>Senha</label>
-        <div class="input-box">
-          <input type="password" id="regPassword" placeholder="••••••••">
-          <span class="toggle" onclick="togglePass('regPassword', this)">👁️</span>
-        </div>
-      </div>
-      <div class="checkbox-row">
-        <input type="checkbox" id="terms">
-        <label for="terms">Li e aceito os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a></label>
-      </div>
-      <button class="btn" id="btnRegister">CADASTRAR</button>
-      <div class="footer-link">Já tem uma conta? <a onclick="showScreen('login')">Entrar</a></div>
+      <svg class="icon purple" onclick="alert('Perfil')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+  </header>
+
+  <div class="search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" placeholder="Buscar produtos..." id="searchInput">
+  </div>
+
+  <div class="banner">
+    <div class="banner-title">OFERTAS EXCLUSIVAS</div>
+    <div class="banner-offer">ATÉ 70% OFF</div>
+    <button class="banner-btn">VER OFERTAS</button>
+    <img class="banner-img" src="https://i.imgur.com/0Z8F8qk.png" alt="Banner">
+  </div>
+
+  <div class="section-header">
+    <span>Categorias</span>
+    <a>Ver todas <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+  </div>
+  <div class="grid">
+    <div class="card-cat" onclick="alert('Games')">
+      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/686/686589.png"></div>
+      <span>Games</span>
+    </div>
+    <div class="card-cat" onclick="alert('Streaming')">
+      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/5977/5977590.png"></div>
+      <span>Streaming</span>
+    </div>
+    <div class="card-cat" onclick="alert('Redes Sociais')">
+      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/174/174855.png"></div>
+      <span>Redes Sociais</span>
+    </div>
+    <div class="card-cat" onclick="alert('Gift Cards')">
+      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/300/300221.png"></div>
+      <span>Gift Cards</span>
+    </div>
+    <div class="card-cat" onclick="alert('Apps')">
+      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968705.png"></div>
+      <span>Apps</span>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span>Produtos em destaque</span>
+    <a>Ver todos <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+  </div>
+  <div class="products-grid">
+    <div class="product-card" onclick="alert('520 Diamantes')">
+      <div class="product-img"><img src="https://i.imgur.com/0qH2XrG.png"></div>
+      <div class="product-name">520 Diamantes</div>
+      <div class="product-desc">Free Fire</div>
+      <div class="product-price">R$ 20,90</div>
+    </div>
+    <div class="product-card" onclick="alert('Netflix Premium')">
+      <div class="product-img"><img src="https://i.imgur.com/0Z8F8qk.png"></div>
+      <div class="product-name">Netflix</div>
+      <div class="product-desc">Premium</div>
+      <div class="product-price">R$ 17,90</div>
+    </div>
+    <div class="product-card" onclick="alert('Spotify Premium')">
+      <div class="product-img"><img src="https://i.imgur.com/4S4S4S4.png"></div>
+      <div class="product-name">Spotify</div>
+      <div class="product-desc">Premium</div>
+      <div class="product-price">R$ 10,90</div>
     </div>
   </div>
 </div>
 
-<div class="screen" id="screen-forgot">
-  <div class="center">
-    <div class="card">
-      <h2>ESQUECEU A SENHA</h2>
-      <div class="logo">Prime Store VZ</div>
-      <div class="subtitle">Recuperar senha</div>
-      <p class="text-info">Informe seu e-mail<br>para receber o código de recuperação.</p>
-      <div class="alert error" id="forgotError"></div>
-      <div class="alert success" id="forgotSuccess"></div>
-      <div class="input-group">
-        <label>E-mail</label>
-        <div class="input-box"><input type="email" id="forgotEmail" placeholder="seuemail@gmail.com"></div>
-      </div>
-      <button class="btn" id="btnForgot">ENVIAR CÓDIGO</button>
-      <div class="footer-link"><a onclick="showScreen('login')">Voltar para o login</a></div>
-    </div>
-  </div>
-</div>
-
-<div class="screen" id="screen-home">
-  <div class="center">
-    <div class="card">
-      <h2>BEM-VINDO</h2>
-      <div class="logo">Prime Store VZ</div>
-      <div class="subtitle" id="userEmail">Logado com sucesso!</div>
-      <button class="btn" onclick="auth.signOut()">SAIR</button>
-    </div>
-  </div>
-</div>
-
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
-  authDomain: "premium-store-aa58b.firebaseapp.com",
-  databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
-  projectId: "premium-store-aa58b",
-  storageBucket: "premium-store-aa58b.firebasestorage.app",
-  messagingSenderId: "462239500057",
-  appId: "1:462239500057:web:f1b7cea162ed308a866788",
-  measurementId: "G-CN88J28WRX"
-};
-
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const ADMIN_EMAIL = 'vittoriahvahz@gmail.com';
-
-function showScreen(name){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(`screen-${name}`).classList.add('active');
-  hideAllAlerts();
+function toggleMenu(){
+  document.getElementById('sideMenu').classList.toggle('active');
+  document.getElementById('menuOverlay').classList.toggle('active');
 }
 
-function togglePass(id, el){
-  const input = document.getElementById(id);
-  if(input.type === 'password'){
-    input.type = 'text';
-    el.textContent = '🙈';
-  }else{
-    input.type = 'password';
-    el.textContent = '👁️';
-  }
-}
-
-function showAlert(id, msg){
-  const el = document.getElementById(id);
-  if(el){
-    el.textContent = msg;
-    el.style.display = 'block';
-  }
-}
-
-function hideAllAlerts(){
-  document.querySelectorAll('.alert').forEach(a => a.style.display = 'none');
-}
-
-function traduzErro(code){
-  const erros = {
-    'auth/invalid-email':'E-mail inválido',
-    'auth/user-disabled':'Usuário desativado',
-    'auth/user-not-found':'Usuário não encontrado',
-    'auth/wrong-password':'Senha incorreta',
-    'auth/email-already-in-use':'E-mail já cadastrado',
-    'auth/weak-password':'Senha fraca - mínimo 6 caracteres',
-    'auth/too-many-requests':'Muitas tentativas. Tente mais tarde'
-  };
-  return erros[code] || 'Erro ao autenticar';
-}
-
-auth.onAuthStateChanged((user) => {
-  if(user){
-    document.getElementById('userEmail').textContent = user.email;
-    showScreen('home');
-    console.log('Logado:', user.email);
-  }else{
-    showScreen('login');
-  }
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  console.log('Buscando:', e.target.value);
 });
-
-document.getElementById('btnLogin').onclick = async () => {
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  const remember = document.getElementById('remember').checked;
-  const btn = document.getElementById('btnLogin');
-  hideAllAlerts();
-  if(!email ||!password) return showAlert('loginError', 'Preencha e-mail e senha');
-  btn.disabled = true;
-  try{
-    await auth.setPersistence(remember? firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION);
-    await auth.signInWithEmailAndPassword(email, password);
-  }catch(e){
-    console.error(e);
-    showAlert('loginError', traduzErro(e.code));
-  }
-  finally{btn.disabled = false;}
-}
-
-document.getElementById('btnRegister').onclick = async () => {
-  const name = document.getElementById('regName').value.trim();
-  const email = document.getElementById('regEmail').value.trim();
-  const password = document.getElementById('regPassword').value;
-  const terms = document.getElementById('terms').checked;
-  const btn = document.getElementById('btnRegister');
-  hideAllAlerts();
-  if(!name ||!email ||!password) return showAlert('registerError', 'Preencha todos os campos');
-  if(!terms) return showAlert('registerError', 'Aceite os Termos de Uso');
-  if(password.length < 6) return showAlert('registerError', 'Senha deve ter no mínimo 6 caracteres');
-  btn.disabled = true;
-  try{
-    const userCred = await auth.createUserWithEmailAndPassword(email, password);
-    await userCred.user.updateProfile({displayName: name});
-    showAlert('registerSuccess', 'Conta criada com sucesso!');
-    setTimeout(() => showScreen('login'), 1500);
-  }catch(e){
-    showAlert('registerError', traduzErro(e.code));
-  }
-  finally{btn.disabled = false;}
-}
-
-document.getElementById('btnForgot').onclick = async () => {
-  const email = document.getElementById('forgotEmail').value.trim();
-  const btn = document.getElementById('btnForgot');
-  hideAllAlerts();
-  if(!email) return showAlert('forgotError', 'Digite seu e-mail');
-  btn.disabled = true;
-  try{
-    await auth.sendPasswordResetEmail(email);
-    showAlert('forgotSuccess', 'Link enviado para seu e-mail!');
-  }catch(e){
-    showAlert('forgotError', 'E-mail não encontrado');
-  }
-  finally{btn.disabled = false;}
-}
-
-document.getElementById('regPhone').addEventListener('input', (e) => {
-  let v = e.target.value.replace(/\D/g,'');
-  if(v.length >= 11) v = v.replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3');
-  else if(v.length >= 7) v = v.replace(/(\d{2})(\d{4})(\d{0,4})/,'($1) $2-$3');
-  else if(v.length >= 3) v = v.replace(/(\d{2})(\d{0,5})/,'($1) $2');
-  e.target.value = v;
-});
-
-console.log('Login Prime Store VZ carregado!');
 </script>
 </body>
 </html>
