@@ -63,19 +63,114 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .card-cat-icon img{width:40px;height:40px;object-fit:contain;z-index:2;filter:drop-shadow(0 0 12px rgba(124,58,237,0.8))}
 .card-cat-icon::after{content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:50px;height:12px;background:var(--purple);filter:blur(12px);opacity:0.7;border-radius:50%}
 .card-cat span{font-size:12px;font-weight:600;color:var(--text)}
-.card-cat.outros.card-cat-icon{background:var(--purple);border-radius:12px}
-.card-cat.outros.card-cat-icon::after{display:none}
+.card-cat.outros .card-cat-icon{background:var(--purple);border-radius:12px}
+.card-cat.outros .card-cat-icon::after{display:none}
 
-/* SUBCATEGORIA */
-.title-subcat{text-align:center;font-size:11px;font-weight:800;letter-spacing:4px;color:#fff;padding:24px 0 20px;display:flex;align-items:center;justify-content:center;gap:16px}
-.title-subcat::before,.title-subcat::after{content:'';flex:1;max-width:60px;height:2px;background:linear-gradient(90deg,transparent,#7c3aed)}
-.title-subcat::after{background:linear-gradient(90deg,#7c3aed,transparent)}
-.subcat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:14px;padding:0 20px 20px}
-.subcat-card{background:linear-gradient(180deg,#0f0f15 0%,#15151d 100%);border:1px solid #2a2a35;border-radius:14px;padding:18px 8px;text-align:center;cursor:pointer;position:relative;transition:0.2s;box-shadow:inset 0 1px 0 rgba(255,255,255,0.05)}
-.subcat-card:active{transform:scale(0.96)}
-.subcat-card img{width:56px;height:56px;margin:0 auto 12px;display:block;object-fit:contain;filter:drop-shadow(0 0 14px rgba(124,58,237,0.9))}
-.subcat-title{font-size:11px;font-weight:800;color:#fff;margin-bottom:4px;letter-spacing:0.5px}
-.subcat-desc{font-size:8px;color:#a855f7;text-transform:uppercase;letter-spacing:1px;font-weight:600}
+/* SUBCATEGORIA - IGUAL DA FOTO */
+.title-subcat{
+  text-align:center;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:4px;
+  color:#fff;
+  padding:24px 0 20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
+  position:relative;
+}
+.title-subcat::before,.title-subcat::after{
+  content:'';
+  flex:1;
+  max-width:80px;
+  height:2px;
+  background:linear-gradient(90deg,transparent,#7c3aed);
+}
+.title-subcat::after{
+  background:linear-gradient(90deg,#7c3aed,transparent);
+}
+.dot-left,.dot-right{
+  position:absolute;
+  width:4px;
+  height:4px;
+  background:#7c3aed;
+  border-radius:50%;
+  box-shadow:0 0 8px #7c3aed;
+}
+.dot-left{left:calc(50% - 84px)}
+.dot-right{right:calc(50% - 84px)}
+.subcat-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:12px;
+  padding:0 16px 20px;
+}
+@media(max-width:480px){
+ .subcat-grid{grid-template-columns:repeat(3,1fr)}
+}
+.subcat-card{
+  background:#0a0a0f;
+  border:1px solid #2a2a35;
+  border-radius:14px;
+  padding:14px 6px;
+  text-align:center;
+  cursor:pointer;
+  position:relative;
+  transition:0.2s;
+  box-shadow:inset 0 0 0 1px rgba(124,58,237,0.1), 0 0 20px rgba(124,58,237,0.05);
+}
+.subcat-card:active{
+  transform:scale(0.96);
+  box-shadow:inset 0 0 0 1px rgba(124,58,237,0.3), 0 0 30px rgba(124,58,237,0.2);
+}
+.subcat-card-img{
+  width:60px;
+  height:60px;
+  margin:0 auto 10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  border-radius:50%;
+  background:#000;
+}
+.subcat-card-img::before{
+  content:'';
+  position:absolute;
+  inset:-2px;
+  border-radius:50%;
+  background:conic-gradient(from 0deg,#7c3aed,#a855f7,#7c3aed);
+  filter:blur(8px);
+  opacity:0.8;
+  z-index:0;
+}
+.subcat-card-img img{
+  width:48px;
+  height:48px;
+  object-fit:contain;
+  position:relative;
+  z-index:2;
+  border-radius:50%;
+  background:#000;
+  padding:4px;
+}
+.subcat-title{
+  font-size:9px;
+  font-weight:800;
+  color:#fff;
+  margin-bottom:3px;
+  letter-spacing:0.5px;
+  line-height:1.2;
+}
+.subcat-desc{
+  font-size:7px;
+  color:#a855f7;
+  text-transform:uppercase;
+  letter-spacing:0.8px;
+  font-weight:600;
+  line-height:1;
+}
 .back-btn{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;cursor:pointer}
 
 /* PRODUTOS */
@@ -194,7 +289,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
     </div>
   </header>
   <div class="search">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35"/></svg>
     <input type="text" placeholder="Buscar produtos..." id="searchInput">
   </div>
   <div class="banner">
@@ -237,9 +332,13 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   <header class="header">
     <div class="back-btn" onclick="showScreen('home')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Voltar</div>
     <div class="header-title" id="subcatTitle">Categoria</div>
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35"/></svg>
   </header>
-  <div class="title-subcat">PRODUTOS</div>
+  <div class="title-subcat">
+    <div class="dot-left"></div>
+    SUBCATEGORIAS
+    <div class="dot-right"></div>
+  </div>
   <div class="subcat-grid" id="subcatGrid"></div>
 </div>
 
@@ -335,15 +434,29 @@ document.getElementById('btnForgot').onclick = async () => {
 
 document.getElementById('logoutBtn').onclick = () => auth.signOut();
 
-// DADOS
+// DADOS - TROCA OS LINKS DAS IMAGENS PELOS TEUS
 const subcategorias = {
   streaming: [
     {id:'netflix',img:'https://cdn-icons-png.flaticon.com/512/5977/5977590.png',title:'NETFLIX',desc:'FILMES E SÉRIES'},
     {id:'hbo',img:'https://cdn-icons-png.flaticon.com/512/5968/5968520.png',title:'HBO MAX',desc:'FILMES E SÉRIES'},
     {id:'disney',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'DISNEY+',desc:'FILMES E SÉRIES'},
     {id:'prime',img:'https://cdn-icons-png.flaticon.com/512/5968/5968749.png',title:'AMAZON PRIME',desc:'FILMES E SÉRIES'},
+    {id:'appletv',img:'https://cdn-icons-png.flaticon.com/512/0/747.png',title:'APPLE TV+',desc:'FILMES E SÉRIES'},
+    {id:'youtube',img:'https://cdn-icons-png.flaticon.com/512/1384/1384060.png',title:'YOUTUBE PREMIUM',desc:'FILMES E VÍDEOS'},
     {id:'spotify',img:'https://cdn-icons-png.flaticon.com/512/174/174872.png',title:'SPOTIFY',desc:'MÚSICAS E PODCASTS'},
-    {id:'youtube',img:'https://cdn-icons-png.flaticon.com/512/1384/1384060.png',title:'YOUTUBE PREMIUM',desc:'FILMES E VÍDEOS'}
+    {id:'deezer',img:'https://cdn-icons-png.flaticon.com/512/5968/5968842.png',title:'DEEZER',desc:'MÚSICAS E PODCASTS'},
+    {id:'crunchyroll',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'CRUNCHYROLL',desc:'ANIMES'},
+    {id:'funimation',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'FUNIMATION',desc:'ANIMES'},
+    {id:'paramount',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'PARAMOUNT+',desc:'FILMES E SÉRIES'},
+    {id:'star',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'STAR+',desc:'FILMES E SÉRIES'},
+    {id:'globoplay',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'GLOBOPLAY',desc:'FILMES E SÉRIES'},
+    {id:'telecine',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'TELECINE',desc:'FILMES E SÉRIES'},
+    {id:'mubi',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'MUBI',desc:'FILMES E CULTURA'},
+    {id:'dazn',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'DAZN',desc:'ESPORTES'},
+    {id:'espn',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'ESPN',desc:'ESPORTES'},
+    {id:'twitch',img:'https://cdn-icons-png.flaticon.com/512/5968/5968819.png',title:'TWITCH',desc:'LIVES E GAMES'},
+    {id:'ytkids',img:'https://cdn-icons-png.flaticon.com/512/1384/1384060.png',title:'YOUTUBE KIDS',desc:'CONTEÚDO INFANTIL'},
+    {id:'tiktok',img:'https://cdn-icons-png.flaticon.com/512/3046/3046121.png',title:'TIKTOK',desc:'VÍDEOS CURTOS'}
   ],
   gift: [
     {id:'googleplay',img:'https://cdn-icons-png.flaticon.com/512/300/300221.png',title:'GOOGLE PLAY',desc:'CRÉDITOS'},
@@ -375,12 +488,24 @@ const produtos = {
   hbo: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968520.png', title:'HBO Max - 30 dias', desc:'Acesso completo ao catálogo', price:'R$ 19,90'}],
   disney: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'Disney+ - 30 dias', desc:'Marvel, Star Wars, Pixar', price:'R$ 16,90'}],
   prime: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968749.png', title:'Prime Video - 30 dias', desc:'Acesso completo ao catálogo', price:'R$ 14,90'}],
+  appletv: [{img:'https://cdn-icons-png.flaticon.com/512/0/747.png', title:'Apple TV+ - 30 dias', desc:'Séries originais Apple', price:'R$ 21,90'}],
   spotify: [{img:'https://cdn-icons-png.flaticon.com/512/174/174872.png', title:'Spotify Premium - 30 dias', desc:'Sem anúncios, offline', price:'R$ 12,90'}],
   youtube: [{img:'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', title:'YouTube Premium - 30 dias', desc:'Sem anúncios + Music', price:'R$ 16,90'}],
+  deezer: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968842.png', title:'Deezer Premium - 30 dias', desc:'Música sem limites', price:'R$ 12,90'}],
+  crunchyroll: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'Crunchyroll - 30 dias', desc:'Animes sem anúncios', price:'R$ 14,90'}],
+  funimation: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'Funimation - 30 dias', desc:'Animes dublados', price:'R$ 14,90'}],
+  paramount: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'Paramount+ - 30 dias', desc:'Filmes e séries', price  star: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'Star+ - 30 dias', desc:'Esportes e entretenimento', price:'R$ 19,90'}],
+  globoplay: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'Globoplay - 30 dias', desc:'Novelas e séries BR', price:'R$ 22,90'}],
+  telecine: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'Telecine - 30 dias', desc:'Catálogo de filmes', price:'R$ 24,90'}],
+  mubi: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'MUBI - 30 dias', desc:'Cinema cult', price:'R$ 29,90'}],
+  dazn: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'DAZN - 30 dias', desc:'Esportes ao vivo', price:'R$ 34,90'}],
+  espn: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'ESPN - 30 dias', desc:'Futebol e NBA', price:'R$ 19,90'}],
+  twitch: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968819.png', title:'Twitch Turbo - 30 dias', desc:'Sem anúncios', price:'R$ 9,90'}],
+  ytkids: [{img:'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', title:'YouTube Kids - 30 dias', desc:'Conteúdo seguro', price:'R$ 8,90'}],
+  tiktok: [{img:'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', title:'TikTok 1k Seguidores', desc:'Entrega em 24h', price:'R$ 12,90'}],
   googleplay: [{img:'https://cdn-icons-png.flaticon.com/512/300/300221.png', title:'Google Play R$ 50', desc:'Créditos para apps e jogos', price:'R$ 52,90'}],
   steam: [{img:'https://cdn-icons-png.flaticon.com/512/588/588249.png', title:'Steam R$ 50', desc:'Carteira Steam', price:'R$ 52,90'}],
   instagram: [{img:'https://cdn-icons-png.flaticon.com/512/174/174855.png', title:'1k Seguidores Instagram', desc:'Entrega em até 24h', price:'R$ 14,90'}],
-  tiktok: [{img:'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', title:'1k Seguidores TikTok', desc:'Entrega em até 24h', price:'R$ 12,90'}],
   freefire: [{img:'https://cdn-icons-png.flaticon.com/512/686/686589.png', title:'500 Diamantes Free Fire', desc:'Entrega via ID', price:'R$ 19,90'}],
   roblox: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'800 Robux', desc:'Entrega via Game Pass', price:'R$ 34,90'}],
   canva: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'Canva Pro - 30 dias', desc:'Templates premium', price:'R$ 24,90'}],
@@ -391,7 +516,6 @@ const produtos = {
 
 let currentCat = '';
 
-// FUNÇÕES
 function showSubcat(cat){
   currentCat = cat;
   const nomes = {streaming:'Streaming',gift:'Gift Cards',social:'Redes Sociais',games:'Games',apps:'Apps Premium',outros:'Outros'};
@@ -400,7 +524,7 @@ function showSubcat(cat){
   const lista = subcategorias[cat] || [];
   grid.innerHTML = '';
   lista.forEach(s => {
-    grid.innerHTML += `<div class="subcat-card" onclick="showProducts('${s.id}')"><img src="${s.img}"><div class="subcat-title">${s.title}</div><div class="subcat-desc">${s.desc}</div></div>`;
+    grid.innerHTML += `<div class="subcat-card" onclick="showProducts('${s.id}')"><div class="subcat-card-img"><img src="${s.img}"></div><div class="subcat-title">${s.title}</div><div class="subcat-desc">${s.desc}</div></div>`;
   });
   showScreen('subcat');
 }
@@ -409,7 +533,13 @@ function showProducts(service) {
   const list = produtos[service] || [];
   const container = document.getElementById('productList');
   const title = document.getElementById('productTitle');
-  title.textContent = service.toUpperCase().replace('YT','YOUTUBE ');
+  const serviceName = subcategorias.streaming.find(s=>s.id===service) ||
+                     subcategorias.gift.find(s=>s.id===service) ||
+                     subcategorias.social.find(s=>s.id===service) ||
+                     subcategorias.games.find(s=>s.id===service) ||
+                     subcategorias.apps.find(s=>s.id===service) ||
+                     subcategorias.outros.find(s=>s.id===service);
+  title.textContent = serviceName? serviceName.title : service.toUpperCase();
   container.innerHTML = '';
   if(list.length === 0){
     container.innerHTML = '<div class="product"><div class="product-info"><div class="product-title">Em breve</div><div class="product-desc">Produtos chegando</div></div></div>';
@@ -447,7 +577,7 @@ function traduzErro(code){
     'auth/email-already-in-use': 'Este e-mail já está em uso',
     'auth/weak-password': 'Senha muito fraca',
     'auth/too-many-requests': 'Muitas tentativas. Tente mais tarde',
-        'auth/network-request-failed': 'Erro de conexão'
+    'auth/network-request-failed': 'Erro de conexão'
   };
   return erros[code] || 'Erro ao processar';
 }
