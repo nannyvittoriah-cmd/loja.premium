@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Prime Store VZ</title>
 <style>
-:root{--bg:#0a0a0f;--card:#0f15;--input:#15151d;--border:#2a2a35;--purple:#7c3aed;--purple-hover:#6d28d9;--text:#fff;--text-dim:#6b7280;--glow:rgba(124,58,237,0.3);--green:#10b981}
+:root{--bg:#0a0a0f;--card:#0f0f15;--input:#15151d;--border:#2a2a35;--purple:#7c3aed;--purple-hover:#6d28d9;--text:#fff;--text-dim:#6b7280;--glow:rgba(124,58,237,0.3);--green:#10b981}
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
-body{background:var(--bg);color:var(--text);min-height:100vh}
+body{background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 .screen{display:none;width:100%;max-width:420px;margin:0 auto;min-height:100vh}
 .screen.active{display:block}
 .center{display:flex;align-items:center;justify-content:center;padding:20px;min-height:100vh;background:radial-gradient(circle at 50% 0%, var(--glow) 0%, transparent 50%)}
@@ -21,17 +21,17 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .input-box:focus-within{border-color:var(--purple);box-shadow:0 0 0 3px rgba(124,58,237,0.1)}
 .input-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px}
 .input-box input::placeholder{color:#4b5563}
-.toggle{cursor:pointer;color:#6b7280;font-size:18px}
+.toggle{cursor:pointer;color:#6b7280;font-size:18px;user-select:none}
 .row{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;font-size:12px}
 .row label{display:flex;align-items:center;gap:8px;color:var(--text-dim);cursor:pointer}
 .row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--purple)}
-.row a{color:var(--purple);text-decoration:none}
+.row a{color:var(--purple);text-decoration:none;cursor:pointer}
 .btn{width:100%;height:50px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:0.2s;letter-spacing:1px;box-shadow:0 4px 20px rgba(124,58,237,0.4)}
 .btn:hover{transform:translateY(-2px);box-shadow:0 6px 30px rgba(124,58,237,0.6)}
 .btn:active{transform:translateY(0)}
 .btn:disabled{opacity:0.5;cursor:not-allowed}
 .footer-link{text-align:center;margin-top:24px;font-size:12px;color:var(--text-dim)}
-.footer-link a{color:var(--purple);text-decoration:none;font-weight:600}
+.footer-link a{color:var(--purple);text-decoration:none;font-weight:600;cursor:pointer}
 .checkbox-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:24px;font-size:11px;color:var(--text-dim);line-height:1.5}
 .checkbox-row input{margin-top:2px;accent-color:var(--purple);flex-shrink:0}
 .checkbox-row a{color:var(--purple);text-decoration:none}
@@ -53,7 +53,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .banner{margin:0 20px 24px;height:140px;background:linear-gradient(135deg,#1e1e2a 0%,#2a2a35 100%);border-radius:16px;border:1px solid var(--border);position:relative;overflow:hidden}
 .banner img{width:100%;height:100%;object-fit:cover}
 .section-header{display:flex;justify-content:space-between;align-items:center;padding:0 20px 14px;font-size:15px;font-weight:700}
-.section-header a{color:var(--purple);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:4px}
+.section-header a{color:var(--purple);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:4px;cursor:pointer}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 20px 20px}
 .card-cat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px 8px;text-align:center;cursor:pointer;position:relative;overflow:hidden;transition:0.2s;box-shadow:inset 0 1px 0 rgba(255,255,255,0.05)}
 .card-cat:active{transform:scale(0.96)}
@@ -63,110 +63,21 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .card-cat span{font-size:12px;font-weight:600;color:var(--text)}
 .card-cat.outros .card-cat-icon{background:var(--purple);border-radius:12px}
 .card-cat.outros .card-cat-icon::after{display:none}
-
-/* TITULO COM LINHA GLOW - USADO EM SUBCATEGORIAS E PRODUTOS */
-.title-glow{
-  text-align:center;
-  font-size:11px;
-  font-weight:800;
-  letter-spacing:4px;
-  color:#fff;
-  padding:24px 0 20px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:16px;
-  position:relative;
-}
-.title-glow::before,.title-glow::after{
-  content:'';
-  flex:1;
-  max-width:80px;
-  height:2px;
-  background:linear-gradient(90deg,transparent,#7c3aed);
-}
+.title-glow{text-align:center;font-size:11px;font-weight:800;letter-spacing:4px;color:#fff;padding:24px 0 20px;display:flex;align-items:center;justify-content:center;gap:16px;position:relative}
+.title-glow::before,.title-glow::after{content:'';flex:1;max-width:80px;height:2px;background:linear-gradient(90deg,transparent,#7c3aed)}
 .title-glow::after{background:linear-gradient(90deg,#7c3aed,transparent)}
-.dot-left,.dot-right{
-  position:absolute;
-  width:4px;
-  height:4px;
-  background:#7c3aed;
-  border-radius:50%;
-  box-shadow:0 0 8px #7c3aed;
-}
+.dot-left,.dot-right{position:absolute;width:4px;height:4px;background:#7c3aed;border-radius:50%;box-shadow:0 0 8px #7c3aed}
 .dot-left{left:calc(50% - 84px)}
 .dot-right{right:calc(50% - 84px)}
-
-/* GRID DE CARDS COM GLOW - USADO EM SUBCATEGORIAS E PRODUTOS */
-.card-grid{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:12px;
-  padding:0 16px 20px;
-}
+.card-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:0 16px 20px}
 @media(max-width:480px){.card-grid{grid-template-columns:repeat(3,1fr)}}
-.glow-card{
-  background:#0a0a0f;
-  border:1px solid #2a2a35;
-  border-radius:14px;
-  padding:14px 6px;
-  text-align:center;
-  cursor:pointer;
-  position:relative;
-  transition:0.2s;
-  box-shadow:inset 0 0 0 1px rgba(124,58,237,0.1), 0 0 20px rgba(124,58,237,0.05);
-}
-.glow-card:active{
-  transform:scale(0.96);
-  box-shadow:inset 0 0 0 1px rgba(124,58,237,0.3), 0 0 30px rgba(124,58,237,0.2);
-}
-.glow-card-img{
-  width:60px;
-  height:60px;
-  margin:0 auto 10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  position:relative;
-  border-radius:50%;
-  background:#000;
-}
-.glow-card-img::before{
-  content:'';
-  position:absolute;
-  inset:-2px;
-  border-radius:50%;
-  background:conic-gradient(from 0deg,#7c3aed,#a855f7,#7c3aed);
-  filter:blur(8px);
-  opacity:0.8;
-  z-index:0;
-}
-.glow-card-img img{
-  width:48px;
-  height:48px;
-  object-fit:contain;
-  position:relative;
-  z-index:2;
-  border-radius:50%;
-  background:#000;
-  padding:4px;
-}
-.glow-card-title{
-  font-size:9px;
-  font-weight:800;
-  color:#fff;
-  margin-bottom:3px;
-  letter-spacing:0.5px;
-  line-height:1.2;
-}
-.glow-card-desc{
-  font-size:7px;
-  color:#a855f7;
-  text-transform:uppercase;
-  letter-spacing:0.8px;
-  font-weight:600;
-  line-height:1;
-}
+.glow-card{background:#0a0a0f;border:1px solid #2a2a35;border-radius:14px;padding:14px 6px;text-align:center;cursor:pointer;position:relative;transition:0.2s;box-shadow:inset 0 0 0 1px rgba(124,58,237,0.1),0 0 20px rgba(124,58,237,0.05);user-select:none}
+.glow-card:active{transform:scale(0.96);box-shadow:inset 0 0 0 1px rgba(124,58,237,0.3),0 0 30px rgba(124,58,237,0.2)}
+.glow-card-img{width:60px;height:60px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;position:relative;border-radius:50%;background:#000;pointer-events:none}
+.glow-card-img::before{content:'';position:absolute;inset:-2px;border-radius:50%;background:conic-gradient(from 0deg,#7c3aed,#a855f7,#7c3aed);filter:blur(8px);opacity:0.8;z-index:0}
+.glow-card-img img{width:48px;height:48px;object-fit:contain;position:relative;z-index:2;border-radius:50%;background:#000;padding:4px}
+.glow-card-title{font-size:9px;font-weight:800;color:#fff;margin-bottom:3px;letter-spacing:0.5px;line-height:1.2;pointer-events:none}
+.glow-card-desc{font-size:7px;color:#a855f7;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;line-height:1;pointer-events:none}
 .back-btn{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;cursor:pointer}
 </style>
 </head>
@@ -193,10 +104,10 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
       </div>
       <div class="row">
         <label><input type="checkbox" id="remember"> Lembrar-me</label>
-        <a href="#" onclick="showScreen('forgot')">Esqueceu a senha?</a>
+        <a onclick="showScreen('forgot')">Esqueceu a senha?</a>
       </div>
       <button class="btn" id="btnLogin">ENTRAR</button>
-      <div class="footer-link">Não tem uma conta? <a href="#" onclick="showScreen('register')">Cadastre-se</a></div>
+      <div class="footer-link">Não tem uma conta? <a onclick="showScreen('register')">Cadastre-se</a></div>
     </div>
   </div>
 </div>
@@ -234,7 +145,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <label for="terms">Li e aceito os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a></label>
       </div>
       <button class="btn" id="btnRegister">CADASTRAR</button>
-      <div class="footer-link">Já tem uma conta? <a href="#" onclick="showScreen('login')">Entrar</a></div>
+      <div class="footer-link">Já tem uma conta? <a onclick="showScreen('login')">Entrar</a></div>
     </div>
   </div>
 </div>
@@ -254,7 +165,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <div class="input-box"><input type="text" id="forgotEmail" placeholder="seuemail@gmail.com"></div>
       </div>
       <button class="btn" id="btnForgot">ENVIAR CÓDIGO</button>
-      <div class="footer-link"><a href="#" onclick="showScreen('login')">Voltar para o login</a></div>
+      <div class="footer-link"><a onclick="showScreen('login')">Voltar para o login</a></div>
     </div>
   </div>
 </div>
@@ -268,7 +179,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
     <div class="header-title">Prime <span>Store VZ</span></div>
     <div class="header-icons">
       <div style="position:relative">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
         <div class="notif-dot"></div>
       </div>
       <svg class="icon purple" id="logoutBtn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -283,7 +194,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
   <div class="section-header">
     <span>Categorias</span>
-    <a href="#">Ver todas <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+    <a>Ver todas <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
   </div>
   <div class="grid">
     <div class="card-cat" onclick="showSubcat('streaming')">
@@ -424,7 +335,6 @@ document.getElementById('btnForgot').onclick = async () => {
 
 document.getElementById('logoutBtn').onclick = () => auth.signOut();
 
-// SUBCATEGORIAS - TROCA OS LINKS DAS IMAGENS PELOS LOGOS REAIS
 const subcategorias = {
   streaming: [
     {id:'netflix',img:'https://i.imgur.com/0Z8F8qk.png',title:'NETFLIX',desc:'FILMES E SÉRIES'},
@@ -470,7 +380,6 @@ const subcategorias = {
   ]
 };
 
-// PRODUTOS - AGORA EM FORMATO DE CARD
 const produtos = {
   netflix: [
     {img:'https://i.imgur.com/0Z8F8qk.png', title:'NETFLIX 1 TELA', desc:'R$ 18,90 - 30 DIAS'},
@@ -487,7 +396,7 @@ const produtos = {
   crunchyroll: [{img:'https://i.imgur.com/2C2C2C2.png', title:'CRUNCHYROLL', desc:'R$ 14,90 - 30 DIAS'}],
   funimation: [{img:'https://i.imgur.com/1F1F1F1.png', title:'FUNIMATION', desc:'R$ 14,90 - 30 DIAS'}],
   paramount: [{img:'https://i.imgur.com/0P0P0P0.png', title:'PARAMOUNT+', desc:'R$ 19,90 - 30 DIAS'}],
-  star: [{img:'https://i.imgur.com/9S9S9S9.png', title:'STAR+', desc  star: [{img:'https://i.imgur.com/9S9S9S9.png', title:'STAR+', desc:'R$ 19,90 - 30 DIAS'}],
+  star: [{img:'https://i.imgur.com/9S9S9S9.png', title:'STAR+', desc:'R$ 19,90 - 30 DIAS'}],
   globoplay: [{img:'https://i.imgur.com/8G8G8G8.png', title:'GLOBOPLAY', desc:'R$ 22,90 - 30 DIAS'}],
   telecine: [{img:'https://i.imgur.com/7T7T7T7.png', title:'TELECINE', desc:'R$ 24,90 - 30 DIAS'}],
   mubi: [{img:'https://i.imgur.com/6M6M6M6.png', title:'MUBI', desc:'R$ 29,90 - 30 DIAS'}],
@@ -498,7 +407,7 @@ const produtos = {
   tiktok: [{img:'https://i.imgur.com/1T1T1T1.png', title:'1K SEGUIDORES', desc:'R$ 12,90'}],
   googleplay: [{img:'https://cdn-icons-png.flaticon.com/512/300/300221.png', title:'GOOGLE PLAY R$50', desc:'R$ 52,90'}],
   steam: [{img:'https://cdn-icons-png.flaticon.com/512/588/588249.png', title:'STEAM R$50', desc:'R$ 52,90'}],
-  instagram: [{img:'https://cdn-icons-png.flaticon.com/512/174/174855.png', title:'1K SEGUIDORES', desc:'R$ 14,90'}],
+    instagram: [{img:'https://cdn-icons-png.flaticon.com/512/174/174855.png', title:'1K SEGUIDORES', desc:'R$ 14,90'}],
   freefire: [{img:'https://cdn-icons-png.flaticon.com/512/686/686589.png', title:'500 DIAMANTES', desc:'R$ 19,90'}],
   roblox: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'800 ROBUX', desc:'R$ 34,90'}],
   canva: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'CANVA PRO', desc:'R$ 24,90 - 30 DIAS'}],
