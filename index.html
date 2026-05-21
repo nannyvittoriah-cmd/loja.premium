@@ -6,9 +6,9 @@
 <title>Prime Store VZ</title>
 <style>
 :root{--bg:#0a0a0f;--card:#0f0f15;--input:#15151d;--border:#2a2a35;--purple:#7c3aed;--purple-hover:#6d28d9;--text:#fff;--text-dim:#6b7280;--glow:rgba(124,58,237,0.3);--green:#10b981}
-*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-.screen{display:none;width:100%;max-width:420px;margin:0 auto;min-height:100vh}
+.screen{display:none;width:100%;max-width:420px;margin:0 auto;min-height:100vh;position:relative}
 .screen.active{display:block}
 .center{display:flex;align-items:center;justify-content:center;padding:20px;min-height:100vh;background:radial-gradient(circle at 50% 0%, var(--glow) 0%, transparent 50%)}
 .card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px 28px;box-shadow:0 0 40px rgba(124,58,237,0.15),inset 0 1px 0 rgba(255,255,255,0.05);width:100%;max-width:360px}
@@ -26,9 +26,8 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .row label{display:flex;align-items:center;gap:8px;color:var(--text-dim);cursor:pointer}
 .row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--purple)}
 .row a{color:var(--purple);text-decoration:none;cursor:pointer}
-.btn{width:100%;height:50px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:0.2s;letter-spacing:1px;box-shadow:0 4px 20px rgba(124,58,237,0.4)}
-.btn:hover{transform:translateY(-2px);box-shadow:0 6px 30px rgba(124,58,237,0.6)}
-.btn:active{transform:translateY(0)}
+.btn{width:100%;height:50px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:0.2s;letter-spacing:1px;box-shadow:0 4px 20px rgba(124,58,237,0.4);position:relative;z-index:1}
+.btn:active{transform:scale(0.98)}
 .btn:disabled{opacity:0.5;cursor:not-allowed}
 .footer-link{text-align:center;margin-top:24px;font-size:12px;color:var(--text-dim)}
 .footer-link a{color:var(--purple);text-decoration:none;font-weight:600;cursor:pointer}
@@ -55,7 +54,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .section-header{display:flex;justify-content:space-between;align-items:center;padding:0 20px 14px;font-size:15px;font-weight:700}
 .section-header a{color:var(--purple);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:4px;cursor:pointer}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 20px 20px}
-.card-cat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px 8px;text-align:center;cursor:pointer;position:relative;overflow:hidden;transition:0.2s;box-shadow:inset 0 1px 0 rgba(255,255,255,0.05)}
+.card-cat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px 8px;text-align:center;cursor:pointer;position:relative;overflow:hidden;transition:0.2s;box-shadow:inset 0 1px 0 rgba(255,255,255,0.05);z-index:1}
 .card-cat:active{transform:scale(0.96)}
 .card-cat-icon{width:48px;height:48px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;position:relative}
 .card-cat-icon img{width:40px;height:40px;object-fit:contain;z-index:2;filter:drop-shadow(0 0 12px rgba(124,58,237,0.8))}
@@ -71,13 +70,13 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .dot-right{right:calc(50% - 84px)}
 .card-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:0 16px 20px}
 @media(max-width:480px){.card-grid{grid-template-columns:repeat(3,1fr)}}
-.glow-card{background:#0a0a0f;border:1px solid #2a2a35;border-radius:14px;padding:14px 6px;text-align:center;cursor:pointer;position:relative;transition:0.2s;box-shadow:inset 0 0 0 1px rgba(124,58,237,0.1),0 0 20px rgba(124,58,237,0.05);user-select:none}
+.glow-card{background:#0a0a0f;border:1px solid #2a2a35;border-radius:14px;padding:14px 6px;text-align:center;cursor:pointer;position:relative;transition:0.2s;box-shadow:inset 0 0 0 1px rgba(124,58,237,0.1),0 0 20px rgba(124,58,237,0.05);z-index:1}
 .glow-card:active{transform:scale(0.96);box-shadow:inset 0 0 0 1px rgba(124,58,237,0.3),0 0 30px rgba(124,58,237,0.2)}
-.glow-card-img{width:60px;height:60px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;position:relative;border-radius:50%;background:#000;pointer-events:none}
+.glow-card-img{width:60px;height:60px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;position:relative;border-radius:50%;background:#000}
 .glow-card-img::before{content:'';position:absolute;inset:-2px;border-radius:50%;background:conic-gradient(from 0deg,#7c3aed,#a855f7,#7c3aed);filter:blur(8px);opacity:0.8;z-index:0}
 .glow-card-img img{width:48px;height:48px;object-fit:contain;position:relative;z-index:2;border-radius:50%;background:#000;padding:4px}
-.glow-card-title{font-size:9px;font-weight:800;color:#fff;margin-bottom:3px;letter-spacing:0.5px;line-height:1.2;pointer-events:none}
-.glow-card-desc{font-size:7px;color:#a855f7;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;line-height:1;pointer-events:none}
+.glow-card-title{font-size:9px;font-weight:800;color:#fff;margin-bottom:3px;letter-spacing:0.5px;line-height:1.2}
+.glow-card-desc{font-size:7px;color:#a855f7;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;line-height:1}
 .back-btn{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;cursor:pointer}
 
 /* DETALHES DO PRODUTO */
@@ -373,7 +372,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <span id="total">R$ 0,00</span>
       </div>
     </div>
-  </div>
   <div class="buy-btn-fixed">
     <button class="buy-btn" onclick="finalizarCompra()">FINALIZAR COMPRA</button>
   </div>
@@ -418,7 +416,7 @@ auth.onAuthStateChanged((user) => {
   else showScreen('login');
 });
 
-document.getElementById('btnLogin').onclick = async () => {
+document.getElementById('btnLogin').onclick  = async () => {
   const email = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value;
   const remember = document.getElementById('remember').checked;
@@ -443,7 +441,7 @@ document.getElementById('btnRegister').onclick = async () => {
   if(password.length < 6) return showAlert('registerError', 'Senha deve ter no mínimo 6 caracteres');
   btn.disabled = true;
   try{
-    const user Cred = await auth.createUserWithEmailAndPassword(email, password);
+    const userCred = await auth.createUserWithEmailAndPassword(email, password);
     await userCred.user.updateProfile({displayName: name});
     showAlert('registerSuccess', 'Conta criada com sucesso!');
     setTimeout(() => showScreen('login'), 1500);
