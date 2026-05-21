@@ -109,7 +109,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 </head>
 <body>
 
-<!-- LOGIN -->
 <div class="screen active" id="screen-login">
   <div class="center">
     <div class="card">
@@ -133,7 +132,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
   </div>
 </div>
 
-<!-- ADMIN -->
 <div class="screen" id="screen-admin">
   <div class="admin-header-mobile">
     <button class="admin-menu-btn" onclick="toggleMenuMobile()">
@@ -235,6 +233,11 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 
     <div class="admin-panel" id="panel-pedidos">
       <div class="admin-page-title">Pedidos</div>
+      <div class="input-group" style="margin-bottom:12px">
+        <div class="input-box">
+          <input type="text" id="searchPedido" placeholder="Buscar por email do cliente..." oninput="pesquisarPedidos()">
+          <span style="color:var(--text-dim);font-size:18px">🔍</span>
+        </div>
       <div class="tabs-pedidos">
         <button class="tab-btn active" onclick="filtrarPedidos('todos',this)">Todos</button>
         <button class="tab-btn" onclick="filtrarPedidos('pendente',this)">Pendentes</button>
@@ -447,7 +450,7 @@ function carregarCategorias(){
     const data = snap.val() || {};
     const lista = document.getElementById('listaCategorias');
     lista.innerHTML = '';
-    
+
     Object.keys(data).forEach(key => {
       const cat = data[key];
       lista.innerHTML += `
@@ -483,9 +486,9 @@ document.getElementById('produtoCategoria').addEventListener('change', (e) => {
   const subSelect = document.getElementById('produtoSubcategoria');
   subSelect.innerHTML = '<option value="">Selecione</option>';
   if(!catId) return;
-  
+
   db.ref('categorias/'+catId+'/subcategorias').once('value').then(snap => {
-        const subs = snap.val() || [];
+    const subs = snap.val() || [];
     subs.forEach(sub => {
       subSelect.innerHTML += `<option value="${sub}">${sub}</option>`;
     });
@@ -496,9 +499,9 @@ function salvarCategoria(){
   const nome = document.getElementById('categoriaNome').value;
   const icon = document.getElementById('categoriaIcon').value;
   const subcats = document.getElementById('categoriaSubcats').value.split(',').map(s=>s.trim()).filter(s=>s);
-  
+
   if(!nome) return alert('Preencha o nome');
-  
+
   db.ref('categorias').push({nome, icon, subcategorias: subcats}).then(() => {
     fecharModal('modalCategoria');
     carregarCategorias();
@@ -519,8 +522,8 @@ function carregarProdutos(){
     const data = snap.val() || {};
     const lista = document.getElementById('listaProdutos');
     lista.innerHTML = '';
-    
-    Object.keys(data).forEach(key => {
+
+        Object.keys(data).forEach(key => {
       const prod = data[key];
       lista.innerHTML += `
         <div class="item-card">
@@ -556,18 +559,18 @@ function salvarProduto(){
   const img = document.getElementById('produtoImg').value;
   const desc = document.getElementById('produtoDesc').value;
   const estoque = parseInt(document.getElementById('produtoEstoque').value) || 10;
-  
+
   if(!nome ||!categoriaId ||!preco) return alert('Preencha todos os campos obrigatórios');
-  
+
   db.ref('categorias/'+categoriaId+'/nome').once('value').then(snap => {
     const categoriaNome = snap.val();
     db.ref('produtos').push({
-      nome, 
+      nome,
       categoria: categoriaNome,
       subcategoria,
-      preco, 
-      img, 
-      desc, 
+      preco,
+      img,
+      desc,
       estoque,
       criadoEm: Date.now()
     }).then(() => {
@@ -586,11 +589,17 @@ function excluirProduto(id){
 }
 
 let filtroAtualPedidos = 'todos';
+let termoPesquisaPedidos = '';
 
 function filtrarPedidos(status, el){
   filtroAtualPedidos = status;
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   if(el) el.classList.add('active');
+  carregarPedidos();
+}
+
+function pesquisarPedidos(){
+  termoPesquisaPedidos = document.getElementById('searchPedido').value.toLowerCase().trim();
   carregarPedidos();
 }
 
@@ -601,25 +610,27 @@ function carregarPedidos(){
     lista.innerHTML = '';
     let pendentes = 0;
     let total = 0;
-    
+
     Object.keys(data).forEach(key => {
       const ped = data[key];
       if(ped.status === 'pendente') pendentes++;
       if(ped.status === 'aprovado') total += ped.valor;
-      
+
       if(filtroAtualPedidos!== 'todos' && ped.status!== filtroAtualPedidos) return;
-      
+      if(termoPesquisaPedidos &&!ped.email.toLowerCase().includes(termoPesquisaPedidos)) return;
+
       const statusClass = ped.status === 'aprovado'? 'status-approved' : ped.status === 'cancelado'? 'status-cancelled' : 'status-pending';
       const statusTexto = ped.status === 'aprovado'? 'Pago' : ped.status === 'cancelado'? 'Cancelado' : 'Pendente';
       const dataFormatada = new Date(ped.criadoEm || Date.now()).toLocaleDateString('pt-BR');
       const horaFormatada = new Date(ped.criadoEm || Date.now()).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-      
+
       lista.innerHTML += `
         <div class="item-card">
           <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px">
             <div style="flex:1">
               <div class="pedido-id">#${key.substring(0,6).toUpperCase()}</div>
               <div class="pedido-produto">${ped.produto}</div>
+              <div class="pedido-data">${ped.email}</div>
               <div class="pedido-data">${dataFormatada} às ${horaFormatada}</div>
             </div>
             <div style="text-align:right">
@@ -637,9 +648,9 @@ function carregarPedidos(){
           </div>
         </div>`;
     });
-    
+
     if(lista.innerHTML === '') lista.innerHTML = '<div class="admin-card"><h3>Nenhum pedido encontrado</h3></div>';
-    
+
     document.getElementById('pedidosPendentes').textContent = pendentes;
     document.getElementById('totalVendas').textContent = `R$ ${total.toFixed(2)}`;
   });
@@ -648,7 +659,7 @@ function carregarPedidos(){
 function aprovarPagamento(id){
   if(confirm('Aprovar pagamento e liberar produto para o cliente?')){
     db.ref('pedidos/'+id).update({
-      status:'aprovado', 
+      status:'aprovado',
       aprovadoEm:Date.now(),
       aprovadoPor: ADMIN_EMAIL
     }).then(() => {
@@ -668,7 +679,7 @@ function enviarComprovante(id){
   db.ref('pedidos/'+id).once('value').then(snap => {
     const ped = snap.val();
     const msg = `✅ *COMPROVANTE DE COMPRA - PRIME STORE VZ*\n\nPedido: #${id.substring(0,6)}\nCliente: ${ped.email}\nProduto: ${ped.produto}\nValor: R$ ${ped.valor.toFixed(2)}\nData: ${new Date(ped.aprovadoEm).toLocaleDateString('pt-BR')}\nStatus: APROVADO ✅\n\nObrigado pela compra! Qualquer dúvida: (98) 98485-3563`;
-    
+
     if(confirm(`Enviar comprovante para ${ped.email}?\n\n${msg}`)){
       db.ref('pedidos/'+id+'/comprovanteEnviado').set({
         enviado: true,
@@ -687,7 +698,7 @@ function carregarUsuarios(){
     const lista = document.getElementById('listaUsuarios');
     lista.innerHTML = '';
     document.getElementById('totalUsuarios').textContent = Object.keys(data).length;
-    
+
     Object.keys(data).forEach(key => {
       const user = data[key];
       lista.innerHTML += `
@@ -748,13 +759,13 @@ document.getElementById('btnLogin').onclick = async () => {
   const btn = document.getElementById('btnLogin');
   const errorDiv = document.getElementById('loginError');
   errorDiv.style.display = 'none';
-  
+
   if(!email ||!password){
     errorDiv.textContent = 'Preencha e-mail e senha';
     errorDiv.style.display = 'block';
     return;
   }
-  
+
   btn.disabled = true;
   try{
     await auth.signInWithEmailAndPassword(email, password);
