@@ -1,387 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Prime Store VZ</title>
-<style>
-:root{--bg:#0a0a0f;--card:#0f0f15;--input:#15151d;--border:#2a2a35;--purple:#7c3aed;--purple-hover:#6d28d9;--text:#fff;--text-dim:#6b7280;--glow:rgba(124,58,237,0.3);--green:#10b981;--red:#ef4444;--yellow:#f59e0b}
-*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-.screen{display:none;width:100%;max-width:420px;margin:0 auto;min-height:100vh}
-.screen.active{display:block}
-.center{display:flex;align-items:center;justify-content:center;padding:20px;min-height:100vh;background:radial-gradient(circle at 50% 0%, var(--glow) 0%, transparent 50%)}
-.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px 28px;box-shadow:0 0 40px rgba(124,58,237,0.15),inset 0 1px 0 rgba(255,255,255,0.05);width:100%;max-width:360px}
-h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var(--text-dim);letter-spacing:1.5px}
-.logo{font-size:22px;font-weight:800;color:#fff;text-align:center;margin-bottom:4px;text-shadow:0 0 20px var(--purple)}
-.subtitle{font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:28px}
-.input-group{margin-bottom:16px}
-.input-group label{display:block;font-size:12px;color:var(--text-dim);margin-bottom:8px}
-.input-box{width:100%;height:48px;background:var(--input);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;padding:0 16px}
-.input-box:focus-within{border-color:var(--purple);box-shadow:0 0 0 3px rgba(124,58,237,0.1)}
-.input-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px}
-.input-box input::placeholder{color:#4b5563}
-.toggle{cursor:pointer;color:#6b7280;font-size:18px;user-select:none}
-.row{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;font-size:12px}
-.row label{display:flex;align-items:center;gap:8px;color:var(--text-dim);cursor:pointer}
-.row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--purple)}
-.row a{color:var(--purple);text-decoration:none;cursor:pointer}
-.btn{width:100%;height:50px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:0.2s;letter-spacing:1px;box-shadow:0 4px 20px rgba(124,58,237,0.4)}
-.btn:active{transform:scale(0.98)}
-.btn:disabled{opacity:0.5;cursor:not-allowed}
-.footer-link{text-align:center;margin-top:24px;font-size:12px;color:var(--text-dim)}
-.footer-link a{color:var(--purple);text-decoration:none;font-weight:600;cursor:pointer}
-.checkbox-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:24px;font-size:11px;color:var(--text-dim);line-height:1.5}
-.checkbox-row input{margin-top:2px;accent-color:var(--purple);flex-shrink:0}
-.checkbox-row a{color:var(--purple);text-decoration:none}
-.alert{padding:12px 16px;border-radius:12px;font-size:12px;margin-bottom:16px;display:none;text-align:center}
-.alert.error{background:rgba(239,68,68,0.1);border:1px solid #ef4444;color:#ef4444}
-.alert.success{background:rgba(16,185,129,0.1);border:1px solid #10b981;color:#10b981}
-.text-info{font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:24px;line-height:1.6}
-.header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;position:sticky;top:0;background:var(--bg);z-index:100}
-.header-left svg{width:24px;height:24px;stroke:var(--text);cursor:pointer}
-.header-title{font-size:18px;font-weight:800}
-.header-title span{color:var(--purple)}
-.header-icons{display:flex;gap:16px;align-items:center}
-.icon{width:22px;height:22px;stroke:var(--text);cursor:pointer}
-.icon.purple{stroke:var(--purple)}
-.search{margin:0 20px 16px;position:relative}
-.search input{width:100%;height:44px;background:var(--input);border:1px solid var(--border);border-radius:14px;padding:0 14px 0 44px;color:var(--text);font-size:13px;outline:none}
-.search svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:18px;height:18px;stroke:#6b7280}
-.banner{margin:0 20px 24px;height:140px;background:linear-gradient(135deg,#1e1e2a 0%,#2a2a35 100%);border-radius:16px;border:1px solid var(--border)}
-.section-header{display:flex;justify-content:space-between;align-items:center;padding:0 20px 14px;font-size:15px;font-weight:700}
-.section-header a{color:var(--purple);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:4px;cursor:pointer}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 20px 20px}
-.card-cat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px 8px;text-align:center;cursor:pointer;transition:0.2s}
-.card-cat:active{transform:scale(0.96)}
-.card-cat-icon{width:48px;height:48px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center}
-.card-cat-icon img{width:40px;height:40px;object-fit:contain;filter:drop-shadow(0 0 12px rgba(124,58,237,0.8))}
-.card-cat span{font-size:12px;font-weight:600;color:var(--text)}
-.card-cat.outros .card-cat-icon{background:var(--purple);border-radius:12px;color:#fff;font-size:32px;font-weight:800}
-.title-glow{text-align:center;font-size:11px;font-weight:800;letter-spacing:4px;color:#fff;padding:24px 0 20px;display:flex;align-items:center;justify-content:center;gap:16px;position:relative}
-.title-glow::before,.title-glow::after{content:'';flex:1;max-width:80px;height:2px;background:linear-gradient(90deg,transparent,#7c3aed)}
-.title-glow::after{background:linear-gradient(90deg,#7c3aed,transparent)}
-.dot-left,.dot-right{position:absolute;width:4px;height:4px;background:#7c3aed;border-radius:50%;box-shadow:0 0 8px #7c3aed}
-.dot-left{left:calc(50% - 84px)}
-.dot-right{right:calc(50% - 84px)}
-.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 16px 20px}
-.glow-card{background:#0a0a0f;border:1px solid #2a2a35;border-radius:14px;padding:14px 6px 10px;text-align:center;transition:0.2s;cursor:pointer}
-.glow-card:active{transform:scale(0.96)}
-.glow-card-img{width:60px;height:60px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#000}
-.glow-card-img img{width:48px;height:48px;object-fit:contain;border-radius:50%;background:#000;padding:4px}
-.glow-card-title{font-size:9px;font-weight:800;color:#fff;margin-bottom:3px;letter-spacing:0.5px;line-height:1.2}
-.glow-card-desc{font-size:7px;color:#a855f7;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;line-height:1;margin-bottom:8px}
-.glow-card-btn{width:100%;height:28px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);border:none;border-radius:8px;color:#fff;font-size:9px;font-weight:800;cursor:pointer;letter-spacing:0.5px;display:flex;align-items:center;justify-content:center;gap:4px}
-.glow-card-btn:active{transform:scale(0.95)}
-.glow-card-btn svg{width:12px;height:12px}
-.back-btn{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;cursor:pointer}
-.detail-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:var(--bg);border-bottom:1px solid var(--border)}
-.detail-header h1{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#fff}
-.detail-content{padding:0 20px 100px}
-.detail-image{width:100%;height:180px;margin:16px 0;border-radius:16px;overflow:hidden;background:radial-gradient(circle at 50% 50%, rgba(124,58,237,0.2) 0%, transparent 70%), #0f0f15;border:1px solid var(--border);display:flex;align-items:center;justify-content:center}
-.detail-image img{width:140px;height:140px;object-fit:contain;filter:drop-shadow(0 0 20px rgba(124,58,237,0.6))}
-.detail-title{font-size:22px;font-weight:800;margin-bottom:4px;color:#fff}
-.detail-subtitle{font-size:13px;color:#6b7280;margin-bottom:16px}
-.detail-price-row{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-.detail-price{font-size:24px;font-weight:800;color:#fff}
-.detail-badge{padding:5px 12px;background:rgba(16,185,129,0.15);border:1px solid #10b981;border-radius:6px;font-size:11px;color:#10b981;font-weight:700}
-.detail-section{margin-bottom:24px}
-.detail-section-title{font-size:11px;font-weight:800;color:#6b7280;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px}
-.detail-desc{font-size:13px;line-height:1.6;color:#9ca3af;margin-bottom:16px}
-.detail-info{border-top:1px solid var(--border);padding-top:0}
-.detail-info-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--border);font-size:13px}
-.detail-info-row:last-child{border-bottom:none}
-.detail-info-row span:first-child{color:#6b7280;font-weight:500}
-.detail-info-row span:last-child{color:#fff;font-weight:600}
-.buy-btn-fixed{position:fixed;bottom:0;left:0;right:0;max-width:420px;margin:0 auto;padding:16px 20px;background:var(--bg);border-top:1px solid var(--border);z-index:200}
-.buy-btn{width:100%;height:54px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);border:none;border-radius:14px;color:#fff;font-size:13px;font-weight:800;cursor:pointer;letter-spacing:1.5px;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 4px 20px rgba(124,58,237,0.5)}
-.buy-btn:active{transform:scale(0.98)}
-.cart-header{display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid var(--border)}
-.cart-title{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#fff}
-.cart-content{padding:0 20px 100px}
-.cart-item{display:flex;gap:12px;padding:16px 0;border-bottom:1px solid var(--border);align-items:center}
-.cart-item-img{width:56px;height:56px;border-radius:12px;background:#0f0f15;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.cart-item-img img{width:40px;height:40px;object-fit:contain}
-.cart-item-info{flex:1}
-.cart-item-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:2px}
-.cart-item-subtitle{font-size:11px;color:var(--text-dim);margin-bottom:8px}
-.cart-item-price{font-size:15px;font-weight:800;color:var(--purple)}
-.cart-item-controls{display:flex;align-items:center;gap:12px}
-.qty-box{display:flex;align-items:center;gap:8px;background:var(--input);border:1px solid var(--border);border-radius:8px;padding:6px 10px}
-.qty-btn{width:20px;height:20px;border:none;background:var(--purple);color:#fff;border-radius:4px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.qty-btn:active{transform:scale(0.9)}
-.qty-num{font-size:13px;font-weight:700;min-width:20px;text-align:center}
-.delete-btn{width:32px;height:32px;border:1px solid var(--border);background:transparent;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.delete-btn svg{width:16px;height:16px;stroke:#6b7280}
-.coupon-box{display:flex;gap:8px;margin:20px 0}
-.coupon-input{flex:1;height:44px;background:var(--input);border:1px solid var(--border);border-radius:10px;padding:0 14px;color:#fff;font-size:13px;outline:none}
-.coupon-input::placeholder{color:#4b5563}
-.coupon-btn{padding:0 20px;height:44px;background:var(--input);border:1px solid var(--border);border-radius:10px;color:var(--purple);font-size:12px;font-weight:700;cursor:pointer}
-.cart-summary{border-top:1px solid var(--border);padding-top:16px;margin-top:8px}
-.summary-row{display:flex;justify-content:space-between;padding:8px 0;font-size:13px}
-.summary-row span:first-child{color:var(--text-dim)}
-.summary-row span:last-child{color:#fff;font-weight:600}
-.summary-row.discount span:last-child{color:#ef4444}
-.summary-total{display:flex;justify-content:space-between;padding:16px 0 0;margin-top:8px;border-top:1px solid var(--border)}
-.summary-total span{font-size:16px;font-weight:800}
-.summary-total span:last-child{color:var(--purple);font-size:18px}
-.cart-badge{position:absolute;top:-4px;right:-4px;background:var(--purple);color:#fff;font-size:10px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.pay-header{display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid var(--border)}
-.pay-title{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#fff}
-.pay-content{padding:0 20px 100px}
-.pay-method{margin:20px 0}
-.pay-method-title{font-size:11px;font-weight:800;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px}
-.pay-option{display:flex;align-items:center;justify-content:space-between;padding:16px;background:var(--input);border:2px solid var(--purple);border-radius:12px;cursor:pointer}
-.pay-option-left{display:flex;align-items:center;gap:12px}
-.pay-icon{width:24px;height:24px;color:var(--green)}
-.pay-option-text{font-size:14px;font-weight:700;color:#fff}
-.pay-radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--purple);display:flex;align-items:center;justify-content:center}
-.pay-radio::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--purple)}
-.pix-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin:20px 0;text-align:center}
-.pix-box-title{font-size:12px;font-weight:800;color:#fff;margin-bottom:16px;text-transform:uppercase;letter-spacing:1px}
-.pix-qrcode{width:180px;height:180px;background:#fff;border-radius:12px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center}
-.pix-qrcode img{width:160px;height:160px}
-.pix-desc{font-size:12px;color:var(--text-dim);margin-bottom:8px}
-.pix-name{font-size:13px;font-weight:700;color:#fff;margin-bottom:16px}
-.pix-divider{font-size:11px;color:var(--text-dim);margin:16px 0;text-transform:uppercase}
-.pix-copy-box{display:flex;gap:8px;align-items:center;background:var(--input);border:1px solid var(--border);border-radius:10px;padding:12px}
-.pix-code{flex:1;font-size:11px;color:#fff;word-break:break-all;font-family:monospace}
-.copy-btn{width:32px;height:32px;background:var(--input);border:1px solid var(--border);border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.copy-btn:active{transform:scale(0.9)}
-.copy-btn svg{width:16px;height:16px;stroke:var(--text-dim)}
-.total-box{border-top:1px solid var(--border);padding-top:16px;margin-top:20px}
-.total-row{display:flex;justify-content:space-between;padding:8px 0;font-size:16px;font-weight:800}
-.total-row span:last-child{color:var(--purple);font-size:18px}
-.receipt-header{display:flex;align-items:center;justify-content:center;padding:24px 20px;position:relative}
-.receipt-close{position:absolute;left:20px;width:24px;height:24px;stroke:#6b7280;cursor:pointer}
-.receipt-success-icon{width:80px;height:80px;background:rgba(16,185,129,0.15);border:2px solid #10b981;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
-.receipt-success-icon svg{width:40px;height:40px;stroke:#10b981;stroke-width:3}
-.receipt-title{font-size:20px;font-weight:800;text-align:center;color:#fff;margin-bottom:8px}
-.receipt-id{font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:4px}
-.receipt-date{font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:20px}
-.receipt-status{display:inline-block;padding:6px 16px;background:rgba(16,185,129,0.15);border:1px solid #10b981;border-radius:8px;font-size:12px;font-weight:700;color:#10b981;margin:0 auto 24px;display:block;width:fit-content}
-.receipt-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin:0 20px 20px}
-.receipt-section-title{font-size:11px;font-weight:800;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:16px}
-.receipt-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
-.receipt-item:last-child{border-bottom:none}
-.receipt-item-icon{width:40px;height:40px;border-radius:10px;background:var(--input);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.receipt-item-icon img{width:28px;height:28px;object-fit:contain}
-.receipt-item-info{flex:1}
-.receipt-item-name{font-size:13px;font-weight:700;color:#fff;margin-bottom:2px}
-.receipt-item-desc{font-size:11px;color:var(--text-dim)}
-.receipt-item-price{font-size:14px;font-weight:800;color:var(--purple)}
-.receipt-total{border-top:1px solid var(--border);padding-top:16px;margin-top:16px;display:flex;justify-content:space-between;align-items:center}
-.receipt-total-label{font-size:14px;font-weight:700;color:var(--text-dim)}
-.receipt-total-value{font-size:18px;font-weight:800;color:var(--purple)}
-.receipt-actions{padding:0 20px 100px;display:flex;flex-direction:column;gap:12px}
-.receipt-btn{width:100%;height:50px;border-radius:12px;font-size:13px;font-weight:800;cursor:pointer;letter-spacing:1px;border:none;display:flex;align-items:center;justify-content:center;gap:8px}
-.receipt-btn-primary{background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);color:#fff;box-shadow:0 4px 20px rgba(124,58,237,0.4)}
-.receipt-btn-secondary{background:var(--input);border:1px solid var(--border);color:#fff}
-.receipt-btn:active{transform:scale(0.98)}
-.orders-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
-.orders-title{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#fff}
-.orders-tabs{display:flex;gap:24px;padding:0 20px;border-bottom:1px solid var(--border);margin-bottom:16px}
-.order-tab{padding:14px 0;font-size:13px;font-weight:600;color:var(--text-dim);cursor:pointer;position:relative;border-bottom:2px solid transparent}
-.order-tab.active{color:var(--purple);border-bottom-color:var(--purple)}
-.orders-content{padding:0 20px 100px}
-.order-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;display:flex;gap:12px;align-items:center;cursor:pointer}
-.order-card:active{transform:scale(0.98)}
-.order-icon{width:48px;height:48px;border-radius:10px;background:var(--input);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.order-icon img{width:32px;height:32px;object-fit:contain}
-.order-info{flex:1}
-.order-id{font-size:12px;font-weight:700;color:#fff;margin-bottom:4px}
-.order-date{font-size:11px;color:var(--text-dim);margin-bottom:2px}
-.order-price{font-size:14px;font-weight:800;color:var(--purple)}
-.order-status{padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase}
-.order-status.concluido{background:rgba(16,185,129,0.15);border:1px solid #10b981;color:#10b981}
-.order-status.pendente{background:rgba(245,158,11,0.15);border:1px solid #f59e0b;color:#f59e0b}
-.order-status.cancelado{background:rgba(239,68,68,0.15);border:1px solid #ef4444;color:#ef4444}
-.profile-header{display:flex;align-items:center;gap:12px;padding:20px;border-bottom:1px solid var(--border)}
-.profile-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff}
-.profile-info{flex:1}
-.profile-name{font-size:15px;font-weight:700;color:#fff;margin-bottom:2px}
-.profile-since{font-size:11px;color:var(--text-dim)}
-.profile-menu{padding:0 20px}
-.profile-menu-item{display:flex;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid var(--border);cursor:pointer}
-.profile-menu-item:active{background:var(--input)}
-.profile-menu-icon{width:20px;height:20px;stroke:var(--text-dim)}
-.profile-menu-text{flex:1;font-size:14px;font-weight:600;color:#fff}
-.profile-menu-arrow{width:16px;height:16px;stroke:var(--text-dim)}
-.profile-logout{color:#ef4444!important}
-.menu-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:999;display:none;backdrop-filter:blur(4px)}
-.menu-overlay.active{display:block}
-.side-menu{position:fixed;top:0;left:-300px;width:280px;height:100vh;background:var(--bg);border-right:1px solid var(--purple);z-index:1000;transition:left 0.3s ease;overflow-y:auto}
-.side-menu.active{left:0}
-.menu-header{display:flex;align-items:center;justify-content:space-between;padding:20px;border-bottom:1px solid var(--border)}
-.menu-title{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--purple)}
-.menu-close{width:24px;height:24px;stroke:#6b7280;cursor:pointer}
-.menu-list{padding:12px 0}
-.menu-item{display:flex;align-items:center;gap:14px;padding:14px 20px;cursor:pointer;transition:0.2s}
-.menu-item:active{background:var(--input)}
-.menu-item svg{width:20px;height:20px;stroke:var(--purple)}
-.menu-item-text{font-size:14px;font-weight:600;color:#fff}
-.menu-item.admin svg{stroke:#f59e0b}
-.menu-item.admin .menu-item-text{color:#f59e0b}
-.admin-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);background:var(--bg)}
-.admin-title{font-size:14px;font-weight:800;color:var(--purple)}
-.admin-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:20px}
-.admin-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px}
-.admin-card-icon{width:44px;height:44px;border-radius:12px;background:rgba(124,58,237,0.15);display:flex;align-items:center;justify-content:center}
-.admin-card-icon svg{width:22px;height:22px;stroke:var(--purple)}
-.admin-card-info{flex:1}
-.admin-card-label{font-size:11px;color:var(--text-dim);margin-bottom:4px}
-.admin-card-value{font-size:20px;font-weight:800;color:#fff}
-.admin-menu{padding:0 20px}
-.admin-menu-item{display:flex;align-items:center;gap:12px;padding:14px;background:var(--input);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;cursor:pointer}
-.admin-menu-item:active{transform:scale(0.98)}
-.admin-menu-item svg{width:20px;height:20px;stroke:var(--purple)}
-.admin-menu-text{flex:1;font-size:14px;font-weight:600;color:#fff}
-.admin-table{width:100%;border-collapse:collapse;margin-top:16px}
-.admin-table th{background:var(--input);padding:12px 8px;font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;text-align:left;border-bottom:1px solid var(--border)}
-.admin-table td{padding:12px 8px;font-size:13px;color:#fff;border-bottom:1px solid var(--border)}
-.admin-table tr:active{background:var(--input)}
-.admin-btn{padding:8px 14px;background:var(--purple);border:none;border-radius:8px;color:#fff;font-size:11px;font-weight:700;cursor:pointer}
-.admin-btn-sm{padding:6px 10px;font-size:10px}
-.admin-btn-red{background:#ef4444}
-.admin-btn-green{background:#10b981}
-.admin-form-group{margin-bottom:16px}
-.admin-form-group label{display:block;font-size:12px;color:var(--text-dim);margin-bottom:8px;font-weight:600}
-.admin-input{width:100%;height:44px;background:var(--input);border:1px solid var(--border);border-radius:10px;padding:0 14px;color:#fff;font-size:13px;outline:none}
-.admin-input:focus{border-color:var(--purple)}
-.admin-textarea{min-height:80px;padding:12px 14px;resize:vertical}
-.admin-switch{width:44px;height:24px;background:var(--border);border-radius:12px;position:relative;cursor:pointer}
-.admin-switch.active{background:var(--purple)}
-.admin-switch::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:0.2s}
-.admin-switch.active::after{left:22px}
-</style>
-</head>
-<body>
-
-<div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
-<div class="side-menu" id="sideMenu">
-  <div class="menu-header">
-    <div class="menu-title">MENU</div>
-    <svg class="menu-close" onclick="toggleMenu()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-  </div>
-  <div class="menu-list">
-    <div class="menu-item" onclick="showScreen('home');toggleMenu()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      <div class="menu-item-text">Início</div>
-    </div>
-    <div class="menu-item" onclick="showScreen('cart');toggleMenu()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-      <div class="menu-item-text">Loja</div>
-    </div>
-    <div class="menu-item admin" onclick="checkAdmin();toggleMenu()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-      <div class="menu-item-text">Adm</div>
-    </div>
-    <div class="menu-item" onclick="alert('Suporte: WhatsApp (98) 98485-3563');toggleMenu()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      <div class="menu-item-text">Suporte</div>
-    </div>
-  </div>
-</div>
-
-<!-- LOGIN -->
-<div class="screen active" id="screen-login">
-  <div class="center">
-    <div class="card">
-      <h2>LOGIN - E-MAIL</h2>
-      <div class="logo">Prime Store VZ</div>
-      <div class="subtitle">Entre na sua conta</div>
-      <div class="alert error" id="loginError"></div>
-      <div class="input-group">
-        <label>E-mail</label>
-        <div class="input-box"><input type="email" id="loginEmail" placeholder="seuemail@gmail.com" value="vittoriahvahz@gmail.com"></div>
-      </div>
-      <div class="input-group">
-        <label>Senha</label>
-        <div class="input-box">
-          <input type="password" id="loginPassword" placeholder="••••••••" value="Lorrannyh.102225">
-          <span class="toggle" onclick="togglePass('loginPassword', this)">👁️</span>
-        </div>
-      <div class="row">
-        <label><input type="checkbox" id="remember"> Lembrar-me</label>
-        <a onclick="showScreen('forgot')">Esqueceu a senha?</a>
-      </div>
-      <button class="btn" id="btnLogin">ENTRAR</button>
-      <div class="footer-link">Não tem uma conta? <a onclick="showScreen('register')">Cadastre-se</a></div>
-    </div>
-  </div>
-</div>
-
-<!-- CADASTRO -->
-<div class="screen" id="screen-register">
-  <div class="center">
-    <div class="card">
-      <h2>CADASTRO</h2>
-           <div class="logo">Prime Store VZ</div>
-      <div class="subtitle">Crie sua conta</div>
-      <div class="alert error" id="registerError"></div>
-      <div class="alert success" id="registerSuccess"></div>
-      <div class="input-group">
-        <label>Nome completo</label>
-        <div class="input-box"><input type="text" id="regName" placeholder="João da Silva"></div>
-      </div>
-      <div class="input-group">
-        <label>E-mail</label>
-        <div class="input-box"><input type="email" id="regEmail" placeholder="joao@email.com"></div>
-      </div>
-      <div class="input-group">
-        <label>Telefone</label>
-        <div class="input-box"><input type="tel" id="regPhone" placeholder="(00) 9 9999-9999"></div>
-      </div>
-      <div class="input-group">
-        <label>Senha</label>
-        <div class="input-box">
-          <input type="password" id="regPassword" placeholder="••••••••">
-          <span class="toggle" onclick="togglePass('regPassword', this)">👁️</span>
-        </div>
-      </div>
-      <div class="checkbox-row">
-        <input type="checkbox" id="terms">
-        <label for="terms">Li e aceito os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a></label>
-      </div>
-      <button class="btn" id="btnRegister">CADASTRAR</button>
-      <div class="footer-link">Já tem uma conta? <a onclick="showScreen('login')">Entrar</a></div>
-    </div>
-  </div>
-</div>
-
-<!-- ESQUECEU SENHA -->
-<div class="screen" id="screen-forgot">
-  <div class="center">
-    <div class="card">
-      <h2>ESQUECEU A SENHA</h2>
-      <div class="logo">Prime Store VZ</div>
-      <div class="subtitle">Recuperar senha</div>
-      <p class="text-info">Informe seu e-mail<br>para receber o código de recuperação.</p>
-      <div class="alert error" id="forgotError"></div>
-      <div class="alert success" id="forgotSuccess"></div>
-      <div class="input-group">
-        <label>E-mail</label>
-        <div class="input-box"><input type="text" id="forgotEmail" placeholder="seuemail@gmail.com"></div>
-      </div>
-      <button class="btn" id="btnForgot">ENVIAR CÓDIGO</button>
-      <div class="footer-link"><a onclick="showScreen('login')">Voltar para o login</a></div>
-    </div>
-  </div>
-</div>
-
-<!-- HOME CLIENTE -->
-<div class="screen" id="screen-home">
-  <header class="header">
-    <div class="header-left">
-      <svg onclick="toggleMenu()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </div>
-    <div class="header-title">Prime <span>Store VZ</span></div>
-    <div class="header-icons">
-      <div style="position:relative" onclick="showScreen('cart')">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-        <div class="cart-badge" id="cartBadge" style="display:none">0</div>
-      </div>
-      <svg class="icon purple" id="profileBtn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <svg class="icon purple" id="profileBtn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     </div>
   </header>
   <div class="search">
@@ -421,37 +38,26 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
-<!-- SUBCATEGORIAS -->
 <div class="screen" id="screen-subcat">
   <header class="header">
     <div class="back-btn" onclick="showScreen('home')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Voltar</div>
     <div class="header-title" id="subcatTitle">Categoria</div>
     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35"/></svg>
   </header>
-  <div class="title-glow">
-    <div class="dot-left"></div>
-    SUBCATEGORIAS
-    <div class="dot-right"></div>
-  </div>
+  <div class="title-glow">SUBCATEGORIAS</div>
   <div class="card-grid" id="subcatGrid"></div>
 </div>
 
-<!-- PRODUTOS -->
 <div class="screen" id="screen-products">
   <header class="header">
     <div class="back-btn" onclick="showScreen('subcat')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Voltar</div>
     <div class="header-title" id="productTitle">Produtos</div>
     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
   </header>
-  <div class="title-glow">
-    <div class="dot-left"></div>
-    PRODUTOS
-    <div class="dot-right"></div>
-  </div>
+  <div class="title-glow">PRODUTOS</div>
   <div class="card-grid" id="productGrid"></div>
 </div>
 
-<!-- DETALHE PRODUTO -->
 <div class="screen" id="screen-detail">
   <div class="detail-header">
     <svg class="icon" onclick="showScreen('products')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
@@ -487,7 +93,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
-<!-- CARRINHO -->
 <div class="screen" id="screen-cart">
   <div class="cart-header">
     <svg class="icon" onclick="showScreen('home')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
@@ -519,7 +124,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
-<!-- PAGAMENTO -->
 <div class="screen" id="screen-payment">
   <div class="pay-header">
     <svg class="icon" onclick="showScreen('cart')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
@@ -530,7 +134,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
       <div class="pay-method-title">MÉTODO DE PAGAMENTO</div>
       <div class="pay-option">
         <div class="pay-option-left">
-          <svg class="pay-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          <svg class="pay-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
           <div class="pay-option-text">PIX</div>
         </div>
         <div class="pay-radio"></div>
@@ -557,13 +161,11 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <span id="payTotal">R$ 0,00</span>
       </div>
     </div>
-  </div>
   <div class="buy-btn-fixed">
     <button class="buy-btn" onclick="pagarPix()">JÁ PAGUEI</button>
   </div>
 </div>
 
-<!-- COMPROVANTE -->
 <div class="screen" id="screen-receipt">
   <div class="receipt-header">
     <svg class="receipt-close" onclick="showScreen('home')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -585,7 +187,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
   <div class="receipt-actions">
     <button class="receipt-btn receipt-btn-primary" onclick="showScreen('orders')">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 22"/></svg>
       VER MEUS PEDIDOS
     </button>
     <button class="receipt-btn receipt-btn-secondary" onclick="enviarComprovante()">
@@ -595,7 +197,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
-<!-- MEUS PEDIDOS -->
 <div class="screen" id="screen-orders">
   <div class="orders-header">
     <svg class="icon" onclick="showScreen('home')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
@@ -623,7 +224,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
-<!-- PERFIL -->
 <div class="screen" id="screen-profile">
   <div class="orders-header">
     <svg class="icon" onclick="showScreen('home')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
@@ -649,7 +249,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
-<!-- ADMIN DASHBOARD -->
 <div class="screen" id="screen-admin">
   <div class="admin-header">
     <div>
@@ -701,7 +300,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
     <div class="admin-menu-item" onclick="showScreen('admin-produtos')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
       <div class="admin-menu-text">Produtos</div>
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
@@ -713,7 +312,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
-<!-- ADMIN PEDIDOS -->
 <div class="screen" id="screen-admin-pedidos">
   <div class="admin-header">
     <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
@@ -731,7 +329,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
-<!-- ADMIN CLIENTES -->
 <div class="screen" id="screen-admin-clientes">
   <div class="admin-header">
     <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
@@ -749,7 +346,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
-<!-- ADMIN PRODUTOS -->
 <div class="screen" id="screen-admin-produtos">
   <div class="admin-header">
     <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
@@ -767,7 +363,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
-<!-- ADMIN CUPONS -->
 <div class="screen" id="screen-admin-cupons">
   <div class="admin-header">
     <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
@@ -777,7 +372,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   <div style="padding:20px">
     <table class="admin-table">
       <thead><tr><th>Código</th><th>Desconto</th><th>Usos</th><th>Status</th><th>Ação</th></tr></thead>
-           <tbody id="adminCuponsTable">
+      <tbody id="adminCuponsTable">
         <tr><td>PRIME10</td><td>10%</td><td>0/100</td><td><div class="admin-switch active" onclick="toggleSwitch(this)"></div></td><td><button class="admin-btn admin-btn-sm admin-btn-red">Excluir</button></td></tr>
         <tr><td>WELCOME20</td><td>R$ 20</td><td>5/50</td><td><div class="admin-switch active" onclick="toggleSwitch(this)"></div></td><td><button class="admin-btn admin-btn-sm admin-btn-red">Excluir</button></td></tr>
       </tbody>
@@ -785,7 +380,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
-<!-- ADMIN ADD CUPOM -->
 <div class="screen" id="screen-admin-cupom-add">
   <div class="admin-header">
     <svg class="icon" onclick="showScreen('admin-cupons')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
@@ -872,7 +466,7 @@ function togglePass(id, el) {
 function toggleMenu(){
   const menu = document.getElementById('sideMenu');
   const overlay = document.getElementById('menuOverlay');
-  menu.classList.toggle('active');
+    menu.classList.toggle('active');
   overlay.classList.toggle('active');
 }
 
@@ -954,7 +548,7 @@ const subcategorias = {
     {id:'spotify',img:'https://i.imgur.com/4S4S4S4.png',title:'SPOTIFY',desc:'MÚSICAS E PODCASTS'}
   ],
   gift: [
-    {id:'googleplay',img:'https://cdn-icons-png.flaticon.com/512/300221.png',title:'GOOGLE PLAY',desc:'CRÉDITOS'},
+    {id:'googleplay',img:'https://cdn-icons-png.flaticon.com/512/300/300221.png',title:'GOOGLE PLAY',desc:'CRÉDITOS'},
     {id:'steam',img:'https://cdn-icons-png.flaticon.com/512/588/588249.png',title:'STEAM',desc:'CRÉDITOS'}
   ],
   social: [
@@ -1303,6 +897,8 @@ document.getElementById('regPhone').addEventListener('input', (e) => {
   else if(v.length >= 3) v = v.replace(/(\d{2})(\d{0,5})/,'($1) $2');
   e.target.value = v;
 });
+
+console.log('Prime Store VZ carregado!');
 </script>
 </body>
-<html>
+</html>
