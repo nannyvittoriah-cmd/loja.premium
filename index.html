@@ -1,427 +1,194 @@
-        <svg class="icon purple" id="profileBtn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    </div>
-  </header>
-  <div class="search">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35"/></svg>
-    <input type="text" placeholder="Buscar produtos..." id="searchInput">
-  </div>
-  <div class="banner"></div>
-  <div class="section-header">
-    <span>Categorias</span>
-    <a>Ver todas <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
-  </div>
-  <div class="grid">
-    <div class="card-cat" onclick="showSubcat('streaming')">
-      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/5977/5977590.png"></div>
-      <span>Streaming</span>
-    </div>
-    <div class="card-cat" onclick="showSubcat('gift')">
-      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/300/300221.png"></div>
-      <span>Gift Cards</span>
-    </div>
-    <div class="card-cat" onclick="showSubcat('social')">
-      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/174/174855.png"></div>
-      <span>Redes Sociais</span>
-    </div>
-    <div class="card-cat" onclick="showSubcat('games')">
-      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/686/686589.png"></div>
-      <span>Games</span>
-    </div>
-    <div class="card-cat" onclick="showSubcat('apps')">
-      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968705.png"></div>
-      <span>Apps Premium</span>
-    </div>
-    <div class="card-cat outros" onclick="showSubcat('outros')">
-      <div class="card-cat-icon">+</div>
-      <span>Outros</span>
-    </div>
-  </div>
-</div>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prime Store VZ - Login</title>
+<style>
+:root{--bg:#0a0a0f;--card:#111117;--input:#1a1a23;--border:#2d2d3a;--purple:#8b5cf6;--purple-glow:rgba(139,92,246,0.4);--text:#fff;--text-dim:#8b8b9e}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+body{background:var(--bg);color:var(--text);min-height:100vh}
+.screen{display:none;width:100%;max-width:420px;margin:0 auto;min-height:100vh}
+.screen.active{display:block}
+.center{display:flex;align-items:center;justify-content:center;padding:20px;min-height:100vh}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:36px 28px;
+  width:100%;
+  max-width:360px;
+  box-shadow:0 0 40px var(--purple-glow), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+h2{
+  font-size:11px;
+  font-weight:700;
+  text-align:center;
+  margin-bottom:16px;
+  color:var(--purple);
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+.logo{
+  font-size:24px;
+  font-weight:800;
+  text-align:center;
+  margin-bottom:6px;
+  background:linear-gradient(135deg,#fff 0%,#8b5cf6 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.subtitle{font-size:13px;color:var(--text-dim);text-align:center;margin-bottom:32px}
+.input-group{margin-bottom:18px}
+.input-group label{display:block;font-size:12px;color:var(--text-dim);margin-bottom:8px;font-weight:500}
+.input-box{
+  width:100%;
+  height:52px;
+  background:var(--input);
+  border:1px solid var(--border);
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  padding:0 18px;
+  transition:all 0.3s;
+}
+.input-box:focus-within{
+  border-color:var(--purple);
+  box-shadow:0 0 0 3px var(--purple-glow);
+}
+.input-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px}
+.input-box input::placeholder{color:#4a4a5e}
+.toggle{cursor:pointer;color:#6b7280;font-size:18px;user-select:none}
+.row{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;font-size:12px}
+.row label{display:flex;align-items:center;gap:8px;color:var(--text-dim);cursor:pointer}
+.row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--purple)}
+.row a{color:var(--purple);text-decoration:none;cursor:pointer;font-weight:600}
+.btn{
+  width:100%;
+  height:54px;
+  background:linear-gradient(135deg,#8b5cf6 0%,#7c3aed 100%);
+  border:none;
+  border-radius:14px;
+  color:#fff;
+  font-size:14px;
+  font-weight:800;
+  cursor:pointer;
+  letter-spacing:1px;
+  box-shadow:0 8px 24px var(--purple-glow);
+  transition:all 0.2s;
+}
+.btn:active{transform:scale(0.98);box-shadow:0 4px 12px var(--purple-glow)}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
+.footer-link{text-align:center;margin-top:28px;font-size:13px;color:var(--text-dim)}
+.footer-link a{color:var(--purple);text-decoration:none;font-weight:700;cursor:pointer}
+.alert{padding:14px 16px;border-radius:12px;font-size:12px;margin-bottom:18px;display:none;text-align:center;font-weight:600}
+.alert.error{background:rgba(239,68,68,0.15);border:1px solid #ef4444;color:#fca5a5}
+.alert.success{background:rgba(16,185,129,0.15);border:1px solid #10b981;color:#6ee7b7}
+.text-info{font-size:13px;color:var(--text-dim);text-align:center;margin-bottom:24px;line-height:1.6}
+.checkbox-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:24px;font-size:12px;color:var(--text-dim)}
+.checkbox-row input{margin-top:2px;accent-color:var(--purple)}
+.checkbox-row a{color:var(--purple);text-decoration:none;font-weight:600}
+</style>
+</head>
+<body>
 
-<div class="screen" id="screen-subcat">
-  <header class="header">
-    <div class="back-btn" onclick="showScreen('home')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Voltar</div>
-    <div class="header-title" id="subcatTitle">Categoria</div>
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35"/></svg>
-  </header>
-  <div class="title-glow">SUBCATEGORIAS</div>
-  <div class="card-grid" id="subcatGrid"></div>
-</div>
-
-<div class="screen" id="screen-products">
-  <header class="header">
-    <div class="back-btn" onclick="showScreen('subcat')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Voltar</div>
-    <div class="header-title" id="productTitle">Produtos</div>
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-  </header>
-  <div class="title-glow">PRODUTOS</div>
-  <div class="card-grid" id="productGrid"></div>
-</div>
-
-<div class="screen" id="screen-detail">
-  <div class="detail-header">
-    <svg class="icon" onclick="showScreen('products')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    <h1>DETALHES DO PRODUTO</h1>
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-  </div>
-  <div class="detail-content">
-    <div class="detail-image" id="detailImage"></div>
-    <div class="detail-title" id="detailTitle"></div>
-    <div class="detail-subtitle" id="detailSubtitle"></div>
-    <div class="detail-price-row">
-      <div class="detail-price" id="detailPrice"></div>
-      <div class="detail-badge">Em estoque</div>
-    </div>
-    <div class="detail-section">
-      <div class="detail-section-title">DESCRIÇÃO</div>
-      <div class="detail-desc" id="detailDesc"></div>
-    </div>
-    <div class="detail-section">
-      <div class="detail-section-title">INFORMAÇÕES</div>
-      <div class="detail-info">
-        <div class="detail-info-row"><span>Entrega:</span><span>Automática</span></div>
-        <div class="detail-info-row"><span>Prazo:</span><span>Imediato</span></div>
-        <div class="detail-info-row"><span>Plataforma:</span><span id="detailPlatform"></span></div>
+<div class="screen active" id="screen-login">
+  <div class="center">
+    <div class="card">
+      <h2>LOGIN - E-MAIL</h2>
+      <div class="logo">Prime Store VZ</div>
+      <div class="subtitle">Entre na sua conta</div>
+      <div class="alert error" id="loginError"></div>
+      <div class="input-group">
+        <label>E-mail</label>
+        <div class="input-box"><input type="email" id="loginEmail" placeholder="seuemail@gmail.com"></div>
       </div>
-    </div>
-  </div>
-  <div class="buy-btn-fixed">
-    <button class="buy-btn" onclick="addToCart()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-      COMPRAR AGORA
-    </button>
-  </div>
-</div>
-
-<div class="screen" id="screen-cart">
-  <div class="cart-header">
-    <svg class="icon" onclick="showScreen('home')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    <div class="cart-title">MEU CARRINHO</div>
-  </div>
-  <div class="cart-content">
-    <div id="cartItems"></div>
-    <div class="coupon-box">
-      <input type="text" class="coupon-input" id="couponInput" placeholder="Cupom de desconto">
-      <button class="coupon-btn" onclick="applyCoupon()">Aplicar</button>
-    </div>
-    <div class="cart-summary">
-      <div class="summary-row">
-        <span>Subtotal</span>
-        <span id="subtotal">R$ 0,00</span>
-      </div>
-      <div class="summary-row discount">
-        <span>Desconto</span>
-        <span id="discount">- R$ 0,00</span>
-      </div>
-      <div class="summary-total">
-        <span>Total</span>
-        <span id="total">R$ 0,00</span>
-      </div>
-    </div>
-  </div>
-  <div class="buy-btn-fixed">
-    <button class="buy-btn" onclick="finalizarCompra()">FINALIZAR COMPRA</button>
-  </div>
-</div>
-
-<div class="screen" id="screen-payment">
-  <div class="pay-header">
-    <svg class="icon" onclick="showScreen('cart')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    <div class="pay-title">PAGAMENTO</div>
-  </div>
-  <div class="pay-content">
-    <div class="pay-method">
-      <div class="pay-method-title">MÉTODO DE PAGAMENTO</div>
-      <div class="pay-option">
-        <div class="pay-option-left">
-          <svg class="pay-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-          <div class="pay-option-text">PIX</div>
+      <div class="input-group">
+        <label>Senha</label>
+        <div class="input-box">
+          <input type="password" id="loginPassword" placeholder="••••••••">
+          <span class="toggle" onclick="togglePass('loginPassword', this)">👁️</span>
         </div>
-        <div class="pay-radio"></div>
       </div>
-    </div>
-    <div class="pix-box">
-      <div class="pix-box-title">PAGAR COM PIX</div>
-      <div class="pix-qrcode">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=98984853563" alt="QR Code PIX">
+      <div class="row">
+        <label><input type="checkbox" id="remember"> Lembrar-me</label>
+        <a onclick="showScreen('forgot')">Esqueceu a senha?</a>
       </div>
-      <div class="pix-desc">Escaneie o QR Code abaixo para realizar o pagamento</div>
-      <div class="pix-name">Lorrane Vitória Alves Vaz</div>
-      <div class="pix-divider">OU COPIE A CHAVE PIX</div>
-      <div class="pix-copy-box">
-        <div class="pix-code" id="pixCode">(98) 98485-3563</div>
-        <button class="copy-btn" onclick="copyPix()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        </button>
-      </div>
-    </div>
-    <div class="total-box">
-      <div class="total-row">
-        <span>Total</span>
-        <span id="payTotal">R$ 0,00</span>
-      </div>
-    </div>
-  <div class="buy-btn-fixed">
-    <button class="buy-btn" onclick="pagarPix()">JÁ PAGUEI</button>
-  </div>
-</div>
-
-<div class="screen" id="screen-receipt">
-  <div class="receipt-header">
-    <svg class="receipt-close" onclick="showScreen('home')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-  </div>
-  <div class="receipt-success-icon">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg>
-  </div>
-  <div class="receipt-title">Pedido realizado!</div>
-  <div class="receipt-id" id="receiptId">#PSVZ-202405180001</div>
-  <div class="receipt-date" id="receiptDate">18/05/2024 às 15:30</div>
-  <div class="receipt-status">Pagamento aprovado</div>
-  <div class="receipt-box">
-    <div class="receipt-section-title">ITENS DO PEDIDO</div>
-    <div id="receiptItems"></div>
-    <div class="receipt-total">
-      <div class="receipt-total-label">Total pago</div>
-      <div class="receipt-total-value" id="receiptTotal">R$ 0,00</div>
-    </div>
-  </div>
-  <div class="receipt-actions">
-    <button class="receipt-btn receipt-btn-primary" onclick="showScreen('orders')">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 22"/></svg>
-      VER MEUS PEDIDOS
-    </button>
-    <button class="receipt-btn receipt-btn-secondary" onclick="enviarComprovante()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      ENVIAR COMPROVANTE
-    </button>
-  </div>
-</div>
-
-<div class="screen" id="screen-orders">
-  <div class="orders-header">
-    <svg class="icon" onclick="showScreen('home')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    <div class="orders-title">MEUS PEDIDOS</div>
-    <div style="width:24px"></div>
-  </div>
-  <div class="orders-tabs">
-    <div class="order-tab active" onclick="filterOrders('todos')">Todos</div>
-    <div class="order-tab" onclick="filterOrders('pendentes')">Pendentes</div>
-    <div class="order-tab" onclick="filterOrders('concluidos')">Concluídos</div>
-    <div class="order-tab" onclick="filterOrders('cancelados')">Cancelados</div>
-  </div>
-  <div class="orders-content" id="ordersList">
-    <div class="order-card">
-      <div class="order-icon"><img src="https://i.imgur.com/0Z8F8qk.png"></div>
-      <div class="order-info">
-        <div class="order-id">#PSVZ-202405180001</div>
-        <div class="order-date">18/05/2024 às 15:30</div>
-      </div>
-      <div style="text-align:right">
-        <div class="order-price">R$ 20,80</div>
-        <div class="order-status concluido" style="margin-top:6px">Concluído</div>
-      </div>
+      <button class="btn" id="btnLogin">ENTRAR</button>
+      <div class="footer-link">Não tem uma conta? <a onclick="showScreen('register')">Cadastre-se</a></div>
     </div>
   </div>
 </div>
 
-<div class="screen" id="screen-profile">
-  <div class="orders-header">
-    <svg class="icon" onclick="showScreen('home')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    <div class="orders-title">PERFIL</div>
-    <div style="width:24px"></div>
-  </div>
-  <div class="profile-header">
-    <div class="profile-avatar">VZ</div>
-    <div class="profile-info">
-      <div class="profile-name" id="profileName">VZ Prime</div>
-      <div class="profile-since">Cliente desde 2024</div>
-    </div>
-  <div class="profile-menu">
-    <div class="profile-menu-item" onclick="showScreen('orders')">
-      <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-      <div class="profile-menu-text">Meus pedidos</div>
-      <svg class="profile-menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-    </div>
-    <div class="profile-menu-item" onclick="auth.signOut()">
-      <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-      <div class="profile-menu-text profile-logout">Sair da conta</div>
-    </div>
-  </div>
-</div>
-
-<div class="screen" id="screen-admin">
-  <div class="admin-header">
-    <div>
-      <div class="admin-title">Prime Store VZ</div>
-      <div style="font-size:11px;color:var(--text-dim);margin-top:2px">Painel Administrativo</div>
-    </div>
-    <svg class="icon" onclick="auth.signOut()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-  </div>
-  <div class="admin-cards">
-    <div class="admin-card">
-      <div class="admin-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
-      <div class="admin-card-info">
-        <div class="admin-card-label">Vendas hoje</div>
-        <div class="admin-card-value">R$ 1.250,00</div>
+<div class="screen" id="screen-register">
+  <div class="center">
+    <div class="card">
+      <h2>CADASTRO</h2>
+      <div class="logo">Prime Store VZ</div>
+      <div class="subtitle">Crie sua conta</div>
+      <div class="alert error" id="registerError"></div>
+      <div class="alert success" id="registerSuccess"></div>
+      <div class="input-group">
+        <label>Nome completo</label>
+        <div class="input-box"><input type="text" id="regName" placeholder="João da Silva"></div>
       </div>
-    </div>
-    <div class="admin-card">
-      <div class="admin-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/></svg></div>
-      <div class="admin-card-info">
-        <div class="admin-card-label">Pedidos hoje</div>
-        <div class="admin-card-value">38</div>
+      <div class="input-group">
+        <label>E-mail</label>
+        <div class="input-box"><input type="email" id="regEmail" placeholder="joao@email.com"></div>
       </div>
-    </div>
-    <div class="admin-card">
-      <div class="admin-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
-      <div class="admin-card-info">
-        <div class="admin-card-label">Clientes</div>
-        <div class="admin-card-value">1.245</div>
+      <div class="input-group">
+        <label>Telefone</label>
+        <div class="input-box"><input type="tel" id="regPhone" placeholder="(00) 9 9999-9999"></div>
       </div>
-    </div>
-    <div class="admin-card">
-      <div class="admin-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
-      <div class="admin-card-info">
-        <div class="admin-card-label">Produtos</div>
-        <div class="admin-card-value">342</div>
+      <div class="input-group">
+        <label>Senha</label>
+        <div class="input-box">
+          <input type="password" id="regPassword" placeholder="••••••••">
+          <span class="toggle" onclick="togglePass('regPassword', this)">👁️</span>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <div class="admin-menu">
-    <div class="admin-menu-item" onclick="showScreen('admin-pedidos')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/></svg>
-      <div class="admin-menu-text">Pedidos</div>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-    </div>
-    <div class="admin-menu-item" onclick="showScreen('admin-clientes')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-      <div class="admin-menu-text">Clientes</div>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-    </div>
-    <div class="admin-menu-item" onclick="showScreen('admin-produtos')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-      <div class="admin-menu-text">Produtos</div>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-    </div>
-    <div class="admin-menu-item" onclick="showScreen('admin-cupons')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-      <div class="admin-menu-text">Cupons</div>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      <div class="checkbox-row">
+        <input type="checkbox" id="terms">
+        <label for="terms">Li e aceito os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a></label>
+      </div>
+      <button class="btn" id="btnRegister">CADASTRAR</button>
+      <div class="footer-link">Já tem uma conta? <a onclick="showScreen('login')">Entrar</a></div>
     </div>
   </div>
 </div>
 
-<div class="screen" id="screen-admin-pedidos">
-  <div class="admin-header">
-    <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    <div class="admin-title">PEDIDOS</div>
-    <div style="width:24px"></div>
-  </div>
-  <div style="padding:20px">
-    <table class="admin-table">
-      <thead><tr><th>ID</th><th>Cliente</th><th>Valor</th><th>Status</th><th>Ação</th></tr></thead>
-      <tbody>
-        <tr><td>#001</td><td>João Silva</td><td>R$ 20,90</td><td><span style="color:#10b981">Concluído</span></td><td><button class="admin-btn admin-btn-sm">Ver</button></td></tr>
-        <tr><td>#002</td><td>Maria Costa</td><td>R$ 32,90</td><td><span style="color:#f59e0b">Pendente</span></td><td><button class="admin-btn admin-btn-sm">Ver</button></td></tr>
-      </tbody>
-    </table>
+<div class="screen" id="screen-forgot">
+  <div class="center">
+    <div class="card">
+      <h2>ESQUECEU A SENHA</h2>
+      <div class="logo">Prime Store VZ</div>
+      <div class="subtitle">Recuperar senha</div>
+      <p class="text-info">Informe seu e-mail<br>para receber o código de recuperação.</p>
+      <div class="alert error" id="forgotError"></div>
+      <div class="alert success" id="forgotSuccess"></div>
+      <div class="input-group">
+        <label>E-mail</label>
+        <div class="input-box"><input type="email" id="forgotEmail" placeholder="seuemail@gmail.com"></div>
+      </div>
+      <button class="btn" id="btnForgot">ENVIAR CÓDIGO</button>
+      <div class="footer-link"><a onclick="showScreen('login')">Voltar para o login</a></div>
+    </div>
   </div>
 </div>
 
-<div class="screen" id="screen-admin-clientes">
-  <div class="admin-header">
-    <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    <div class="admin-title">CLIENTES</div>
-    <div style="width:24px"></div>
-  </div>
-  <div style="padding:20px">
-    <table class="admin-table">
-      <thead><tr><th>Nome</th><th>E-mail</th><th>Pedidos</th><th>Ação</th></tr></thead>
-      <tbody>
-        <tr><td>João Silva</td><td>joao@email.com</td><td>5</td><td><button class="admin-btn admin-btn-sm">Ver</button></td></tr>
-        <tr><td>Maria Costa</td><td>maria@email.com</td><td>3</td><td><button class="admin-btn admin-btn-sm">Ver</button></td></tr>
-      </tbody>
-    </table>
+<div class="screen" id="screen-home">
+  <div class="center">
+    <div class="card">
+      <h2>BEM-VINDO</h2>
+      <div class="logo">Prime Store VZ</div>
+      <div class="subtitle" id="userEmail">Logado com sucesso!</div>
+      <button class="btn" onclick="auth.signOut()">SAIR</button>
+    </div>
   </div>
 </div>
 
-<div class="screen" id="screen-admin-produtos">
-  <div class="admin-header">
-    <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    <div class="admin-title">PRODUTOS</div>
-    <button class="admin-btn" onclick="alert('Em breve')">+ NOVO</button>
-  </div>
-  <div style="padding:20px">
-    <table class="admin-table">
-      <thead><tr><th>Nome</th><th>Categoria</th><th>Preço</th><th>Ação</th></tr></thead>
-      <tbody>
-        <tr><td>Netflix 1 Tela</td><td>Streaming</td><td>R$ 20,90</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
-        <tr><td>Spotify Premium</td><td>Streaming</td><td>R$ 12,90</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<div class="screen" id="screen-admin-cupons">
-  <div class="admin-header">
-    <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    <div class="admin-title">CUPONS</div>
-    <button class="admin-btn" onclick="showScreen('admin-cupom-add')">+ NOVO</button>
-  </div>
-  <div style="padding:20px">
-    <table class="admin-table">
-      <thead><tr><th>Código</th><th>Desconto</th><th>Usos</th><th>Status</th><th>Ação</th></tr></thead>
-      <tbody id="adminCuponsTable">
-        <tr><td>PRIME10</td><td>10%</td><td>0/100</td><td><div class="admin-switch active" onclick="toggleSwitch(this)"></div></td><td><button class="admin-btn admin-btn-sm admin-btn-red">Excluir</button></td></tr>
-        <tr><td>WELCOME20</td><td>R$ 20</td><td>5/50</td><td><div class="admin-switch active" onclick="toggleSwitch(this)"></div></td><td><button class="admin-btn admin-btn-sm admin-btn-red">Excluir</button></td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<div class="screen" id="screen-admin-cupom-add">
-  <div class="admin-header">
-    <svg class="icon" onclick="showScreen('admin-cupons')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-    <div class="admin-title">NOVO CUPOM</div>
-    <div style="width:24px"></div>
-  </div>
-  <div style="padding:20px">
-    <div class="admin-form-group">
-      <label>Código do cupom</label>
-      <input type="text" class="admin-input" id="cupomCodigo" placeholder="EX: DESCONTO10">
-    </div>
-    <div class="admin-form-group">
-      <label>Tipo de desconto</label>
-      <select class="admin-input" id="cupomTipo">
-        <option value="porcentagem">Porcentagem %</option>
-        <option value="fixo">Valor fixo R$</option>
-      </select>
-    </div>
-    <div class="admin-form-group">
-      <label>Valor</label>
-      <input type="number" class="admin-input" id="cupomValor" placeholder="10">
-    </div>
-    <div class="admin-form-group">
-      <label>Limite de usos por cliente</label>
-      <input type="number" class="admin-input" id="cupomLimite" placeholder="1">
-    </div>
-    <div class="admin-form-group">
-      <label>Total de usos disponíveis</label>
-      <input type="number" class="admin-input" id="cupomTotal" placeholder="100">
-    </div>
-    <div class="admin-form-group">
-      <label style="display:flex;align-items:center;gap:10px">
-        <span>Ativo</span>
-        <div class="admin-switch active" id="cupomAtivo" onclick="toggleSwitch(this)"></div>
-      </label>
-    </div>
-    <button class="btn" onclick="salvarCupom()">SALVAR CUPOM</button>
-  </div>
-</div>
-
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -430,439 +197,29 @@ const firebaseConfig = {
   projectId: "premium-store-aa58b",
   storageBucket: "premium-store-aa58b.firebasestorage.app",
   messagingSenderId: "462239500057",
-  appId: "1:462239500057:web:f1b7cea162ed308a866788"
+  appId: "1:462239500057:web:f1b7cea162ed308a866788",
+  measurementId: "G-CN88J28WRX"
 };
+
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
-
 const ADMIN_EMAIL = 'vittoriahvahz@gmail.com';
-let cart = [];
-let currentCoupon = null;
-window.currentProduct = null;
 
-function showScreen(screen) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + screen).classList.add('active');
-  window.scrollTo(0,0);
+function showScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(`screen-${name}`).classList.add('active');
   hideAllAlerts();
-  if(screen === 'cart') renderCart();
 }
 
-function checkAdmin(){
-  const user = auth.currentUser;
-  if(user && user.email === ADMIN_EMAIL){
-    showScreen('admin');
-  }else{
-    alert('Acesso negado. Apenas administradores.');
-  }
-}
-
-function togglePass(id, el) {
+function togglePass(id, el){
   const input = document.getElementById(id);
-  input.type = input.type === 'password'? 'text' : 'password';
-  el.textContent = input.type === 'password'? '👁️' : '🙈';
-}
-
-function toggleMenu(){
-  const menu = document.getElementById('sideMenu');
-  const overlay = document.getElementById('menuOverlay');
-    menu.classList.toggle('active');
-  overlay.classList.toggle('active');
-}
-
-auth.onAuthStateChanged((user) => {
-  if(user){
-    console.log('Logado:', user.email);
-    if(user.email === ADMIN_EMAIL){
-      console.log('É ADMIN - Mostrando painel');
-      showScreen('admin');
-    }else{
-      console.log('Cliente normal');
-      showScreen('home');
-    }
-    if(user.displayName){
-      document.getElementById('profileName').textContent = user.displayName;
-    }
+  if(input.type === 'password'){
+    input.type = 'text';
+    el.textContent = '🙈';
   }else{
-    console.log('Não logado');
-    showScreen('login');
+    input.type = 'password';
+    el.textContent = '👁️';
   }
-});
-
-document.getElementById('btnLogin').onclick = async () => {
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  const remember = document.getElementById('remember').checked;
-  const btn = document.getElementById('btnLogin');
-  if(!email ||!password) return showAlert('loginError', 'Preencha e-mail e senha');
-  btn.disabled = true;
-  try{
-    await auth.setPersistence(remember? firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION);
-    await auth.signInWithEmailAndPassword(email, password);
-  }catch(e){
-    console.error(e);
-    showAlert('loginError', traduzErro(e.code));
-  }
-  finally{btn.disabled = false;}
-}
-
-document.getElementById('btnRegister').onclick = async () => {
-  const name = document.getElementById('regName').value.trim();
-  const email = document.getElementById('regEmail').value.trim();
-  const password = document.getElementById('regPassword').value;
-  const terms = document.getElementById('terms').checked;
-  const btn = document.getElementById('btnRegister');
-  if(!name ||!email ||!password) return showAlert('registerError', 'Preencha todos os campos');
-  if(!terms) return showAlert('registerError', 'Aceite os Termos de Uso');
-  if(password.length < 6) return showAlert('registerError', 'Senha deve ter no mínimo 6 caracteres');
-  btn.disabled = true;
-  try{
-    const userCred = await auth.createUserWithEmailAndPassword(email, password);
-    await userCred.user.updateProfile({displayName: name});
-    showAlert('registerSuccess', 'Conta criada com sucesso!');
-    setTimeout(() => showScreen('login'), 1500);
-  }catch(e){showAlert('registerError', traduzErro(e.code));}
-  finally{btn.disabled = false;}
-}
-
-document.getElementById('btnForgot').onclick = async () => {
-  const email = document.getElementById('forgotEmail').value.trim();
-  const btn = document.getElementById('btnForgot');
-  if(!email) return showAlert('forgotError', 'Digite seu e-mail');
-  btn.disabled = true;
-  try{
-    await auth.sendPasswordResetEmail(email);
-    showAlert('forgotSuccess', 'Link enviado para seu e-mail!');
-  }catch(e){showAlert('forgotError', 'E-mail não encontrado');}
-  finally{btn.disabled = false;}
-}
-
-document.getElementById('profileBtn').onclick = () => showScreen('profile');
-
-const subcategorias = {
-  streaming: [
-    {id:'netflix',img:'https://i.imgur.com/0Z8F8qk.png',title:'NETFLIX',desc:'FILMES E SÉRIES'},
-    {id:'hbo',img:'https://i.imgur.com/8QJ8Q.png',title:'HBO MAX',desc:'FILMES E SÉRIES'},
-    {id:'disney',img:'https://i.imgur.com/9R9R9R9.png',title:'DISNEY+',desc:'FILMES E SÉRIES'},
-    {id:'prime',img:'https://i.imgur.com/7P7P7P7.png',title:'AMAZON PRIME',desc:'FILMES E SÉRIES'},
-    {id:'spotify',img:'https://i.imgur.com/4S4S4S4.png',title:'SPOTIFY',desc:'MÚSICAS E PODCASTS'}
-  ],
-  gift: [
-    {id:'googleplay',img:'https://cdn-icons-png.flaticon.com/512/300/300221.png',title:'GOOGLE PLAY',desc:'CRÉDITOS'},
-    {id:'steam',img:'https://cdn-icons-png.flaticon.com/512/588/588249.png',title:'STEAM',desc:'CRÉDITOS'}
-  ],
-  social: [
-    {id:'instagram',img:'https://cdn-icons-png.flaticon.com/512/174/174855.png',title:'INSTAGRAM',desc:'SEGUIDORES E LIKES'},
-    {id:'tiktok',img:'https://cdn-icons-png.flaticon.com/512/3046/3046121.png',title:'TIKTOK',desc:'SEGUIDORES E VIEWS'}
-  ],
-  games: [
-    {id:'freefire',img:'https://cdn-icons-png.flaticon.com/512/686/686589.png',title:'FREE FIRE',desc:'DIAMANTES'},
-    {id:'roblox',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'ROBLOX',desc:'ROBUX'}
-  ],
-  apps: [
-    {id:'canva',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'CANVA PRO',desc:'DESIGN'},
-    {id:'chatgpt',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'CHATGPT PLUS',desc:'IA PREMIUM'}
-  ],
-  outros: [
-    {id:'iptv',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'IPTV',desc:'CANAIS'},
-    {id:'vpn',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'VPN PREMIUM',desc:'NAVEGAÇÃO SEGURA'}
-  ]
-};
-
-const produtos = {
-  netflix: [
-    {id:'netflix-1',img:'https://i.imgur.com/0Z8F8qk.png', title:'NETFLIX 1 TELA', desc:'Conta individual 30 dias', price:'R$ 18,90', platform:'Netflix'},
-    {id:'netflix-4k',img:'https://i.imgur.com/0Z8F8qk.png', title:'NETFLIX 4K', desc:'4 telas + Ultra HD 30 dias', price:'R$ 32,90', platform:'Netflix'},
-    {id:'netflix-2',img:'https://i.imgur.com/0Z8F8qk.png', title:'NETFLIX 2 TELAS', desc:'2 telas simultâneas 30 dias', price:'R$ 24,90', platform:'Netflix'}
-  ],
-  hbo: [{id:'hbo-1',img:'https://i.imgur.com/8QJ8Q.png', title:'HBO MAX', desc:'Acesso completo 30 dias', price:'R$ 19,90', platform:'HBO Max'}],
-  disney: [{id:'disney-1',img:'https://i.imgur.com/9R9R9R9.png', title:'DISNEY+', desc:'Filmes e séries Disney 30 dias', price:'R$ 16,90', platform:'Disney+'}],
-  prime: [{id:'prime-1',img:'https://i.imgur.com/7P7P7P7.png', title:'PRIME VIDEO', desc:'Amazon Prime 30 dias', price:'R$ 14,90', platform:'Prime Video'}],
-  spotify: [{id:'spotify-1',img:'https://i.imgur.com/4S4S4S4.png', title:'SPOTIFY PREMIUM', desc:'Música sem anúncios 30 dias', price:'R$ 12,90', platform:'Spotify'}],
-  googleplay: [{id:'google-50',img:'https://cdn-icons-png.flaticon.com/512/300/300221.png', title:'GOOGLE PLAY R$50', desc:'Créditos para apps e jogos', price:'R$ 52,90', platform:'Google Play'}],
-  steam: [{id:'steam-50',img:'https://cdn-icons-png.flaticon.com/512/588/588249.png', title:'STEAM R$50', desc:'Carteira Steam', price:'R$ 52,90', platform:'Steam'}],
-  instagram: [{id:'insta-1k',img:'https://cdn-icons-png.flaticon.com/512/174/174855.png', title:'1K SEGUIDORES', desc:'Entrega em até 24h', price:'R$ 14,90', platform:'Instagram'}],
-  tiktok: [{id:'tiktok-1k',img:'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', title:'1K SEGUIDORES', desc:'Entrega em até 24h', price:'R$ 12,90', platform:'TikTok'}],
-  freefire: [
-    {id:'ff-520',img:'https://i.imgur.com/0qH2XrG.png', title:'520 DIAMANTES', desc:'Diamantes para Free Fire', price:'R$ 20,90', platform:'Free Fire'},
-    {id:'ff-1080',img:'https://i.imgur.com/0qH2XrG.png', title:'1080 DIAMANTES', desc:'Pacote com bônus', price:'R$ 39,90', platform:'Free Fire'}
-  ],
-  roblox: [{id:'rbx-800',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'800 ROBUX', desc:'Entrega via Game Pass', price:'R$ 34,90', platform:'Roblox'}],
-  canva: [{id:'canva-1',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'CANVA PRO', desc:'Templates premium 30 dias', price:'R$ 24,90', platform:'Canva'}],
-  chatgpt: [{id:'gpt-1',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'CHATGPT PLUS', desc:'GPT-4 liberado 30 dias', price:'R$ 89,90', platform:'ChatGPT'}],
-  iptv: [{id:'iptv-1',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'IPTV COMPLETO', desc:'Canais, filmes e séries 30 dias', price:'R$ 29,90', platform:'IPTV'}],
-  vpn: [{id:'vpn-1',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'NORDVPN', desc:'Navegação segura 30 dias', price:'R$ 19,90', platform:'NordVPN'}]
-};
-
-function showSubcat(cat){
-  const nomes = {streaming:'Streaming',gift:'Gift Cards',social:'Redes Sociais',games:'Games',apps:'Apps Premium',outros:'Outros'};
-  document.getElementById('subcatTitle').textContent = nomes[cat];
-  const grid = document.getElementById('subcatGrid');
-  const lista = subcategorias[cat] || [];
-  grid.innerHTML = '';
-  lista.forEach(s => {
-    grid.innerHTML += `<div class="glow-card" onclick="showProducts('${s.id}')"><div class="glow-card-img"><img src="${s.img}"></div><div class="glow-card-title">${s.title}</div><div class="glow-card-desc">${s.desc}</div></div>`;
-  });
-  showScreen('subcat');
-}
-
-function showProducts(service) {
-  const list = produtos[service] || [];
-  const grid = document.getElementById('productGrid');
-  const title = document.getElementById('productTitle');
-  const allSubs = [...subcategorias.streaming,...subcategorias.gift,...subcategorias.social,...subcategorias.games,...subcategorias.apps,...subcategorias.outros];
-  const serviceName = allSubs.find(s=>s.id===service);
-  title.textContent = serviceName? serviceName.title : service.toUpperCase();
-  grid.innerHTML = '';
-  if(list.length === 0){
-    grid.innerHTML = '<div class="glow-card"><div class="glow-card-title">EM BREVE</div><div class="glow-card-desc">PRODUTOS CHEGANDO</div></div>';
-  }else{
-    list.forEach(p => {
-      grid.innerHTML += `
-        <div class="glow-card">
-          <div onclick="showDetail('${service}','${p.id}')">
-            <div class="glow-card-img"><img src="${p.img}"></div>
-            <div class="glow-card-title">${p.title}</div>
-            <div class="glow-card-desc">${p.price}</div>
-          </div>
-          <button class="glow-card-btn" onclick="event.stopPropagation(); addToCartDirect('${service}','${p.id}')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-            CARRINHO
-          </button>
-        </div>`;
-    });
-  }
-  showScreen('products');
-}
-
-function showDetail(serviceId, productId){
-  const list = produtos[serviceId] || [];
-  const p = list.find(x => x.id === productId);
-  if(!p) return;
-  document.getElementById('detailImage').innerHTML = `<img src="${p.img}">`;
-  document.getElementById('detailTitle').textContent = p.title;
-  document.getElementById('detailSubtitle').textContent = p.platform;
-  document.getElementById('detailPrice').textContent = p.price;
-  document.getElementById('detailDesc').textContent = p.desc;
-  document.getElementById('detailPlatform').textContent = p.platform;
-  window.currentProduct = {...p, serviceId};
-  showScreen('detail');
-}
-
-function addToCart(){
-  if(!window.currentProduct) return;
-  const existing = cart.find(i => i.id === window.currentProduct.id);
-  if(existing){
-    existing.qty++;
-  }else{
-    cart.push({...window.currentProduct, qty: 1});
-  }
-  updateCartBadge();
-  showScreen('cart');
-  renderCart();
-}
-
-function addToCartDirect(serviceId, productId){
-  const list = produtos[serviceId] || [];
-  const p = list.find(x => x.id === productId);
-  if(!p) return;
-  const product = {...p, serviceId};
-  const existing = cart.find(i => i.id === product.id);
-  if(existing){
-    existing.qty++;
-  }else{
-    cart.push({...product, qty: 1});
-  }
-  updateCartBadge();
-  alert('Adicionado ao carrinho!');
-}
-
-function updateCartBadge(){
-  const count = cart.reduce((sum, i) => sum + i.qty, 0);
-  const badge = document.getElementById('cartBadge');
-  if(badge){
-    badge.textContent = count;
-    badge.style.display = count > 0? 'flex' : 'none';
-  }
-}
-
-function renderCart(){
-  const container = document.getElementById('cartItems');
-  if(cart.length === 0){
-    container.innerHTML = '<div style="text-align:center;padding:40px 0;color:var(--text-dim)">Carrinho vazio</div>';
-  }else{
-    container.innerHTML = '';
-    cart.forEach((item, idx) => {
-      container.innerHTML += `
-        <div class="cart-item">
-          <div class="cart-item-img"><img src="${item.img}"></div>
-          <div class="cart-item-info">
-            <div class="cart-item-title">${item.title}</div>
-            <div class="cart-item-subtitle">${item.platform}</div>
-            <div class="cart-item-price">${item.price}</div>
-          </div>
-          <div class="cart-item-controls">
-            <div class="qty-box">
-              <button class="qty-btn" onclick="changeQty(${idx}, -1)">-</button>
-              <div class="qty-num">${item.qty}</div>
-              <button class="qty-btn" onclick="changeQty(${idx}, 1)">+</button>
-            </div>
-            <button class="delete-btn" onclick="removeItem(${idx})">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-            </button>
-          </div>
-        </div>`;
-    });
-  }
-  updateTotals();
-}
-
-function changeQty(idx, delta){
-  cart[idx].qty += delta;
-  if(cart[idx].qty <= 0) cart.splice(idx, 1);
-  updateCartBadge();
-  renderCart();
-}
-
-function removeItem(idx){
-  cart.splice(idx, 1);
-  updateCartBadge();
-  renderCart();
-}
-
-function updateTotals(){
-  let subtotal = 0;
-  cart.forEach(item => {
-    const price = parseFloat(item.price.replace('R$ ','').replace(',','.'));
-    subtotal += price * item.qty;
-  });
-  let discount = 0;
-  if(currentCoupon === 'PRIME10'){
-    discount = subtotal * 0.1;
-  }
-  const total = subtotal - discount;
-  document.getElementById('subtotal').textContent = `R$ ${subtotal.toFixed(2).replace('.',',')}`;
-  document.getElementById('discount').textContent = `- R$ ${discount.toFixed(2).replace('.',',')}`;
-  document.getElementById('total').textContent = `R$ ${total.toFixed(2).replace('.',',')}`;
-  document.getElementById('payTotal').textContent = `R$ ${total.toFixed(2).replace('.',',')}`;
-}
-
-function applyCoupon(){
-  const code = document.getElementById('couponInput').value.trim().toUpperCase();
-  if(code === 'PRIME10'){
-    currentCoupon = code;
-    alert('Cupom aplicado! 10% de desconto');
-    updateTotals();
-  }else{
-    alert('Cupom inválido');
-  }
-}
-
-function finalizarCompra(){
-  if(cart.length === 0){
-    alert('Carrinho vazio');
-    return;
-  }
-  showScreen('payment');
-}
-
-function copyPix(){
-  const code = document.getElementById('pixCode').textContent;
-  navigator.clipboard.writeText(code).then(() => {
-    alert('Chave PIX copiada!');
-  });
-}
-
-function pagarPix(){
-  gerarComprovante();
-  setTimeout(() => {
-    cart = [];
-    currentCoupon = null;
-    updateCartBadge();
-  }, 2000);
-}
-
-function gerarComprovante(){
-  const agora = new Date();
-  const id = `#PSVZ-${agora.getFullYear()}${String(agora.getMonth()+1).padStart(2,'0')}${String(agora.getDate()).padStart(2,'0')}${String(Math.floor(Math.random()*9000)+1000)}`;
-  const data = `${String(agora.getDate()).padStart(2,'0')}/${String(agora.getMonth()+1).padStart(2,'0')}/${agora.getFullYear()} às ${String(agora.getHours()).padStart(2,'0')}:${String(agora.getMinutes()).padStart(2,'0')}`;
-  document.getElementById('receiptId').textContent = id;
-  document.getElementById('receiptDate').textContent = data;
-  let total = 0;
-  cart.forEach(item => {
-    const price = parseFloat(item.price.replace('R$ ','').replace(',','.'));
-    total += price * item.qty;
-  });
-  if(currentCoupon === 'PRIME10'){
-    total = total * 0.9;
-  }
-  document.getElementById('receiptTotal').textContent = `R$ ${total.toFixed(2).replace('.',',')}`;
-  const container = document.getElementById('receiptItems');
-  container.innerHTML = '';
-  cart.forEach(item => {
-    container.innerHTML += `
-      <div class="receipt-item">
-        <div class="receipt-item-icon"><img src="${item.img}"></div>
-        <div class="receipt-item-info">
-          <div class="receipt-item-name">${item.title}</div>
-          <div class="receipt-item-desc">${item.platform}</div>
-        </div>
-        <div class="receipt-item-price">${item.price}</div>
-      </div>`;
-  });
-  showScreen('receipt');
-}
-
-function enviarComprovante(){
-  let texto = '*COMPROVANTE PRIME STORE VZ*%0A%0A';
-  texto += `Pedido: ${document.getElementById('receiptId').textContent}%0A`;
-  texto += `Data: ${document.getElementById('receiptDate').textContent}%0A`;
-  texto += `Status: Pagamento aprovado ✅%0A`;
-  texto += '*Itens:*%0A';
-  cart.forEach(item => {
-    texto += `• ${item.title} - ${item.price}%0A`;
-  });
-  texto += `%0A*Total pago: ${document.getElementById('receiptTotal').textContent}*`;
-  const numeroWhats = '5598984853563';
-  window.open(`https://wa.me/${numeroWhats}?text=${texto}`, '_blank');
-}
-
-function filterOrders(tipo){
-  document.querySelectorAll('.order-tab').forEach(t=>t.classList.remove('active'));
-  event.target.classList.add('active');
-  const cards = document.querySelectorAll('.order-card');
-  cards.forEach(card => {
-    const status = card.querySelector('.order-status').textContent.toLowerCase();
-    if(tipo === 'todos'){
-      card.style.display = 'flex';
-    }else if(tipo === 'pendentes' && status === 'pendente'){
-      card.style.display = 'flex';
-    }else if(tipo === 'concluidos' && status === 'concluído'){
-      card.style.display = 'flex';
-    }else if(tipo === 'cancelados' && status === 'cancelado'){
-      card.style.display = 'flex';
-    }else{
-      card.style.display = 'none';
-    }
-  });
-}
-
-function salvarCupom(){
-  const codigo = document.getElementById('cupomCodigo').value;
-  const tipo = document.getElementById('cupomTipo').value;
-  const valor = document.getElementById('cupomValor').value;
-  const limite = document.getElementById('cupomLimite').value;
-  const total = document.getElementById('cupomTotal').value;
-  if(!codigo ||!valor){
-    alert('Preencha código e valor');
-    return;
-  }
-  alert(`Cupom ${codigo} criado!\nDesconto: ${valor}${tipo==='porcentagem'?'%':' R$'}\nLimite: ${limite}x por cliente\nTotal: ${total} usos`);
-  showScreen('admin-cupons');
-}
-
-function toggleSwitch(el){
-  el.classList.toggle('active');
 }
 
 function showAlert(id, msg){
@@ -884,10 +241,75 @@ function traduzErro(code){
     'auth/user-not-found':'Usuário não encontrado',
     'auth/wrong-password':'Senha incorreta',
     'auth/email-already-in-use':'E-mail já cadastrado',
-    'auth/weak-password':'Senha fraca (mínimo 6 caracteres)',
+    'auth/weak-password':'Senha fraca - mínimo 6 caracteres',
     'auth/too-many-requests':'Muitas tentativas. Tente mais tarde'
   };
   return erros[code] || 'Erro ao autenticar';
+}
+
+auth.onAuthStateChanged((user) => {
+  if(user){
+    document.getElementById('userEmail').textContent = user.email;
+    showScreen('home');
+    console.log('Logado:', user.email);
+  }else{
+    showScreen('login');
+  }
+});
+
+document.getElementById('btnLogin').onclick = async () => {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const remember = document.getElementById('remember').checked;
+  const btn = document.getElementById('btnLogin');
+  hideAllAlerts();
+  if(!email ||!password) return showAlert('loginError', 'Preencha e-mail e senha');
+  btn.disabled = true;
+  try{
+    await auth.setPersistence(remember? firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION);
+    await auth.signInWithEmailAndPassword(email, password);
+  }catch(e){
+    console.error(e);
+    showAlert('loginError', traduzErro(e.code));
+  }
+  finally{btn.disabled = false;}
+}
+
+document.getElementById('btnRegister').onclick = async () => {
+  const name = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const password = document.getElementById('regPassword').value;
+  const terms = document.getElementById('terms').checked;
+  const btn = document.getElementById('btnRegister');
+  hideAllAlerts();
+  if(!name ||!email ||!password) return showAlert('registerError', 'Preencha todos os campos');
+  if(!terms) return showAlert('registerError', 'Aceite os Termos de Uso');
+  if(password.length < 6) return showAlert('registerError', 'Senha deve ter no mínimo 6 caracteres');
+  btn.disabled = true;
+  try{
+    const userCred = await auth.createUserWithEmailAndPassword(email, password);
+    await userCred.user.updateProfile({displayName: name});
+    showAlert('registerSuccess', 'Conta criada com sucesso!');
+    setTimeout(() => showScreen('login'), 1500);
+  }catch(e){
+    showAlert('registerError', traduzErro(e.code));
+  }
+  finally{btn.disabled = false;}
+}
+
+document.getElementById('btnForgot').onclick = async () => {
+  const email = document.getElementById('forgotEmail').value.trim();
+  const btn = document.getElementById('btnForgot');
+  hideAllAlerts();
+  if(!email) return showAlert('forgotError', 'Digite seu e-mail');
+  btn.disabled = true;
+  try{
+    await auth.sendPasswordResetEmail(email);
+    showAlert('forgotSuccess', 'Link enviado para seu e-mail!');
+  }catch(e){
+    showAlert('forgotError', 'E-mail não encontrado');
+  }
+  finally{btn.disabled = false;}
 }
 
 document.getElementById('regPhone').addEventListener('input', (e) => {
@@ -898,7 +320,7 @@ document.getElementById('regPhone').addEventListener('input', (e) => {
   e.target.value = v;
 });
 
-console.log('Prime Store VZ carregado!');
+console.log('Login Prime Store VZ carregado!');
 </script>
 </body>
 </html>
