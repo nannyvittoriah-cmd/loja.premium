@@ -80,7 +80,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .glow-card-desc{font-size:7px;color:#a855f7;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;line-height:1;pointer-events:none}
 .back-btn{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;cursor:pointer}
 
-/* DETALHES DO PRODUTO - IGUAL A FOTO */
+/* DETALHES DO PRODUTO */
 .detail-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:var(--bg);border-bottom:1px solid var(--border)}
 .detail-header h1{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#fff}
 .detail-content{padding:0 20px 100px}
@@ -102,6 +102,38 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .buy-btn-fixed{position:fixed;bottom:0;left:0;right:0;max-width:420px;margin:0 auto;padding:16px 20px;background:var(--bg);border-top:1px solid var(--border);z-index:20}
 .buy-btn{width:100%;height:54px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);border:none;border-radius:14px;color:#fff;font-size:13px;font-weight:800;cursor:pointer;letter-spacing:1.5px;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 4px 20px rgba(124,58,237,0.5)}
 .buy-btn:active{transform:scale(0.98)}
+
+/* CARRINHO */
+.cart-header{display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid var(--border)}
+.cart-title{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#fff}
+.cart-content{padding:0 20px 100px}
+.cart-item{display:flex;gap:12px;padding:16px 0;border-bottom:1px solid var(--border);align-items:center}
+.cart-item-img{width:56px;height:56px;border-radius:12px;background:#0f0f15;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cart-item-img img{width:40px;height:40px;object-fit:contain}
+.cart-item-info{flex:1}
+.cart-item-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:2px}
+.cart-item-subtitle{font-size:11px;color:var(--text-dim);margin-bottom:8px}
+.cart-item-price{font-size:15px;font-weight:800;color:var(--purple)}
+.cart-item-controls{display:flex;align-items:center;gap:12px}
+.qty-box{display:flex;align-items:center;gap:8px;background:var(--input);border:1px solid var(--border);border-radius:8px;padding:6px 10px}
+.qty-btn{width:20px;height:20px;border:none;background:var(--purple);color:#fff;border-radius:4px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.qty-btn:active{transform:scale(0.9)}
+.qty-num{font-size:13px;font-weight:700;min-width:20px;text-align:center}
+.delete-btn{width:32px;height:32px;border:1px solid var(--border);background:transparent;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.delete-btn svg{width:16px;height:16px;stroke:#6b7280}
+.coupon-box{display:flex;gap:8px;margin:20px 0}
+.coupon-input{flex:1;height:44px;background:var(--input);border:1px solid var(--border);border-radius:10px;padding:0 14px;color:#fff;font-size:13px;outline:none}
+.coupon-input::placeholder{color:#4b5563}
+.coupon-btn{padding:0 20px;height:44px;background:var(--input);border:1px solid var(--border);border-radius:10px;color:var(--purple);font-size:12px;font-weight:700;cursor:pointer}
+.cart-summary{border-top:1px solid var(--border);padding-top:16px;margin-top:8px}
+.summary-row{display:flex;justify-content:space-between;padding:8px 0;font-size:13px}
+.summary-row span:first-child{color:var(--text-dim)}
+.summary-row span:last-child{color:#fff;font-weight:600}
+.summary-row.discount span:last-child{color:#ef4444}
+.summary-total{display:flex;justify-content:space-between;padding:16px 0 0;margin-top:8px;border-top:1px solid var(--border)}
+.summary-total span{font-size:16px;font-weight:800}
+.summary-total span:last-child{color:var(--purple);font-size:18px}
+.cart-badge{position:absolute;top:-4px;right:-4px;background:var(--purple);color:#fff;font-size:10px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center}
 </style>
 </head>
 <body>
@@ -201,9 +233,9 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
     </div>
     <div class="header-title">Prime <span>Store VZ</span></div>
     <div class="header-icons">
-      <div style="position:relative">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        <div class="notif-dot"></div>
+      <div style="position:relative" onclick="showScreen('cart')">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <div class="cart-badge" id="cartBadge" style="display:none">0</div>
       </div>
       <svg class="icon purple" id="logoutBtn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     </div>
@@ -306,10 +338,44 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
     </div>
   </div>
   <div class="buy-btn-fixed">
-    <button class="buy-btn" onclick="alert('Compra realizada!')">
+    <button class="buy-btn" onclick="addToCart()">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
       COMPRAR AGORA
     </button>
+  </div>
+</div>
+
+<!-- CARRINHO -->
+<div class="screen" id="screen-cart">
+  <div class="cart-header">
+    <svg class="icon" onclick="showScreen('home')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    <div class="cart-title">MEU CARRINHO</div>
+  </div>
+  <div class="cart-content">
+    <div id="cartItems"></div>
+    
+    <div class="coupon-box">
+      <input type="text" class="coupon-input" id="couponInput" placeholder="Cupom de desconto">
+      <button class="coupon-btn" onclick="applyCoupon()">Aplicar</button>
+    </div>
+    
+    <div class="cart-summary">
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span id="subtotal">R$ 0,00</span>
+      </div>
+      <div class="summary-row discount">
+        <span>Desconto</span>
+        <span id="discount">- R$ 0,00</span>
+      </div>
+      <div class="summary-total">
+        <span>Total</span>
+        <span id="total">R$ 0,00</span>
+      </div>
+    </div>
+  </div>
+  <div class="buy-btn-fixed">
+    <button class="buy-btn" onclick="finalizarCompra()">FINALIZAR COMPRA</button>
   </div>
 </div>
 
@@ -329,11 +395,16 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
+let cart = [];
+let currentCoupon = null;
+window.currentProduct = null;
+
 function showScreen(screen) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + screen).classList.add('active');
   window.scrollTo(0,0);
   hideAllAlerts();
+  if(screen === 'cart') renderCart();
 }
 
 function togglePass(id, el) {
@@ -372,192 +443,4 @@ document.getElementById('btnRegister').onclick = async () => {
   if(password.length < 6) return showAlert('registerError', 'Senha deve ter no mínimo 6 caracteres');
   btn.disabled = true;
   try{
-    const userCred = await auth.createUserWithEmailAndPassword(email, password);
-    await userCred.user.updateProfile({displayName: name});
-    showAlert('registerSuccess', 'Conta criada com sucesso!');
-    setTimeout(() => showScreen('login'), 1500);
-  }catch(e){showAlert('registerError', traduzErro(e.code));}
-  finally{btn.disabled = false;}
-}
-
-document.getElementById('btnForgot').onclick = async () => {
-  const email = document.getElementById('forgotEmail').value.trim();
-  const btn = document.getElementById('btnForgot');
-  if(!email) return showAlert('forgotError', 'Digite seu e-mail');
-  btn.disabled = true;
-  try{
-    await auth.sendPasswordResetEmail(email);
-    showAlert('forgotSuccess', 'Link enviado para seu e-mail!');
-  }catch(e){showAlert('forgotError', 'E-mail não encontrado');}
-  finally{btn.disabled = false;}
-}
-
-document.getElementById('logoutBtn').onclick = () => auth.signOut();
-
-const subcategorias = {
-  streaming: [
-    {id:'netflix',img:'https://i.imgur.com/0Z8F8qk.png',title:'NETFLIX',desc:'FILMES E SÉRIES'},
-    {id:'hbo',img:'https://i.imgur.com/8QJ8Q.png',title:'HBO MAX',desc:'FILMES E SÉRIES'},
-    {id:'disney',img:'https://i.imgur.com/9R9R9R9.png',title:'DISNEY+',desc:'FILMES E SÉRIES'},
-    {id:'prime',img:'https://i.imgur.com/7P7P7P7.png',title:'AMAZON PRIME',desc:'FILMES E SÉRIES'},
-    {id:'appletv',img:'https://i.imgur.com/6A6A6A6.png',title:'APPLE TV+',desc:'FILMES E SÉRIES'},
-    {id:'youtube',img:'https://i.imgur.com/5Y5Y5Y5.png',title:'YOUTUBE PREMIUM',desc:'FILMES E VÍDEOS'},
-    {id:'spotify',img:'https://i.imgur.com/4S4S4S4.png',title:'SPOTIFY',desc:'MÚSICAS E PODCASTS'},
-    {id:'deezer',img:'https://i.imgur.com/3D3D3D3.png',title:'DEEZER',desc:'MÚSICAS E PODCASTS'},
-    {id:'crunchyroll',img:'https://i.imgur.com/2C2C2C2.png',title:'CRUNCHYROLL',desc:'ANIMES'},
-    {id:'funimation',img:'https://i.imgur.com/1F1F1F1.png',title:'FUNIMATION',desc:'ANIMES'},
-    {id:'paramount',img:'https://i.imgur.com/0P0P0P0.png',title:'PARAMOUNT+',desc:'FILMES E SÉRIES'},
-    {id:'star',img:'https://i.imgur.com/9S9S9S9.png',title:'STAR+',desc:'FILMES E SÉRIES'},
-    {id:'globoplay',img:'https://i.imgur.com/8G8G8G8.png',title:'GLOBOPLAY',desc:'FILMES E SÉRIES'},
-    {id:'telecine',img:'https://i.imgur.com/7T7T7T7.png',title:'TELECINE',desc:'FILMES E SÉRIES'},
-    {id:'mubi',img:'https://i.imgur.com/6M6M6M6.png',title:'MUBI',desc:'FILMES E CULTURA'},
-    {id:'dazn',img:'https://i.imgur.com/5D5D5D5.png',title:'DAZN',desc:'ESPORTES'},
-    {id:'espn',img:'https://i.imgur.com/4E4E4E4.png',title:'ESPN',desc:'ESPORTES'},
-    {id:'twitch',img:'https://i.imgur.com/3T3T3T3.png',title:'TWITCH',desc:'LIVES E GAMES'},
-    {id:'ytkids',img:'https://i.imgur.com/2Y2Y2Y2.png',title:'YOUTUBE KIDS',desc:'CONTEÚDO INFANTIL'},
-    {id:'tiktok',img:'https://i.imgur.com/1T1T1T1.png',title:'TIKTOK',desc:'VÍDEOS CURTOS'}
-  ],
-  gift: [
-    {id:'googleplay',img:'https://cdn-icons-png.flaticon.com/512/300/300221.png',title:'GOOGLE PLAY',desc:'CRÉDITOS'},
-    {id:'steam',img:'https://cdn-icons-png.flaticon.com/512/588/588249.png',title:'STEAM',desc:'CRÉDITOS'}
-  ],
-  social: [
-    {id:'instagram',img:'https://cdn-icons-png.flaticon.com/512/174/174855.png',title:'INSTAGRAM',desc:'SEGUIDORES E LIKES'},
-    {id:'tiktok',img:'https://cdn-icons-png.flaticon.com/512/3046/3046121.png',title:'TIKTOK',desc:'SEGUIDORES E VIEWS'}
-  ],
-  games: [
-        {id:'freefire',img:'https://cdn-icons-png.flaticon.com/512/686/686589.png',title:'FREE FIRE',desc:'DIAMANTES'},
-    {id:'roblox',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'ROBLOX',desc:'ROBUX'}
-  ],
-  apps: [
-    {id:'canva',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'CANVA PRO',desc:'DESIGN'},
-    {id:'chatgpt',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'CHATGPT PLUS',desc:'IA PREMIUM'}
-  ],
-  outros: [
-    {id:'iptv',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'IPTV',desc:'CANAIS'},
-    {id:'vpn',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png',title:'VPN PREMIUM',desc:'NAVEGAÇÃO SEGURA'}
-  ]
-};
-
-const produtos = {
-  netflix: [
-    {id:'netflix-1',img:'https://i.imgur.com/0Z8F8qk.png', title:'NETFLIX 1 TELA', desc:'Conta individual 30 dias', price:'R$ 18,90', platform:'Netflix'},
-    {id:'netflix-4k',img:'https://i.imgur.com/0Z8F8qk.png', title:'NETFLIX 4K', desc:'4 telas + Ultra HD 30 dias', price:'R$ 32,90', platform:'Netflix'},
-    {id:'netflix-2',img:'https://i.imgur.com/0Z8F8qk.png', title:'NETFLIX 2 TELAS', desc:'2 telas simultâneas 30 dias', price:'R$ 24,90', platform:'Netflix'}
-  ],
-  hbo: [{id:'hbo-1',img:'https://i.imgur.com/8QJ8Q.png', title:'HBO MAX', desc:'Acesso completo 30 dias', price:'R$ 19,90', platform:'HBO Max'}],
-  disney: [{id:'disney-1',img:'https://i.imgur.com/9R9R9R9.png', title:'DISNEY+', desc:'Filmes e séries Disney 30 dias', price:'R$ 16,90', platform:'Disney+'}],
-  prime: [{id:'prime-1',img:'https://i.imgur.com/7P7P7P7.png', title:'PRIME VIDEO', desc:'Amazon Prime 30 dias', price:'R$ 14,90', platform:'Prime Video'}],
-  appletv: [{id:'appletv-1',img:'https://i.imgur.com/6A6A6A6.png', title:'APPLE TV+', desc:'Originais Apple 30 dias', price:'R$ 21,90', platform:'Apple TV+'}],
-  youtube: [{id:'youtube-1',img:'https://i.imgur.com/5Y5Y5Y5.png', title:'YOUTUBE PREMIUM', desc:'Sem anúncios + Music 30 dias', price:'R$ 16,90', platform:'YouTube'}],
-  spotify: [{id:'spotify-1',img:'https://i.imgur.com/4S4S4S4.png', title:'SPOTIFY PREMIUM', desc:'Música sem anúncios 30 dias', price:'R$ 12,90', platform:'Spotify'}],
-  deezer: [{id:'deezer-1',img:'https://i.imgur.com/3D3D3D3.png', title:'DEEZER PREMIUM', desc:'Streaming de música 30 dias', price:'R$ 12,90', platform:'Deezer'}],
-  crunchyroll: [{id:'crunchy-1',img:'https://i.imgur.com/2C2C2C2.png', title:'CRUNCHYROLL', desc:'Animes premium 30 dias', price:'R$ 14,90', platform:'Crunchyroll'}],
-  funimation: [{id:'funi-1',img:'https://i.imgur.com/1F1F1F1.png', title:'FUNIMATION', desc:'Animes dublados 30 dias', price:'R$ 14,90', platform:'Funimation'}],
-  paramount: [{id:'para-1',img:'https://i.imgur.com/0P0P0P0.png', title:'PARAMOUNT+', desc:'Filmes e séries 30 dias', price:'R$ 19,90', platform:'Paramount+'}],
-  star: [{id:'star-1',img:'https://i.imgur.com/9S9S9S9.png', title:'STAR+', desc:'Conteúdo adulto Disney 30 dias', price:'R$ 19,90', platform:'Star+'}],
-  globoplay: [{id:'globo-1',img:'https://i.imgur.com/8G8G8G8.png', title:'GLOBOPLAY', desc:'Novelas e séries 30 dias', price:'R$ 22,90', platform:'Globoplay'}],
-  telecine: [{id:'tele-1',img:'https://i.imgur.com/7T7T7T7.png', title:'TELECINE', desc:'Filmes lançamentos 30 dias', price:'R$ 24,90', platform:'Telecine'}],
-  mubi: [{id:'mubi-1',img:'https://i.imgur.com/6M6M6M6.png', title:'MUBI', desc:'Cinema cult 30 dias', price:'R$ 29,90', platform:'MUBI'}],
-  dazn: [{id:'dazn-1',img:'https://i.imgur.com/5D5D5D5.png', title:'DAZN', desc:'Esportes ao vivo 30 dias', price:'R$ 34,90', platform:'DAZN'}],
-  espn: [{id:'espn-1',img:'https://i.imgur.com/4E4E4E4.png', title:'ESPN', desc:'Futebol e NBA 30 dias', price:'R$ 19,90', platform:'ESPN'}],
-  twitch: [{id:'twitch-1',img:'https://i.imgur.com/3T3T3T3.png', title:'TWITCH TURBO', desc:'Sem anúncios 30 dias', price:'R$ 9,90', platform:'Twitch'}],
-  ytkids: [{id:'ytkids-1',img:'https://i.imgur.com/2Y2Y2Y2.png', title:'YOUTUBE KIDS', desc:'Conteúdo seguro 30 dias', price:'R$ 8,90', platform:'YouTube Kids'}],
-  tiktok: [{id:'tiktok-1k',img:'https://i.imgur.com/1T1T1T1.png', title:'1K SEGUIDORES', desc:'Entrega em até 24h', price:'R$ 12,90', platform:'TikTok'}],
-  googleplay: [{id:'google-50',img:'https://cdn-icons-png.flaticon.com/512/300/300221.png', title:'GOOGLE PLAY R$50', desc:'Créditos para apps e jogos', price:'R$ 52,90', platform:'Google Play'}],
-  steam: [{id:'steam-50',img:'https://cdn-icons-png.flaticon.com/512/588/588249.png', title:'STEAM R$50', desc:'Carteira Steam', price:'R$ 52,90', platform:'Steam'}],
-  instagram: [{id:'insta-1k',img:'https://cdn-icons-png.flaticon.com/512/174/174855.png', title:'1K SEGUIDORES', desc:'Entrega em até 24h', price:'R$ 14,90', platform:'Instagram'}],
-  freefire: [
-    {id:'ff-520',img:'https://i.imgur.com/0qH2XrG.png', title:'520 DIAMANTES', desc:'Diamantes para sua conta de Free Fire. Entrega automática após a confirmação do pagamento.', price:'R$ 20,90', platform:'Free Fire'},
-    {id:'ff-1080',img:'https://i.imgur.com/0qH2XrG.png', title:'1080 DIAMANTES', desc:'Pacote com bônus. Entrega automática após a confirmação do pagamento.', price:'R$ 39,90', platform:'Free Fire'}
-  ],
-  roblox: [{id:'rbx-800',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'800 ROBUX', desc:'Entrega via Game Pass', price:'R$ 34,90', platform:'Roblox'}],
-  canva: [{id:'canva-1',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'CANVA PRO', desc:'Templates premium 30 dias', price:'R$ 24,90', platform:'Canva'}],
-  chatgpt: [{id:'gpt-1',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'CHATGPT PLUS', desc:'GPT-4 liberado 30 dias', price:'R$ 89,90', platform:'ChatGPT'}],
-  iptv: [{id:'iptv-1',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'IPTV COMPLETO', desc:'Canais, filmes e séries 30 dias', price:'R$ 29,90', platform:'IPTV'}],
-  vpn: [{id:'vpn-1',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'NORDVPN', desc:'Navegação segura 30 dias', price:'R$ 19,90', platform:'NordVPN'}]
-};
-
-let currentCat = '';
-let currentSub = '';
-
-function showSubcat(cat){
-  currentCat = cat;
-  const nomes = {streaming:'Streaming',gift:'Gift Cards',social:'Redes Sociais',games:'Games',apps:'Apps Premium',outros:'Outros'};
-  document.getElementById('subcatTitle').textContent = nomes[cat];
-  const grid = document.getElementById('subcatGrid');
-  const lista = subcategorias[cat] || [];
-  grid.innerHTML = '';
-  lista.forEach(s => {
-    grid.innerHTML += `<div class="glow-card" onclick="showProducts('${s.id}')"><div class="glow-card-img"><img src="${s.img}"></div><div class="glow-card-title">${s.title}</div><div class="glow-card-desc">${s.desc}</div></div>`;
-  });
-  showScreen('subcat');
-}
-
-function showProducts(service) {
-  currentSub = service;
-  const list = produtos[service] || [];
-  const grid = document.getElementById('productGrid');
-  const title = document.getElementById('productTitle');
-  const allSubs = [...subcategorias.streaming,...subcategorias.gift,...subcategorias.social,...subcategorias.games,...subcategorias.apps,...subcategorias.outros];
-  const serviceName = allSubs.find(s=>s.id===service);
-  title.textContent = serviceName? serviceName.title : service.toUpperCase();
-  grid.innerHTML = '';
-  if(list.length === 0){
-    grid.innerHTML = '<div class="glow-card"><div class="glow-card-title">EM BREVE</div><div class="glow-card-desc">PRODUTOS CHEGANDO</div></div>';
-  }else{
-    list.forEach(p => {
-      grid.innerHTML += `<div class="glow-card" onclick="showDetail('${service}','${p.id}')"><div class="glow-card-img"><img src="${p.img}"></div><div class="glow-card-title">${p.title}</div><div class="glow-card-desc">${p.price}</div></div>`;
-    });
-  }
-  showScreen('products');
-}
-
-function showDetail(serviceId, productId){
-  const list = produtos[serviceId] || [];
-  const p = list.find(x => x.id === productId);
-  if(!p) return;
-  
-  document.getElementById('detailImage').innerHTML = `<img src="${p.img}">`;
-  document.getElementById('detailTitle').textContent = p.title;
-  document.getElementById('detailSubtitle').textContent = p.platform;
-  document.getElementById('detailPrice').textContent = p.price;
-  document.getElementById('detailDesc').textContent = p.desc;
-  document.getElementById('detailPlatform').textContent = p.platform;
-  
-  showScreen('detail');
-}
-
-document.getElementById('searchInput').oninput = (e) => {
-  const term = e.target.value.toLowerCase();
-  document.querySelectorAll('.card-cat').forEach(card => {
-    const name = card.querySelector('span').textContent.toLowerCase();
-    card.style.display = name.includes(term)? 'block' : 'none';
-  });
-}
-
-function showAlert(id, msg){
-  hideAllAlerts();
-  const el = document.getElementById(id);
-  el.innerText = msg;
-  el.style.display = 'block';
-  setTimeout(()=>el.style.display='none', 4000);
-}
-function hideAllAlerts(){
-  document.querySelectorAll('.alert').forEach(a => a.style.display='none');
-}
-function traduzErro(code){
-  const erros = {
-    'auth/invalid-email': 'E-mail inválido',
-    'auth/user-not-found': 'Usuário não encontrado',
-    'auth/wrong-password': 'Senha incorreta',
-    'auth/email-already-in-use': 'Este e-mail já está em uso',
-    'auth/weak-password': 'Senha muito fraca',
-    'auth/too-many-requests': 'Muitas tentativas. Tente mais tarde',
-    'auth/network-request-failed': 'Erro de conexão'
-  };
-  return erros[code] || 'Erro ao processar';
-}
-</script>
-</body>
-</html>
+    const user
