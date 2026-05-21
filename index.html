@@ -31,10 +31,12 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 .btn{width:100%;height:54px;background:linear-gradient(135deg,#8b5cf6 0%,#7c3aed 100%);border:none;border-radius:14px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;letter-spacing:1px;box-shadow:0 8px 24px var(--purple-glow);transition:all 0.2s}
 .btn:active{transform:scale(0.98)}
 .btn:disabled{opacity:0.5;cursor:not-allowed}
+.btn-secondary{background:var(--input);border:1px solid var(--border);box-shadow:none}
 .footer-link{text-align:center;margin-top:28px;font-size:13px;color:var(--text-dim)}
 .footer-link a{color:var(--purple);text-decoration:none;font-weight:700;cursor:pointer}
 .alert{padding:14px 16px;border-radius:12px;font-size:12px;margin-bottom:18px;display:none;text-align:center;font-weight:600}
 .alert.error{background:rgba(239,68,68,0.15);border:1px solid #ef4444;color:#fca5a5}
+.alert.success{background:rgba(16,185,129,0.15);border:1px solid #10b981;color:#6ee7b7}
 
 /* HOME */
 .header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;position:sticky;top:0;background:var(--bg);z-index:100;border-bottom:1px solid var(--border)}
@@ -52,7 +54,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 .banner-title{font-size:12px;font-weight:700;color:var(--purple);letter-spacing:1px;margin-bottom:6px}
 .banner-offer{font-size:28px;font-weight:900;color:#fff;margin-bottom:12px}
 .banner-btn{width:fit-content;padding:10px 24px;background:linear-gradient(135deg,#8b5cf6 0%,#7c3aed 100%);border:none;border-radius:12px;color:#fff;font-size:12px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px var(--purple-glow)}
-.banner-img{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:120px;opacity:0.8}
+.banner-img{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:120px;height:120px;object-fit:contain}
 .section-header{display:flex;justify-content:space-between;align-items:center;padding:0 20px 16px;font-size:16px;font-weight:800}
 .section-header a{color:var(--purple);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:4px;cursor:pointer;font-weight:700}
 .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:0 20px 24px}
@@ -83,6 +85,12 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 .menu-item:active{background:var(--input)}
 .menu-item svg{width:20px;height:20px;stroke:var(--purple)}
 .menu-item-text{font-size:14px;font-weight:700;color:#fff}
+
+/* ADMIN */
+.admin-section{padding:20px;border-bottom:1px solid var(--border);margin-bottom:20px}
+.admin-section h3{font-size:14px;font-weight:800;color:var(--purple);margin-bottom:16px}
+.preview-banner{height:120px;background:linear-gradient(135deg,#1e1e2a 0%,#2a1e35 50%,#1e1e2a 100%);border-radius:16px;border:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden;padding:16px;display:flex;flex-direction:column;justify-content:center}
+.preview-banner img{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:80px;height:80px;object-fit:contain}
 </style>
 </head>
 <body>
@@ -97,21 +105,20 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
       <div class="alert error" id="loginError"></div>
       <div class="input-group">
         <label>E-mail</label>
-        <div class="input-box"><input type="email" id="loginEmail" placeholder="seuemail@gmail.com" value="vittoriahvahz@gmail.com"></div>
+        <div class="input-box"><input type="email" id="loginEmail" placeholder="seuemail@gmail.com"></div>
       </div>
       <div class="input-group">
         <label>Senha</label>
         <div class="input-box">
-          <input type="password" id="loginPassword" placeholder="••••••••" value="Lorrannyh.102225">
+          <input type="password" id="loginPassword" placeholder="••••••••">
           <span class="toggle" onclick="togglePass('loginPassword', this)">👁️</span>
         </div>
       </div>
       <div class="row">
         <label><input type="checkbox" id="remember"> Lembrar-me</label>
-        <a onclick="alert('Recuperação de senha')">Esqueceu a senha?</a>
+        <a>Esqueceu a senha?</a>
       </div>
       <button class="btn" id="btnLogin">ENTRAR</button>
-      <div class="footer-link">Não tem uma conta? <a onclick="alert('Tela de cadastro')">Cadastre-se</a></div>
     </div>
   </div>
 </div>
@@ -136,12 +143,12 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
       <div class="menu-item-text">Categorias</div>
     </div>
-    <div class="menu-item" onclick="alert('Painel Admin')">
+    <div class="menu-item" id="menuAdm" style="display:none" onclick="showScreen('admin');toggleMenu()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
       <div class="menu-item-text">Adm</div>
     </div>
     <div class="menu-item" onclick="alert('Suporte: (98) 98485-3563')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/></svg>
       <div class="menu-item-text">Suporte</div>
     </div>
     <div class="menu-item" onclick="alert('Sobre Nós')">
@@ -149,7 +156,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
       <div class="menu-item-text">Sobre Nós</div>
     </div>
     <div class="menu-item" onclick="alert('Termos de Uso')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
       <div class="menu-item-text">Termos de Uso</div>
     </div>
   </div>
@@ -176,11 +183,11 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
     <input type="text" placeholder="Buscar produtos...">
   </div>
 
-  <div class="banner">
-    <div class="banner-title">OFERTAS EXCLUSIVAS</div>
-    <div class="banner-offer">ATÉ 70% OFF</div>
+  <div class="banner" id="bannerHome">
+    <div class="banner-title" id="bannerTitle">OFERTAS EXCLUSIVAS</div>
+    <div class="banner-offer" id="bannerOffer">ATÉ 70% OFF</div>
     <button class="banner-btn">VER OFERTAS</button>
-    <img class="banner-img" src="https://i.imgur.com/0Z8F8qk.png" alt="Banner">
+    <img class="banner-img" id="bannerImg" src="https://i.imgur.com/0Z8F8qk.png" alt="Banner">
   </div>
 
   <div class="section-header">
@@ -188,23 +195,23 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
     <a>Ver todas <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
   </div>
   <div class="grid">
-    <div class="card-cat" onclick="alert('Games')">
+    <div class="card-cat">
       <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/686/686589.png"></div>
       <span>Games</span>
     </div>
-    <div class="card-cat" onclick="alert('Streaming')">
+    <div class="card-cat">
       <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/5977/5977590.png"></div>
       <span>Streaming</span>
     </div>
-    <div class="card-cat" onclick="alert('Redes Sociais')">
+    <div class="card-cat">
       <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/174/174855.png"></div>
       <span>Redes Sociais</span>
     </div>
-    <div class="card-cat" onclick="alert('Gift Cards')">
+    <div class="card-cat">
       <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/300/300221.png"></div>
       <span>Gift Cards</span>
     </div>
-    <div class="card-cat" onclick="alert('Apps')">
+    <div class="card-cat">
       <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968705.png"></div>
       <span>Apps</span>
     </div>
@@ -236,8 +243,49 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
   </div>
 </div>
 
+<!-- ADMIN -->
+<div class="screen" id="screen-admin">
+  <header class="header">
+    <div class="header-left">
+      <svg onclick="showScreen('home')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    </div>
+    <div class="header-title">Painel Admin</div>
+    <div class="header-icons">
+      <svg class="icon purple" onclick="auth.signOut()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    </div>
+  </header>
+
+  <div style="padding:20px">
+    <div class="admin-section">
+      <h3>GERENCIAR BANNER HOME</h3>
+      <div class="alert success" id="bannerSuccess"></div>
+      
+      <div class="preview-banner">
+        <div class="banner-title" id="previewTitle">OFERTAS EXCLUSIVAS</div>
+        <div class="banner-offer" id="previewOffer">ATÉ 70% OFF</div>
+        <img id="previewImg" src="https://i.imgur.com/0Z8F8qk.png">
+      </div>
+
+      <div class="input-group">
+        <label>Título do Banner</label>
+        <div class="input-box"><input type="text" id="bannerTitleInput" placeholder="OFERTAS EXCLUSIVAS" value="OFERTAS EXCLUSIVAS"></div>
+      </div>
+      <div class="input-group">
+        <label>Texto da Oferta</label>
+        <div class="input-box"><input type="text" id="bannerOfferInput" placeholder="ATÉ 70% OFF" value="ATÉ 70% OFF"></div>
+      </div>
+      <div class="input-group">
+        <label>URL da Imagem</label>
+        <div class="input-box"><input type="text" id="bannerImgInput" placeholder="https://i.imgur.com/..." value="https://i.imgur.com/0Z8F8qk.png"></div>
+      </div>
+      <button class="btn" onclick="salvarBanner()">SALVAR BANNER</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -252,6 +300,8 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
+const db = firebase.database();
+const ADMIN_EMAIL = 'vittoriahvahz@gmail.com';
 
 function showScreen(name){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -274,11 +324,58 @@ function toggleMenu(){
   document.getElementById('menuOverlay').classList.toggle('active');
 }
 
+// Carrega banner do Firebase
+function carregarBanner(){
+  db.ref('config/banner').once('value').then(snap => {
+    const data = snap.val();
+    if(data){
+      document.getElementById('bannerTitle').textContent = data.title || 'OFERTAS EXCLUSIVAS';
+      document.getElementById('bannerOffer').textContent = data.offer || 'ATÉ 70% OFF';
+      document.getElementById('bannerImg').src = data.img || 'https://i.imgur.com/0Z8F8qk.png';
+      
+      // Atualiza preview do admin
+      document.getElementById('previewTitle').textContent = data.title || 'OFERTAS EXCLUSIVAS';
+      document.getElementById('previewOffer').textContent = data.offer || 'ATÉ 70% OFF';
+      document.getElementById('previewImg').src = data.img || 'https://i.imgur.com/0Z8F8qk.png';
+      document.getElementById('bannerTitleInput').value = data.title || '';
+      document.getElementById('bannerOfferInput').value = data.offer || '';
+      document.getElementById('bannerImgInput').value = data.img || '';
+    }
+  });
+}
+
+function salvarBanner(){
+  const title = document.getElementById('bannerTitleInput').value;
+  const offer = document.getElementById('bannerOfferInput').value;
+  const img = document.getElementById('bannerImgInput').value;
+  
+  db.ref('config/banner').set({title, offer, img}).then(() => {
+    document.getElementById('bannerSuccess').textContent = 'Banner atualizado com sucesso!';
+    document.getElementById('bannerSuccess').style.display = 'block';
+    carregarBanner();
+    setTimeout(() => document.getElementById('bannerSuccess').style.display = 'none', 3000);
+  });
+}
+
+// Preview ao digitar
+['bannerTitleInput', 'bannerOfferInput', 'bannerImgInput'].forEach(id => {
+  document.getElementById(id).addEventListener('input', (e) => {
+    if(id === 'bannerTitleInput') document.getElementById('previewTitle').textContent = e.target.value;
+    if(id === 'bannerOfferInput') document.getElementById('previewOffer').textContent = e.target.value;
+    if(id === 'bannerImgInput') document.getElementById('previewImg').src = e.target.value;
+  });
+});
+
 auth.onAuthStateChanged((user) => {
   if(user){
     console.log('Logado:', user.email);
+    if(user.email === ADMIN_EMAIL){
+      document.getElementById('menuAdm').style.display = 'flex';
+    }
     showScreen('home');
+    carregarBanner();
   }else{
+    document.getElementById('menuAdm').style.display = 'none';
     showScreen('login');
   }
 });
