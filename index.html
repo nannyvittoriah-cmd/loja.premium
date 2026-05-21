@@ -21,17 +21,21 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 .input-group label{display:block;font-size:12px;color:var(--text-dim);margin-bottom:8px;font-weight:500}
 .input-box{width:100%;height:52px;background:var(--input);border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;padding:0 18px;transition:all 0.3s}
 .input-box:focus-within{border-color:var(--purple);box-shadow:0 0 0 3px var(--purple-glow)}
-.input-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px}
+.input-box input,.input-box select,.input-box textarea{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px;font-family:inherit}
+.input-box textarea{padding:12px 0;min-height:80px;resize:vertical}
 .input-box input::placeholder{color:#4a4a5e}
 .toggle{cursor:pointer;color:#6b7280;font-size:18px;user-select:none}
 .row{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;font-size:12px}
 .row label{display:flex;align-items:center;gap:8px;color:var(--text-dim);cursor:pointer}
 .row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--purple)}
 .row a{color:var(--purple);text-decoration:none;cursor:pointer;font-weight:600}
-.btn{width:100%;height:54px;background:linear-gradient(135deg,#8b5cf6 0%,#7c3aed 100%);border:none;border-radius:14px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;letter-spacing:1px;box-shadow:0 8px 24px var(--purple-glow);transition:all 0.2s}
+.btn{width:100%;height:54px;background:linear-gradient(135deg,#8b5cf6 0%,#7c3aed 100%);border:none;border-radius:14px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;letter-spacing:1px;box-shadow:0 8px 24px var(--purple-glow);transition:all 0.2s;margin-bottom:12px}
 .btn:active{transform:scale(0.98)}
 .btn:disabled{opacity:0.5;cursor:not-allowed}
 .btn-secondary{background:var(--input);border:1px solid var(--border);box-shadow:none}
+.btn-small{height:40px;font-size:12px}
+.btn-danger{background:linear-gradient(135deg,#ef4444 0%,#dc2626 100%);box-shadow:0 8px 24px rgba(239,68,68,0.4)}
+.btn-success{background:linear-gradient(135deg,#10b981 0%,#059669 100%);box-shadow:0 8px 24px rgba(16,185,129,0.4)}
 .footer-link{text-align:center;margin-top:28px;font-size:13px;color:var(--text-dim)}
 .footer-link a{color:var(--purple);text-decoration:none;font-weight:700;cursor:pointer}
 .alert{padding:14px 16px;border-radius:12px;font-size:12px;margin-bottom:18px;display:none;text-align:center;font-weight:600}
@@ -72,7 +76,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 .product-desc{font-size:10px;color:var(--text-dim);margin-bottom:8px}
 .product-price{font-size:13px;font-weight:900;color:var(--purple)}
 
-/* MENU LATERAL */
+/* MENU LATERAL USUÁRIO */
 .menu-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:999;display:none}
 .menu-overlay.active{display:block}
 .side-menu{position:fixed;top:0;left:-300px;width:280px;height:100vh;background:var(--bg);border:2px solid var(--purple);border-radius:0 20px 20px 0;z-index:1000;transition:left 0.3s ease;overflow-y:auto;box-shadow:4px 0 24px rgba(139,92,246,0.4)}
@@ -86,11 +90,39 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 .menu-item svg{width:20px;height:20px;stroke:var(--purple)}
 .menu-item-text{font-size:14px;font-weight:700;color:#fff}
 
-/* ADMIN */
-.admin-section{padding:20px;border-bottom:1px solid var(--border);margin-bottom:20px}
-.admin-section h3{font-size:14px;font-weight:800;color:var(--purple);margin-bottom:16px}
+/* ADMIN SIDEBAR */
+.admin-sidebar{position:fixed;left:0;top:0;width:260px;height:100vh;background:#0d0d14;border-right:2px solid var(--purple);overflow-y:auto;z-index:50}
+.admin-logo{text-align:center;padding:30px 20px;border-bottom:1px solid var(--border)}
+.admin-logo-star{color:var(--purple);font-size:24px;margin-bottom:8px}
+.admin-logo-text{font-size:20px;font-weight:900;color:#fff;letter-spacing:2px}
+.admin-logo-sub{font-size:11px;color:var(--text-dim);letter-spacing:3px;margin-top:4px}
+.admin-section-title{font-size:10px;font-weight:800;color:var(--text-dim);letter-spacing:2px;padding:20px 20px 12px}
+.admin-menu-item{display:flex;align-items:center;gap:14px;padding:14px 20px;cursor:pointer;transition:all 0.2s;color:var(--text-dim);margin:0 12px;border-radius:12px}
+.admin-menu-item:hover{background:var(--input);color:#fff}
+.admin-menu-item.active{background:var(--purple);color:#fff;box-shadow:0 4px 16px var(--purple-glow)}
+.admin-menu-item svg{width:20px;height:20px;stroke:currentColor}
+.admin-content{margin-left:260px;min-height:100vh;padding:20px}
+.admin-panel{display:none}
+.admin-panel.active{display:block}
+.admin-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.admin-title{font-size:24px;font-weight:900}
+.admin-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;margin-bottom:20px}
+.admin-card h3{font-size:16px;font-weight:800;color:var(--purple);margin-bottom:20px}
+.table{width:100%;border-collapse:collapse}
+.table th{text-align:left;padding:12px;font-size:11px;color:var(--text-dim);font-weight:700;text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--border)}
+.table td{padding:16px 12px;border-bottom:1px solid var(--border);font-size:13px}
+.table tr:last-child td{border-bottom:none}
+.status-badge{padding:6px 12px;border-radius:8px;font-size:11px;font-weight:700;display:inline-block}
+.status-pending{background:rgba(251,191,36,0.15);color:#fbbf24;border:1px solid #fbbf24}
+.status-approved{background:rgba(16,185,129,0.15);color:#10b981;border:1px solid #10b981}
+.status-cancelled{background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid #ef4444}
 .preview-banner{height:120px;background:linear-gradient(135deg,#1e1e2a 0%,#2a1e35 50%,#1e1e2a 100%);border-radius:16px;border:1px solid var(--border);margin-bottom:16px;position:relative;overflow:hidden;padding:16px;display:flex;flex-direction:column;justify-content:center}
 .preview-banner img{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:80px;height:80px;object-fit:contain}
+.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:9999;align-items:center;justify-content:center;padding:20px}
+.modal.active{display:flex}
+.modal-content{background:var(--card);border:1px solid var(--purple);border-radius:24px;padding:32px;max-width:400px;width:100%;box-shadow:0 0 60px var(--purple-glow)}
+.modal-title{font-size:20px;font-weight:900;margin-bottom:20px}
+@media(max-width:768px){.admin-sidebar{display:none}.admin-content{margin-left:0}}
 </style>
 </head>
 <body>
@@ -123,7 +155,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
   </div>
 </div>
 
-<!-- MENU LATERAL -->
+<!-- MENU LATERAL USUÁRIO -->
 <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
 <div class="side-menu" id="sideMenu">
   <div class="menu-header">
@@ -194,92 +226,304 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
     <span>Categorias</span>
     <a>Ver todas <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
   </div>
-  <div class="grid">
-    <div class="card-cat">
-      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/686/686589.png"></div>
-      <span>Games</span>
-    </div>
-    <div class="card-cat">
-      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/5977/5977590.png"></div>
-      <span>Streaming</span>
-    </div>
-    <div class="card-cat">
-      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/174/174855.png"></div>
-      <span>Redes Sociais</span>
-    </div>
-    <div class="card-cat">
-      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/300/300221.png"></div>
-      <span>Gift Cards</span>
-    </div>
-    <div class="card-cat">
-      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968705.png"></div>
-      <span>Apps</span>
-    </div>
-  </div>
+  <div class="grid" id="categoriasGrid"></div>
 
   <div class="section-header">
     <span>Produtos em destaque</span>
     <a>Ver todos <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
   </div>
-  <div class="products-grid">
-    <div class="product-card">
-      <div class="product-img"><img src="https://i.imgur.com/0qH2XrG.png"></div>
-      <div class="product-name">520 Diamantes</div>
-      <div class="product-desc">Free Fire</div>
-      <div class="product-price">R$ 20,90</div>
-    </div>
-    <div class="product-card">
-      <div class="product-img"><img src="https://i.imgur.com/0Z8F8qk.png"></div>
-      <div class="product-name">Netflix</div>
-      <div class="product-desc">Premium</div>
-      <div class="product-price">R$ 17,90</div>
-    </div>
-    <div class="product-card">
-      <div class="product-img"><img src="https://i.imgur.com/4S4S4S4.png"></div>
-      <div class="product-name">Spotify</div>
-      <div class="product-desc">Premium</div>
-      <div class="product-price">R$ 10,90</div>
-    </div>
-  </div>
+  <div class="products-grid" id="produtosGrid"></div>
 </div>
 
 <!-- ADMIN -->
 <div class="screen" id="screen-admin">
-  <header class="header">
-    <div class="header-left">
-      <svg onclick="showScreen('home')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+  <div class="admin-sidebar">
+    <div class="admin-logo">
+      <div class="admin-logo-star">★</div>
+      <div class="admin-logo-text">PRIME</div>
+      <div class="admin-logo-sub">STORE</div>
     </div>
-    <div class="header-title">Painel Admin</div>
-    <div class="header-icons">
-      <svg class="icon purple" onclick="auth.signOut()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    
+    <div class="admin-section-title">PAINEL ADMIN</div>
+    <div class="admin-menu-item active" onclick="showAdminPanel('dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+      <span>Dashboard</span>
     </div>
-  </header>
+    <div class="admin-menu-item" onclick="showAdminPanel('produtos')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      <span>Produtos</span>
+    </div>
+    <div class="admin-menu-item" onclick="showAdminPanel('categorias')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Categorias</span>
+    </div>
+    <div class="admin-menu-item" onclick="showAdminPanel('pedidos')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span>Pedidos</span>
+    </div>
+    <div class="admin-menu-item" onclick="showAdminPanel('usuarios')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Usuários</span>
+    </div>
+    <div class="admin-menu-item" onclick="showAdminPanel('cupons')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+      <span>Cupons</span>
+    </div>
+    <div class="admin-menu-item" onclick="showAdminPanel('banners')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <span>Slider / Banners</span>
+    </div>
+    <div class="admin-menu-item" onclick="showAdminPanel('config')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Configurações</span>
+    </div>
+    <div class="admin-menu-item" onclick="showAdminPanel('relatorios')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span>Relatórios</span>
+    </div>
+    <div class="admin-menu-item" onclick="showAdminPanel('suporte')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span>Suporte</span>
+    </div>
+    <div class="admin-menu-item" onclick="showAdminPanel('logs')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2
+            <span>Logs do Sistema</span>
+    </div>
+    <div class="admin-menu-item" onclick="auth.signOut()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      <span>Sair</span>
+    </div>
+  </div>
 
-  <div style="padding:20px">
-    <div class="admin-section">
-      <h3>GERENCIAR BANNER HOME</h3>
-      <div class="alert success" id="bannerSuccess"></div>
-      
-      <div class="preview-banner">
-        <div class="banner-title" id="previewTitle">OFERTAS EXCLUSIVAS</div>
-        <div class="banner-offer" id="previewOffer">ATÉ 70% OFF</div>
-        <img id="previewImg" src="https://i.imgur.com/0Z8F8qk.png">
+  <div class="admin-content">
+    <!-- DASHBOARD -->
+    <div class="admin-panel active" id="panel-dashboard">
+      <div class="admin-header">
+        <div class="admin-title">Dashboard</div>
       </div>
-
-      <div class="input-group">
-        <label>Título do Banner</label>
-        <div class="input-box"><input type="text" id="bannerTitleInput" placeholder="OFERTAS EXCLUSIVAS" value="OFERTAS EXCLUSIVAS"></div>
+      <div class="admin-card">
+        <h3>Resumo Geral</h3>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px">
+          <div style="background:var(--input);padding:20px;border-radius:16px;border:1px solid var(--border)">
+            <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px">Total Vendas</div>
+            <div style="font-size:24px;font-weight:900;color:var(--purple)" id="totalVendas">R$ 0,00</div>
+          </div>
+          <div style="background:var(--input);padding:20px;border-radius:16px;border:1px solid var(--border)">
+            <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px">Pedidos Pendentes</div>
+            <div style="font-size:24px;font-weight:900;color:#fbbf24" id="pedidosPendentes">0</div>
+          </div>
+          <div style="background:var(--input);padding:20px;border-radius:16px;border:1px solid var(--border)">
+            <div style="font-size:12px;color:var(--text-dim);margin-bottom:8px">Usuários</div>
+            <div style="font-size:24px;font-weight:900;color:#10b981" id="totalUsuarios">0</div>
+          </div>
+        </div>
       </div>
-      <div class="input-group">
-        <label>Texto da Oferta</label>
-        <div class="input-box"><input type="text" id="bannerOfferInput" placeholder="ATÉ 70% OFF" value="ATÉ 70% OFF"></div>
-      </div>
-      <div class="input-group">
-        <label>URL da Imagem</label>
-        <div class="input-box"><input type="text" id="bannerImgInput" placeholder="https://i.imgur.com/..." value="https://i.imgur.com/0Z8F8qk.png"></div>
-      </div>
-      <button class="btn" onclick="salvarBanner()">SALVAR BANNER</button>
     </div>
+
+    <!-- PRODUTOS -->
+    <div class="admin-panel" id="panel-produtos">
+      <div class="admin-header">
+        <div class="admin-title">Produtos</div>
+        <button class="btn btn-small" onclick="abrirModalProduto()" style="width:auto;padding:0 20px">+ Adicionar Produto</button>
+      </div>
+      <div class="admin-card">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Categoria</th>
+              <th>Preço</th>
+              <th>Estoque</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaProdutos"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CATEGORIAS -->
+    <div class="admin-panel" id="panel-categorias">
+      <div class="admin-header">
+        <div class="admin-title">Categorias</div>
+        <button class="btn btn-small" onclick="abrirModalCategoria()" style="width:auto;padding:0 20px">+ Adicionar Categoria</button>
+      </div>
+      <div class="admin-card">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Subcategorias</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaCategorias"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PEDIDOS -->
+    <div class="admin-panel" id="panel-pedidos">
+      <div class="admin-header">
+        <div class="admin-title">Pedidos</div>
+      </div>
+      <div class="admin-card">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Cliente</th>
+              <th>Produto</th>
+              <th>Valor</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaPedidos"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- USUÁRIOS -->
+    <div class="admin-panel" id="panel-usuarios">
+      <div class="admin-header">
+        <div class="admin-title">Usuários</div>
+      </div>
+      <div class="admin-card">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>E-mail</th>
+              <th>Nome</th>
+              <th>Pedidos</th>
+              <th>Total Gasto</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaUsuarios"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CUPONS -->
+    <div class="admin-panel" id="panel-cupons">
+      <div class="admin-header">
+        <div class="admin-title">Cupons</div>
+        <button class="btn btn-small" onclick="abrirModalCupom()" style="width:auto;padding:0 20px">+ Criar Cupom</button>
+      </div>
+      <div class="admin-card">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Desconto</th>
+              <th>Validade</th>
+              <th>Usos</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaCupons"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- BANNERS -->
+    <div class="admin-panel" id="panel-banners">
+      <div class="admin-header">
+        <div class="admin-title">Slider / Banners</div>
+      </div>
+      <div class="admin-card">
+        <h3>Banner Principal da Home</h3>
+        <div class="alert success" id="bannerSuccess"></div>
+        
+        <div class="preview-banner">
+          <div class="banner-title" id="previewTitle">OFERTAS EXCLUSIVAS</div>
+          <div class="banner-offer" id="previewOffer">ATÉ 70% OFF</div>
+          <img id="previewImg" src="https://i.imgur.com/0Z8F8qk.png">
+        </div>
+
+        <div class="input-group">
+          <label>Título do Banner</label>
+          <div class="input-box"><input type="text" id="bannerTitleInput" placeholder="OFERTAS EXCLUSIVAS"></div>
+        </div>
+        <div class="input-group">
+          <label>Texto da Oferta</label>
+          <div class="input-box"><input type="text" id="bannerOfferInput" placeholder="ATÉ 70% OFF"></div>
+        </div>
+        <div class="input-group">
+          <label>URL da Imagem</label>
+          <div class="input-box"><input type="text" id="bannerImgInput" placeholder="https://i.imgur.com/..."></div>
+        </div>
+        <button class="btn" onclick="salvarBanner()">SALVAR BANNER</button>
+      </div>
+    </div>
+
+    <!-- OUTROS PAINEIS -->
+    <div class="admin-panel" id="panel-config">
+      <div class="admin-header"><div class="admin-title">Configurações</div></div>
+      <div class="admin-card"><h3>Em desenvolvimento</h3></div>
+    </div>
+    <div class="admin-panel" id="panel-relatorios">
+      <div class="admin-header"><div class="admin-title">Relatórios</div></div>
+      <div class="admin-card"><h3>Em desenvolvimento</h3></div>
+    </div>
+    <div class="admin-panel" id="panel-suporte">
+      <div class="admin-header"><div class="admin-title">Suporte</div></div>
+      <div class="admin-card"><h3>Tickets de Suporte</h3><div id="listaSuporte"></div></div>
+    </div>
+    <div class="admin-panel" id="panel-logs">
+      <div class="admin-header"><div class="admin-title">Logs do Sistema</div></div>
+      <div class="admin-card"><h3>Atividades Recentes</h3><div id="listaLogs"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PRODUTO -->
+<div class="modal" id="modalProduto">
+  <div class="modal-content">
+    <div class="modal-title">Adicionar Produto</div>
+    <div class="input-group">
+      <label>Nome do Produto</label>
+      <div class="input-box"><input type="text" id="produtoNome" placeholder="Ex: Netflix Premium"></div>
+    </div>
+    <div class="input-group">
+      <label>Categoria</label>
+      <div class="input-box"><select id="produtoCategoria"></select></div>
+    </div>
+    <div class="input-group">
+      <label>Preço</label>
+      <div class="input-box"><input type="number" id="produtoPreco" placeholder="17.90" step="0.01"></div>
+    </div>
+    <div class="input-group">
+      <label>URL da Imagem</label>
+      <div class="input-box"><input type="text" id="produtoImg" placeholder="https://..."></div>
+    </div>
+    <div class="input-group">
+      <label>Descrição</label>
+      <div class="input-box"><textarea id="produtoDesc" placeholder="Descrição do produto"></textarea></div>
+    </div>
+    <button class="btn" onclick="salvarProduto()">SALVAR PRODUTO</button>
+    <button class="btn btn-secondary" onclick="fecharModal('modalProduto')">CANCELAR</button>
+  </div>
+</div>
+
+<!-- MODAL CATEGORIA -->
+<div class="modal" id="modalCategoria">
+  <div class="modal-content">
+    <div class="modal-title">Adicionar Categoria</div>
+    <div class="input-group">
+      <label>Nome da Categoria</label>
+      <div class="input-box"><input type="text" id="categoriaNome" placeholder="Ex: Streaming"></div>
+    </div>
+    <div class="input-group">
+      <label>Ícone (URL)</label>
+      <div class="input-box"><input type="text" id="categoriaIcon" placeholder="https://..."></div>
+    </div>
+    <div class="input-group">
+      <label>Subcategorias (separar por vírgula)</label>
+      <div class="input-box"><input type="text" id="categoriaSubcats" placeholder="Netflix, Spotify, Disney+"></div>
+    </div>
+    <button class="btn" onclick="salvarCategoria()">SALVAR CATEGORIA</button>
+    <button class="btn btn-secondary" onclick="fecharModal('modalCategoria')">CANCELAR</button>
   </div>
 </div>
 
@@ -324,7 +568,27 @@ function toggleMenu(){
   document.getElementById('menuOverlay').classList.toggle('active');
 }
 
-// Carrega banner do Firebase
+function showAdminPanel(panel){
+  document.querySelectorAll('.admin-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.admin-menu-item').forEach(m=>m.classList.remove('active'));
+  document.getElementById(`panel-${panel}`).classList.add('active');
+  event.currentTarget.classList.add('active');
+  carregarDadosAdmin(panel);
+}
+
+function abrirModal(id){document.getElementById(id).classList.add('active')}
+function fecharModal(id){document.getElementById(id).classList.remove('active')}
+
+function abrirModalProduto(){
+  carregarCategoriasSelect();
+  abrirModal('modalProduto');
+}
+
+function abrirModalCategoria(){
+  abrirModal('modalCategoria');
+}
+
+// BANNER
 function carregarBanner(){
   db.ref('config/banner').once('value').then(snap => {
     const data = snap.val();
@@ -332,8 +596,6 @@ function carregarBanner(){
       document.getElementById('bannerTitle').textContent = data.title || 'OFERTAS EXCLUSIVAS';
       document.getElementById('bannerOffer').textContent = data.offer || 'ATÉ 70% OFF';
       document.getElementById('bannerImg').src = data.img || 'https://i.imgur.com/0Z8F8qk.png';
-      
-      // Atualiza preview do admin
       document.getElementById('previewTitle').textContent = data.title || 'OFERTAS EXCLUSIVAS';
       document.getElementById('previewOffer').textContent = data.offer || 'ATÉ 70% OFF';
       document.getElementById('previewImg').src = data.img || 'https://i.imgur.com/0Z8F8qk.png';
@@ -348,16 +610,14 @@ function salvarBanner(){
   const title = document.getElementById('bannerTitleInput').value;
   const offer = document.getElementById('bannerOfferInput').value;
   const img = document.getElementById('bannerImgInput').value;
-  
   db.ref('config/banner').set({title, offer, img}).then(() => {
-    document.getElementById('bannerSuccess').textContent = 'Banner atualizado com sucesso!';
+    document.getElementById('bannerSuccess').textContent = 'Banner atualizado!';
     document.getElementById('bannerSuccess').style.display = 'block';
     carregarBanner();
     setTimeout(() => document.getElementById('bannerSuccess').style.display = 'none', 3000);
   });
 }
 
-// Preview ao digitar
 ['bannerTitleInput', 'bannerOfferInput', 'bannerImgInput'].forEach(id => {
   document.getElementById(id).addEventListener('input', (e) => {
     if(id === 'bannerTitleInput') document.getElementById('previewTitle').textContent = e.target.value;
@@ -366,14 +626,218 @@ function salvarBanner(){
   });
 });
 
+// CATEGORIAS
+function carregarCategorias(){
+  db.ref('categorias').once('value').then(snap => {
+    const data = snap.val() || {};
+    const grid = document.getElementById('categoriasGrid');
+    const tabela = document.getElementById('tabelaCategorias');
+    grid.innerHTML = '';
+    tabela.innerHTML = '';
+    
+    Object.keys(data).forEach(key => {
+      const cat = data[key];
+      grid.innerHTML += `
+        <div class="card-cat">
+          <div class="card-cat-icon"><img src="${cat.icon}"></div>
+          <span>${cat.nome}</span>
+        </div>`;
+      tabela.innerHTML += `
+        <tr>
+          <td>${cat.nome}</td>
+          <td>${cat.subcategorias? cat.subcategorias.join(', ') : '-'}</td>
+          <td><button class="btn btn-danger btn-small" onclick="excluirCategoria('${key}')">Excluir</button></td>
+        </tr>`;
+    });
+  });
+}
+
+function carregarCategoriasSelect(){
+  db.ref('categorias').once('value').then(snap => {
+    const data = snap.val() || {};
+    const select = document.getElementById('produtoCategoria');
+    select.innerHTML = '<option value="">Selecione</option>';
+    Object.keys(data).forEach(key => {
+      select.innerHTML += `<option value="${key}">${data[key].nome}</option>`;
+    });
+  });
+}
+
+function salvarCategoria(){
+  const nome = document.getElementById('categoriaNome').value;
+  const icon = document.getElementById('categoriaIcon').value;
+  const subcats = document.getElementById('categoriaSubcats').value.split(',').map(s=>s.trim()).filter(s=>s);
+  
+  if(!nome) return alert('Preencha o nome');
+  
+  db.ref('categorias').push({nome, icon, subcategorias: subcats}).then(() => {
+    fecharModal('modalCategoria');
+    carregarCategorias();
+    document.getElementById('categoriaNome').value = '';
+    document.getElementById('categoriaIcon').value = '';
+    document.getElementById('categoriaSubcats').value = '';
+  });
+}
+
+function excluirCategoria(id){
+  if(confirm('Excluir categoria?')){
+    db.ref('categorias/'+id).remove().then(carregarCategorias);
+  }
+}
+
+// PRODUTOS
+function carregarProdutos(){
+  db.ref('produtos').once('value').then(snap => {
+    const data = snap.val() || {};
+    const grid = document.getElementById('produtosGrid');
+    const tabela = document.getElementById('tabelaProdutos');
+    grid.innerHTML = '';
+    tabela.innerHTML = '';
+    
+    Object.keys(data).forEach(key => {
+      const prod = data[key];
+      grid.innerHTML += `
+        <div class="product-card">
+          <div class="product-img"><img src="${prod.img}"></div>
+          <div class="product-name">${prod.nome}</div>
+          <div class="product-desc">${prod.categoria}</div>
+          <div class="product-price">R$ ${prod.preco.toFixed(2)}</div>
+        </div>`;
+      tabela.innerHTML += `
+        <tr>
+          <td>${prod.nome}</td>
+          <td>${prod.categoria}</td>
+          <td>R$ ${prod.preco.toFixed(2)}</td>
+          <td>${prod.estoque || 0}</td>
+          <td><button class="btn btn-danger btn-small" onclick="excluirProduto('${key}')">Excluir</button></td>
+        </tr>`;
+    });
+  });
+}
+
+function salvarProduto(){
+  const nome = document.getElementById('produtoNome').value;
+  const categoria = document.getElementById('produtoCategoria').value;
+  const preco = parseFloat(document.getElementById('produtoPreco').value);
+  const img = document.getElementById('produtoImg').value;
+  const desc = document.getElementById('produtoDesc').value;
+  
+  if(!nome ||!categoria ||!preco) return alert('Preencha todos os campos');
+  
+  db.ref('produtos').push({nome, categoria, preco, img, desc, estoque: 10}).then(() => {
+    fecharModal('modalProduto');
+    carregarProdutos();
+    ['produtoNome','produtoPreco','produtoImg','produtoDesc'].forEach(id=>document.getElementById(id).value='');
+  });
+}
+
+function excluirProduto(id){
+  if(confirm('Excluir produto?')){
+    db.ref('produtos/'+id).remove().then(carregarProdutos);
+  }
+}
+
+// PEDIDOS
+function carregarPedidos(){
+  db.ref('pedidos').once('value').then(snap => {
+    const data = snap.val() || {};
+    const tabela = document.getElementById('tabelaPedidos');
+    tabela.innerHTML = '';
+    let pendentes = 0;
+    let total = 0;
+    
+    Object.keys(data).forEach(key => {
+      const ped = data[key];
+      if(ped.status === 'pendente') pendentes++;
+      if(ped.status === 'aprovado') total += ped.valor;
+      
+      const statusClass = ped.status === 'aprovado'? 'status-approved' : ped.status === 'cancelado'? 'status-cancelled' : 'status-pending';
+      
+      tabela.innerHTML += `
+        <tr>
+          <td>#${key.substring(0,6)}</td>
+          <td>${ped.email}</td>
+          <td>${ped.produto}</td>
+          <td>R$ ${ped.valor.toFixed(2)}</td>
+          <td><span class="status-badge ${statusClass}">${ped.status}</span></td>
+          <td>
+            ${ped.status === 'pendente'? `
+              <button class="btn btn-success btn-small" onclick="aprovarPagamento('${key}')" style="margin-bottom:4px">Aprovar</button>
+              <button class="btn btn-danger btn-small" onclick="cancelarPedido('${key}')">Cancelar</button>
+            ` : ped.status === 'aprovado'? `
+              <button class="btn btn-small" onclick="enviarComprovante('${key}')">Enviar Comprovante</button>
+            ` : '-'}
+          </td>
+        </tr>`;
+    });
+    
+    document.getElementById('pedidosPendentes').textContent = pendentes;
+    document.getElementById('totalVendas').textContent = `R$ ${total.toFixed(2)}`;
+  });
+}
+
+function aprovarPagamento(id){
+  if(confirm('Aprovar pagamento e liberar produto?')){
+    db.ref('pedidos/'+id).update({status:'aprovado', aprovadoEm:Date.now()}).then(() => {
+      carregarPedidos();
+      alert('Pagamento aprovado! Comprovante disponível para envio.');
+    });
+  }
+}
+
+function cancelarPedido(id){
+  if(confirm('Cancelar pedido?')){
+    db.ref('pedidos/'+id).update({status:'cancelado'}).then(carregarPedidos);
+  }
+}
+
+function enviarComprovante(id){
+  db.ref('pedidos/'+id).once('value').then(snap => {
+    const ped = snap.val();
+    const msg = `✅ *COMPROVANTE DE COMPRA*\n\nPedido: #${id.substring(0,6)}\nProduto: ${ped.produto}\nValor: R$ ${ped.valor.toFixed(2)}\nData: ${new Date(ped.aprovadoEm).toLocaleDateString()}\n\nObrigado pela compra!`;
+    alert(`Comprovante enviado para ${ped.email}:\n\n${msg}`);
+    db.ref('pedidos/'+id+'/comprovanteEnviado').set(true);
+  });
+}
+
+// USUÁRIOS
+function carregarUsuarios(){
+  db.ref('usuarios').once('value').then(snap => {
+    const data = snap.val() || {};
+    const tabela = document.getElementById('tabelaUsuarios');
+    tabela.innerHTML = '';
+    document.getElementById('totalUsuarios').textContent = Object.keys(data).length;
+    
+    Object.keys(data).forEach(key => {
+      const user = data[key];
+      tabela.innerHTML += `
+        <tr>
+          <td>${user.email}</td>
+          <td>${user.nome || '-'}</td>
+          <td>${user.pedidos || 0}</td>
+          <td>R$ ${(user.totalGasto || 0).toFixed(2)}</td>
+        </tr>`;
+    });
+  });
+}
+
+function carregarDadosAdmin(panel){
+  if(panel === 'produtos') carregarProdutos();
+  if(panel === 'categorias') carregarCategorias();
+  if(panel === 'pedidos') carregarPedidos();
+  if(panel === 'usuarios') carregarUsuarios();
+}
+
+// AUTH
 auth.onAuthStateChanged((user) => {
   if(user){
-    console.log('Logado:', user.email);
     if(user.email === ADMIN_EMAIL){
       document.getElementById('menuAdm').style.display = 'flex';
     }
     showScreen('home');
     carregarBanner();
+    carregarCategorias();
+    carregarProdutos();
   }else{
     document.getElementById('menuAdm').style.display = 'none';
     showScreen('login');
@@ -404,8 +868,6 @@ document.getElementById('btnLogin').onclick = async () => {
   }
   finally{btn.disabled = false;}
 }
-
-console.log('Prime Store VZ carregado!');
 </script>
 </body>
 </html>
