@@ -212,7 +212,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .profile-menu-text{flex:1;font-size:14px;font-weight:600;color:#fff}
 .profile-menu-arrow{width:16px;height:16px;stroke:var(--text-dim)}
 .profile-logout{color:#ef4444!important}
-/* MENU LATERAL */
 .menu-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:999;display:none;backdrop-filter:blur(4px)}
 .menu-overlay.active{display:block}
 .side-menu{position:fixed;top:0;left:-300px;width:280px;height:100vh;background:var(--bg);border-right:1px solid var(--purple);z-index:1000;transition:left 0.3s ease;overflow-y:auto}
@@ -227,11 +226,52 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .menu-item-text{font-size:14px;font-weight:600;color:#fff}
 .menu-item.admin svg{stroke:#f59e0b}
 .menu-item.admin .menu-item-text{color:#f59e0b}
+/* ADMIN */
+.admin-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);background:var(--bg)}
+.admin-title{font-size:14px;font-weight:800;color:var(--purple)}
+.admin-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:20px}
+.admin-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px}
+.admin-card-icon{width:44px;height:44px;border-radius:12px;background:rgba(124,58,237,0.15);display:flex;align-items:center;justify-content:center}
+.admin-card-icon svg{width:22px;height:22px;stroke:var(--purple)}
+.admin-card-info{flex:1}
+.admin-card-label{font-size:11px;color:var(--text-dim);margin-bottom:4px}
+.admin-card-value{font-size:20px;font-weight:800;color:#fff}
+.admin-stats{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin:0 20px 20px}
+.admin-stats-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:16px}
+.admin-stat-row{display:flex;align-items:center;gap:12px;padding:10px 0}
+.admin-stat-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.admin-stat-icon.green{background:rgba(16,185,129,0.15)}
+.admin-stat-icon.yellow{background:rgba(245,158,11,0.15)}
+.admin-stat-icon.red{background:rgba(239,68,68,0.15)}
+.admin-stat-info{flex:1}
+.admin-stat-label{font-size:13px;font-weight:600;color:#fff}
+.admin-stat-value{font-size:14px;font-weight:800;color:#fff}
+.admin-menu{padding:0 20px}
+.admin-menu-item{display:flex;align-items:center;gap:12px;padding:14px;background:var(--input);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;cursor:pointer}
+.admin-menu-item:active{transform:scale(0.98)}
+.admin-menu-item svg{width:20px;height:20px;stroke:var(--purple)}
+.admin-menu-text{flex:1;font-size:14px;font-weight:600;color:#fff}
+.admin-table{width:100%;border-collapse:collapse;margin-top:16px}
+.admin-table th{background:var(--input);padding:12px 8px;font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;text-align:left;border-bottom:1px solid var(--border)}
+.admin-table td{padding:12px 8px;font-size:13px;color:#fff;border-bottom:1px solid var(--border)}
+.admin-table tr:active{background:var(--input)}
+.admin-btn{padding:8px 14px;background:var(--purple);border:none;border-radius:8px;color:#fff;font-size:11px;font-weight:700;cursor:pointer}
+.admin-btn-sm{padding:6px 10px;font-size:10px}
+.admin-btn-red{background:#ef4444}
+.admin-btn-green{background:#10b981}
+.admin-form-group{margin-bottom:16px}
+.admin-form-group label{display:block;font-size:12px;color:var(--text-dim);margin-bottom:8px;font-weight:600}
+.admin-input{width:100%;height:44px;background:var(--input);border:1px solid var(--border);border-radius:10px;padding:0 14px;color:#fff;font-size:13px;outline:none}
+.admin-input:focus{border-color:var(--purple)}
+.admin-textarea{min-height:80px;padding:12px 14px;resize:vertical}
+.admin-switch{width:44px;height:24px;background:var(--border);border-radius:12px;position:relative;cursor:pointer}
+.admin-switch.active{background:var(--purple)}
+.admin-switch::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:0.2s}
+.admin-switch.active::after{left:22px}
 </style>
 </head>
 <body>
 
-<!-- MENU LATERAL -->
 <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
 <div class="side-menu" id="sideMenu">
   <div class="menu-header">
@@ -251,7 +291,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
       <div class="menu-item-text">Categorias</div>
     </div>
-    <div class="menu-item admin" onclick="alert('Painel Admin em breve');toggleMenu()">
+        <div class="menu-item admin" onclick="checkAdmin();toggleMenu()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
       <div class="menu-item-text">Adm</div>
     </div>
@@ -270,6 +310,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
+<!-- TELAS DE LOGIN/CADASTRO -->
 <div class="screen active" id="screen-login">
   <div class="center">
     <div class="card">
@@ -303,7 +344,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
     <div class="card">
       <h2>CADASTRO</h2>
       <div class="logo">Prime Store VZ</div>
-            <div class="subtitle">Crie sua conta</div>
+      <div class="subtitle">Crie sua conta</div>
       <div class="alert error" id="registerError"></div>
       <div class="alert success" id="registerSuccess"></div>
       <div class="input-group">
@@ -354,6 +395,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
+<!-- HOME CLIENTE -->
 <div class="screen" id="screen-home">
   <header class="header">
     <div class="header-left">
@@ -397,7 +439,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
       <span>Games</span>
     </div>
     <div class="card-cat" onclick="showSubcat('apps')">
-      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/174/174872.png"></div>
+      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/174872.png"></div>
       <span>Apps Premium</span>
     </div>
     <div class="card-cat outros" onclick="showSubcat('outros')">
@@ -407,6 +449,471 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
+<!-- ADMIN DASHBOARD -->
+<div class="screen" id="screen-admin">
+  <div class="admin-header">
+    <div>
+      <div class="admin-title">Prime Store VZ</div>
+      <div style="font-size:11px;color:var(--text-dim);margin-top:2px">Painel Administrativo</div>
+    </div>
+    <svg class="icon" onclick="auth.signOut()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+  </div>
+
+  <div class="admin-cards">
+    <div class="admin-card">
+      <div class="admin-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+      <div class="admin-card-info">
+        <div class="admin-card-label">Vendas hoje</div>
+        <div class="admin-card-value" id="vendasHoje">R$ 1.250,00</div>
+      </div>
+    </div>
+    <div class="admin-card">
+      <div class="admin-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg></div>
+      <div class="admin-card-info">
+        <div class="admin-card-label">Pedidos hoje</div>
+        <div class="admin-card-value" id="pedidosHoje">38</div>
+      </div>
+    </div>
+    <div class="admin-card">
+      <div class="admin-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div class="admin-card-info">
+        <div class="admin-card-label">Clientes</div>
+        <div class="admin-card-value" id="totalClientes">1.245</div>
+      </div>
+    </div>
+    <div class="admin-card">
+      <div class="admin-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+      <div class="admin-card-info">
+        <div class="admin-card-label">Produtos</div>
+        <div class="admin-card-value" id="totalProdutos">342</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-stats">
+    <div class="admin-stats-title">Pedidos por status</div>
+    <div class="admin-stat-row">
+      <div class="admin-stat-icon green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="admin-stat-info"><div class="admin-stat-label">Concluídos</div></div>
+      <div class="admin-stat-value">120</div>
+    </div>
+    <div class="admin-stat-row">
+      <div class="admin-stat-icon yellow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      <div class="admin-stat-info"><div class="admin-stat-label">Pendentes</div></div>
+      <div class="admin-stat-value">15</div>
+    </div>
+    <div class="admin-stat-row">
+      <div class="admin-stat-icon red"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+      <div class="admin-stat-info"><div class="admin-stat-label">Cancelados</div></div>
+      <div class="admin-stat-value">5</div>
+    </div>
+  </div>
+
+  <div class="admin-menu">
+    <div class="admin-menu-item" onclick="showScreen('admin-pedidos')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/></svg>
+      <div class="admin-menu-text">Pedidos</div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div class="admin-menu-item" onclick="showScreen('admin-clientes')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      <div class="admin-menu-text">Clientes</div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div class="admin-menu-item" onclick="showScreen('admin-produtos')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      <div class="admin-menu-text">Produtos</div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div class="admin-menu-item" onclick="showScreen('admin-categorias')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <div class="admin-menu-text">Categorias</div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div class="admin-menu-item" onclick="showScreen('admin-subcategorias')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      <div class="admin-menu-text">Subcategorias</div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div class="admin-menu-item" onclick="showScreen('admin-cupons')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      <div class="admin-menu-text">Cupons</div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div class="admin-menu-item" onclick="showScreen('admin-config')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M23 12h-6m-6 0H1m18.2 5.2l-4.2-4.2m0-6l4.2-4.2"/></svg>
+      <div class="admin-menu-text">Configurações</div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PEDIDOS -->
+<div class="screen" id="screen-admin-pedidos">
+  <div class="admin-header">
+    <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    <div class="admin-title">PEDIDOS</div>
+    <div style="width:24px"></div>
+  </div>
+  <div style="padding:20px">
+    <table class="admin-table">
+      <thead><tr><th>ID</th><th>Cliente</th><th>Valor</th><th>Status</th><th>Ação</th></tr></thead>
+      <tbody id="adminPedidosTable">
+        <tr><td>#001</td><td>João Silva</td><td>R$ 20,90</td><td><span style="color:#10b981">Concluído</span></td><td><button class="admin-btn admin-btn-sm" onclick="verPedido('001')">Ver</button></td></tr>
+        <tr><td>#002</td><td>Maria Costa</td><td>R$ 32,90</td><td><span style="color:#f59e0b">Pendente</span></td><td><button class="admin-btn admin-btn-sm" onclick="verPedido('002')">Ver</button></td></tr>
+        <tr><td>#003</td><td>Pedro Santos</td><td>R$ 14,90</td><td><span style="color:#ef4444">Cancelado</span></td><td><button class="admin-btn admin-btn-sm" onclick="verPedido('003')">Ver</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ADMIN PEDIDO DETALHE -->
+<div class="screen" id="screen-admin-pedido-detalhe">
+  <div class="admin-header">
+    <svg class="icon" onclick="showScreen('admin-pedidos')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    <div class="admin-title">DETALHE PEDIDO</div>
+    <div style="width:24px"></div>
+  </div>
+  <div style="padding:20px">
+    <div class="admin-form-group">
+      <label>ID do Pedido</label>
+      <input type="text" class="admin-input" id="pedidoId" value="#001" readonly>
+    </div>
+    <div class="admin-form-group">
+      <label>Cliente</label>
+      <input type="text" class="admin-input" id="pedidoCliente" value="João Silva">
+    </div>
+    <div class="admin-form-group">
+      <label>E-mail</label>
+      <input type="text" class="admin-input" id="pedidoEmail" value="joao@email.com">
+    </div>
+    <div class="admin-form-group">
+      <label>Telefone</label>
+      <input type="text" class="admin-input" id="pedidoTelefone" value="(98) 99999-9999">
+    </div>
+    <div class="admin-form-group">
+      <label>Produto</label>
+      <input type="text" class="admin-input" id="pedidoProduto" value="Netflix 1 Tela" readonly>
+    </div>
+    <div class="admin-form-group">
+      <label>Valor</label>
+      <input type="text" class="admin-input" id="pedidoValor" value="R$ 20,90" readonly>
+    </div>
+    <div class="admin-form-group">
+      <label>Status</label>
+      <select class="admin-input" id="pedidoStatus">
+        <option value="pendente">Pendente</option>
+        <option value="concluido" selected>Concluído</option>
+        <option value="cancelado">Cancelado</option>
+      </select>
+    </div>
+    <button class="btn" onclick="salvarPedido()">SALVAR ALTERAÇÕES</button>
+  </div>
+</div>
+
+<!-- ADMIN CLIENTES -->
+<div class="screen" id="screen-admin-clientes">
+  <div class="admin-header">
+    <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    <div class="admin-title">CLIENTES</div>
+    <div style="width:24px"></div>
+  </div>
+  <div style="padding:20px">
+    <table class="admin-table">
+      <thead><tr><th>Nome</th><th>E-mail</th><th>Pedidos</th><th>Ação</th></tr></thead>
+      <tbody>
+        <tr><td>João Silva</td><td>joao@email.com</td><td>5</td><td><button class="admin-btn admin-btn-sm" onclick="verCliente('joao')">Ver</button></td></tr>
+        <tr><td>Maria Costa</td><td>maria@email.com</td><td>3</td><td><button class="admin-btn admin-btn-sm" onclick="verCliente('maria')">Ver</button></td></tr>
+        <tr><td>Pedro Santos</td><td>pedro@email.com</td><td>1</td><td><button class="admin-btn admin-btn-sm" onclick="verCliente('pedro')">Ver</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ADMIN CLIENTE DETALHE -->
+<div class="screen" id="screen-admin-cliente-detalhe">
+  <div class="admin-header">
+    <svg class="icon" onclick="showScreen('admin-clientes')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    <div class="admin-title">DETALHE CLIENTE</div>
+    <div style="width:24px"></div>
+  </div>
+  <div style="padding:20px">
+    <div class="admin-form-group">
+      <label>Nome</label>
+      <input type="text" class="admin-input" id="clienteNome" value="João Silva">
+    </div>
+    <div class="admin-form-group">
+      <label>E-mail</label>
+      <input type="text" class="admin-input" id="clienteEmail" value="joao@email.com">
+    </div>
+    <div class="admin-form-group">
+      <label>Telefone</label>
+      <input type="text" class="admin-input" id="clienteTelefone" value="(98) 99999-9999">
+    </div>
+    <div class="admin-form-group">
+      <label>Data cadastro</label>
+      <input type="text" class="admin-input" id="clienteData" value="15/01/2024" readonly>
+    </div>
+    <div class="admin-form-group">
+      <label>Total gasto</label>
+      <input type="text" class="admin-input" id="clienteTotal" value="R$ 156,70" readonly>
+    </div>
+    <button class="btn" onclick="salvarCliente()">SALVAR ALTERAÇÕES</button>
+  </div>
+</div>
+
+<!-- ADMIN PRODUTOS -->
+<div class="screen" id="screen-admin-produtos">
+  <div class="admin-header">
+    <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    <div class="admin-title">PRODUTOS</div>
+    <button class="admin-btn" onclick="showScreen('admin-produto-add')">+ NOVO</button>
+  </div>
+  <div style="padding:20px">
+    <table class="admin-table">
+      <thead><tr><th>Nome</th><th>Categoria</th><th>Preço</th><th>Ação</th></tr></thead>
+      <tbody id="adminProdutosTable">
+        <tr><td>Netflix 1 Tela</td><td>Streaming</td><td>R$ 20,90</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
+        <tr><td>Spotify Premium</td><td>Streaming</td><td>R$ 12,90</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
+        <tr><td>Free Fire 520</td><td>Games</td><td>R$ 20,90</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ADMIN ADD PRODUTO -->
+<div class="screen" id="screen-admin-produto-add">
+  <div class="admin-header">
+    <svg class="icon" onclick="showScreen('admin-produtos')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    <div class="admin-title">NOVO PRODUTO</div>
+    <div style="width:24px"></div>
+  </div>
+  <div style="padding:20px">
+    <div class="admin-form-group">
+      <label>Nome do produto</label>
+      <input type="text" class="admin-input" id="produtoNome" placeholder="Ex: Netflix 4K">
+    </div>
+    <div class="admin-form-group">
+      <label>Categoria</label>
+      <select class="admin-input" id="produtoCategoria">
+        <option value="streaming">Streaming</option>
+        <option value="games">Games</option>
+        <option value="social">Redes Sociais</option>
+        <option value="apps">Apps Premium</option>
+        <option value="gift">Gift Cards</option>
+        <option value="outros">Outros</option>
+      </select>
+    </div>
+    <div class="admin-form-group">
+      <label>Subcategoria</label>
+      <select class="admin-input" id="produtoSubcategoria">
+        <option value="netflix">Netflix</option>
+        <option value="spotify">Spotify</option>
+        <option value="freefire">Free Fire</option>
+      </select>
+    </div>
+    <div class="admin-form-group">
+      <label>Preço</label>
+      <input type="text" class="admin-input" id="produtoPreco" placeholder="R$ 20,90">
+    </div>
+    <div class="admin-form-group">
+      <label>Descrição</label>
+      <textarea class="admin-input admin-textarea" id="produtoDesc" placeholder="Descrição do produto"></textarea>
+    </div>
+    <div class="admin-form-group">
+      <label>URL da imagem</label>
+      <input type="text" class="admin-input" id="produtoImg" placeholder="https://i.imgur.com/...">
+    </div>
+    <button class="btn" onclick="salvarProduto()">SALVAR PRODUTO</button>
+  </div>
+</div>
+
+<!-- ADMIN CATEGORIAS -->
+<div class="screen" id="screen-admin-categorias">
+      <div class="admin-header">
+    <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    <div class="admin-title">CATEGORIAS</div>
+    <button class="admin-btn" onclick="showScreen('admin-categoria-add')">+ NOVA</button>
+  </div>
+  <div style="padding:20px">
+    <table class="admin-table">
+      <thead><tr><th>Nome</th><th>Produtos</th><th>Ação</th></tr></thead>
+      <tbody>
+        <tr><td>Streaming</td><td>18</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
+        <tr><td>Games</td><td>12</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
+        <tr><td>Gift Cards</td><td>8</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
+        <tr><td>Redes Sociais</td><td>5</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
+        <tr><td>Apps Premium</td><td>6</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
+        <tr><td>Outros</td><td>4</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ADMIN ADD CATEGORIA -->
+<div class="screen" id="screen-admin-categoria-add">
+  <div class="admin-header">
+    <svg class="icon" onclick="showScreen('admin-categorias')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    <div class="admin-title">NOVA CATEGORIA</div>
+    <div style="width:24px"></div>
+  </div>
+  <div style="padding:20px">
+    <div class="admin-form-group">
+      <label>Nome da categoria</label>
+      <input type="text" class="admin-input" id="catNome" placeholder="Ex: Música">
+    </div>
+    <div class="admin-form-group">
+      <label>Ícone URL</label>
+      <input type="text" class="admin-input" id="catIcon" placeholder="https://cdn-icons-png...">
+    </div>
+    <button class="btn" onclick="salvarCategoria()">SALVAR CATEGORIA</button>
+  </div>
+</div>
+
+<!-- ADMIN SUBCATEGORIAS -->
+<div class="screen" id="screen-admin-subcategorias">
+  <div class="admin-header">
+    <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    <div class="admin-title">SUBCATEGORIAS</div>
+    <button class="admin-btn" onclick="showScreen('admin-subcategoria-add')">+ NOVA</button>
+  </div>
+  <div style="padding:20px">
+    <table class="admin-table">
+      <thead><tr><th>Nome</th><th>Categoria</th><th>Produtos</th><th>Ação</th></tr></thead>
+      <tbody>
+        <tr><td>Netflix</td><td>Streaming</td><td>3</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
+        <tr><td>Spotify</td><td>Streaming</td><td>1</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
+        <tr><td>Free Fire</td><td>Games</td><td>2</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
+        <tr><td>Instagram</td><td>Redes Sociais</td><td>1</td><td><button class="admin-btn admin-btn-sm">Editar</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ADMIN ADD SUBCATEGORIA -->
+<div class="screen" id="screen-admin-subcategoria-add">
+  <div class="admin-header">
+    <svg class="icon" onclick="showScreen('admin-subcategorias')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    <div class="admin-title">NOVA SUBCATEGORIA</div>
+    <div style="width:24px"></div>
+  </div>
+  <div style="padding:20px">
+    <div class="admin-form-group">
+      <label>Nome da subcategoria</label>
+      <input type="text" class="admin-input" id="subcatNome" placeholder="Ex: Disney+">
+    </div>
+    <div class="admin-form-group">
+      <label>Categoria pai</label>
+      <select class="admin-input" id="subcatCat">
+        <option value="streaming">Streaming</option>
+        <option value="games">Games</option>
+        <option value="social">Redes Sociais</option>
+        <option value="apps">Apps Premium</option>
+        <option value="gift">Gift Cards</option>
+        <option value="outros">Outros</option>
+      </select>
+    </div>
+    <div class="admin-form-group">
+      <label>Ícone URL</label>
+      <input type="text" class="admin-input" id="subcatIcon" placeholder="https://i.imgur.com/...">
+    </div>
+    <div class="admin-form-group">
+      <label>Descrição</label>
+      <input type="text" class="admin-input" id="subcatDesc" placeholder="Ex: FILMES E SÉRIES">
+    </div>
+    <button class="btn" onclick="salvarSubcategoria()">SALVAR SUBCATEGORIA</button>
+  </div>
+</div>
+
+<!-- ADMIN CUPONS -->
+<div class="screen" id="screen-admin-cupons">
+  <div class="admin-header">
+    <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    <div class="admin-title">CUPONS</div>
+    <button class="admin-btn" onclick="novoCupom()">+ NOVO</button>
+  </div>
+  <div style="padding:20px">
+    <table class="admin-table">
+      <thead><tr><th>Código</th><th>Desconto</th><th>Usos</th><th>Status</th><th>Ação</th></tr></thead>
+      <tbody id="adminCuponsTable">
+        <tr><td>PRIME10</td><td>10%</td><td>0/100</td><td><div class="admin-switch active" onclick="toggleSwitch(this)"></div></td><td><button class="admin-btn admin-btn-sm admin-btn-red">Excluir</button></td></tr>
+        <tr><td>WELCOME20</td><td>R$ 20</td><td>5/50</td><td><div class="admin-switch active" onclick="toggleSwitch(this)"></div></td><td><button class="admin-btn admin-btn-sm admin-btn-red">Excluir</button></td></tr>
+        <tr><td>GAME15</td><td>15%</td><td>12/200</td><td><div class="admin-switch" onclick="toggleSwitch(this)"></div></td><td><button class="admin-btn admin-btn-sm admin-btn-red">Excluir</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ADMIN ADD CUPOM -->
+<div class="screen" id="screen-admin-cupom-add">
+  <div class="admin-header">
+    <svg class="icon" onclick="showScreen('admin-cupons')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    <div class="admin-title">NOVO CUPOM</div>
+    <div style="width:24px"></div>
+  </div>
+  <div style="padding:20px">
+    <div class="admin-form-group">
+      <label>Código do cupom</label>
+      <input type="text" class="admin-input" id="cupomCodigo" placeholder="EX: DESCONTO10">
+    </div>
+    <div class="admin-form-group">
+      <label>Tipo de desconto</label>
+      <select class="admin-input" id="cupomTipo">
+        <option value="porcentagem">Porcentagem %</option>
+        <option value="fixo">Valor fixo R$</option>
+      </select>
+    </div>
+    <div class="admin-form-group">
+      <label>Valor</label>
+      <input type="number" class="admin-input" id="cupomValor" placeholder="10">
+    </div>
+    <div class="admin-form-group">
+      <label>Limite de usos por cliente</label>
+      <input type="number" class="admin-input" id="cupomLimite" placeholder="1">
+    </div>
+    <div class="admin-form-group">
+      <label>Total de usos disponíveis</label>
+      <input type="number" class="admin-input" id="cupomTotal" placeholder="100">
+    </div>
+    <div class="admin-form-group">
+      <label style="display:flex;align-items:center;gap:10px">
+        <span>Ativo</span>
+        <div class="admin-switch active" id="cupomAtivo" onclick="toggleSwitch(this)"></div>
+      </label>
+    </div>
+    <button class="btn" onclick="salvarCupom()">SALVAR CUPOM</button>
+  </div>
+</div>
+
+<!-- ADMIN CONFIG -->
+<div class="screen" id="screen-admin-config">
+  <div class="admin-header">
+    <svg class="icon" onclick="showScreen('admin')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    <div class="admin-title">CONFIGURAÇÕES</div>
+    <div style="width:24px"></div>
+  </div>
+  <div style="padding:20px">
+    <div class="admin-form-group">
+      <label>Chave PIX</label>
+      <input type="text" class="admin-input" id="configPix" value="(98) 98485-3563">
+    </div>
+    <div class="admin-form-group">
+      <label>Nome no PIX</label>
+      <input type="text" class="admin-input" id="configNomePix" value="Lorrane Vitória Alves Vaz">
+    </div>
+    <div class="admin-form-group">
+      <label>WhatsApp Suporte</label>
+      <input type="text" class="admin-input" id="configWhats" value="5598984853563">
+    </div>
+    <div class="admin-form-group">
+      <label>Taxa de entrega padrão</label>
+      <input type="text" class="admin-input" id="configTaxa" value="Automática">
+    </div>
+    <button class="btn" onclick="salvarConfig()">SALVAR CONFIGURAÇÕES</button>
+  </div>
+</div>
+
+<!-- TELAS CLIENTE RESTANTES: SUBCAT, PRODUCTS, DETAIL, CART, PAYMENT, RECEIPT, ORDERS, PROFILE -->
 <div class="screen" id="screen-subcat">
   <header class="header">
     <div class="back-btn" onclick="showScreen('home')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Voltar</div>
@@ -477,12 +984,10 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
   <div class="cart-content">
     <div id="cartItems"></div>
-    
     <div class="coupon-box">
       <input type="text" class="coupon-input" id="couponInput" placeholder="Cupom de desconto">
       <button class="coupon-btn" onclick="applyCoupon()">Aplicar</button>
     </div>
-    
     <div class="cart-summary">
       <div class="summary-row">
         <span>Subtotal</span>
@@ -518,8 +1023,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         </div>
         <div class="pay-radio"></div>
       </div>
-    </div>
-
     <div class="pix-box">
       <div class="pix-box-title">PAGAR COM PIX</div>
       <div class="pix-qrcode">
@@ -527,23 +1030,20 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
       </div>
       <div class="pix-desc">Escaneie o QR Code abaixo para realizar o pagamento</div>
       <div class="pix-name">Lorrane Vitória Alves Vaz</div>
-      
       <div class="pix-divider">OU COPIE A CHAVE PIX</div>
-      
       <div class="pix-copy-box">
         <div class="pix-code" id="pixCode">(98) 98485-3563</div>
         <button class="copy-btn" onclick="copyPix()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         </button>
       </div>
-    </div>
-
     <div class="total-box">
       <div class="total-row">
         <span>Total</span>
         <span id="payTotal">R$ 0,00</span>
       </div>
     </div>
+  </div>
   <div class="buy-btn-fixed">
     <button class="buy-btn" onclick="pagarPix()">JÁ PAGUEI</button>
   </div>
@@ -553,26 +1053,21 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   <div class="receipt-header">
     <svg class="receipt-close" onclick="showScreen('home')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
   </div>
-  
   <div class="receipt-success-icon">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg>
   </div>
-  
   <div class="receipt-title">Pedido realizado!</div>
   <div class="receipt-id" id="receiptId">#PSVZ-202405180001</div>
   <div class="receipt-date" id="receiptDate">18/05/2024 às 15:30</div>
   <div class="receipt-status">Pagamento aprovado</div>
-  
   <div class="receipt-box">
     <div class="receipt-section-title">ITENS DO PEDIDO</div>
     <div id="receiptItems"></div>
-    
     <div class="receipt-total">
       <div class="receipt-total-label">Total pago</div>
       <div class="receipt-total-value" id="receiptTotal">R$ 0,00</div>
     </div>
   </div>
-  
   <div class="receipt-actions">
     <button class="receipt-btn receipt-btn-primary" onclick="showScreen('home')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 22"/></svg>
@@ -591,14 +1086,12 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
     <div class="orders-title">MEUS PEDIDOS</div>
     <div style="width:24px"></div>
   </div>
-  
   <div class="orders-tabs">
     <div class="order-tab active" onclick="filterOrders('todos')">Todos</div>
     <div class="order-tab" onclick="filterOrders('pendentes')">Pendentes</div>
     <div class="order-tab" onclick="filterOrders('concluidos')">Concluídos</div>
     <div class="order-tab" onclick="filterOrders('cancelados')">Cancelados</div>
   </div>
-  
   <div class="orders-content" id="ordersList">
     <div class="order-card">
       <div class="order-icon"><img src="https://i.imgur.com/0Z8F8qk.png"></div>
@@ -611,7 +1104,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <div class="order-status concluido" style="margin-top:6px">Concluído</div>
       </div>
     </div>
-    
     <div class="order-card">
       <div class="order-icon"><img src="https://i.imgur.com/0Z8F8qk.png"></div>
       <div class="order-info">
@@ -623,30 +1115,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <div class="order-status concluido" style="margin-top:6px">Concluído</div>
       </div>
     </div>
-    
-    <div class="order-card">
-      <div class="order-icon"><img src="https://i.imgur.com/0Z8F8qk.png"></div>
-      <div class="order-info">
-        <div class="order-id">#PSVZ-202405180003</div>
-        <div class="order-date">16/05/2024 às 13:10</div>
-      </div>
-      <div style="text-align:right">
-        <div class="order-price">R$ 17,90</div>
-        <div class="order-status pendente" style="margin-top:6px">Pendente</div>
-      </div>
-    </div>
-    
-    <div class="order-card">
-      <div class="order-icon"><img src="https://i.imgur.com/0Z8F8qk.png"></div>
-      <div class="order-info">
-        <div class="order-id">#PSVZ-202405180004</div>
-        <div class="order-date">15/05/2024 às 12:00</div>
-      </div>
-      <div style="text-align:right">
-        <div class="order-price">R$ 79,90</div>
-        <div class="order-status pendente" style="margin-top:6px">Pendente</div>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -656,52 +1124,43 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
     <div class="orders-title">PERFIL</div>
     <div style="width:24px"></div>
   </div>
-  
   <div class="profile-header">
     <div class="profile-avatar">VZ</div>
     <div class="profile-info">
       <div class="profile-name" id="profileName">VZ Prime</div>
       <div class="profile-since">Cliente desde 2024</div>
     </div>
-  </div>
-  
   <div class="profile-menu">
     <div class="profile-menu-item" onclick="showScreen('orders')">
       <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
       <div class="profile-menu-text">Meus pedidos</div>
       <svg class="profile-menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
-    
     <div class="profile-menu-item" onclick="alert('Em breve')">
-      <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 0 0 0-7.78 0L12 5.67l-1.06a5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 0 0 0 0-7.78z"/></svg>
+      <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 0 0 0 0-7.78z"/></svg>
       <div class="profile-menu-text">Produtos favoritos</div>
       <svg class="profile-menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
-    
     <div class="profile-menu-item" onclick="alert('Em breve')">
-      <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
       <div class="profile-menu-text">Cupons de desconto</div>
       <svg class="profile-menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
-    
     <div class="profile-menu-item" onclick="alert('Em breve')">
       <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
       <div class="profile-menu-text">Métodos de pagamento</div>
       <svg class="profile-menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
-    
     <div class="profile-menu-item" onclick="alert('Em breve')">
       <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M23 12h-6m-6 0H1m18.2 5.2l-4.2-4.2m0-6l4.2-4.2"/></svg>
       <div class="profile-menu-text">Configurações da conta</div>
       <svg class="profile-menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
-    
     <div class="profile-menu-item" onclick="alert('Em breve')">
       <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       <div class="profile-menu-text">Central de ajuda</div>
       <svg class="profile-menu-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
-    
     <div class="profile-menu-item" onclick="auth.signOut()">
       <svg class="profile-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
       <div class="profile-menu-text profile-logout">Sair da conta</div>
@@ -725,6 +1184,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
+const ADMIN_EMAIL = 'vittoriahvahz@gmail.com';
 let cart = [];
 let currentCoupon = null;
 window.currentProduct = null;
@@ -737,6 +1197,15 @@ function showScreen(screen) {
   if(screen === 'cart') renderCart();
 }
 
+function checkAdmin(){
+  const user = auth.currentUser;
+  if(user && user.email === ADMIN_EMAIL){
+    showScreen('admin');
+  }else{
+    alert('Acesso negado. Apenas administradores.');
+  }
+}
+
 function togglePass(id, el) {
   const input = document.getElementById(id);
   input.type = input.type === 'password'? 'text' : 'password';
@@ -745,14 +1214,18 @@ function togglePass(id, el) {
 
 function toggleMenu(){
   const menu = document.getElementById('sideMenu');
-  const overlay = document.getElementById('menuOverlay');
-  menu.classList.toggle('active');
+  const overlay = document.getElementById('menuOverlay
+    menu.classList.toggle('active');
   overlay.classList.toggle('active');
 }
 
 auth.onAuthStateChanged((user) => {
   if(user){
-    showScreen('home');
+    if(user.email === ADMIN_EMAIL){
+      showScreen('admin');
+    }else{
+      showScreen('home');
+    }
     if(user.displayName){
       document.getElementById('profileName').textContent = user.displayName;
     }
@@ -814,22 +1287,7 @@ const subcategorias = {
     {id:'hbo',img:'https://i.imgur.com/8QJ8Q.png',title:'HBO MAX',desc:'FILMES E SÉRIES'},
     {id:'disney',img:'https://i.imgur.com/9R9R9R9.png',title:'DISNEY+',desc:'FILMES E SÉRIES'},
     {id:'prime',img:'https://i.imgur.com/7P7P7P7.png',title:'AMAZON PRIME',desc:'FILMES E SÉRIES'},
-    {id:'appletv',img:'https://i.imgur.com/6A6A6A6.png',title:'APPLE TV+',desc:'FILMES E SÉRIES'},
-    {id:'youtube',img:'https://i.imgur.com/5Y5Y5Y5.png',title:'YOUTUBE PREMIUM',desc:'FILMES E VÍDEOS'},
-        {id:'spotify',img:'https://i.imgur.com/4S4S4S4.png',title:'SPOTIFY',desc:'MÚSICAS E PODCASTS'},
-    {id:'deezer',img:'https://i.imgur.com/3D3D3D3.png',title:'DEEZER',desc:'MÚSICAS E PODCASTS'},
-    {id:'crunchyroll',img:'https://i.imgur.com/2C2C2C2.png',title:'CRUNCHYROLL',desc:'ANIMES'},
-    {id:'funimation',img:'https://i.imgur.com/1F1F1F1.png',title:'FUNIMATION',desc:'ANIMES'},
-    {id:'paramount',img:'https://i.imgur.com/0P0P0P0.png',title:'PARAMOUNT+',desc:'FILMES E SÉRIES'},
-    {id:'star',img:'https://i.imgur.com/9S9S9S9.png',title:'STAR+',desc:'FILMES E SÉRIES'},
-    {id:'globoplay',img:'https://i.imgur.com/8G8G8G8.png',title:'GLOBOPLAY',desc:'FILMES E SÉRIES'},
-    {id:'telecine',img:'https://i.imgur.com/7T7T7T7.png',title:'TELECINE',desc:'FILMES E SÉRIES'},
-    {id:'mubi',img:'https://i.imgur.com/6M6M6M6.png',title:'MUBI',desc:'FILMES E CULTURA'},
-    {id:'dazn',img:'https://i.imgur.com/5D5D5D5.png',title:'DAZN',desc:'ESPORTES'},
-    {id:'espn',img:'https://i.imgur.com/4E4E4E4.png',title:'ESPN',desc:'ESPORTES'},
-    {id:'twitch',img:'https://i.imgur.com/3T3T3T3.png',title:'TWITCH',desc:'LIVES E GAMES'},
-    {id:'ytkids',img:'https://i.imgur.com/2Y2Y2Y2.png',title:'YOUTUBE KIDS',desc:'CONTEÚDO INFANTIL'},
-    {id:'tiktok',img:'https://i.imgur.com/1T1T1T1.png',title:'TIKTOK',desc:'VÍDEOS CURTOS'}
+    {id:'spotify',img:'https://i.imgur.com/4S4S4S4.png',title:'SPOTIFY',desc:'MÚSICAS E PODCASTS'}
   ],
   gift: [
     {id:'googleplay',img:'https://cdn-icons-png.flaticon.com/512/300/300221.png',title:'GOOGLE PLAY',desc:'CRÉDITOS'},
@@ -862,28 +1320,14 @@ const produtos = {
   hbo: [{id:'hbo-1',img:'https://i.imgur.com/8QJ8Q.png', title:'HBO MAX', desc:'Acesso completo 30 dias', price:'R$ 19,90', platform:'HBO Max'}],
   disney: [{id:'disney-1',img:'https://i.imgur.com/9R9R9R9.png', title:'DISNEY+', desc:'Filmes e séries Disney 30 dias', price:'R$ 16,90', platform:'Disney+'}],
   prime: [{id:'prime-1',img:'https://i.imgur.com/7P7P7P7.png', title:'PRIME VIDEO', desc:'Amazon Prime 30 dias', price:'R$ 14,90', platform:'Prime Video'}],
-  appletv: [{id:'appletv-1',img:'https://i.imgur.com/6A6A6A6.png', title:'APPLE TV+', desc:'Originais Apple 30 dias', price:'R$ 21,90', platform:'Apple TV+'}],
-  youtube: [{id:'youtube-1',img:'https://i.imgur.com/5Y5Y5Y5.png', title:'YOUTUBE PREMIUM', desc:'Sem anúncios + Music 30 dias', price:'R$ 16,90', platform:'YouTube'}],
   spotify: [{id:'spotify-1',img:'https://i.imgur.com/4S4S4S4.png', title:'SPOTIFY PREMIUM', desc:'Música sem anúncios 30 dias', price:'R$ 12,90', platform:'Spotify'}],
-  deezer: [{id:'deezer-1',img:'https://i.imgur.com/3D3D3D3.png', title:'DEEZER PREMIUM', desc:'Streaming de música 30 dias', price:'R$ 12,90', platform:'Deezer'}],
-  crunchyroll: [{id:'crunchy-1',img:'https://i.imgur.com/2C2C2C2.png', title:'CRUNCHYROLL', desc:'Animes premium 30 dias', price:'R$ 14,90', platform:'Crunchyroll'}],
-  funimation: [{id:'funi-1',img:'https://i.imgur.com/1F1F1F1.png', title:'FUNIMATION', desc:'Animes dublados 30 dias', price:'R$ 14,90', platform:'Funimation'}],
-  paramount: [{id:'para-1',img:'https://i.imgur.com/0P0P0P0.png', title:'PARAMOUNT+', desc:'Filmes e séries 30 dias', price:'R$ 19,90', platform:'Paramount+'}],
-  star: [{id:'star-1',img:'https://i.imgur.com/9S9S9S9.png', title:'STAR+', desc:'Conteúdo adulto Disney 30 dias', price:'R$ 19,90', platform:'Star+'}],
-  globoplay: [{id:'globo-1',img:'https://i.imgur.com/8G8G8G8.png', title:'GLOBOPLAY', desc:'Novelas e séries 30 dias', price:'R$ 22,90', platform:'Globoplay'}],
-  telecine: [{id:'tele-1',img:'https://i.imgur.com/7T7T7T7.png', title:'TELECINE', desc:'Filmes lançamentos 30 dias', price:'R$ 24,90', platform:'Telecine'}],
-  mubi: [{id:'mubi-1',img:'https://i.imgur.com/6M6M6M6.png', title:'MUBI', desc:'Cinema cult 30 dias', price:'R$ 29,90', platform:'MUBI'}],
-  dazn: [{id:'dazn-1',img:'https://i.imgur.com/5D5D5D5.png', title:'DAZN', desc:'Esportes ao vivo 30 dias', price:'R$ 34,90', platform:'DAZN'}],
-  espn: [{id:'espn-1',img:'https://i.imgur.com/4E4E4E4.png', title:'ESPN', desc:'Futebol e NBA 30 dias', price:'R$ 19,90', platform:'ESPN'}],
-  twitch: [{id:'twitch-1',img:'https://i.imgur.com/3T3T3T3.png', title:'TWITCH TURBO', desc:'Sem anúncios 30 dias', price:'R$ 9,90', platform:'Twitch'}],
-  ytkids: [{id:'ytkids-1',img:'https://i.imgur.com/2Y2Y2Y2.png', title:'YOUTUBE KIDS', desc:'Conteúdo seguro 30 dias', price:'R$ 8,90', platform:'YouTube Kids'}],
-  tiktok: [{id:'tiktok-1k',img:'https://i.imgur.com/1T1T1T1.png', title:'1K SEGUIDORES', desc:'Entrega em até 24h', price:'R$ 12,90', platform:'TikTok'}],
   googleplay: [{id:'google-50',img:'https://cdn-icons-png.flaticon.com/512/300/300221.png', title:'GOOGLE PLAY R$50', desc:'Créditos para apps e jogos', price:'R$ 52,90', platform:'Google Play'}],
   steam: [{id:'steam-50',img:'https://cdn-icons-png.flaticon.com/512/588/588249.png', title:'STEAM R$50', desc:'Carteira Steam', price:'R$ 52,90', platform:'Steam'}],
   instagram: [{id:'insta-1k',img:'https://cdn-icons-png.flaticon.com/512/174/174855.png', title:'1K SEGUIDORES', desc:'Entrega em até 24h', price:'R$ 14,90', platform:'Instagram'}],
+  tiktok: [{id:'tiktok-1k',img:'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', title:'1K SEGUIDORES', desc:'Entrega em até 24h', price:'R$ 12,90', platform:'TikTok'}],
   freefire: [
-    {id:'ff-520',img:'https://i.imgur.com/0qH2XrG.png', title:'520 DIAMANTES', desc:'Diamantes para sua conta de Free Fire. Entrega automática após a confirmação do pagamento.', price:'R$ 20,90', platform:'Free Fire'},
-    {id:'ff-1080',img:'https://i.imgur.com/0qH2XrG.png', title:'1080 DIAMANTES', desc:'Pacote com bônus. Entrega automática após a confirmação do pagamento.', price:'R$ 39,90', platform:'Free Fire'}
+    {id:'ff-520',img:'https://i.imgur.com/0qH2XrG.png', title:'520 DIAMANTES', desc:'Diamantes para Free Fire', price:'R$ 20,90', platform:'Free Fire'},
+    {id:'ff-1080',img:'https://i.imgur.com/0qH2XrG.png', title:'1080 DIAMANTES', desc:'Pacote com bônus', price:'R$ 39,90', platform:'Free Fire'}
   ],
   roblox: [{id:'rbx-800',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'800 ROBUX', desc:'Entrega via Game Pass', price:'R$ 34,90', platform:'Roblox'}],
   canva: [{id:'canva-1',img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'CANVA PRO', desc:'Templates premium 30 dias', price:'R$ 24,90', platform:'Canva'}],
@@ -942,14 +1386,12 @@ function showDetail(serviceId, productId){
   const list = produtos[serviceId] || [];
   const p = list.find(x => x.id === productId);
   if(!p) return;
-
   document.getElementById('detailImage').innerHTML = `<img src="${p.img}">`;
   document.getElementById('detailTitle').textContent = p.title;
   document.getElementById('detailSubtitle').textContent = p.platform;
   document.getElementById('detailPrice').textContent = p.price;
   document.getElementById('detailDesc').textContent = p.desc;
   document.getElementById('detailPlatform').textContent = p.platform;
-
   window.currentProduct = {...p, serviceId};
   showScreen('detail');
 }
@@ -971,7 +1413,6 @@ function addToCartDirect(serviceId, productId){
   const list = produtos[serviceId] || [];
   const p = list.find(x => x.id === productId);
   if(!p) return;
-
   const product = {...p, serviceId};
   const existing = cart.find(i => i.id === product.id);
   if(existing){
@@ -1042,14 +1483,11 @@ function updateTotals(){
     const price = parseFloat(item.price.replace('R$ ','').replace(',','.'));
     subtotal += price * item.qty;
   });
-
   let discount = 0;
   if(currentCoupon === 'PRIME10'){
     discount = subtotal * 0.1;
   }
-
   const total = subtotal - discount;
-
   document.getElementById('subtotal').textContent = `R$ ${subtotal.toFixed(2).replace('.',',')}`;
   document.getElementById('discount').textContent = `- R$ ${discount.toFixed(2).replace('.',',')}`;
   document.getElementById('total').textContent = `R$ ${total.toFixed(2).replace('.',',')}`;
@@ -1095,22 +1533,17 @@ function gerarComprovante(){
   const agora = new Date();
   const id = `#PSVZ-${agora.getFullYear()}${String(agora.getMonth()+1).padStart(2,'0')}${String(agora.getDate()).padStart(2,'0')}${String(Math.floor(Math.random()*9000)+1000)}`;
   const data = `${String(agora.getDate()).padStart(2,'0')}/${String(agora.getMonth()+1).padStart(2,'0')}/${agora.getFullYear()} às ${String(agora.getHours()).padStart(2,'0')}:${String(agora.getMinutes()).padStart(2,'0')}`;
-
   document.getElementById('receiptId').textContent = id;
   document.getElementById('receiptDate').textContent = data;
-
   let total = 0;
   cart.forEach(item => {
     const price = parseFloat(item.price.replace('R$ ','').replace(',','.'));
     total += price * item.qty;
   });
-
   if(currentCoupon === 'PRIME10'){
     total = total * 0.9;
   }
-
   document.getElementById('receiptTotal').textContent = `R$ ${total.toFixed(2).replace('.',',')}`;
-
   const container = document.getElementById('receiptItems');
   container.innerHTML = '';
   cart.forEach(item => {
@@ -1124,7 +1557,6 @@ function gerarComprovante(){
         <div class="receipt-item-price">${item.price}</div>
       </div>`;
   });
-
   showScreen('receipt');
 }
 
@@ -1134,13 +1566,10 @@ function enviarComprovante(){
   texto += `Data: ${document.getElementById('receiptDate').textContent}%0A`;
   texto += `Status: Pagamento aprovado ✅%0A%0A`;
   texto += '*Itens:*%0A';
-
   cart.forEach(item => {
     texto += `• ${item.title} - ${item.price}%0A`;
   });
-
   texto += `%0A*Total pago: ${document.getElementById('receiptTotal').textContent}*`;
-
   const numeroWhats = '5598984853563';
   window.open(`https://wa.me/${numeroWhats}?text=${texto}`, '_blank');
 }
@@ -1148,7 +1577,6 @@ function enviarComprovante(){
 function filterOrders(tipo){
   document.querySelectorAll('.order-tab').forEach(t=>t.classList.remove('active'));
   event.target.classList.add('active');
-
   const cards = document.querySelectorAll('.order-card');
   cards.forEach(card => {
     const status = card.querySelector('.order-status').textContent.toLowerCase();
@@ -1164,6 +1592,82 @@ function filterOrders(tipo){
       card.style.display = 'none';
     }
   });
+}
+
+// ADMIN FUNCTIONS
+function verPedido(id){
+  showScreen('admin-pedido-detalhe');
+}
+
+function salvarPedido(){
+  alert('Pedido atualizado com sucesso!');
+  showScreen('admin-pedidos');
+}
+
+function verCliente(id){
+  showScreen('admin-cliente-detalhe');
+}
+
+function salvarCliente(){
+  alert('Cliente atualizado com sucesso!');
+  showScreen('admin-clientes');
+}
+
+function salvarProduto(){
+  const nome = document.getElementById('produtoNome').value;
+  const preco = document.getElementById('produtoPreco').value;
+  if(!nome ||!preco){
+    alert('Preencha nome e preço');
+    return;
+  }
+  alert(`Produto ${nome} criado!\nPreço: ${preco}`);
+  showScreen('admin-produtos');
+}
+
+function salvarCategoria(){
+  const nome = document.getElementById('catNome').value;
+  if(!nome){
+    alert('Preencha o nome');
+    return;
+  }
+  alert(`Categoria ${nome} criada!`);
+  showScreen('admin-categorias');
+}
+
+function salvarSubcategoria(){
+  const nome = document.getElementById('subcatNome').value;
+  if(!nome){
+    alert('Preencha o nome');
+    return;
+  }
+  alert(`Subcategoria ${nome} criada!`);
+  showScreen('admin-subcategorias');
+}
+
+function novoCupom(){
+  showScreen('admin-cupom-add');
+}
+
+function salvarCupom(){
+  const codigo = document.getElementById('cupomCodigo').value;
+  const tipo = document.getElementById('cupomTipo').value;
+  const valor = document.getElementById('cupomValor').value;
+  const limite = document.getElementById('cupomLimite').value;
+  const total = document.getElementById('cupomTotal').value;
+  if(!codigo ||!valor){
+    alert('Preencha código e valor');
+    return;
+  }
+  alert(`Cupom ${codigo} criado!\nDesconto: ${valor}${tipo==='porcentagem'?'%':' R$'}\nLimite: ${limite}x por cliente\nTotal: ${total} usos`);
+  showScreen('admin-cupons');
+}
+
+function salvarConfig(){
+  alert('Configurações salvas com sucesso!');
+}
+
+function toggleSwitch(el){
+  el.classList.toggle('active');
 }
 
 function showAlert(id, msg){
