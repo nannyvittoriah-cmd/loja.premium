@@ -67,15 +67,17 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .dot-left,.dot-right{position:absolute;width:4px;height:4px;background:#7c3aed;border-radius:50%;box-shadow:0 0 8px #7c3aed}
 .dot-left{left:calc(50% - 84px)}
 .dot-right{right:calc(50% - 84px)}
-.card-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:0 16px 20px}
-@media(max-width:480px){.card-grid{grid-template-columns:repeat(3,1fr)}}
-.glow-card{background:#0a0a0f;border:1px solid #2a2a35;border-radius:14px;padding:14px 6px;text-align:center;cursor:pointer;position:relative;transition:0.2s;box-shadow:inset 0 0 0 1px rgba(124,58,237,0.1),0 0 20px rgba(124,58,237,0.05);z-index:1}
+.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 16px 20px}
+.glow-card{background:#0a0a0f;border:1px solid #2a2a35;border-radius:14px;padding:14px 6px 10px;text-align:center;cursor:pointer;position:relative;transition:0.2s;box-shadow:inset 0 0 0 1px rgba(124,58,237,0.1),0 0 20px rgba(124,58,237,0.05);z-index:1}
 .glow-card:active{transform:scale(0.96);box-shadow:inset 0 0 0 1px rgba(124,58,237,0.3),0 0 30px rgba(124,58,237,0.2)}
 .glow-card-img{width:60px;height:60px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;position:relative;border-radius:50%;background:#000}
 .glow-card-img::before{content:'';position:absolute;inset:-2px;border-radius:50%;background:conic-gradient(from 0deg,#7c3aed,#a855f7,#7c3aed);filter:blur(8px);opacity:0.8;z-index:0}
 .glow-card-img img{width:48px;height:48px;object-fit:contain;position:relative;z-index:2;border-radius:50%;background:#000;padding:4px}
 .glow-card-title{font-size:9px;font-weight:800;color:#fff;margin-bottom:3px;letter-spacing:0.5px;line-height:1.2}
-.glow-card-desc{font-size:7px;color:#a855f7;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;line-height:1}
+.glow-card-desc{font-size:7px;color:#a855f7;text-transform:uppercase;letter-spacing:0.8px;font-weight:600;line-height:1;margin-bottom:8px}
+.glow-card-btn{width:100%;height:28px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);border:none;border-radius:8px;color:#fff;font-size:9px;font-weight:800;cursor:pointer;letter-spacing:0.5px;display:flex;align-items:center;justify-content:center;gap:4px}
+.glow-card-btn:active{transform:scale(0.95)}
+.glow-card-btn svg{width:12px;height:12px}
 .back-btn{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;cursor:pointer}
 .detail-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:var(--bg);border-bottom:1px solid var(--border)}
 .detail-header h1{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#fff}
@@ -143,7 +145,8 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .pix-box-title{font-size:12px;font-weight:800;color:#fff;margin-bottom:16px;text-transform:uppercase;letter-spacing:1px}
 .pix-qrcode{width:180px;height:180px;background:#fff;border-radius:12px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center}
 .pix-qrcode img{width:160px;height:160px}
-.pix-desc{font-size:12px;color:var(--text-dim);margin-bottom:16px}
+.pix-desc{font-size:12px;color:var(--text-dim);margin-bottom:8px}
+.pix-name{font-size:13px;font-weight:700;color:#fff;margin-bottom:16px}
 .pix-divider{font-size:11px;color:var(--text-dim);margin:16px 0;text-transform:uppercase}
 .pix-copy-box{display:flex;gap:8px;align-items:center;background:var(--input);border:1px solid var(--border);border-radius:10px;padding:12px}
 .pix-code{flex:1;font-size:11px;color:#fff;word-break:break-all;font-family:monospace}
@@ -392,7 +395,8 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 
 <div class="screen" id="screen-payment">
   <div class="pay-header">
-    <svg class="icon" onclick="showScreen('cart')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    <svg class="icon" onclick="showScreen('cart')" viewBox="0 0 24 24"
+        <svg class="icon" onclick="showScreen('cart')" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
     <div class="pay-title">PAGAMENTO</div>
   </div>
   <div class="pay-content">
@@ -400,7 +404,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
       <div class="pay-method-title">MÉTODO DE PAGAMENTO</div>
       <div class="pay-option">
         <div class="pay-option-left">
-          <svg class="pay-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12 s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          <svg class="pay-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
           <div class="pay-option-text">PIX</div>
         </div>
         <div class="pay-radio"></div>
@@ -410,14 +414,15 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
     <div class="pix-box">
       <div class="pix-box-title">PAGAR COM PIX</div>
       <div class="pix-qrcode">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=COLOQUE-SUA-CHAVE-PIX-AQUI" alt="QR Code PIX">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=98984853563" alt="QR Code PIX">
       </div>
       <div class="pix-desc">Escaneie o QR Code abaixo para realizar o pagamento</div>
+      <div class="pix-name">Lorrane Vitória Alves Vaz</div>
       
-      <div class="pix-divider">OU COPIE O CÓDIGO PIX</div>
+      <div class="pix-divider">OU COPIE A CHAVE PIX</div>
       
       <div class="pix-copy-box">
-        <div class="pix-code" id="pixCode">00020126580014BR.GOV.BCB.PIX0136COLOQUE-SUA-CHAVE-PIX-AQUI5204000053039865802BR5925PRIME STORE VZ LTDA6009SAO PAULO62070503***6304ABCD</div>
+        <div class="pix-code" id="pixCode">(98) 98485-3563</div>
         <button class="copy-btn" onclick="copyPix()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         </button>
@@ -635,7 +640,18 @@ function showProducts(service) {
     grid.innerHTML = '<div class="glow-card"><div class="glow-card-title">EM BREVE</div><div class="glow-card-desc">PRODUTOS CHEGANDO</div></div>';
   }else{
     list.forEach(p => {
-      grid.innerHTML += `<div class="glow-card" onclick="showDetail('${service}','${p.id}')"><div class="glow-card-img"><img src="${p.img}"></div><div class="glow-card-title">${p.title}</div><div class="glow-card-desc">${p.price}</div></div>`;
+      grid.innerHTML += `
+        <div class="glow-card">
+          <div onclick="showDetail('${service}','${p.id}')">
+            <div class="glow-card-img"><img src="${p.img}"></div>
+            <div class="glow-card-title">${p.title}</div>
+            <div class="glow-card-desc">${p.price}</div>
+          </div>
+          <button class="glow-card-btn" onclick="event.stopPropagation(); addToCartDirect('${service}','${p.id}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            CARRINHO
+          </button>
+        </div>`;
     });
   }
   showScreen('products');
@@ -668,6 +684,22 @@ function addToCart(){
   updateCartBadge();
   showScreen('cart');
   renderCart();
+}
+
+function addToCartDirect(serviceId, productId){
+  const list = produtos[serviceId] || [];
+  const p = list.find(x => x.id === productId);
+  if(!p) return;
+  
+  const product = {...p, serviceId};
+  const existing = cart.find(i => i.id === product.id);
+  if(existing){
+    existing.qty++;
+  }else{
+    cart.push({...product, qty: 1});
+  }
+  updateCartBadge();
+  alert('Adicionado ao carrinho!');
 }
 
 function updateCartBadge(){
@@ -773,7 +805,7 @@ function finalizarCompra(){
 function copyPix(){
   const code = document.getElementById('pixCode').textContent;
   navigator.clipboard.writeText(code).then(() => {
-    alert('Código PIX copiado!');
+    alert('Chave PIX copiada!');
   }).catch(() => {
     alert('Erro ao copiar. Copie manualmente.');
   });
@@ -802,8 +834,8 @@ function pagarPix(){
   resumo += 'Já realizei o pagamento via PIX.%0A';
   resumo += 'Por favor, me envia a chave PIX pra confirmar.';
   
-  // TROCA O NÚMERO AQUI 👇
-  const numeroWhats = '5598984853563'; // DDD + número sem espaços
+  // WhatsApp: (98) 98485-3563
+  const numeroWhats = '5598984853563';
   
   window.open(`https://wa.me/${numeroWhats}?text=${resumo}`, '_blank');
   
