@@ -5,76 +5,93 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Prime Store VZ</title>
 <style>
-:root{--bg:#0a0a0f;--card:#15151d;--input:#1e1e2a;--border:#2a2a35;--purple:#7c3aed;--purple-hover:#6d28d9;--text:#fff;--text-dim:#9ca3af;--green:#10b981}
+:root{--bg:#0a0a0f;--card:#0f0f15;--input:#15151d;--border:#2a2a35;--purple:#7c3aed;--purple-hover:#6d28d9;--text:#fff;--text-dim:#6b7280;--glow:rgba(124,58,237,0.3);--green:#10b981}
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
 body{background:var(--bg);color:var(--text);min-height:100vh}
 .screen{display:none;width:100%;max-width:420px;margin:0 auto;min-height:100vh}
 .screen.active{display:block}
-.center{display:flex;align-items:center;justify-content:center;padding:20px;min-height:100vh}
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 24px}
-h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px}
-.logo{font-size:20px;font-weight:700;color:var(--purple);text-align:center;margin-bottom:4px}
-.subtitle{font-size:13px;color:var(--text-dim);text-align:center;margin-bottom:24px}
+.center{display:flex;align-items:center;justify-content:center;padding:20px;min-height:100vh;background:radial-gradient(circle at 50% 0%, var(--glow) 0%, transparent 50%)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px 28px;box-shadow:0 0 40px rgba(124,58,237,0.15),inset 0 1px 0 rgba(255,255,255,0.05);width:100%;max-width:360px}
+h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var(--text-dim);letter-spacing:1.5px}
+.logo{font-size:22px;font-weight:800;color:#fff;text-align:center;margin-bottom:4px;text-shadow:0 0 20px var(--purple)}
+.subtitle{font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:28px}
 .input-group{margin-bottom:16px}
-.input-group label{display:block;font-size:13px;color:var(--text-dim);margin-bottom:6px}
-.input-box{width:100%;height:48px;background:var(--input);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;padding:0 14px}
+.input-group label{display:block;font-size:12px;color:var(--text-dim);margin-bottom:8px}
+.input-box{width:100%;height:48px;background:var(--input);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;padding:0 16px}
+.input-box:focus-within{border-color:var(--purple);box-shadow:0 0 0 3px rgba(124,58,237,0.1)}
 .input-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px}
-.input-box input::placeholder{color:#6b7280}
+.input-box input::placeholder{color:#4b5563}
 .toggle{cursor:pointer;color:#6b7280;font-size:18px}
-.row{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;font-size:13px}
+.row{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;font-size:12px}
 .row label{display:flex;align-items:center;gap:8px;color:var(--text-dim);cursor:pointer}
 .row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--purple)}
 .row a{color:var(--purple);text-decoration:none}
-.btn{width:100%;height:48px;background:var(--purple);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:0.2s}
-.btn:hover{background:var(--purple-hover)}
-.btn:disabled{opacity:0.6;cursor:not-allowed}
-.footer-link{text-align:center;margin-top:20px;font-size:13px;color:var(--text-dim)}
+.btn{width:100%;height:50px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:0.2s;letter-spacing:1px;box-shadow:0 4px 20px rgba(124,58,237,0.4)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 30px rgba(124,58,237,0.6)}
+.btn:active{transform:translateY(0)}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
+.footer-link{text-align:center;margin-top:24px;font-size:12px;color:var(--text-dim)}
 .footer-link a{color:var(--purple);text-decoration:none;font-weight:600}
-.checkbox-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:20px;font-size:12px;color:var(--text-dim)}
-.checkbox-row input{margin-top:2px;accent-color:var(--purple)}
+.checkbox-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:24px;font-size:11px;color:var(--text-dim);line-height:1.5}
+.checkbox-row input{margin-top:2px;accent-color:var(--purple);flex-shrink:0}
 .checkbox-row a{color:var(--purple);text-decoration:none}
-.alert{padding:12px 14px;border-radius:10px;font-size:13px;margin-bottom:16px;display:none}
+.alert{padding:12px 16px;border-radius:12px;font-size:12px;margin-bottom:16px;display:none;text-align:center}
 .alert.error{background:rgba(239,68,68,0.1);border:1px solid #ef4444;color:#ef4444}
 .alert.success{background:rgba(16,185,129,0.1);border:1px solid #10b981;color:#10b981}
+.text-info{font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:24px;line-height:1.6}
+
+/* HOME */
 .header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;position:sticky;top:0;background:var(--bg);z-index:10}
-.header-title{font-size:16px;font-weight:700}
+.header-left svg{width:24px;height:24px;stroke:var(--text);cursor:pointer}
+.header-title{font-size:18px;font-weight:800}
+.header-title span{color:var(--purple)}
 .header-icons{display:flex;gap:16px;align-items:center}
 .icon{width:22px;height:22px;stroke:var(--text);cursor:pointer}
 .icon.purple{stroke:var(--purple)}
-.back-btn{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;cursor:pointer}
+.notif-dot{position:absolute;width:8px;height:8px;background:var(--purple);border-radius:50%;top:0;right:0}
 .search{margin:0 20px 16px;position:relative}
-.search input{width:100%;height:42px;background:var(--input);border:1px solid var(--border);border-radius:12px;padding:0 14px 0 42px;color:var(--text);font-size:13px;outline:none}
-.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;stroke:#6b7280}
-.banner{margin:0 20px 20px;height:120px;background:linear-gradient(135deg,#1e1e2a 0%,#2a2a35 100%);border-radius:12px;border:1px solid var(--border)}
-.section-header{display:flex;justify-content:space-between;align-items:center;padding:0 20px 12px;font-size:14px;font-weight:600}
-.section-header a{color:var(--purple);text-decoration:none;font-size:12px;display:flex;align-items:center;gap:4px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 20px 20px}
-.card-cat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center;cursor:pointer;position:relative;overflow:hidden;transition:0.2s}
-.card-cat:active{transform:scale(0.95)}
-.card-cat svg{width:32px;height:32px;margin:0 auto 8px;display:block}
-.plus-icon{width:32px;height:32px;margin:0 auto 8px;background:var(--purple);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700}
-.card-cat span{font-size:11px;font-weight:500;color:var(--text-dim);line-height:1.2}
-.glow{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:40px;height:8px;background:var(--purple);filter:blur(12px);opacity:0.6;border-radius:50%}
-.subcat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:14px;padding:20px}
-.subcat-card{background:linear-gradient(180deg,#0f0f15 0%,#15151d 100%);border:1px solid #2a2a35;border-radius:14px;padding:16px 8px;text-align:center;cursor:pointer;position:relative;transition:0.2s;box-shadow:inset 0 1px 0 rgba(255,255,255,0.05)}
-.subcat-card:active{transform:scale(0.95)}
-.subcat-card img{width:56px;height:56px;margin:0 auto 10px;display:block;object-fit:contain;filter:drop-shadow(0 0 12px rgba(124,58,237,0.8))}
-.subcat-title{font-size:11px;font-weight:800;color:#fff;margin-bottom:3px;letter-spacing:0.5px}
-.subcat-desc{font-size:8px;color:#a855f7;text-transform:uppercase;letter-spacing:1px;font-weight:600}
-.title-subcat{text-align:center;font-size:11px;font-weight:700;letter-spacing:4px;color:#fff;padding:24px 0 16px;display:flex;align-items:center;justify-content:center;gap:16px}
+.search input{width:100%;height:44px;background:var(--input);border:1px solid var(--border);border-radius:14px;padding:0 14px 0 44px;color:var(--text);font-size:13px;outline:none}
+.search svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:18px;height:18px;stroke:#6b7280}
+.banner{margin:0 20px 24px;height:140px;background:linear-gradient(135deg,#1e1e2a 0%,#2a2a35 100%);border-radius:16px;border:1px solid var(--border);position:relative;overflow:hidden}
+.banner img{width:100%;height:100%;object-fit:cover}
+.section-header{display:flex;justify-content:space-between;align-items:center;padding:0 20px 14px;font-size:15px;font-weight:700}
+.section-header a{color:var(--purple);text-decoration:none;font-size:13px;display:flex;align-items:center;gap:4px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 20px 20px}
+.card-cat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px 8px;text-align:center;cursor:pointer;position:relative;overflow:hidden;transition:0.2s;box-shadow:inset 0 1px 0 rgba(255,255,255,0.05)}
+.card-cat:active{transform:scale(0.96)}
+.card-cat-icon{width:48px;height:48px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;position:relative}
+.card-cat-icon img{width:40px;height:40px;object-fit:contain;z-index:2;filter:drop-shadow(0 0 12px rgba(124,58,237,0.8))}
+.card-cat-icon::after{content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:50px;height:12px;background:var(--purple);filter:blur(12px);opacity:0.7;border-radius:50%}
+.card-cat span{font-size:12px;font-weight:600;color:var(--text)}
+.card-cat.outros.card-cat-icon{background:var(--purple);border-radius:12px}
+.card-cat.outros.card-cat-icon::after{display:none}
+
+/* SUBCATEGORIA */
+.title-subcat{text-align:center;font-size:11px;font-weight:800;letter-spacing:4px;color:#fff;padding:24px 0 20px;display:flex;align-items:center;justify-content:center;gap:16px}
 .title-subcat::before,.title-subcat::after{content:'';flex:1;max-width:60px;height:2px;background:linear-gradient(90deg,transparent,#7c3aed)}
 .title-subcat::after{background:linear-gradient(90deg,#7c3aed,transparent)}
+.subcat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:14px;padding:0 20px 20px}
+.subcat-card{background:linear-gradient(180deg,#0f0f15 0%,#15151d 100%);border:1px solid #2a2a35;border-radius:14px;padding:18px 8px;text-align:center;cursor:pointer;position:relative;transition:0.2s;box-shadow:inset 0 1px 0 rgba(255,255,255,0.05)}
+.subcat-card:active{transform:scale(0.96)}
+.subcat-card img{width:56px;height:56px;margin:0 auto 12px;display:block;object-fit:contain;filter:drop-shadow(0 0 14px rgba(124,58,237,0.9))}
+.subcat-title{font-size:11px;font-weight:800;color:#fff;margin-bottom:4px;letter-spacing:0.5px}
+.subcat-desc{font-size:8px;color:#a855f7;text-transform:uppercase;letter-spacing:1px;font-weight:600}
+.back-btn{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;cursor:pointer}
+
+/* PRODUTOS */
 .product-list{padding:0 20px 20px;display:flex;flex-direction:column;gap:12px}
-.product{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px}
-.product img{width:48px;height:48px;border-radius:8px;object-fit:contain}
+.product{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px}
+.product img{width:52px;height:52px;border-radius:10px;object-fit:contain;background:var(--input);padding:6px}
 .product-info{flex:1}
-.product-title{font-size:13px;font-weight:600;margin-bottom:2px}
-.product-desc{font-size:11px;color:var(--text-dim);margin-bottom:6px}
-.product-price{font-size:14px;font-weight:700;color:var(--green)}
-.product-btn{height:36px;padding:0 16px;background:var(--purple);border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:600;cursor:pointer}
+.product-title{font-size:13px;font-weight:700;margin-bottom:4px}
+.product-desc{font-size:11px;color:var(--text-dim);margin-bottom:8px}
+.product-price{font-size:15px;font-weight:800;color:var(--green)}
+.product-btn{height:38px;padding:0 18px;background:var(--purple);border:none;border-radius:10px;color:#fff;font-size:12px;font-weight:700;cursor:pointer}
 </style>
 </head>
 <body>
+
+<!-- LOGIN -->
 <div class="screen active" id="screen-login">
   <div class="center">
     <div class="card">
@@ -102,6 +119,8 @@ h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px}
     </div>
   </div>
 </div>
+
+<!-- CADASTRO -->
 <div class="screen" id="screen-register">
   <div class="center">
     <div class="card">
@@ -131,117 +150,105 @@ h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px}
       </div>
       <div class="checkbox-row">
         <input type="checkbox" id="terms">
-        <label for="terms">Li e aceito os <a href="#">Termos de Uso</a></label>
+        <label for="terms">Li e aceito os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a></label>
       </div>
       <button class="btn" id="btnRegister">CADASTRAR</button>
       <div class="footer-link">Já tem uma conta? <a href="#" onclick="showScreen('login')">Entrar</a></div>
     </div>
   </div>
 </div>
+
+<!-- ESQUECEU SENHA -->
 <div class="screen" id="screen-forgot">
   <div class="center">
     <div class="card">
       <h2>ESQUECEU A SENHA</h2>
       <div class="logo">Prime Store VZ</div>
       <div class="subtitle">Recuperar senha</div>
-      <p style="font-size:13px;color:var(--text-dim);text-align:center;margin-bottom:24px;">Informe seu e-mail para receber o código de recuperação.</p>
+      <p class="text-info">Informe seu e-mail ou telefone<br>para receber o código de recuperação.</p>
       <div class="alert error" id="forgotError"></div>
       <div class="alert success" id="forgotSuccess"></div>
       <div class="input-group">
-        <label>E-mail</label>
-        <div class="input-box"><input type="email" id="forgotEmail" placeholder="seuemail@gmail.com"></div>
+        <label>E-mail ou telefone</label>
+        <div class="input-box"><input type="text" id="forgotEmail" placeholder="seuemail@gmail.com"></div>
       </div>
       <button class="btn" id="btnForgot">ENVIAR CÓDIGO</button>
       <div class="footer-link"><a href="#" onclick="showScreen('login')">Voltar para o login</a></div>
     </div>
   </div>
 </div>
+
+<!-- HOME -->
 <div class="screen" id="screen-home">
   <header class="header">
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    <div class="header-title">Prime <span style="color:var(--purple)">Store VZ</span></div>
+    <div class="header-left">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </div>
+    <div class="header-title">Prime <span>Store VZ</span></div>
     <div class="header-icons">
-      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/><circle cx="18" cy="6" r="3" fill="var(--purple)" stroke="none"/></svg>
+      <div style="position:relative">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <div class="notif-dot"></div>
+      </div>
       <svg class="icon purple" id="logoutBtn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     </div>
   </header>
   <div class="search">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input type="text" placeholder="Buscar produtos..." id="searchInput">
   </div>
-  <div class="banner"></div>
+  <div class="banner">
+    <img src="https://i.imgur.com/YJ7s4XK.png" alt="banner">
+  </div>
   <div class="section-header">
     <span>Categorias</span>
     <a href="#">Ver todas <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
   </div>
-  <div class="grid" id="catGrid">
-    <div class="card-cat" data-name="streaming" onclick="showScreen('sub-streaming')"><div class="glow"></div><svg width="32" height="32" viewBox="0 0 24 24" fill="var(--purple)"><rect x="2" y="7" width="20" height="15" rx="2"/><path d="m10 10 5 3-5 3z"/></svg><span>Streaming</span></div>
-    <div class="card-cat" data-name="gift cards" onclick="showScreen('sub-gift')"><div class="glow"></div><svg width="32" height="32" viewBox="0 0 24 24" fill="var(--purple)"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><span>Gift Cards</span></div>
-    <div class="card-cat" data-name="redes sociais" onclick="showScreen('sub-social')"><div class="glow"></div><svg width="32" height="32" viewBox="0 0 24 24" fill="var(--purple)"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg><span>Redes Sociais</span></div>
-    <div class="card-cat" data-name="games" onclick="showScreen('sub-games')"><div class="glow"></div><svg width="32" height="32" viewBox="0 0 24 24" fill="var(--purple)"><path d="M21.58 16.09l-1.09-7.33A2 2 0 0 0 18.5 7h-1.42a3.99 0 0 0-3.08 1.47L12 10.5 10 8.47A3.99 0 0 0 6.92 7H5.5a2 2 0 0 0-1.99 1.76l-1.09 7.33A4 4 0 0 0 6.36 21h11.28a4 4 0 0 0 3.94-4.91zM7 12a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg><span>Games</span></div>
-    <div class="card-cat" data-name="apps premium" onclick="showScreen('sub-apps')"><div class="glow"></div><svg width="32" height="32" viewBox="0 0 24 24" fill="var(--purple)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span>Apps Premium</span></div>
-    <div class="card-cat" data-name="outros" onclick="showScreen('sub-outros')"><div class="glow"></div><div class="plus-icon">+</div><span>Outros</span></div>
+  <div class="grid">
+    <div class="card-cat" onclick="showSubcat('streaming')">
+      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/5977/5977590.png"></div>
+      <span>Streaming</span>
+    </div>
+    <div class="card-cat" onclick="showSubcat('gift')">
+      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/300/300221.png"></div>
+      <span>Gift Cards</span>
+    </div>
+    <div class="card-cat" onclick="showSubcat('social')">
+      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/174/174855.png"></div>
+      <span>Redes Sociais</span>
+    </div>
+    <div class="card-cat" onclick="showSubcat('games')">
+      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/686/686589.png"></div>
+      <span>Games</span>
+    </div>
+    <div class="card-cat" onclick="showSubcat('apps')">
+      <div class="card-cat-icon"><img src="https://cdn-icons-png.flaticon.com/512/174/174872.png"></div>
+      <span>Apps Premium</span>
+    </div>
+    <div class="card-cat outros" onclick="showSubcat('outros')">
+      <div class="card-cat-icon" style="color:#fff;font-size:32px;font-weight:800">+</div>
+      <span>Outros</span>
+    </div>
   </div>
 </div>
-<div class="screen" id="screen-sub-streaming">
+
+<!-- SUBCATEGORIAS -->
+<div class="screen" id="screen-subcat">
   <header class="header">
     <div class="back-btn" onclick="showScreen('home')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Voltar</div>
-    <div class="header-title">Streaming</div>
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35"/></svg>
+    <div class="header-title" id="subcatTitle">Categoria</div>
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
   </header>
   <div class="title-subcat">PRODUTOS</div>
-  <div class="subcat-grid" id="grid-streaming"></div>
+  <div class="subcat-grid" id="subcatGrid"></div>
 </div>
-<div class="screen" id="screen-sub-gift">
-  <header class="header">
-    <div class="back-btn" onclick="showScreen('home')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Voltar</div>
-    <div class="header-title">Gift Cards</div>
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35"/></svg>
-  </header>
-  <div class="title-subcat">PRODUTOS</div>
-  <div class="subcat-grid" id="grid-gift"></div>
-</div>
-<div class="screen" id="screen-sub-social">
-  <header class="header">
-    <div class="back-btn" onclick="showScreen('home')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Voltar</div>
-    <div class="header-title">Redes Sociais</div>
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35"/></svg>
-  </header>
-  <div class="title-subcat">PRODUTOS</div>
-  <div class="subcat-grid" id="grid-social"></div>
-</div>
-<div class="screen" id="screen-sub-games">
-  <header class="header">
-    <div class="back-btn" onclick="showScreen('home')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Voltar</div>
-    <div class="header-title">Games</div>
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35"/></svg>
-  </header>
-  <div class="title-subcat">PRODUTOS</div>
-  <div class="subcat-grid" id="grid-games"></div>
-</div>
-<div class="screen" id="screen-sub-apps">
-  <header class="header">
-    <div class="back-btn" onclick="showScreen('home')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Voltar</div>
-    <div class="header-title">Apps Premium</div>
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35"/></svg>
-  </header>
-  <div class="title-subcat">PRODUTOS</div>
-  <div class="subcat-grid" id="grid-apps"></div>
-</div>
-<div class="screen" id="screen-sub-outros">
-  <header class="header">
-    <div class="back-btn" onclick="showScreen('home')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Voltar</div>
-    <div class="header-title">Outros</div>
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35"/></svg>
-  </header>
-  <div class="title-subcat">PRODUTOS</div>
-  <div class="subcat-grid" id="grid-outros"></div>
-</div>
+
+<!-- PRODUTOS -->
 <div class="screen" id="screen-products">
   <header class="header">
-    <div class="back-btn" onclick="history.back()"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Voltar</div>
+    <div class="back-btn" onclick="showScreen('subcat')"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Voltar</div>
     <div class="header-title" id="productTitle">Produtos</div>
-    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35"/></svg>
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
   </header>
   <div class="product-list" id="productList"></div>
 </div>
@@ -249,17 +256,24 @@ h2{font-size:18px;font-weight:700;text-align:center;margin-bottom:4px}
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script>
-const firebaseConfig = {apiKey:"AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",authDomain:"premium-store-aa58b.firebaseapp.com",databaseURL:"https://premium-store-aa58b-default-rtdb.firebaseio.com",projectId:"premium-store-aa58b",storageBucket:"premium-store-aa58b.firebasestorage.app",messagingSenderId:"462239500057",appId:"1:462239500057:web:f1b7cea162ed308a866788"};
+const firebaseConfig = {
+  apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
+  authDomain: "premium-store-aa58b.firebaseapp.com",
+  databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
+  projectId: "premium-store-aa58b",
+  storageBucket: "premium-store-aa58b.firebasestorage.app",
+  messagingSenderId: "462239500057",
+  appId: "1:462239500057:web:f1b7cea162ed308a866788",
+  measurementId: "G-CN88J28WRX"
+};
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
 function showScreen(screen) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  const el = document.getElementById('screen-' + screen);
-  if(el) el.classList.add('active');
+  document.getElementById('screen-' + screen).classList.add('active');
   window.scrollTo(0,0);
   hideAllAlerts();
-  window.location.hash = screen;
 }
 
 function togglePass(id, el) {
@@ -268,34 +282,10 @@ function togglePass(id, el) {
   el.textContent = input.type === 'password'? '👁️' : '🙈';
 }
 
-function showProducts(service) {
-  const list = produtos[service] || [];
-  const container = document.getElementById('productList');
-  const title = document.getElementById('productTitle');
-  title.textContent = service.toUpperCase().replace('YT','YOUTUBE ');
-  container.innerHTML = '';
-  if(list.length === 0){
-    container.innerHTML = '<div class="product"><div class="plus-icon">+</div><div class="product-info"><div class="product-title">Em breve</div><div class="product-desc">Produtos chegando</div><div class="product-price">R$ --</div></div><button class="product-btn" disabled>Avisar</button></div>';
-  }else{
-    list.forEach(p => {
-      container.innerHTML += `<div class="product"><img src="${p.img}" alt=""><div class="product-info"><div class="product-title">${p.title}</div><div class="product-desc">${p.desc}</div><div class="product-price">${p.price}</div></div><button class="product-btn" onclick="comprar('${p.title}')">Comprar</button></div>`;
-    });
-  }
-  showScreen('products');
-}
-
-function comprar(produto) {
-  alert('Comprar: ' + produto + '\n\nIntegração com pagamento em breve');
-}
-
+// AUTH
 auth.onAuthStateChanged((user) => {
-  const hash = window.location.hash.replace('#','');
-  if(user){
-    if(!hash || hash === 'login' || hash === 'register' || hash === 'forgot') showScreen('home');
-    else showScreen(hash);
-  }else{
-    showScreen('login');
-  }
+  if(user) showScreen('home');
+  else showScreen('login');
 });
 
 document.getElementById('btnLogin').onclick = async () => {
@@ -308,7 +298,8 @@ document.getElementById('btnLogin').onclick = async () => {
   try{
     await auth.setPersistence(remember? firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION);
     await auth.signInWithEmailAndPassword(email, password);
-  }catch(e){showAlert('loginError', traduzErro(e.code));}finally{btn.disabled = false;}
+  }catch(e){showAlert('loginError', traduzErro(e.code));}
+  finally{btn.disabled = false;}
 }
 
 document.getElementById('btnRegister').onclick = async () => {
@@ -318,15 +309,16 @@ document.getElementById('btnRegister').onclick = async () => {
   const terms = document.getElementById('terms').checked;
   const btn = document.getElementById('btnRegister');
   if(!name ||!email ||!password) return showAlert('registerError', 'Preencha todos os campos');
-  if(!terms) return showAlert('registerError', 'Aceite os termos de uso');
+  if(!terms) return showAlert('registerError', 'Aceite os Termos de Uso');
   if(password.length < 6) return showAlert('registerError', 'Senha deve ter no mínimo 6 caracteres');
   btn.disabled = true;
   try{
     const userCred = await auth.createUserWithEmailAndPassword(email, password);
     await userCred.user.updateProfile({displayName: name});
-    showAlert('registerSuccess', 'Conta criada!');
+    showAlert('registerSuccess', 'Conta criada com sucesso!');
     setTimeout(() => showScreen('login'), 1500);
-  }catch(e){showAlert('registerError', traduzErro(e.code));}finally{btn.disabled = false;}
+  }catch(e){showAlert('registerError', traduzErro(e.code));}
+  finally{btn.disabled = false;}
 }
 
 document.getElementById('btnForgot').onclick = async () => {
@@ -337,19 +329,13 @@ document.getElementById('btnForgot').onclick = async () => {
   try{
     await auth.sendPasswordResetEmail(email);
     showAlert('forgotSuccess', 'Link enviado para seu e-mail!');
-  }catch(e){showAlert('forgotError', 'E-mail não encontrado');}finally{btn.disabled = false;}
+  }catch(e){showAlert('forgotError', 'E-mail não encontrado');}
+  finally{btn.disabled = false;}
 }
 
 document.getElementById('logoutBtn').onclick = () => auth.signOut();
 
-document.getElementById('searchInput').oninput = (e) => {
-  const term = e.target.value.toLowerCase();
-  document.querySelectorAll('.card-cat').forEach(card => {
-    const name = card.dataset.name;
-    card.style.display = name.includes(term)? 'block' : 'none';
-  });
-}
-
+// DADOS
 const subcategorias = {
   streaming: [
     {id:'netflix',img:'https://cdn-icons-png.flaticon.com/512/5977/5977590.png',title:'NETFLIX',desc:'FILMES E SÉRIES'},
@@ -381,75 +367,67 @@ const subcategorias = {
   ]
 };
 
-function renderSubcategoria(categoria){
-  const grid = document.getElementById('grid-' + categoria);
-  if(!grid) return;
-  const lista = subcategorias[categoria] || [];
+const produtos = {
+  netflix: [
+    {img:'https://cdn-icons-png.flaticon.com/512/5977/5977590.png', title:'Netflix 1 Tela - 30 dias', desc:'Conta compartilhada, perfil único', price:'R$ 18,90'},
+    {img:'https://cdn-icons-png.flaticon.com/512/5977/5977590.png', title:'Netflix 4K - 30 dias', desc:'4 telas simultâneas, Ultra HD', price:'R$ 32,90'}
+  ],
+  hbo: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968520.png', title:'HBO Max - 30 dias', desc:'Acesso completo ao catálogo', price:'R$ 19,90'}],
+  disney: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'Disney+ - 30 dias', desc:'Marvel, Star Wars, Pixar', price:'R$ 16,90'}],
+  prime: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968749.png', title:'Prime Video - 30 dias', desc:'Acesso completo ao catálogo', price:'R$ 14,90'}],
+  spotify: [{img:'https://cdn-icons-png.flaticon.com/512/174/174872.png', title:'Spotify Premium - 30 dias', desc:'Sem anúncios, offline', price:'R$ 12,90'}],
+  youtube: [{img:'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', title:'YouTube Premium - 30 dias', desc:'Sem anúncios + Music', price:'R$ 16,90'}],
+  googleplay: [{img:'https://cdn-icons-png.flaticon.com/512/300/300221.png', title:'Google Play R$ 50', desc:'Créditos para apps e jogos', price:'R$ 52,90'}],
+  steam: [{img:'https://cdn-icons-png.flaticon.com/512/588/588249.png', title:'Steam R$ 50', desc:'Carteira Steam', price:'R$ 52,90'}],
+  instagram: [{img:'https://cdn-icons-png.flaticon.com/512/174/174855.png', title:'1k Seguidores Instagram', desc:'Entrega em até 24h', price:'R$ 14,90'}],
+  tiktok: [{img:'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', title:'1k Seguidores TikTok', desc:'Entrega em até 24h', price:'R$ 12,90'}],
+  freefire: [{img:'https://cdn-icons-png.flaticon.com/512/686/686589.png', title:'500 Diamantes Free Fire', desc:'Entrega via ID', price:'R$ 19,90'}],
+  roblox: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'800 Robux', desc:'Entrega via Game Pass', price:'R$ 34,90'}],
+  canva: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'Canva Pro - 30 dias', desc:'Templates premium', price:'R$ 24,90'}],
+  chatgpt: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'ChatGPT Plus - 30 dias', desc:'GPT-4 liberado', price:'R$ 89,90'}],
+  iptv: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'IPTV - 30 dias', desc:'Canais, filmes e séries', price:'R$ 29,90'}],
+  vpn: [{img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'NordVPN - 30 dias', desc:'Navegação segura', price:'R$ 19,90'}]
+};
+
+let currentCat = '';
+
+// FUNÇÕES
+function showSubcat(cat){
+  currentCat = cat;
+  const nomes = {streaming:'Streaming',gift:'Gift Cards',social:'Redes Sociais',games:'Games',apps:'Apps Premium',outros:'Outros'};
+  document.getElementById('subcatTitle').textContent = nomes[cat];
+  const grid = document.getElementById('subcatGrid');
+  const lista = subcategorias[cat] || [];
   grid.innerHTML = '';
   lista.forEach(s => {
     grid.innerHTML += `<div class="subcat-card" onclick="showProducts('${s.id}')"><img src="${s.img}"><div class="subcat-title">${s.title}</div><div class="subcat-desc">${s.desc}</div></div>`;
   });
+  showScreen('subcat');
 }
 
-['streaming','gift','social','games','apps','outros'].forEach(renderSubcategoria);
+function showProducts(service) {
+  const list = produtos[service] || [];
+  const container = document.getElementById('productList');
+  const title = document.getElementById('productTitle');
+  title.textContent = service.toUpperCase().replace('YT','YOUTUBE ');
+  container.innerHTML = '';
+  if(list.length === 0){
+    container.innerHTML = '<div class="product"><div class="product-info"><div class="product-title">Em breve</div><div class="product-desc">Produtos chegando</div></div></div>';
+  }else{
+    list.forEach(p => {
+      container.innerHTML += `<div class="product"><img src="${p.img}"><div class="product-info"><div class="product-title">${p.title}</div><div class="product-desc">${p.desc}</div><div class="product-price">${p.price}</div></div><button class="product-btn" onclick="alert('Comprar: ${p.title}')">Comprar</button></div>`;
+    });
+  }
+  showScreen('products');
+}
 
-const produtos = {
-  netflix: [
-    {img:'https://cdn-icons-png.flaticon.com/512/5977/5977590.png', title:'Netflix 1 Tela - 30 dias', desc:'Conta compartilhada, perfil único', price:'R$ 18,90'},
-    {img:'https://cdn-icons-png.flaticon.com/512/5977/5977590.png', title:'Netflix 4K - 30 dias', desc:'4 telas simultâneas, desc:'4 telas simultâneas, Ultra HD', price:'R$ 32,90'}
-  ],
-  hbo: [
-    {img:'https://cdn-icons-png.flaticon.com/512/5968/5968520.png', title:'HBO Max - 30 dias', desc:'Acesso completo ao catálogo', price:'R$ 19,90'}
-  ],
-  disney: [
-    {img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'Disney+ - 30 dias', desc:'Marvel, Star Wars, Pixar', price:'R$ 16,90'}
-  ],
-  prime: [
-    {img:'https://cdn-icons-png.flaticon.com/512/5968/5968749.png', title:'Prime Video - 30 dias', desc:'Acesso completo ao catálogo', price:'R$ 14,90'}
-  ],
-  spotify: [
-    {img:'https://cdn-icons-png.flaticon.com/512/174/174872.png', title:'Spotify Premium - 30 dias', desc:'Sem anúncios, offline', price:'R$ 12,90'}
-  ],
-  youtube: [
-    {img:'https://cdn-icons-png.flaticon.com/512/1384/1384060.png', title:'YouTube Premium - 30 dias', desc:'Sem anúncios + Music', price:'R$ 16,90'}
-  ],
-  googleplay: [
-    {img:'https://cdn-icons-png.flaticon.com/512/300/300221.png', title:'Google Play R$ 50', desc:'Créditos para apps e jogos', price:'R$ 52,90'},
-    {img:'https://cdn-icons-png.flaticon.com/512/300/300221.png', title:'Google Play R$ 100', desc:'Créditos para apps e jogos', price:'R$ 104,90'}
-  ],
-  steam: [
-    {img:'https://cdn-icons-png.flaticon.com/512/588/588249.png', title:'Steam R$ 50', desc:'Carteira Steam', price:'R$ 52,90'}
-  ],
-  instagram: [
-    {img:'https://cdn-icons-png.flaticon.com/512/174/174855.png', title:'1k Seguidores Instagram', desc:'Entrega em até 24h', price:'R$ 14,90'},
-    {img:'https://cdn-icons-png.flaticon.com/512/174/174855.png', title:'5k Seguidores Instagram', desc:'Entrega em até 24h', price:'R$ 59,90'}
-  ],
-  tiktok: [
-    {img:'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', title:'1k Seguidores TikTok', desc:'Entrega em até 24h', price:'R$ 12,90'},
-    {img:'https://cdn-icons-png.flaticon.com/512/3046/3046121.png', title:'10k Views TikTok', desc:'Entrega instantânea', price:'R$ 8,90'}
-  ],
-  freefire: [
-    {img:'https://cdn-icons-png.flaticon.com/512/686/686589.png', title:'500 Diamantes Free Fire', desc:'Entrega via ID', price:'R$ 19,90'},
-    {img:'https://cdn-icons-png.flaticon.com/512/686/686589.png', title:'1000 Diamantes Free Fire', desc:'Entrega via ID', price:'R$ 36,90'}
-  ],
-  roblox: [
-    {img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'800 Robux', desc:'Entrega via Game Pass', price:'R$ 34,90'},
-    {img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'1700 Robux', desc:'Entrega via Game Pass', price:'R$ 69,90'}
-  ],
-  canva: [
-    {img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'Canva Pro - 30 dias', desc:'Templates premium', price:'R$ 24,90'},
-    {img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'Canva Pro - 1 ano', desc:'Acesso completo', price:'R$ 199,90'}
-  ],
-  chatgpt: [
-    {img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'ChatGPT Plus - 30 dias', desc:'GPT-4 liberado', price:'R$ 89,90'}
-  ],
-  iptv: [
-    {img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'IPTV - 30 dias', desc:'Canais, filmes e séries', price:'R$ 29,90'}
-  ],
-  vpn: [
-    {img:'https://cdn-icons-png.flaticon.com/512/5968/5968705.png', title:'NordVPN - 30 dias', desc:'Navegação segura', price:'R$ 19,90'}
-  ]
-};
+document.getElementById('searchInput').oninput = (e) => {
+  const term = e.target.value.toLowerCase();
+  document.querySelectorAll('.card-cat').forEach(card => {
+    const name = card.querySelector('span').textContent.toLowerCase();
+    card.style.display = name.includes(term)? 'block' : 'none';
+  });
+}
 
 function showAlert(id, msg){
   hideAllAlerts();
@@ -467,9 +445,9 @@ function traduzErro(code){
     'auth/user-not-found': 'Usuário não encontrado',
     'auth/wrong-password': 'Senha incorreta',
     'auth/email-already-in-use': 'Este e-mail já está em uso',
-    'auth/weak-password': 'Senha muito fraca. Mínimo 6 caracteres',
+    'auth/weak-password': 'Senha muito fraca',
     'auth/too-many-requests': 'Muitas tentativas. Tente mais tarde',
-    'auth/network-request-failed': 'Erro de conexão'
+        'auth/network-request-failed': 'Erro de conexão'
   };
   return erros[code] || 'Erro ao processar';
 }
