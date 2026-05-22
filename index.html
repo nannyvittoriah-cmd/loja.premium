@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Prime Store VZ</title>
+<title>Prime Store VZ - Admin</title>
 <style>
-:root{--bg:#000;--card:#0d0d0d;--input:#141414;--border:#1f1f1f;--purple:#8b5cf6;--purple-glow:rgba(139,92,246,0.3);--text:#fff;--text-dim:#7a7a8a;--green:#10b981;--yellow:#fbbf24;--red:#ef4444}
+:root{--bg:#000;--card:#0d0d0d;--input:#141414;--border:#1f1f1f;--purple:#8b5cf6;--purple-glow:rgba(139,92,246,0.3);--text:#fff;--text-dim:#7a7a8a;--green:#10b981;--yellow:#fbbf24;--red:#ef4444;--blue:#3b82f6}
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
 body{background:var(--bg);color:var(--text);min-height:100vh}
 .hide{display:none!important}
@@ -21,6 +21,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 .input-box:focus-within{border-color:var(--purple);box-shadow:0 0 0 3px var(--purple-glow)}
 .input-box input,.input-box textarea,.input-box select{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px}
 .input-box textarea{padding:12px 0;min-height:80px;resize:none}
+.input-box select{cursor:pointer}
 .toggle{cursor:pointer;color:#6b7280;font-size:18px}
 .row{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;font-size:12px}
 .checkbox{display:flex;align-items:center;gap:8px;color:var(--text-dim);cursor:pointer}
@@ -32,12 +33,11 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 .btn-sm{height:38px;font-size:12px;width:auto;padding:0 16px}
 .btn-red{background:linear-gradient(135deg,#ef4444,#dc2626)}
 .btn-green{background:linear-gradient(135deg,#10b981,#059669)}
+.btn-blue{background:linear-gradient(135deg,#3b82f6,#2563eb)}
 .footer-text{text-align:center;font-size:12px;color:var(--text-dim);margin-top:16px}
 .alert{padding:14px 16px;border-radius:12px;font-size:12px;margin-bottom:18px;display:none;text-align:center;font-weight:600}
 .alert.error{background:rgba(239,68,68,0.15);border:1px solid #ef4444;color:#fca5a5}
 .alert.success{background:rgba(16,185,129,0.15);border:1px solid #10b981;color:#6ee7b7}
-
-/* ADMIN */
 .admin{display:none;min-height:100vh}
 .admin.active{display:block}
 .admin-header{position:fixed;top:0;left:0;right:0;height:56px;background:var(--card);border-bottom:1px solid var(--purple);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:50}
@@ -47,7 +47,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 .sidebar{position:fixed;top:56px;left:-260px;width:260px;height:calc(100vh - 56px);background:var(--bg);border-right:2px solid var(--purple);transition:0.3s;z-index:40;overflow-y:auto}
 .sidebar.open{left:0}
 .side-header{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
-.side-header.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#8b5cf6,#7c3aed);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#8b5cf6,#7c3aed);border-radius:10px;display:flex;align-items:center;justify-content:center}
 .side-item{padding:14px 16px;cursor:pointer;border-left:3px solid transparent;font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px}
 .side-item:hover,.side-item.active{background:var(--input);border-left-color:var(--purple);color:var(--purple)}
 .admin-content{padding:68px 12px 20px}
@@ -60,18 +60,37 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 .stat-value{font-size:22px;font-weight:900}
 .card-admin{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px}
 .card-title{font-size:13px;font-weight:800;color:var(--purple);margin-bottom:12px}
-.item-row{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
-.item-info{flex:1}
-.item-title{font-weight:700;font-size:13px;margin-bottom:2px}
+.item-row{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.item-row.clickable{cursor:pointer}
+.item-info{flex:1;min-width:0}
+.item-title{font-weight:700;font-size:13px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .item-sub{font-size:11px;color:var(--text-dim)}
-.actions{display:flex;gap:6px}
+.actions{display:flex;gap:6px;flex-shrink:0}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
 .modal.active{display:flex}
-.modal-box{background:var(--card);border:1px solid var(--purple);border-radius:20px;padding:24px;width:100%;max-width:400px;max-height:90vh;overflow-y:auto}
+.modal-box{background:var(--card);border:1px solid var(--purple);border-radius:20px;padding:24px;width:100%;max-width:450px;max-height:90vh;overflow-y:auto}
 .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
 .modal-title{font-size:16px;font-weight:800}
 .close-btn{width:32px;height:32px;background:var(--input);border:none;border-radius:8px;color:#fff;cursor:pointer;font-size:18px}
 .empty{text-align:center;padding:40px 20px;color:var(--text-dim);font-size:13px}
+.img-preview{width:100%;height:120px;background:var(--input);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer}
+.img-preview img{width:100%;height:100%;object-fit:cover}
+.img-preview span{font-size:12px;color:var(--text-dim)}
+.badge-status{padding:4px 8px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase}
+.badge-ativo{background:rgba(16,185,129,0.2);color:var(--green)}
+.badge-inativo{background:rgba(239,68,68,0.2);color:var(--red)}
+.badge-pendente{background:rgba(251,191,36,0.2);color:var(--yellow)}
+.badge-concluido{background:rgba(16,185,129,0.2);color:var(--green)}
+.badge-cancelado{background:rgba(239,68,68,0.2);color:var(--red)}
+.search-box{margin-bottom:16px}
+.filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.filter-btn{padding:8px 14px;background:var(--input);border:1px solid var(--border);border-radius:10px;font-size:12px;font-weight:600;cursor:pointer}
+.filter-btn.active{background:var(--purple);border-color:var(--purple)}
+.img-thumb{width:50px;height:50px;border-radius:10px;object-fit:cover;background:var(--input);flex-shrink:0}
+.cupom-list{display:flex;flex-wrap:wrap;gap:8px}
+.cupom-tag{padding:6px 10px;background:var(--input);border:1px solid var(--border);border-radius:8px;font-size:11px;display:flex;align-items:center;gap:6px}
+.cupom-tag.active{border-color:var(--green)}
+.cupom-tag.remove{cursor:pointer;color:var(--red)}
 </style>
 </head>
 <body>
@@ -81,7 +100,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
   <div class="card">
     <h2>LOGIN - E-MAIL</h2>
     <div class="logo">Prime Store VZ</div>
-    <div class="subtitle">Entre na sua conta</div>
+    <div class="subtitle">Painel Administrativo</div>
     <div class="alert error" id="loginError"></div>
     <div class="input-group">
       <label>E-mail</label>
@@ -94,64 +113,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
         <span class="toggle" onclick="togglePass('loginPassword',this)">👁️</span>
       </div>
     </div>
-    <div class="row">
-      <label class="checkbox"><input type="checkbox" id="lembrar"><span>Lembrar-me</span></label>
-      <a class="link" onclick="showAuth('recuperar')">Esqueceu a senha?</a>
-    </div>
     <button class="btn" id="btnLogin" onclick="fazerLogin()">ENTRAR</button>
-    <div class="footer-text">Não tem uma conta? <a class="link" onclick="showAuth('cadastro')">Cadastre-se</a></div>
-  </div>
-</div>
-
-<!-- CADASTRO -->
-<div class="screen" id="screen-cadastro">
-  <div class="card">
-    <h2>CADASTRO</h2>
-    <div class="logo">Prime Store VZ</div>
-    <div class="subtitle">Crie sua conta</div>
-    <div class="alert error" id="cadastroError"></div>
-    <div class="alert success" id="cadastroSuccess"></div>
-    <div class="input-group">
-      <label>Nome completo</label>
-      <div class="input-box"><input type="text" id="cadNome" placeholder="João da Silva"></div>
-    </div>
-    <div class="input-group">
-      <label>Email</label>
-      <div class="input-box"><input type="email" id="cadEmail" placeholder="joao@email.com"></div>
-    </div>
-    <div class="input-group">
-      <label>Telefone</label>
-      <div class="input-box"><input type="tel" id="cadTelefone" placeholder="(11) 9 9999-9999"></div>
-    </div>
-    <div class="input-group">
-      <label>Senha</label>
-      <div class="input-box">
-        <input type="password" id="cadSenha" placeholder="••••••••">
-        <span class="toggle" onclick="togglePass('cadSenha',this)">👁️</span>
-      </div>
-    </div>
-    <div class="row">
-      <label class="checkbox"><input type="checkbox" id="termos"><span>Li e aceito os Termos de Uso</span></label>
-    </div>
-    <button class="btn" id="btnCadastro" onclick="fazerCadastro()">CADASTRAR</button>
-    <div class="footer-text">Já tem uma conta? <a class="link" onclick="showAuth('login')">Entrar</a></div>
-  </div>
-</div>
-
-<!-- RECUPERAR -->
-<div class="screen" id="screen-recuperar">
-  <div class="card">
-    <h2>ESQUECEU A SENHA</h2>
-    <div class="logo">Prime Store VZ</div>
-    <div class="subtitle">Recuperar senha</div>
-    <div class="alert error" id="recuperarError"></div>
-    <div class="alert success" id="recuperarSuccess"></div>
-    <div class="input-group">
-      <label>E-mail</label>
-      <div class="input-box"><input type="email" id="recuperarEmail" placeholder=""></div>
-    </div>
-    <button class="btn" id="btnRecuperar" onclick="recuperarSenha()">ENVIAR CÓDIGO</button>
-    <div class="footer-text"><a class="link" onclick="showAuth('login')">Voltar para o login</a></div>
   </div>
 </div>
 
@@ -168,12 +130,16 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
       <div><div style="font-weight:800;font-size:14px">PRIME</div><div style="font-size:10px;color:var(--text-dim)">Painel Admin</div></div>
     </div>
     <div class="side-item active" onclick="trocarPage('dash',this)">📊 Dashboard</div>
+    <div class="side-item" onclick="trocarPage('categorias',this)">📁 Categorias</div>
+    <div class="side-item" onclick="trocarPage('subcategorias',this)">📂 Subcategorias</div>
     <div class="side-item" onclick="trocarPage('produtos',this)">📦 Produtos</div>
+    <div class="side-item" onclick="trocarPage('cupons',this)">🎟️ Cupons</div>
     <div class="side-item" onclick="trocarPage('pedidos',this)">🛒 Pedidos</div>
     <div class="side-item" onclick="trocarPage('clientes',this)">👥 Clientes</div>
     <div class="side-item" onclick="logout()">🚪 Sair</div>
   </div>
   <div class="admin-content">
+    <!-- DASHBOARD -->
     <div id="dash" class="page active">
       <h3 style="margin-bottom:16px">Dashboard</h3>
       <div class="stats">
@@ -182,26 +148,112 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
         <div class="stat-card"><div class="stat-label">Produtos</div><div class="stat-value" style="color:var(--green)" id="totalProdutos">0</div></div>
         <div class="stat-card"><div class="stat-label">Clientes</div><div class="stat-value" style="color:var(--purple)" id="totalClientes">0</div></div>
       </div>
-      <div class="card-admin">
-        <div class="card-title">Pedidos Recentes</div>
-        <div id="pedidosRecentes"><div class="empty">Nenhum pedido ainda</div></div>
-      </div>
     </div>
+
+    <!-- CATEGORIAS -->
+    <div id="categorias" class="page">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <h3>Categorias</h3>
+        <button class="btn btn-sm" onclick="abrirModalCategoria()">+ Adicionar</button>
+      </div>
+      <div id="listaCategorias"><div class="empty">Nenhuma categoria</div></div>
+    </div>
+
+    <!-- SUBCATEGORIAS -->
+    <div id="subcategorias" class="page">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <h3>Subcategorias</h3>
+        <button class="btn btn-sm" onclick="abrirModalSubcategoria()">+ Adicionar</button>
+      </div>
+      <div id="listaSubcategorias"><div class="empty">Nenhuma subcategoria</div></div>
+    </div>
+
+    <!-- PRODUTOS -->
     <div id="produtos" class="page">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
         <h3>Produtos</h3>
         <button class="btn btn-sm" onclick="abrirModalProduto()">+ Adicionar</button>
       </div>
-      <div id="listaProdutos"><div class="empty">Nenhum produto cadastrado</div></div>
+      <div id="listaProdutos"><div class="empty">Nenhum produto</div></div>
     </div>
+
+    <!-- CUPONS -->
+    <div id="cupons" class="page">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <h3>Cupons</h3>
+        <button class="btn btn-sm" onclick="abrirModalCupom()">+ Adicionar</button>
+      </div>
+      <div id="listaCupons"><div class="empty">Nenhum cupom</div></div>
+    </div>
+
+    <!-- PEDIDOS -->
     <div id="pedidos" class="page">
       <h3 style="margin-bottom:16px">Pedidos</h3>
-      <div id="listaPedidos"><div class="empty">Nenhum pedido ainda</div></div>
+      <div class="search-box">
+        <div class="input-box">
+          <input type="text" id="searchPedido" placeholder="Buscar por email do cliente..." onkeyup="filtrarPedidos()">
+        </div>
+      </div>
+      <div class="filters">
+        <button class="filter-btn active" onclick="filtrarStatusPedido('todos',this)">Todos</button>
+        <button class="filter-btn" onclick="filtrarStatusPedido('pendente',this)">Pendentes</button>
+        <button class="filter-btn" onclick="filtrarStatusPedido('concluido',this)">Concluídos</button>
+        <button class="filter-btn" onclick="filtrarStatusPedido('cancelado',this)">Cancelados</button>
+      </div>
+      <div id="listaPedidos"><div class="empty">Nenhum pedido</div></div>
     </div>
+
+    <!-- CLIENTES -->
     <div id="clientes" class="page">
       <h3 style="margin-bottom:16px">Clientes</h3>
-      <div id="listaClientes"><div class="empty">Nenhum cliente ainda</div></div>
+      <div id="listaClientes"><div class="empty">Nenhum cliente</div></div>
     </div>
+  </div>
+</div>
+
+<!-- MODAL CATEGORIA -->
+<div class="modal" id="modalCategoria">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title">Nova Categoria</div>
+      <button class="close-btn" onclick="fecharModal('modalCategoria')">×</button>
+    </div>
+    <input type="hidden" id="catId">
+    <div class="img-preview" onclick="document.getElementById('catImgInput').click()">
+      <img id="catImgPreview" class="hide">
+      <span id="catImgText">Clique para adicionar imagem</span>
+    </div>
+    <input type="file" id="catImgInput" accept="image/*" class="hide" onchange="previewImg(this,'catImgPreview','catImgText')">
+    <div class="input-group">
+      <label>Nome da Categoria</label>
+      <div class="input-box"><input type="text" id="catNome" placeholder="Streaming"></div>
+    </div>
+    <button class="btn" onclick="salvarCategoria()">SALVAR</button>
+  </div>
+</div>
+
+<!-- MODAL SUBCATEGORIA -->
+<div class="modal" id="modalSubcategoria">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title">Nova Subcategoria</div>
+      <button class="close-btn" onclick="fecharModal('modalSubcategoria')">×</button>
+    </div>
+    <input type="hidden" id="subcatId">
+    <div class="input-group">
+      <label>Categoria Pai</label>
+      <div class="input-box"><select id="subcatCatId"></select></div>
+    </div>
+    <div class="img-preview" onclick="document.getElementById('subcatImgInput').click()">
+      <img id="subcatImgPreview" class="hide">
+      <span id="subcatImgText">Clique para adicionar imagem</span>
+    </div>
+    <input type="file" id="subcatImgInput" accept="image/*" class="hide" onchange="previewImg(this,'subcatImgPreview','subcatImgText')">
+    <div class="input-group">
+      <label>Nome da Subcategoria</label>
+      <div class="input-box"><input type="text" id="subcatNome" placeholder="Netflix"></div>
+    </div>
+    <button class="btn" onclick="salvarSubcategoria()">SALVAR</button>
   </div>
 </div>
 
@@ -213,33 +265,91 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
       <button class="close-btn" onclick="fecharModal('modalProduto')">×</button>
     </div>
     <input type="hidden" id="prodId">
+    <div class="img-preview" onclick="document.getElementById('prodImgInput').click()">
+      <img id="prodImgPreview" class="hide">
+      <span id="prodImgText">Clique para adicionar imagem</span>
+    </div>
+    <input type="file" id="prodImgInput" accept="image/*" class="hide" onchange="previewImg(this,'prodImgPreview','prodImgText')">
     <div class="input-group">
       <label>Nome do Produto</label>
-      <div class="input-box"><input type="text" id="prodNome" placeholder="Netflix Premium"></div>
+      <div class="input-box"><input type="text" id="prodNome" placeholder="Netflix Premium 1 Mês"></div>
+    </div>
+    <div class="input-group">
+      <label>Categoria</label>
+      <div class="input-box"><select id="prodCatId" onchange="carregarSubcats()"></select></div>
+    </div>
+    <div class="input-group">
+      <label>Subcategoria</label>
+      <div class="input-box"><select id="prodSubcatId"></select></div>
     </div>
     <div class="input-group">
       <label>Preço</label>
       <div class="input-box"><input type="number" id="prodPreco" placeholder="29.90" step="0.01"></div>
     </div>
     <div class="input-group">
-      <label>Categoria</label>
-      <div class="input-box"><input type="text" id="prodCategoria" placeholder="Streaming"></div>
+      <label>Estoque</label>
+      <div class="input-box"><input type="number" id="prodEstoque" placeholder="10"></div>
+    </div>
+    <div class="input-group">
+      <label>Taxa Extra</label>
+      <div class="input-box"><input type="number" id="prodTaxa" placeholder="0" step="0.01"></div>
+    </div>
+    <div class="input-group">
+      <label>Cupons Disponíveis</label>
+      <div id="prodCupons" class="cupom-list"></div>
     </div>
     <div class="input-group">
       <label>Descrição</label>
       <div class="input-box"><textarea id="prodDesc" placeholder="Descrição do produto"></textarea></div>
     </div>
-    <div class="input-group">
-      <label>Estoque</label>
-      <div class="input-box"><input type="number" id="prodEstoque" placeholder="10"></div>
-    </div>
     <button class="btn" onclick="salvarProduto()">SALVAR PRODUTO</button>
+  </div>
+</div>
+
+<!-- MODAL CUPOM -->
+<div class="modal" id="modalCupom">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title">Novo Cupom</div>
+      <button class="close-btn" onclick="fecharModal('modalCupom')">×</button>
+    </div>
+    <input type="hidden" id="cupomId">
+    <div class="input-group">
+      <label>Código do Cupom</label>
+      <div class="input-box"><input type="text" id="cupomCodigo" placeholder="PRIME10" style="text-transform:uppercase"></div>
+    </div>
+    <div class="input-group">
+      <label>Desconto (%)</label>
+      <div class="input-box"><input type="number" id="cupomDesconto" placeholder="10" min="0" max="100"></div>
+    </div>
+    <div class="input-group">
+      <label>Limite de Uso Total</label>
+      <div class="input-box"><input type="number" id="cupomLimite" placeholder="100" min="1"></div>
+    </div>
+    <div class="row">
+      <label class="checkbox"><input type="checkbox" id="cupomAtivo" checked><span>Cupom Ativo</span></label>
+    </div>
+    <button class="btn" onclick="salvarCupom()">SALVAR CUPOM</button>
+  </div>
+</div>
+
+<!-- MODAL CLIENTE HISTORICO -->
+<div class="modal" id="modalCliente">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title">Histórico do Cliente</div>
+      <button class="close-btn" onclick="fecharModal('modalCliente')">×</button>
+    </div>
+    <div id="clienteInfo" style="margin-bottom:16px"></div>
+    <div class="card-title">Pedidos</div>
+    <div id="clientePedidos"></div>
   </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -254,13 +364,10 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
+const storage = firebase.storage();
 let currentUser = null;
-
-function showAuth(nome){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-'+nome).classList.add('active');
-  document.querySelectorAll('.alert').forEach(a=>a.style.display='none');
-}
+let filtroPedidoStatus = 'todos';
+let cuponsSelecionados = [];
 
 function togglePass(id,el){
   const input = document.getElementById(id);
@@ -287,57 +394,13 @@ async function fazerLogin(){
     let msg = 'Erro ao fazer login';
     if(e.code==='auth/user-not-found') msg='Usuário não encontrado';
     if(e.code==='auth/wrong-password') msg='Senha incorreta';
-    if(e.code==='auth/invalid-email') msg='E-mail inválido';
     showAlert('loginError',msg,'error');
     btn.disabled = false;
   }
 }
 
-async function fazerCadastro(){
-  const nome = document.getElementById('cadNome').value.trim();
-  const email = document.getElementById('cadEmail').value.trim();
-  const telefone = document.getElementById('cadTelefone').value.trim();
-  const senha = document.getElementById('cadSenha').value;
-  const termos = document.getElementById('termos').checked;
-  const btn = document.getElementById('btnCadastro');
-  if(!nome||!email||!telefone||!senha) return showAlert('cadastroError','Preencha todos os campos','error');
-  if(!termos) return showAlert('cadastroError','Aceite os termos','error');
-  if(senha.length<6) return showAlert('cadastroError','Senha mínimo 6 caracteres','error');
-  btn.disabled = true;
-  try{
-    const cred = await auth.createUserWithEmailAndPassword(email,senha);
-    await db.ref('usuarios/'+cred.user.uid).set({nome,email,telefone,criadoEm:Date.now(),isAdmin:false});
-    showAlert('cadastroSuccess','Conta criada!','success');
-    setTimeout(()=>showAuth('login'),1500);
-  }catch(e){
-    let msg = 'Erro ao criar conta';
-    if(e.code==='auth/email-already-in-use') msg='E-mail já cadastrado';
-    showAlert('cadastroError',msg,'error');
-  }
-  btn.disabled = false;
-}
-
-async function recuperarSenha(){
-  const email = document.getElementById('recuperarEmail').value.trim();
-  const btn = document.getElementById('btnRecuperar');
-  if(!email) return showAlert('recuperarError','Informe seu e-mail','error');
-  btn.disabled = true;
-  try{
-    await auth.sendPasswordResetEmail(email);
-    showAlert('recuperarSuccess','Link enviado para seu e-mail!','success');
-  }catch(e){
-    showAlert('recuperarError','E-mail não encontrado','error');
-  }
-  btn.disabled = false;
-}
-
-function logout(){
-  auth.signOut();
-}
-
-function toggleMenu(){
-  document.getElementById('sidebar').classList.toggle('open');
-}
+function logout(){auth.signOut()}
+function toggleMenu(){document.getElementById('sidebar').classList.toggle('open')}
 
 function trocarPage(id,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -345,52 +408,258 @@ function trocarPage(id,el){
   document.getElementById(id).classList.add('active');
   el.classList.add('active');
   toggleMenu();
+  if(id==='dash') carregarDashboard();
+  if(id==='categorias') carregarCategorias();
+  if(id==='subcategorias') carregarSubcategorias();
   if(id==='produtos') carregarProdutos();
+  if(id==='cupons') carregarCupons();
   if(id==='pedidos') carregarPedidos();
   if(id==='clientes') carregarClientes();
-  if(id==='dash') carregarDashboard();
-}
-
-function abrirModalProduto(id=null){
-  document.getElementById('prodId').value = id||'';
-  document.getElementById('modalProdTitulo').textContent = id?'Editar Produto':'Novo Produto';
-  if(id){
-    db.ref('produtos/'+id).once('value',snap=>{
-      const p = snap.val();
-      document.getElementById('prodNome').value = p.nome;
-      document.getElementById('prodPreco').value = p.preco;
-      document.getElementById('prodCategoria').value = p.categoria;
-      document.getElementById('prodDesc').value = p.descricao;
-      document.getElementById('prodEstoque').value = p.estoque;
-    });
-  }else{
-    document.getElementById('prodNome').value = '';
-    document.getElementById('prodPreco').value = '';
-    document.getElementById('prodCategoria').value = '';
-    document.getElementById('prodDesc').value = '';
-    document.getElementById('prodEstoque').value = '';
-  }
-  document.getElementById('modalProduto').classList.add('active');
 }
 
 function fecharModal(id){
   document.getElementById(id).classList.remove('active');
+  document.querySelectorAll('.modal input,.modal textarea,.modal select').forEach(i=>{if(i.type!=='file'&&i.type!=='checkbox')i.value=''});
+  document.querySelectorAll('.modal img').forEach(i=>{i.classList.add('hide');i.src=''});
+  document.querySelectorAll('.modal.img-preview span').forEach(s=>s.classList.remove('hide'));
+  cuponsSelecionados = [];
+}
+
+function previewImg(input,imgId,textId){
+  if(input.files&&input.files[0]){
+    const reader = new FileReader();
+    reader.onload = e=>{
+      document.getElementById(imgId).src = e.target.result;
+      document.getElementById(imgId).classList.remove('hide');
+      document.getElementById(textId).classList.add('hide');
+    }
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+async function uploadImg(file,path){
+  const ref = storage.ref(path+'/'+Date.now()+'_'+file.name);
+  await ref.put(file);
+  return await ref.getDownloadURL();
+}
+
+// CATEGORIAS
+function abrirModalCategoria(id=null){
+  document.getElementById('catId').value = id||'';
+  if(id){
+    db.ref('categorias/'+id).once('value',snap=>{
+      const c = snap.val();
+      document.getElementById('catNome').value = c.nome;
+      if(c.imagem){
+        document.getElementById('catImgPreview').src = c.imagem;
+        document.getElementById('catImgPreview').classList.remove('hide');
+        document.getElementById('catImgText').classList.add('hide');
+      }
+    });
+  }
+  document.getElementById('modalCategoria').classList.add('active');
+}
+
+async function salvarCategoria(){
+  const id = document.getElementById('catId').value;
+  const nome = document.getElementById('catNome').value.trim();
+  const file = document.getElementById('catImgInput').files[0];
+  if(!nome) return alert('Preencha o nome');
+  let imagem = document.getElementById('catImgPreview').src||'';
+  if(file) imagem = await uploadImg(file,'categorias');
+  const data = {nome,imagem,criadoEm:Date.now()};
+  if(id) await db.ref('categorias/'+id).update(data);
+  else await db.ref('categorias').push(data);
+  fecharModal('modalCategoria');
+  carregarCategorias();
+}
+
+async function deletarCategoria(id){
+  if(confirm('Deletar categoria? Produtos vinculados ficarão sem categoria.')){
+    await db.ref('categorias/'+id).remove();
+    carregarCategorias();
+  }
+}
+
+function carregarCategorias(){
+  db.ref('categorias').once('value',snap=>{
+    const lista = document.getElementById('listaCategorias');
+    const dados = snap.val();
+    if(!dados){lista.innerHTML='<div class="empty">Nenhuma categoria</div>';return}
+    let html = '';
+    Object.entries(dados).forEach(([id,c])=>{
+      html += `<div class="item-row">
+        <img src="${c.imagem||''}" class="img-thumb" onerror="this.style.display='none'">
+        <div class="item-info">
+          <div class="item-title">${c.nome}</div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-sm" onclick="abrirModalCategoria('${id}')">Editar</button>
+          <button class="btn btn-sm btn-red" onclick="deletarCategoria('${id}')">Del</button>
+        </div>
+      </div>`;
+    });
+    lista.innerHTML = html;
+  });
+}
+
+// SUBCATEGORIAS
+async function abrirModalSubcategoria(id=null){
+  const select = document.getElementById('subcatCatId');
+  select.innerHTML = '<option value="">Selecione...</option>';
+  const snap = await db.ref('categorias').once('value');
+  const cats = snap.val()||{};
+  Object.entries(cats).forEach(([cid,c])=>{
+    select.innerHTML += `<option value="${cid}">${c.nome}</option>`;
+  });
+  document.getElementById('subcatId').value = id||'';
+  if(id){
+    db.ref('subcategorias/'+id).once('value',snap=>{
+      const s = snap.val();
+      document.getElementById('subcatCatId').value = s.categoriaId;
+      document.getElementById('subcatNome').value = s.nome;
+      if(s.imagem){
+        document.getElementById('subcatImgPreview').src = s.imagem;
+        document.getElementById('subcatImgPreview').classList.remove('hide');
+        document.getElementById('subcatImgText').classList.add('hide');
+      }
+    });
+  }
+  document.getElementById('modalSubcategoria').classList.add('active');
+}
+
+async function salvarSubcategoria(){
+  const id = document.getElementById('subcatId').value;
+  const categoriaId = document.getElementById('subcatCatId').value;
+  const nome = document.getElementById('subcatNome').value.trim();
+  const file = document.getElementById('subcatImgInput').files[0];
+  if(!categoriaId||!nome) return alert('Preencha todos os campos');
+  let imagem = document.getElementById('subcatImgPreview').src||'';
+  if(file) imagem = await uploadImg(file,'subcategorias');
+  const data = {categoriaId,nome,imagem,criadoEm:Date.now()};
+  if(id) await db.ref('subcategorias/'+id).update(data);
+  else await db.ref('subcategorias').push(data);
+  fecharModal('modalSubcategoria');
+  carregarSubcategorias();
+}
+
+async function deletarSubcategoria(id){
+  if(confirm('Deletar subcategoria?')){
+    await db.ref('subcategorias/'+id).remove();
+    carregarSubcategorias();
+  }
+}
+
+function carregarSubcategorias(){
+  db.ref('subcategorias').once('value',async snap=>{
+    const lista = document.getElementById('listaSubcategorias');
+    const dados = snap.val();
+    if(!dados){lista.innerHTML='<div class="empty">Nenhuma subcategoria</div>';return}
+    const catSnap = await db.ref('categorias').once('value');
+    const cats = catSnap.val()||{};
+    let html = '';
+    Object.entries(dados).forEach(([id,s])=>{
+      const catNome = cats[s.categoriaId]?.nome||'Sem categoria';
+      html += `<div class="item-row">
+        <img src="${s.imagem||''}" class="img-thumb" onerror="this.style.display='none'">
+        <div class="item-info">
+          <div class="item-title">${s.nome}</div>
+          <div class="item-sub">${catNome}</div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-sm" onclick="abrirModalSubcategoria('${id}')">Editar</button>
+          <button class="btn btn-sm btn-red" onclick="deletarSubcategoria('${id}')">Del</button>
+        </div>
+      </div>`;
+    });
+    lista.innerHTML = html;
+  });
+}
+
+// PRODUTOS
+async function abrirModalProduto(id=null){
+  const catSelect = document.getElementById('prodCatId');
+  catSelect.innerHTML = '<option value="">Selecione...</option>';
+  const catSnap = await db.ref('categorias').once('value');
+  const cats = catSnap.val()||{};
+  Object.entries(cats).forEach(([cid,c])=>{
+    catSelect.innerHTML += `<option value="${cid}">${c.nome}</option>`;
+  });
+
+  const cuponsDiv = document.getElementById('prodCupons');
+  cuponsDiv.innerHTML = '';
+  const cupomSnap = await db.ref('cupons').once('value');
+  const cupons = cupomSnap.val()||{};
+  Object.entries(cupons).forEach(([cid,c])=>{
+    if(c.ativo){
+      cuponsDiv.innerHTML += `<label class="cupom-tag"><input type="checkbox" value="${cid}" onchange="toggleCupomProduto(this)"> ${c.codigo} (-${c.desconto}%)</label>`;
+    }
+  });
+
+  document.getElementById('prodId').value = id||'';
+  document.getElementById('modalProdTitulo').textContent = id?'Editar Produto':'Novo Produto';
+  if(id){
+    db.ref('produtos/'+id).once('value',async snap=>{
+      const p = snap.val();
+      document.getElementById('prodNome').value = p.nome;
+      document.getElementById('prodCatId').value = p.categoriaId;
+      await carregarSubcats();
+      document.getElementById('prodSubcatId').value = p.subcategoriaId||'';
+      document.getElementById('prodPreco').value = p.preco;
+      document.getElementById('prodEstoque').value = p.estoque;
+      document.getElementById('prodTaxa').value = p.taxa||0;
+      document.getElementById('prodDesc').value = p.descricao;
+      if(p.imagem){
+        document.getElementById('prodImgPreview').src = p.imagem;
+        document.getElementById('prodImgPreview').classList.remove('hide');
+        document.getElementById('prodImgText').classList.add('hide');
+      }
+      cuponsSelecionados = p.cupons||[];
+      cuponsSelecionados.forEach(cid=>{
+        const cb = document.querySelector(`#prodCupons input[value="${cid}"]`);
+        if(cb) cb.checked = true;
+      });
+    });
+  }
+  document.getElementById('modalProduto').classList.add('active');
+}
+
+async function carregarSubcats(){
+  const catId = document.getElementById('prodCatId').value;
+  const select = document.getElementById('prodSubcatId');
+  select.innerHTML = '<option value="">Nenhuma</option>';
+  if(!catId) return;
+  const snap = await db.ref('subcategorias').orderByChild('categoriaId').equalTo(catId).once('value');
+  const subs = snap.val()||{};
+  Object.entries(subs).forEach(([sid,s])=>{
+    select.innerHTML += `<option value="${sid}">${s.nome}</option>`;
+  });
+}
+
+function toggleCupomProduto(cb){
+  if(cb.checked){
+    if(!cuponsSelecionados.includes(cb.value)) cuponsSelecionados.push(cb.value);
+  }else{
+    cuponsSelecionados = cuponsSelecionados.filter(id=>id!==cb.value);
+  }
 }
 
 async function salvarProduto(){
   const id = document.getElementById('prodId').value;
   const nome = document.getElementById('prodNome').value.trim();
+  const categoriaId = document.getElementById('prodCatId').value;
+  const subcategoriaId = document.getElementById('prodSubcatId').value;
   const preco = parseFloat(document.getElementById('prodPreco').value);
-  const categoria = document.getElementById('prodCategoria').value.trim();
-  const descricao = document.getElementById('prodDesc').value.trim();
   const estoque = parseInt(document.getElementById('prodEstoque').value);
-  if(!nome||!preco) return alert('Preencha nome e preço');
-  const data = {nome,preco,categoria,descricao,estoque,criadoEm:Date.now()};
-  if(id){
-    await db.ref('produtos/'+id).update(data);
-  }else{
-    await db.ref('produtos').push(data);
-  }
+  const taxa = parseFloat(document.getElementById('prodTaxa').value)||0;
+  const descricao = document.getElementById('prodDesc').value.trim();
+  const file = document.getElementById('prodImgInput').files[0];
+  if(!nome||!categoriaId||!preco||isNaN(estoque)) return alert('Preencha nome, categoria, preço e estoque');
+  let imagem = document.getElementById('prodImgPreview').src||'';
+  if(file) imagem = await uploadImg(file,'produtos');
+  const data = {nome,categoriaId,subcategoriaId,preco,estoque,taxa,descricao,imagem,cupons:cuponsSelecionados,criadoEm:Date.now()};
+  if(id) await db.ref('produtos/'+id).update(data);
+  else await db.ref('produtos').push(data);
   fecharModal('modalProduto');
   carregarProdutos();
 }
@@ -403,16 +672,23 @@ async function deletarProduto(id){
 }
 
 function carregarProdutos(){
-  db.ref('produtos').once('value',snap=>{
+  db.ref('produtos').once('value',async snap=>{
     const lista = document.getElementById('listaProdutos');
     const dados = snap.val();
-    if(!dados){lista.innerHTML='<div class="empty">Nenhum produto cadastrado</div>';return}
+    if(!dados){lista.innerHTML='<div class="empty">Nenhum produto</div>';return}
+    const catSnap = await db.ref('categorias').once('value');
+    const cats = catSnap.val()||{};
+    const subSnap = await db.ref('subcategorias').once('value');
+    const subs = subSnap.val()||{};
     let html = '';
     Object.entries(dados).forEach(([id,p])=>{
+      const catNome = cats[p.categoriaId]?.nome||'Sem categoria';
+      const subNome = subs[p.subcategoriaId]?.nome||'';
       html += `<div class="item-row">
+        <img src="${p.imagem||''}" class="img-thumb" onerror="this.style.display='none'">
         <div class="item-info">
           <div class="item-title">${p.nome}</div>
-          <div class="item-sub">R$ ${p.preco.toFixed(2)} - ${p.categoria} - Estoque: ${p.estoque}</div>
+          <div class="item-sub">R$ ${p.preco.toFixed(2)} - ${catNome}${subNome?' > '+subNome:''} - Estoque: ${p.estoque}</div>
         </div>
         <div class="actions">
           <button class="btn btn-sm" onclick="abrirModalProduto('${id}')">Editar</button>
@@ -424,34 +700,126 @@ function carregarProdutos(){
   });
 }
 
-function carregarPedidos(){
-  db.ref('pedidos').once('value',snap=>{
-    const lista = document.getElementById('listaPedidos');
+// CUPONS
+function abrirModalCupom(id=null){
+  document.getElementById('cupomId').value = id||'';
+  if(id){
+    db.ref('cupons/'+id).once('value',snap=>{
+      const c = snap.val();
+      document.getElementById('cupomCodigo').value = c.codigo;
+      document.getElementById('cupomDesconto').value = c.desconto;
+      document.getElementById('cupomLimite').value = c.limite;
+      document.getElementById('cupomAtivo').checked = c.ativo;
+    });
+  }
+  document.getElementById('modalCupom').classList.add('active');
+}
+
+async function salvarCupom(){
+  const id = document.getElementById('cupomId').value;
+  const codigo = document.getElementById('cupomCodigo').value.trim().toUpperCase();
+  const desconto = parseInt(document.getElementById('cupomDesconto').value);
+  const limite = parseInt(document.getElementById('cupomLimite').value);
+  const ativo = document.getElementById('cupomAtivo').checked;
+  if(!codigo||isNaN(desconto)||isNaN(limite)) return alert('Preencha todos os campos');
+  const data = {codigo,desconto,limite,usado:0,ativo,criadoEm:Date.now()};
+  if(id) await db.ref('cupons/'+id).update(data);
+  else await db.ref('cupons').push(data);
+  fecharModal('modalCupom');
+  carregarCupons();
+}
+
+async function deletarCupom(id){
+  if(confirm('Deletar cupom?')){
+    await db.ref('cupons/'+id).remove();
+    carregarCupons();
+  }
+}
+
+async function toggleCupomAtivo(id,ativo){
+  await db.ref('cupons/'+id).update({ativo:!ativo});
+  carregarCupons();
+}
+
+function carregarCupons(){
+  db.ref('cupons').once('value',snap=>{
+    const lista = document.getElementById('listaCupons');
     const dados = snap.val();
-    if(!dados){lista.innerHTML='<div class="empty">Nenhum pedido ainda</div>';return}
+    if(!dados){lista.innerHTML='<div class="empty">Nenhum cupom</div>';return}
     let html = '';
-    Object.entries(dados).reverse().forEach(([id,p])=>{
-      html += `<div class="card-admin">
-        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-          <div style="font-weight:800">#${id.slice(-6)}</div>
-          <div style="font-size:11px;color:var(--purple)">${p.status||'Pendente'}</div>
+    Object.entries(dados).forEach(([id,c])=>{
+      html += `<div class="item-row">
+        <div class="item-info">
+          <div class="item-title">${c.codigo} <span class="badge-status ${c.ativo?'badge-ativo':'badge-inativo'}">${c.ativo?'Ativo':'Inativo'}</span></div>
+          <div class="item-sub">${c.desconto}% OFF - Usado ${c.usado||0}/${c.limite}</div>
         </div>
-        <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px">${p.clienteNome} - ${p.clienteEmail}</div>
-        <div style="font-size:13px;font-weight:700">R$ ${p.total.toFixed(2)}</div>
+        <div class="actions">
+          <button class="btn btn-sm ${c.ativo?'btn-red':'btn-green'}" onclick="toggleCupomAtivo('${id}',${c.ativo})">${c.ativo?'Desativar':'Ativar'}</button>
+          <button class="btn btn-sm" onclick="abrirModalCupom('${id}')">Editar</button>
+          <button class="btn btn-sm btn-red" onclick="deletarCupom('${id}')">Del</button>
+        </div>
       </div>`;
     });
     lista.innerHTML = html;
   });
 }
 
+// PEDIDOS
+let todosPedidos = {};
+function filtrarStatusPedido(status,el){
+  filtroPedidoStatus = status;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  filtrarPedidos();
+}
+
+function filtrarPedidos(){
+  const busca = document.getElementById('searchPedido').value.toLowerCase();
+  const lista = document.getElementById('listaPedidos');
+  let html = '';
+  Object.entries(todosPedidos).reverse().forEach(([id,p])=>{
+    const matchStatus = filtroPedidoStatus==='todos'||p.status===filtroPedidoStatus;
+    const matchBusca =!busca||p.clienteEmail?.toLowerCase().includes(busca);
+    if(matchStatus&&matchBusca){
+      const statusClass = p.status==='concluido'?'badge-concluido':p.status==='cancelado'?'badge-cancelado':'badge-pendente';
+      html += `<div class="card-admin">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <div style="font-weight:800">#${id.slice(-6)}</div>
+          <div class="badge-status ${statusClass}">${p.status||'pendente'}</div>
+        </div>
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px">${p.clienteNome} - ${p.clienteEmail}</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px">R$ ${p.total.toFixed(2)}</div>
+        <div class="actions">
+          <button class="btn btn-sm btn-green" onclick="atualizarStatusPedido('${id}','concluido')">Concluir</button>
+          <button class="btn btn-sm btn-red" onclick="atualizarStatusPedido('${id}','cancelado')">Cancelar</button>
+        </div>
+      </div>`;
+    }
+  });
+  lista.innerHTML = html||'<div class="empty">Nenhum pedido encontrado</div>';
+}
+
+async function atualizarStatusPedido(id,status){
+  await db.ref('pedidos/'+id).update({status});
+  carregarPedidos();
+}
+
+function carregarPedidos(){
+  db.ref('pedidos').once('value',snap=>{
+    todosPedidos = snap.val()||{};
+    filtrarPedidos();
+  });
+}
+
+// CLIENTES
 function carregarClientes(){
   db.ref('usuarios').once('value',snap=>{
     const lista = document.getElementById('listaClientes');
     const dados = snap.val();
-    if(!dados){lista.innerHTML='<div class="empty">Nenhum cliente ainda</div>';return}
+    if(!dados){lista.innerHTML='<div class="empty">Nenhum cliente</div>';return}
     let html = '';
     Object.entries(dados).forEach(([id,u])=>{
-      html += `<div class="item-row">
+      html += `<div class="item-row clickable" onclick="verCliente('${id}')">
         <div class="item-info">
           <div class="item-title">${u.nome}</div>
           <div class="item-sub">${u.email} - ${u.telefone}</div>
@@ -462,22 +830,43 @@ function carregarClientes(){
   });
 }
 
+async function verCliente(uid){
+  const userSnap = await db.ref('usuarios/'+uid).once('value');
+  const user = userSnap.val();
+  document.getElementById('clienteInfo').innerHTML = `
+    <div class="item-title">${user.nome}</div>
+    <div class="item-sub">${user.email}</div>
+    <div class="item-sub">${user.telefone}</div>
+  `;
+  const pedSnap = await db.ref('pedidos').orderByChild('clienteId').equalTo(uid).once('value');
+  const peds = pedSnap.val()||{};
+  let html = '';
+  Object.entries(peds).reverse().forEach(([id,p])=>{
+    const statusClass = p.status==='concluido'?'badge-concluido':p.status==='cancelado'?'badge-cancelado':'badge-pendente';
+    html += `<div class="item-row">
+      <div class="item-info">
+        <div class="item-title">#${id.slice(-6)} - R$ ${p.total.toFixed(2)}</div>
+        <div class="item-sub">${new Date(p.criadoEm).toLocaleDateString('pt-BR')} <span class="badge-status ${statusClass}">${p.status}</span></div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('clientePedidos').innerHTML = html||'<div class="empty">Nenhum pedido</div>';
+  document.getElementById('modalCliente').classList.add('active');
+}
+
+// DASHBOARD
 function carregarDashboard(){
   db.ref('produtos').once('value',s=>document.getElementById('totalProdutos').textContent=Object.keys(s.val()||{}).length);
   db.ref('usuarios').once('value',s=>document.getElementById('totalClientes').textContent=Object.keys(s.val()||{}).length);
   db.ref('pedidos').once('value',s=>{
     const p = s.val()||{};
     document.getElementById('totalPedidos').textContent=Object.keys(p).length;
+    const hoje = new Date().setHours(0,0,0,0);
     let total = 0;
-    Object.values(p).forEach(ped=>total+=ped.total||0);
-    document.getElementById('vendasHoje').textContent='R$ '+total.toFixed(2);
-    const rec = document.getElementById('pedidosRecentes');
-    if(Object.keys(p).length===0){rec.innerHTML='<div class="empty">Nenhum pedido ainda</div>';return}
-    let html = '';
-    Object.entries(p).reverse().slice(0,3).forEach(([id,ped])=>{
-      html += `<div class="item-row"><div class="item-info"><div class="item-title">#${id.slice(-6)} - R$ ${ped.total.toFixed(2)}</div><div class="item-sub">${ped.clienteNome}</div></div></div>`;
+    Object.values(p).forEach(ped=>{
+      if(ped.criadoEm>=hoje) total+=ped.total||0;
     });
-    rec.innerHTML = html;
+    document.getElementById('vendasHoje').textContent='R$ '+total.toFixed(2);
   });
 }
 
