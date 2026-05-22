@@ -70,7 +70,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;z-index:100;padding:20px;pointer-events:none}
 .modal.active{display:flex;pointer-events:auto}
 .modal-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;width:100%;max-width:450px;max-height:90vh;overflow-y:auto}
-.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;position:relative}
 .modal-title{font-size:16px;font-weight:800}
 .close-btn{width:32px;height:32px;background:transparent;border:1px solid var(--border);border-radius:8px;color:#fff;cursor:pointer;font-size:18px}
 .close-btn:active{background:var(--input);border-color:var(--red);color:var(--red)}
@@ -199,7 +199,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
         <div class="input-box">
           <input type="text" id="searchPedido" placeholder="🔍 Buscar por email..." onkeyup="filtrarPedidos()">
         </div>
-      </div>
       <div class="filters">
         <button class="filter-btn active" onclick="filtrarStatusPedido('todos',this)">Todos</button>
         <button class="filter-btn" onclick="filtrarStatusPedido('pendente',this)">⏳ Pendentes</button>
@@ -284,6 +283,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
         <label>Subcategoria</label>
         <div class="input-box"><select id="prodSubcatId"></select></div>
       </div>
+    </div>
     <div class="grid-2">
       <div class="input-group">
         <label>💵 Preço</label>
@@ -293,6 +293,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
         <label>📊 Estoque</label>
         <div class="input-box"><input type="number" id="prodEstoque" placeholder="10"></div>
       </div>
+    </div>
     <div class="input-group">
       <label>💸 Taxa Extra</label>
       <div class="input-box"><input type="number" id="prodTaxa" placeholder="0" step="0.01"></div>
@@ -341,7 +342,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
             <option value="0">Ilimitado</option>
           </select>
         </div>
-      </div>
       <div class="input-group">
         <label>♻️ Uso por Cliente</label>
         <div class="input-box"><input type="number" id="cupomUsoCliente" placeholder="1" min="1" value="1"></div>
@@ -351,18 +351,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
       <label class="checkbox"><input type="checkbox" id="cupomAtivo" checked><span>🟢 Cupom Ativo</span></label>
     </div>
     <button class="btn btn-primary" onclick="salvarCupom()">✨ SALVAR CUPOM</button>
-  </div>
-</div>
-
-<div class="modal" id="modalCliente">
-  <div class="modal-box">
-    <div class="modal-head">
-      <div class="modal-title">👤 Detalhes do Cliente</div>
-      <button class="close-btn" onclick="fecharModal('modalCliente')">×</button>
-    </div>
-    <div id="clienteInfo" style="margin-bottom:16px"></div>
-    <div class="card-title">📜 Pedidos</div>
-    <div id="clientePedidos"></div>
   </div>
 </div>
 
@@ -381,10 +369,20 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 <div class="modal" id="modalPedido">
   <div class="modal-box">
     <div class="modal-head">
-      <div class="modal-title">📋 Detalhes do Pedido</div>
-      <button class="close-btn" onclick="fecharModal('modalPedido')">×</button>
+      <button class="close-btn" onclick="fecharModal('modalPedido')" style="position:absolute;left:16px;top:16px">←</button>
+      <div class="modal-title" style="width:100%;text-align:center">📋 DETALHES DO PEDIDO</div>
     </div>
     <div id="pedidoDetalhes"></div>
+  </div>
+</div>
+
+<div class="modal" id="modalCliente">
+  <div class="modal-box">
+    <div class="modal-head">
+      <button class="close-btn" onclick="fecharModal('modalCliente')" style="position:absolute;left:16px;top:16px">←</button>
+      <div class="modal-title" style="width:100%;text-align:center">👤 CLIENTE - DETALHES</div>
+    </div>
+    <div id="clienteDetalhes"></div>
   </div>
 </div>
 
@@ -560,8 +558,8 @@ async function abrirModalSubcategoria(id=null){
     db.ref('subcategorias/'+id).once('value',snap=>{
       const s = snap.val();
       document.getElementById('subcatCatId').value = s.categoriaId;
-            document.getElementById('subcatNome').value = s.nome;
-      if(s.imagem){
+      document.getElementById('subcatNome').value = s.nome;
+            if(s.imagem){
         document.getElementById('subcatImgPreview').src = s.imagem;
         document.getElementById('subcatImgPreview').classList.remove('hide');
         document.getElementById('subcatImgText').classList.add('hide');
@@ -904,25 +902,55 @@ function filtrarPedidos(){
 
 async function verDetalhesPedido(id){
   const p = todosPedidos[id];
-  let produtosHtml = '';
+  const userSnap = await db.ref('usuarios/'+p.clienteId).once('value');
+  const user = userSnap.val()||{};
+
+  let itensHtml = '';
   if(p.produtos){
     Object.values(p.produtos).forEach(prod=>{
-      produtosHtml += `<div class="detail-row">
-        <div><div class="detail-label">📦 ${prod.nome}</div><div class="detail-value">Qtd: ${prod.qtd}</div></div>
+      itensHtml += `<div class="item-row" style="margin:8px 0">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:40px;height:40px;background:var(--input);border-radius:8px;display:flex;align-items:center;justify-content:center">📦</div>
+          <div>
+            <div class="item-title">${prod.nome}</div>
+            <div class="item-sub">Qtd: ${prod.qtd}</div>
+          </div>
         <div class="detail-value">💰 R$ ${(prod.preco*prod.qtd).toFixed(2)}</div>
       </div>`;
     });
   }
+
+  const pagoBadge = p.pago?'<span class="badge-status badge-ativo" style="float:right">Pago</span>':'';
+
   document.getElementById('pedidoDetalhes').innerHTML = `
-    <div class="detail-row"><div class="detail-label">🆔 ID</div><div class="detail-value">#${id.slice(-6)}</div></div>
-    <div class="detail-row"><div class="detail-label">👤 Cliente</div><div class="detail-value">${p.clienteNome}</div></div>
-    <div class="detail-row"><div class="detail-label">📧 Email</div><div class="detail-value">${p.clienteEmail}</div></div>
-    <div class="detail-row"><div class="detail-label">📅 Data</div><div class="detail-value">${new Date(p.criadoEm).toLocaleString('pt-BR')}</div></div>
-    <div class="detail-row"><div class="detail-label">📊 Status</div><div class="detail-value">${p.status||'pendente'}</div></div>
-    <div class="card-title" style="margin-top:16px">📦 Produtos</div>
-    ${produtosHtml}
-    <div class="detail-row" style="border-top:1px solid var(--border);margin-top:12px;padding-top:12px">
-      <div class="detail-label">💰 Total</div><div class="detail-value" style="font-size:18px;color:var(--purple)">R$ ${p.total.toFixed(2)}</div>
+    <div style="margin-bottom:20px">
+      <div style="font-size:13px;color:var(--text-dim);margin-bottom:4px">Pedido #${id.slice(-8).toUpperCase()}</div>
+      <div style="font-size:12px;color:var(--text-dim)">${new Date(p.criadoEm).toLocaleString('pt-BR')} ${pagoBadge}</div>
+    </div>
+
+    <div class="card-title">👤 Cliente</div>
+    <div class="detail-row"><div class="detail-label">Nome</div><div class="detail-value">${user.nome||p.clienteNome}</div></div>
+    <div class="detail-row"><div class="detail-label">📧 Email</div><div class="detail-value">${user.email||p.clienteEmail}</div></div>
+    <div class="detail-row"><div class="detail-label">📱 Telefone</div><div class="detail-value">${user.telefone||'N/A'}</div></div>
+
+    <div class="card-title" style="margin-top:20px">📦 Itens do pedido</div>
+    ${itensHtml}
+
+    <div class="detail-row" style="border-top:1px solid var(--border);margin-top:16px;padding-top:16px">
+      <div class="detail-label">💰 Total</div>
+      <div class="detail-value" style="font-size:18px;color:var(--purple)">R$ ${p.total.toFixed(2)}</div>
+    </div>
+
+    <div class="card-title" style="margin-top:20px">💳 Pagamento</div>
+    <div class="detail-row"><div class="detail-label">Método</div><div class="detail-value">💎 PIX</div></div>
+
+    <div class="card-title" style="margin-top:20px">📄 Comprovante</div>
+    <button class="btn btn-blue" onclick="alert('Abrir comprovante')" style="margin-bottom:16px">📄 Visualizar comprovante</button>
+
+    <div class="card-title">⚡ Ações</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-green" onclick="atualizarStatusPedido('${id}','concluido');fecharModal('modalPedido')">✅ Marcar como concluído</button>
+      <button class="btn btn-red" onclick="atualizarStatusPedido('${id}','cancelado');fecharModal('modalPedido')">❌ Cancelar pedido</button>
     </div>
   `;
   document.getElementById('modalPedido').classList.add('active');
@@ -964,25 +992,55 @@ function carregarClientes(){
 async function verCliente(uid){
   const userSnap = await db.ref('usuarios/'+uid).once('value');
   const user = userSnap.val();
-  document.getElementById('clienteInfo').innerHTML = `
-    <div class="detail-row"><div class="detail-label">👤 Nome</div><div class="detail-value">${user.nome}</div></div>
-    <div class="detail-row"><div class="detail-label">📧 Email</div><div class="detail-value">${user.email}</div></div>
-    <div class="detail-row"><div class="detail-label">📱 Telefone</div><div class="detail-value">${user.telefone}</div></div>
-  `;
+
   const pedSnap = await db.ref('pedidos').orderByChild('clienteId').equalTo(uid).once('value');
   const peds = pedSnap.val()||{};
-  let html = '';
-  Object.entries(peds).reverse().forEach(([id,p])=>{
-    const statusClass = p.status==='concluido'?'badge-concluido':p.status==='cancelado'?'badge-cancelado':'badge-pendente';
-    const statusEmoji = p.status==='concluido'?'✅':p.status==='cancelado'?'❌':'⏳';
-    html += `<div class="item-row">
-      <div class="item-info">
-        <div class="item-title">#${id.slice(-6)} • 💰 R$ ${p.total.toFixed(2)}</div>
-        <div class="item-sub">📅 ${new Date(p.criadoEm).toLocaleDateString('pt-BR')} <span class="badge-status ${statusClass}">${statusEmoji} ${p.status}</span></div>
-      </div>
-    </div>`;
+
+  let totalGasto = 0;
+  let concluidos = 0;
+  let pendentes = 0;
+  let ultimoPedido = null;
+
+  Object.entries(peds).forEach(([id,p])=>{
+    totalGasto += p.total||0;
+    if(p.status==='concluido') concluidos++;
+    if(p.status==='pendente') pendentes++;
+    if(!ultimoPedido || p.criadoEm > ultimoPedido.criadoEm) ultimoPedido = {id,...p};
   });
-  document.getElementById('clientePedidos').innerHTML = html||'<div class="empty">Nenhum pedido 📜</div>';
+
+  const avatar = user.nome?user.nome[0].toUpperCase():'U';
+  const desde = user.criadoEm?new Date(user.criadoEm).toLocaleDateString('pt-BR'):'N/A';
+
+  document.getElementById('clienteDetalhes').innerHTML = `
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="width:60px;height:60px;background:var(--purple);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;margin:0 auto 12px">${avatar}</div>
+      <div class="item-title" style="font-size:18px;margin-bottom:4px">${user.nome}</div>
+      <div class="item-sub">${user.email}</div>
+      <div class="item-sub">📱 ${user.telefone||'N/A'}</div>
+      <div class="item-sub" style="margin-top:8px">Cliente desde ${desde}</div>
+    </div>
+
+    <div class="card-title">📊 Resumo</div>
+    <div class="detail-row"><div class="detail-label">Total de pedidos</div><div class="detail-value">${Object.keys(peds).length}</div></div>
+    <div class="detail-row"><div class="detail-label">💰 Total gasto</div><div class="detail-value" style="color:var(--green)">R$ ${totalGasto.toFixed(2)}</div></div>
+    <div class="detail-row"><div class="detail-label">✅ Pedidos concluídos</div><div class="detail-value">${concluidos}</div></div>
+    <div class="detail-row"><div class="detail-label">⏳ Pedidos pendentes</div><div class="detail-value">${pendentes}</div></div>
+
+    ${ultimoPedido?`
+    <div class="card-title" style="margin-top:20px">📜 Último pedido</div>
+    <div class="item-row clickable" onclick="verDetalhesPedido('${ultimoPedido.id}')">
+      <div class="item-info">
+        <div class="item-title">#${ultimoPedido.id.slice(-8).toUpperCase()}</div>
+        <div class="item-sub">📅 ${new Date(ultimoPedido.criadoEm).toLocaleString('pt-BR')}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="detail-value">💰 R$ ${ultimoPedido.total.toFixed(2)}</div>
+        <span class="badge-status badge-ativo">Pago</span>
+      </div>
+    </div>`:''}
+
+    <button class="btn btn-primary" style="margin-top:20px" onclick="fecharModal('modalCliente')">Já tem uma conta!</button>
+  `;
   document.getElementById('modalCliente').classList.add('active');
 }
 
