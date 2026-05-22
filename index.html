@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Prime Store VZ - Admin</title>
 <style>
-:root{--bg:#0a0a0f;--card:#111117;--input:#1a1a23;--border:#2d2d3a;--purple:#8b5cf6;--purple-glow:rgba(139,92,246,0.4);--text:#fff;--text-dim:#8b8b9e}
+:root{--bg:#000000;--card:#0d0d0d;--input:#141414;--border:#1f1f1f;--purple:#8b5cf6;--purple-glow:rgba(139,92,246,0.3);--text:#fff;--text-dim:#7a7a8a}
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
 body{background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 .screen{display:none;width:100%;min-height:100vh}
@@ -384,8 +384,8 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
       <div class="input-box"><input type="number" id="cupomLimiteUser" placeholder="1" value="1"></div>
     </div>
     <div class="checkbox-row">
-      <input type="checkbox" id="cupomAtivo" checked>
-      <label for="cupomAtivo" style="margin:0;font-size:13px">Cupom Ativo</label>
+      <input type="checkbox" id="cupomAtivoCheck" checked>
+      <label for="cupomAtivoCheck" style="margin:0;font-size:13px">Cupom Ativo</label>
     </div>
     <button class="btn" onclick="salvarCupom()">SALVAR CUPOM</button>
     <button class="btn btn-secondary" onclick="fecharModal('modalCupom')">CANCELAR</button>
@@ -506,9 +506,8 @@ function carregarCategorias(){
         <div class="item-card">
           <div class="item-card-header">
             <div style="display:flex;align-items:center;gap:10px">
-              <img src="${cat.icon || ''}" style="width:40px;height:40px;border-radius:8px;object
-                            <div class="item-card-title">${cat.nome}</div>
-            </div>
+              <img src="${cat.icon || ''}" style="width:40px;height:40px;border-radius:8px;object-fit:cover">
+              <div class="item-card-title">${cat.nome}            </div>
           </div>
           <div class="item-card-row">
             <span class="item-card-label">Subcategorias</span>
@@ -697,6 +696,7 @@ function carregarPedidos(){
               <div class="pedido-valor">R$ ${ped.valor.toFixed(2)}</div>
               <span class="status-badge ${statusClass}" style="margin-top:6px">${statusTexto}</span>
             </div>
+          </div>
           <div class="item-card-actions">
             ${ped.status === 'pendente'? `
               <button class="btn btn-success btn-small" onclick="aprovarPagamento('${key}')">Aprovar</button>
@@ -797,7 +797,7 @@ function salvarCupom(){
   const valor = parseFloat(document.getElementById('cupomValor').value);
   const limiteTotal = parseInt(document.getElementById('cupomLimiteTotal').value) || 0;
   const limiteUser = parseInt(document.getElementById('cupomLimiteUser').value) || 1;
-  const ativo = document.getElementById('cupomAtivo').checked;
+  const ativo = document.getElementById('cupomAtivoCheck').checked;
   if(!codigo ||!valor) return alert('Preencha código e valor');
   db.ref('cupons').push({
     codigo,
