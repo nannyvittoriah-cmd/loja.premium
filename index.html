@@ -120,7 +120,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
           <input type="password" id="loginPassword" placeholder="••••••••">
           <span class="toggle" onclick="togglePass('loginPassword', this)">👁️</span>
         </div>
-      </div>
       <button class="btn" id="btnLogin">ENTRAR</button>
     </div>
   </div>
@@ -216,6 +215,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
           <input type="text" id="searchPedido" placeholder="Buscar por email do cliente..." oninput="pesquisarPedidos()">
           <span style="color:var(--text-dim);font-size:18px">🔍</span>
         </div>
+      </div>
       <div class="tabs-pedidos">
         <button class="tab-btn active" onclick="filtrarPedidos('todos',this)">Todos</button>
         <button class="tab-btn" onclick="filtrarPedidos('pendente',this)">Pendentes</button>
@@ -228,6 +228,12 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
     <div class="admin-panel" id="panel-usuarios">
       <div class="admin-page-title">Usuários</div>
       <div id="listaUsuarios" class="card-list"></div>
+    </div>
+
+    <div class="admin-panel" id="panel-cupons">
+      <div class="admin-page-title">Cupons de Desconto</div>
+      <button class="btn btn-small" onclick="abrirModal('modalCupom')" style="margin-bottom:14px">+ Adicionar Cupom</button>
+      <div id="listaCupons" class="card-list"></div>
     </div>
 
     <div class="admin-panel" id="panel-banners">
@@ -252,19 +258,12 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
           <label>Imagem</label>
           <div class="file-upload">
             <label class="file-upload-btn">
-              <input type="file" id="bannerImgFile" accept="image/*" onchange="previewFileUpload(this,'previewImg')">
+              <input type="file" id="bannerImgFile" accept="image/*" onchange="previewBase64(this,'previewImg')">
               Escolher da Galeria
             </label>
-            <img id="previewImg" class="file-preview" style="display:none">
           </div>
-        </div>
         <button class="btn" onclick="salvarBanner()">SALVAR BANNER</button>
       </div>
-    </div>
-
-    <div class="admin-panel" id="panel-cupons">
-      <div class="admin-page-title">Cupons</div>
-      <div class="admin-card"><h3>Em desenvolvimento</h3></div>
     </div>
   </div>
 </div>
@@ -293,7 +292,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
       <label>Imagem do Produto</label>
       <div class="file-upload">
         <label class="file-upload-btn">
-          <input type="file" id="produtoImgFile" accept="image/*" onchange="previewFileUpload(this,'produtoImgPreview')">
+          <input type="file" id="produtoImgFile" accept="image/*" onchange="previewBase64(this,'produtoImgPreview')">
           Escolher da Galeria
         </label>
         <img id="produtoImgPreview" class="file-preview" style="display:none">
@@ -340,7 +339,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
       <label>Ícone da Categoria</label>
       <div class="file-upload">
         <label class="file-upload-btn">
-          <input type="file" id="categoriaIconFile" accept="image/*" onchange="previewFileUpload(this,'categoriaIconPreview')">
+          <input type="file" id="categoriaIconFile" accept="image/*" onchange="previewBase64(this,'categoriaIconPreview')">
           Escolher da Galeria
         </label>
         <img id="categoriaIconPreview" class="file-preview" style="display:none">
@@ -355,10 +354,47 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
   </div>
 </div>
 
+<div class="modal" id="modalCupom">
+  <div class="modal-content">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Adicionar Cupom</div>
+    <div class="input-group">
+      <label>Código do Cupom</label>
+      <div class="input-box"><input type="text" id="cupomCodigo" placeholder="PRIME10" style="text-transform:uppercase"></div>
+    </div>
+    <div class="input-group">
+      <label>Tipo de Desconto</label>
+      <div class="input-box">
+        <select id="cupomTipo">
+          <option value="percent">Porcentagem %</option>
+          <option value="fixed">Valor Fixo R$</option>
+        </select>
+      </div>
+    </div>
+    <div class="input-group">
+      <label>Valor do Desconto</label>
+      <div class="input-box"><input type="number" id="cupomValor" placeholder="10" step="0.01"></div>
+    </div>
+    <div class="input-group">
+      <label>Limite Total de Usos</label>
+      <div class="input-box"><input type="number" id="cupomLimiteTotal" placeholder="100" value="100"></div>
+    </div>
+    <div class="input-group">
+      <label>Limite por Usuário</label>
+      <div class="input-box"><input type="number" id="cupomLimiteUser" placeholder="1" value="1"></div>
+    </div>
+    <div class="checkbox-row">
+      <input type="checkbox" id="cupomAtivo" checked>
+      <label for="cupomAtivo" style="margin:0;font-size:13px">Cupom Ativo</label>
+    </div>
+    <button class="btn" onclick="salvarCupom()">SALVAR CUPOM</button>
+    <button class="btn btn-secondary" onclick="fecharModal('modalCupom')">CANCELAR</button>
+  </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -373,7 +409,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
-const storage = firebase.storage();
 const ADMIN_EMAIL = 'vittoriahvahz@gmail.com';
 
 function showScreen(name){
@@ -414,7 +449,7 @@ function toggleTaxaField(){
   document.getElementById('taxaGroup').style.display = checked? 'block' : 'none';
 }
 
-async function previewFileUpload(input, previewId){
+function previewBase64(input, previewId){
   const file = input.files[0];
   if(file){
     const reader = new FileReader();
@@ -425,13 +460,6 @@ async function previewFileUpload(input, previewId){
     };
     reader.readAsDataURL(file);
   }
-}
-
-async function uploadFile(file, path){
-  if(!file) return null;
-  const storageRef = storage.ref(path + Date.now() + '_' + file.name);
-  const snapshot = await storageRef.put(file);
-  return await snapshot.ref.getDownloadURL();
 }
 
 function carregarBanner(){
@@ -448,17 +476,11 @@ function carregarBanner(){
   });
 }
 
-async function salvarBanner(){
+function salvarBanner(){
   const title = document.getElementById('bannerTitleInput').value;
   const offer = document.getElementById('bannerOfferInput').value;
-  const file = document.getElementById('bannerImgFile').files[0];
-
-  let imgUrl = document.getElementById('previewImg').src;
-  if(file){
-    imgUrl = await uploadFile(file, 'banners/');
-  }
-
-  db.ref('config/banner').set({title, offer, img: imgUrl}).then(() => {
+  const img = document.getElementById('previewImg').src;
+  db.ref('config/banner').set({title, offer, img}).then(() => {
     document.getElementById('bannerSuccess').textContent = 'Banner atualizado!';
     document.getElementById('bannerSuccess').style.display = 'block';
     carregarBanner();
@@ -484,8 +506,8 @@ function carregarCategorias(){
         <div class="item-card">
           <div class="item-card-header">
             <div style="display:flex;align-items:center;gap:10px">
-              <img src="${cat.icon || ''}" style="width:40px;height:40px;border-radius:8px;object-fit:cover">
-              <div class="item-card-title">${cat.nome}</div>
+              <img src="${cat.icon || ''}" style="width:40px;height:40px;border-radius:8px;object
+                            <div class="item-card-title">${cat.nome}</div>
             </div>
           </div>
           <div class="item-card-row">
@@ -524,18 +546,12 @@ document.getElementById('produtoCategoria').addEventListener('change', (e) => {
   });
 });
 
-async function salvarCategoria(){
+function salvarCategoria(){
   const nome = document.getElementById('categoriaNome').value;
-  const file = document.getElementById('categoriaIconFile').files[0];
+  const icon = document.getElementById('categoriaIconPreview').src;
   const subcats = document.getElementById('categoriaSubcats').value.split(',').map(s=>s.trim()).filter(s=>s);
   if(!nome) return alert('Preencha o nome');
-
-  let iconUrl = '';
-  if(file){
-    iconUrl = await uploadFile(file, 'categorias/');
-  }
-
-  db.ref('categorias').push({nome, icon: iconUrl, subcategorias: subcats}).then(() => {
+  db.ref('categorias').push({nome, icon, subcategorias: subcats}).then(() => {
     fecharModal('modalCategoria');
     carregarCategorias();
     document.getElementById('categoriaNome').value = '';
@@ -567,6 +583,7 @@ function carregarProdutos(){
                 <div class="item-card-title">${prod.nome}</div>
                 <div style="font-size:11px;color:var(--text-dim)">${prod.categoria}</div>
               </div>
+            </div>
             <span class="status-badge status-approved">R$ ${prod.preco.toFixed(2)}</span>
           </div>
           <div class="item-card-row">
@@ -593,26 +610,19 @@ function carregarProdutos(){
   });
 }
 
-async function salvarProduto(){
+function salvarProduto(){
   const nome = document.getElementById('produtoNome').value;
   const categoriaId = document.getElementById('produtoCategoria').value;
   const subcategoria = document.getElementById('produtoSubcategoria').value;
   const preco = parseFloat(document.getElementById('produtoPreco').value);
-  const file = document.getElementById('produtoImgFile').files[0];
+  const img = document.getElementById('produtoImgPreview').src;
   const desc = document.getElementById('produtoDesc').value;
   const estoque = parseInt(document.getElementById('produtoEstoque').value) || 0;
   const temTaxa = document.getElementById('temTaxa').checked;
   const taxa = temTaxa? parseFloat(document.getElementById('produtoTaxa').value) || 0 : 0;
   const cupom = document.getElementById('produtoCupom').value;
   const cupomAtivo = document.getElementById('cupomAtivo').checked;
-
   if(!nome ||!categoriaId ||!preco) return alert('Preencha nome, categoria e preço');
-
-  let imgUrl = document.getElementById('produtoImgPreview').src;
-  if(file){
-    imgUrl = await uploadFile(file, 'produtos/');
-  }
-
   db.ref('categorias/'+categoriaId+'/nome').once('value').then(snap => {
     const categoriaNome = snap.val();
     db.ref('produtos').push({
@@ -622,8 +632,9 @@ async function salvarProduto(){
       subcategoria,
       preco,
       taxa,
+      cupom,
       cupomAtivo,
-      img: imgUrl,
+      img,
       desc,
       estoque,
       criadoEm: Date.now()
@@ -737,6 +748,86 @@ function enviarComprovante(id){
   });
 }
 
+function carregarCupons(){
+  db.ref('cupons').once('value').then(snap => {
+    const data = snap.val() || {};
+    const lista = document.getElementById('listaCupons');
+    lista.innerHTML = '';
+    Object.keys(data).forEach(key => {
+      const cupom = data[key];
+      const usado = cupom.usos || 0;
+      const total = cupom.limiteTotal || 0;
+      const esgotado = total > 0 && usado >= total;
+      const status =!cupom.ativo? 'Inativo' : esgotado? 'Esgotado' : 'Ativo';
+      const statusClass =!cupom.ativo? 'status-cancelled' : esgotado? 'status-pending' : 'status-approved';
+      const descontoTxt = cupom.tipo === 'percent'? `${cupom.valor}% de desconto` : `R$ ${cupom.valor.toFixed(2)} de desconto`;
+      lista.innerHTML += `
+        <div class="item-card">
+          <div class="item-card-header">
+            <div class="item-card-title">${cupom.codigo}</div>
+            <span class="status-badge ${statusClass}">${status}</span>
+          </div>
+          <div class="item-card-row">
+            <span class="item-card-label">Desconto</span>
+            <span class="item-card-value">${descontoTxt}</span>
+          </div>
+          <div class="item-card-row">
+            <span class="item-card-label">Uso</span>
+            <span class="item-card-value">${usado}/${total || '∞'}</span>
+          </div>
+          <div class="item-card-row">
+            <span class="item-card-label">Limite/Usuário</span>
+            <span class="item-card-value">${cupom.limiteUser || 1}x</span>
+          </div>
+          <div class="item-card-actions">
+            <button class="btn ${cupom.ativo? 'btn-danger' : 'btn-success'} btn-small" onclick="toggleCupom('${key}', ${!cupom.ativo})">
+              ${cupom.ativo? 'Desativar' : 'Ativar'}
+            </button>
+            <button class="btn btn-danger btn-small" onclick="excluirCupom('${key}')">Excluir</button>
+          </div>
+        </div>`;
+    });
+    if(lista.innerHTML === '') lista.innerHTML = '<div class="admin-card"><h3>Nenhum cupom criado</h3></div>';
+  });
+}
+
+function salvarCupom(){
+  const codigo = document.getElementById('cupomCodigo').value.trim().toUpperCase();
+  const tipo = document.getElementById('cupomTipo').value;
+  const valor = parseFloat(document.getElementById('cupomValor').value);
+  const limiteTotal = parseInt(document.getElementById('cupomLimiteTotal').value) || 0;
+  const limiteUser = parseInt(document.getElementById('cupomLimiteUser').value) || 1;
+  const ativo = document.getElementById('cupomAtivo').checked;
+  if(!codigo ||!valor) return alert('Preencha código e valor');
+  db.ref('cupons').push({
+    codigo,
+    tipo,
+    valor,
+    limiteTotal,
+    limiteUser,
+    ativo,
+    usos: 0,
+    usuariosUsaram: {},
+    criadoEm: Date.now()
+  }).then(() => {
+    fecharModal('modalCupom');
+    carregarCupons();
+    ['cupomCodigo','cupomValor','cupomLimiteTotal','cupomLimiteUser'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('cupomLimiteTotal').value = '100';
+    document.getElementById('cupomLimiteUser').value = '1';
+  });
+}
+
+function toggleCupom(id, status){
+  db.ref('cupons/'+id+'/ativo').set(status).then(carregarCupons);
+}
+
+function excluirCupom(id){
+  if(confirm('Excluir cupom? Isso não afeta pedidos já feitos.')){
+    db.ref('cupons/'+id).remove().then(carregarCupons);
+  }
+}
+
 function carregarUsuarios(){
   db.ref('usuarios').once('value').then(snap => {
     const data = snap.val() || {};
@@ -773,6 +864,7 @@ function carregarDadosAdmin(panel){
   if(panel === 'pedidos') carregarPedidos();
   if(panel === 'usuarios') carregarUsuarios();
   if(panel === 'banners') carregarBanner();
+  if(panel === 'cupons') carregarCupons();
   if(panel === 'dashboard'){
     carregarPedidos();
     carregarUsuarios();
