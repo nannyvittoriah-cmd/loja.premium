@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Prime Store VZ - Admin</title>
+<title>Prime Store VZ</title>
 <style>
-:root{--bg:#000000;--card:#0d0d0d;--input:#141414;--border:#1f1f1f;--purple:#8b5cf6;--purple-glow:rgba(139,92,246,0.3);--text:#fff;--text-dim:#7a7a8a}
+:root{--bg:#000;--card:#0d0d0d;--input:#141414;--border:#1f1f1f;--purple:#8b5cf6;--purple-glow:rgba(139,92,246,0.3);--text:#fff;--text-dim:#7a7a8a;--green:#10b981;--yellow:#fbbf24;--red:#ef4444}
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
-body{background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);min-height:100vh}
+.hide{display:none!important}
 .screen{display:none;width:100%;min-height:100vh}
-.screen.active{display:block}
-.center{display:flex;align-items:center;justify-content:center;padding:20px;min-height:100vh}
+.screen.active{display:flex;align-items:center;justify-content:center;padding:20px}
 .card{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:32px 24px;width:100%;max-width:360px;box-shadow:0 0 40px var(--purple-glow)}
 h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var(--purple);letter-spacing:2px;text-transform:uppercase}
 .logo{font-size:24px;font-weight:800;text-align:center;margin-bottom:6px;background:linear-gradient(135deg,#fff 0%,#8b5cf6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
@@ -19,302 +19,221 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 .input-group label{display:block;font-size:12px;color:var(--text-dim);margin-bottom:8px;font-weight:500}
 .input-box{width:100%;min-height:50px;background:var(--input);border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;padding:0 16px;transition:all 0.3s}
 .input-box:focus-within{border-color:var(--purple);box-shadow:0 0 0 3px var(--purple-glow)}
-.input-box input,.input-box select,.input-box textarea{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px}
-.input-box textarea{padding:12px 0;min-height:70px;resize:vertical}
+.input-box input,.input-box textarea,.input-box select{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px}
+.input-box textarea{padding:12px 0;min-height:80px;resize:none}
 .toggle{cursor:pointer;color:#6b7280;font-size:18px}
+.row{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;font-size:12px}
+.checkbox{display:flex;align-items:center;gap:8px;color:var(--text-dim);cursor:pointer}
+.checkbox input{width:18px;height:18px;accent-color:var(--purple)}
+.link{color:var(--purple);text-decoration:none;font-weight:600;cursor:pointer}
 .btn{width:100%;height:50px;background:linear-gradient(135deg,#8b5cf6 0%,#7c3aed 100%);border:none;border-radius:14px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;letter-spacing:1px;box-shadow:0 8px 24px var(--purple-glow);transition:all 0.2s;margin-bottom:12px}
 .btn:active{transform:scale(0.98)}
-.btn-secondary{background:var(--input);border:1px solid var(--border);box-shadow:none}
-.btn-small{height:38px;font-size:12px;padding:0 14px;width:auto}
-.btn-danger{background:linear-gradient(135deg,#ef4444 0%,#dc2626 100%);box-shadow:0 8px 24px rgba(239,68,68,0.4)}
-.btn-success{background:linear-gradient(135deg,#10b981 0%,#059669 100%);box-shadow:0 8px 24px rgba(16,185,129,0.4)}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
+.btn-sm{height:38px;font-size:12px;width:auto;padding:0 16px}
+.btn-red{background:linear-gradient(135deg,#ef4444,#dc2626)}
+.btn-green{background:linear-gradient(135deg,#10b981,#059669)}
+.footer-text{text-align:center;font-size:12px;color:var(--text-dim);margin-top:16px}
 .alert{padding:14px 16px;border-radius:12px;font-size:12px;margin-bottom:18px;display:none;text-align:center;font-weight:600}
 .alert.error{background:rgba(239,68,68,0.15);border:1px solid #ef4444;color:#fca5a5}
 .alert.success{background:rgba(16,185,129,0.15);border:1px solid #10b981;color:#6ee7b7}
-.admin-header-mobile{position:fixed;top:0;left:0;right:0;height:56px;background:var(--card);border-bottom:1px solid var(--purple);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:50}
-.admin-menu-btn{width:36px;height:36px;background:var(--purple);border:none;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.admin-menu-btn svg{width:20px;height:20px;stroke:#fff}
-.admin-title-mobile{font-size:16px;font-weight:900;background:linear-gradient(135deg,#fff 0%,#8b5cf6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.menu-mobile-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:98;display:none;pointer-events:none}
-.menu-mobile-overlay.active{display:block;pointer-events:auto}
-.menu-mobile{position:fixed;top:0;left:-100%;width:260px;height:100vh;background:var(--bg);border-right:2px solid var(--purple);z-index:99;transition:left 0.3s;overflow-y:auto;overflow-x:hidden}
-.menu-mobile.active{left:0}
-.menu-mobile-header{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:10}
-.menu-mobile-logo{font-size:18px;font-weight:900;color:#fff}
-.menu-mobile-close{width:30px;height:30px;background:var(--input);border:none;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.menu-mobile-close svg{width:18px;height:18px;stroke:#fff}
-.menu-mobile-section{padding:12px 16px 8px;font-size:10px;font-weight:800;color:var(--text-dim);letter-spacing:2px}
-.menu-mobile-item{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;transition:all 0.2s;color:var(--text-dim);border-left:3px solid transparent}
-.menu-mobile-item:active{background:var(--input)}
-.menu-mobile-item.active{background:rgba(139,92,246,0.15);color:#fff;border-left-color:var(--purple)}
-.menu-mobile-item svg{width:18px;height:18px;stroke:currentColor;flex-shrink:0}
-.menu-mobile-item span{font-size:13px;font-weight:700}
-.admin-content{padding:68px 12px 20px;min-height:100vh}
-.admin-panel{display:none}
-.admin-panel.active{display:block}
-.admin-page-title{font-size:20px;font-weight:900;margin-bottom:16px}
-.admin-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:14px}
-.admin-card h3{font-size:13px;font-weight:800;color:var(--purple);margin-bottom:14px}
-.stats-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:16px}
-.stat-card{background:var(--input);padding:16px;border-radius:14px;border:1px solid var(--border)}
-.stat-label{font-size:10px;color:var(--text-dim);margin-bottom:4px}
+
+/* ADMIN */
+.admin{display:none;min-height:100vh}
+.admin.active{display:block}
+.admin-header{position:fixed;top:0;left:0;right:0;height:56px;background:var(--card);border-bottom:1px solid var(--purple);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:50}
+.menu-btn{width:36px;height:36px;background:var(--purple);border:none;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:18px}
+.admin-title{font-weight:900;font-size:16px}
+.badge{width:36px;height:36px;background:linear-gradient(135deg,#8b5cf6,#7c3aed);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
+.sidebar{position:fixed;top:56px;left:-260px;width:260px;height:calc(100vh - 56px);background:var(--bg);border-right:2px solid var(--purple);transition:0.3s;z-index:40;overflow-y:auto}
+.sidebar.open{left:0}
+.side-header{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.side-header.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#8b5cf6,#7c3aed);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.side-item{padding:14px 16px;cursor:pointer;border-left:3px solid transparent;font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px}
+.side-item:hover,.side-item.active{background:var(--input);border-left-color:var(--purple);color:var(--purple)}
+.admin-content{padding:68px 12px 20px}
+.page{display:none}
+.page.active{display:block}
+.stats{display:grid;gap:12px;grid-template-columns:repeat(2,1fr);margin-bottom:16px}
+@media(min-width:768px){.stats{grid-template-columns:repeat(4,1fr)}}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
+.stat-label{font-size:11px;color:var(--text-dim);margin-bottom:4px}
 .stat-value{font-size:22px;font-weight:900}
-.card-list{display:flex;flex-direction:column;gap:10px}
-.item-card{background:var(--input);border:1px solid var(--border);border-radius:14px;padding:14px}
-.item-card-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:10px}
-.item-card-title{font-size:14px;font-weight:800}
-.item-card-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)}
-.item-card-row:last-of-type{border-bottom:none;margin-bottom:10px}
-.item-card-label{font-size:11px;color:var(--text-dim);font-weight:600}
-.item-card-value{font-size:12px;font-weight:700;text-align:right}
-.item-card-actions{display:flex;gap:6px;flex-wrap:wrap}
-.status-badge{padding:5px 10px;border-radius:7px;font-size:10px;font-weight:700;display:inline-block}
-.status-pending{background:rgba(251,191,36,0.15);color:#fbbf24;border:1px solid #fbbf24}
-.status-approved{background:rgba(16,185,129,0.15);color:#10b981;border:1px solid #10b981}
-.status-cancelled{background:rgba(239,68,68,0.15);color:#ef4444;border:1px solid #ef4444}
-.tabs-pedidos{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
-.tab-btn{background:var(--input);border:1px solid var(--border);color:var(--text-dim);padding:10px 16px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all 0.2s}
-.tab-btn.active{background:var(--purple);color:#fff;border-color:var(--purple)}
-.pedido-id{font-size:11px;color:var(--text-dim);font-weight:600;margin-bottom:4px}
-.pedido-produto{font-size:13px;font-weight:800;margin-bottom:2px}
-.pedido-data{font-size:11px;color:var(--text-dim)}
-.pedido-valor{font-size:15px;font-weight:900}
-.preview-banner{height:100px;background:linear-gradient(135deg,#1e1e2a 0%,#2a1e35 50%,#1e1e2a 100%);border-radius:14px;border:1px solid var(--border);margin-bottom:14px;position:relative;overflow:hidden;padding:14px;display:flex;flex-direction:column;justify-content:center}
-.preview-banner img{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:70px;height:70px;object-fit:contain}
-.banner-title{font-size:10px;font-weight:700;color:var(--purple);letter-spacing:1px;margin-bottom:4px}
-.banner-offer{font-size:20px;font-weight:900;color:#fff}
-.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);z-index:100;align-items:flex-end;padding:0}
+.card-admin{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px}
+.card-title{font-size:13px;font-weight:800;color:var(--purple);margin-bottom:12px}
+.item-row{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.item-info{flex:1}
+.item-title{font-weight:700;font-size:13px;margin-bottom:2px}
+.item-sub{font-size:11px;color:var(--text-dim)}
+.actions{display:flex;gap:6px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
 .modal.active{display:flex}
-.modal-content{background:var(--card);border-radius:20px 20px 0 0;width:100%;max-height:90vh;overflow-y:auto;padding:20px;animation:slideUp 0.3s}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal-title{font-size:16px;font-weight:900;margin-bottom:16px}
-.modal-handle{width:36px;height:3px;background:var(--border);border-radius:2px;margin:0 auto 16px}
-.file-upload{display:flex;align-items:center;gap:10px}
-.file-upload input[type="file"]{display:none}
-.file-upload-btn{background:var(--input);border:1px solid var(--border);padding:10px 14px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;color:var(--text)}
-.file-preview{width:50px;height:50px;border-radius:10px;object-fit:cover;border:1px solid var(--border)}
-.checkbox-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.checkbox-row input[type="checkbox"]{width:20px;height:20px;accent-color:var(--purple)}
-@media(min-width:768px){
-.stats-grid{grid-template-columns:repeat(3,1fr)}
-.admin-content{padding:76px 24px 24px}
-}
+.modal-box{background:var(--card);border:1px solid var(--purple);border-radius:20px;padding:24px;width:100%;max-width:400px;max-height:90vh;overflow-y:auto}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.modal-title{font-size:16px;font-weight:800}
+.close-btn{width:32px;height:32px;background:var(--input);border:none;border-radius:8px;color:#fff;cursor:pointer;font-size:18px}
+.empty{text-align:center;padding:40px 20px;color:var(--text-dim);font-size:13px}
 </style>
 </head>
 <body>
 
+<!-- LOGIN -->
 <div class="screen active" id="screen-login">
-  <div class="center">
-    <div class="card">
-      <h2>LOGIN - E-MAIL</h2>
-      <div class="logo">Prime Store VZ</div>
-      <div class="subtitle">Painel Administrativo</div>
-      <div class="alert error" id="loginError"></div>
-      <div class="input-group">
-        <label>E-mail</label>
-        <div class="input-box"><input type="email" id="loginEmail" placeholder="seuemail@gmail.com"></div>
-      </div>
-      <div class="input-group">
-        <label>Senha</label>
-        <div class="input-box">
-          <input type="password" id="loginPassword" placeholder="••••••••">
-          <span class="toggle" onclick="togglePass('loginPassword', this)">👁️</span>
-        </div>
-      </div>
-      <button class="btn" id="btnLogin">ENTRAR</button>
+  <div class="card">
+    <h2>LOGIN - E-MAIL</h2>
+    <div class="logo">Prime Store VZ</div>
+    <div class="subtitle">Entre na sua conta</div>
+    <div class="alert error" id="loginError"></div>
+    <div class="input-group">
+      <label>E-mail</label>
+      <div class="input-box"><input type="email" id="loginEmail" placeholder="seuemail@gmail.com"></div>
     </div>
+    <div class="input-group">
+      <label>Senha</label>
+      <div class="input-box">
+        <input type="password" id="loginPassword" placeholder="••••••••">
+        <span class="toggle" onclick="togglePass('loginPassword',this)">👁️</span>
+      </div>
+    </div>
+    <div class="row">
+      <label class="checkbox"><input type="checkbox" id="lembrar"><span>Lembrar-me</span></label>
+      <a class="link" onclick="showAuth('recuperar')">Esqueceu a senha?</a>
+    </div>
+    <button class="btn" id="btnLogin" onclick="fazerLogin()">ENTRAR</button>
+    <div class="footer-text">Não tem uma conta? <a class="link" onclick="showAuth('cadastro')">Cadastre-se</a></div>
   </div>
 </div>
 
-<div class="screen" id="screen-admin">
-  <div class="admin-header-mobile">
-    <button class="admin-menu-btn" onclick="toggleMenuMobile()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>
-    <div class="admin-title-mobile">Prime Store</div>
-    <div style="width:36px"></div>
+<!-- CADASTRO -->
+<div class="screen" id="screen-cadastro">
+  <div class="card">
+    <h2>CADASTRO</h2>
+    <div class="logo">Prime Store VZ</div>
+    <div class="subtitle">Crie sua conta</div>
+    <div class="alert error" id="cadastroError"></div>
+    <div class="alert success" id="cadastroSuccess"></div>
+    <div class="input-group">
+      <label>Nome completo</label>
+      <div class="input-box"><input type="text" id="cadNome" placeholder="João da Silva"></div>
+    </div>
+    <div class="input-group">
+      <label>Email</label>
+      <div class="input-box"><input type="email" id="cadEmail" placeholder="joao@email.com"></div>
+    </div>
+    <div class="input-group">
+      <label>Telefone</label>
+      <div class="input-box"><input type="tel" id="cadTelefone" placeholder="(11) 9 9999-9999"></div>
+    </div>
+    <div class="input-group">
+      <label>Senha</label>
+      <div class="input-box">
+        <input type="password" id="cadSenha" placeholder="••••••••">
+        <span class="toggle" onclick="togglePass('cadSenha',this)">👁️</span>
+      </div>
+    </div>
+    <div class="row">
+      <label class="checkbox"><input type="checkbox" id="termos"><span>Li e aceito os Termos de Uso</span></label>
+    </div>
+    <button class="btn" id="btnCadastro" onclick="fazerCadastro()">CADASTRAR</button>
+    <div class="footer-text">Já tem uma conta? <a class="link" onclick="showAuth('login')">Entrar</a></div>
   </div>
+</div>
 
-  <div class="menu-mobile-overlay" id="menuOverlay" onclick="toggleMenuMobile()"></div>
-  <div class="menu-mobile" id="menuMobile">
-    <div class="menu-mobile-header">
-      <div class="menu-mobile-logo">★ PRIME</div>
-      <button class="menu-mobile-close" onclick="toggleMenuMobile()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
+<!-- RECUPERAR -->
+<div class="screen" id="screen-recuperar">
+  <div class="card">
+    <h2>ESQUECEU A SENHA</h2>
+    <div class="logo">Prime Store VZ</div>
+    <div class="subtitle">Recuperar senha</div>
+    <div class="alert error" id="recuperarError"></div>
+    <div class="alert success" id="recuperarSuccess"></div>
+    <div class="input-group">
+      <label>E-mail</label>
+      <div class="input-box"><input type="email" id="recuperarEmail" placeholder=""></div>
     </div>
-    <div class="menu-mobile-section">PAINEL ADMIN</div>
-    <div class="menu-mobile-item active" onclick="showAdminPanel('dashboard',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-      <span>Dashboard</span>
-    </div>
-    <div class="menu-mobile-item" onclick="showAdminPanel('produtos',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-      <span>Produtos</span>
-    </div>
-    <div class="menu-mobile-item" onclick="showAdminPanel('categorias',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-      <span>Categorias</span>
-    </div>
-    <div class="menu-mobile-item" onclick="showAdminPanel('pedidos',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      <span>Pedidos</span>
-    </div>
-    <div class="menu-mobile-item" onclick="showAdminPanel('usuarios',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-      <span>Usuários</span>
-    </div>
-    <div class="menu-mobile-item" onclick="showAdminPanel('cupons',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>
-      <span>Cupons</span>
-    </div>
-    <div class="menu-mobile-item" onclick="showAdminPanel('banners',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-      <span>Slider / Banners</span>
-    </div>
-    <div class="menu-mobile-item" onclick="auth.signOut()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-      <span>Sair</span>
-    </div>
+    <button class="btn" id="btnRecuperar" onclick="recuperarSenha()">ENVIAR CÓDIGO</button>
+    <div class="footer-text"><a class="link" onclick="showAuth('login')">Voltar para o login</a></div>
   </div>
+</div>
 
+<!-- ADMIN -->
+<div class="admin" id="adminPanel">
+  <div class="admin-header">
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <div class="admin-title">Prime Store VZ</div>
+    <div class="badge" id="userBadge">A</div>
+  </div>
+  <div class="sidebar" id="sidebar">
+    <div class="side-header">
+      <div class="logo-icon">★</div>
+      <div><div style="font-weight:800;font-size:14px">PRIME</div><div style="font-size:10px;color:var(--text-dim)">Painel Admin</div></div>
+    </div>
+    <div class="side-item active" onclick="trocarPage('dash',this)">📊 Dashboard</div>
+    <div class="side-item" onclick="trocarPage('produtos',this)">📦 Produtos</div>
+    <div class="side-item" onclick="trocarPage('pedidos',this)">🛒 Pedidos</div>
+    <div class="side-item" onclick="trocarPage('clientes',this)">👥 Clientes</div>
+    <div class="side-item" onclick="logout()">🚪 Sair</div>
+  </div>
   <div class="admin-content">
-    <div class="admin-panel active" id="panel-dashboard">
-      <div class="admin-page-title">Dashboard</div>
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-label">Total Vendas</div>
-          <div class="stat-value" style="color:var(--purple)" id="totalVendas">R$ 0,00</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Pedidos Pendentes</div>
-          <div class="stat-value" style="color:#fbbf24" id="pedidosPendentes">0</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Usuários</div>
-          <div class="stat-value" style="color:#10b981" id="totalUsuarios">0</div>
-        </div>
+    <div id="dash" class="page active">
+      <h3 style="margin-bottom:16px">Dashboard</h3>
+      <div class="stats">
+        <div class="stat-card"><div class="stat-label">Vendas Hoje</div><div class="stat-value" style="color:var(--purple)" id="vendasHoje">R$ 0</div></div>
+        <div class="stat-card"><div class="stat-label">Pedidos</div><div class="stat-value" style="color:var(--yellow)" id="totalPedidos">0</div></div>
+        <div class="stat-card"><div class="stat-label">Produtos</div><div class="stat-value" style="color:var(--green)" id="totalProdutos">0</div></div>
+        <div class="stat-card"><div class="stat-label">Clientes</div><div class="stat-value" style="color:var(--purple)" id="totalClientes">0</div></div>
+      </div>
+      <div class="card-admin">
+        <div class="card-title">Pedidos Recentes</div>
+        <div id="pedidosRecentes"><div class="empty">Nenhum pedido ainda</div></div>
       </div>
     </div>
-
-    <div class="admin-panel" id="panel-produtos">
-      <div class="admin-page-title">Produtos</div>
-      <button class="btn btn-small" onclick="abrirModal('modalProduto')" style="margin-bottom:14px">+ Adicionar Produto</button>
-      <div id="listaProdutos" class="card-list"></div>
-    </div>
-
-    <div class="admin-panel" id="panel-categorias">
-      <div class="admin-page-title">Categorias</div>
-      <button class="btn btn-small" onclick="abrirModal('modalCategoria')" style="margin-bottom:14px">+ Adicionar Categoria</button>
-      <div id="listaCategorias" class="card-list"></div>
-    </div>
-
-    <div class="admin-panel" id="panel-pedidos">
-      <div class="admin-page-title">Pedidos</div>
-      <div class="input-group" style="margin-bottom:12px">
-        <div class="input-box">
-          <input type="text" id="searchPedido" placeholder="Buscar por email do cliente..." oninput="pesquisarPedidos()">
-          <span style="color:var(--text-dim);font-size:18px">🔍</span>
-        </div>
+    <div id="produtos" class="page">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <h3>Produtos</h3>
+        <button class="btn btn-sm" onclick="abrirModalProduto()">+ Adicionar</button>
       </div>
-      <div class="tabs-pedidos">
-        <button class="tab-btn active" onclick="filtrarPedidos('todos',this)">Todos</button>
-        <button class="tab-btn" onclick="filtrarPedidos('pendente',this)">Pendentes</button>
-        <button class="tab-btn" onclick="filtrarPedidos('aprovado',this)">Concluídos</button>
-        <button class="tab-btn" onclick="filtrarPedidos('cancelado',this)">Cancelados</button>
-      </div>
-      <div id="listaPedidos" class="card-list"></div>
+      <div id="listaProdutos"><div class="empty">Nenhum produto cadastrado</div></div>
     </div>
-
-    <div class="admin-panel" id="panel-usuarios">
-      <div class="admin-page-title">Usuários</div>
-      <div id="listaUsuarios" class="card-list"></div>
+    <div id="pedidos" class="page">
+      <h3 style="margin-bottom:16px">Pedidos</h3>
+      <div id="listaPedidos"><div class="empty">Nenhum pedido ainda</div></div>
     </div>
-
-    <div class="admin-panel" id="panel-cupons">
-      <div class="admin-page-title">Cupons de Desconto</div>
-      <button class="btn btn-small" onclick="abrirModal('modalCupom')" style="margin-bottom:14px">+ Adicionar Cupom</button>
-      <div id="listaCupons" class="card-list"></div>
-    </div>
-
-    <div class="admin-panel" id="panel-banners">
-      <div class="admin-page-title">Slider / Banners</div>
-      <div class="admin-card">
-        <h3>Banner Principal</h3>
-        <div class="alert success" id="bannerSuccess"></div>
-        <div class="preview-banner">
-          <div class="banner-title" id="previewTitle">OFERTAS EXCLUSIVAS</div>
-          <div class="banner-offer" id="previewOffer">ATÉ 70% OFF</div>
-          <img id="previewImg" src="https://i.imgur.com/0Z8F8qk.png">
-        </div>
-        <div class="input-group">
-          <label>Título</label>
-          <div class="input-box"><input type="text" id="bannerTitleInput" placeholder="OFERTAS EXCLUSIVAS"></div>
-        </div>
-        <div class="input-group">
-          <label>Oferta</label>
-          <div class="input-box"><input type="text" id="bannerOfferInput" placeholder="ATÉ 70% OFF"></div>
-        </div>
-        <div class="input-group">
-          <label>Imagem</label>
-          <div class="file-upload">
-            <label class="file-upload-btn">
-              <input type="file" id="bannerImgFile" accept="image/*" onchange="previewBase64(this,'previewImg')">
-              Escolher da Galeria
-            </label>
-          </div>
-        </div>
-        <button class="btn" onclick="salvarBanner()">SALVAR BANNER</button>
-      </div>
+    <div id="clientes" class="page">
+      <h3 style="margin-bottom:16px">Clientes</h3>
+      <div id="listaClientes"><div class="empty">Nenhum cliente ainda</div></div>
     </div>
   </div>
 </div>
 
-<!-- MODAIS IGUAIS DO CÓDIGO ANTERIOR -->
+<!-- MODAL PRODUTO -->
 <div class="modal" id="modalProduto">
-  <div class="modal-content">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Adicionar Produto</div>
-    <div class="input-group"><label>Nome</label><div class="input-box"><input type="text" id="produtoNome" placeholder="Ex: Netflix Premium"></div></div>
-    <div class="input-group"><label>Categoria</label><div class="input-box"><select id="produtoCategoria"></select></div></div>
-    <div class="input-group"><label>Subcategoria</label><div class="input-box"><select id="produtoSubcategoria"><option value="">Selecione categoria primeiro</option></select></div></div>
-    <div class="input-group"><label>Preço</label><div class="input-box"><input type="number" id="produtoPreco" placeholder="17.90" step="0.01"></div></div>
-    <div class="input-group"><label>Imagem do Produto</label><div class="file-upload"><label class="file-upload-btn"><input type="file" id="produtoImgFile" accept="image/*" onchange="previewBase64(this,'produtoImgPreview')">Escolher da Galeria</label><img id="produtoImgPreview" class="file-preview" style="display:none"></div></div>
-    <div class="checkbox-row"><input type="checkbox" id="temTaxa" onchange="toggleTaxaField()"><label for="temTaxa" style="margin:0;font-size:13px">Cobrar taxa adicional</label></div>
-    <div class="input-group" id="taxaGroup" style="display:none"><label>Valor da Taxa</label><div class="input-box"><input type="number" id="produtoTaxa" placeholder="2.50" step="0.01"></div></div>
-    <div class="input-group"><label>Código do Cupom (opcional)</label><div class="input-box"><input type="text" id="produtoCupom" placeholder="PRIME10"></div></div>
-    <div class="checkbox-row"><input type="checkbox" id="cupomAtivo"><label for="cupomAtivo" style="margin:0;font-size:13px">Cupom ativo</label></div>
-    <div class="input-group"><label>Descrição</label><div class="input-box"><textarea id="produtoDesc" placeholder="Descrição"></textarea></div></div>
-    <div class="input-group"><label>Estoque (deixe 0 para ilimitado)</label><div class="input-box"><input type="number" id="produtoEstoque" placeholder="0" value="0"></div></div>
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title" id="modalProdTitulo">Novo Produto</div>
+      <button class="close-btn" onclick="fecharModal('modalProduto')">×</button>
+    </div>
+    <input type="hidden" id="prodId">
+    <div class="input-group">
+      <label>Nome do Produto</label>
+      <div class="input-box"><input type="text" id="prodNome" placeholder="Netflix Premium"></div>
+    </div>
+    <div class="input-group">
+      <label>Preço</label>
+      <div class="input-box"><input type="number" id="prodPreco" placeholder="29.90" step="0.01"></div>
+    </div>
+    <div class="input-group">
+      <label>Categoria</label>
+      <div class="input-box"><input type="text" id="prodCategoria" placeholder="Streaming"></div>
+    </div>
+    <div class="input-group">
+      <label>Descrição</label>
+      <div class="input-box"><textarea id="prodDesc" placeholder="Descrição do produto"></textarea></div>
+    </div>
+    <div class="input-group">
+      <label>Estoque</label>
+      <div class="input-box"><input type="number" id="prodEstoque" placeholder="10"></div>
+    </div>
     <button class="btn" onclick="salvarProduto()">SALVAR PRODUTO</button>
-    <button class="btn btn-secondary" onclick="fecharModal('modalProduto')">FECHAR</button>
-  </div>
-</div>
-
-<div class="modal" id="modalCategoria">
-  <div class="modal-content">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Adicionar Categoria</div>
-    <div class="input-group"><label>Nome</label><div class="input-box"><input type="text" id="categoriaNome" placeholder="Ex: Streaming"></div></div>
-    <div class="input-group"><label>Ícone da Categoria</label><div class="file-upload"><label class="file-upload-btn"><input type="file" id="categoriaIconFile" accept="image/*" onchange="previewBase64(this,'categoriaIconPreview')">Escolher da Galeria</label><img id="categoriaIconPreview" class="file-preview" style="display:none"></div></div>
-    <div class="input-group"><label>Subcategorias (separar por vírgula)</label><div class="input-box"><input type="text" id="categoriaSubcats" placeholder="Netflix, Spotify, Disney+"></div></div>
-    <button class="btn" onclick="salvarCategoria()">SALVAR CATEGORIA</button>
-    <button class="btn btn-secondary" onclick="fecharModal('modalCategoria')">CANCELAR</button>
-  </div>
-</div>
-
-<div class="modal" id="modalCupom">
-  <div class="modal-content">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Adicionar Cupom</div>
-    <div class="input-group"><label>Código do Cupom</label><div class="input-box"><input type="text" id="cupomCodigo" placeholder="PRIME10" style="text-transform:uppercase"></div></div>
-    <div class="input-group"><label>Tipo de Desconto</label><div class="input-box"><select id="cupomTipo"><option value="percent">Porcentagem %</option><option value="fixed">Valor Fixo R$</option></select></div></div>
-    <div class="input-group"><label>Valor do Desconto</label><div class="input-box"><input type="number" id="cupomValor" placeholder="10" step="0.01"></div></div>
-    <div class="input-group"><label>Limite Total de Usos</label><div class="input-box"><input type="number" id="cupomLimiteTotal" placeholder="100" value="100"></div></div>
-    <div class="input-group"><label>Limite por Usuário</label><div class="input-box"><input type="number" id="cupomLimiteUser" placeholder="1" value="1"></div></div>
-    <div class="checkbox-row"><input type="checkbox" id="cupomAtivoCheck" checked><label for="cupomAtivoCheck" style="margin:0;font-size:13px">Cupom Ativo</label></div>
-    <button class="btn" onclick="salvarCupom()">SALVAR CUPOM</button>
-    <button class="btn btn-secondary" onclick="fecharModal('modalCupom')">CANCELAR</button>
   </div>
 </div>
 
@@ -329,519 +248,252 @@ const firebaseConfig = {
   projectId: "premium-store-aa58b",
   storageBucket: "premium-store-aa58b.firebasestorage.app",
   messagingSenderId: "462239500057",
-  appId: "1:462239500057:web:f1b7cea162ed308a866788"
+  appId: "1:462239500057:web:f1b7cea162ed308a866788",
+  measurementId: "G-CN88J28WRX"
 };
-
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
-const ADMIN_EMAIL = 'vittoriahvahz@gmail.com';
+let currentUser = null;
 
-function showScreen(name){
+function showAuth(nome){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(`screen-${name}`).classList.add('active');
+  document.getElementById('screen-'+nome).classList.add('active');
+  document.querySelectorAll('.alert').forEach(a=>a.style.display='none');
 }
 
-function togglePass(id, el){
+function togglePass(id,el){
   const input = document.getElementById(id);
-  if(input.type === 'password'){
-    input.type = 'text';
-    el.textContent = '🙈';
+  if(input.type==='password'){input.type='text';el.textContent='🙈'}
+  else{input.type='password';el.textContent='👁️'}
+}
+
+function showAlert(id,msg,tipo){
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = 'alert '+tipo;
+  el.style.display = 'block';
+}
+
+async function fazerLogin(){
+  const email = document.getElementById('loginEmail').value.trim();
+  const senha = document.getElementById('loginPassword').value;
+  const btn = document.getElementById('btnLogin');
+  if(!email||!senha) return showAlert('loginError','Preencha todos os campos','error');
+  btn.disabled = true;
+  try{
+    await auth.signInWithEmailAndPassword(email,senha);
+  }catch(e){
+    let msg = 'Erro ao fazer login';
+    if(e.code==='auth/user-not-found') msg='Usuário não encontrado';
+    if(e.code==='auth/wrong-password') msg='Senha incorreta';
+    if(e.code==='auth/invalid-email') msg='E-mail inválido';
+    showAlert('loginError',msg,'error');
+    btn.disabled = false;
+  }
+}
+
+async function fazerCadastro(){
+  const nome = document.getElementById('cadNome').value.trim();
+  const email = document.getElementById('cadEmail').value.trim();
+  const telefone = document.getElementById('cadTelefone').value.trim();
+  const senha = document.getElementById('cadSenha').value;
+  const termos = document.getElementById('termos').checked;
+  const btn = document.getElementById('btnCadastro');
+  if(!nome||!email||!telefone||!senha) return showAlert('cadastroError','Preencha todos os campos','error');
+  if(!termos) return showAlert('cadastroError','Aceite os termos','error');
+  if(senha.length<6) return showAlert('cadastroError','Senha mínimo 6 caracteres','error');
+  btn.disabled = true;
+  try{
+    const cred = await auth.createUserWithEmailAndPassword(email,senha);
+    await db.ref('usuarios/'+cred.user.uid).set({nome,email,telefone,criadoEm:Date.now(),isAdmin:false});
+    showAlert('cadastroSuccess','Conta criada!','success');
+    setTimeout(()=>showAuth('login'),1500);
+  }catch(e){
+    let msg = 'Erro ao criar conta';
+    if(e.code==='auth/email-already-in-use') msg='E-mail já cadastrado';
+    showAlert('cadastroError',msg,'error');
+  }
+  btn.disabled = false;
+}
+
+async function recuperarSenha(){
+  const email = document.getElementById('recuperarEmail').value.trim();
+  const btn = document.getElementById('btnRecuperar');
+  if(!email) return showAlert('recuperarError','Informe seu e-mail','error');
+  btn.disabled = true;
+  try{
+    await auth.sendPasswordResetEmail(email);
+    showAlert('recuperarSuccess','Link enviado para seu e-mail!','success');
+  }catch(e){
+    showAlert('recuperarError','E-mail não encontrado','error');
+  }
+  btn.disabled = false;
+}
+
+function logout(){
+  auth.signOut();
+}
+
+function toggleMenu(){
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+function trocarPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.side-item').forEach(i=>i.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+  toggleMenu();
+  if(id==='produtos') carregarProdutos();
+  if(id==='pedidos') carregarPedidos();
+  if(id==='clientes') carregarClientes();
+  if(id==='dash') carregarDashboard();
+}
+
+function abrirModalProduto(id=null){
+  document.getElementById('prodId').value = id||'';
+  document.getElementById('modalProdTitulo').textContent = id?'Editar Produto':'Novo Produto';
+  if(id){
+    db.ref('produtos/'+id).once('value',snap=>{
+      const p = snap.val();
+      document.getElementById('prodNome').value = p.nome;
+      document.getElementById('prodPreco').value = p.preco;
+      document.getElementById('prodCategoria').value = p.categoria;
+      document.getElementById('prodDesc').value = p.descricao;
+      document.getElementById('prodEstoque').value = p.estoque;
+    });
   }else{
-    input.type = 'password';
-    el.textContent = '👁️';
+    document.getElementById('prodNome').value = '';
+    document.getElementById('prodPreco').value = '';
+    document.getElementById('prodCategoria').value = '';
+    document.getElementById('prodDesc').value = '';
+    document.getElementById('prodEstoque').value = '';
   }
+  document.getElementById('modalProduto').classList.add('active');
 }
 
-function toggleMenuMobile(){
-  document.getElementById('menuMobile').classList.toggle('active');
-  document.getElementById('menuOverlay').classList.toggle('active');
+function fecharModal(id){
+  document.getElementById(id).classList.remove('active');
 }
 
-function showAdminPanel(panel, el){
-  document.querySelectorAll('.admin-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.menu-mobile-item').forEach(m=>m.classList.remove('active'));
-  document.getElementById(`panel-${panel}`).classList.add('active');
-  if(el) el.classList.add('active');
-  carregarDadosAdmin(panel);
-  toggleMenuMobile();
-}
-
-function abrirModal(id){document.getElementById(id).classList.add('active')}
-function fecharModal(id){document.getElementById(id).classList.remove('active')}
-
-function toggleTaxaField(){
-  const checked = document.getElementById('temTaxa').checked;
-  document.getElementById('taxaGroup').style.display = checked? 'block' : 'none';
-}
-
-function previewBase64(input, previewId){
-  const file = input.files[0];
-  if(file){
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = document.getElementById(previewId);
-      img.src = e.target.result;
-      img.style.display = 'block';
-    };
-    reader.readAsDataURL(file);
+async function salvarProduto(){
+  const id = document.getElementById('prodId').value;
+  const nome = document.getElementById('prodNome').value.trim();
+  const preco = parseFloat(document.getElementById('prodPreco').value);
+  const categoria = document.getElementById('prodCategoria').value.trim();
+  const descricao = document.getElementById('prodDesc').value.trim();
+  const estoque = parseInt(document.getElementById('prodEstoque').value);
+  if(!nome||!preco) return alert('Preencha nome e preço');
+  const data = {nome,preco,categoria,descricao,estoque,criadoEm:Date.now()};
+  if(id){
+    await db.ref('produtos/'+id).update(data);
+  }else{
+    await db.ref('produtos').push(data);
   }
+  fecharModal('modalProduto');
+  carregarProdutos();
 }
 
-function carregarBanner(){
-  db.ref('config/banner').once('value').then(snap => {
-    const data = snap.val();
-    if(data){
-      document.getElementById('previewTitle').textContent = data.title;
-      document.getElementById('previewOffer').textContent = data.offer;
-      document.getElementById('previewImg').src = data.img;
-      document.getElementById('bannerTitleInput').value = data.title;
-      document.getElementById('bannerOfferInput').value = data.offer;
-      document.getElementById('previewImg').style.display = 'block';
-    }
-  }).catch(()=>{});
-}
-
-function salvarBanner(){
-  const title = document.getElementById('bannerTitleInput').value;
-  const offer = document.getElementById('bannerOfferInput').value;
-  const img = document.getElementById('previewImg').src;
-  db.ref('config/banner').set({title, offer, img}).then(() => {
-    document.getElementById('bannerSuccess').textContent = 'Banner atualizado!';
-    document.getElementById('bannerSuccess').style.display = 'block';
-    carregarBanner();
-    setTimeout(() => document.getElementById('bannerSuccess').style.display = 'none', 3000);
-  });
-}
-
-['bannerTitleInput', 'bannerOfferInput'].forEach(id => {
-  document.getElementById(id).addEventListener('input', (e) => {
-    if(id === 'bannerTitleInput') document.getElementById('previewTitle').textContent = e.target.value;
-    if(id === 'bannerOfferInput') document.getElementById('previewOffer').textContent = e.target.value;
-  });
-});
-
-function carregarCategorias(){
-  db.ref('categorias').once('value').then(snap => {
-    const data = snap.val() || {};
-    const lista = document.getElementById('listaCategorias');
-    lista.innerHTML = '';
-    Object.keys(data).forEach(key => {
-      const cat = data[key];
-      lista.innerHTML += `
-        <div class="item-card">
-          <div class="item-card-header">
-            <div style="display:flex;align-items:center;gap:10px">
-              <img src="${cat.icon || ''}" style="width:40px;height:40px;border-radius:8px;object-fit:cover">
-              <div class="item-card-title">${cat.nome
-                          </div>
-          </div>
-          <div class="item-card-row">
-            <span class="item-card-label">Subcategorias</span>
-            <span class="item-card-value">${cat.subcategorias? cat.subcategorias.join(', ') : '-'}</span>
-          </div>
-          <div class="item-card-actions">
-            <button class="btn btn-danger btn-small" onclick="excluirCategoria('${key}')">Excluir</button>
-          </div>
-        </div>`;
-    });
-  }).catch(()=>{});
-}
-
-function carregarCategoriasSelect(){
-  db.ref('categorias').once('value').then(snap => {
-    const data = snap.val() || {};
-    const select = document.getElementById('produtoCategoria');
-    select.innerHTML = '<option value="">Selecione</option>';
-    Object.keys(data).forEach(key => {
-      select.innerHTML += `<option value="${key}">${data[key].nome}</option>`;
-    });
-  });
-}
-
-document.getElementById('produtoCategoria').addEventListener('change', (e) => {
-  const catId = e.target.value;
-  const subSelect = document.getElementById('produtoSubcategoria');
-  subSelect.innerHTML = '<option value="">Selecione</option>';
-  if(!catId) return;
-  db.ref('categorias/'+catId+'/subcategorias').once('value').then(snap => {
-    const subs = snap.val() || [];
-    subs.forEach(sub => {
-      subSelect.innerHTML += `<option value="${sub}">${sub}</option>`;
-    });
-  });
-});
-
-function salvarCategoria(){
-  const nome = document.getElementById('categoriaNome').value;
-  const icon = document.getElementById('categoriaIconPreview').src;
-  const subcats = document.getElementById('categoriaSubcats').value.split(',').map(s=>s.trim()).filter(s=>s);
-  if(!nome) return alert('Preencha o nome');
-  db.ref('categorias').push({nome, icon, subcategorias: subcats}).then(() => {
-    fecharModal('modalCategoria');
-    carregarCategorias();
-    carregarCategoriasSelect();
-    document.getElementById('categoriaNome').value = '';
-    document.getElementById('categoriaIconFile').value = '';
-    document.getElementById('categoriaSubcats').value = '';
-    document.getElementById('categoriaIconPreview').style.display = 'none';
-  });
-}
-
-function excluirCategoria(id){
-  if(confirm('Excluir categoria?')){
-    db.ref('categorias/'+id).remove().then(()=>{
-      carregarCategorias();
-      carregarCategoriasSelect();
-    });
+async function deletarProduto(id){
+  if(confirm('Deletar este produto?')){
+    await db.ref('produtos/'+id).remove();
+    carregarProdutos();
   }
 }
 
 function carregarProdutos(){
-  db.ref('produtos').once('value').then(snap => {
-    const data = snap.val() || {};
+  db.ref('produtos').once('value',snap=>{
     const lista = document.getElementById('listaProdutos');
-    lista.innerHTML = '';
-    Object.keys(data).forEach(key => {
-      const prod = data[key];
-      lista.innerHTML += `
-        <div class="item-card">
-          <div class="item-card-header">
-            <div style="display:flex;align-items:center;gap:10px;flex:1">
-              <img src="${prod.img || ''}" style="width:50px;height:50px;border-radius:8px;object-fit:cover">
-              <div>
-                <div class="item-card-title">${prod.nome}</div>
-                <div style="font-size:11px;color:var(--text-dim)">${prod.categoria}</div>
-              </div>
-            </div>
-            <span class="status-badge status-approved">R$ ${prod.preco.toFixed(2)}</span>
-          </div>
-          <div class="item-card-row">
-            <span class="item-card-label">Subcategoria</span>
-            <span class="item-card-value">${prod.subcategoria || '-'}</span>
-          </div>
-          <div class="item-card-row">
-            <span class="item-card-label">Taxa</span>
-            <span class="item-card-value">${prod.taxa? 'R$ '+prod.taxa.toFixed(2) : '-'}</span>
-          </div>
-          <div class="item-card-row">
-            <span class="item-card-label">Cupom</span>
-            <span class="item-card-value">${prod.cupom? prod.cupom + (prod.cupomAtivo? ' ✅' : ' ❌') : '-'}</span>
-          </div>
-          <div class="item-card-row">
-            <span class="item-card-label">Estoque</span>
-            <span class="item-card-value">${prod.estoque === 0? 'Ilimitado' : prod.estoque}</span>
-          </div>
-          <div class="item-card-actions">
-            <button class="btn btn-danger btn-small" onclick="excluirProduto('${key}')">Excluir</button>
-          </div>
-        </div>`;
+    const dados = snap.val();
+    if(!dados){lista.innerHTML='<div class="empty">Nenhum produto cadastrado</div>';return}
+    let html = '';
+    Object.entries(dados).forEach(([id,p])=>{
+      html += `<div class="item-row">
+        <div class="item-info">
+          <div class="item-title">${p.nome}</div>
+          <div class="item-sub">R$ ${p.preco.toFixed(2)} - ${p.categoria} - Estoque: ${p.estoque}</div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-sm" onclick="abrirModalProduto('${id}')">Editar</button>
+          <button class="btn btn-sm btn-red" onclick="deletarProduto('${id}')">Del</button>
+        </div>
+      </div>`;
     });
-  }).catch(()=>{});
-}
-
-function salvarProduto(){
-  const nome = document.getElementById('produtoNome').value;
-  const categoriaId = document.getElementById('produtoCategoria').value;
-  const subcategoria = document.getElementById('produtoSubcategoria').value;
-  const preco = parseFloat(document.getElementById('produtoPreco').value);
-  const img = document.getElementById('produtoImgPreview').src;
-  const desc = document.getElementById('produtoDesc').value;
-  const estoque = parseInt(document.getElementById('produtoEstoque').value) || 0;
-  const temTaxa = document.getElementById('temTaxa').checked;
-  const taxa = temTaxa? parseFloat(document.getElementById('produtoTaxa').value) || 0 : 0;
-  const cupom = document.getElementById('produtoCupom').value;
-  const cupomAtivo = document.getElementById('cupomAtivo').checked;
-  if(!nome ||!categoriaId ||!preco) return alert('Preencha nome, categoria e preço');
-  db.ref('categorias/'+categoriaId+'/nome').once('value').then(snap => {
-    const categoriaNome = snap.val();
-    db.ref('produtos').push({
-      nome,
-      categoria: categoriaNome,
-      categoriaId,
-      subcategoria,
-      preco,
-      taxa,
-      cupom,
-      cupomAtivo,
-      img,
-      desc,
-      estoque,
-      criadoEm: Date.now()
-    }).then(() => {
-      fecharModal('modalProduto');
-      carregarProdutos();
-      alert('Produto salvo! Dados mantidos no formulário pra criar outro igual.');
-    });
+    lista.innerHTML = html;
   });
-}
-
-function excluirProduto(id){
-  if(confirm('Excluir produto?')){
-    db.ref('produtos/'+id).remove().then(carregarProdutos);
-  }
-}
-
-let filtroAtualPedidos = 'todos';
-let termoPesquisaPedidos = '';
-
-function filtrarPedidos(status, el){
-  filtroAtualPedidos = status;
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  if(el) el.classList.add('active');
-  carregarPedidos();
-}
-
-function pesquisarPedidos(){
-  termoPesquisaPedidos = document.getElementById('searchPedido').value.toLowerCase().trim();
-  carregarPedidos();
 }
 
 function carregarPedidos(){
-  db.ref('pedidos').once('value').then(snap => {
-    const data = snap.val() || {};
+  db.ref('pedidos').once('value',snap=>{
     const lista = document.getElementById('listaPedidos');
-    lista.innerHTML = '';
-    let pendentes = 0;
+    const dados = snap.val();
+    if(!dados){lista.innerHTML='<div class="empty">Nenhum pedido ainda</div>';return}
+    let html = '';
+    Object.entries(dados).reverse().forEach(([id,p])=>{
+      html += `<div class="card-admin">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <div style="font-weight:800">#${id.slice(-6)}</div>
+          <div style="font-size:11px;color:var(--purple)">${p.status||'Pendente'}</div>
+        </div>
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px">${p.clienteNome} - ${p.clienteEmail}</div>
+        <div style="font-size:13px;font-weight:700">R$ ${p.total.toFixed(2)}</div>
+      </div>`;
+    });
+    lista.innerHTML = html;
+  });
+}
+
+function carregarClientes(){
+  db.ref('usuarios').once('value',snap=>{
+    const lista = document.getElementById('listaClientes');
+    const dados = snap.val();
+    if(!dados){lista.innerHTML='<div class="empty">Nenhum cliente ainda</div>';return}
+    let html = '';
+    Object.entries(dados).forEach(([id,u])=>{
+      html += `<div class="item-row">
+        <div class="item-info">
+          <div class="item-title">${u.nome}</div>
+          <div class="item-sub">${u.email} - ${u.telefone}</div>
+        </div>
+      </div>`;
+    });
+    lista.innerHTML = html;
+  });
+}
+
+function carregarDashboard(){
+  db.ref('produtos').once('value',s=>document.getElementById('totalProdutos').textContent=Object.keys(s.val()||{}).length);
+  db.ref('usuarios').once('value',s=>document.getElementById('totalClientes').textContent=Object.keys(s.val()||{}).length);
+  db.ref('pedidos').once('value',s=>{
+    const p = s.val()||{};
+    document.getElementById('totalPedidos').textContent=Object.keys(p).length;
     let total = 0;
-    Object.keys(data).forEach(key => {
-      const ped = data[key];
-      if(ped.status === 'pendente') pendentes++;
-      if(ped.status === 'aprovado') total += ped.valor;
-      if(filtroAtualPedidos!== 'todos' && ped.status!== filtroAtualPedidos) return;
-      if(termoPesquisaPedidos &&!ped.email.toLowerCase().includes(termoPesquisaPedidos)) return;
-      const statusClass = ped.status === 'aprovado'? 'status-approved' : ped.status === 'cancelado'? 'status-cancelled' : 'status-pending';
-      const statusTexto = ped.status === 'aprovado'? 'Pago' : ped.status === 'cancelado'? 'Cancelado' : 'Pendente';
-      const dataFormatada = new Date(ped.criadoEm || Date.now()).toLocaleDateString('pt-BR');
-      const horaFormatada = new Date(ped.criadoEm || Date.now()).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-      lista.innerHTML += `
-        <div class="item-card">
-          <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px">
-            <div style="flex:1">
-              <div class="pedido-id">#${key.substring(0,6).toUpperCase()}</div>
-              <div class="pedido-produto">${ped.produto}</div>
-              <div class="pedido-data">${ped.email}</div>
-              <div class="pedido-data">${dataFormatada} às ${horaFormatada}</div>
-            </div>
-            <div style="text-align:right">
-              <div class="pedido-valor">R$ ${ped.valor.toFixed(2)}</div>
-              <span class="status-badge ${statusClass}" style="margin-top:6px">${statusTexto}</span>
-            </div>
-          </div>
-          <div class="item-card-actions">
-            ${ped.status === 'pendente'? `
-              <button class="btn btn-success btn-small" onclick="aprovarPagamento('${key}')">Aprovar</button>
-              <button class="btn btn-danger btn-small" onclick="cancelarPedido('${key}')">Cancelar</button>
-            ` : ped.status === 'aprovado'? `
-              <button class="btn btn-small" onclick="enviarComprovante('${key}')">Enviar Comprovante</button>
-            ` : ''}
-          </div>
-        </div>`;
+    Object.values(p).forEach(ped=>total+=ped.total||0);
+    document.getElementById('vendasHoje').textContent='R$ '+total.toFixed(2);
+    const rec = document.getElementById('pedidosRecentes');
+    if(Object.keys(p).length===0){rec.innerHTML='<div class="empty">Nenhum pedido ainda</div>';return}
+    let html = '';
+    Object.entries(p).reverse().slice(0,3).forEach(([id,ped])=>{
+      html += `<div class="item-row"><div class="item-info"><div class="item-title">#${id.slice(-6)} - R$ ${ped.total.toFixed(2)}</div><div class="item-sub">${ped.clienteNome}</div></div></div>`;
     });
-    if(lista.innerHTML === '') lista.innerHTML = '<div class="admin-card"><h3>Nenhum pedido encontrado</h3></div>';
-    document.getElementById('pedidosPendentes').textContent = pendentes;
-    document.getElementById('totalVendas').textContent = `R$ ${total.toFixed(2)}`;
-  }).catch(()=>{});
-}
-
-function aprovarPagamento(id){
-  if(confirm('Aprovar pagamento e liberar produto para o cliente?')){
-    db.ref('pedidos/'+id).update({
-      status:'aprovado',
-      aprovadoEm:Date.now(),
-      aprovadoPor: ADMIN_EMAIL
-    }).then(() => {
-      carregarPedidos();
-      alert('Pagamento aprovado! Agora você pode enviar o comprovante.');
-    });
-  }
-}
-
-function cancelarPedido(id){
-  if(confirm('Cancelar pedido?')){
-    db.ref('pedidos/'+id).update({status:'cancelado'}).then(carregarPedidos);
-  }
-}
-
-function enviarComprovante(id){
-  db.ref('pedidos/'+id).once('value').then(snap => {
-    const ped = snap.val();
-    const msg = `✅ *COMPROVANTE DE COMPRA - PRIME STORE VZ*\n\nPedido: #${id.substring(0,6)}\nCliente: ${ped.email}\nProduto: ${ped.produto}\nValor: R$ ${ped.valor.toFixed(2)}\nData: ${new Date(ped.aprovadoEm).toLocaleDateString('pt-BR')}\nStatus: APROVADO ✅\n\nObrigado pela compra! Qualquer dúvida: (98) 98485-3563`;
-    if(confirm(`Enviar comprovante para ${ped.email}?\n\n${msg}`)){
-      db.ref('pedidos/'+id+'/comprovanteEnviado').set({
-        enviado: true,
-        enviadoEm: Date.now(),
-        enviadoPor: ADMIN_EMAIL
-      });
-      alert('Comprovante marcado como enviado!');
-      carregarPedidos();
-    }
+    rec.innerHTML = html;
   });
 }
 
-function carregarCupons(){
-  db.ref('cupons').once('value').then(snap => {
-    const data = snap.val() || {};
-    const lista = document.getElementById('listaCupons');
-    lista.innerHTML = '';
-    Object.keys(data).forEach(key => {
-      const cupom = data[key];
-      const usado = cupom.usos || 0;
-      const total = cupom.limiteTotal || 0;
-      const esgotado = total > 0 && usado >= total;
-      const status =!cupom.ativo? 'Inativo' : esgotado? 'Esgotado' : 'Ativo';
-      const statusClass =!cupom.ativo? 'status-cancelled' : esgotado? 'status-pending' : 'status-approved';
-      const descontoTxt = cupom.tipo === 'percent'? `${cupom.valor}% de desconto` : `R$ ${cupom.valor.toFixed(2)} de desconto`;
-      lista.innerHTML += `
-        <div class="item-card">
-          <div class="item-card-header">
-            <div class="item-card-title">${cupom.codigo}</div>
-            <span class="status-badge ${statusClass}">${status}</span>
-          </div>
-          <div class="item-card-row">
-            <span class="item-card-label">Desconto</span>
-            <span class="item-card-value">${descontoTxt}</span>
-          </div>
-          <div class="item-card-row">
-            <span class="item-card-label">Uso</span>
-            <span class="item-card-value">${usado}/${total || '∞'}</span>
-          </div>
-          <div class="item-card-row">
-            <span class="item-card-label">Limite/Usuário</span>
-            <span class="item-card-value">${cupom.limiteUser || 1}x</span>
-          </div>
-          <div class="item-card-actions">
-            <button class="btn ${cupom.ativo? 'btn-danger' : 'btn-success'} btn-small" onclick="toggleCupom('${key}', ${!cupom.ativo})">
-              ${cupom.ativo? 'Desativar' : 'Ativar'}
-            </button>
-            <button class="btn btn-danger btn-small" onclick="excluirCupom('${key}')">Excluir</button>
-          </div>
-        </div>`;
-    });
-    if(lista.innerHTML === '') lista.innerHTML = '<div class="admin-card"><h3>Nenhum cupom criado</h3></div>';
-  }).catch(()=>{});
-}
-
-function salvarCupom(){
-  const codigo = document.getElementById('cupomCodigo').value.trim().toUpperCase();
-  const tipo = document.getElementById('cupomTipo').value;
-  const valor = parseFloat(document.getElementById('cupomValor').value);
-  const limiteTotal = parseInt(document.getElementById('cupomLimiteTotal').value) || 0;
-  const limiteUser = parseInt(document.getElementById('cupomLimiteUser').value) || 1;
-  const ativo = document.getElementById('cupomAtivoCheck').checked;
-  if(!codigo ||!valor) return alert('Preencha código e valor');
-  db.ref('cupons').push({
-    codigo,
-    tipo,
-    valor,
-    limiteTotal,
-    limiteUser,
-    ativo,
-    usos: 0,
-    usuariosUsaram: {},
-    criadoEm: Date.now()
-  }).then(() => {
-    fecharModal('modalCupom');
-    carregarCupons();
-    ['cupomCodigo','cupomValor','cupomLimiteTotal','cupomLimiteUser'].forEach(id=>document.getElementById(id).value='');
-    document.getElementById('cupomLimiteTotal').value = '100';
-    document.getElementById('cupomLimiteUser').value = '1';
-  });
-}
-
-function toggleCupom(id, status){
-  db.ref('cupons/'+id+'/ativo').set(status).then(carregarCupons);
-}
-
-function excluirCupom(id){
-  if(confirm('Excluir cupom? Isso não afeta pedidos já feitos.')){
-    db.ref('cupons/'+id).remove().then(carregarCupons);
-  }
-}
-
-function carregarUsuarios(){
-  db.ref('usuarios').once('value').then(snap => {
-    const data = snap.val() || {};
-    const lista = document.getElementById('listaUsuarios');
-    lista.innerHTML = '';
-    document.getElementById('totalUsuarios').textContent = Object.keys(data).length;
-    Object.keys(data).forEach(key => {
-      const user = data[key];
-      lista.innerHTML += `
-        <div class="item-card">
-          <div class="item-card-header">
-            <div class="item-card-title">${user.email}</div>
-          </div>
-          <div class="item-card-row">
-            <span class="item-card-label">Nome</span>
-            <span class="item-card-value">${user.nome || '-'}</span>
-          </div>
-          <div class="item-card-row">
-            <span class="item-card-label">Pedidos</span>
-            <span class="item-card-value">${user.pedidos || 0}</span>
-          </div>
-          <div class="item-card-row">
-            <span class="item-card-label">Total Gasto</span>
-            <span class="item-card-value">R$ ${(user.totalGasto || 0).toFixed(2)}</span>
-          </div>
-        </div>`;
-    });
-  }).catch(()=>{});
-}
-
-function carregarDadosAdmin(panel){
-  if(panel === 'produtos') carregarProdutos();
-  if(panel === 'categorias') carregarCategorias();
-  if(panel === 'pedidos') carregarPedidos();
-  if(panel === 'usuarios') carregarUsuarios();
-  if(panel === 'banners') carregarBanner();
-  if(panel === 'cupons') carregarCupons();
-  if(panel === 'dashboard'){
-    carregarPedidos();
-    carregarUsuarios();
-  }
-}
-
-auth.onAuthStateChanged((user) => {
+auth.onAuthStateChanged(async user=>{
   if(user){
-    if(user.email === ADMIN_EMAIL){
-      showScreen('admin');
-      carregarBanner();
-      carregarCategorias();
-      carregarProdutos();
-      carregarPedidos();
-      carregarCategoriasSelect();
-      carregarCupons();
-      carregarUsuarios();
-    } else {
-      alert('Acesso negado. Apenas admin pode acessar.');
-      auth.signOut();
-    }
+    currentUser = user;
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById('adminPanel').classList.add('active');
+    document.getElementById('userBadge').textContent = user.email[0].toUpperCase();
+    carregarDashboard();
   }else{
-    showScreen('login');
+    document.getElementById('adminPanel').classList.remove('active');
+    document.getElementById('screen-login').classList.add('active');
+    currentUser = null;
   }
 });
-
-document.getElementById('btnLogin').onclick = async () => {
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  const btn = document.getElementById('btnLogin');
-  const errorDiv = document.getElementById('loginError');
-  errorDiv.style.display = 'none';
-  if(!email ||!password){
-    errorDiv.textContent = 'Preencha e-mail e senha';
-    errorDiv.style.display = 'block';
-    return;
-  }
-  btn.disabled = true;
-  try{
-    await auth.signInWithEmailAndPassword(email, password);
-  }catch(e){
-    errorDiv.textContent = 'E-mail ou senha incorretos';
-    errorDiv.style.display = 'block';
-  }
-  finally{btn.disabled = false;}
-}
 </script>
 </body>
 </html>
