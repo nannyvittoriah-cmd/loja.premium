@@ -22,11 +22,11 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 .input-box input,.input-box textarea,.input-box select{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px}
 .input-box textarea{padding:12px 0;min-height:80px;resize:none}
 .toggle{cursor:pointer;color:#6b7280;font-size:18px}
-.btn{width:100%;height:50px;background:transparent;border:1px solid var(--border);border-radius:14px;color:var(--text);font-size:14px;font-weight:700;cursor:pointer;letter-spacing:0.5px;transition:all 0.15s;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn:active{transform:scale(0.96);border-color:var(--purple);color:var(--purple)}
+.btn{width:100%;height:50px;background:transparent;border:1px solid var(--border);border-radius:14px;color:var(--text);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:0.5px;transition:all 0.15s;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn:active{transform:scale(0.96);border-color:var(--purple);color:var(--purple);background:rgba(139,92,246,0.08)}
 .btn:disabled{opacity:0.5;cursor:not-allowed}
 .btn-primary{background:var(--purple);color:#fff;border:none}
-.btn-primary:active{background:#7c3aed}
+.btn-primary:active{background:#7c3aed;transform:scale(0.96)}
 .btn-sm{height:38px;font-size:12px;width:auto;padding:0 14px}
 .btn-red{border-color:var(--red);color:var(--red)}
 .btn-red:active{background:rgba(239,68,68,0.1)}
@@ -67,8 +67,8 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 .item-title{font-weight:700;font-size:13px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .item-sub{font-size:11px;color:var(--text-dim)}
 .actions{display:flex;gap:6px;flex-shrink:0}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
-.modal.active{display:flex}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;z-index:100;padding:20px;pointer-events:none}
+.modal.active{display:flex;pointer-events:auto}
 .modal-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;width:100%;max-width:450px;max-height:90vh;overflow-y:auto}
 .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
 .modal-title{font-size:16px;font-weight:800}
@@ -90,13 +90,13 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 .filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
 .filter-btn{padding:8px 14px;background:transparent;border:1px solid var(--border);border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text)}
 .filter-btn:active{transform:scale(0.95)}
-.filter-btn.active{border-color:var(--purple);color:var(--purple);background:rgba(139,92,246,0.05)}
+.filter-btn.active{border-color:var(--purple);color:var(--purple);background:rgba(139,92,246,0.08)}
 .img-thumb{width:60px;height:60px;border-radius:10px;object-fit:cover;background:var(--input);flex-shrink:0;border:1px solid var(--border)}
 .cupom-list{display:flex;flex-wrap:wrap;gap:8px}
 .cupom-tag{padding:8px 12px;background:transparent;border:1px solid var(--border);border-radius:8px;font-size:11px;display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none}
 .cupom-tag:active{transform:scale(0.95)}
 .cupom-tag.active{border-color:var(--green);color:var(--green);background:rgba(16,185,129,0.05)}
-.cupom-tag input{pointer-events:none}
+.cupom-tag input{cursor:pointer}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .checkbox{display:flex;align-items:center;gap:8px;color:var(--text-dim);cursor:pointer}
 .checkbox input{width:18px;height:18px;accent-color:var(--purple);cursor:pointer}
@@ -280,7 +280,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
         <label>Subcategoria</label>
         <div class="input-box"><select id="prodSubcatId"></select></div>
       </div>
-    </div>
     <div class="grid-2">
       <div class="input-group">
         <label>💵 Preço</label>
@@ -344,6 +343,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
         <label>♻️ Uso por Cliente</label>
         <div class="input-box"><input type="number" id="cupomUsoCliente" placeholder="1" min="1" value="1"></div>
       </div>
+    </div>
     <div class="row">
       <label class="checkbox"><input type="checkbox" id="cupomAtivo" checked><span>🟢 Cupom Ativo</span></label>
     </div>
@@ -547,7 +547,6 @@ async function abrirModalSubcategoria(id=null){
     db.ref('subcategorias/'+id).once('value',snap=>{
       const s = snap.val();
       document.getElementById('subcatCatId').value = s.categoriaId;
-      document.getElementById('subcatNome').value = s.nome;
             if(s.imagem){
         document.getElementById('subcatImgPreview').src = s.imagem;
         document.getElementById('subcatImgPreview').classList.remove('hide');
