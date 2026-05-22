@@ -1,1079 +1,421 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Prime Store VZ - Admin</title>
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Prime Store Vz</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
-:root{--bg:#000;--card:#0d0d0d;--input:#141414;--border:#2a2a2a;--purple:#8b5cf6;--text:#fff;--text-dim:#7a7a8a;--green:#10b981;--yellow:#fbbf24;--red:#ef4444;--blue:#3b82f6}
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);color:var(--text);min-height:100vh}
-.hide{display:none!important}
-.screen{display:none;width:100%;min-height:100vh}
-.screen.active{display:flex;align-items:center;justify-content:center;padding:20px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:32px 24px;width:100%;max-width:360px}
-h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var(--purple);letter-spacing:2px;text-transform:uppercase}
-.logo{font-size:24px;font-weight:800;text-align:center;margin-bottom:6px;background:linear-gradient(135deg,#fff 0%,#8b5cf6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.subtitle{font-size:13px;color:var(--text-dim);text-align:center;margin-bottom:32px}
-.input-group{margin-bottom:16px}
-.input-group label{display:block;font-size:12px;color:var(--text-dim);margin-bottom:8px;font-weight:500}
-.input-box{width:100%;min-height:50px;background:var(--input);border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;padding:0 16px}
-.input-box:focus-within{border-color:var(--purple)}
-.input-box input,.input-box textarea,.input-box select{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px}
-.input-box textarea{padding:12px 0;min-height:80px;resize:none}
-.toggle{cursor:pointer;color:#6b7280;font-size:18px}
-.btn{width:100%;height:50px;background:transparent;border:1px solid var(--border);border-radius:14px;color:var(--text);font-size:13px;font-weight:700;cursor:pointer;letter-spacing:0.5px;transition:all 0.15s;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn:active{transform:scale(0.96);border-color:var(--purple);color:var(--purple);background:rgba(139,92,246,0.08)}
-.btn:disabled{opacity:0.5;cursor:not-allowed}
-.btn-primary{background:var(--purple);color:#fff;border:none}
-.btn-primary:active{background:#7c3aed;transform:scale(0.96)}
-.btn-sm{height:38px;font-size:12px;width:auto;padding:0 14px}
-.btn-red{border-color:var(--red);color:var(--red)}
-.btn-red:active{background:rgba(239,68,68,0.1)}
-.btn-green{border-color:var(--green);color:var(--green)}
-.btn-green:active{background:rgba(16,185,129,0.1)}
-.btn-blue{border-color:var(--blue);color:var(--blue)}
-.btn-blue:active{background:rgba(59,130,246,0.1)}
-.alert{padding:14px 16px;border-radius:12px;font-size:12px;margin-bottom:18px;display:none;text-align:center;font-weight:600;border:1px solid}
-.alert.error{background:rgba(239,68,0.15);border-color:#ef4444;color:#fca5a5}
-.admin{display:none;min-height:100vh}
-.admin.active{display:block}
-.admin-header{position:fixed;top:0;left:0;right:0;height:56px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:50}
-.menu-btn{width:36px;height:36px;background:transparent;border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:18px}
-.menu-btn:active{background:var(--input);border-color:var(--purple)}
-.admin-title{font-weight:900;font-size:16px}
-.badge{width:36px;height:36px;background:transparent;border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
-.sidebar{position:fixed;top:56px;left:-260px;width:260px;height:calc(100vh - 56px);background:var(--bg);border-right:1px solid var(--border);transition:0.3s;z-index:40;overflow-y:auto}
-.sidebar.open{left:0}
-.side-header{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
-.logo-icon{width:36px;height:36px;background:transparent;border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center}
-.side-item{padding:14px 16px;cursor:pointer;border-left:3px solid transparent;font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px}
-.side-item:active{background:var(--input)}
-.side-item.active{border-left-color:var(--purple);color:var(--purple);background:rgba(139,92,246,0.05)}
-.admin-content{padding:68px 12px 20px}
-.page{display:none}
-.page.active{display:block}
-.stats{display:grid;gap:12px;grid-template-columns:repeat(2,1fr);margin-bottom:16px}
-@media(min-width:768px){.stats{grid-template-columns:repeat(4,1fr)}}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
-.stat-label{font-size:11px;color:var(--text-dim);margin-bottom:4px}
-.stat-value{font-size:22px;font-weight:900}
-.card-admin{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px}
-.card-title{font-size:13px;font-weight:800;color:var(--purple);margin-bottom:12px}
-.item-row{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:12px}
-.item-row.clickable{cursor:pointer}
-.item-row.clickable:active{background:rgba(139,92,246,0.05);border-color:var(--purple)}
-.item-info{flex:1;min-width:0}
-.item-title{font-weight:700;font-size:13px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.item-sub{font-size:11px;color:var(--text-dim)}
-.actions{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;z-index:100;padding:20px;pointer-events:none}
-.modal.active{display:flex;pointer-events:auto}
-.modal-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;width:100%;max-width:450px;max-height:90vh;overflow-y:auto}
-.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;position:relative}
-.modal-title{font-size:16px;font-weight:800}
-.close-btn{width:32px;height:32px;background:transparent;border:1px solid var(--border);border-radius:8px;color:#fff;cursor:pointer;font-size:18px}
-.close-btn:active{background:var(--input);border-color:var(--red);color:var(--red)}
-.empty{text-align:center;padding:40px 20px;color:var(--text-dim);font-size:13px}
-.img-preview{width:100%;height:140px;background:var(--input);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer}
-.img-preview:active{border-color:var(--purple)}
-.img-preview img{width:100%;height:100%;object-fit:cover}
-.img-preview span{font-size:12px;color:var(--text-dim)}
-.badge-status{padding:4px 8px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase;border:1px solid}
-.badge-ativo{background:rgba(16,185,129,0.1);color:var(--green);border-color:var(--green)}
-.badge-inativo{background:rgba(239,68,68,0.1);color:var(--red);border-color:var(--red)}
-.badge-expirado{background:rgba(107,114,128,0.1);color:#6b7280;border-color:#6b7280}
-.badge-pendente{background:rgba(251,191,36,0.1);color:var(--yellow);border-color:var(--yellow)}
-.badge-concluido{background:rgba(16,185,129,0.1);color:var(--green);border-color:var(--green)}
-.badge-cancelado{background:rgba(239,68,68,0.1);color:var(--red);border-color:var(--red)}
-.search-box{margin-bottom:16px}
-.filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
-.filter-btn{padding:8px 14px;background:transparent;border:1px solid var(--border);border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text)}
-.filter-btn:active{transform:scale(0.95)}
-.filter-btn.active{border-color:var(--purple);color:var(--purple);background:rgba(139,92,246,0.08)}
-.img-thumb{width:60px;height:60px;border-radius:10px;object-fit:cover;background:var(--input);flex-shrink:0;border:1px solid var(--border)}
-.cupom-list{display:flex;flex-wrap:wrap;gap:8px}
-.cupom-tag{padding:8px 12px;background:transparent;border:1px solid var(--border);border-radius:8px;font-size:11px;display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none}
-.cupom-tag:active{transform:scale(0.95)}
-.cupom-tag.active{border-color:var(--green);color:var(--green);background:rgba(16,185,129,0.05)}
-.cupom-tag input{cursor:pointer}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.checkbox{display:flex;align-items:center;gap:8px;color:var(--text-dim);cursor:pointer}
-.checkbox input{width:18px;height:18px;accent-color:var(--purple);cursor:pointer}
-.detail-row{padding:12px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-.detail-row:last-child{border-bottom:none}
-.detail-label{font-size:12px;color:var(--text-dim)}
-.detail-value{font-size:13px;font-weight:700}
-.avatar-circle{width:60px;height:60px;background:var(--purple);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;margin:0 auto 12px}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#05010a;
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+padding:15px;
+color:white;
+}
+
+/* CARD */
+
+.login-box{
+width:100%;
+max-width:340px;
+background:#0d0616;
+border:1px solid rgba(128,0,255,0.2);
+border-radius:28px;
+padding:22px;
+box-shadow:0 0 25px rgba(128,0,255,0.15);
+}
+
+/* LOGO */
+
+.logo-area{
+display:flex;
+flex-direction:column;
+align-items:center;
+margin-bottom:28px;
+}
+
+.logo{
+width:70px;
+height:70px;
+border-radius:20px;
+background:linear-gradient(135deg,#6800ff,#b700ff);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:38px;
+font-weight:700;
+box-shadow:0 0 20px #7a00ff;
+margin-bottom:15px;
+}
+
+.logo-text{
+font-size:26px;
+font-weight:700;
+}
+
+.logo-text span{
+color:#b700ff;
+}
+
+.sub{
+font-size:11px;
+color:#8d8d8d;
+margin-top:4px;
+}
+
+/* TABS */
+
+.tabs{
+display:flex;
+gap:8px;
+margin-bottom:20px;
+}
+
+.tab{
+flex:1;
+padding:11px;
+border-radius:13px;
+background:#14091f;
+text-align:center;
+font-size:11px;
+color:#a6a6a6;
+border:1px solid #241035;
+}
+
+.active{
+background:linear-gradient(135deg,#7300ff,#bf00ff);
+color:white;
+font-weight:600;
+}
+
+/* TITLES */
+
+.title{
+font-size:24px;
+font-weight:600;
+margin-bottom:4px;
+}
+
+.desc{
+font-size:11px;
+color:#8b8b8b;
+margin-bottom:22px;
+}
+
+/* INPUT */
+
+.input-box{
+margin-bottom:14px;
+}
+
+.label{
+font-size:11px;
+margin-bottom:7px;
+color:#cfcfcf;
+display:block;
+}
+
+.input{
+width:100%;
+height:48px;
+background:#14091f;
+border:none;
+outline:none;
+border-radius:15px;
+padding:0 15px;
+font-size:12px;
+color:white;
+border:1px solid #251138;
+}
+
+/* OPTIONS */
+
+.options{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-top:5px;
+margin-bottom:18px;
+font-size:10px;
+color:#9e9e9e;
+}
+
+.options a{
+color:#ba00ff;
+text-decoration:none;
+}
+
+/* BUTTON */
+
+.btn{
+width:100%;
+height:50px;
+border:none;
+border-radius:16px;
+background:linear-gradient(135deg,#6d00ff,#c100ff);
+color:white;
+font-size:13px;
+font-weight:600;
+box-shadow:0 0 15px rgba(128,0,255,0.3);
+}
+
+/* FOOT */
+
+.footer{
+margin-top:20px;
+display:flex;
+justify-content:space-between;
+gap:8px;
+}
+
+.footer-card{
+flex:1;
+background:#12081c;
+padding:10px;
+border-radius:14px;
+border:1px solid #241035;
+font-size:9px;
+color:#9b9b9b;
+text-align:center;
+}
+
+.footer-card b{
+display:block;
+color:#c700ff;
+margin-bottom:4px;
+font-size:10px;
+}
+
 </style>
+
 </head>
+
 <body>
 
-<div class="screen active" id="screen-login">
-  <div class="card">
-    <h2>LOGIN - E-MAIL</h2>
-    <div class="logo">Prime Store VZ</div>
-    <div class="subtitle">Painel Administrativo 🔐</div>
-    <div class="alert error" id="loginError"></div>
-    <div class="input-group">
-      <label>📧 E-mail</label>
-      <div class="input-box"><input type="email" id="loginEmail" placeholder="seuemail@gmail.com"></div>
-    </div>
-    <div class="input-group">
-      <label>🔑 Senha</label>
-      <div class="input-box">
-        <input type="password" id="loginPassword" placeholder="••••••••">
-        <span class="toggle" onclick="togglePass('loginPassword',this)">👁️</span>
-      </div>
-    </div>
-    <button class="btn btn-primary" id="btnLogin" onclick="fazerLogin()">🚀 ENTRAR</button>
-  </div>
+<div class="login-box">
+
+<!-- LOGO -->
+
+<div class="logo-area">
+
+<div class="logo">
+P
 </div>
 
-<div class="admin" id="adminPanel">
-  <div class="admin-header">
-    <button class="menu-btn" onclick="toggleMenu()">☰</button>
-    <div class="admin-title">Prime Store VZ</div>
-    <div class="badge" id="userBadge">A</div>
-  </div>
-  <div class="sidebar" id="sidebar">
-    <div class="side-header">
-      <div class="logo-icon">⭐</div>
-      <div><div style="font-weight:800;font-size:14px">PRIME</div><div style="font-size:10px;color:var(--text-dim)">Painel Admin</div></div>
-    </div>
-    <div class="side-item active" onclick="trocarPage('dash',this)">📊 Dashboard</div>
-    <div class="side-item" onclick="trocarPage('categorias',this)">📁 Categorias</div>
-    <div class="side-item" onclick="trocarPage('subcategorias',this)">📂 Subcategorias</div>
-    <div class="side-item" onclick="trocarPage('produtos',this)">📦 Produtos</div>
-    <div class="side-item" onclick="trocarPage('cupons',this)">🎟️ Cupons</div>
-    <div class="side-item" onclick="trocarPage('pedidos',this)">🛒 Pedidos</div>
-    <div class="side-item" onclick="trocarPage('clientes',this)">👥 Clientes</div>
-    <div class="side-item" onclick="logout()">🚪 Sair</div>
-  </div>
-  <div class="admin-content">
-    <div id="dash" class="page active">
-      <h3 style="margin-bottom:16px">📊 Dashboard</h3>
-      <div class="stats">
-        <div class="stat-card"><div class="stat-label">💰 Vendas Hoje</div><div class="stat-value" style="color:var(--purple)" id="vendasHoje">R$ 0</div></div>
-        <div class="stat-card"><div class="stat-label">🛒 Pedidos</div><div class="stat-value" style="color:var(--yellow)" id="totalPedidos">0</div></div>
-        <div class="stat-card"><div class="stat-label">📦 Produtos</div><div class="stat-value" style="color:var(--green)" id="totalProdutos">0</div></div>
-        <div class="stat-card"><div class="stat-label">👥 Clientes</div><div class="stat-value" style="color:var(--purple)" id="totalClientes">0</div></div>
-      </div>
-    <div id="categorias" class="page">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-        <h3>📁 Categorias</h3>
-        <button class="btn btn-sm btn-primary" onclick="abrirModalCategoria()">➕ Adicionar</button>
-      </div>
-      <div id="listaCategorias"><div class="empty">Nenhuma categoria</div></div>
-    </div>
-    <div id="subcategorias" class="page">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-        <h3>📂 Subcategorias</h3>
-        <button class="btn btn-sm btn-primary" onclick="abrirModalSubcategoria()">➕ Adicionar</button>
-      </div>
-      <div id="listaSubcategorias"><div class="empty">Nenhuma subcategoria</div></div>
-    </div>
-    <div id="produtos" class="page">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-        <h3>📦 Produtos</h3>
-        <button class="btn btn-sm btn-primary" onclick="abrirModalProduto()">➕ Adicionar</button>
-      </div>
-      <div id="listaProdutos"><div class="empty">Nenhum produto</div></div>
-    </div>
-    <div id="cupons" class="page">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-        <h3>🎟️ Cupons</h3>
-        <button class="btn btn-sm btn-primary" onclick="abrirModalCupom()">➕ Adicionar</button>
-      </div>
-      <div class="filters">
-        <button class="filter-btn active" onclick="filtrarCupomStatus('todos',this)">Todos</button>
-        <button class="filter-btn" onclick="filtrarCupomStatus('ativo',this)">🟢 Ativos</button>
-        <button class="filter-btn" onclick="filtrarCupomStatus('inativo',this)">🔴 Inativos</button>
-        <button class="filter-btn" onclick="filtrarCupomStatus('expirado',this)">⚫ Expirados</button>
-      </div>
-      <div id="listaCupons"><div class="empty">Nenhum cupom</div></div>
-    </div>
-    <div id="pedidos" class="page">
-      <h3 style="margin-bottom:16px">🛒 Pedidos</h3>
-      <div class="search-box">
-        <div class="input-box">
-          <input type="text" id="searchPedido" placeholder="🔍 Buscar por email..." onkeyup="filtrarPedidos()">
-        </div>
-      </div>
-      <div class="filters">
-        <button class="filter-btn active" onclick="filtrarStatusPedido('todos',this)">Todos</button>
-        <button class="filter-btn" onclick="filtrarStatusPedido('pendente',this)">⏳ Pendentes</button>
-        <button class="filter-btn" onclick="filtrarStatusPedido('concluido',this)">✅ Concluídos</button>
-        <button class="filter-btn" onclick="filtrarStatusPedido('cancelado',this)">❌ Cancelados</button>
-      </div>
-      <div id="listaPedidos"><div class="empty">Nenhum pedido</div></div>
-    </div>
-    <div id="clientes" class="page">
-      <h3 style="margin-bottom:16px">👥 Clientes</h3>
-      <div id="listaClientes"><div class="empty">Nenhum cliente</div></div>
-    </div>
-  </div>
+<div class="logo-text">
+Prime <span>store Vz</span>
 </div>
 
-<div class="modal" id="modalCategoria">
-  <div class="modal-box">
-    <div class="modal-head">
-      <div class="modal-title">📁 Nova Categoria</div>
-      <button class="close-btn" onclick="fecharModal('modalCategoria')">×</button>
-    </div>
-    <input type="hidden" id="catId">
-    <div class="img-preview" onclick="document.getElementById('catImgInput').click()">
-      <img id="catImgPreview" class="hide">
-      <span id="catImgText">🖼️ Clique para adicionar imagem</span>
-    </div>
-    <input type="file" id="catImgInput" accept="image/*" class="hide" onchange="previewImg(this,'catImgPreview','catImgText')">
-    <div class="input-group">
-      <label>Nome da Categoria</label>
-      <div class="input-box"><input type="text" id="catNome" placeholder="Streaming"></div>
-    </div>
-    <button class="btn btn-primary" onclick="salvarCategoria()">✨ SALVAR</button>
-  </div>
+<div class="sub">
+Sua loja gamer premium
 </div>
 
-<div class="modal" id="modalSubcategoria">
-  <div class="modal-box">
-    <div class="modal-head">
-      <div class="modal-title">📂 Nova Subcategoria</div>
-      <button class="close-btn" onclick="fecharModal('modalSubcategoria')">×</button>
-    </div>
-    <input type="hidden" id="subcatId">
-    <div class="input-group">
-      <label>Categoria Pai</label>
-      <div class="input-box"><select id="subcatCatId"></select></div>
-    </div>
-    <div class="img-preview" onclick="document.getElementById('subcatImgInput').click()">
-      <img id="subcatImgPreview" class="hide">
-      <span id="subcatImgText">🖼️ Clique para adicionar imagem</span>
-    </div>
-    <input type="file" id="subcatImgInput" accept="image/*" class="hide" onchange="previewImg(this,'subcatImgPreview','subcatImgText')">
-    <div class="input-group">
-      <label>Nome da Subcategoria</label>
-      <div class="input-box"><input type="text" id="subcatNome" placeholder="Netflix"></div>
-    </div>
-    <button class="btn btn-primary" onclick="salvarSubcategoria()">✨ SALVAR</button>
-  </div>
 </div>
 
-<div class="modal" id="modalProduto">
-  <div class="modal-box">
-    <div class="modal-head">
-      <div class="modal-title" id="modalProdTitulo">📦 Novo Produto</div>
-      <button class="close-btn" onclick="fecharModal('modalProduto')">×</button>
-    </div>
-    <input type="hidden" id="prodId">
-    <div class="img-preview" onclick="document.getElementById('prodImgInput').click()">
-      <img id="prodImgPreview" class="hide">
-      <span id="prodImgText">🖼️ Clique para adicionar imagem</span>
-    </div>
-    <input type="file" id="prodImgInput" accept="image/*" class="hide" onchange="previewImg(this,'prodImgPreview','prodImgText')">
-    <div class="input-group">
-      <label>Nome do Produto</label>
-      <div class="input-box"><input type="text" id="prodNome" placeholder="Netflix Premium 1 Mês"></div>
-    </div>
-    <div class="grid-2">
-      <div class="input-group">
-        <label>Categoria</label>
-        <div class="input-box"><select id="prodCatId" onchange="carregarSubcats()"></select></div>
-      </div>
-      <div class="input-group">
-        <label>Subcategoria</label>
-        <div class="input-box"><select id="prodSubcatId"></select></div>
-      </div>
-    </div>
-    <div class="grid-2">
-      <div class="input-group">
-        <label>💵 Preço</label>
-        <div class="input-box"><input type="number" id="prodPreco" placeholder="29.90" step="0.01"></div>
-      </div>
-      <div class="input-group">
-        <label>📊 Estoque</label>
-        <div class="input-box"><input type="number" id="prodEstoque" placeholder="10"></div>
-      </div>
-    </div>
-    <div class="input-group">
-      <label>💸 Taxa Extra</label>
-      <div class="input-box"><input type="number" id="prodTaxa" placeholder="0" step="0.01"></div>
-    </div>
-    <div class="input-group">
-      <label>🎟️ Vincular Cupons</label>
-      <div id="prodCupons" class="cupom-list"></div>
-    </div>
-    <div class="input-group">
-      <label>📝 Descrição</label>
-      <div class="input-box"><textarea id="prodDesc" placeholder="Descrição do produto"></textarea></div>
-    </div>
-    <button class="btn btn-primary" onclick="salvarProduto()">✨ SALVAR PRODUTO</button>
-  </div>
+<!-- TABS -->
+
+<div class="tabs">
+
+<div class="tab active">
+Login
 </div>
 
-<div class="modal" id="modalCupom">
-  <div class="modal-box">
-    <div class="modal-head">
-      <div class="modal-title">🎟️ Novo Cupom</div>
-      <button class="close-btn" onclick="fecharModal('modalCupom')">×</button>
-    </div>
-    <input type="hidden" id="cupomId">
-    <div class="input-group">
-      <label>Código do Cupom</label>
-      <div class="input-box"><input type="text" id="cupomCodigo" placeholder="PRIME10" style="text-transform:uppercase"></div>
-    </div>
-    <div class="grid-2">
-      <div class="input-group">
-        <label>🔥 Desconto (%)</label>
-        <div class="input-box"><input type="number" id="cupomDesconto" placeholder="10" min="0" max="100"></div>
-      </div>
-      <div class="input-group">
-        <label>🎯 Limite Total</label>
-        <div class="input-box"><input type="number" id="cupomLimite" placeholder="100" min="1"></div>
-      </div>
-    </div>
-    <div class="grid-2">
-      <div class="input-group">
-        <label>🗓️ Validade</label>
-        <div class="input-box">
-          <select id="cupomValidade">
-            <option value="1">1 Dia</option>
-            <option value="7">7 Dias</option>
-            <option value="30">30 Dias</option>
-            <option value="0">Ilimitado</option>
-          </select>
-        </div>
-      <div class="input-group">
-        <label>♻️ Uso por Cliente</label>
-        <div class="input-box"><input type="number" id="cupomUsoCliente" placeholder="1" min="1" value="1"></div>
-      </div>
-    </div>
-    <div class="row">
-      <label class="checkbox"><input type="checkbox" id="cupomAtivo" checked><span>🟢 Cupom Ativo</span></label>
-    </div>
-    <button class="btn btn-primary" onclick="salvarCupom()">✨ SALVAR CUPOM</button>
-  </div>
+<div class="tab">
+Cadastro
 </div>
 
-<div class="modal" id="modalCupomHist">
-  <div class="modal-box">
-    <div class="modal-head">
-      <div class="modal-title">🎟️ Histórico do Cupom</div>
-      <button class="close-btn" onclick="fecharModal('modalCupomHist')">×</button>
-    </div>
-    <div id="cupomHistInfo" style="margin-bottom:16px"></div>
-    <div class="card-title">👥 Quem Usou</div>
-    <div id="cupomHistUsos"></div>
-  </div>
+<div class="tab">
+Senha
 </div>
 
-<div class="modal" id="modalPedido">
-  <div class="modal-box">
-    <div class="modal-head">
-      <button class="close-btn" onclick="fecharModal('modalPedido')" style="position:absolute;left:16px;top:16px">←</button>
-      <div class="modal-title" style="width:100%;text-align:center">📋 DETALHES DO PEDIDO</div>
-    </div>
-    <div id="pedidoDetalhes"></div>
-  </div>
 </div>
 
-<div class="modal" id="modalCliente">
-  <div class="modal-box">
-    <div class="modal-head">
-      <button class="close-btn" onclick="fecharModal('modalCliente')" style="position:absolute;left:16px;top:16px">←</button>
-      <div class="modal-title" style="width:100%;text-align:center">👤 CLIENTE - DETALHES</div>
-    </div>
-    <div id="clienteDetalhes"></div>
-  </div>
+<!-- TEXT -->
+
+<div class="title">
+Bem-vindo
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
-<script>
+<div class="desc">
+Faça login para continuar
+</div>
+
+<!-- EMAIL -->
+
+<div class="input-box">
+
+<label class="label">
+E-mail
+</label>
+
+<input
+type="email"
+class="input"
+placeholder="seuemail@gmail.com"
+id="email">
+
+</div>
+
+<!-- SENHA -->
+
+<div class="input-box">
+
+<label class="label">
+Senha
+</label>
+
+<input
+type="password"
+class="input"
+placeholder="Sua senha"
+id="senha">
+
+</div>
+
+<!-- OPTIONS -->
+
+<div class="options">
+
+<div>
+Lembrar de mim
+</div>
+
+<a href="#">
+Esqueceu senha?
+</a>
+
+</div>
+
+<!-- BUTTON -->
+
+<button class="btn" onclick="login()">
+Entrar
+</button>
+
+<!-- FOOT -->
+
+<div class="footer">
+
+<div class="footer-card">
+
+<b>
+Seguro
+</b>
+
+Dados protegidos
+
+</div>
+
+<div class="footer-card">
+
+<b>
+Entrega
+</b>
+
+Automática
+
+</div>
+
+<div class="footer-card">
+
+<b>
+Suporte
+</b>
+
+24 horas
+
+</div>
+
+</div>
+
+</div>
+
+<!-- FIREBASE -->
+
+<script type="module">
+
+import { initializeApp }
+
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+
+getAuth,
+
+signInWithEmailAndPassword
+
+}
+
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 const firebaseConfig = {
-  apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
-  authDomain: "premium-store-aa58b.firebaseapp.com",
-  databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
-  projectId: "premium-store-aa58b",
-  storageBucket: "premium-store-aa58b.firebasestorage.app",
-  messagingSenderId: "462239500057",
-  appId: "1:462239500057:web:f1b7cea162ed308a866788",
-  measurementId: "G-CN88J28WRX"
+
+apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
+
+authDomain: "premium-store-aa58b.firebaseapp.com",
+
+databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
+
+projectId: "premium-store-aa58b",
+
+storageBucket: "premium-store-aa58b.firebasestorage.app",
+
+messagingSenderId: "462239500057",
+
+appId: "1:462239500057:web:f1b7cea162ed308a866788",
+
+measurementId: "G-CN88J28WRX"
+
 };
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.database();
-const storage = firebase.storage();
-let currentUser = null;
-let filtroPedidoStatus = 'todos';
-let filtroCupomStatus = 'todos';
-let cuponsSelecionados = [];
-let todosPedidos = {};
-let todosCupons = {};
 
-function togglePass(id,el){
-  const input = document.getElementById(id);
-  if(input.type==='password'){input.type='text';el.textContent='🙈'}
-  else{input.type='password';el.textContent='👁️'}
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+window.login = async function(){
+
+const email =
+document.getElementById("email").value;
+
+const senha =
+document.getElementById("senha").value;
+
+try{
+
+await signInWithEmailAndPassword(
+auth,
+email,
+senha
+);
+
+alert("Login realizado!");
+
+}catch(error){
+
+alert(error.message);
+
 }
 
-function showAlert(id,msg,tipo){
-  const el = document.getElementById(id);
-  el.textContent = msg;
-  el.className = 'alert '+tipo;
-  el.style.display = 'block';
 }
 
-async function fazerLogin(){
-  const email = document.getElementById('loginEmail').value.trim();
-  const senha = document.getElementById('loginPassword').value;
-  const btn = document.getElementById('btnLogin');
-  if(!email||!senha) return showAlert('loginError','Preencha todos os campos','error');
-  btn.disabled = true;
-  try{
-    await auth.signInWithEmailAndPassword(email,senha);
-  }catch(e){
-    let msg = 'Erro ao fazer login';
-    if(e.code==='auth/user-not-found') msg='Usuário não encontrado';
-    if(e.code==='auth/wrong-password') msg='Senha incorreta';
-    showAlert('loginError',msg,'error');
-    btn.disabled = false;
-  }
-}
-
-function logout(){auth.signOut()}
-function toggleMenu(){document.getElementById('sidebar').classList.toggle('open')}
-
-function trocarPage(id,el){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.side-item').forEach(i=>i.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  el.classList.add('active');
-  toggleMenu();
-  if(id==='dash') carregarDashboard();
-  if(id==='categorias') carregarCategorias();
-  if(id==='subcategorias') carregarSubcategorias();
-  if(id==='produtos') carregarProdutos();
-  if(id==='cupons') carregarCupons();
-  if(id==='pedidos') carregarPedidos();
-  if(id==='clientes') carregarClientes();
-}
-
-function fecharModal(id){
-  document.getElementById(id).classList.remove('active');
-  document.querySelectorAll('.modal input,.modal textarea,.modal select').forEach(i=>{if(i.type!=='file'&&i.type!=='checkbox')i.value=''});
-  document.querySelectorAll('.modal img').forEach(i=>{i.classList.add('hide');i.src=''});
-  document.querySelectorAll('.img-preview span').forEach(s=>s.classList.remove('hide'));
-  cuponsSelecionados = [];
-}
-
-function previewImg(input,imgId,textId){
-  if(input.files&&input.files[0]){
-    const reader = new FileReader();
-    reader.onload = e=>{
-      document.getElementById(imgId).src = e.target.result;
-      document.getElementById(imgId).classList.remove('hide');
-      document.getElementById(textId).classList.add('hide');
-    }
-    reader.readAsDataURL(input.files[0]);
-  }
-}
-
-async function uploadImg(file,path){
-  const ref = storage.ref(path+'/'+Date.now()+'_'+file.name);
-  await ref.put(file);
-  return await ref.getDownloadURL();
-}
-
-function abrirModalCategoria(id=null){
-  document.getElementById('catId').value = id||'';
-  if(id){
-    db.ref('categorias/'+id).once('value',snap=>{
-      const c = snap.val();
-      document.getElementById('catNome').value = c.nome;
-      if(c.imagem){
-        document.getElementById('catImgPreview').src = c.imagem;
-        document.getElementById('catImgPreview').classList.remove('hide');
-        document.getElementById('catImgText').classList.add('hide');
-      }
-    });
-  }
-  document.getElementById('modalCategoria').classList.add('active');
-}
-
-async function salvarCategoria(){
-  const id = document.getElementById('catId').value;
-  const nome = document.getElementById('catNome').value.trim();
-  const file = document.getElementById('catImgInput').files[0];
-  if(!nome) return alert('Preencha o nome');
-  let imagem = document.getElementById('catImgPreview').src||'';
-  if(file) imagem = await uploadImg(file,'categorias');
-  const data = {nome,imagem,criadoEm:Date.now()};
-  if(id) await db.ref('categorias/'+id).update(data);
-  else await db.ref('categorias').push(data);
-  fecharModal('modalCategoria');
-  carregarCategorias();
-}
-
-async function deletarCategoria(id){
-  if(confirm('Deletar categoria? Produtos vinculados ficarão sem categoria.')){
-    await db.ref('categorias/'+id).remove();
-    carregarCategorias();
-  }
-}
-
-function carregarCategorias(){
-  db.ref('categorias').once('value',snap=>{
-    const lista = document.getElementById('listaCategorias');
-    const dados = snap.val();
-    if(!dados){lista.innerHTML='<div class="empty">Nenhuma categoria 📁</div>';return}
-    let html = '';
-    Object.entries(dados).forEach(([id,c])=>{
-      html += `<div class="item-row">
-        <img src="${c.imagem||''}" class="img-thumb" onerror="this.style.display='none'">
-        <div class="item-info">
-          <div class="item-title">📁 ${c.nome}</div>
-        </div>
-        <div class="actions">
-          <button class="btn btn-sm" onclick="abrirModalCategoria('${id}')">✏️ Editar</button>
-          <button class="btn btn-sm btn-red" onclick="deletarCategoria('${id}')">🗑️ Del</button>
-        </div>
-      </div>`;
-    });
-      });
-}
-
-async function abrirModalSubcategoria(id=null){
-  const select = document.getElementById('subcatCatId');
-  select.innerHTML = '<option value="">Selecione...</option>';
-  const snap = await db.ref('categorias').once('value');
-  const cats = snap.val()||{};
-  Object.entries(cats).forEach(([cid,c])=>{
-    select.innerHTML += `<option value="${cid}">${c.nome}</option>`;
-  });
-  document.getElementById('subcatId').value = id||'';
-  if(id){
-    db.ref('subcategorias/'+id).once('value',snap=>{
-      const s = snap.val();
-      document.getElementById('subcatCatId').value = s.categoriaId;
-      document.getElementById('subcatNome').value = s.nome;
-      if(s.imagem){
-        document.getElementById('subcatImgPreview').src = s.imagem;
-        document.getElementById('subcatImgPreview').classList.remove('hide');
-        document.getElementById('subcatImgText').classList.add('hide');
-      }
-    });
-  }
-  document.getElementById('modalSubcategoria').classList.add('active');
-}
-
-async function salvarSubcategoria(){
-  const id = document.getElementById('subcatId').value;
-  const categoriaId = document.getElementById('subcatCatId').value;
-  const nome = document.getElementById('subcatNome').value.trim();
-  const file = document.getElementById('subcatImgInput').files[0];
-  if(!categoriaId||!nome) return alert('Preencha todos os campos');
-  let imagem = document.getElementById('subcatImgPreview').src||'';
-  if(file) imagem = await uploadImg(file,'subcategorias');
-  const data = {categoriaId,nome,imagem,criadoEm:Date.now()};
-  if(id) await db.ref('subcategorias/'+id).update(data);
-  else await db.ref('subcategorias').push(data);
-  fecharModal('modalSubcategoria');
-  carregarSubcategorias();
-}
-
-async function deletarSubcategoria(id){
-  if(confirm('Deletar subcategoria?')){
-    await db.ref('subcategorias/'+id).remove();
-    carregarSubcategorias();
-  }
-}
-
-function carregarSubcategorias(){
-  db.ref('subcategorias').once('value',async snap=>{
-    const lista = document.getElementById('listaSubcategorias');
-    const dados = snap.val();
-    if(!dados){lista.innerHTML='<div class="empty">Nenhuma subcategoria 📂</div>';return}
-    const catSnap = await db.ref('categorias').once('value');
-    const cats = catSnap.val()||{};
-    let html = '';
-    Object.entries(dados).forEach(([id,s])=>{
-      const catNome = cats[s.categoriaId]?.nome||'Sem categoria';
-      html += `<div class="item-row">
-        <img src="${s.imagem||''}" class="img-thumb" onerror="this.style.display='none'">
-        <div class="item-info">
-          <div class="item-title">📂 ${s.nome}</div>
-          <div class="item-sub">📁 ${catNome}</div>
-        </div>
-        <div class="actions">
-          <button class="btn btn-sm" onclick="abrirModalSubcategoria('${id}')">✏️ Editar</button>
-          <button class="btn btn-sm btn-red" onclick="deletarSubcategoria('${id}')">🗑️ Del</button>
-        </div>
-      </div>`;
-    });
-    lista.innerHTML = html;
-  });
-}
-
-async function abrirModalProduto(id=null){
-  const catSelect = document.getElementById('prodCatId');
-  catSelect.innerHTML = '<option value="">Selecione...</option>';
-  const catSnap = await db.ref('categorias').once('value');
-  const cats = catSnap.val()||{};
-  Object.entries(cats).forEach(([cid,c])=>{
-    catSelect.innerHTML += `<option value="${cid}">${c.nome}</option>`;
-  });
-
-  const cuponsDiv = document.getElementById('prodCupons');
-  cuponsDiv.innerHTML = '';
-  const cupomSnap = await db.ref('cupons').once('value');
-  const cupons = cupomSnap.val()||{};
-  Object.entries(cupons).forEach(([cid,c])=>{
-    if(c.ativo){
-      const expirado = c.expiraEm>0&&c.expiraEm<Date.now();
-      if(!expirado){
-        cuponsDiv.innerHTML += `<div class="cupom-tag" onclick="toggleCupomProduto('${cid}',this)">
-          <input type="checkbox" value="${cid}"> ${c.codigo} (-${c.desconto}%)
-        </div>`;
-      }
-    }
-  });
-
-  document.getElementById('prodId').value = id||'';
-  document.getElementById('modalProdTitulo').textContent = id?'📦 Editar Produto':'📦 Novo Produto';
-  if(id){
-    db.ref('produtos/'+id).once('value',async snap=>{
-      const p = snap.val();
-      document.getElementById('prodNome').value = p.nome;
-      document.getElementById('prodCatId').value = p.categoriaId;
-      await carregarSubcats();
-      document.getElementById('prodSubcatId').value = p.subcategoriaId||'';
-      document.getElementById('prodPreco').value = p.preco;
-      document.getElementById('prodEstoque').value = p.estoque;
-      document.getElementById('prodTaxa').value = p.taxa||0;
-      document.getElementById('prodDesc').value = p.descricao;
-      if(p.imagem){
-        document.getElementById('prodImgPreview').src = p.imagem;
-        document.getElementById('prodImgPreview').classList.remove('hide');
-        document.getElementById('prodImgText').classList.add('hide');
-      }
-      cuponsSelecionados = p.cupons||[];
-      cuponsSelecionados.forEach(cid=>{
-        const tags = document.querySelectorAll(`#prodCupons.cupom-tag`);
-        tags.forEach(tag=>{
-          if(tag.querySelector('input').value===cid){
-            tag.querySelector('input').checked = true;
-            tag.classList.add('active');
-          }
-        });
-      });
-    });
-  }
-  document.getElementById('modalProduto').classList.add('active');
-}
-
-async function carregarSubcats(){
-  const catId = document.getElementById('prodCatId').value;
-  const select = document.getElementById('prodSubcatId');
-  select.innerHTML = '<option value="">Nenhuma</option>';
-  if(!catId) return;
-  const snap = await db.ref('subcategorias').orderByChild('categoriaId').equalTo(catId).once('value');
-  const subs = snap.val()||{};
-  Object.entries(subs).forEach(([sid,s])=>{
-    select.innerHTML += `<option value="${sid}">${s.nome}</option>`;
-  });
-}
-
-function toggleCupomProduto(cid,el){
-  const cb = el.querySelector('input');
-  cb.checked =!cb.checked;
-  if(cb.checked){
-    if(!cuponsSelecionados.includes(cid)) cuponsSelecionados.push(cid);
-    el.classList.add('active');
-  }else{
-    cuponsSelecionados = cuponsSelecionados.filter(id=>id!==cid);
-    el.classList.remove('active');
-  }
-}
-
-async function salvarProduto(){
-  const id = document.getElementById('prodId').value;
-  const nome = document.getElementById('prodNome').value.trim();
-  const categoriaId = document.getElementById('prodCatId').value;
-  const subcategoriaId = document.getElementById('prodSubcatId').value;
-  const preco = parseFloat(document.getElementById('prodPreco').value);
-  const estoque = parseInt(document.getElementById('prodEstoque').value);
-  const taxa = parseFloat(document.getElementById('prodTaxa').value)||0;
-  const descricao = document.getElementById('prodDesc').value.trim();
-  const file = document.getElementById('prodImgInput').files[0];
-  if(!nome||!categoriaId||!preco||isNaN(estoque)) return alert('Preencha nome, categoria, preço e estoque');
-  let imagem = document.getElementById('prodImgPreview').src||'';
-  if(file) imagem = await uploadImg(file,'produtos');
-  const data = {nome,categoriaId,subcategoriaId,preco,estoque,taxa,descricao,imagem,cupons:cuponsSelecionados,criadoEm:Date.now()};
-  if(id) await db.ref('produtos/'+id).update(data);
-  else await db.ref('produtos').push(data);
-  fecharModal('modalProduto');
-  carregarProdutos();
-}
-
-async function deletarProduto(id){
-  if(confirm('Deletar este produto?')){
-    await db.ref('produtos/'+id).remove();
-    carregarProdutos();
-  }
-}
-
-function carregarProdutos(){
-  db.ref('produtos').once('value',async snap=>{
-    const lista = document.getElementById('listaProdutos');
-    const dados = snap.val();
-    if(!dados){lista.innerHTML='<div class="empty">Nenhum produto 📦</div>';return}
-    const catSnap = await db.ref('categorias').once('value');
-    const cats = catSnap.val()||{};
-    const subSnap = await db.ref('subcategorias').once('value');
-    const subs = subSnap.val()||{};
-    let html = '';
-    Object.entries(dados).forEach(([id,p])=>{
-      const catNome = cats[p.categoriaId]?.nome||'Sem categoria';
-      const subNome = subs[p.subcategoriaId]?.nome||'';
-      const cuponsTxt = p.cupons&&p.cupons.length?`🎟️ ${p.cupons.length}`:'';
-      html += `<div class="item-row">
-        <img src="${p.imagem||''}" class="img-thumb" onerror="this.style.display='none'">
-        <div class="item-info">
-          <div class="item-title">📦 ${p.nome}</div>
-          <div class="item-sub">💵 R$ ${p.preco.toFixed(2)} • ${catNome}${subNome?' > '+subNome:''} • 📊 ${p.estoque} ${cuponsTxt}</div>
-        </div>
-        <div class="actions">
-          <button class="btn btn-sm" onclick="abrirModalProduto('${id}')">✏️</button>
-          <button class="btn btn-sm btn-red" onclick="deletarProduto('${id}')">🗑️</button>
-        </div>
-      </div>`;
-    });
-    lista.innerHTML = html;
-  });
-}
-
-function abrirModalCupom(id=null){
-  document.getElementById('cupomId').value = id||'';
-  if(id){
-    db.ref('cupons/'+id).once('value',snap=>{
-      const c = snap.val();
-      document.getElementById('cupomCodigo').value = c.codigo;
-      document.getElementById('cupomDesconto').value = c.desconto;
-      document.getElementById('cupomLimite').value = c.limite;
-      document.getElementById('cupomValidade').value = c.validadeDias||0;
-      document.getElementById('cupomUsoCliente').value = c.usoPorCliente||1;
-      document.getElementById('cupomAtivo').checked = c.ativo;
-    });
-  }
-  document.getElementById('modalCupom').classList.add('active');
-}
-
-async function salvarCupom(){
-  const id = document.getElementById('cupomId').value;
-  const codigo = document.getElementById('cupomCodigo').value.trim().toUpperCase();
-  const desconto = parseInt(document.getElementById('cupomDesconto').value);
-  const limite = parseInt(document.getElementById('cupomLimite').value);
-  const validadeDias = parseInt(document.getElementById('cupomValidade').value);
-  const usoPorCliente = parseInt(document.getElementById('cupomUsoCliente').value);
-  const ativo = document.getElementById('cupomAtivo').checked;
-  if(!codigo||isNaN(desconto)||isNaN(limite)) return alert('Preencha todos os campos');
-  const expiraEm = validadeDias>0?Date.now()+(validadeDias*24*60*60*1000):0;
-  const data = {codigo,desconto,limite,usado:0,validadeDias,expiraEm,usoPorCliente,ativo,criadoEm:Date.now()};
-  if(id) await db.ref('cupons/'+id).update(data);
-  else await db.ref('cupons').push(data);
-  fecharModal('modalCupom');
-  carregarCupons();
-}
-
-async function deletarCupom(id){
-  if(confirm('Deletar cupom?')){
-    await db.ref('cupons/'+id).remove();
-    carregarCupons();
-  }
-}
-
-async function toggleCupomAtivo(id,ativo){
-  await db.ref('cupons/'+id).update({ativo:!ativo});
-  carregarCupons();
-}
-
-function filtrarCupomStatus(status,el){
-  filtroCupomStatus = status;
-  document.querySelectorAll('#cupons.filter-btn').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  renderCupons();
-}
-
-function renderCupons(){
-  const lista = document.getElementById('listaCupons');
-  if(!todosCupons||Object.keys(todosCupons).length===0){lista.innerHTML='<div class="empty">Nenhum cupom 🎟️</div>';return}
-  let html = '';
-  Object.entries(todosCupons).forEach(([id,c])=>{
-    const expirado = c.expiraEm>0&&c.expiraEm<Date.now();
-    let status = 'ativo';
-    if(expirado) status = 'expirado';
-    else if(!c.ativo) status = 'inativo';
-    const matchFiltro = filtroCupomStatus==='todos'||filtroCupomStatus===status;
-    if(!matchFiltro) return;
-    const statusEmoji = status==='ativo'?'🟢':status==='inativo'?'🔴':'⚫';
-    const statusText = status==='ativo'?'Ativo':status==='inativo'?'Inativo':'Expirado';
-    const validadeText = c.validadeDias===0?'Ilimitado':c.expiraEm?new Date(c.expiraEm).toLocaleDateString('pt-BR'):`${c.validadeDias} dias`;
-    html += `<div class="item-row">
-      <div class="item-info">
-        <div class="item-title">🎟️ ${c.codigo} <span class="badge-status badge-${status}">${statusEmoji} ${statusText}</span></div>
-        <div class="item-sub">🔥 ${c.desconto}% OFF • 🎯 ${c.usado||0}/${c.limite} • 🗓️ ${validadeText} • ♻️ ${c.usoPorCliente}x</div>
-      </div>
-      <div class="actions">
-        <button class="btn btn-sm btn-blue" onclick="verHistoricoCupom('${id}')">📋</button>
-        <button class="btn btn-sm ${c.ativo?'btn-red':'btn-green'}" onclick="toggleCupomAtivo('${id}',${c.ativo})">${c.ativo?'🔴':'🟢'}</button>
-        <button class="btn btn-sm" onclick="abrirModalCupom('${id}')">✏️</button>
-        <button class="btn btn-sm btn-red" onclick="deletarCupom('${id}')">🗑️</button>
-      </div>
-    </div>`;
-  });
-  lista.innerHTML = html||'<div class="empty">Nenhum cupom encontrado 🎟️</div>';
-}
-
-function carregarCupons(){
-  db.ref('cupons').once('value',snap=>{
-    todosCupons = snap.val()||{};
-    renderCupons();
-  });
-}
-
-async function verHistoricoCupom(id){
-  const cupom = todosCupons[id];
-  document.getElementById('cupomHistInfo').innerHTML = `
-    <div class="item-title">🎟️ ${cupom.codigo}</div>
-    <div class="item-sub">🔥 ${cupom.desconto}% OFF • 🎯 ${cupom.usado||0}/${cupom.limite}</div>
-  `;
-  const usosSnap = await db.ref('cupom_usos').orderByChild('cupomId').equalTo(id).once('value');
-  const usos = usosSnap.val()||{};
-  let html = '';
-  Object.values(usos).forEach(u=>{
-    html += `<div class="item-row">
-      <div class="item-info">
-        <div class="item-title">👤 ${u.clienteEmail}</div>
-        <div class="item-sub">🛒 Pedido #${u.pedidoId.slice(-6)} • 📅 ${new Date(u.usadoEm).toLocaleString('pt-BR')}</div>
-      </div>
-    </div>`;
-  });
-  document.getElementById('cupomHistUsos').innerHTML = html||'<div class="empty">Ninguém usou ainda</div>';
-  document.getElementById('modalCupomHist').classList.add('active');
-}
-
-function filtrarStatusPedido(status,el){
-  filtroPedidoStatus = status;
-  document.querySelectorAll('#pedidos.filter-btn').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  filtrarPedidos();
-}
-
-function filtrarPedidos(){
-  const busca = document.getElementById('searchPedido').value.toLowerCase();
-  const lista = document.getElementById('listaPedidos');
-  let html = '';
-  Object.entries(todosPedidos).reverse().forEach(([id,p])=>{
-    const matchStatus = filtroPedidoStatus==='todos'||p.status===filtroPedidoStatus;
-    const matchBusca =!busca||p.clienteEmail?.toLowerCase().includes(busca);
-    if(matchStatus&&matchBusca){
-      const statusClass = p.status==='concluido'?'badge-concluido':p.status==='cancelado'?'badge-cancelado':'badge-pendente';
-      const statusEmoji = p.status==='concluido'?'✅':p.status==='cancelado'?'❌':'⏳';
-      html += `<div class="card-admin">
-        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-          <div style="font-weight:800">#${id.slice(-6)}</div>
-          <div class="badge-status ${statusClass}">${statusEmoji} ${p.status||'pendente'}</div>
-        </div>
-        <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px">👤 ${p.clienteNome} • 📧 ${p.clienteEmail}</div>
-        <div style="font-size:13px;font-weight:700;margin-bottom:8px">💰 R$ ${p.total.toFixed(2)}</div>
-        <div class="actions">
-          <button class="btn btn-sm btn-blue" onclick="verDetalhesPedido('${id}')">📋 Detalhes</button>
-          <button class="btn btn-sm btn-green" onclick="atualizarStatusPedido('${id}','concluido')">✅ Concluir</button>
-          <button class="btn btn-sm btn-red" onclick="atualizarStatusPedido('${id}','cancelado')">❌ Cancelar</button>
-        </div>
-      </div>`;
-    }
-  });
-  lista.innerHTML = html||'<div class="empty">Nenhum pedido encontrado 🛒</div>';
-}
-
-async function verDetalhesPedido(id){
-  const p = todosPedidos[id];
-  const userSnap = await db.ref('usuarios/'+p.clienteId).once('value');
-  const user = userSnap.val()||{};
-
-  let itensHtml = '';
-  if(p.produtos){
-    Object.values(p.produtos).forEach(prod=>{
-      itensHtml += `<div class="item-row" style="margin:8px 0">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:40px;height:40px;background:var(--input);border-radius:8px;display:flex;align-items:center;justify-content:center">📦</div>
-          <div>
-            <div class="item-title">${prod.nome}</div>
-            <div class="item-sub">Qtd: ${prod.qtd}</div>
-          </div>
-        </div>
-        <div class="detail-value">💰 R$ ${(prod.preco*prod.qtd).toFixed(2)}</div>
-      </div>`;
-    });
-  }
-
-  const pagoBadge = p.pago?'<span class="badge-status badge-ativo" style="float:right">Pago</span>':'';
-
-  document.getElementById('pedidoDetalhes').innerHTML = `
-    <div style="margin-bottom:20px">
-      <div style="font-size:13px;color:var(--text-dim);margin-bottom:4px">Pedido #${id.slice(-8).toUpperCase()}</div>
-      <div style="font-size:12px;color:var(--text-dim)">${new Date(p.criadoEm).toLocaleString('pt-BR')} ${pagoBadge}</div>
-    </div>
-
-    <div class="card-title">👤 Cliente</div>
-    <div class="detail-row"><div class="detail-label">Nome</div><div class="detail-value">${user.nome||p.clienteNome}</div></div>
-    <div class="detail-row"><div class="detail-label">📧 Email</div><div class="detail-value">${user.email||p.clienteEmail}</div></div>
-    <div class="detail-row"><div class="detail-label">📱 Telefone</div><div class="detail-value">${user.telefone||'N/A'}</div></div>
-
-    <div class="card-title" style="margin-top:20px">📦 Itens do pedido</div>
-    ${itensHtml}
-
-    <div class="detail-row" style="border-top:1px solid var(--border);margin-top:16px;padding-top:16px">
-      <div class="detail-label">💰 Total</div>
-      <div class="detail-value" style="font-size:18px;color:var(--purple)">R$ ${p.total.toFixed(2)}</div>
-    </div>
-
-    <div class="card-title" style="margin-top:20px">💳 Pagamento</div>
-    <div class="detail-row"><div class="detail-label">Método</div><div class="detail-value">💎 PIX</div></div>
-
-    <div class="card-title" style="margin-top:20px">📄 Comprovante</div>
-    <button class="btn btn-blue" onclick="alert('Abrir comprovante')" style="margin-bottom:16px">📄 Visualizar comprovante</button>
-
-    <div class="card-title">⚡ Ações</div>
-    <div style="display:flex;gap:8px">
-      <button class="btn btn-green" onclick="atualizarStatusPedido('${id}','concluido');fecharModal('modalPedido')">✅ Marcar como concluído</button>
-      <button class="btn btn-red" onclick="atualizarStatusPedido('${id}','cancelado');fecharModal('modalPedido')">❌ Cancelar pedido</button>
-    </div>
-  `;
-  document.getElementById('modalPedido').classList.add('active');
-}
-
-async function atualizarStatusPedido(id,status){
-  await db.ref('pedidos/'+id).update({status});
-  carregarPedidos();
-}
-
-function carregarPedidos(){
-  db.ref('pedidos').once('value',snap=>{
-    todosPedidos = snap.val()||{};
-    filtrarPedidos();
-  });
-}
-
-function carregarClientes(){
-  db.ref('usuarios').once('value',snap=>{
-    const lista = document.getElementById('listaClientes');
-    const dados = snap.val();
-    if(!dados){lista.innerHTML='<div class="empty">Nenhum cliente 👥</div>';return}
-    let html = '';
-    Object.entries(dados).forEach(([id,u])=>{
-      html += `<div class="item-row">
-        <div class="item-info">
-          <div class="item-title">👤 ${u.nome}</div>
-          <div class="item-sub">📧 ${u.email} • 📱 ${u.telefone}</div>
-        </div>
-        <div class="actions">
-          <button class="btn btn-sm btn-blue" onclick="verCliente('${id}')">📋 Detalhes</button>
-        </div>
-      </div>`;
-    });
-    lista.innerHTML = html;
-  });
-}
-
-async function verCliente(uid){
-  const userSnap = await db.ref('usuarios/'+uid).once('value');
-  const user = userSnap.val();
-
-  const pedSnap = await db.ref('pedidos').orderByChild('clienteId').equalTo(uid).once('value');
-  const peds = pedSnap.val()||{};
-
-  let totalGasto = 0;
-  let concluidos = 0;
-  let pendentes = 0;
-  let ultimoPedido = null;
-
-  Object.entries(peds).forEach(([id,p])=>{
-    totalGasto += p.total||0;
-    if(p.status==='concluido') concluidos++;
-    if(p.status==='pendente') pendentes++;
-    if(!ultimoPedido || p.criadoEm > ultimoPedido.criadoEm) ultimoPedido = {id,...p};
-  });
-
-  const avatar = user.nome?user.nome[0].toUpperCase():'U';
-  const desde = user.criadoEm?new Date(user.criadoEm).toLocaleDateString('pt-BR'):'N/A';
-
-  document.getElementById('clienteDetalhes').innerHTML = `
-    <div style="text-align:center;margin-bottom:20px">
-      <div class="avatar-circle">${avatar}</div>
-      <div class="item-title" style="font-size:18px;margin-bottom:4px">${user.nome}</div>
-      <div class="item-sub">${user.email}</div>
-      <div class="item-sub">📱 ${user.telefone||'N/A'}</div>
-      <div class="item-sub" style="margin-top:8px">Cliente desde ${desde}</div>
-    </div>
-
-    <div class="card-title">📊 Resumo</div>
-    <div class="detail-row"><div class="detail-label">Total de pedidos</div><div class="detail-value">${Object.keys(peds).length}</div></div>
-    <div class="detail-row"><div class="detail-label">💰 Total gasto</div><div class="detail-value" style="color:var(--green)">R$ ${totalGasto.toFixed(2)}</div></div>
-    <div class="detail-row"><div class="detail-label">✅ Pedidos concluídos</div><div class="detail-value">${concluidos}</div></div>
-    <div class="detail-row"><div class="detail-label">⏳ Pedidos pendentes</div><div class="detail-value">${pendentes}</div></div>
-
-    ${ultimoPedido?`
-    <div class="card-title" style="margin-top:20px">📜 Último pedido</div>
-    <div class="item-row clickable" onclick="verDetalhesPedido('${ultimoPedido.id}')">
-      <div class="item-info">
-        <div class="item-title">#${ultimoPedido.id.slice(-8).toUpperCase()}</div>
-        <div class="item-sub">📅 ${new Date(ultimoPedido.criadoEm).toLocaleString('pt-BR')}</div>
-      </div>
-      <div style="text-align:right">
-        <div class="detail-value">💰 R$ ${ultimoPedido.total.toFixed(2)}</div>
-        <span class="badge-status badge-ativo">Pago</span>
-      </div>
-    </div>`:''}
-
-    <button class="btn btn-primary" style="margin-top:20px" onclick="fecharModal('modalCliente')">Já tem uma conta!</button>
-  `;
-  document.getElementById('modalCliente').classList.add('active');
-}
-
-function carregarDashboard(){
-  db.ref('produtos').once('value',s=>document.getElementById('totalProdutos').textContent=Object.keys(s.val()||{}).length);
-  db.ref('usuarios').once('value',s=>document.getElementById('totalClientes').textContent=Object.keys(s.val()||{}).length);
-  db.ref('pedidos').once('value',s=>{
-    const p = s.val()||{};
-    document.getElementById('totalPedidos').textContent=Object.keys(p).length;
-    const hoje = new Date().setHours(0,0,0,0);
-    let total = 0;
-    Object.values(p).forEach(ped=>{
-      if(ped.criadoEm>=hoje) total+=ped.total||0;
-    });
-    document.getElementById('vendasHoje').textContent='R$ '+total.toFixed(2);
-  });
-}
-
-auth.onAuthStateChanged(async user=>{
-  if(user){
-    currentUser = user;
-    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-    document.getElementById('adminPanel').classList.add('active');
-    document.getElementById('userBadge').textContent = user.email[0].toUpperCase();
-    carregarDashboard();
-  }else{
-    document.getElementById('adminPanel').classList.remove('active');
-    document.getElementById('screen-login').classList.add('active');
-    currentUser = null;
-    document.getElementById('btnLogin').disabled = false;
-  }
-});
 </script>
+
 </body>
 </html>
