@@ -44,7 +44,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 .menu-btn{width:36px;height:36px;background:var(--purple);border:none;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:18px}
 .admin-title{font-weight:900;font-size:16px}
 .badge{width:36px;height:36px;background:linear-gradient(135deg,#8b5cf6,#7c3aed);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px}
-.sidebar{position:fixed;top:56px;left:-260px;width:260px;height:calc(100vh - 56px);background:var(--bg);border-right:2px solid var(--purple);transition:0.3s;z-index:40;overflow-y:auto}
+.sidebar{position:fixed;top:56px;left:-260px;width:260px;height:calc(100vh - 56px);background:var(--bg);border-right:1px solid var(--purple);transition:0.3s;z-index:40;overflow-y:auto}
 .sidebar.open{left:0}
 .side-header{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
 .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#8b5cf6,#7c3aed);border-radius:10px;display:flex;align-items:center;justify-content:center}
@@ -73,12 +73,13 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 .modal-title{font-size:16px;font-weight:800}
 .close-btn{width:32px;height:32px;background:var(--input);border:none;border-radius:8px;color:#fff;cursor:pointer;font-size:18px}
 .empty{text-align:center;padding:40px 20px;color:var(--text-dim);font-size:13px}
-.img-preview{width:100%;height:120px;background:var(--input);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer}
+.img-preview{width:100%;height:140px;background:var(--input);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer}
 .img-preview img{width:100%;height:100%;object-fit:cover}
 .img-preview span{font-size:12px;color:var(--text-dim)}
 .badge-status{padding:4px 8px;border-radius:6px;font-size:10px;font-weight:700;text-transform:uppercase}
 .badge-ativo{background:rgba(16,185,129,0.2);color:var(--green)}
 .badge-inativo{background:rgba(239,68,68,0.2);color:var(--red)}
+.badge-expirado{background:rgba(107,114,128,0.2);color:#6b7280}
 .badge-pendente{background:rgba(251,191,36,0.2);color:var(--yellow)}
 .badge-concluido{background:rgba(16,185,129,0.2);color:var(--green)}
 .badge-cancelado{background:rgba(239,68,68,0.2);color:var(--red)}
@@ -86,11 +87,12 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 .filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
 .filter-btn{padding:8px 14px;background:var(--input);border:1px solid var(--border);border-radius:10px;font-size:12px;font-weight:600;cursor:pointer}
 .filter-btn.active{background:var(--purple);border-color:var(--purple)}
-.img-thumb{width:50px;height:50px;border-radius:10px;object-fit:cover;background:var(--input);flex-shrink:0}
+.img-thumb{width:60px;height:60px;border-radius:10px;object-fit:cover;background:var(--input);flex-shrink:0}
 .cupom-list{display:flex;flex-wrap:wrap;gap:8px}
 .cupom-tag{padding:6px 10px;background:var(--input);border:1px solid var(--border);border-radius:8px;font-size:11px;display:flex;align-items:center;gap:6px}
 .cupom-tag.active{border-color:var(--green)}
 .cupom-tag.remove{cursor:pointer;color:var(--red)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 </style>
 </head>
 <body>
@@ -100,7 +102,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
   <div class="card">
     <h2>LOGIN - E-MAIL</h2>
     <div class="logo">Prime Store VZ</div>
-    <div class="subtitle">Painel Administrativo</div>
+    <div class="subtitle">Painel Administrativo 🔐</div>
     <div class="alert error" id="loginError"></div>
     <div class="input-group">
       <label>E-mail</label>
@@ -112,7 +114,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
         <input type="password" id="loginPassword" placeholder="••••••••">
         <span class="toggle" onclick="togglePass('loginPassword',this)">👁️</span>
       </div>
-    </div>
     <button class="btn" id="btnLogin" onclick="fazerLogin()">ENTRAR</button>
   </div>
 </div>
@@ -141,19 +142,19 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
   <div class="admin-content">
     <!-- DASHBOARD -->
     <div id="dash" class="page active">
-      <h3 style="margin-bottom:16px">Dashboard</h3>
+      <h3 style="margin-bottom:16px">Dashboard 📊</h3>
       <div class="stats">
-        <div class="stat-card"><div class="stat-label">Vendas Hoje</div><div class="stat-value" style="color:var(--purple)" id="vendasHoje">R$ 0</div></div>
-        <div class="stat-card"><div class="stat-label">Pedidos</div><div class="stat-value" style="color:var(--yellow)" id="totalPedidos">0</div></div>
-        <div class="stat-card"><div class="stat-label">Produtos</div><div class="stat-value" style="color:var(--green)" id="totalProdutos">0</div></div>
-        <div class="stat-card"><div class="stat-label">Clientes</div><div class="stat-value" style="color:var(--purple)" id="totalClientes">0</div></div>
+        <div class="stat-card"><div class="stat-label">Vendas Hoje 💰</div><div class="stat-value" style="color:var(--purple)" id="vendasHoje">R$ 0</div></div>
+        <div class="stat-card"><div class="stat-label">Pedidos 🛒</div><div class="stat-value" style="color:var(--yellow)" id="totalPedidos">0</div></div>
+        <div class="stat-card"><div class="stat-label">Produtos 📦</div><div class="stat-value" style="color:var(--green)" id="totalProdutos">0</div></div>
+        <div class="stat-card"><div class="stat-label">Clientes 👥</div><div class="stat-value" style="color:var(--purple)" id="totalClientes">0</div></div>
       </div>
     </div>
 
     <!-- CATEGORIAS -->
     <div id="categorias" class="page">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-        <h3>Categorias</h3>
+        <h3>Categorias 📁</h3>
         <button class="btn btn-sm" onclick="abrirModalCategoria()">+ Adicionar</button>
       </div>
       <div id="listaCategorias"><div class="empty">Nenhuma categoria</div></div>
@@ -162,7 +163,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
     <!-- SUBCATEGORIAS -->
     <div id="subcategorias" class="page">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-        <h3>Subcategorias</h3>
+        <h3>Subcategorias 📂</h3>
         <button class="btn btn-sm" onclick="abrirModalSubcategoria()">+ Adicionar</button>
       </div>
       <div id="listaSubcategorias"><div class="empty">Nenhuma subcategoria</div></div>
@@ -171,7 +172,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
     <!-- PRODUTOS -->
     <div id="produtos" class="page">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-        <h3>Produtos</h3>
+        <h3>Produtos 📦</h3>
         <button class="btn btn-sm" onclick="abrirModalProduto()">+ Adicionar</button>
       </div>
       <div id="listaProdutos"><div class="empty">Nenhum produto</div></div>
@@ -180,15 +181,21 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
     <!-- CUPONS -->
     <div id="cupons" class="page">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-        <h3>Cupons</h3>
+        <h3>Cupons 🎟️</h3>
         <button class="btn btn-sm" onclick="abrirModalCupom()">+ Adicionar</button>
+      </div>
+      <div class="filters">
+        <button class="filter-btn active" onclick="filtrarCupomStatus('todos',this)">Todos</button>
+        <button class="filter-btn" onclick="filtrarCupomStatus('ativo',this)">🟢 Ativos</button>
+        <button class="filter-btn" onclick="filtrarCupomStatus('inativo',this)">🔴 Inativos</button>
+        <button class="filter-btn" onclick="filtrarCupomStatus('expirado',this)">⚫ Expirados</button>
       </div>
       <div id="listaCupons"><div class="empty">Nenhum cupom</div></div>
     </div>
 
     <!-- PEDIDOS -->
     <div id="pedidos" class="page">
-      <h3 style="margin-bottom:16px">Pedidos</h3>
+      <h3 style="margin-bottom:16px">Pedidos 🛒</h3>
       <div class="search-box">
         <div class="input-box">
           <input type="text" id="searchPedido" placeholder="Buscar por email do cliente..." onkeyup="filtrarPedidos()">
@@ -196,16 +203,16 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
       </div>
       <div class="filters">
         <button class="filter-btn active" onclick="filtrarStatusPedido('todos',this)">Todos</button>
-        <button class="filter-btn" onclick="filtrarStatusPedido('pendente',this)">Pendentes</button>
-        <button class="filter-btn" onclick="filtrarStatusPedido('concluido',this)">Concluídos</button>
-        <button class="filter-btn" onclick="filtrarStatusPedido('cancelado',this)">Cancelados</button>
+        <button class="filter-btn" onclick="filtrarStatusPedido('pendente',this)">Pendentes ⏳</button>
+        <button class="filter-btn" onclick="filtrarStatusPedido('concluido',this)">Concluídos ✅</button>
+        <button class="filter-btn" onclick="filtrarStatusPedido('cancelado',this)">Cancelados ❌</button>
       </div>
       <div id="listaPedidos"><div class="empty">Nenhum pedido</div></div>
     </div>
 
     <!-- CLIENTES -->
     <div id="clientes" class="page">
-      <h3 style="margin-bottom:16px">Clientes</h3>
+      <h3 style="margin-bottom:16px">Clientes 👥</h3>
       <div id="listaClientes"><div class="empty">Nenhum cliente</div></div>
     </div>
   </div>
@@ -215,20 +222,20 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 <div class="modal" id="modalCategoria">
   <div class="modal-box">
     <div class="modal-head">
-      <div class="modal-title">Nova Categoria</div>
+      <div class="modal-title">Nova Categoria 📁</div>
       <button class="close-btn" onclick="fecharModal('modalCategoria')">×</button>
     </div>
     <input type="hidden" id="catId">
     <div class="img-preview" onclick="document.getElementById('catImgInput').click()">
       <img id="catImgPreview" class="hide">
-      <span id="catImgText">Clique para adicionar imagem</span>
+      <span id="catImgText">Clique para adicionar imagem 🖼️</span>
     </div>
     <input type="file" id="catImgInput" accept="image/*" class="hide" onchange="previewImg(this,'catImgPreview','catImgText')">
     <div class="input-group">
       <label>Nome da Categoria</label>
       <div class="input-box"><input type="text" id="catNome" placeholder="Streaming"></div>
     </div>
-    <button class="btn" onclick="salvarCategoria()">SALVAR</button>
+    <button class="btn" onclick="salvarCategoria()">SALVAR ✨</button>
   </div>
 </div>
 
@@ -236,7 +243,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 <div class="modal" id="modalSubcategoria">
   <div class="modal-box">
     <div class="modal-head">
-      <div class="modal-title">Nova Subcategoria</div>
+      <div class="modal-title">Nova Subcategoria 📂</div>
       <button class="close-btn" onclick="fecharModal('modalSubcategoria')">×</button>
     </div>
     <input type="hidden" id="subcatId">
@@ -246,14 +253,14 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
     </div>
     <div class="img-preview" onclick="document.getElementById('subcatImgInput').click()">
       <img id="subcatImgPreview" class="hide">
-      <span id="subcatImgText">Clique para adicionar imagem</span>
+      <span id="subcatImgText">Clique para adicionar imagem 🖼️</span>
     </div>
     <input type="file" id="subcatImgInput" accept="image/*" class="hide" onchange="previewImg(this,'subcatImgPreview','subcatImgText')">
     <div class="input-group">
       <label>Nome da Subcategoria</label>
       <div class="input-box"><input type="text" id="subcatNome" placeholder="Netflix"></div>
     </div>
-    <button class="btn" onclick="salvarSubcategoria()">SALVAR</button>
+    <button class="btn" onclick="salvarSubcategoria()">SALVAR ✨</button>
   </div>
 </div>
 
@@ -261,48 +268,51 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 <div class="modal" id="modalProduto">
   <div class="modal-box">
     <div class="modal-head">
-      <div class="modal-title" id="modalProdTitulo">Novo Produto</div>
+      <div class="modal-title" id="modalProdTitulo">Novo Produto 📦</div>
       <button class="close-btn" onclick="fecharModal('modalProduto')">×</button>
     </div>
     <input type="hidden" id="prodId">
     <div class="img-preview" onclick="document.getElementById('prodImgInput').click()">
       <img id="prodImgPreview" class="hide">
-      <span id="prodImgText">Clique para adicionar imagem</span>
+      <span id="prodImgText">Clique para adicionar imagem 🖼️</span>
     </div>
     <input type="file" id="prodImgInput" accept="image/*" class="hide" onchange="previewImg(this,'prodImgPreview','prodImgText')">
     <div class="input-group">
       <label>Nome do Produto</label>
       <div class="input-box"><input type="text" id="prodNome" placeholder="Netflix Premium 1 Mês"></div>
     </div>
-    <div class="input-group">
-      <label>Categoria</label>
-      <div class="input-box"><select id="prodCatId" onchange="carregarSubcats()"></select></div>
+    <div class="grid-2">
+      <div class="input-group">
+        <label>Categoria</label>
+        <div class="input-box"><select id="prodCatId" onchange="carregarSubcats()"></select></div>
+      </div>
+      <div class="input-group">
+        <label>Subcategoria</label>
+        <div class="input-box"><select id="prodSubcatId"></select></div>
+      </div>
+    <div class="grid-2">
+      <div class="input-group">
+        <label>Preço 💵</label>
+        <div class="input-box"><input type="number" id="prodPreco" placeholder="29.90" step="0.01"></div>
+      </div>
+      <div class="input-group">
+        <label>Estoque 📊</label>
+        <div class="input-box"><input type="number" id="prodEstoque" placeholder="10"></div>
+      </div>
     </div>
     <div class="input-group">
-      <label>Subcategoria</label>
-      <div class="input-box"><select id="prodSubcatId"></select></div>
-    </div>
-    <div class="input-group">
-      <label>Preço</label>
-      <div class="input-box"><input type="number" id="prodPreco" placeholder="29.90" step="0.01"></div>
-    </div>
-    <div class="input-group">
-      <label>Estoque</label>
-      <div class="input-box"><input type="number" id="prodEstoque" placeholder="10"></div>
-    </div>
-    <div class="input-group">
-      <label>Taxa Extra</label>
+      <label>Taxa Extra 💸</label>
       <div class="input-box"><input type="number" id="prodTaxa" placeholder="0" step="0.01"></div>
     </div>
     <div class="input-group">
-      <label>Cupons Disponíveis</label>
+      <label>Cupons Disponíveis 🎟️</label>
       <div id="prodCupons" class="cupom-list"></div>
     </div>
     <div class="input-group">
-      <label>Descrição</label>
+      <label>Descrição 📝</label>
       <div class="input-box"><textarea id="prodDesc" placeholder="Descrição do produto"></textarea></div>
     </div>
-    <button class="btn" onclick="salvarProduto()">SALVAR PRODUTO</button>
+    <button class="btn" onclick="salvarProduto()">SALVAR PRODUTO ✨</button>
   </div>
 </div>
 
@@ -310,7 +320,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 <div class="modal" id="modalCupom">
   <div class="modal-box">
     <div class="modal-head">
-      <div class="modal-title">Novo Cupom</div>
+      <div class="modal-title">Novo Cupom 🎟️</div>
       <button class="close-btn" onclick="fecharModal('modalCupom')">×</button>
     </div>
     <input type="hidden" id="cupomId">
@@ -318,18 +328,37 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
       <label>Código do Cupom</label>
       <div class="input-box"><input type="text" id="cupomCodigo" placeholder="PRIME10" style="text-transform:uppercase"></div>
     </div>
-    <div class="input-group">
-      <label>Desconto (%)</label>
-      <div class="input-box"><input type="number" id="cupomDesconto" placeholder="10" min="0" max="100"></div>
+    <div class="grid-2">
+      <div class="input-group">
+        <label>Desconto (%) 🔥</label>
+        <div class="input-box"><input type="number" id="cupomDesconto" placeholder="10" min="0" max="100"></div>
+      </div>
+      <div class="input-group">
+        <label>Limite Total 🎯</label>
+        <div class="input-box"><input type="number" id="cupomLimite" placeholder="100" min="1"></div>
+      </div>
     </div>
-    <div class="input-group">
-      <label>Limite de Uso Total</label>
-      <div class="input-box"><input type="number" id="cupomLimite" placeholder="100" min="1"></div>
+    <div class="grid-2">
+      <div class="input-group">
+        <label>Validade 🗓️</label>
+        <div class="input-box">
+          <select id="cupomValidade">
+            <option value="1">1 Dia</option>
+            <option value="7">7 Dias</option>
+            <option value="30">30 Dias</option>
+            <option value="0">Ilimitado</option>
+          </select>
+        </div>
+      </div>
+      <div class="input-group">
+        <label>Uso por Cliente ♻️</label>
+        <div class="input-box"><input type="number" id="cupomUsoCliente" placeholder="1" min="1" value="1"></div>
+      </div>
     </div>
     <div class="row">
-      <label class="checkbox"><input type="checkbox" id="cupomAtivo" checked><span>Cupom Ativo</span></label>
+      <label class="checkbox"><input type="checkbox" id="cupomAtivo" checked><span>Cupom Ativo 🟢</span></label>
     </div>
-    <button class="btn" onclick="salvarCupom()">SALVAR CUPOM</button>
+    <button class="btn" onclick="salvarCupom()">SALVAR CUPOM ✨</button>
   </div>
 </div>
 
@@ -337,12 +366,25 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
 <div class="modal" id="modalCliente">
   <div class="modal-box">
     <div class="modal-head">
-      <div class="modal-title">Histórico do Cliente</div>
+      <div class="modal-title">Histórico do Cliente 👤</div>
       <button class="close-btn" onclick="fecharModal('modalCliente')">×</button>
     </div>
     <div id="clienteInfo" style="margin-bottom:16px"></div>
-    <div class="card-title">Pedidos</div>
+    <div class="card-title">Pedidos 📜</div>
     <div id="clientePedidos"></div>
+  </div>
+</div>
+
+<!-- MODAL CUPOM HISTORICO -->
+<div class="modal" id="modalCupomHist">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title">Histórico do Cupom 🎟️</div>
+      <button class="close-btn" onclick="fecharModal('modalCupomHist')">×</button>
+    </div>
+    <div id="cupomHistInfo" style="margin-bottom:16px"></div>
+    <div class="card-title">Quem Usou 👥</div>
+    <div id="cupomHistUsos"></div>
   </div>
 </div>
 
@@ -367,7 +409,10 @@ const db = firebase.database();
 const storage = firebase.storage();
 let currentUser = null;
 let filtroPedidoStatus = 'todos';
+let filtroCupomStatus = 'todos';
 let cuponsSelecionados = [];
+let todosPedidos = {};
+let todosCupons = {};
 
 function togglePass(id,el){
   const input = document.getElementById(id);
@@ -485,21 +530,21 @@ function carregarCategorias(){
   db.ref('categorias').once('value',snap=>{
     const lista = document.getElementById('listaCategorias');
     const dados = snap.val();
-    if(!dados){lista.innerHTML='<div class="empty">Nenhuma categoria</div>';return}
+    if(!dados){lista.innerHTML='<div class="empty">Nenhuma categoria 📁</div>';return}
     let html = '';
     Object.entries(dados).forEach(([id,c])=>{
       html += `<div class="item-row">
         <img src="${c.imagem||''}" class="img-thumb" onerror="this.style.display='none'">
         <div class="item-info">
-          <div class="item-title">${c.nome}</div>
+          <div class="item-title">📁 ${c.nome}</div>
         </div>
         <div class="actions">
-          <button class="btn btn-sm" onclick="abrirModalCategoria('${id}')">Editar</button>
-          <button class="btn btn-sm btn-red" onclick="deletarCategoria('${id}')">Del</button>
+          <button class="btn btn-sm" onclick="abrirModalCategoria('${id}')">Editar ✏️</button>
+          <button class="btn btn-sm btn-red" onclick="deletarCategoria('${id}')">Del 🗑️</button>
         </div>
       </div>`;
     });
-    lista.innerHTML = html;
+        lista.innerHTML = html;
   });
 }
 
@@ -554,7 +599,7 @@ function carregarSubcategorias(){
   db.ref('subcategorias').once('value',async snap=>{
     const lista = document.getElementById('listaSubcategorias');
     const dados = snap.val();
-    if(!dados){lista.innerHTML='<div class="empty">Nenhuma subcategoria</div>';return}
+    if(!dados){lista.innerHTML='<div class="empty">Nenhuma subcategoria 📂</div>';return}
     const catSnap = await db.ref('categorias').once('value');
     const cats = catSnap.val()||{};
     let html = '';
@@ -563,12 +608,12 @@ function carregarSubcategorias(){
       html += `<div class="item-row">
         <img src="${s.imagem||''}" class="img-thumb" onerror="this.style.display='none'">
         <div class="item-info">
-          <div class="item-title">${s.nome}</div>
-          <div class="item-sub">${catNome}</div>
+          <div class="item-title">📂 ${s.nome}</div>
+          <div class="item-sub">📁 ${catNome}</div>
         </div>
         <div class="actions">
-          <button class="btn btn-sm" onclick="abrirModalSubcategoria('${id}')">Editar</button>
-          <button class="btn btn-sm btn-red" onclick="deletarSubcategoria('${id}')">Del</button>
+          <button class="btn btn-sm" onclick="abrirModalSubcategoria('${id}')">Editar ✏️</button>
+          <button class="btn btn-sm btn-red" onclick="deletarSubcategoria('${id}')">Del 🗑️</button>
         </div>
       </div>`;
     });
@@ -597,7 +642,7 @@ async function abrirModalProduto(id=null){
   });
 
   document.getElementById('prodId').value = id||'';
-  document.getElementById('modalProdTitulo').textContent = id?'Editar Produto':'Novo Produto';
+  document.getElementById('modalProdTitulo').textContent = id?'Editar Produto 📦':'Novo Produto 📦';
   if(id){
     db.ref('produtos/'+id).once('value',async snap=>{
       const p = snap.val();
@@ -675,7 +720,7 @@ function carregarProdutos(){
   db.ref('produtos').once('value',async snap=>{
     const lista = document.getElementById('listaProdutos');
     const dados = snap.val();
-    if(!dados){lista.innerHTML='<div class="empty">Nenhum produto</div>';return}
+    if(!dados){lista.innerHTML='<div class="empty">Nenhum produto 📦</div>';return}
     const catSnap = await db.ref('categorias').once('value');
     const cats = catSnap.val()||{};
     const subSnap = await db.ref('subcategorias').once('value');
@@ -687,12 +732,12 @@ function carregarProdutos(){
       html += `<div class="item-row">
         <img src="${p.imagem||''}" class="img-thumb" onerror="this.style.display='none'">
         <div class="item-info">
-          <div class="item-title">${p.nome}</div>
-          <div class="item-sub">R$ ${p.preco.toFixed(2)} - ${catNome}${subNome?' > '+subNome:''} - Estoque: ${p.estoque}</div>
+          <div class="item-title">📦 ${p.nome}</div>
+          <div class="item-sub">R$ ${p.preco.toFixed(2)} - ${catNome}${subNome?' > '+subNome:''} - Estoque: ${p.estoque} 📊</div>
         </div>
         <div class="actions">
-          <button class="btn btn-sm" onclick="abrirModalProduto('${id}')">Editar</button>
-          <button class="btn btn-sm btn-red" onclick="deletarProduto('${id}')">Del</button>
+          <button class="btn btn-sm" onclick="abrirModalProduto('${id}')">Editar ✏️</button>
+          <button class="btn btn-sm btn-red" onclick="deletarProduto('${id}')">Del 🗑️</button>
         </div>
       </div>`;
     });
@@ -709,6 +754,8 @@ function abrirModalCupom(id=null){
       document.getElementById('cupomCodigo').value = c.codigo;
       document.getElementById('cupomDesconto').value = c.desconto;
       document.getElementById('cupomLimite').value = c.limite;
+      document.getElementById('cupomValidade').value = c.validadeDias||0;
+      document.getElementById('cupomUsoCliente').value = c.usoPorCliente||1;
       document.getElementById('cupomAtivo').checked = c.ativo;
     });
   }
@@ -720,9 +767,12 @@ async function salvarCupom(){
   const codigo = document.getElementById('cupomCodigo').value.trim().toUpperCase();
   const desconto = parseInt(document.getElementById('cupomDesconto').value);
   const limite = parseInt(document.getElementById('cupomLimite').value);
+  const validadeDias = parseInt(document.getElementById('cupomValidade').value);
+  const usoPorCliente = parseInt(document.getElementById('cupomUsoCliente').value);
   const ativo = document.getElementById('cupomAtivo').checked;
   if(!codigo||isNaN(desconto)||isNaN(limite)) return alert('Preencha todos os campos');
-  const data = {codigo,desconto,limite,usado:0,ativo,criadoEm:Date.now()};
+  const expiraEm = validadeDias>0?Date.now()+(validadeDias*24*60*60*1000):0;
+  const data = {codigo,desconto,limite,usado:0,validadeDias,expiraEm,usoPorCliente,ativo,criadoEm:Date.now()};
   if(id) await db.ref('cupons/'+id).update(data);
   else await db.ref('cupons').push(data);
   fecharModal('modalCupom');
@@ -741,34 +791,78 @@ async function toggleCupomAtivo(id,ativo){
   carregarCupons();
 }
 
+function filtrarCupomStatus(status,el){
+  filtroCupomStatus = status;
+  document.querySelectorAll('#cupons.filter-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  renderCupons();
+}
+
+function renderCupons(){
+  const lista = document.getElementById('listaCupons');
+  if(!todosCupons||Object.keys(todosCupons).length===0){lista.innerHTML='<div class="empty">Nenhum cupom 🎟️</div>';return}
+  let html = '';
+  Object.entries(todosCupons).forEach(([id,c])=>{
+    const expirado = c.expiraEm>0&&c.expiraEm<Date.now();
+    let status = 'ativo';
+    if(expirado) status = 'expirado';
+    else if(!c.ativo) status = 'inativo';
+
+    const matchFiltro = filtroCupomStatus==='todos'||filtroCupomStatus===status;
+    if(!matchFiltro) return;
+
+    const statusEmoji = status==='ativo'?'🟢':status==='inativo'?'🔴':'⚫';
+    const statusText = status==='ativo'?'Ativo':status==='inativo'?'Inativo':'Expirado';
+    const validadeText = c.validadeDias===0?'Ilimitado':c.expiraEm?new Date(c.expiraEm).toLocaleDateString('pt-BR'):`${c.validadeDias} dias`;
+
+    html += `<div class="item-row">
+      <div class="item-info">
+        <div class="item-title">🎟️ ${c.codigo} <span class="badge-status badge-${status}">${statusEmoji} ${statusText}</span></div>
+        <div class="item-sub">${c.desconto}% OFF - Usado ${c.usado||0}/${c.limite} - Válido: ${validadeText} - Por cliente: ${c.usoPorCliente}x ♻️</div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-sm btn-blue" onclick="verHistoricoCupom('${id}')">Histórico 📜</button>
+        <button class="btn btn-sm ${c.ativo?'btn-red':'btn-green'}" onclick="toggleCupomAtivo('${id}',${c.ativo})">${c.ativo?'Desativar':'Ativar'}</button>
+        <button class="btn btn-sm" onclick="abrirModalCupom('${id}')">Editar ✏️</button>
+        <button class="btn btn-sm btn-red" onclick="deletarCupom('${id}')">Del 🗑️</button>
+      </div>
+    </div>`;
+  });
+  lista.innerHTML = html||'<div class="empty">Nenhum cupom encontrado 🎟️</div>';
+}
+
 function carregarCupons(){
   db.ref('cupons').once('value',snap=>{
-    const lista = document.getElementById('listaCupons');
-    const dados = snap.val();
-    if(!dados){lista.innerHTML='<div class="empty">Nenhum cupom</div>';return}
-    let html = '';
-    Object.entries(dados).forEach(([id,c])=>{
-      html += `<div class="item-row">
-        <div class="item-info">
-          <div class="item-title">${c.codigo} <span class="badge-status ${c.ativo?'badge-ativo':'badge-inativo'}">${c.ativo?'Ativo':'Inativo'}</span></div>
-          <div class="item-sub">${c.desconto}% OFF - Usado ${c.usado||0}/${c.limite}</div>
-        </div>
-        <div class="actions">
-          <button class="btn btn-sm ${c.ativo?'btn-red':'btn-green'}" onclick="toggleCupomAtivo('${id}',${c.ativo})">${c.ativo?'Desativar':'Ativar'}</button>
-          <button class="btn btn-sm" onclick="abrirModalCupom('${id}')">Editar</button>
-          <button class="btn btn-sm btn-red" onclick="deletarCupom('${id}')">Del</button>
-        </div>
-      </div>`;
-    });
-    lista.innerHTML = html;
+    todosCupons = snap.val()||{};
+    renderCupons();
   });
 }
 
+async function verHistoricoCupom(id){
+  const cupom = todosCupons[id];
+  document.getElementById('cupomHistInfo').innerHTML = `
+    <div class="item-title">🎟️ ${cupom.codigo}</div>
+    <div class="item-sub">${cupom.desconto}% OFF - Usado ${cupom.usado||0}/${cupom.limite}</div>
+  `;
+  const usosSnap = await db.ref('cupom_usos').orderByChild('cupomId').equalTo(id).once('value');
+  const usos = usosSnap.val()||{};
+  let html = '';
+  Object.values(usos).forEach(u=>{
+    html += `<div class="item-row">
+      <div class="item-info">
+        <div class="item-title">👤 ${u.clienteEmail}</div>
+        <div class="item-sub">Pedido #${u.pedidoId.slice(-6)} - ${new Date(u.usadoEm).toLocaleString('pt-BR')}</div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('cupomHistUsos').innerHTML = html||'<div class="empty">Ninguém usou ainda</div>';
+  document.getElementById('modalCupomHist').classList.add('active');
+}
+
 // PEDIDOS
-let todosPedidos = {};
 function filtrarStatusPedido(status,el){
   filtroPedidoStatus = status;
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#pedidos.filter-btn').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
   filtrarPedidos();
 }
@@ -782,21 +876,22 @@ function filtrarPedidos(){
     const matchBusca =!busca||p.clienteEmail?.toLowerCase().includes(busca);
     if(matchStatus&&matchBusca){
       const statusClass = p.status==='concluido'?'badge-concluido':p.status==='cancelado'?'badge-cancelado':'badge-pendente';
+      const statusEmoji = p.status==='concluido'?'✅':p.status==='cancelado'?'❌':'⏳';
       html += `<div class="card-admin">
         <div style="display:flex;justify-content:space-between;margin-bottom:8px">
           <div style="font-weight:800">#${id.slice(-6)}</div>
-          <div class="badge-status ${statusClass}">${p.status||'pendente'}</div>
+          <div class="badge-status ${statusClass}">${statusEmoji} ${p.status||'pendente'}</div>
         </div>
-        <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px">${p.clienteNome} - ${p.clienteEmail}</div>
-        <div style="font-size:13px;font-weight:700;margin-bottom:8px">R$ ${p.total.toFixed(2)}</div>
+        <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px">👤 ${p.clienteNome} - ${p.clienteEmail}</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:8px">💰 R$ ${p.total.toFixed(2)}</div>
         <div class="actions">
-          <button class="btn btn-sm btn-green" onclick="atualizarStatusPedido('${id}','concluido')">Concluir</button>
-          <button class="btn btn-sm btn-red" onclick="atualizarStatusPedido('${id}','cancelado')">Cancelar</button>
+          <button class="btn btn-sm btn-green" onclick="atualizarStatusPedido('${id}','concluido')">Concluir ✅</button>
+          <button class="btn btn-sm btn-red" onclick="atualizarStatusPedido('${id}','cancelado')">Cancelar ❌</button>
         </div>
       </div>`;
     }
   });
-  lista.innerHTML = html||'<div class="empty">Nenhum pedido encontrado</div>';
+  lista.innerHTML = html||'<div class="empty">Nenhum pedido encontrado 🛒</div>';
 }
 
 async function atualizarStatusPedido(id,status){
@@ -816,13 +911,13 @@ function carregarClientes(){
   db.ref('usuarios').once('value',snap=>{
     const lista = document.getElementById('listaClientes');
     const dados = snap.val();
-    if(!dados){lista.innerHTML='<div class="empty">Nenhum cliente</div>';return}
+    if(!dados){lista.innerHTML='<div class="empty">Nenhum cliente 👥</div>';return}
     let html = '';
     Object.entries(dados).forEach(([id,u])=>{
       html += `<div class="item-row clickable" onclick="verCliente('${id}')">
         <div class="item-info">
-          <div class="item-title">${u.nome}</div>
-          <div class="item-sub">${u.email} - ${u.telefone}</div>
+          <div class="item-title">👤 ${u.nome}</div>
+          <div class="item-sub">📧 ${u.email} - 📱 ${u.telefone}</div>
         </div>
       </div>`;
     });
@@ -834,23 +929,24 @@ async function verCliente(uid){
   const userSnap = await db.ref('usuarios/'+uid).once('value');
   const user = userSnap.val();
   document.getElementById('clienteInfo').innerHTML = `
-    <div class="item-title">${user.nome}</div>
-    <div class="item-sub">${user.email}</div>
-    <div class="item-sub">${user.telefone}</div>
+    <div class="item-title">👤 ${user.nome}</div>
+    <div class="item-sub">📧 ${user.email}</div>
+    <div class="item-sub">📱 ${user.telefone}</div>
   `;
   const pedSnap = await db.ref('pedidos').orderByChild('clienteId').equalTo(uid).once('value');
   const peds = pedSnap.val()||{};
   let html = '';
   Object.entries(peds).reverse().forEach(([id,p])=>{
     const statusClass = p.status==='concluido'?'badge-concluido':p.status==='cancelado'?'badge-cancelado':'badge-pendente';
+    const statusEmoji = p.status==='concluido'?'✅':p.status==='cancelado'?'❌':'⏳';
     html += `<div class="item-row">
       <div class="item-info">
-        <div class="item-title">#${id.slice(-6)} - R$ ${p.total.toFixed(2)}</div>
-        <div class="item-sub">${new Date(p.criadoEm).toLocaleDateString('pt-BR')} <span class="badge-status ${statusClass}">${p.status}</span></div>
+        <div class="item-title">#${id.slice(-6)} - 💰 R$ ${p.total.toFixed(2)}</div>
+        <div class="item-sub">${new Date(p.criadoEm).toLocaleDateString('pt-BR')} <span class="badge-status ${statusClass}">${statusEmoji} ${p.status}</span></div>
       </div>
     </div>`;
   });
-  document.getElementById('clientePedidos').innerHTML = html||'<div class="empty">Nenhum pedido</div>';
+  document.getElementById('clientePedidos').innerHTML = html||'<div class="empty">Nenhum pedido 📜</div>';
   document.getElementById('modalCliente').classList.add('active');
 }
 
