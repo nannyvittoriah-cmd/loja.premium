@@ -120,6 +120,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
           <input type="password" id="loginPassword" placeholder="••••••••">
           <span class="toggle" onclick="togglePass('loginPassword', this)">👁️</span>
         </div>
+      </div>
       <button class="btn" id="btnLogin">ENTRAR</button>
     </div>
   </div>
@@ -344,7 +345,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:16px;color:var
         </label>
         <img id="categoriaIconPreview" class="file-preview" style="display:none">
       </div>
-    </div>
     <div class="input-group">
       <label>Subcategorias (separar por vírgula)</label>
       <div class="input-box"><input type="text" id="categoriaSubcats" placeholder="Netflix, Spotify, Disney+"></div>
@@ -473,7 +473,7 @@ function carregarBanner(){
       document.getElementById('bannerOfferInput').value = data.offer;
       document.getElementById('previewImg').style.display = 'block';
     }
-  });
+  }).catch(()=>{});
 }
 
 function salvarBanner(){
@@ -499,15 +499,13 @@ function carregarCategorias(){
   db.ref('categorias').once('value').then(snap => {
     const data = snap.val() || {};
     const lista = document.getElementById('listaCategorias');
-    lista.innerHTML = '';
-    Object.keys(data).forEach(key => {
-      const cat = data[key];
-      lista.innerHTML += `
+          lista.innerHTML += `
         <div class="item-card">
           <div class="item-card-header">
             <div style="display:flex;align-items:center;gap:10px">
               <img src="${cat.icon || ''}" style="width:40px;height:40px;border-radius:8px;object-fit:cover">
-              <div class="item-card-title">${cat.nome}            </div>
+              <div class="item-card-title">${cat.nome}</div>
+            </div>
           </div>
           <div class="item-card-row">
             <span class="item-card-label">Subcategorias</span>
@@ -518,7 +516,7 @@ function carregarCategorias(){
           </div>
         </div>`;
     });
-  });
+  }).catch(()=>{});
 }
 
 function carregarCategoriasSelect(){
@@ -553,6 +551,7 @@ function salvarCategoria(){
   db.ref('categorias').push({nome, icon, subcategorias: subcats}).then(() => {
     fecharModal('modalCategoria');
     carregarCategorias();
+    carregarCategoriasSelect();
     document.getElementById('categoriaNome').value = '';
     document.getElementById('categoriaIconFile').value = '';
     document.getElementById('categoriaSubcats').value = '';
@@ -562,7 +561,10 @@ function salvarCategoria(){
 
 function excluirCategoria(id){
   if(confirm('Excluir categoria?')){
-    db.ref('categorias/'+id).remove().then(carregarCategorias);
+    db.ref('categorias/'+id).remove().then(()=>{
+      carregarCategorias();
+      carregarCategoriasSelect();
+    });
   }
 }
 
@@ -606,7 +608,7 @@ function carregarProdutos(){
           </div>
         </div>`;
     });
-  });
+  }).catch(()=>{});
 }
 
 function salvarProduto(){
@@ -710,7 +712,7 @@ function carregarPedidos(){
     if(lista.innerHTML === '') lista.innerHTML = '<div class="admin-card"><h3>Nenhum pedido encontrado</h3></div>';
     document.getElementById('pedidosPendentes').textContent = pendentes;
     document.getElementById('totalVendas').textContent = `R$ ${total.toFixed(2)}`;
-  });
+  }).catch(()=>{});
 }
 
 function aprovarPagamento(id){
@@ -788,7 +790,7 @@ function carregarCupons(){
         </div>`;
     });
     if(lista.innerHTML === '') lista.innerHTML = '<div class="admin-card"><h3>Nenhum cupom criado</h3></div>';
-  });
+  }).catch(()=>{});
 }
 
 function salvarCupom(){
@@ -855,7 +857,7 @@ function carregarUsuarios(){
           </div>
         </div>`;
     });
-  });
+  }).catch(()=>{});
 }
 
 function carregarDadosAdmin(panel){
@@ -880,6 +882,8 @@ auth.onAuthStateChanged((user) => {
       carregarProdutos();
       carregarPedidos();
       carregarCategoriasSelect();
+      carregarCupons();
+      carregarUsuarios();
     } else {
       alert('Acesso negado. Apenas admin pode acessar.');
       auth.signOut();
