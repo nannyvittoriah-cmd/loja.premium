@@ -79,11 +79,16 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 .badge-status.cancelado{background:rgba(239,68,68,0.15);color:var(--red);border:1px solid var(--red)}
 .actions{display:flex;gap:6px}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.upload-area{width:100%;height:120px;background:var(--input);border:2px dashed var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;margin-bottom:10px;position:relative;overflow:hidden}
+.upload-area{width:100%;height:200px;background:var(--input);border:2px dashed var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;margin-bottom:10px;position:relative;overflow:hidden}
 .upload-area:hover{border-color:var(--purple)}
 .upload-area img{width:100%;height:100%;object-fit:cover;position:absolute}
-.upload-icon{font-size:24px;margin-bottom:6px;color:var(--text-dim);z-index:1}
-.upload-text{font-size:10px;color:var(--text-dim);z-index:1}
+.upload-icon{font-size:32px;margin-bottom:8px;color:var(--text-dim);z-index:1}
+.upload-text{font-size:11px;color:var(--text-dim);z-index:1}
+.upload-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.upload-box{aspect-ratio:1;background:var(--input);border:2px dashed var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden}
+.upload-box:hover{border-color:var(--purple)}
+.upload-box img{width:100%;height:100%;object-fit:cover;position:absolute}
+.upload-box .remove-btn{position:absolute;top:4px;right:4px;width:20px;height:20px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;z-index:2;cursor:pointer}
 .user-card{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;cursor:pointer}
 .user-card:active{border-color:var(--purple)}
 .user-avatar{width:40px;height:40px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800}
@@ -113,6 +118,12 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 .alert.error{background:rgba(239,68,68,0.15);border-color:var(--red);color:#fca5a5}
 .checkbox-row{display:flex;align-items:center;gap:8px;padding:8px;background:var(--input);border:1px solid var(--border);border-radius:10px;margin-bottom:8px}
 .checkbox-row input[type="checkbox"]{width:16px;height:16px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.9);backdrop-filter:blur(10px);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.active{display:flex}
+.modal-content{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;width:100%;max-width:440px;max-height:90vh;overflow-y:auto}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.modal-title{font-size:13px;font-weight:800}
+.close-btn{width:28px;height:28px;background:var(--input);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px}
 @media(max-width:768px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.menu-btn{display:flex}.stats{grid-template-columns:1fr}}
 </style>
 </head>
@@ -124,19 +135,19 @@ body{background:var(--bg);color:var(--text);font-size:11px}
     <div class="logo-sub">STORE</div>
   </div>
   <div class="menu-label">PAINEL ADMIN</div>
-  <div class="menu-item active" onclick="mostrarTela('dashboard')"><span class="menu-icon">💼</span>Dashboard</div>
-  <div class="menu-item" onclick="mostrarTela('produtos')"><span class="menu-icon">📦</span>Produtos</div>
-  <div class="menu-item" onclick="mostrarTela('categorias')"><span class="menu-icon">📁</span>Categorias</div>
-  <div class="menu-item" onclick="mostrarTela('subcategorias')"><span class="menu-icon">🗂️</span>Subcategorias</div>
-  <div class="menu-item" onclick="mostrarTela('pedidos')"><span class="menu-icon">🛒</span>Pedidos</div>
-  <div class="menu-item" onclick="mostrarTela('usuarios')"><span class="menu-icon">👥</span>Usuários</div>
-  <div class="menu-item" onclick="mostrarTela('cupons')"><span class="menu-icon">🎫</span>Cupons</div>
-  <div class="menu-item" onclick="mostrarTela('slider')"><span class="menu-icon">🖼️</span>Slider / Banners</div>
-  <div class="menu-item" onclick="mostrarTela('notificar')"><span class="menu-icon">🔔</span>Notificar Cliente</div>
-  <div class="menu-item" onclick="mostrarTela('config')"><span class="menu-icon">⚙️</span>Configurações</div>
-  <div class="menu-item" onclick="mostrarTela('relatorios')"><span class="menu-icon">📊</span>Relatorios</div>
-  <div class="menu-item" onclick="mostrarTela('suporte')"><span class="menu-icon">💬</span>Suporte</div>
-  <div class="menu-item" onclick="mostrarTela('logs')"><span class="menu-icon">📄</span>Logs do Sistema</div>
+  <div class="menu-item active" onclick="mostrarTela('dashboard',this)"><span class="menu-icon">💼</span>Dashboard</div>
+  <div class="menu-item" onclick="mostrarTela('produtos',this)"><span class="menu-icon">📦</span>Produtos</div>
+  <div class="menu-item" onclick="mostrarTela('categorias',this)"><span class="menu-icon">📁</span>Categorias</div>
+  <div class="menu-item" onclick="mostrarTela('subcategorias',this)"><span class="menu-icon">🗂️</span>Subcategorias</div>
+  <div class="menu-item" onclick="mostrarTela('pedidos',this)"><span class="menu-icon">🛒</span>Pedidos</div>
+  <div class="menu-item" onclick="mostrarTela('usuarios',this)"><span class="menu-icon">👥</span>Usuários</div>
+  <div class="menu-item" onclick="mostrarTela('cupons',this)"><span class="menu-icon">🎫</span>Cupons</div>
+  <div class="menu-item" onclick="mostrarTela('slider',this)"><span class="menu-icon">🖼️</span>Slider / Banners</div>
+  <div class="menu-item" onclick="mostrarTela('notificar',this)"><span class="menu-icon">🔔</span>Notificar Cliente</div>
+  <div class="menu-item" onclick="mostrarTela('config',this)"><span class="menu-icon">⚙️</span>Configurações</div>
+  <div class="menu-item" onclick="mostrarTela('relatorios',this)"><span class="menu-icon">📊</span>Relatorios</div>
+  <div class="menu-item" onclick="mostrarTela('suporte',this)"><span class="menu-icon">💬</span>Suporte</div>
+  <div class="menu-item" onclick="mostrarTela('logs',this)"><span class="menu-icon">📄</span>Logs do Sistema</div>
   <div class="menu-item" onclick="logout()"><span class="menu-icon">🚪</span>Sair</div>
 </div>
 
@@ -149,7 +160,6 @@ body{background:var(--bg);color:var(--text);font-size:11px}
     <button class="icon-btn" onclick="logout()">🚪</button>
   </div>
   
-  <!-- DASHBOARD -->
   <div class="screen active" id="screen-dashboard">
     <div class="stats">
       <div class="stat-card"><div class="stat-card-top"><div class="stat-icon">💰</div><div class="stat-info"><div class="stat-label">Vendas hoje</div><div class="stat-value" id="statVendas">R$ 0,00</div></div></div></div>
@@ -172,7 +182,6 @@ body{background:var(--bg);color:var(--text);font-size:11px}
     </div>
   </div>
 
-  <!-- PRODUTOS -->
   <div class="screen" id="screen-produtos">
     <div class="card">
       <div class="card-title">📦 PRODUTOS</div>
@@ -184,22 +193,20 @@ body{background:var(--bg);color:var(--text);font-size:11px}
     </div>
   </div>
 
-  <!-- PEDIDOS -->
   <div class="screen" id="screen-pedidos">
     <div class="card">
       <div class="card-title">🛒 PEDIDOS</div>
       <div class="input-box" style="margin-bottom:12px"><span>🔍</span><input type="text" id="searchPedido" placeholder="Buscar por ID do pedido..." oninput="buscarPedido()"></div>
       <div class="tabs">
-        <div class="tab active" onclick="filtrarPedidos('todos')">Todos</div>
-        <div class="tab" onclick="filtrarPedidos('pendente')">Pendentes</div>
-        <div class="tab" onclick="filtrarPedidos('concluido')">Concluídos</div>
-        <div class="tab" onclick="filtrarPedidos('cancelado')">Cancelados</div>
+        <div class="tab active" onclick="filtrarPedidos('todos',this)">Todos</div>
+        <div class="tab" onclick="filtrarPedidos('pendente',this)">Pendentes</div>
+        <div class="tab" onclick="filtrarPedidos('concluido',this)">Concluídos</div>
+        <div class="tab" onclick="filtrarPedidos('cancelado',this)">Cancelados</div>
       </div>
       <div id="listaPedidos"><div class="empty">Nenhum pedido encontrado</div></div>
     </div>
   </div>
 
-  <!-- CLIENTES -->
   <div class="screen" id="screen-usuarios">
     <div class="card">
       <div class="card-title">👥 CLIENTES</div>
@@ -208,7 +215,6 @@ body{background:var(--bg);color:var(--text);font-size:11px}
     </div>
   </div>
 
-  <!-- CUPONS -->
   <div class="screen" id="screen-cupons">
     <div class="card">
       <div class="card-title">🎫 CUPONS DE DESCONTO</div>
@@ -217,7 +223,6 @@ body{background:var(--bg);color:var(--text);font-size:11px}
     </div>
   </div>
 
-  <!-- CATEGORIAS -->
   <div class="screen" id="screen-categorias">
     <div class="card">
       <div class="card-title">📁 CATEGORIAS</div>
@@ -226,7 +231,6 @@ body{background:var(--bg);color:var(--text);font-size:11px}
     </div>
   </div>
 
-  <!-- SUBCATEGORIAS -->
   <div class="screen" id="screen-subcategorias">
     <div class="card">
       <div class="card-title">🗂️ SUBCATEGORIAS</div>
@@ -235,7 +239,6 @@ body{background:var(--bg);color:var(--text);font-size:11px}
     </div>
   </div>
 
-  <!-- SLIDER -->
   <div class="screen" id="screen-slider">
     <div class="card">
       <div class="card-title">🖼️ SLIDER / BANNERS</div>
@@ -245,20 +248,18 @@ body{background:var(--bg);color:var(--text);font-size:11px}
     </div>
   </div>
 
-  <!-- NOTIFICAR CLIENTE -->
   <div class="screen" id="screen-notificar">
     <div class="card">
       <div class="card-title">🔔 NOTIFICAR CLIENTE</div>
       <div class="alert success" id="alertNotif"></div>
       <div class="checkbox-row"><input type="checkbox" id="notifTodos" onchange="toggleNotificarTodos()"><label for="notifTodos">Notificar todos os clientes</label></div>
-      <div class="input-box" id="boxEmailNotif"><span>🔍</span><input type="email" id="notifEmail" placeholder="Pesquisar e-mail do cliente..."></div>
+      <div class="input-box" id="boxEmailNotif"><span>🔍</span><input type="email" id="notifEmail" placeholder="Pesquisar e-mail do cliente..." oninput="buscarEmailCliente(this.value)"><div id="sugestaoEmail" style="position:absolute;top:40px;left:0;right:0;background:var(--input);border:1px solid var(--border);border-radius:10px;max-height:150px;overflow-y:auto;display:none;z-index:10"></div></div>
       <div class="input-box"><input type="text" id="notifTitulo" placeholder="Título da notificação"></div>
       <div class="input-box"><textarea id="notifMsg" placeholder="Mensagem..."></textarea></div>
       <button class="btn" onclick="enviarNotificacao()">📤 Enviar Notificação</button>
     </div>
   </div>
 
-  <!-- CONFIG -->
   <div class="screen" id="screen-config">
     <div class="card">
       <div class="card-title">⚙️ CONFIGURAÇÕES</div>
@@ -298,19 +299,22 @@ body{background:var(--bg);color:var(--text);font-size:11px}
     </div>
   </div>
 
-  <!-- RELATORIOS -->
   <div class="screen" id="screen-relatorios"><div class="card"><div class="card-title">📊 RELATORIOS</div><div class="empty">Em desenvolvimento</div></div></div>
   <div class="screen" id="screen-suporte"><div class="card"><div class="card-title">💬 SUPORTE</div><div class="empty">Em desenvolvimento</div></div></div>
   <div class="screen" id="screen-logs"><div class="card"><div class="card-title">📄 LOGS DO SISTEMA</div><div class="empty">Em desenvolvimento</div></div></div>
 </div>
 
-<!-- MODAL PRODUTO -->
 <div class="modal" id="modalProduto">
   <div class="modal-content">
     <div class="modal-header"><div class="modal-title">Novo Produto</div><button class="close-btn" onclick="fecharModal('modalProduto')">✕</button></div>
-    <div class="upload-area" onclick="document.getElementById('uploadProdutoImg').click()" id="uploadAreaProduto">
-      <div class="upload-icon">+</div><div class="upload-text">Selecionar imagem</div>
-      <input type="file" id="uploadProdutoImg" style="display:none" accept="image/*" onchange="previewImagem(this,'uploadAreaProduto')">
+    <div class="card-title">Fotos do produto (máx 6)</div>
+    <div class="upload-grid" id="uploadGridProduto">
+      <div class="upload-box" onclick="document.getElementById('uploadProd1').click()"><div class="upload-icon">+</div><input type="file" id="uploadProd1" style="display:none" accept="image/*" onchange="addImagemProduto(this,0)"></div>
+      <div class="upload-box" onclick="document.getElementById('uploadProd2').click()"><div class="upload-icon">+</div><input type="file" id="uploadProd2" style="display:none" accept="image/*" onchange="addImagemProduto(this,1)"></div>
+      <div class="upload-box" onclick="document.getElementById('uploadProd3').click()"><div class="upload-icon">+</div><input type="file" id="uploadProd3" style="display:none" accept="image/*" onchange="addImagemProduto(this,2)"></div>
+      <div class="upload-box" onclick="document.getElementById('uploadProd4').click()"><div class="upload-icon">+</div><input type="file" id="uploadProd4" style="display:none" accept="image/*" onchange="addImagemProduto(this,3)"></div>
+      <div class="upload-box" onclick="document.getElementById('uploadProd5').click()"><div class="upload-icon">+</div><input type="file" id="uploadProd5" style="display:none" accept="image/*" onchange="addImagemProduto(this,4)"></div>
+      <div class="upload-box" onclick="document.getElementById('uploadProd6').click()"><div class="upload-icon">+</div><input type="file" id="uploadProd6" style="display:none" accept="image/*" onchange="addImagemProduto(this,5)"></div>
     </div>
     <div class="input-box"><input type="text" id="prodNome" placeholder="Nome do produto"></div>
     <div class="input-box"><input type="number" id="prodPreco" placeholder="Preço"></div>
@@ -323,20 +327,27 @@ body{background:var(--bg);color:var(--text);font-size:11px}
   </div>
 </div>
 
-<!-- MODAL CATEGORIA -->
 <div class="modal" id="modalCategoria">
   <div class="modal-content">
     <div class="modal-header"><div class="modal-title">Nova Categoria</div><button class="close-btn" onclick="fecharModal('modalCategoria')">✕</button></div>
     <div class="upload-area" onclick="document.getElementById('uploadCatImg').click()" id="uploadAreaCat">
-      <div class="upload-icon">+</div><div class="upload-text">Selecionar imagem</div>
+      <div class="upload-icon">+</div><div class="upload-text">Selecionar imagem da galeria</div>
       <input type="file" id="uploadCatImg" style="display:none" accept="image/*" onchange="previewImagem(this,'uploadAreaCat')">
     </div>
-    <div class="input-box"><input type="text" id="catNome" placeholder="Nome da categoria"></div>
+      <div class="input-box"><input type="text" id="catNome" placeholder="Nome da categoria"></div>
     <button class="btn" onclick="salvarCategoria()">SALVAR CATEGORIA</button>
   </div>
 </div>
 
-<!-- MODAL CUPOM -->
+<div class="modal" id="modalSubcategoria">
+  <div class="modal-content">
+    <div class="modal-header"><div class="modal-title">Nova Subcategoria</div><button class="close-btn" onclick="fecharModal('modalSubcategoria')">✕</button></div>
+    <div class="input-box"><select id="subcatCategoria"><option value="">Selecione a categoria</option></select></div>
+    <div class="input-box"><input type="text" id="subcatNome" placeholder="Nome da subcategoria"></div>
+    <button class="btn" onclick="salvarSubcategoria()">SALVAR SUBCATEGORIA</button>
+  </div>
+</div>
+
 <div class="modal" id="modalCupom">
   <div class="modal-content">
     <div class="modal-header"><div class="modal-title">Novo Cupom</div><button class="close-btn" onclick="fecharModal('modalCupom')">✕</button></div>
@@ -347,11 +358,11 @@ body{background:var(--bg);color:var(--text);font-size:11px}
       <div class="input-box"><input type="number" id="cupomValor" placeholder="Valor do desconto"></div>
     </div>
     <div class="grid-2">
-      <div class="input-box"><input type="number" id="cupomLimite" placeholder="Limite de uso"></div>
+      <div class="input-box"><input type="number" id="cupomLimite" placeholder="Limite de uso total"></div>
       <div class="input-box"><input type="number" id="cupomLimiteDiario" placeholder="Limite diário"></div>
     </div>
     <div class="input-box"><input type="number" id="cupomValidade" placeholder="Validade (dias)"></div>
-    <div class="input-box"><select id="cupomProdutos" multiple><option value="">Todos os produtos</option></select></div>
+    <div class="input-box"><select id="cupomProdutos" multiple style="min-height:80px"><option value="">Todos os produtos</option></select></div>
     <button class="btn" onclick="salvarCupom()">SALVAR CUPOM</button>
   </div>
 </div>
@@ -365,7 +376,7 @@ const firebaseConfig={apiKey:"AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",authDomai
 firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth();const db=firebase.database();const storage=firebase.storage();
 const ADMIN_EMAIL='vittoriahvahz@gmail.com';
-let imgProdutoTemp='',imgCatTemp='';
+let imagensProduto=[],imgCategoria='';
 
 auth.onAuthStateChanged(user=>{
   if(!user||user.email!==ADMIN_EMAIL){window.location.href='index.html';return}
@@ -375,11 +386,21 @@ auth.onAuthStateChanged(user=>{
   carregarCupons();
   carregarPedidos();
   carregarClientes();
+  carregarBanners();
 });
 
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open')}
 function logout(){auth.signOut().then(()=>window.location.href='index.html')}
-function mostrarTela(tela){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active'));document.getElementById('screen-'+tela).classList.add('active');event.target.closest('.menu-item').classList.add('active');const titulos={dashboard:'Dashboard',produtos:'Produtos',categorias:'Categorias',subcategorias:'Subcategorias',pedidos:'Pedidos',usuarios:'Clientes',cupons:'Cupons',slider:'Slider / Banners',notificar:'Notificar Cliente',config:'Configurações',relatorios:'Relatorios',suporte:'Suporte',logs:'Logs do Sistema'};document.getElementById('headerTitle').textContent=titulos[tela]||'Dashboard';if(window.innerWidth<=768)toggleSidebar();}
+
+function mostrarTela(tela,el){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active'));
+  document.getElementById('screen-'+tela).classList.add('active');
+  if(el)el.classList.add('active');
+  const titulos={dashboard:'Dashboard',produtos:'Produtos',categorias:'Categorias',subcategorias:'Subcategorias',pedidos:'Pedidos',usuarios:'Clientes',cupons:'Cupons',slider:'Slider / Banners',notificar:'Notificar Cliente',config:'Configurações',relatorios:'Relatorios',suporte:'Suporte',logs:'Logs do Sistema'};
+  document.getElementById('headerTitle').textContent=titulos||'Dashboard';
+  if(window.innerWidth<=768)toggleSidebar();
+}
 
 function mudarTabConfig(tab,e){
   document.querySelectorAll('.config-tab').forEach(t=>t.classList.remove('active'));
@@ -409,7 +430,7 @@ function carregarProdutos(){
   db.ref('produtos').once('value',snap=>{
     const produtos=snap.val()||{};let html='';
     Object.entries(produtos).forEach(([id,p])=>{
-      const img=p.imagem||'https://via.placeholder.com/40';
+      const img=p.imagens&&p.imagens.length?p.imagens[0]:'https://via.placeholder.com/40';
       html+=`<div class="item-row"><img src="${img}" class="img-thumb"><div class="item-info"><div class="item-title">${p.nome}</div><div class="item-sub">${p.categoria||'Sem categoria'} • R$ ${(p.preco||0).toFixed(2)} • Estoque: ${p.estoque||0}</div></div><div class="actions"><button class="btn-sm btn-red" onclick="deletarProduto('${id}')">🗑️</button></div></div>`;
     });
     document.getElementById('listaProdutos').innerHTML=html||'<div class="empty">Nenhum produto cadastrado</div>';
@@ -431,21 +452,31 @@ function buscarProdutos(q){
 }
 
 function abrirModalProduto(){
-  document.getElementById('modalProduto').classList.add('active');
+  imagensProduto=[];
+  document.querySelectorAll('#uploadGridProduto.upload-box').forEach((box,i)=>{
+    box.innerHTML=`<div class="upload-icon">+</div><input type="file" id="uploadProd${i+1}" style="display:none" accept="image/*" onchange="addImagemProduto(this,${i})">`;
+    box.onclick=()=>document.getElementById('uploadProd'+(i+1)).click();
+  });
   carregarCategoriasSelect();
+  document.getElementById('modalProduto').classList.add('active');
 }
 
-function abrirModalCategoria(){document.getElementById('modalCategoria').classList.add('active')}
-function abrirModalCupom(){document.getElementById('modalCupom').classList.add('active')}
-function fecharModal(id){document.getElementById(id).classList.remove('active');imgProdutoTemp='';imgCatTemp=''}
-
-function previewImagem(input,id){
+function addImagemProduto(input,idx){
   const file=input.files[0];if(!file)return;
   const reader=new FileReader();
-  reader.onload=e=>{document.getElementById(id).innerHTML=`<img src="${e.target.result}">`;};
+  reader.onload=e=>{
+    imagensProduto[idx]=file;
+    input.parentElement.innerHTML=`<img src="${e.target.result}"><div class="remove-btn" onclick="removerImagemProduto(${idx},event)">✕</div>`;
+  };
   reader.readAsDataURL(file);
-  if(id==='uploadAreaProduto')imgProdutoTemp=file;
-  if(id==='uploadAreaCat')imgCatTemp=file;
+}
+
+function removerImagemProduto(idx,e){
+  e.stopPropagation();
+  imagensProduto[idx]=null;
+  const box=e.target.parentElement;
+  box.innerHTML=`<div class="upload-icon">+</div><input type="file" id="uploadProd${idx+1}" style="display:none" accept="image/*" onchange="addImagemProduto(this,${idx})">`;
+  box.onclick=()=>document.getElementById('uploadProd'+(idx+1)).click();
 }
 
 async function salvarProduto(){
@@ -456,14 +487,16 @@ async function salvarProduto(){
   const desc=document.getElementById('prodDesc').value.trim();
   if(!nome||!preco){alert('Preencha nome e preço');return}
   
-  let imgUrl='';
-  if(imgProdutoTemp){
-    const ref=storage.ref('produtos/'+Date.now()+'.jpg');
-    await ref.put(imgProdutoTemp);
-    imgUrl=await ref.getDownloadURL();
+  const urls=[];
+  for(let i=0;i<imagensProduto.length;i++){
+    if(imagensProduto[i]){
+      const ref=storage.ref('produtos/'+Date.now()+'_'+i+'.jpg');
+      await ref.put(imagensProduto[i]);
+      urls.push(await ref.getDownloadURL());
+    }
   }
   
-  await db.ref('produtos').push({nome,preco,categoria,estoque,descricao:desc,imagem:imgUrl,criadoEm:Date.now()});
+  await db.ref('produtos').push({nome,preco,categoria,estoque,descricao:desc,imagens:urls,criadoEm:Date.now()});
   fecharModal('modalProduto');
   carregarProdutos();
   alert('Produto salvo!');
@@ -492,14 +525,30 @@ function carregarCategoriasSelect(){
   });
 }
 
+function abrirModalCategoria(){document.getElementById('modalCategoria').classList.add('active')}
+function abrirModalSubcategoria(){
+  carregarCategoriasSelectSub();
+  document.getElementById('modalSubcategoria').classList.add('active');
+}
+function abrirModalCupom(){document.getElementById('modalCupom').classList.add('active')}
+function fecharModal(id){document.getElementById(id).classList.remove('active');imagensProduto=[];imgCategoria=''}
+
+function previewImagem(input,id){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{document.getElementById(id).innerHTML=`<img src="${e.target.result}">`;};
+  reader.readAsDataURL(file);
+  if(id==='uploadAreaCat')imgCategoria=file;
+}
+
 async function salvarCategoria(){
   const nome=document.getElementById('catNome').value.trim();
   if(!nome){alert('Preencha o nome');return}
   
   let imgUrl='';
-  if(imgCatTemp){
+  if(imgCategoria){
     const ref=storage.ref('categorias/'+Date.now()+'.jpg');
-    await ref.put(imgCatTemp);
+    await ref.put(imgCategoria);
     imgUrl=await ref.getDownloadURL();
   }
   
@@ -527,9 +576,9 @@ function buscarPedido(){
   rows.forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'flex':'none'});
 }
 
-function filtrarPedidos(status){
+function filtrarPedidos(status,el){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  event.target.classList.add('active');
+  el.classList.add('active');
   const rows=document.querySelectorAll('#listaPedidos.item-row');
   rows.forEach(r=>{
     if(status==='todos'){r.style.display='flex';return}
@@ -609,6 +658,23 @@ function deletarBanner(id){
   if(confirm('Deletar banner?')){db.ref('banners/'+id).remove();carregarBanners()}
 }
 
+async function buscarEmailCliente(q){
+  if(q.length<3){document.getElementById('sugestaoEmail').style.display='none';return}
+  const snap=await db.ref('usuarios').orderByChild('email').startAt(q).endAt(q+'\uf8ff').limitToFirst(5).once('value');
+  const usuarios=snap.val()||{};let html='';
+  Object.entries(usuarios).forEach(([uid,u])=>{
+    html+=`<div style="padding:8px;cursor:pointer;border-bottom:1px solid var(--border)" onclick="selecionarEmail('${u.email}')">${u.email}</div>`;
+  });
+  const div=document.getElementById('sugestaoEmail');
+  div.innerHTML=html;
+  div.style.display=html?'block':'none';
+}
+
+function selecionarEmail(email){
+  document.getElementById('notifEmail').value=email;
+  document.getElementById('sugestaoEmail').style.display='none';
+}
+
 async function enviarNotificacao(){
   const todos=document.getElementById('notifTodos').checked;
   const email=document.getElementById('notifEmail').value.trim();
@@ -640,6 +706,28 @@ async function enviarNotificacao(){
 }
 
 function salvarConfig(){alert('Configurações salvas com sucesso!')}
+
+function carregarCategoriasSelectSub(){
+  db.ref('categorias').once('value',snap=>{
+    const cats=snap.val()||{};let html='<option value="">Selecione a categoria</option>';
+    Object.entries(cats).forEach(([id,c])=>{html+=`<option value="${id}">${c.nome}</option>`});
+    document.getElementById('subcatCategoria').innerHTML=html;
+  });
+}
+
+async function salvarSubcategoria(){
+  const catId=document.getElementById('subcatCategoria').value;
+  const nome=document.getElementById('subcatNome').value.trim();
+  if(!catId||!nome){alert('Preencha todos os campos');return}
+  await db.ref('categorias/'+catId+'/subcategorias').push({nome,criadoEm:Date.now()});
+  fecharModal('modalSubcategoria');
+  alert('Subcategoria salva!');
+}
+
+function abrirModalSubcategoria(){
+  carregarCategoriasSelectSub();
+  document.getElementById('modalSubcategoria').classList.add('active');
+}
 </script>
 </body>
 </html>
