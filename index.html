@@ -3,1257 +3,443 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Prime Store VZ - Admin</title>
+<title>Prime Store VZ</title>
 <style>
-:root{--bg:#000;--card:#0d0d0d;--input:#141414;--border:#2a2a2a;--purple:#8b5cf6;--text:#fff;--text-dim:#7a7a8a;--green:#10b981;--yellow:#fbbf24;--red:#ef4444;--blue:#3b82f6}
+:root{--bg:#0a0a10;--card:#15151f;--input:#1c1c28;--border:#2d2d3f;--purple:#8b5cf6;--purple-dark:#7c3aed;--text:#fff;--text-dim:#8b8ba1;--green:#10b981;--red:#ef4444}
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);color:var(--text);min-height:100vh}
-.hide{display:none!important}
-#loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:99999;flex-direction:column;gap:16px}
-#loading.hide{display:none}
-.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--purple);border-radius:50%;animation:spin 0.8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.screen{display:none;width:100%;min-height:100vh}
-.screen.active{display:flex;align-items:center;justify-content:center;padding:16px;flex-direction:column}
-.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px 20px;width:100%;max-width:340px}
-h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var(--purple);letter-spacing:2px;text-transform:uppercase}
-.logo{font-size:22px;font-weight:800;text-align:center;margin-bottom:6px;background:linear-gradient(135deg,#fff 0%,#8b5cf6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.subtitle{font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:24px}
+body{background:var(--bg);color:var(--text);min-height:100vh;position:relative;overflow-x:hidden}
+body::before{content:'';position:fixed;top:-100px;left:50%;transform:translateX(-50%);width:500px;height:500px;background:radial-gradient(circle,rgba(139,92,246,0.15) 0%,transparent 70%);filter:blur(100px);pointer-events:none}
+.screen{display:none;min-height:100vh;width:100%;position:relative}
+.screen.active{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 16px}
+.logo-area{text-align:center;margin-bottom:24px;position:relative;z-index:1}
+.logo-p{width:70px;height:70px;margin:0 auto 14px;position:relative}
+.logo-p svg{width:100%;height:100%;filter:drop-shadow(0 8px 24px rgba(139,92,246,0.5))}
+.logo-text{font-size:26px;font-weight:800;margin-bottom:4px}
+.logo-text .prime{color:#fff}
+.logo-text .store{color:var(--purple)}
+.logo-sub{font-size:12px;color:var(--text-dim)}
+.tabs{display:flex;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:4px;width:100%;max-width:380px;margin-bottom:20px}
+.tab{flex:1;height:40px;background:transparent;border:none;border-radius:10px;color:var(--text-dim);font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all 0.2s}
+.tab.active{background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);color:#fff;box-shadow:0 4px 12px rgba(139,92,246,0.3)}
+.card{width:100%;max-width:380px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;position:relative;z-index:1}
+.card-title{font-size:17px;font-weight:800;text-align:center;margin-bottom:6px}
+.card-subtitle{font-size:12px;color:var(--text-dim);text-align:center;margin-bottom:20px}
 .input-group{margin-bottom:14px}
-.input-group label{display:block;font-size:11px;color:var(--text-dim);margin-bottom:6px;font-weight:500}
-.input-box{width:100%;min-height:46px;background:var(--input);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;padding:0 14px}
-.input-box:focus-within{border-color:var(--purple)}
-.input-box input,.input-box textarea,.input-box select{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:13px}
-.input-box textarea{padding:10px 0;min-height:70px;resize:none}
-.toggle{cursor:pointer;color:#6b7280;font-size:18px}
-.btn{width:100%;height:46px;background:transparent;border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:12px;font-weight:700;cursor:pointer;letter-spacing:0.5px;transition:all 0.15s;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:6px}
-.btn:active{transform:scale(0.96);border-color:var(--purple);color:var(--purple);background:rgba(139,92,246,0.08)}
+.input-label{font-size:11px;color:var(--text-dim);margin-bottom:6px;font-weight:500}
+.input-box{width:100%;min-height:48px;background:var(--input);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;padding:0 14px;gap:10px;transition:all 0.2s}
+.input-box:focus-within{border-color:var(--purple);box-shadow:0 0 0 3px rgba(139,92,246,0.1)}
+.input-icon{font-size:16px;color:var(--text-dim);flex-shrink:0}
+.input-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:13px}
+.input-box input::placeholder{color:var(--text-dim)}
+.toggle{cursor:pointer;color:var(--text-dim);font-size:16px}
+.checkbox-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.checkbox-label{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-dim);cursor:pointer}
+.checkbox-label input{width:16px;height:16px;accent-color:var(--purple);cursor:pointer}
+.link-small{color:var(--purple);font-size:11px;font-weight:600;cursor:pointer;text-decoration:none}
+.btn{width:100%;height:48px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border:none;border-radius:12px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(139,92,246,0.3);transition:all 0.2s}
+.btn:active{transform:scale(0.98)}
 .btn:disabled{opacity:0.5;cursor:not-allowed}
-.btn-primary{background:var(--purple);color:#fff;border:none}
-.btn-primary:active{background:#7c3aed;transform:scale(0.96)}
-.btn-sm{height:36px;font-size:11px;width:auto;padding:0 12px}
-.btn-red{border-color:var(--red);color:var(--red)}
-.btn-red:active{background:rgba(239,68,68,0.1)}
-.btn-green{border-color:var(--green);color:var(--green)}
-.btn-green:active{background:rgba(16,185,129,0.1)}
-.btn-blue{border-color:var(--blue);color:var(--blue)}
-.btn-blue:active{background:rgba(59,130,246,0.1)}
-.alert{padding:12px 14px;border-radius:10px;font-size:11px;margin-bottom:16px;display:none;text-align:center;font-weight:600;border:1px solid}
-.alert.error{background:rgba(239,68,68,0.15);border-color:#ef4444;color:#fca5a5}
-.alert.success{background:rgba(16,185,129,0.15);border-color:#10b981;color:#6ee7b7}
-.admin{display:none;min-height:100vh}
-.admin.active{display:block}
-.admin-header{position:fixed;top:0;left:0;right:0;height:52px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 10px;z-index:50}
-.menu-btn{width:34px;height:34px;background:transparent;border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:17px}
-.menu-btn:active{background:var(--input);border-color:var(--purple)}
-.admin-title{font-weight:900;font-size:15px}
-.badge{width:34px;height:34px;background:transparent;border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
-.sidebar{position:fixed;top:52px;left:-260px;width:260px;height:calc(100vh - 52px);background:var(--bg);border-right:1px solid var(--border);transition:0.3s;z-index:40;overflow-y:auto}
-.sidebar.open{left:0}
-.side-header{padding:14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.logo-icon{width:34px;height:34px;background:transparent;border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center}
-.side-item{padding:13px 14px;cursor:pointer;border-left:3px solid transparent;font-size:12px;font-weight:600;display:flex;align-items:center;gap:9px}
-.side-item:active{background:var(--input)}
-.side-item.active{border-left-color:var(--purple);color:var(--purple);background:rgba(139,92,246,0.05)}
-.admin-content{padding:62px 10px 20px}
-.page{display:none}
-.page.active{display:block}
-.stats{display:grid;gap:10px;grid-template-columns:repeat(2,1fr);margin-bottom:14px}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px}
-.stat-label{font-size:10px;color:var(--text-dim);margin-bottom:4px;display:flex;align-items:center;gap:5px}
-.stat-value{font-size:20px;font-weight:900}
-.card-admin{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px}
-.card-title{font-size:12px;font-weight:800;color:var(--purple);margin-bottom:10px}
-.item-row{background:var(--input);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.item-row.clickable{cursor:pointer}
-.item-row.clickable:active{background:rgba(139,92,246,0.05);border-color:var(--purple)}
-.item-info{flex:1;min-width:0}
-.item-title{font-weight:700;font-size:12px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.item-sub{font-size:10px;color:var(--text-dim)}
-.actions{display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
-.modal.active{display:flex}
-.modal-box{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;width:100%;max-width:420px;max-height:90vh;overflow-y:auto}
-.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;position:relative}
-.modal-title{font-size:15px;font-weight:800}
-.close-btn{width:30px;height:30px;background:transparent;border:1px solid var(--border);border-radius:7px;color:#fff;cursor:pointer;font-size:17px}
-.close-btn:active{background:var(--input);border-color:var(--red);color:var(--red)}
-.empty{text-align:center;padding:36px 20px;color:var(--text-dim);font-size:12px}
-.img-preview{width:100%;height:120px;background:var(--input);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;position:relative}
-.img-preview:active{border-color:var(--purple)}
-.img-preview img{width:100%;height:100%;object-fit:cover}
-.img-preview span{font-size:11px;color:var(--text-dim)}
-.img-list{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
-.img-list-item{height:80px;background:var(--input);border:1px solid var(--border);border-radius:8px;position:relative;overflow:hidden}
-.img-list-item img{width:100%;height:100%;object-fit:cover}
-.img-list-item .del{position:absolute;top:4px;right:4px;width:20px;height:20px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
-.badge-status{padding:3px 7px;border-radius:5px;font-size:9px;font-weight:700;text-transform:uppercase;border:1px solid}
-.badge-ativo{background:rgba(16,185,129,0.1);color:var(--green);border-color:var(--green)}
-.badge-inativo{background:rgba(239,68,68,0.1);color:var(--red);border-color:var(--red)}
-.badge-expirado{background:rgba(107,114,128,0.1);color:#6b7280;border-color:#6b7280}
-.badge-pendente{background:rgba(251,191,36,0.1);color:var(--yellow);border-color:var(--yellow)}
-.badge-concluido{background:rgba(16,185,129,0.1);color:var(--green);border-color:var(--green)}
-.badge-cancelado{background:rgba(239,68,68,0.1);color:var(--red);border-color:var(--red)}
-.search-box{margin-bottom:14px}
-.filters{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
-.filter-btn{padding:7px 12px;background:transparent;border:1px solid var(--border);border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;color:var(--text)}
-.filter-btn:active{transform:scale(0.95)}
-.filter-btn.active{border-color:var(--purple);color:var(--purple);background:rgba(139,92,246,0.08)}
-.img-thumb{width:50px;height:50px;border-radius:8px;object-fit:cover;background:var(--input);flex-shrink:0;border:1px solid var(--border)}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.checkbox{display:flex;align-items:center;gap:7px;color:var(--text-dim);cursor:pointer;font-size:11px}
-.checkbox input{width:16px;height:16px;accent-color:var(--purple);cursor:pointer}
-.detail-row{padding:10px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-.detail-row:last-child{border-bottom:none}
-.detail-label{font-size:11px;color:var(--text-dim)}
-.detail-value{font-size:12px;font-weight:700}
-.avatar-circle{width:54px;height:54px;background:var(--purple);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;margin:0 auto 10px}
-.tabs{display:flex;gap:6px;border-bottom:1px solid var(--border);margin-bottom:14px}
-.tab{padding:9px 14px;font-size:11px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;color:var(--text-dim)}
-.tab.active{color:var(--purple);border-bottom-color:var(--purple)}
-#debug{position:fixed;bottom:10px;left:10px;right:10px;background:#ef4444;color:#fff;padding:10px;border-radius:8px;font-size:11px;z-index:9999;display:none}
+.alert{padding:10px 14px;border-radius:10px;font-size:11px;margin-bottom:14px;display:none;font-weight:600;border:1px solid;text-align:center}
+.alert.error{background:rgba(239,68,68,0.15);border-color:var(--red);color:#fca5a5}
+.alert.success{background:rgba(16,185,129,0.15);border-color:var(--green);color:#6ee7b7}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:24px;padding:16px;background:var(--card);border:1px solid var(--border);border-radius:16px;width:100%;max-width:380px}
+.feature{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.feature-icon{width:32px;height:32px;background:var(--input);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--purple)}
+.feature-title{font-size:10px;font-weight:700;color:var(--text)}
+.feature-desc{font-size:9px;color:var(--text-dim);line-height:1.3}
+.footer{font-size:9px;color:var(--text-dim);text-align:center;margin-top:20px;padding-bottom:10px}
+.requirements{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:14px}
+.req-title{font-size:10px;color:var(--text-dim);margin-bottom:8px}
+.req-item{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--text-dim);margin-bottom:5px}
+.req-item:last-child{margin-bottom:0}
+.req-item.valid{color:var(--green)}
+.req-check{width:14px;height:14px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px}
+.req-item.valid .req-check{background:var(--green);border-color:var(--green);color:#fff}
+.info-box{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:14px}
+.info-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.info-row:last-child{margin-bottom:0}
+.info-icon{width:32px;height:32px;background:var(--card);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.info-text{flex:1}
+.info-title{font-size:11px;font-weight:700;margin-bottom:2px}
+.info-desc{font-size:10px;color:var(--text-dim);line-height:1.4}
+.success-circle{width:70px;height:70px;margin:0 auto 16px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 8px 24px rgba(139,92,246,0.4)}
 </style>
 </head>
 <body>
 
-<div id="loading">
-  <div class="spinner"></div>
-  <div style="font-size:12px;color:var(--text-dim)">Carregando...</div>
-</div>
+<!-- TELA LOGIN -->
+<div class="screen active" id="screen-login">
+  <div class="logo-area">
+    <div class="logo-p">
+      <svg viewBox="0 0 100 100" fill="none">
+        <defs>
+          <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <path d="M50 10L20 40L20 70L50 90L80 70L80 40L50 10Z" fill="url(#logoGradient)"/>
+        <path d="M50 25L35 40L35 60L50 75L65 60L65 40L50 25Z" fill="#0a0a10"/>
+        <path d="M50 35L42 43L42 57L50 65L58 57L58 43L50 35Z" fill="url(#logoGradient)"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="prime">Prime</span> <span class="store">store Vz</span></div>
+    <div class="logo-sub">Sua loja, sua experiência.</div>
+  </div>
+  
+  <div class="tabs">
+    <button class="tab active" onclick="mudarTab('login')">→] Login</button>
+    <button class="tab" onclick="mudarTab('cadastro')">👤 Cadastrar</button>
+    <button class="tab" onclick="mudarTab('esqueci')">🔒 Esqueceu senha</button>
+  </div>
 
-<div id="debug"></div>
-
-<div class="screen" id="screen-login">
   <div class="card">
-    <h2>LOGIN - E-MAIL</h2>
-    <div class="logo">Prime Store VZ</div>
-    <div class="subtitle">Painel Administrativo 🔐</div>
+    <div class="card-title">Bem-vindo de volta!</div>
+    <div class="card-subtitle">Faça login para continuar</div>
     <div class="alert error" id="loginError"></div>
-    <div class="alert success" id="loginSuccess"></div>
     <div class="input-group">
-      <label>📧 E-mail</label>
-      <div class="input-box"><input type="email" id="loginEmail" placeholder="vittoriahvahz@gmail.com" value="vittoriahvahz@gmail.com"></div>
-    </div>
-    <div class="input-group">
-      <label>🔑 Senha</label>
+      <div class="input-label">E-mail</div>
       <div class="input-box">
-        <input type="password" id="loginPassword" placeholder="••••••••" value="Lorrannyh.101225">
-        <span class="toggle" onclick="togglePass('loginPassword',this)">👁️</span>
+        <span class="input-icon">📧</span>
+        <input type="email" id="loginEmail" placeholder="seuemail@email.com">
       </div>
     </div>
-    <button class="btn btn-primary" id="btnLogin" onclick="fazerLogin()">🚀 ENTRAR</button>
+    <div class="input-group">
+      <div class="input-label">Senha</div>
+      <div class="input-box">
+        <span class="input-icon">🔒</span>
+        <input type="password" id="loginSenha" placeholder="Sua senha">
+        <span class="toggle" onclick="toggleSenha('loginSenha',this)">👁️</span>
+      </div>
+    </div>
+    <div class="checkbox-row">
+      <label class="checkbox-label">
+        <input type="checkbox" id="lembrar">
+        <span>Lembrar de mim</span>
+      </label>
+      <a class="link-small" onclick="mudarTab('esqueci')">Esqueceu sua senha?</a>
+    </div>
+    <button class="btn" id="btnLogin" onclick="fazerLogin()">Entrar</button>
   </div>
+
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">🛡️</div>
+      <div class="feature-title">Compra segura</div>
+      <div class="feature-desc">Seus dados protegidos</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🎧</div>
+      <div class="feature-title">Suporte dedicado</div>
+      <div class="feature-desc">Estamos aqui para ajudar</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🚚</div>
+      <div class="feature-title">Entrega rápida</div>
+      <div class="feature-desc">Produtos digitais na hora</div>
+    </div>
+  </div>
+  
+  <div class="footer">© 2024 Prime store Vz. Todos os direitos reservados.</div>
 </div>
 
-<div class="admin" id="adminPanel">
-  <div class="admin-header">
-    <button class="menu-btn" onclick="toggleMenu()">☰</button>
-    <div class="admin-title">Prime Store VZ</div>
-    <div class="badge" id="userBadge">A</div>
+<!-- TELA CADASTRO -->
+<div class="screen" id="screen-cadastro">
+  <div class="logo-area">
+    <div class="logo-p">
+      <svg viewBox="0 0 100 100" fill="none">
+        <defs>
+          <linearGradient id="logoGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <path d="M50 10L20 40L20 70L50 90L80 70L80 40L50 10Z" fill="url(#logoGradient2)"/>
+        <path d="M50 25L35 40L35 60L50 75L65 60L65 40L50 25Z" fill="#0a0a10"/>
+        <path d="M50 35L42 43L42 57L50 65L58 57L58 43L50 35Z" fill="url(#logoGradient2)"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="prime">Prime</span> <span class="store">store Vz</span></div>
+    <div class="logo-sub">Crie sua conta e comece sua jornada.</div>
   </div>
-  <div class="sidebar" id="sidebar">
-    <div class="side-header">
-      <div class="logo-icon">⭐</div>
-      <div><div style="font-weight:800;font-size:13px">PRIME</div><div style="font-size:9px;color:var(--text-dim)">Painel Admin</div></div>
-    </div>
-    <div class="side-item active" onclick="trocarPage('dash',this)">📊 Dashboard</div>
-    <div class="side-item" onclick="trocarPage('produtos',this)">📦 Produtos</div>
-    <div class="side-item" onclick="trocarPage('pedidos',this)">🛒 Pedidos</div>
-    <div class="side-item" onclick="trocarPage('clientes',this)">👥 Clientes</div>
-    <div class="side-item" onclick="trocarPage('categorias',this)">📁 Categorias</div>
-    <div class="side-item" onclick="trocarPage('subcategorias',this)">📂 Subcategorias</div>
-    <div class="side-item" onclick="trocarPage('cupons',this)">🎟️ Cupons</div>
-    <div class="side-item" onclick="trocarPage('config',this)">⚙️ Config</div>
-    <div class="side-item btn-red" onclick="zerarBanco()">🗑️ ZERAR BANCO</div>
-    <div class="side-item" onclick="logout()">🚪 Sair</div>
+  
+  <div class="tabs">
+    <button class="tab" onclick="mudarTab('login')">→] Login</button>
+    <button class="tab active" onclick="mudarTab('cadastro')">👤 Cadastrar</button>
+    <button class="tab" onclick="mudarTab('esqueci')">🔒 Esqueceu senha</button>
   </div>
-  <div class="admin-content">
-    <div id="dash" class="page active">
-      <h3 style="margin-bottom:14px">📊 Dashboard</h3>
-      <div class="stats">
-        <div class="stat-card"><div class="stat-label">💰 Vendas Hoje</div><div class="stat-value" style="color:var(--purple)" id="vendasHoje">R$ 0</div></div>
-        <div class="stat-card"><div class="stat-label">🔒 Pedidos Hoje</div><div class="stat-value" style="color:var(--blue)" id="pedidosHoje">0</div></div>
-        <div class="stat-card"><div class="stat-label">👥 Clientes</div><div class="stat-value" style="color:var(--yellow)" id="totalClientes">0</div></div>
-        <div class="stat-card"><div class="stat-label">📦 Produtos</div><div class="stat-value" style="color:var(--green)" id="totalProdutos">0</div></div>
+
+  <div class="card">
+    <div class="card-title">Criar conta</div>
+    <div class="card-subtitle">Preencha os dados para criar sua conta.</div>
+    <div class="alert error" id="cadastroError"></div>
+    <div class="alert success" id="cadastroSuccess"></div>
+    <div class="input-group">
+      <div class="input-label">Nome completo</div>
+      <div class="input-box">
+        <span class="input-icon">👤</span>
+        <input type="text" id="cadNome" placeholder="Seu nome completo">
       </div>
     </div>
-    <div id="produtos" class="page">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-        <h3>📦 Produtos</h3>
-        <button class="btn btn-sm btn-primary" onclick="abrirModalProduto()">➕ Adicionar</button>
+    <div class="input-group">
+      <div class="input-label">E-mail</div>
+      <div class="input-box">
+        <span class="input-icon">📧</span>
+        <input type="email" id="cadEmail" placeholder="seuemail@email.com">
       </div>
-      <div class="search-box">
-        <div class="input-box"><input type="text" id="searchProduto" placeholder="🔍 Buscar produto..." onkeyup="filtrarProdutos()"></div>
-      </div>
-      <div id="listaProdutos"><div class="empty">Nenhum produto</div></div>
     </div>
-    <div id="pedidos" class="page">
-      <h3 style="margin-bottom:14px">🛒 Pedidos</h3>
-      <div class="filters">
-        <button class="filter-btn active" onclick="filtrarStatusPedido('todos',this)">Todos</button>
-        <button class="filter-btn" onclick="filtrarStatusPedido('pendente',this)">Pendentes</button>
-        <button class="filter-btn" onclick="filtrarStatusPedido('concluido',this)">Concluídos</button>
-        <button class="filter-btn" onclick="filtrarStatusPedido('cancelado',this)">Cancelados</button>
+    <div class="input-group">
+      <div class="input-label">Senha</div>
+      <div class="input-box">
+        <span class="input-icon">🔒</span>
+        <input type="password" id="cadSenha" placeholder="Mínimo 8 caracteres" oninput="validarSenha()">
+        <span class="toggle" onclick="toggleSenha('cadSenha',this)">👁️</span>
       </div>
-      <div id="listaPedidos"><div class="empty">Nenhum pedido</div></div>
     </div>
-    <div id="clientes" class="page">
-      <h3 style="margin-bottom:14px">👥 Clientes</h3>
-      <div class="search-box">
-        <div class="input-box"><input type="text" id="searchCliente" placeholder="🔍 Buscar cliente..." onkeyup="filtrarClientes()"></div>
+    <div class="input-group">
+      <div class="input-label">Confirmar senha</div>
+      <div class="input-box">
+        <span class="input-icon">🔒</span>
+        <input type="password" id="cadConfirmaSenha" placeholder="Confirme sua senha">
+        <span class="toggle" onclick="toggleSenha('cadConfirmaSenha',this)">👁️</span>
       </div>
-      <div id="listaClientes"><div class="empty">Nenhum cliente</div></div>
     </div>
-    <div id="categorias" class="page">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-        <h3>📁 Categorias</h3>
-        <button class="btn btn-sm btn-primary" onclick="abrirModalCategoria()">➕ Adicionar</button>
-      </div>
-      <div id="listaCategorias"><div class="empty">Nenhuma categoria</div></div>
+    <div class="requirements">
+      <div class="req-title">A senha deve conter:</div>
+      <div class="req-item" id="req8"><div class="req-check">✓</div>Mínimo de 8 caracteres</div>
+      <div class="req-item" id="reqMaiuscula"><div class="req-check">✓</div>Uma letra maiúscula</div>
+      <div class="req-item" id="reqNumero"><div class="req-check">✓</div>Um número</div>
+      <div class="req-item" id="reqEspecial"><div class="req-check">✓</div>Um caractere especial</div>
     </div>
-    <div id="subcategorias" class="page">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-        <h3>📂 Subcategorias</h3>
-        <button class="btn btn-sm btn-primary" onclick="abrirModalSubcategoria()">➕ Adicionar</button>
-      </div>
-      <div id="listaSubcategorias"><div class="empty">Nenhuma subcategoria</div></div>
+    <label class="checkbox-label" style="margin-bottom:20px">
+      <input type="checkbox" id="aceiteTermos">
+      <span style="font-size:11px">Li e aceito os <a href="#" style="color:var(--purple)">Termos de Uso</a> e a <a href="#" style="color:var(--purple)">Política de Privacidade</a></span>
+    </label>
+    <button class="btn" id="btnCadastrar" onclick="fazerCadastro()">👤 Cadastrar</button>
+  </div>
+  
+  <div class="footer">© 2024 Prime store Vz. Todos os direitos reservados.</div>
+</div>
+
+<!-- TELA ESQUECEU SENHA -->
+<div class="screen" id="screen-esqueci">
+  <div class="logo-area">
+    <div class="logo-p">
+      <svg viewBox="0 0 100 100" fill="none">
+        <defs>
+          <linearGradient id="logoGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <path d="M50 10L20 40L20 70L50 90L80 70L80 40L50 10Z" fill="url(#logoGradient3)"/>
+        <path d="M50 25L35 40L35 60L50 75L65 60L65 40L50 25Z" fill="#0a0a10"/>
+        <path d="M50 35L42 43L42 57L50 65L58 57L58 43L50 35Z" fill="url(#logoGradient3)"/>
+      </svg>
     </div>
-    <div id="cupons" class="page">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-        <h3>🎟️ Cupons de Desconto</h3>
-        <button class="btn btn-sm btn-primary" onclick="abrirModalCupom()">➕ Adicionar</button>
+    <div class="logo-text"><span class="prime">Prime</span> <span class="store">store Vz</span></div>
+    <div class="logo-sub">Recupere o acesso à sua conta.</div>
+  </div>
+  
+  <div class="tabs">
+    <button class="tab" onclick="mudarTab('login')">→] Login</button>
+    <button class="tab" onclick="mudarTab('cadastro')">👤 Cadastrar</button>
+    <button class="tab active" onclick="mudarTab('esqueci')">🔒 Esqueceu senha</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Esqueceu sua senha?</div>
+    <div class="card-subtitle">Informe o e-mail da sua conta que enviaremos um link para redefinir sua senha.</div>
+    <div class="alert error" id="esqueciError"></div>
+    <div class="input-group">
+      <div class="input-label">E-mail</div>
+      <div class="input-box">
+        <span class="input-icon">📧</span>
+        <input type="email" id="esqueciEmail" placeholder="seuemail@email.com">
       </div>
-      <div id="listaCupons"><div class="empty">Nenhum cupom</div></div>
     </div>
-    <div id="config" class="page">
-      <h3 style="margin-bottom:14px">⚙️ Configurações</h3>
-      <div class="tabs">
-        <div class="tab active" onclick="trocarTab('geral',this)">Geral</div>
-        <div class="tab" onclick="trocarTab('loja',this)">Loja</div>
-      </div>
-      <div id="tab-geral" class="tab-content">
-        <div class="input-group">
-          <label>Nome da loja</label>
-          <div class="input-box"><input type="text" id="configNome" value="Prime Store VZ"></div>
+    <button class="btn" id="btnEsqueci" onclick="enviarLink()">✈️ Enviar link de redefinição</button>
+    <div class="info-box" style="margin-top:16px">
+      <div class="info-row">
+        <div class="info-icon">🛡️</div>
+        <div class="info-text">
+          <div class="info-title">Por segurança, o link expira em 15 minutos.</div>
         </div>
-        <div class="input-group">
-          <label>Descrição da loja</label>
-          <div class="input-box"><textarea id="configDesc">A melhor loja de produtos digitais!</textarea></div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer">© 2024 Prime store Vz. Todos os direitos reservados.</div>
+</div>
+
+<!-- TELA E-MAIL ENVIADO -->
+<div class="screen" id="screen-enviado">
+  <div class="logo-area">
+    <div class="logo-p">
+      <svg viewBox="0 0 100 100" fill="none">
+        <defs>
+          <linearGradient id="logoGradient4" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <path d="M50 10L20 40L20 70L50 90L80 70L80 40L50 10Z" fill="url(#logoGradient4)"/>
+        <path d="M50 25L35 40L35 60L50 75L65 60L65 40L50 25Z" fill="#0a0a10"/>
+        <path d="M50 35L42 43L42 57L50 65L58 57L58 43L50 35Z" fill="url(#logoGradient4)"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="prime">Prime</span> <span class="store">store Vz</span></div>
+  </div>
+  
+  <div class="success-circle">✓</div>
+  
+  <div class="card" style="text-align:center">
+    <div class="card-title" style="margin-bottom:8px">E-mail enviado!</div>
+    <div class="card-subtitle" style="margin-bottom:20px">Enviamos um link de redefinição para<br><strong id="emailEnviado"></strong></div>
+    <div class="info-box">
+      <div class="info-row">
+        <div class="info-icon">📧</div>
+        <div class="info-text">
+          <div class="info-title">Verifique sua caixa de entrada</div>
+          <div class="info-desc">(e o spam/lixo eletrônico).</div>
         </div>
-        <div class="input-group">
-          <label>E-mail de contato</label>
-          <div class="input-box"><input type="email" id="configEmail" value="contato@primestorevz.com"></div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">⏰</div>
+        <div class="info-text">
+          <div class="info-title">O link expira em 15 minutos.</div>
         </div>
-        <div class="input-group">
-          <label>WhatsApp</label>
-          <div class="input-box"><input type="text" id="configWhats" value="+55 11 99999-0000"></div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">🛡️</div>
+        <div class="info-text">
+          <div class="info-title">Não recebeu o e-mail?</div>
+          <div class="info-desc"><a href="#" onclick="mudarTab('esqueci')" style="color:var(--purple)">Enviar novamente</a></div>
         </div>
-        <div class="input-group">
-          <label class="checkbox"><input type="checkbox" id="configManutencao"><span>Modo de manutenção</span></label>
-        </div>
-        <button class="btn btn-primary" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
-      </div>
-      <div id="tab-loja" class="tab-content hide">
-        <div class="empty">Configurações da loja em breve</div>
       </div>
     </div>
+    <button class="btn" onclick="mudarTab('login')">← Voltar para o login</button>
   </div>
-</div>
-
-<div class="modal" id="modalProduto">
-  <div class="modal-box">
-    <div class="modal-head">
-      <button class="close-btn" onclick="fecharModal('modalProduto')" style="position:absolute;left:16px;top:16px">←</button>
-      <div class="modal-title" style="width:100%;text-align:center">📦 ADICIONAR PRODUTO</div>
-    </div>
-    <input type="hidden" id="prodId">
-    <div class="input-group">
-      <label>Imagens do produto (máx 5)</label>
-      <div class="img-preview" onclick="document.getElementById('prodImgInput').click()">
-        <img id="prodImgPreview" class="hide">
-        <span id="prodImgText">+ Selecionar imagens</span>
-      </div>
-      <input type="file" id="prodImgInput" accept="image/*" multiple class="hide" onchange="previewMultipleImg(this)">
-      <div id="prodImgList" class="img-list"></div>
-    </div>
-    <div class="input-group">
-      <label>Nome do produto</label>
-      <div class="input-box"><input type="text" id="prodNome" placeholder="Post"></div>
-    </div>
-    <div class="grid-2">
-      <div class="input-group">
-        <label>Preço</label>
-        <div class="input-box"><input type="number" id="prodPreco" placeholder="0.00" step="0.01"></div>
-      </div>
-      <div class="input-group">
-        <label>Estoque</label>
-        <div class="input-box"><input type="number" id="prodEstoque" placeholder="0"></div>
-      </div>
-    </div>
-    <div class="grid-2">
-      <div class="input-group">
-        <label>Categoria</label>
-        <div class="input-box"><select id="prodCatId" onchange="carregarSubcats()"></select></div>
-      </div>
-      <div class="input-group">
-        <label>Subcategoria</label>
-        <div class="input-box"><select id="prodSubcatId"></select></div>
-      </div>
-    </div>
-    <div class="input-group">
-      <label>Cupom Vinculado</label>
-      <div class="input-box"><select id="prodCupomId"><option value="">Nenhum</option></select></div>
-    </div>
-    <div class="input-group">
-      <label>Descrição</label>
-      <div class="input-box"><textarea id="prodDesc" placeholder="Descrição do produto..."></textarea></div>
-    </div>
-    <button class="btn btn-primary" onclick="salvarProduto()">SALVAR PRODUTO</button>
-  </div>
-</div>
-
-<div class="modal" id="modalCategoria">
-  <div class="modal-box">
-    <div class="modal-head">
-      <button class="close-btn" onclick="fecharModal('modalCategoria')" style="position:absolute;left:16px;top:16px">←</button>
-      <div class="modal-title" style="width:100%;text-align:center">📁 NOVA CATEGORIA</div>
-    </div>
-    <input type="hidden" id="catId">
-    <div class="input-group">
-      <label>Ícone/Imagem</label>
-      <div class="img-preview" onclick="document.getElementById('catImgInput').click()">
-        <img id="catImgPreview" class="hide">
-        <span id="catImgText">+ Selecionar</span>
-      </div>
-      <input type="file" id="catImgInput" accept="image/*" class="hide" onchange="previewImg(this,'catImgPreview','catImgText')">
-    </div>
-    <div class="input-group">
-      <label>Nome da Categoria</label>
-      <div class="input-box"><input type="text" id="catNome" placeholder="Streaming"></div>
-    </div>
-    <button class="btn btn-primary" onclick="salvarCategoria()">SALVAR CATEGORIA</button>
-  </div>
-</div>
-
-<div class="modal" id="modalSubcategoria">
-  <div class="modal-box">
-    <div class="modal-head">
-      <button class="close-btn" onclick="fecharModal('modalSubcategoria')" style="position:absolute;left:16px;top:16px">←</button>
-      <div class="modal-title" style="width:100%;text-align:center">📂 NOVA SUBCATEGORIA</div>
-    </div>
-    <input type="hidden" id="subcatId">
-    <div class="input-group">
-      <label>Categoria Pai</label>
-      <div class="input-box"><select id="subcatCatId"></select></div>
-    </div>
-    <div class="input-group">
-      <label>Nome da Subcategoria</label>
-      <div class="input-box"><input type="text" id="subcatNome" placeholder="Netflix"></div>
-    </div>
-    <button class="btn btn-primary" onclick="salvarSubcategoria()">SALVAR SUBCATEGORIA</button>
-  </div>
-</div>
-
-<div class="modal" id="modalCupom">
-  <div class="modal-box">
-    <div class="modal-head">
-      <button class="close-btn" onclick="fecharModal('modalCupom')" style="position:absolute;left:16px;top:16px">←</button>
-      <div class="modal-title" style="width:100%;text-align:center">🎟️ NOVO CUPOM</div>
-    </div>
-    <input type="hidden" id="cupomId">
-    <div class="input-group">
-      <label>Código do Cupom</label>
-      <div class="input-box"><input type="text" id="cupomCodigo" placeholder="PRIME10" style="text-transform:uppercase"></div>
-    </div>
-    <div class="grid-2">
-      <div class="input-group">
-        <label>Desconto (%)</label>
-        <div class="input-box"><input type="number" id="cupomDesconto" placeholder="10" min="0" max="100"></div>
-      </div>
-      <div class="input-group">
-        <label>Limite de uso</label>
-        <div class="input-box"><input type="number" id="cupomLimite" placeholder="100" min="1"></div>
-      </div>
-    </div>
-    <div class="grid-2">
-      <div class="input-group">
-        <label>Validade (dias)</label>
-        <div class="input-box">
-          <select id="cupomValidade">
-            <option value="1">1 Dia</option>
-            <option value="7">7 Dias</option>
-            <option value="30">30 Dias</option>
-            <option value="0">Ilimitado</option>
-          </select>
-        </div>
-      <div class="input-group">
-        <label>Uso por Cliente</label>
-        <div class="input-box"><input type="number" id="cupomUsoCliente" placeholder="1" min="1" value="1"></div>
-      </div>
-    </div>
-    <div class="input-group">
-      <label class="checkbox"><input type="checkbox" id="cupomAtivo" checked><span>Cupom Ativo</span></label>
-    </div>
-    <button class="btn btn-primary" onclick="salvarCupom()">SALVAR CUPOM</button>
-  </div>
-</div>
-
-<div class="modal" id="modalPedido">
-  <div class="modal-box">
-    <div class="modal-head">
-      <button class="close-btn" onclick="fecharModal('modalPedido')" style="position:absolute;left:16px;top:16px">←</button>
-      <div class="modal-title" style="width:100%;text-align:center">📋 DETALHES DO PEDIDO</div>
-    </div>
-    <div id="pedidoDetalhes"></div>
-  </div>
-</div>
-
-<div class="modal" id="modalCliente">
-  <div class="modal-box">
-    <div class="modal-head">
-      <button class="close-btn" onclick="fecharModal('modalCliente')" style="position:absolute;left:16px;top:16px">←</button>
-      <div class="modal-title" style="width:100%;text-align:center">👤 CLIENTE - DETALHES</div>
-    </div>
-    <div id="clienteDetalhes"></div>
-  </div>
+  
+  <div class="footer">© 2024 Prime store Vz. Todos os direitos reservados.</div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <script>
-function debug(msg){
-  console.error(msg);
-  const d = document.getElementById('debug');
-  d.textContent = 'ERRO: ' + msg;
-  d.style.display = 'block';
-  setTimeout(()=>d.style.display='none',8000);
+const firebaseConfig = {
+  apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
+  authDomain: "premium-store-aa58b.firebaseapp.com",
+  databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
+  projectId: "premium-store-aa58b",
+  storageBucket: "premium-store-aa58b.firebasestorage.app",
+  messagingSenderId: "462239500057",
+  appId: "1:462239500057:web:f1b7cea162ed308a866788",
+  measurementId: "G-CN88J28WRX"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+
+function mudarTab(tela){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+tela).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab')[tela==='login'?0:tela==='cadastro'?1:2].classList.add('active');
+  document.querySelectorAll('.alert').forEach(a=>a.style.display='none');
 }
-window.onerror = function(msg,url,line){ debug(msg + ' Linha: ' + line); }
 
-try {
-  const firebaseConfig = {
-    apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
-    authDomain: "premium-store-aa58b.firebaseapp.com",
-    databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
-    projectId: "premium-store-aa58b",
-    storageBucket: "premium-store-aa58b.firebasestorage.app",
-    messagingSenderId: "462239500057",
-    appId: "1:462239500057:web:f1b7cea162ed308a866788",
-    measurementId: "G-CN88J28WRX"
-  };
-  
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.database();
-  const storage = firebase.storage();
-  
-  let currentUser = null;
-  let filtroPedidoStatus = 'todos';
-  let todosPedidos = {};
-  let todosCupons = {};
-  let todosClientes = {};
-  let todosProdutos = {};
-  let todosSubcats = {};
-  let imagensProduto = [];
-  let authVerificado = false;
-
-  function togglePass(id,el){
-    const input = document.getElementById(id);
-    if(input.type==='password'){input.type='text';el.textContent='🙈'}
-    else{input.type='password';el.textContent='👁️'}
-  }
-
-  function showAlert(id,msg,tipo){
-    const el = document.getElementById(id);
-    el.textContent = msg;
-    el.className = 'alert '+tipo;
-    el.style.display = 'block';
-  }
-
-  async function fazerLogin(){
-    const email = document.getElementById('loginEmail').value.trim();
-    const senha = document.getElementById('loginPassword').value;
-    const btn = document.getElementById('btnLogin');
-    document.getElementById('loginError').style.display='none';
-    document.getElementById('loginSuccess').style.display='none';
-    if(!email||!senha) return showAlert('loginError','Preencha todos os campos','error');
-    btn.disabled = true;
-    btn.textContent = 'ENTRANDO...';
-    try{
-      await auth.signInWithEmailAndPassword(email,senha);
-    }catch(e){
-      let msg = 'Erro ao fazer login';
-      if(e.code==='auth/user-not-found') msg='Usuário não encontrado. Crie no Firebase > Authentication > Users';
-      if(e.code==='auth/wrong-password') msg='Senha incorreta';
-      if(e.code==='auth/invalid-credential') msg='Email ou senha inválidos';
-      if(e.code==='auth/operation-not-allowed') msg='Ative Email/Password no Firebase Console > Authentication > Sign-in method';
-            if(e.code==='auth/too-many-requests') msg='Muitas tentativas. Tente mais tarde';
-      if(e.code==='auth/network-request-failed') msg='Sem internet ou Firebase bloqueado';
-      debug(e.code + ' - ' + e.message);
-      showAlert('loginError',msg,'error');
-      btn.disabled = false;
-      btn.textContent = '🚀 ENTRAR';
-    }
-  }
-
-  function logout(){auth.signOut()}
-  function toggleMenu(){document.getElementById('sidebar').classList.toggle('open')}
-
-  function trocarPage(id,el){
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-    document.querySelectorAll('.side-item').forEach(i=>i.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    el.classList.add('active');
-    toggleMenu();
-    if(id==='dash') carregarDashboard();
-    if(id==='produtos') carregarProdutos();
-    if(id==='pedidos') carregarPedidos();
-    if(id==='clientes') carregarClientes();
-    if(id==='categorias') carregarCategorias();
-    if(id==='subcategorias') carregarSubcategorias();
-    if(id==='cupons') carregarCupons();
-  }
-
-  function trocarTab(id,el){
-    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c=>c.classList.add('hide'));
-    el.classList.add('active');
-    document.getElementById('tab-'+id).classList.remove('hide');
-  }
-
-  function fecharModal(id){
-    document.getElementById(id).classList.remove('active');
-    document.querySelectorAll('.modal input,.modal textarea,.modal select').forEach(i=>{if(i.type!=='file'&&i.type!=='checkbox')i.value=''});
-    document.querySelectorAll('.modal img').forEach(i=>{i.classList.add('hide');i.src=''});
-    document.querySelectorAll('.img-preview span').forEach(s=>s.classList.remove('hide'));
-    document.getElementById('prodImgList').innerHTML = '';
-    imagensProduto = [];
-  }
-
-  function previewImg(input,imgId,textId){
-    if(input.files&&input.files[0]){
-      const reader = new FileReader();
-      reader.onload = e=>{
-        document.getElementById(imgId).src = e.target.result;
-        document.getElementById(imgId).classList.remove('hide');
-        document.getElementById(textId).classList.add('hide');
-      }
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-
-  function previewMultipleImg(input){
-    const files = Array.from(input.files).slice(0,5);
-    const list = document.getElementById('prodImgList');
-    list.innerHTML = '';
-    imagensProduto = [];
-    files.forEach((file,idx)=>{
-      const reader = new FileReader();
-      reader.onload = e=>{
-        imagensProduto.push({file,url:e.target.result});
-        list.innerHTML += `<div class="img-list-item">
-          <img src="${e.target.result}">
-          <div class="del" onclick="removerImg(${idx})">×</div>
-        </div>`;
-      }
-      reader.readAsDataURL(file);
-    });
-  }
-
-  function removerImg(idx){
-    imagensProduto.splice(idx,1);
-    const list = document.getElementById('prodImgList');
-    list.innerHTML = '';
-    imagensProduto.forEach((img,i)=>{
-      list.innerHTML += `<div class="img-list-item">
-        <img src="${img.url}">
-        <div class="del" onclick="removerImg(${i})">×</div>
-      </div>`;
-    });
-  }
-
-  async function uploadImg(file,path){
-    try{
-      const ref = storage.ref(path+'/'+Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9.]/g,'_'));
-      await ref.put(file);
-      return await ref.getDownloadURL();
-    }catch(e){
-      debug('ERRO STORAGE: ' + e.message);
-      throw new Error('Falha no upload. Ative o Storage no Firebase e libere as Rules');
-    }
-  }
-
-  async function abrirModalProduto(id=null){
-    try{
-      const catSelect = document.getElementById('prodCatId');
-      catSelect.innerHTML = '<option value="">Carregando...</option>';
-      const catSnap = await db.ref('categorias').once('value');
-      const cats = catSnap.val()||{};
-      catSelect.innerHTML = '<option value="">Selecione</option>';
-      Object.entries(cats).forEach(([cid,c])=>{
-        catSelect.innerHTML += `<option value="${cid}">${c.nome}</option>`;
-      });
-
-      const cupomSelect = document.getElementById('prodCupomId');
-      cupomSelect.innerHTML = '<option value="">Nenhum</option>';
-      const cupomSnap = await db.ref('cupons').once('value');
-      const cups = cupomSnap.val()||{};
-      Object.entries(cups).forEach(([cid,c])=>{
-        if(c.ativo && (!c.expiraEm||c.expiraEm>Date.now())){
-          cupomSelect.innerHTML += `<option value="${cid}">${c.codigo} - ${c.desconto}%</option>`;
-        }
-      });
-
-      document.getElementById('prodId').value = id||'';
-      imagensProduto = [];
-      if(id){
-        const snap = await db.ref('produtos/'+id).once('value');
-        const p = snap.val();
-        document.getElementById('prodNome').value = p.nome;
-        document.getElementById('prodCatId').value = p.categoriaId;
-        await carregarSubcats();
-        document.getElementById('prodSubcatId').value = p.subcategoriaId||'';
-        document.getElementById('prodPreco').value = p.preco;
-        document.getElementById('prodEstoque').value = p.estoque;
-        document.getElementById('prodDesc').value = p.descricao||'';
-        document.getElementById('prodCupomId').value = p.cupomId||'';
-        if(p.imagens){
-          const list = document.getElementById('prodImgList');
-          list.innerHTML = '';
-          p.imagens.forEach((url,i)=>{
-            imagensProduto.push({url});
-            list.innerHTML += `<div class="img-list-item">
-              <img src="${url}">
-              <div class="del" onclick="removerImg(${i})">×</div>
-            </div>`;
-          });
-        }
-      } else {
-        document.getElementById('prodSubcatId').innerHTML = '<option value="">Selecione a categoria primeiro</option>';
-      }
-      document.getElementById('modalProduto').classList.add('active');
-    }catch(e){
-      debug('ERRO ABRIR PRODUTO: ' + e.message);
-      alert('Erro: ' + e.message);
-    }
-  }
-
-  async function carregarSubcats(){
-    const catId = document.getElementById('prodCatId').value;
-    const select = document.getElementById('prodSubcatId');
-    select.innerHTML = '<option value="">Carregando...</option>';
-    if(!catId) {
-      select.innerHTML = '<option value="">Selecione a categoria primeiro</option>';
-      return;
-    }
-    const snap = await db.ref('subcategorias').orderByChild('categoriaId').equalTo(catId).once('value');
-    const subs = snap.val()||{};
-    select.innerHTML = '<option value="">Selecione</option>';
-    Object.entries(subs).forEach(([sid,s])=>{
-      select.innerHTML += `<option value="${sid}">${s.nome}</option>`;
-    });
-    if(Object.keys(subs).length===0){
-      select.innerHTML = '<option value="">Nenhuma subcategoria cadastrada</option>';
-    }
-  }
-
-  async function salvarProduto(){
-    const id = document.getElementById('prodId').value;
-    const nome = document.getElementById('prodNome').value.trim();
-    const categoriaId = document.getElementById('prodCatId').value;
-    const subcategoriaId = document.getElementById('prodSubcatId').value;
-    const preco = parseFloat(document.getElementById('prodPreco').value);
-    const estoque = parseInt(document.getElementById('prodEstoque').value);
-    const descricao = document.getElementById('prodDesc').value.trim();
-    const cupomId = document.getElementById('prodCupomId').value;
-
-    if(!nome) return alert('❌ Preencha o nome do produto');
-    if(!preco || preco <= 0) return alert('❌ Preço inválido');
-    if(isNaN(estoque) || estoque < 0) return alert('❌ Estoque inválido');
-    if(!categoriaId) return alert('❌ Selecione uma categoria');
-
-    const btn = document.querySelector('#modalProduto.btn-primary');
-    btn.disabled = true;
-    btn.textContent = 'SALVANDO...';
-
-    try {
-      let imagens = [];
-      for(let img of imagensProduto){
-        if(img.file){
-          const url = await uploadImg(img.file,'produtos');
-          imagens.push(url);
-        }else if(img.url){
-          imagens.push(img.url);
-        }
-      }
-
-      const data = {
-        nome,
-        categoriaId,
-        subcategoriaId: subcategoriaId || '',
-        preco,
-        estoque,
-        descricao,
-        cupomId: cupomId || '',
-        imagens,
-        atualizadoEm: Date.now()
-      };
-
-      if(!id) data.criadoEm = Date.now();
-
-      if(id) await db.ref('produtos/'+id).update(data);
-      else await db.ref('produtos').push(data);
-
-      fecharModal('modalProduto');
-      carregarProdutos();
-      showAlert('loginSuccess','✅ Produto salvo com sucesso!','success');
-      setTimeout(()=>document.getElementById('loginSuccess').style.display='none',3000);
-    } catch(e) {
-      debug('ERRO AO SALVAR PRODUTO: ' + e.message);
-      alert('❌ Erro ao salvar: ' + e.message);
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'SALVAR PRODUTO';
-    }
-  }
-
-  function carregarProdutos(){
-    db.ref('produtos').once('value',async snap=>{
-      const lista = document.getElementById('listaProdutos');
-      todosProdutos = snap.val()||{};
-      if(!todosProdutos||Object.keys(todosProdutos).length===0){lista.innerHTML='<div class="empty">Nenhum produto 📦</div>';return}
-      const catSnap = await db.ref('categorias').once('value');
-      const cats = catSnap.val()||{};
-      const subcatSnap = await db.ref('subcategorias').once('value');
-      const subcats = subcatSnap.val()||{};
-      const cupSnap = await db.ref('cupons').once('value');
-      const cups = cupSnap.val()||{};
-      let html = '';
-      Object.entries(todosProdutos).forEach(([id,p])=>{
-        const catNome = cats[p.categoriaId]?.nome||'Sem categoria';
-        const subcatNome = p.subcategoriaId&&subcats[p.subcategoriaId]?` > ${subcats[p.subcategoriaId].nome}`:'';
-        const img = p.imagens&&p.imagens.length?p.imagens[0]:'';
-        const cupomNome = p.cupomId&&cups[p.cupomId]?`🎟️ ${cups[p.cupomId].codigo}`:'';
-        html += `<div class="item-row clickable" onclick="abrirModalProduto('${id}')">
-          <img src="${img}" class="img-thumb" onerror="this.style.display='none'">
-          <div class="item-info">
-            <div class="item-title">📦 ${p.nome}</div>
-            <div class="item-sub">💵 R$ ${p.preco.toFixed(2)} • ${catNome}${subcatNome} • 📊 ${p.estoque} ${cupomNome}</div>
-          </div>
-          <div class="actions">
-            <button class="btn btn-sm btn-red" onclick="event.stopPropagation();deletarProduto('${id}')">🗑️</button>
-          </div>
-        </div>`;
-      });
-      lista.innerHTML = html;
-    }).catch(e=>debug('ERRO CARREGAR PRODUTOS: '+e.message));
-  }
-
-  async function deletarProduto(id){
-    if(confirm('Deletar este produto?')){
-      await db.ref('produtos/'+id).remove();
-      carregarProdutos();
-    }
-  }
-
-  function filtrarProdutos(){
-    const busca = document.getElementById('searchProduto').value.toLowerCase();
-    const lista = document.getElementById('listaProdutos');
-    let html = '';
-    Object.entries(todosProdutos).forEach(([id,p])=>{
-      if(!busca||p.nome.toLowerCase().includes(busca)){
-        const img = p.imagens&&p.imagens.length?p.imagens[0]:'';
-        html += `<div class="item-row clickable" onclick="abrirModalProduto('${id}')">
-          <img src="${img}" class="img-thumb" onerror="this.style.display='none'">
-          <div class="item-info">
-            <div class="item-title">📦 ${p.nome}</div>
-            <div class="item-sub">💵 R$ ${p.preco.toFixed(2)} • 📊 ${p.estoque}</div>
-          </div>
-          <div class="actions">
-            <button class="btn btn-sm btn-red" onclick="event.stopPropagation();deletarProduto('${id}')">🗑️</button>
-          </div>
-        </div>`;
-      }
-    });
-    lista.innerHTML = html||'<div class="empty">Nenhum produto encontrado 📦</div>';
-  }
-
-  function abrirModalCategoria(id=null){
-    document.getElementById('catId').value = id||'';
-    if(id){
-      db.ref('categorias/'+id).once('value',snap=>{
-        const c = snap.val();
-        document.getElementById('catNome').value = c.nome;
-        if(c.imagem){
-          document.getElementById('catImgPreview').src = c.imagem;
-          document.getElementById('catImgPreview').classList.remove('hide');
-          document.getElementById('catImgText').classList.add('hide');
-        }
-      });
-    }
-    document.getElementById('modalCategoria').classList.add('active');
-  }
-
-  async function salvarCategoria(){
-    const id = document.getElementById('catId').value;
-    const nome = document.getElementById('catNome').value.trim();
-    const file = document.getElementById('catImgInput').files[0];
-    if(!nome) return alert('Preencha o nome');
-    try{
-      let imagem = document.getElementById('catImgPreview').src||'';
-      if(file) imagem = await uploadImg(file,'categorias');
-      const data = {nome,imagem,criadoEm:Date.now()};
-      if(id) await db.ref('categorias/'+id).update(data);
-      else await db.ref('categorias').push(data);
-      fecharModal('modalCategoria');
-      carregarCategorias();
-    }catch(e){
-      debug('ERRO SALVAR CATEGORIA: '+e.message);
-      alert('Erro: '+e.message);
-    }
-  }
-
-  function carregarCategorias(){
-    db.ref('categorias').once('value',snap=>{
-      const lista = document.getElementById('listaCategorias');
-      const dados = snap.val();
-      if(!dados){lista.innerHTML='<div class="empty">Nenhuma categoria 📁</div>';return}
-      let html = '';
-      Object.entries(dados).forEach(([id,c])=>{
-        html += `<div class="item-row clickable" onclick="abrirModalCategoria('${id}')">
-          <img src="${c.imagem||''}" class="img-thumb" onerror="this.style.display='none'">
-          <div class="item-info">
-            <div class="item-title">📁 ${c.nome}</div>
-          </div>
-          <div class="actions">
-            <button class="btn btn-sm btn-red" onclick="event.stopPropagation();deletarCategoria('${id}')">🗑️</button>
-          </div>
-        </div>`;
-      });
-      lista.innerHTML = html;
-    });
-  }
-
-  async function deletarCategoria(id){
-    if(confirm('Deletar categoria? Isso vai apagar as subcategorias também!')){
-      await db.ref('categorias/'+id).remove();
-      const subSnap = await db.ref('subcategorias').orderByChild('categoriaId').equalTo(id).once('value');
-      const subs = subSnap.val()||{};
-      Object.keys(subs).forEach(async sid=>{await db.ref('subcategorias/'+sid).remove()});
-      carregarCategorias();
-    }
-  }
-
-  async function abrirModalSubcategoria(id=null){
-    const catSelect = document.getElementById('subcatCatId');
-    catSelect.innerHTML = '<option value="">Carregando...</option>';
-    const catSnap = await db.ref('categorias').once('value');
-    const cats = catSnap.val()||{};
-    catSelect.innerHTML = '<option value="">Selecione</option>';
-    Object.entries(cats).forEach(([cid,c])=>{
-      catSelect.innerHTML += `<option value="${cid}">${c.nome}</option>`;
-    });
-
-    document.getElementById('subcatId').value = id||'';
-    if(id){
-      db.ref('subcategorias/'+id).once('value',snap=>{
-        const s = snap.val();
-        document.getElementById('subcatNome').value = s.nome;
-        document.getElementById('subcatCatId').value = s.categoriaId;
-      });
-    }
-    document.getElementById('modalSubcategoria').classList.add('active');
-  }
-
-  async function salvarSubcategoria(){
-    const id = document.getElementById('subcatId').value;
-    const nome = document.getElementById('subcatNome').value.trim();
-    const categoriaId = document.getElementById('subcatCatId').value;
-    if(!nome||!categoriaId) return alert('Preencha todos os campos');
-    try{
-      const data = {nome,categoriaId,criadoEm:Date.now()};
-      if(id) await db.ref('subcategorias/'+id).update(data);
-      else await db.ref('subcategorias').push(data);
-      fecharModal('modalSubcategoria');
-      carregarSubcategorias();
-    }catch(e){
-      debug('ERRO SALVAR SUBCATEGORIA: '+e.message);
-      alert('Erro: '+e.message);
-    }
-  }
-
-  function carregarSubcategorias(){
-    db.ref('subcategorias').once('value',async snap=>{
-      const lista = document.getElementById('listaSubcategorias');
-      todosSubcats = snap.val()||{};
-      if(!todosSubcats||Object.keys(todosSubcats).length===0){lista.innerHTML='<div class="empty">Nenhuma subcategoria 📂</div>';return}
-      const catSnap = await db.ref('categorias').once('value');
-      const cats = catSnap.val()||{};
-      let html = '';
-      Object.entries(todosSubcats).forEach(([id,s])=>{
-        const catNome = cats[s.categoriaId]?.nome||'Sem categoria';
-        html += `<div class="item-row clickable" onclick="abrirModalSubcategoria('${id}')">
-          <div class="item-info">
-            <div class="item-title">📂 ${s.nome}</div>
-            <div class="item-sub">📁 ${catNome}</div>
-          </div>
-          <div class="actions">
-            <button class="btn btn-sm btn-red" onclick="event.stopPropagation();deletarSubcategoria('${id}')">🗑️</button>
-          </div>
-        </div>`;
-      });
-      lista.innerHTML = html;
-    });
-  }
-
-  async function deletarSubcategoria(id){
-    if(confirm('Deletar subcategoria?')){
-      await db.ref('subcategorias/'+id).remove();
-      carregarSubcategorias();
-    }
-  }
-
-  function abrirModalCupom(id=null){
-    document.getElementById('cupomId').value = id||'';
-    if(id){
-      db.ref('cupons/'+id).once('value',snap=>{
-        const c = snap.val();
-        document.getElementById('cupomCodigo').value = c.codigo;
-        document.getElementById('cupomDesconto').value = c.desconto;
-        document.getElementById('cupomLimite').value = c.limite;
-        document.getElementById('cupomValidade').value = c.validadeDias||0;
-        document.getElementById('cupomUsoCliente').value = c.usoPorCliente||1;
-        document.getElementById('cupomAtivo').checked = c.ativo;
-      });
-    }
-    document.getElementById('modalCupom').classList.add('active');
-  }
-
-  async function salvarCupom(){
-    const id = document.getElementById('cupomId').value;
-    const codigo = document.getElementById('cupomCodigo').value.trim().toUpperCase();
-    const desconto = parseInt(document.getElementById('cupomDesconto').value);
-    const limite = parseInt(document.getElementById('cupomLimite').value);
-    const validadeDias = parseInt(document.getElementById('cupomValidade').value);
-    const usoPorCliente = parseInt(document.getElementById('cupomUsoCliente').value);
-    const ativo = document.getElementById('cupomAtivo').checked;
-    if(!codigo||isNaN(desconto)||isNaN(limite)) return alert('Preencha todos os campos');
-    const expiraEm = validadeDias>0?Date.now()+(validadeDias*24*60*60*1000):0;
-    const data = {codigo,desconto,limite,usado:0,validadeDias,expiraEm,usoPorCliente,ativo,criadoEm:Date.now()};
-    if(id) await db.ref('cupons/'+id).update(data);
-    else await db.ref('cupons').push(data);
-    fecharModal('modalCupom');
-    carregarCupons();
-  }
-
-  function carregarCupons(){
-    db.ref('cupons').once('value',snap=>{
-      todosCupons = snap.val()||{};
-      const lista = document.getElementById('listaCupons');
-      if(!todosCupons||Object.keys(todosCupons).length===0){
-        lista.innerHTML='<div class="empty">Nenhum cupom 🎟️</div>';
-        return;
-      }
-      renderCupons();
-    });
-  }
-
-  function renderCupons(){
-    const lista = document.getElementById('listaCupons');
-    if(!todosCupons||Object.keys(todosCupons).length===0){lista.innerHTML='<div class="empty">Nenhum cupom 🎟️</div>';return}
-    let html = '';
-    Object.entries(todosCupons).forEach(([id,c])=>{
-      const expirado = c.expiraEm>0&&c.expiraEm<Date.now();
-      let status = 'ativo';
-      if(expirado) status = 'expirado';
-      else if(!c.ativo) status = 'inativo';
-      const statusEmoji = status==='ativo'?'🟢':status==='inativo'?'🔴':'⚫';
-      const statusText = status==='ativo'?'Ativo':status==='inativo'?'Inativo':'Expirado';
-      const validadeText = c.validadeDias===0?'Ilimitado':c.expiraEm?new Date(c.expiraEm).toLocaleDateString('pt-BR'):`${c.validadeDias} dias`;
-      html += `<div class="item-row clickable" onclick="abrirModalCupom('${id}')">
-        <div class="item-info">
-          <div class="item-title">🎟️ ${c.codigo} <span class="badge-status badge-${status}">${statusEmoji} ${statusText}</span></div>
-          <div class="item-sub">🔥 ${c.desconto}% OFF • 🎯 ${c.usado||0}/${c.limite} • 🗓️ ${validadeText} • ♻️ ${c.usoPorCliente}x</div>
-        </div>
-        <div class="actions">
-          <button class="btn btn-sm ${c.ativo?'btn-red':'btn-green'}" onclick="event.stopPropagation();toggleCupomAtivo('${id}',${c.ativo})">${c.ativo?'🔴':'🟢'}</button>
-          <button class="btn btn-sm btn-red" onclick="event.stopPropagation();deletarCupom('${id}')">🗑️</button>
-        </div>
-      </div>`;
-    });
-    lista.innerHTML = html;
-  }
-
-  async function toggleCupomAtivo(id,ativo){
-    await db.ref('cupons/'+id).update({ativo:!ativo});
-    carregarCupons();
-  }
-
-  async function deletarCupom(id){
-    if(confirm('Deletar cupom?')){
-      await db.ref('cupons/'+id).remove();
-      carregarCupons();
-    }
-  }
-
-  function carregarPedidos(){
-    db.ref('pedidos').once('value',snap=>{
-      todosPedidos = snap.val()||{};
-      filtrarPedidos();
-    });
-  }
-
-  function filtrarStatusPedido(status,el){
-    filtroPedidoStatus = status;
-    document.querySelectorAll('#pedidos.filter-btn').forEach(b=>b.classList.remove('active'));
-    el.classList.add('active');
-    filtrarPedidos();
-  }
-
-  function filtrarPedidos(){
-    const lista = document.getElementById('listaPedidos');
-    let html = '';
-    Object.entries(todosPedidos).reverse().forEach(([id,p])=>{
-      const matchStatus = filtroPedidoStatus==='todos'||p.status===filtroPedidoStatus;
-      if(matchStatus){
-        const statusClass = p.status==='concluido'?'badge-concluido':p.status==='cancelado'?'badge-cancelado':'badge-pendente';
-        const statusEmoji = p.status==='concluido'?'✅':p.status==='cancelado'?'❌':'⏳';
-        html += `<div class="card-admin clickable" onclick="verDetalhesPedido('${id}')">
-          <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-            <div style="font-weight:800">#${id.slice(-6)}</div>
-            <div class="badge-status ${statusClass}">${statusEmoji} ${p.status||'pendente'}</div>
-          </div>
-          <div style="font-size:12px;color:var(--text-dim);margin-bottom:4px">👤 ${p.clienteNome} • 📧 ${p.clienteEmail}</div>
-          <div style="font-size:13px;font-weight:700;margin-bottom:8px">💰 R$ ${p.total.toFixed(2)}</div>
-          <div class="actions">
-            <button class="btn btn-sm btn-green" onclick="event.stopPropagation();atualizarStatusPedido('${id}','concluido')">✅ Concluir</button>
-            <button class="btn btn-sm btn-red" onclick="event.stopPropagation();atualizarStatusPedido('${id}','cancelado')">❌ Cancelar</button>
-          </div>
-        </div>`;
-      }
-    });
-    lista.innerHTML = html||'<div class="empty">Nenhum pedido encontrado 🛒</div>';
-  }
-
-  async function verDetalhesPedido(id){
-    const p = todosPedidos[id];
-    const userSnap = await db.ref('usuarios/'+p.clienteId).once('value');
-    const user = userSnap.val()||{};
-    let itensHtml = '';
-    if(p.produtos){
-      Object.values(p.produtos).forEach(prod=>{
-        itensHtml += `<div class="item-row" style="margin:8px 0">
-          <div style="display:flex;align-items:center;gap:10px">
-            <div style="width:40px;height:40px;background:var(--input);border-radius:8px;display:flex;align-items:center;justify-content:center">📦</div>
-            <div>
-              <div class="item-title">${prod.nome}</div>
-              <div class="item-sub">Qtd: ${prod.qtd}</div>
-            </div>
-          </div>
-          <div class="detail-value">💰 R$ ${(prod.preco*prod.qtd).toFixed(2)}</div>
-        </div>`;
-      });
-    }
-    const pagoBadge = p.pago?'<span class="badge-status badge-ativo" style="float:right">Pago</span>':'';
-    document.getElementById('pedidoDetalhes').innerHTML = `
-      <div style="margin-bottom:20px">
-        <div style="font-size:13px;color:var(--text-dim);margin-bottom:4px">Pedido #${id.slice(-8).toUpperCase()}</div>
-        <div style="font-size:12px;color:var(--text-dim)">${new Date(p.criadoEm).toLocaleString('pt-BR')} ${pagoBadge}</div>
-      </div>
-      <div class="card-title">👤 Cliente</div>
-      <div class="detail-row"><div class="detail-label">Nome</div><div class="detail-value">${user.nome||p.clienteNome}</div></div>
-      <div class="detail-row"><div class="detail-label">📧 Email</div><div class="detail-value">${user.email||p.clienteEmail}</div></div>
-      <div class="detail-row"><div class="detail-label">📱 Telefone</div><div class="detail-value">${user.telefone||'N/A'}</div></div>
-      <div class="card-title" style="margin-top:20px">📦 Itens do pedido</div>
-      ${itensHtml}
-      <div class="detail-row" style="border-top:1px solid var(--border);margin-top:16px;padding-top:16px">
-        <div class="detail-label">💰 Total</div>
-        <div class="detail-value" style="font-size:18px;color:var(--purple)">R$ ${p.total.toFixed(2)}</div>
-      </div>
-      <div class="card-title" style="margin-top:20px">💳 Pagamento</div>
-      <div class="detail-row"><div class="detail-label">Método</div><div class="detail-value">💎 PIX</div></div>
-      <div class="card-title" style="margin-top:20px">📄 Comprovante</div>
-      <button class="btn btn-blue" onclick="alert('Abrir comprovante')" style="margin-bottom:16px">📄 Visualizar comprovante</button>
-      <div class="card-title">⚡ Ações</div>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-green" onclick="atualizarStatusPedido('${id}','concluido');fecharModal('modalPedido')">✅ Marcar como concluído</button>
-        <button class="btn btn-red" onclick="atualizarStatusPedido('${id}','cancelado');fecharModal('modalPedido')">❌ Cancelar pedido</button>
-      </div>
-    `;
-    document.getElementById('modalPedido').classList.add('active');
-  }
-
-  async function atualizarStatusPedido(id,status){
-    await db.ref('pedidos/'+id).update({status});
-    carregarPedidos();
-  }
-
-  function carregarClientes(){
-    db.ref('usuarios').once('value',snap=>{
-      todosClientes = snap.val()||{};
-      renderClientes();
-    });
-  }
-
-  function filtrarClientes(){
-    const busca = document.getElementById('searchCliente').value.toLowerCase();
-    renderClientes(busca);
-  }
-
-  function renderClientes(busca=''){
-    const lista = document.getElementById('listaClientes');
-    if(!todosClientes||Object.keys(todosClientes).length===0){lista.innerHTML='<div class="empty">Nenhum cliente 👥</div>';return}
-    let html = '';
-    Object.entries(todosClientes).forEach(([id,u])=>{
-      if(!busca||u.nome.toLowerCase().includes(busca)||u.email.toLowerCase().includes(busca)){
-        html += `<div class="item-row clickable" onclick="verCliente('${id}')">
-          <div class="item-info">
-            <div class="item-title">👤 ${u.nome}</div>
-            <div class="item-sub">📧 ${u.email} • 📱 ${u.telefone||'N/A'}</div>
-          </div>
-        </div>`;
-      }
-    });
-    lista.innerHTML = html||'<div class="empty">Nenhum cliente encontrado 👥</div>';
-  }
-
-  async function verCliente(uid){
-    const userSnap = await db.ref('usuarios/'+uid).once('value');
-    const user = userSnap.val();
-    const pedSnap = await db.ref('pedidos').orderByChild('clienteId').equalTo(uid).once('value');
-    const peds = pedSnap.val()||{};
-    let totalGasto = 0;
-    let concluidos = 0;
-    let pendentes = 0;
-    let ultimoPedido = null;
-    Object.entries(peds).forEach(([id,p])=>{
-      totalGasto += p.total||0;
-      if(p.status==='concluido') concluidos++;
-      if(p.status==='pendente') pendentes++;
-      if(!ultimoPedido || p.criadoEm > ultimoPedido.criadoEm) ultimoPedido = {id,...p};
-    });
-    const avatar = user.nome?user.nome[0].toUpperCase():'U';
-    const desde = user.criadoEm?new Date(user.criadoEm).toLocaleDateString('pt-BR'):'N/A';
-    document.getElementById('clienteDetalhes').innerHTML = `
-      <div style="text-align:center;margin-bottom:20px">
-        <div class="avatar-circle">${avatar}</div>
-        <div class="item-title" style="font-size:18px;margin-bottom:4px">${user.nome}</div>
-        <div class="item-sub">${user.email}</div>
-        <div class="item-sub">📱 ${user.telefone||'N/A'}</div>
-        <div class="item-sub" style="margin-top:8px">Cliente desde ${desde}</div>
-      </div>
-      <div class="card-title">📊 Resumo</div>
-      <div class="detail-row"><div class="detail-label">Total de pedidos</div><div class="detail-value">${Object.keys(peds).length}</div></div>
-      <div class="detail-row"><div class="detail-label">💰 Total gasto</div><div class="detail-value" style="color:var(--green)">R$ ${totalGasto.toFixed(2)}</div></div>
-      <div class="detail-row"><div class="detail-label">✅ Pedidos concluídos</div><div class="detail-value">${concluidos}</div></div>
-      <div class="detail-row"><div class="detail-label">⏳ Pedidos pendentes</div><div class="detail-value">${pendentes}</div></div>
-      ${ultimoPedido?`
-      <div class="card-title" style="margin-top:20px">📜 Último pedido</div>
-      <div class="item-row clickable" onclick="verDetalhesPedido('${ultimoPedido.id}')">
-        <div class="item-info">
-          <div class="item-title">#${ultimoPedido.id.slice(-8).toUpperCase()}</div>
-          <div class="item-sub">📅 ${new Date(ultimoPedido.criadoEm).toLocaleString('pt-BR')}</div>
-        </div>
-        <div style="text-align:right">
-          <div class="detail-value">💰 R$ ${ultimoPedido.total.toFixed(2)}</div>
-          <span class="badge-status badge-ativo">Pago</span>
-        </div>
-      </div>`:''}
-      <button class="btn btn-primary" style="margin-top:20px" onclick="fecharModal('modalCliente')">Fechar</button>
-    `;
-    document.getElementById('modalCliente').classList.add('active');
-  }
-
-  async function salvarConfig(){
-    const data = {
-      nome:document.getElementById('configNome').value,
-      desc:document.getElementById('configDesc').value,
-      email:document.getElementById('configEmail').value,
-      whats:document.getElementById('configWhats').value,
-      manutencao:document.getElementById('configManutencao').checked
-    };
-    await db.ref('config').set(data);
-    alert('Configurações salvas!');
-  }
-
-  function carregarConfig(){
-    db.ref('config').once('value',snap=>{
-      const c = snap.val()||{};
-      if(c.nome) document.getElementById('configNome').value = c.nome;
-      if(c.desc) document.getElementById('configDesc').value = c.desc;
-      if(c.email) document.getElementById('configEmail').value = c.email;
-            if(c.whats) document.getElementById('configWhats').value = c.whats;
-      if(c.manutencao) document.getElementById('configManutencao').checked = c.manutencao;
-    });
-  }
-
-  function carregarDashboard(){
-    db.ref('produtos').once('value',s=>document.getElementById('totalProdutos').textContent=Object.keys(s.val()||{}).length);
-    db.ref('usuarios').once('value',s=>document.getElementById('totalClientes').textContent=Object.keys(s.val()||{}).length);
-    db.ref('pedidos').once('value',s=>{
-      const p = s.val()||{};
-      const hoje = new Date().setHours(0,0,0,0);
-      let totalVendas = 0;
-      let totalPedidos = 0;
-      Object.values(p).forEach(ped=>{
-        if(ped.criadoEm>=hoje){
-          totalVendas+=ped.total||0;
-          totalPedidos++;
-        }
-      });
-      document.getElementById('vendasHoje').textContent='R$ '+totalVendas.toFixed(2);
-      document.getElementById('pedidosHoje').textContent=totalPedidos;
-    });
-  }
-
-  async function zerarBanco(){
-    if(confirm('⚠️ ATENÇÃO! Isso vai apagar TUDO: produtos, pedidos, clientes, cupons, categorias, subcategorias.\n\nTem certeza?')){
-      if(confirm('Última chance! Realmente quer ZERAR o banco de dados?')){
-        await db.ref('produtos').remove();
-        await db.ref('pedidos').remove();
-        await db.ref('usuarios').remove();
-        await db.ref('cupons').remove();
-        await db.ref('categorias').remove();
-        await db.ref('subcategorias').remove();
-        alert('✅ Banco zerado com sucesso!');
-        location.reload();
-      }
-    }
-  }
-
-  // CORRIGIDO: Sem piscar, sem reload rápido, sem tela preta
-  auth.onAuthStateChanged(async user=>{
-    if(authVerificado) return;
-    authVerificado = true;
-
-    document.getElementById('loading').classList.add('hide');
-
-    if(user){
-      currentUser = user;
-      document.getElementById('screen-login').classList.remove('active');
-      document.getElementById('adminPanel').classList.add('active');
-      document.getElementById('userBadge').textContent = user.email[0].toUpperCase();
-      await carregarDashboard();
-      await carregarConfig();
-    }else{
-      document.getElementById('adminPanel').classList.remove('active');
-      document.getElementById('screen-login').classList.add('active');
-      currentUser = null;
-      document.getElementById('btnLogin').disabled = false;
-      document.getElementById('btnLogin').textContent = '🚀 ENTRAR';
-    }
-
-    // Libera pra próximo login/logout sem piscar
-    setTimeout(()=>{authVerificado = false}, 1000);
-  });
-
-} catch(e) {
-  debug('ERRO AO INICIAR: ' + e.message);
-  document.getElementById('loading').classList.add('hide');
-  document.getElementById('screen-login').classList.add('active');
+function toggleSenha(id,el){
+  const input=document.getElementById(id);
+  if(input.type==='password'){input.type='text';el.textContent='🙈'}
+  else{input.type='password';el.textContent='👁️'}
 }
+
+function validarSenha(){
+  const s=document.getElementById('cadSenha').value;
+  document.getElementById('req8').classList.toggle('valid',s.length>=8);
+  document.getElementById('reqMaiuscula').classList.toggle('valid',/[A-Z]/.test(s));
+  document.getElementById('reqNumero').classList.toggle('valid',/[0-9]/.test(s));
+  document.getElementById('reqEspecial').classList.toggle('valid',/[^A-Za-z0-9]/.test(s));
+}
+
+async function fazerLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const senha=document.getElementById('loginSenha').value;
+  const btn=document.getElementById('btnLogin');
+  const err=document.getElementById('loginError');
+  err.style.display='none';
+  if(!email||!senha){err.textContent='Preencha todos os campos';err.style.display='block';return}
+  btn.disabled=true;btn.textContent='ENTRANDO...';
+  try{
+    await auth.signInWithEmailAndPassword(email,senha);
+    window.location.href='home.html';
+  }catch(e){
+    let msg='Erro ao fazer login';
+    if(e.code==='auth/user-not-found')msg='Usuário não encontrado';
+    if(e.code==='auth/wrong-password')msg='Senha incorreta';
+    if(e.code==='auth/invalid-credential')msg='Email ou senha inválidos';
+    err.textContent=msg;err.style.display='block';
+    btn.disabled=false;btn.textContent='Entrar';
+  }
+}
+
+async function fazerCadastro(){
+  const nome=document.getElementById('cadNome').value.trim();
+  const email=document.getElementById('cadEmail').value.trim();
+  const senha=document.getElementById('cadSenha').value;
+  const confirma=document.getElementById('cadConfirmaSenha').value;
+  const aceite=document.getElementById('aceiteTermos').checked;
+  const btn=document.getElementById('btnCadastrar');
+  const err=document.getElementById('cadastroError');
+  const suc=document.getElementById('cadastroSuccess');
+  err.style.display='none';suc.style.display='none';
+  if(!nome||!email||!senha||!confirma){err.textContent='Preencha todos os campos';err.style.display='block';return}
+  if(senha!==confirma){err.textContent='As senhas não coincidem';err.style.display='block';return}
+  if(senha.length<8||!/[A-Z]/.test(senha)||!/[0-9]/.test(senha)||!/[^A-Za-z0-9]/.test(senha)){err.textContent='A senha não atende aos requisitos';err.style.display='block';return}
+  if(!aceite){err.textContent='Aceite os termos de uso';err.style.display='block';return}
+  btn.disabled=true;btn.textContent='CADASTRANDO...';
+  try{
+    const cred=await auth.createUserWithEmailAndPassword(email,senha);
+    await db.ref('usuarios/'+cred.user.uid).set({nome,email,criadoEm:Date.now()});
+    suc.textContent='Conta criada com sucesso!';suc.style.display='block';
+    setTimeout(()=>mudarTab('login'),2000);
+  }catch(e){
+    let msg='Erro ao cadastrar';
+    if(e.code==='auth/email-already-in-use')msg='Este e-mail já está cadastrado';
+    if(e.code==='auth/invalid-email')msg='E-mail inválido';
+    if(e.code==='auth/weak-password')msg='Senha muito fraca';
+    err.textContent=msg;err.style.display='block';
+    btn.disabled=false;btn.textContent='👤 Cadastrar';
+  }
+}
+
+async function enviarLink(){
+  const email=document.getElementById('esqueciEmail').value.trim();
+  const btn=document.getElementById('btnEsqueci');
+  const err=document.getElementById('esqueciError');
+  err.style.display='none';
+  if(!email){err.textContent='Digite seu e-mail';err.style.display='block';return}
+  btn.disabled=true;btn.textContent='ENVIANDO...';
+  try{
+    await auth.sendPasswordResetEmail(email);
+    document.getElementById('emailEnviado').textContent=email;
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById('screen-enviado').classList.add('active');
+  }catch(e){
+    let msg='Erro ao enviar e-mail';
+    if(e.code==='auth/user-not-found')msg='E-mail não cadastrado';
+    if(e.code==='auth/invalid-email')msg='E-mail inválido';
+    err.textContent=msg;err.style.display='block';
+  }finally{
+    btn.disabled=false;btn.textContent='✈️ Enviar link de redefinição';
+  }
+}
+
+auth.onAuthStateChanged(user=>{
+  if(user) window.location.href='home.html';
+});
 </script>
 </body>
 </html>
