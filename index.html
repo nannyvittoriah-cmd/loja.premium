@@ -273,6 +273,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <label>Estoque</label>
         <div class="input-box"><input type="number" id="prodEstoque" placeholder="0"></div>
       </div>
+    </div>
     <div class="grid-2">
       <div class="input-group">
         <label>Categoria</label>
@@ -533,10 +534,10 @@ async function abrirModalProduto(id=null){
 
   const cupomSelect = document.getElementById('prodCupomId');
   cupomSelect.innerHTML = '<option value="">Nenhum</option>';
-  const cupomSnap = await db.ref('cupons').orderByChild('ativo').equalTo(true).once('value');
+  const cupomSnap = await db.ref('cupons').once('value');
   const cups = cupomSnap.val()||{};
   Object.entries(cups).forEach(([cid,c])=>{
-    if(!c.expiraEm||c.expiraEm>Date.now()){
+    if(c.ativo && (!c.expiraEm||c.expiraEm>Date.now())){
       cupomSelect.innerHTML += `<option value="${cid}">${c.codigo} - ${c.desconto}%</option>`;
     }
   });
@@ -764,6 +765,11 @@ async function salvarCupom(){
 function carregarCupons(){
   db.ref('cupons').once('value',snap=>{
     todosCupons = snap.val()||{};
+    const lista = document.getElementById('listaCupons');
+    if(!todosCupons||Object.keys(todosCupons).length===0){
+      lista.innerHTML='<div class="empty">Nenhum cupom 🎟️</div>';
+      return;
+    }
     renderCupons();
   });
 }
