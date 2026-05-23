@@ -3,184 +3,386 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Prime Store VZ</title>
+<title>Admin - Prime Store VZ</title>
 <style>
-:root{--bg:#0a0a12;--card:#16161f;--input:#1e1e2a;--border:#2f2f42;--purple:#8b5cf6;--purple-dark:#7c3aed;--text:#fff;--text-dim:#8b8ba1;--green:#10b981;--red:#ef4444;--blue:#3b82f6}
+:root{--bg:#0a0a12;--sidebar:#0f0f1a;--card:#16161f;--input:#1e1e2a;--border:#2f2f42;--purple:#8b5cf6;--purple-dark:#7c3aed;--text:#fff;--text-dim:#8b8ba1;--green:#10b981;--red:#ef4444;--blue:#3b82f6;--yellow:#f59e0b}
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);color:var(--text);font-size:11px;padding-bottom:70px}
+body{background:var(--bg);color:var(--text);font-size:11px;overflow-x:hidden}
 .hide{display:none!important}
-.header{position:fixed;top:0;left:0;right:0;height:50px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:100}
+.login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;padding:16px}
+.login-box{width:100%;max-width:360px;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;text-align:center}
+.login-logo{width:64px;height:64px;margin:0 auto 12px}
+.login-logo svg{width:100%;height:100%;filter:drop-shadow(0 6px 20px rgba(139,92,246,0.4))}
+.login-title{font-size:18px;font-weight:800;margin-bottom:4px}
+.login-sub{font-size:11px;color:var(--text-dim);margin-bottom:18px}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:220px;background:var(--sidebar);border-right:1px solid var(--border);padding:16px 0;overflow-y:auto;z-index:100;transition:transform 0.3s}
+.sidebar.mobile{transform:translateX(-100%)}
+.sidebar.mobile.open{transform:translateX(0)}
+.logo-area{text-align:center;padding:0 16px 20px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.logo-star{color:var(--purple);font-size:20px;margin-bottom:6px}
+.logo-text{font-size:16px;font-weight:800;margin-bottom:2px}
+.logo-sub{font-size:9px;color:var(--purple);letter-spacing:1px}
+.menu-label{font-size:9px;color:var(--text-dim);padding:0 16px;margin-bottom:8px;font-weight:600;letter-spacing:0.5px}
+.menu-item{display:flex;align-items:center;gap:10px;padding:10px 16px;margin:2px 8px;border-radius:10px;color:var(--text-dim);font-size:11px;font-weight:500;cursor:pointer;transition:all 0.2s}
+.menu-item:hover{background:var(--input);color:var(--text)}
+.menu-item.active{background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);color:#fff;box-shadow:0 4px 12px rgba(139,92,246,0.3)}
+.menu-icon{font-size:16px;width:18px;text-align:center}
+.main{margin-left:220px;min-height:100vh;padding:16px;transition:margin 0.3s}
+.main.mobile{margin-left:0}
+.header{height:50px;background:var(--card);border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;margin-bottom:16px}
 .header-left{display:flex;align-items:center;gap:10px}
-.menu-btn{width:32px;height:32px;background:var(--input);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px}
-.logo{font-weight:800;font-size:13px;background:linear-gradient(135deg,#fff 0%,var(--purple) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.menu-btn{width:32px;height:32px;background:var(--input);border:1px solid var(--border);border-radius:8px;display:none;align-items:center;justify-content:center;cursor:pointer;font-size:16px}
+.header-title{font-size:13px;font-weight:800}
 .header-icons{display:flex;gap:8px}
-.icon-btn{width:32px;height:32px;background:transparent;border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;position:relative}
-.icon-btn:active{transform:scale(0.95);border-color:var(--purple)}
+.icon-btn{width:32px;height:32px;background:var(--input);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;position:relative}
+.icon-btn:active{transform:scale(0.95)}
 .badge{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;font-size:8px;font-weight:700;padding:2px 5px;border-radius:10px;min-width:16px;text-align:center}
-.content{padding:62px 10px 10px;max-width:480px;margin:0 auto}
-.search-box{width:100%;min-height:40px;background:var(--input);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;padding:0 12px;gap:8px;margin-bottom:14px}
-.search-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:11px}
-.search-box input::placeholder{color:var(--text-dim)}
-.banner{background:linear-gradient(135deg,#1e1e2a 0%,#2a1a4a 100%);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:16px;position:relative;overflow:hidden}
-.banner::before{content:'';position:absolute;top:-50px;right:-50px;width:150px;height:150px;background:radial-gradient(circle,rgba(139,92,246,0.3) 0%,transparent 70%);filter:blur(40px)}
-.banner-title{font-size:13px;font-weight:800;margin-bottom:4px;position:relative;z-index:1}
-.banner-sub{font-size:10px;color:var(--text-dim);margin-bottom:10px;position:relative;z-index:1}
-.banner-btn{height:32px;padding:0 16px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border:none;border-radius:9px;color:#fff;font-size:10px;font-weight:700;cursor:pointer;position:relative;z-index:1}
-.banner-img{position:absolute;right:10px;bottom:0;width:80px;height:80px;object-fit:contain;z-index:0}
-.section{margin-bottom:16px}
-.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.section-title{font-size:12px;font-weight:800}
-.section-link{font-size:10px;color:var(--purple);cursor:pointer;font-weight:600}
-.cat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.cat-item{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
-.cat-icon{width:48px;height:48px;background:var(--card);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
-.cat-icon:active{transform:scale(0.95);border-color:var(--purple)}
-.cat-name{font-size:9px;color:var(--text-dim);text-align:center}
-.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.prod-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:8px;cursor:pointer}
-.prod-card:active{transform:scale(0.98);border-color:var(--purple)}
-.prod-img{width:100%;aspect-ratio:1;background:var(--input);border-radius:8px;margin-bottom:6px;object-fit:cover}
-.prod-title{font-size:9px;font-weight:700;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.prod-price{font-size:10px;font-weight:900;color:var(--purple)}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:60px;background:var(--card);border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;z-index:50}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;color:var(--text-dim);cursor:pointer;position:relative}
-.nav-item.active{color:var(--purple)}
-.nav-icon{font-size:18px}
-.nav-badge{position:absolute;top:-2px;right:8px;background:var(--red);color:#fff;font-size:7px;font-weight:700;padding:1px 4px;border-radius:8px;min-width:14px;text-align:center}
+.screen{display:none}
+.screen.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
+.card-title{font-size:12px;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:12px}
+.stat-card{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center}
+.stat-value{font-size:18px;font-weight:900;color:var(--purple);margin-bottom:2px}
+.stat-label{font-size:9px;color:var(--text-dim)}
+.btn{width:100%;height:40px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border:none;border-radius:10px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:8px}
+.btn:active{transform:scale(0.98)}
+.btn-sm{height:30px;font-size:10px;padding:0 12px;width:auto}
+.btn-red{background:linear-gradient(135deg,var(--red) 0%,#dc2626 100%)}
+.btn-green{background:linear-gradient(135deg,var(--green) 0%,#059669 100%)}
+.btn-blue{background:linear-gradient(135deg,var(--blue) 0%,#2563eb 100%)}
+.btn-yellow{background:linear-gradient(135deg,var(--yellow) 0%,#d97706 100%)}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+.input-box{width:100%;min-height:38px;background:var(--input);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;padding:0 12px;gap:8px;margin-bottom:10px}
+.input-box input,.input-box textarea,.input-box select{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:11px}
+.input-box textarea{min-height:60px;resize:vertical;padding:10px 0}
+.tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto}
+.tab{height:34px;padding:0 12px;background:var(--input);border:1px solid var(--border);border-radius:9px;color:var(--text-dim);font-size:10px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.tab.active{background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);color:#fff;border-color:var(--purple)}
+.item-row{display:flex;align-items:center;gap:10px;padding:10px;background:var(--input);border:1px solid var(--border);border-radius:10px;margin-bottom:8px}
+.item-row.clickable{cursor:pointer}
+.item-row.clickable:active{border-color:var(--purple)}
+.img-thumb{width:40px;height:40px;background:var(--card);border-radius:8px;object-fit:cover}
+.item-info{flex:1}
+.item-title{font-size:11px;font-weight:700;margin-bottom:2px}
+.item-sub{font-size:9px;color:var(--text-dim)}
+.actions{display:flex;gap:6px}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,0.9);backdrop-filter:blur(10px);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
 .modal.active{display:flex}
 .modal-content{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;width:100%;max-width:440px;max-height:90vh;overflow-y:auto}
 .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .modal-title{font-size:13px;font-weight:800}
 .close-btn{width:28px;height:28px;background:var(--input);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px}
-.notif-item{background:var(--input);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:8px;font-size:10px;cursor:pointer}
-.notif-item.unread{border-color:var(--purple);background:rgba(139,92,246,0.1)}
-.notif-title{font-size:11px;font-weight:700;margin-bottom:3px}
-.notif-time{font-size:8px;color:var(--text-dim);margin-top:4px}
 .empty{text-align:center;padding:30px 20px;color:var(--text-dim);font-size:11px}
-.sidebar{position:fixed;left:-260px;top:0;bottom:0;width:260px;background:var(--card);border-right:1px solid var(--border);padding:16px;overflow-y:auto;z-index:150;transition:0.3s}
-.sidebar.open{left:0}
-.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:149;display:none}
-.sidebar-overlay.active{display:block}
-.sidebar-header{display:flex;align-items:center;gap:10px;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:16px}
-.user-avatar{width:40px;height:40px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800}
-.user-info{flex:1}
-.user-name{font-size:12px;font-weight:700;margin-bottom:2px}
-.user-email{font-size:9px;color:var(--text-dim)}
-.menu-item{display:flex;align-items:center;gap:10px;padding:10px 12px;margin:2px 0;border-radius:10px;color:var(--text-dim);font-size:11px;font-weight:500;cursor:pointer}
-.menu-item:active,.menu-item.active{background:var(--input);color:var(--text)}
-.menu-icon{font-size:16px;width:18px;text-align:center}
+.badge-status{font-size:8px;padding:2px 6px;border-radius:6px;font-weight:700;display:inline-block}
+.badge-pendente{background:rgba(245,158,11,0.2);color:#fbbf24}
+.badge-concluido{background:rgba(16,185,129,0.2);color:#34d399}
+.badge-cancelado{background:rgba(239,68,68,0.2);color:#f87171}
+.badge-ativo{background:rgba(16,185,129,0.2);color:#34d399}
+.badge-inativo{background:rgba(239,68,68,0.2);color:#f87171}
+.chat-box{max-height:280px;overflow-y:auto;background:var(--input);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:10px}
+.chat-msg{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px;margin-bottom:8px;font-size:10px}
+.chat-msg.admin{background:linear-gradient(135deg,rgba(139,92,246,0.2) 0%,rgba(124,58,237,0.2) 100%);border-color:var(--purple)}
+.chat-time{font-size:8px;color:var(--text-dim);margin-top:4px}
+.alert{padding:9px 12px;border-radius:9px;font-size:10px;margin-bottom:12px;display:none;font-weight:600;border:1px solid;text-align:center}
+.alert.success{background:rgba(16,185,129,0.15);border-color:var(--green);color:#6ee7b7}
+.alert.error{background:rgba(239,68,0.15);border-color:var(--red);color:#fca5a5}
+.img-upload{width:100%;height:100px;background:var(--input);border:2px dashed var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;margin-bottom:10px;position:relative;overflow:hidden}
+.img-upload img{width:100%;height:100%;object-fit:cover}
+.img-list{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.img-list-item{width:60px;height:60px;background:var(--input);border:1px solid var(--border);border-radius:8px;position:relative;overflow:hidden}
+.img-list-item img{width:100%;height:100%;object-fit:cover}
+.img-list-item .del{position:absolute;top:2px;right:2px;width:18px;height:18px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99;display:none}
+.overlay.active{display:block}
+.log-item{padding:8px;background:var(--input);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;font-size:9px;font-family:monospace}
+.log-time{color:var(--text-dim);font-size:8px;margin-bottom:2px}
+@media(max-width:768px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.menu-btn{display:flex}.overlay.active{display:block}}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-left">
-    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
-    <div class="logo">Prime Store VZ</div>
-  </div>
-  <div class="header-icons">
-    <button class="icon-btn" onclick="abrirModal('modalNotif')">🔔<span class="badge hide" id="badgeNotif">0</span></button>
-    <button class="icon-btn" onclick="abrirModal('modalCarrinho')">🛒<span class="badge hide" id="badgeCarrinho">0</span></button>
+<!-- TELA LOGIN ADM -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">
+      <svg viewBox="0 0 64 64" fill="none">
+        <defs><linearGradient id="logoG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs>
+        <path d="M32 6L14 20v24l18 14 18-14V20L32 6z" fill="url(#logoG)"/>
+        <path d="M32 16L22 25v14l10 9 10-9V25L32 16z" fill="#0a0a12"/>
+        <path d="M32 24L26 30v8l6 6 6-6v-8l-6-6z" fill="url(#logoG)"/>
+      </svg>
+    </div>
+    <div class="login-title">PRIME STORE</div>
+    <div class="login-sub">PAINEL ADMIN</div>
+    <div class="alert error" id="loginError"></div>
+    <div class="input-box"><span class="input-icon">📧</span><input type="email" id="loginEmail" placeholder="E-mail de admin"></div>
+    <div class="input-box"><span class="input-icon">🔒</span><input type="password" id="loginSenha" placeholder="Senha"></div>
+    <button class="btn" onclick="fazerLogin()">🚀 Entrar no Painel</button>
   </div>
 </div>
 
 <div class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <div class="user-avatar" id="userAvatar">U</div>
-    <div class="user-info">
-      <div class="user-name" id="userName">Usuário</div>
-      <div class="user-email" id="userEmail">email@email.com</div>
-    </div>
+  <div class="logo-area">
+    <div class="logo-star">★</div>
+    <div class="logo-text">PRIME</div>
+    <div class="logo-sub">STORE</div>
   </div>
-  <div class="menu-item active" onclick="irPara('home')"><span class="menu-icon">🏠</span>Início</div>
-  <div class="menu-item" onclick="irPara('pedidos')"><span class="menu-icon">📦</span>Meus Pedidos</div>
-  <div class="menu-item" onclick="irPara('favoritos')"><span class="menu-icon">❤️</span>Favoritos</div>
-  <div class="menu-item" onclick="irPara('carteira')"><span class="menu-icon">💰</span>Carteira</div>
-  <div class="menu-item" onclick="irPara('suporte')"><span class="menu-icon">💬</span>Suporte</div>
-  <div class="menu-item" onclick="irPara('config')"><span class="menu-icon">⚙️</span>Configurações</div>
+  <div class="menu-label">PAINEL ADMIN</div>
+  <div class="menu-item active" onclick="mostrarTela('dashboard')"><span class="menu-icon">💼</span>Dashboard</div>
+  <div class="menu-item" onclick="mostrarTela('produtos')"><span class="menu-icon">📦</span>Produtos</div>
+  <div class="menu-item" onclick="mostrarTela('categorias')"><span class="menu-icon">📁</span>Categorias</div>
+  <div class="menu-item" onclick="mostrarTela('pedidos')"><span class="menu-icon">🛒</span>Pedidos</div>
+  <div class="menu-item" onclick="mostrarTela('usuarios')"><span class="menu-icon">👥</span>Usuários</div>
+  <div class="menu-item" onclick="mostrarTela('cupons')"><span class="menu-icon">🎟️</span>Cupons</div>
+  <div class="menu-item" onclick="mostrarTela('banners')"><span class="menu-icon">🖼️</span>Slider / Banners</div>
+  <div class="menu-item" onclick="mostrarTela('config')"><span class="menu-icon">⚙️</span>Configurações</div>
+  <div class="menu-item" onclick="mostrarTela('relatorios')"><span class="menu-icon">📊</span>Relatórios</div>
+  <div class="menu-item" onclick="mostrarTela('suporte')"><span class="menu-icon">💬</span>Suporte</div>
+  <div class="menu-item" onclick="mostrarTela('logs')"><span class="menu-icon">📄</span>Logs do Sistema</div>
   <div class="menu-item" onclick="logout()"><span class="menu-icon">🚪</span>Sair</div>
 </div>
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-<div class="content">
-  <div class="search-box">
-    <span class="input-icon">🔍</span>
-    <input type="text" id="searchInput" placeholder="Buscar produtos..." oninput="buscarProdutos()">
-  </div>
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
-  <div class="banner">
-    <div class="banner-title">OFERTAS EXCLUSIVAS</div>
-    <div class="banner-sub">ATÉ 70% OFF</div>
-    <button class="banner-btn" onclick="irPara('ofertas')">VER OFERTAS</button>
-    <img src="https://i.imgur.com/placeholder.png" class="banner-img" id="bannerImg">
-  </div>
-
-  <div class="section">
-    <div class="section-header">
-      <div class="section-title">Categorias</div>
-      <div class="section-link" onclick="irPara('categorias')">Ver todas</div>
+<div class="main hide" id="main">
+  <div class="header">
+    <div class="header-left">
+      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+      <div class="header-title" id="headerTitle">Dashboard</div>
     </div>
-    <div class="cat-grid" id="catGrid"></div>
-  </div>
-
-  <div class="section">
-    <div class="section-header">
-      <div class="section-title">Produtos em destaque</div>
-      <div class="section-link" onclick="irPara('produtos')">Ver todos</div>
-    </div>
-    <div class="prod-grid" id="prodGrid"></div>
-  </div>
-</div>
-
-<div class="bottom-nav">
-  <div class="nav-item active" onclick="irPara('home')"><div class="nav-icon">🏠</div>Início</div>
-  <div class="nav-item" onclick="irPara('categorias')"><div class="nav-icon">📁</div>Categorias</div>
-  <div class="nav-item" onclick="irPara('carrinho')"><div class="nav-icon">🛒</div>Carrinho<span class="nav-badge hide" id="navBadgeCarrinho">0</span></div>
-  <div class="nav-item" onclick="irPara('pedidos')"><div class="nav-icon">📦</div>Pedidos</div>
-  <div class="nav-item" onclick="abrirModal('modalPerfil')"><div class="nav-icon">👤</div>Perfil</div>
-</div>
-
-<!-- MODAL NOTIFICAÇÕES -->
-<div class="modal" id="modalNotif">
-  <div class="modal-content">
-    <div class="modal-header"><div class="modal-title">🔔 Notificações</div><button class="close-btn" onclick="fecharModal('modalNotif')">×</button></div>
-    <div id="listaNotifs"></div>
-  </div>
-</div>
-
-<!-- MODAL CARRINHO -->
-<div class="modal" id="modalCarrinho">
-  <div class="modal-content">
-    <div class="modal-header"><div class="modal-title">🛒 Carrinho</div><button class="close-btn" onclick="fecharModal('modalCarrinho')">×</button></div>
-    <div id="listaCarrinho"></div>
-    <div class="card" style="margin-top:10px">
-      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-size:10px;color:var(--text-dim)">Subtotal:</span><span style="font-size:11px;font-weight:700" id="cartSubtotal">R$ 0,00</span></div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:12px"><span style="font-size:12px;font-weight:800">Total:</span><span style="font-size:14px;font-weight:900;color:var(--purple)" id="cartTotal">R$ 0,00</span></div>
-      <button class="btn" onclick="finalizarCompra()">💳 Finalizar Compra</button>
+    <div class="header-icons">
+      <button class="icon-btn" onclick="abrirModal('modalNotificar')">🔔<span class="badge hide" id="badgeNotif">0</span></button>
+      <button class="icon-btn" onclick="logout()">🚪</button>
     </div>
   </div>
+
+  <!-- DASHBOARD -->
+  <div class="screen active" id="screen-dashboard">
+    <div class="stats">
+      <div class="stat-card"><div class="stat-value" id="statVendas">R$ 0</div><div class="stat-label">Vendas Hoje</div></div>
+      <div class="stat-card"><div class="stat-value" id="statPedidos">0</div><div class="stat-label">Pedidos</div></div>
+      <div class="stat-card"><div class="stat-value" id="statClientes">0</div><div class="stat-label">Clientes</div></div>
+      <div class="stat-card"><div class="stat-value" id="statProdutos">0</div><div class="stat-label">Produtos</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">⚡ Ações Rápidas</div>
+      <button class="btn" onclick="abrirModal('modalProduto')">➕ Novo Produto</button>
+      <button class="btn btn-blue" onclick="abrirModal('modalNotificar')">🔔 Notificar Cliente</button>
+      <button class="btn btn-green" onclick="mostrarTela('pedidos')">📦 Ver Pedidos</button>
+      <button class="btn btn-yellow" onclick="mostrarTela('cupons')">🎟️ Gerenciar Cupons</button>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 Últimos Pedidos</div>
+      <div id="ultimosPedidos"></div>
+    </div>
+  </div>
+
+  <!-- PRODUTOS -->
+  <div class="screen" id="screen-produtos">
+    <div class="card">
+      <div class="card-title">📦 Produtos</div>
+      <button class="btn" onclick="abrirModal('modalProduto')">➕ Adicionar Produto</button>
+      <div class="input-box"><span class="input-icon">🔍</span><input type="text" id="searchProduto" placeholder="Buscar produto" oninput="filtrarProdutos()"></div>
+      <div id="listaProdutos"></div>
+    </div>
+  </div>
+
+  <!-- CATEGORIAS -->
+  <div class="screen" id="screen-categorias">
+    <div class="card">
+      <div class="card-title">📁 Categorias</div>
+      <button class="btn" onclick="abrirModal('modalCategoria')">➕ Nova Categoria</button>
+      <div id="listaCategorias"></div>
+    </div>
+  </div>
+
+  <!-- PEDIDOS -->
+  <div class="screen" id="screen-pedidos">
+    <div class="card">
+      <div class="card-title">🛒 Pedidos</div>
+      <div class="tabs">
+        <button class="tab active" onclick="filtrarStatusPedido('todos',this)">Todos</button>
+        <button class="tab" onclick="filtrarStatusPedido('pendente',this)">Pendentes</button>
+        <button class="tab" onclick="filtrarStatusPedido('concluido',this)">Concluídos</button>
+        <button class="tab" onclick="filtrarStatusPedido('cancelado',this)">Cancelados</button>
+      </div>
+      <div id="listaPedidos"></div>
+    </div>
+  </div>
+
+  <!-- USUÁRIOS -->
+  <div class="screen" id="screen-usuarios">
+    <div class="card">
+      <div class="card-title">👥 Usuários</div>
+      <div class="input-box"><span class="input-icon">🔍</span><input type="text" id="searchUsuario" placeholder="Buscar por e-mail ou nome" oninput="filtrarUsuarios()"></div>
+      <div id="listaUsuarios"></div>
+    </div>
+  </div>
+
+  <!-- CUPONS -->
+  <div class="screen" id="screen-cupons">
+    <div class="card">
+      <div class="card-title">🎟️ Cupons de Desconto</div>
+      <button class="btn" onclick="abrirModal('modalCupom')">➕ Novo Cupom</button>
+      <div id="listaCupons"></div>
+    </div>
+  </div>
+
+  <!-- BANNERS -->
+  <div class="screen" id="screen-banners">
+    <div class="card">
+      <div class="card-title">🖼️ Slider / Banners</div>
+      <button class="btn" onclick="abrirModal('modalBanner')">➕ Novo Banner</button>
+      <div id="listaBanners"></div>
+    </div>
+  </div>
+
+  <!-- CONFIG -->
+  <div class="screen" id="screen-config">
+    <div class="card">
+      <div class="card-title">⚙️ Configurações da Loja</div>
+      <div class="input-box"><input type="text" id="configNome" placeholder="Nome da loja"></div>
+      <div class="input-box"><textarea id="configDesc" placeholder="Descrição"></textarea></div>
+      <div class="input-box"><input type="email" id="configEmail" placeholder="Email de contato"></div>
+      <div class="input-box"><input type="text" id="configWhats" placeholder="WhatsApp"></div>
+      <div class="input-box"><input type="text" id="configPix" placeholder="Chave PIX"></div>
+      <label class="checkbox-label" style="margin-bottom:10px"><input type="checkbox" id="configManutencao"><span>Modo manutenção</span></label>
+      <button class="btn" onclick="salvarConfig()">💾 Salvar Configurações</button>
+    </div>
+  </div>
+
+  <!-- RELATÓRIOS -->
+  <div class="screen" id="screen-relatorios">
+    <div class="card">
+      <div class="card-title">📊 Relatórios</div>
+      <div class="stats">
+        <div class="stat-card"><div class="stat-value" id="relTotalVendas">R$ 0</div><div class="stat-label">Total Vendas</div></div>
+        <div class="stat-card"><div class="stat-value" id="relTotalPedidos">0</div><div class="stat-label">Total Pedidos</div></div>
+        <div class="stat-card"><div class="stat-value" id="relTicketMedio">R$ 0</div><div class="stat-label">Ticket Médio</div></div>
+        <div class="stat-card"><div class="stat-value" id="relTaxaConversao">0%</div><div class="stat-label">Taxa Conversão</div></div>
+      </div>
+      <button class="btn btn-blue" onclick="exportarRelatorio()">📥 Exportar Relatório</button>
+    </div>
+  </div>
+
+  <!-- SUPORTE -->
+  <div class="screen" id="screen-suporte">
+    <div class="card">
+      <div class="card-title">💬 Suporte / Mensagens</div>
+      <div class="tabs">
+        <button class="tab active" onclick="filtrarSuporte('todos',this)">Todos</button>
+        <button class="tab" onclick="filtrarSuporte('nao-lido',this)">Não Lidos</button>
+      </div>
+      <div id="listaSuporte"></div>
+    </div>
+  </div>
+
+  <!-- LOGS -->
+  <div class="screen" id="screen-logs">
+    <div class="card">
+      <div class="card-title">📄 Logs do Sistema</div>
+      <button class="btn btn-red btn-sm" onclick="limparLogs()">🗑️ Limpar Logs</button>
+      <div id="listaLogs" style="margin-top:10px"></div>
+    </div>
+  </div>
 </div>
 
-<!-- MODAL PERFIL -->
-<div class="modal" id="modalPerfil">
+<!-- MODAL NOTIFICAR -->
+<div class="modal" id="modalNotificar">
   <div class="modal-content">
-    <div class="modal-header"><div class="modal-title">👤 Meu Perfil</div><button class="close-btn" onclick="fecharModal('modalPerfil')">×</button></div>
-    <div id="perfilDetalhes"></div>
+    <div class="modal-header"><div class="modal-title">🔔 Notificar Cliente</div><button class="close-btn" onclick="fecharModal('modalNotificar')">×</button></div>
+    <div class="input-box"><span class="input-icon">📧</span><input type="email" id="notifEmail" placeholder="E-mail do cliente ou 'todos'" oninput="buscarClienteNotif()"></div>
+    <div id="clienteInfo" class="hide"></div>
+    <div class="chat-box hide" id="chatHistorico"></div>
+    <div class="input-box"><textarea id="notifMsg" placeholder="Digite a mensagem, link ou comprovante..."></textarea></div>
+    <button class="btn btn-blue" onclick="enviarNotificacao()">✈️ Enviar Notificação</button>
+    <button class="btn btn-green" onclick="enviarNotificacaoTodos()">📢 Enviar Para Todos</button>
   </div>
 </div>
 
 <!-- MODAL PRODUTO -->
 <div class="modal" id="modalProduto">
   <div class="modal-content">
-    <div class="modal-header"><div class="modal-title" id="prodModalNome">Produto</div><button class="close-btn" onclick="fecharModal('modalProduto')">×</button></div>
-    <div id="prodModalConteudo"></div>
+    <div class="modal-header"><div class="modal-title">📦 Produto</div><button class="close-btn" onclick="fecharModal('modalProduto')">×</button></div>
+    <input type="hidden" id="prodId">
+    <div class="input-box"><input type="text" id="prodNome" placeholder="Nome do produto"></div>
+    <div class="input-box"><input type="number" id="prodPreco" placeholder="Preço" step="0.01"></div>
+    <div class="input-box"><input type="number" id="prodEstoque" placeholder="Estoque"></div>
+    <div class="input-box"><select id="prodCatId"><option value="">Selecione categoria</option></select></div>
+    <div class="input-box"><textarea id="prodDesc" placeholder="Descrição"></textarea></div>
+    <div class="img-upload" onclick="document.getElementById('prodImgInput').click()"><div id="prodImgText">📷 Clique para adicionar imagens</div><input type="file" id="prodImgInput" accept="image/*" multiple style="display:none" onchange="previewProdImgs(event)"></div>
+    <div class="img-list" id="prodImgList"></div>
+    <button class="btn" onclick="salvarProduto()">💾 Salvar Produto</button>
+  </div>
+</div>
+
+<!-- MODAL CATEGORIA -->
+<div class="modal" id="modalCategoria">
+  <div class="modal-content">
+    <div class="modal-header"><div class="modal-title">📁 Categoria</div><button class="close-btn" onclick="fecharModal('modalCategoria')">×</button></div>
+    <input type="hidden" id="catId">
+    <div class="input-box"><input type="text" id="catNome" placeholder="Nome da categoria"></div>
+    <button class="btn" onclick="salvarCategoria()">💾 Salvar Categoria</button>
+  </div>
+</div>
+
+<!-- MODAL CUPOM -->
+<div class="modal" id="modalCupom">
+  <div class="modal-content">
+    <div class="modal-header"><div class="modal-title">🎟️ Cupom</div><button class="close-btn" onclick="fecharModal('modalCupom')">×</button></div>
+    <input type="hidden" id="cupomId">
+    <div class="input-box"><input type="text" id="cupomCodigo" placeholder="Código (ex: PRIME10)"></div>
+    <div class="input-box"><input type="number" id="cupomDesconto" placeholder="Desconto %"></div>
+    <div class="input-box"><input type="number" id="cupomLimite" placeholder="Limite de uso"></div>
+    <div class="input-box"><input type="number" id="cupomValidade" placeholder="Validade em dias (0=ilimitado)"></div>
+    <label class="checkbox-label" style="margin-bottom:10px"><input type="checkbox" id="cupomAtivo" checked><span>Ativo</span></label>
+    <button class="btn" onclick="salvarCupom()">💾 Salvar Cupom</button>
+  </div>
+</div>
+
+<!-- MODAL BANNER -->
+<div class="modal" id="modalBanner">
+  <div class="modal-content">
+    <div class="modal-header"><div class="modal-title">🖼️ Banner</div><button class="close-btn" onclick="fecharModal('modalBanner')">×</button></div>
+    <input type="hidden" id="bannerId">
+    <div class="input-box"><input type="text" id="bannerTitulo" placeholder="Título do banner"></div>
+    <div class="input-box"><input type="text" id="bannerLink" placeholder="Link (opcional)"></div>
+    <div class="img-upload" onclick="document.getElementById('bannerImgInput').click()"><img id="bannerImgPreview" class="hide"><div id="bannerImgText">📷 Clique para adicionar imagem</div><input type="file" id="bannerImgInput" accept="image/*" style="display:none" onchange="previewBannerImg(event)"></div>
+    <label class="checkbox-label" style="margin-bottom:10px"><input type="checkbox" id="bannerAtivo" checked><span>Ativo</span></label>
+    <button class="btn" onclick="salvarBanner()">💾 Salvar Banner</button>
+  </div>
+</div>
+
+<!-- MODAL DETALHES PEDIDO -->
+<div class="modal" id="modalPedido">
+  <div class="modal-content">
+    <div class="modal-header"><div class="modal-title">🛒 Detalhes do Pedido</div><button class="close-btn" onclick="fecharModal('modalPedido')">×</button></div>
+    <div id="pedidoDetalhes"></div>
+  </div>
+</div>
+
+<!-- MODAL DETALHES CLIENTE -->
+<div class="modal" id="modalCliente">
+  <div class="modal-content">
+    <div class="modal-header"><div class="modal-title">👤 Perfil do Cliente</div><button class="close-btn" onclick="fecharModal('modalCliente')">×</button></div>
+    <div id="clienteDetalhes"></div>
+  </div>
+</div>
+
+<!-- MODAL CHAT SUPORTE -->
+<div class="modal" id="modalChat">
+  <div class="modal-content">
+    <div class="modal-header"><div class="modal-title" id="chatTitulo">💬 Chat</div><button class="close-btn" onclick="fecharModal('modalChat')">×</button></div>
+    <div class="chat-box" id="chatMsgs"></div>
+    <div class="input-box"><input type="text" id="chatInput" placeholder="Digite sua mensagem..." onkeypress="if(event.key==='Enter')enviarChatMsg()"><button class="btn-sm btn-blue" onclick="enviarChatMsg()" style="margin:0">✈️</button></div>
   </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -194,215 +396,502 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth();
 const db=firebase.database();
+const storage=firebase.storage();
 
-let currentUser=null,todosProdutos={},todasCategorias={},carrinho={},notificacoes={};
+const ADMIN_EMAIL='vittoriahvahz@gmail.com';
+let currentUser=null,todosProdutos={},todosPedidos={},todosClientes={},todosCupons={},todosBanners={},todasCategorias={},filtroPedidoStatus='todos',filtroSuporte='todos',clienteSelecionado=null,chatClienteId=null,imagensProduto=[];
 
-auth.onAuthStateChanged(async user=>{
-  if(!user){window.location.href='index.html';return}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('overlay').classList.toggle('active')}
+function mostrarTela(tela){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+tela).classList.add('active');
+  document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active'));
+  event.target.closest('.menu-item').classList.add('active');
+  document.getElementById('headerTitle').textContent=event.target.closest('.menu-item').textContent.trim();
+  if(window.innerWidth<=768)toggleSidebar();
+}
+function abrirModal(id){document.getElementById(id).classList.add('active')}
+function fecharModal(id){document.getElementById(id).classList.remove('active');if(id==='modalNotificar'){clienteSelecionado=null;document.getElementById('clienteInfo').classList.add('hide');document.getElementById('chatHistorico').classList.add('hide');document.getElementById('notifEmail').value='';document.getElementById('notifMsg').value=''}}
+
+function debug(msg){db.ref('logs').push({msg,timestamp:Date.now(),user:currentUser?.email||'anonimo'});carregarLogs()}
+
+function fazerLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const senha=document.getElementById('loginSenha').value;
+  const err=document.getElementById('loginError');
+  err.style.display='none';
+  if(email!==ADMIN_EMAIL){err.textContent='Acesso negado. Apenas ADM autorizado.';err.style.display='block';return}
+  auth.signInWithEmailAndPassword(email,senha).catch(e=>{
+    err.textContent=e.code==='auth/wrong-password'?'Senha incorreta':'Erro ao fazer login';err.style.display='block';
+  });
+}
+
+auth.onAuthStateChanged(user=>{
+  if(!user||user.email!==ADMIN_EMAIL){
+    document.getElementById('loginScreen').classList.remove('hide');
+    document.getElementById('main').classList.add('hide');
+    if(user)auth.signOut();
+    return;
+  }
   currentUser=user;
-  const snap=await db.ref('usuarios/'+user.uid).once('value');
-  const u=snap.val()||{};
-  document.getElementById('userName').textContent=u.nome||'Usuário';
-  document.getElementById('userEmail').textContent=user.email;
-  document.getElementById('userAvatar').textContent=(u.nome||'U')[0].toUpperCase();
-  carregarCategorias();
-  carregarProdutos();
-  carregarCarrinho();
-  carregarNotificacoes();
-  carregarBanner();
+  document.getElementById('loginScreen').classList.add('hide');
+  document.getElementById('main').classList.remove('hide');
+  if(window.innerWidth<=768){document.getElementById('sidebar').classList.add('mobile');document.getElementById('main').classList.add('mobile')}
+  carregarDashboard();carregarProdutos();carregarCategorias();carregarPedidos();carregarUsuarios();carregarCupons();carregarBanners();carregarConfig();carregarLogs();carregarSuporte();
+  debug('Admin logou no painel');
 });
 
-function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('active')}
-function abrirModal(id){document.getElementById(id).classList.add('active')}
-function fecharModal(id){document.getElementById(id).classList.remove('active')}
-function irPara(pagina){if(pagina==='home'){window.scrollTo(0,0)}else{alert('Página: '+pagina)}}
+function logout(){if(confirm('Deseja sair?')){debug('Admin deslogou');auth.signOut()}}
 
-async function carregarCategorias(){
-  const snap=await db.ref('categorias').once('value');
-  todasCategorias=snap.val()||{};
-  let html='';const icons={Games:'🎮',Streaming:'📺',Redes:'🌐',Sociais:'👥','Gift Cards':'🎁',Apps:'📱'};
-  Object.entries(todasCategorias).slice(0,5).forEach(([id,c])=>{
-    html+=`<div class="cat-item" onclick="filtrarCategoria('${id}')"><div class="cat-icon">${icons[c.nome]||'📁'}</div><div class="cat-name">${c.nome}</div></div>`;
+function carregarDashboard(){
+  db.ref('produtos').once('value',s=>document.getElementById('statProdutos').textContent=Object.keys(s.val()||{}).length);
+  db.ref('usuarios').once('value',s=>document.getElementById('statClientes').textContent=Object.keys(s.val()||{}).length);
+  db.ref('pedidos').once('value',s=>{
+    const p=s.val()||{};const hoje=new Date().setHours(0,0,0,0);let totalVendas=0,totalPedidos=0;
+    Object.values(p).forEach(ped=>{if(ped.criadoEm>=hoje&&ped.status!=='cancelado'){totalVendas+=ped.total||0;totalPedidos++}});
+    document.getElementById('statVendas').textContent='R$ '+totalVendas.toFixed(2);
+    document.getElementById('statPedidos').textContent=totalPedidos;
   });
-  document.getElementById('catGrid').innerHTML=html||'<div class="empty" style="grid-column:1/-1">Nenhuma categoria</div>';
+  db.ref('pedidos').limitToLast(5).once('value',snap=>{
+    const peds=snap.val()||{};let html='';
+    Object.entries(peds).reverse().forEach(([id,p])=>{
+      const statusClass=p.status==='concluido'?'badge-concluido':p.status==='cancelado'?'badge-cancelado':'badge-pendente';
+      html+=`<div class="item-row"><div class="item-info"><div class="item-title">#${id.slice(-6)} <span class="badge-status ${statusClass}">${p.status}</span></div><div class="item-sub">👤 ${p.clienteNome} • 💰 R$ ${p.total.toFixed(2)}</div></div></div>`;
+    });
+    document.getElementById('ultimosPedidos').innerHTML=html||'<div class="empty">Nenhum pedido</div>';
+  });
 }
 
-async function carregarProdutos(){
-  const snap=await db.ref('produtos').limitToLast(6).once('value');
-  todosProdutos=snap.val()||{};
-  let html='';
+// PRODUTOS
+function carregarProdutos(){
+  db.ref('produtos').on('value',snap=>{
+    todosProdutos=snap.val()||{};renderProdutos();
+    db.ref('categorias').once('value',s=>{
+      todasCategorias=s.val()||{};
+      let html='<option value="">Selecione categoria</option>';
+      Object.entries(todasCategorias).forEach(([id,c])=>html+=`<option value="${id}">${c.nome}</option>`);
+      document.getElementById('prodCatId').innerHTML=html;
+    });
+  });
+}
+function renderProdutos(){
+  const lista=document.getElementById('listaProdutos');let html='';
   Object.entries(todosProdutos).forEach(([id,p])=>{
     const img=p.imagens&&p.imagens.length?p.imagens[0]:'https://via.placeholder.com/100';
-    html+=`<div class="prod-card" onclick="abrirProduto('${id}')">
-      <img src="${img}" class="prod-img" onerror="this.src='https://via.placeholder.com/100'">
-      <div class="prod-title">${p.nome}</div>
-      <div class="prod-price">R$ ${p.preco.toFixed(2)}</div>
-    </div>`;
+    const cat=todasCategorias[p.categoriaId]?.nome||'Sem categoria';
+    html+=`<div class="item-row"><img src="${img}" class="img-thumb" onerror="this.src='https://via.placeholder.com/100'"><div class="item-info"><div class="item-title">📦 ${p.nome}</div><div class="item-sub">💵 R$ ${p.preco.toFixed(2)} • 📊 ${p.estoque} • 📁 ${cat}</div></div><div class="actions"><button class="btn btn-sm btn-blue" onclick="editarProduto('${id}')">✏️</button><button class="btn btn-sm btn-red" onclick="deletarProduto('${id}')">🗑️</button></div></div>`;
   });
-  document.getElementById('prodGrid').innerHTML=html||'<div class="empty" style="grid-column:1/-1">Nenhum produto</div>';
+  lista.innerHTML=html||'<div class="empty">Nenhum produto 📦</div>';
 }
-
-async function carregarBanner(){
-  const snap=await db.ref('banners').orderByChild('ativo').equalTo(true).limitToFirst(1).once('value');
-  const banners=snap.val()||{};
-  const banner=Object.values(banners)[0];
-  if(banner&&banner.imagem)document.getElementById('bannerImg').src=banner.imagem;
-}
-
-function buscarProdutos(){
-  const busca=document.getElementById('searchInput').value.toLowerCase();
-  let html='';
+function filtrarProdutos(){
+  const busca=document.getElementById('searchProduto').value.toLowerCase();
+  const lista=document.getElementById('listaProdutos');let html='';
   Object.entries(todosProdutos).forEach(([id,p])=>{
     if(!busca||p.nome.toLowerCase().includes(busca)){
       const img=p.imagens&&p.imagens.length?p.imagens[0]:'https://via.placeholder.com/100';
-      html+=`<div class="prod-card" onclick="abrirProduto('${id}')">
-        <img src="${img}" class="prod-img" onerror="this.src='https://via.placeholder.com/100'">
-        <div class="prod-title">${p.nome}</div>
-        <div class="prod-price">R$ ${p.preco.toFixed(2)}</div>
-      </div>`;
+      const cat=todasCategorias[p.categoriaId]?.nome||'Sem categoria';
+      html+=`<div class="item-row"><img src="${img}" class="img-thumb" onerror="this.src='https://via.placeholder.com/100'"><div class="item-info"><div class="item-title">📦 ${p.nome}</div><div class="item-sub">💵 R$ ${p.preco.toFixed(2)} • 📊 ${p.estoque} • 📁 ${cat}</div></div><div class="actions"><button class="btn btn-sm btn-blue" onclick="editarProduto('${id}')">✏️</button><button class="btn btn-sm btn-red" onclick="deletarProduto('${id}')">🗑️</button></div></div>`;
     }
   });
-  document.getElementById('prodGrid').innerHTML=html||'<div class="empty" style="grid-column:1/-1">Nenhum produto encontrado</div>';
+  lista.innerHTML=html||'<div class="empty">Nenhum produto encontrado</div>';
 }
-
-function filtrarCategoria(catId){
-  let html='';
-  Object.entries(todosProdutos).forEach(([id,p])=>{
-    if(p.categoriaId===catId){
-      const img=p.imagens&&p.imagens.length?p.imagens[0]:'https://via.placeholder.com/100';
-      html+=`<div class="prod-card" onclick="abrirProduto('${id}')">
-        <img src="${img}" class="prod-img" onerror="this.src='https://via.placeholder.com/100'">
-        <div class="prod-title">${p.nome}</div>
-        <div class="prod-price">R$ ${p.preco.toFixed(2)}</div>
-      </div>`;
-    }
-  });
-  document.getElementById('prodGrid').innerHTML=html||'<div class="empty" style="grid-column:1/-1">Nenhum produto nesta categoria</div>';
-}
-
-async function abrirProduto(id){
+function editarProduto(id){
   const p=todosProdutos[id];
-  const img=p.imagens&&p.imagens.length?p.imagens[0]:'https://via.placeholder.com/300';
-  document.getElementById('prodModalNome').textContent=p.nome;
-  document.getElementById('prodModalConteudo').innerHTML=`
-    <img src="${img}" style="width:100%;height:200px;object-fit:cover;border-radius:10px;margin-bottom:12px" onerror="this.src='https://via.placeholder.com/300'">
-    <div style="font-size:16px;font-weight:900;color:var(--purple);margin-bottom:8px">R$ ${p.preco.toFixed(2)}</div>
-    <div style="font-size:10px;color:var(--text-dim);margin-bottom:12px;line-height:1.4">${p.descricao||'Sem descrição'}</div>
-    <div style="font-size:10px;color:var(--text-dim);margin-bottom:12px">📊 Estoque: ${p.estoque}</div>
-    <button class="btn" onclick="addCarrinho('${id}')">🛒 Adicionar ao Carrinho</button>
-  `;
+  document.getElementById('prodId').value=id;
+  document.getElementById('prodNome').value=p.nome;
+  document.getElementById('prodPreco').value=p.preco;
+  document.getElementById('prodEstoque').value=p.estoque;
+  document.getElementById('prodCatId').value=p.categoriaId||'';
+  document.getElementById('prodDesc').value=p.descricao||'';
+  imagensProduto=p.imagens||[];renderProdImgs();
   abrirModal('modalProduto');
 }
-
-async function addCarrinho(prodId){
-  if(!carrinho[prodId])carrinho[prodId]=0;
-  carrinho[prodId]++;
-  await db.ref('carrinhos/'+currentUser.uid).set(carrinho);
-  carregarCarrinho();
-  fecharModal('modalProduto');
-  alert('✅ Produto adicionado ao carrinho!');
+async function deletarProduto(id){if(confirm('Deletar produto?')){await db.ref('produtos/'+id).remove();debug('Produto deletado: '+todosProdutos[id].nome)}}
+function previewProdImgs(e){
+  const files=e.target.files;
+  for(let f of files){
+    const reader=new FileReader();
+    reader.onload=ev=>{imagensProduto.push(ev.target.result);renderProdImgs()};
+    reader.readAsDataURL(f);
+  }
+}
+function renderProdImgs(){
+  let html='';
+  imagensProduto.forEach((img,i)=>html+=`<div class="img-list-item"><img src="${img}"><div class="del" onclick="removerProdImg(${i})">×</div></div>`);
+  document.getElementById('prodImgList').innerHTML=html;
+  document.getElementById('prodImgText').style.display=imagensProduto.length?'none':'block';
+}
+function removerProdImg(i){imagensProduto.splice(i,1);renderProdImgs()}
+async function salvarProduto(){
+  const id=document.getElementById('prodId').value;
+  const nome=document.getElementById('prodNome').value.trim();
+  const preco=parseFloat(document.getElementById('prodPreco').value);
+  const estoque=parseInt(document.getElementById('prodEstoque').value);
+  const categoriaId=document.getElementById('prodCatId').value;
+  const descricao=document.getElementById('prodDesc').value.trim();
+  if(!nome||!preco||isNaN(estoque))return alert('Preencha nome, preço e estoque');
+  const data={nome,preco,estoque,categoriaId,descricao,imagens:imagensProduto,criadoEm:Date.now()};
+  if(id){await db.ref('produtos/'+id).update(data);debug('Produto atualizado: '+nome)}
+  else{await db.ref('produtos').push(data);debug('Produto criado: '+nome)}
+  fecharModal('modalProduto');limparFormProduto();
+}
+function limparFormProduto(){
+  document.getElementById('prodId').value='';
+  document.getElementById('prodNome').value='';
+  document.getElementById('prodPreco').value='';
+  document.getElementById('prodEstoque').value='';
+  document.getElementById('prodCatId').value='';
+  document.getElementById('prodDesc').value='';
+  imagensProduto=[];renderProdImgs();
 }
 
-async function carregarCarrinho(){
-  const snap=await db.ref('carrinhos/'+currentUser.uid).once('value');
-  carrinho=snap.val()||{};
-  const qtd=Object.values(carrinho).reduce((a,b)=>a+b,0);
-  document.getElementById('badgeCarrinho').textContent=qtd;
-  document.getElementById('badgeCarrinho').classList.toggle('hide',qtd===0);
-  document.getElementById('navBadgeCarrinho').textContent=qtd;
-  document.getElementById('navBadgeCarrinho').classList.toggle('hide',qtd===0);
-  
-  let html='',subtotal=0;
-  for(let[prodId,qtd]of Object.entries(carrinho)){
-    const p=todosProdutos[prodId];
-    if(p){
-      const img=p.imagens&&p.imagens.length?p.imagens[0]:'https://via.placeholder.com/100';
-      subtotal+=p.preco*qtd;
-      html+=`<div class="item-row">
-        <img src="${img}" class="img-thumb" onerror="this.src='https://via.placeholder.com/100'">
-        <div class="item-info">
-          <div class="item-title">${p.nome}</div>
-          <div class="item-sub">Qtd: ${qtd} • R$ ${(p.preco*qtd).toFixed(2)}</div>
-        </div>
-        <button class="btn-sm btn-red" onclick="removerCarrinho('${prodId}')">🗑️</button>
-      </div>`;
+// CATEGORIAS
+function carregarCategorias(){
+  db.ref('categorias').on('value',snap=>{
+    todasCategorias=snap.val()||{};renderCategorias();
+  });
+}
+function renderCategorias(){
+  const lista=document.getElementById('listaCategorias');let html='';
+  Object.entries(todasCategorias).forEach(([id,c])=>{
+    html+=`<div class="item-row"><div class="item-info"><div class="item-title">📁 ${c.nome}</div></div><div class="actions"><button class="btn btn-sm btn-red" onclick="deletarCategoria('${id}')">🗑️</button></div></div>`;
+  });
+  lista.innerHTML=html||'<div class="empty">Nenhuma categoria 📁</div>';
+}
+async function salvarCategoria(){
+  const id=document.getElementById('catId').value;
+  const nome=document.getElementById('catNome').value.trim();
+  if(!nome)return alert('Digite o nome');
+  const data={nome,criadoEm:Date.now()};
+  if(id)await db.ref('categorias/'+id).update(data);
+  else await db.ref('categorias').push(data);
+  debug('Categoria salva: '+nome);
+  fecharModal('modalCategoria');
+  document.getElementById('catId').value='';
+  document.getElementById('catNome').value='';
+}
+async function deletarCategoria(id){if(confirm('Deletar categoria?')){await db.ref('categorias/'+id).remove();debug('Categoria deletada: '+todasCategorias[id].nome)}}
+
+// PEDIDOS
+function carregarPedidos(){
+  db.ref('pedidos').on('value',snap=>{
+    todosPedidos=snap.val()||{};filtrarStatusPedido('todos',document.querySelector('#screen-pedidos.tab.active'));
+  });
+}
+function filtrarStatusPedido(status,el){
+  filtroPedidoStatus=status;
+  document.querySelectorAll('#screen-pedidos.tab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  const lista=document.getElementById('listaPedidos');let html='';
+  Object.entries(todosPedidos).reverse().forEach(([id,p])=>{
+    if(status==='todos'||p.status===status){
+      const statusClass=p.status==='concluido'?'badge-concluido':p.status==='cancelado'?'badge-cancelado':'badge-pendente';
+      const statusEmoji=p.status==='concluido'?'✅':p.status==='cancelado'?'❌':'⏳';
+      html+=`<div class="item-row clickable" onclick="verPedido('${id}')"><div class="item-info"><div class="item-title">#${id.slice(-6)} <span class="badge-status ${statusClass}">${statusEmoji} ${p.status}</span></div><div class="item-sub">👤 ${p.clienteNome} • 💰 R$ ${p.total.toFixed(2)} • 📅 ${new Date(p.criadoEm).toLocaleDateString('pt-BR')}</div></div><div class="actions"><button class="btn btn-sm btn-green" onclick="event.stopPropagation();atualizarStatus('${id}','concluido')">✅</button><button class="btn btn-sm btn-red" onclick="event.stopPropagation();atualizarStatus('${id}','cancelado')">❌</button></div></div>`;
     }
-  }
-  document.getElementById('listaCarrinho').innerHTML=html||'<div class="empty">Carrinho vazio</div>';
-  document.getElementById('cartSubtotal').textContent='R$ '+subtotal.toFixed(2);
-  document.getElementById('cartTotal').textContent='R$ '+subtotal.toFixed(2);
-}
-
-async function removerCarrinho(prodId){
-  delete carrinho[prodId];
-  await db.ref('carrinhos/'+currentUser.uid).set(carrinho);
-  carregarCarrinho();
-}
-
-async function finalizarCompra(){
-  if(Object.keys(carrinho).length===0)return alert('Carrinho vazio');
-  let total=0,produtos=[];
-  for(let[prodId,qtd]of Object.entries(carrinho)){
-    const p=todosProdutos[prodId];
-    if(p){total+=p.preco*qtd;produtos.push({id:prodId,nome:p.nome,preco:p.preco,qtd})}
-  }
-  await db.ref('pedidos').push({
-    clienteId:currentUser.uid,
-    clienteNome:document.getElementById('userName').textContent,
-    clienteEmail:currentUser.email,
-    produtos,total,status:'pendente',criadoEm:Date.now()
   });
-  await db.ref('carrinhos/'+currentUser.uid).remove();
-  carrinho={};
-  carregarCarrinho();
-  fecharModal('modalCarrinho');
-  alert('✅ Pedido realizado! Aguarde confirmação.');
+  lista.innerHTML=html||'<div class="empty">Nenhum pedido</div>';
+}
+async function atualizarStatus(id,status){
+  await db.ref('pedidos/'+id).update({status});
+  debug(`Pedido #${id.slice(-6)} marcado como ${status}`);
+}
+async function verPedido(id){
+  const p=todosPedidos[id];
+  let produtosHtml='';
+  p.produtos.forEach(prod=>produtosHtml+=`<div class="item-row"><div class="item-info"><div class="item-title">${prod.nome}</div><div class="item-sub">Qtd: ${prod.qtd} • R$ ${prod.preco.toFixed(2)} cada</div></div></div>`);
+  document.getElementById('pedidoDetalhes').innerHTML=`
+    <div class="item-title" style="font-size:14px;margin-bottom:8px">#${id.slice(-6)}</div>
+    <div class="item-sub" style="margin-bottom:12px">📅 ${new Date(p.criadoEm).toLocaleString('pt-BR')}</div>
+    <div class="card-title" style="margin-top:16px">👤 Cliente</div>
+    <div class="item-row"><div class="item-info"><div class="item-title">${p.clienteNome}</div><div class="item-sub">📧 ${p.clienteEmail}</div></div></div>
+    <div class="card-title" style="margin-top:16px">📦 Produtos</div>
+    ${produtosHtml}
+    <div class="item-row" style="margin-top:12px"><div class="item-info"><div class="item-title">💰 Total</div></div><div class="item-sub" style="color:var(--purple);font-weight:900;font-size:14px">R$ ${p.total.toFixed(2)}</div></div>
+    <button class="btn btn-green" onclick="atualizarStatus('${id}','concluido');fecharModal('modalPedido')">✅ Marcar como Concluído</button>
+    <button class="btn btn-red" onclick="atualizarStatus('${id}','cancelado');fecharModal('modalPedido')">❌ Cancelar Pedido</button>
+    <button class="btn btn-blue" onclick="notificarCliente('${p.clienteEmail}')">🔔 Notificar Cliente</button>
+  `;
+  abrirModal('modalPedido');
 }
 
-async function carregarNotificacoes(){
-  db.ref('notificacoes/'+currentUser.uid).orderByChild('criadoEm').on('value',snap=>{
-    notificacoes=snap.val()||{};
-    const naoLidas=Object.values(notificacoes).filter(n=>!n.lida).length;
-    document.getElementById('badgeNotif').textContent=naoLidas;
-    document.getElementById('badgeNotif').classList.toggle('hide',naoLidas===0);
-    
-    let html='';
-    Object.entries(notificacoes).reverse().forEach(([id,n])=>{
-      html+=`<div class="notif-item ${!n.lida?'unread':''}" onclick="marcarLida('${id}')">
-        <div class="notif-title">${n.mensagem}</div>
-        <div class="notif-time">${new Date(n.criadoEm).toLocaleString('pt-BR')}</div>
-      </div>`;
+// USUÁRIOS
+function carregarUsuarios(){
+  db.ref('usuarios').on('value',snap=>{
+    todosClientes=snap.val()||{};renderUsuarios();
+  });
+}
+function renderUsuarios(){
+  const lista=document.getElementById('listaUsuarios');let html='';
+  Object.entries(todosClientes).forEach(([uid,u])=>{
+    html+=`<div class="item-row clickable" onclick="verCliente('${uid}')"><div class="item-info"><div class="item-title">👤 ${u.nome}</div><div class="item-sub">📧 ${u.email}</div></div><div class="actions"><button class="btn btn-sm btn-blue" onclick="event.stopPropagation();notificarCliente('${u.email}')">🔔</button></div></div>`;
+  });
+  lista.innerHTML=html||'<div class="empty">Nenhum usuário 👥</div>';
+}
+function filtrarUsuarios(){
+  const busca=document.getElementById('searchUsuario').value.toLowerCase();
+  const lista=document.getElementById('listaUsuarios');let html='';
+  Object.entries(todosClientes).forEach(([uid,u])=>{
+    if(!busca||u.email.toLowerCase().includes(busca)||u.nome.toLowerCase().includes(busca)){
+      html+=`<div class="item-row clickable" onclick="verCliente('${uid}')"><div class="item-info"><div class="item-title">👤 ${u.nome}</div><div class="item-sub">📧 ${u.email}</div></div><div class="actions"><button class="btn btn-sm btn-blue" onclick="event.stopPropagation();notificarCliente('${u.email}')">🔔</button></div></div>`;
+    }
+  });
+  lista.innerHTML=html||'<div class="empty">Nenhum usuário encontrado</div>';
+}
+async function verCliente(uid){
+  const userSnap=await db.ref('usuarios/'+uid).once('value');const user=userSnap.val();
+  const pedSnap=await db.ref('pedidos').orderByChild('clienteId').equalTo(uid).once('value');const peds=pedSnap.val()||{};
+  let totalGasto=0,concluidos=0,pendentes=0;
+  Object.values(peds).forEach(p=>{totalGasto+=p.total||0;if(p.status==='concluido')concluidos++;if(p.status==='pendente')pendentes++});
+  document.getElementById('clienteDetalhes').innerHTML=`
+    <div class="item-title" style="font-size:14px;margin-bottom:8px">${user.nome}</div>
+    <div class="item-sub" style="margin-bottom:12px">📧 ${user.email}</div>
+    <div class="card-title" style="margin-top:16px">📊 Resumo</div>
+    <div class="item-row"><div class="item-info"><div class="item-title">Total de pedidos</div></div><div class="item-sub">${Object.keys(peds).length}</div></div>
+    <div class="item-row"><div class="item-info"><div class="item-title">💰 Total gasto</div></div><div class="item-sub" style="color:var(--green)">R$ ${totalGasto.toFixed(2)}</div></div>
+    <div class="item-row"><div class="item-info"><div class="item-title">✅ Concluídos</div></div><div class="item-sub">${concluidos}</div></div>
+    <div class="item-row"><div class="item-info"><div class="item-title">⏳ Pendentes</div></div><div class="item-sub">${pendentes}</div></div>
+    <button class="btn btn-blue" style="margin-top:12px" onclick="notificarCliente('${user.email}')">🔔 Enviar Notificação</button>
+  `;
+  abrirModal('modalCliente');
+}
+
+// NOTIFICAÇÕES
+function notificarCliente(email){
+  fecharModal('modalCliente');fecharModal('modalPedido');
+  document.getElementById('notifEmail').value=email;
+  buscarClienteNotif();
+  abrirModal('modalNotificar');
+}
+async function buscarClienteNotif(){
+  const email=document.getElementById('notifEmail').value.trim().toLowerCase();
+  if(!email||email==='todos'){clienteSelecionado=null;document.getElementById('clienteInfo').classList.add('hide');document.getElementById('chatHistorico').classList.add('hide');return}
+  const userSnap=await db.ref('usuarios').orderByChild('email').equalTo(email).once('value');
+  const users=userSnap.val();
+  if(users){
+    const uid=Object.keys(users)[0];const user=users[uid];
+    clienteSelecionado={uid,email:user.email,nome:user.nome};
+    document.getElementById('clienteInfo').innerHTML=`<div class="item-row"><div class="item-info"><div class="item-title">👤 ${user.nome}</div><div class="item-sub">📧 ${user.email}</div></div></div>`;
+    document.getElementById('clienteInfo').classList.remove('hide');
+    carregarChatHistorico(uid);
+  }else{
+    clienteSelecionado=null;
+    document.getElementById('clienteInfo').classList.add('hide');
+    document.getElementById('chatHistorico').classList.add('hide');
+  }
+}
+async function carregarChatHistorico(uid){
+  const notifSnap=await db.ref('notificacoes/'+uid).limitToLast(10).once('value');
+  const notifs=notifSnap.val()||{};
+  let html='';
+  Object.values(notifs).forEach(n=>{
+    html+=`<div class="chat-msg admin"><div>${n.mensagem}</div><div class="chat-time">${new Date(n.criadoEm).toLocaleString('pt-BR')}</div></div>`;
+  });
+  document.getElementById('chatHistorico').innerHTML=html||'<div class="empty" style="font-size:9px">Nenhuma mensagem anterior</div>';
+  document.getElementById('chatHistorico').classList.remove('hide');
+}
+async function enviarNotificacao(){
+  const email=document.getElementById('notifEmail').value.trim().toLowerCase();
+  const msg=document.getElementById('notifMsg').value.trim();
+  if(!msg)return alert('Digite a mensagem');
+  if(email==='todos')return enviarNotificacaoTodos();
+  if(!clienteSelecionado)return alert('Cliente não encontrado');
+  const data={mensagem:msg,criadoEm:Date.now(),lida:false,tipo:'admin'};
+  await db.ref('notificacoes/'+clienteSelecionado.uid).push(data);
+  debug('Notificação enviada para: '+clienteSelecionado.email);
+  document.getElementById('notifMsg').value='';
+  carregarChatHistorico(clienteSelecionado.uid);
+  alert('✅ Notificação enviada para '+clienteSelecionado.nome);
+}
+async function enviarNotificacaoTodos(){
+  const msg=document.getElementById('notifMsg').value.trim();
+  if(!msg)return alert('Digite a mensagem');
+  if(!confirm('Enviar essa notificação para TODOS os clientes?'))return;
+  const userSnap=await db.ref('usuarios').once('value');
+  const users=userSnap.val()||{};
+  const promises=Object.keys(users).map(uid=>{
+    return db.ref('notificacoes/'+uid).push({mensagem:msg,criadoEm:Date.now(),lida:false,tipo:'admin'});
+  });
+  await Promise.all(promises);
+  debug('Notificação enviada para todos ('+Object.keys(users).length+' clientes)');
+  document.getElementById('notifMsg').value='';
+  alert('✅ Notificação enviada para '+Object.keys(users).length+' clientes');
+  fecharModal('modalNotificar');
+}
+
+// CUPONS
+function carregarCupons(){
+  db.ref('cupons').on('value',snap=>{
+    todosCupons=snap.val()||{};renderCupons();
+  });
+}
+function renderCupons(){
+  const lista=document.getElementById('listaCupons');let html='';
+  Object.entries(todosCupons).forEach(([id,c])=>{
+    const statusClass=c.ativo?'badge-ativo':'badge-inativo';
+    html+=`<div class="item-row"><div class="item-info"><div class="item-title">🎟️ ${c.codigo} <span class="badge-status ${statusClass}">${c.ativo?'ATIVO':'INATIVO'}</span></div><div class="item-sub">💸 ${c.desconto}% OFF • 📊 Usado ${c.usos||0}/${c.limite||'∞'}</div></div><div class="actions"><button class="btn btn-sm btn-red" onclick="deletarCupom('${id}')">🗑️</button></div></div>`;
+  });
+  lista.innerHTML=html||'<div class="empty">Nenhum cupom 🎟️</div>';
+}
+async function salvarCupom(){
+  const id=document.getElementById('cupomId').value;
+  const codigo=document.getElementById('cupomCodigo').value.trim().toUpperCase();
+  const desconto=parseInt(document.getElementById('cupomDesconto').value);
+  const limite=parseInt(document.getElementById('cupomLimite').value)||0;
+  const validadeDias=parseInt(document.getElementById('cupomValidade').value)||0;
+  const ativo=document.getElementById('cupomAtivo').checked;
+  if(!codigo||!desconto)return alert('Preencha código e desconto');
+  const data={codigo,desconto,limite,ativo,usos:0,criadoEm:Date.now()};
+  if(validadeDias>0)data.validade=Date.now()+(validadeDias*24*60*60*1000);
+  if(id)await db.ref('cupons/'+id).update(data);
+  else await db.ref('cupons').push(data);
+  debug('Cupom salvo: '+codigo);
+  fecharModal('modalCupom');
+  document.getElementById('cupomId').value='';
+  document.getElementById('cupomCodigo').value='';
+  document.getElementById('cupomDesconto').value='';
+  document.getElementById('cupomLimite').value='';
+  document.getElementById('cupomValidade').value='';
+}
+async function deletarCupom(id){if(confirm('Deletar cupom?')){await db.ref('cupons/'+id).remove();debug('Cupom deletado: '+todosCupons[id].codigo)}}
+
+// BANNERS
+function carregarBanners(){
+  db.ref('banners').on('value',snap=>{
+    todosBanners=snap.val()||{};renderBanners();
+  });
+}
+function renderBanners(){
+  const lista=document.getElementById('listaBanners');let html='';
+  Object.entries(todosBanners).forEach(([id,b])=>{
+    const statusClass=b.ativo?'badge-ativo':'badge-inativo';
+    html+=`<div class="item-row"><img src="${b.imagem}" class="img-thumb" onerror="this.src='https://via.placeholder.com/100'"><div class="item-info"><div class="item-title">${b.titulo} <span class="badge-status ${statusClass}">${b.ativo?'ATIVO':'INATIVO'}</span></div><div class="item-sub">🔗 ${b.link||'Sem link'}</div></div><div class="actions"><button class="btn btn-sm btn-red" onclick="deletarBanner('${id}')">🗑️</button></div></div>`;
+  });
+  lista.innerHTML=html||'<div class="empty">Nenhum banner 🖼️</div>';
+}
+function previewBannerImg(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{document.getElementById('bannerImgPreview').src=ev.target.result;document.getElementById('bannerImgPreview').classList.remove('hide');document.getElementById('bannerImgText').style.display='none'};
+  reader.readAsDataURL(file);
+}
+async function salvarBanner(){
+  const id=document.getElementById('bannerId').value;
+  const titulo=document.getElementById('bannerTitulo').value.trim();
+  const link=document.getElementById('bannerLink').value.trim();
+  const ativo=document.getElementById('bannerAtivo').checked;
+  const file=document.getElementById('bannerImgInput').files[0];
+  if(!titulo)return alert('Digite o título');
+  let imagem=document.getElementById('bannerImgPreview').src;
+  if(file){
+    const ref=storage.ref('banners/'+Date.now()+'_'+file.name);
+    await ref.put(file);
+    imagem=await ref.getDownloadURL();
+  }
+  if(!imagem||imagem.includes('undefined'))return alert('Adicione uma imagem');
+  const data={titulo,link,imagem,ativo,criadoEm:Date.now()};
+  if(id)await db.ref('banners/'+id).update(data);
+  else await db.ref('banners').push(data);
+  debug('Banner salvo: '+titulo);
+  fecharModal('modalBanner');
+  document.getElementById('bannerId').value='';
+  document.getElementById('bannerTitulo').value='';
+  document.getElementById('bannerLink').value='';
+  document.getElementById('bannerImgPreview').classList.add('hide');
+  document.getElementById('bannerImgText').style.display='block';
+}
+async function deletarBanner(id){if(confirm('Deletar banner?')){await db.ref('banners/'+id).remove();debug('Banner deletado: '+todosBanners[id].titulo)}}
+
+// CONFIG
+function carregarConfig(){
+  db.ref('config').once('value',snap=>{
+    const c=snap.val()||{};
+    document.getElementById('configNome').value=c.nome||'';
+    document.getElementById('configDesc').value=c.descricao||'';
+    document.getElementById('configEmail').value=c.email||'';
+    document.getElementById('configWhats').value=c.whatsapp||'';
+    document.getElementById('configPix').value=c.pix||'';
+    document.getElementById('configManutencao').checked=c.manutencao||false;
+  });
+}
+async function salvarConfig(){
+  const data={
+    nome:document.getElementById('configNome').value.trim(),
+    descricao:document.getElementById('configDesc').value.trim(),
+    email:document.getElementById('configEmail').value.trim(),
+    whatsapp:document.getElementById('configWhats').value.trim(),
+    pix:document.getElementById('configPix').value.trim(),
+    manutencao:document.getElementById('configManutencao').checked,
+    atualizadoEm:Date.now()
+  };
+  await db.ref('config').set(data);
+  debug('Configurações atualizadas');
+  alert('✅ Configurações salvas!');
+}
+
+// RELATÓRIOS
+function carregarRelatorios(){
+  db.ref('pedidos').once('value',snap=>{
+    const p=snap.val()||{};
+    let totalVendas=0,totalPedidos=0;
+    Object.values(p).forEach(ped=>{if(ped.status==='concluido'){totalVendas+=ped.total||0;totalPedidos++}});
+    document.getElementById('relTotalVendas').textContent='R$ '+totalVendas.toFixed(2);
+    document.getElementById('relTotalPedidos').textContent=totalPedidos;
+    document.getElementById('relTicketMedio').textContent='R$ '+(totalPedidos>0?(totalVendas/totalPedidos).toFixed(2):'0,00');
+    db.ref('usuarios').once('value',u=>{
+      const totalUsers=Object.keys(u.val()||{}).length;
+      document.getElementById('relTaxaConversao').textContent=totalUsers>0?((totalPedidos/totalUsers)*100).toFixed(1)+'%':'0%';
     });
-    document.getElementById('listaNotifs').innerHTML=html||'<div class="empty">Nenhuma notificação</div>';
   });
 }
+function exportarRelatorio(){alert('📥 Função de exportar em desenvolvimento. Dados salvos nos logs.');debug('Relatório exportado')}
 
-async function marcarLida(notifId){
-  await db.ref('notificacoes/'+currentUser.uid+'/'+notifId).update({lida:true});
+// SUPORTE
+function carregarSuporte(){
+  db.ref('suporte').orderByChild('criadoEm').limitToLast(50).on('value',snap=>{
+    const msgs=snap.val()||{};let html='';
+    Object.entries(msgs).reverse().forEach(([id,m])=>{
+      const naoLido=!m.lido?'unread':'';
+      html+=`<div class="item-row clickable ${naoLido}" onclick="abrirChatSuporte('${m.clienteId}','${m.clienteNome}')"><div class="item-info"><div class="item-title">💬 ${m.clienteNome}</div><div class="item-sub">${m.ultimaMsg||'Nova mensagem'} • ${new Date(m.criadoEm).toLocaleString('pt-BR')}</div></div></div>`;
+    });
+    document.getElementById('listaSuporte').innerHTML=html||'<div class="empty">Nenhuma mensagem de suporte</div>';
+  });
+}
+function filtrarSuporte(tipo,el){
+  filtroSuporte=tipo;
+  document.querySelectorAll('#screen-suporte.tab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  carregarSuporte();
+}
+async function abrirChatSuporte(clienteId,clienteNome){
+  chatClienteId=clienteId;
+  document.getElementById('chatTitulo').textContent='💬 '+clienteNome;
+  db.ref('suporte/'+clienteId+'/mensagens').on('value',snap=>{
+    const msgs=snap.val()||{};let html='';
+    Object.values(msgs).forEach(m=>{
+      html+=`<div class="chat-msg ${m.de==='admin'?'admin':''}"><div>${m.texto}</div><div class="chat-time">${new Date(m.criadoEm).toLocaleString('pt-BR')}</div></div>`;
+    });
+    document.getElementById('chatMsgs').innerHTML=html;
+    document.getElementById('chatMsgs').scrollTop=document.getElementById('chatMsgs').scrollHeight;
+  });
+  await db.ref('suporte/'+clienteId).update({lido:true});
+  abrirModal('modalChat');
+}
+async function enviarChatMsg(){
+  const texto=document.getElementById('chatInput').value.trim();
+  if(!texto||!chatClienteId)return;
+  await db.ref('suporte/'+chatClienteId+'/mensagens').push({texto,de:'admin',criadoEm:Date.now()});
+  await db.ref('suporte/'+chatClienteId).update({ultimaMsg:texto,criadoEm:Date.now()});
+  await db.ref('notificacoes/'+chatClienteId).push({mensagem:'Nova mensagem do suporte: '+texto,criadoEm:Date.now(),lida:false,tipo:'suporte'});
+  document.getElementById('chatInput').value='';
 }
 
-function logout(){
-  if(confirm('Deseja sair?'))auth.signOut();
-}
+// LOGS JÁ ESTÁ ACIMA
 
-async function abrirModal(id){
-  document.getElementById(id).classList.add('active');
-  if(id==='modalPerfil'){
-    const snap=await db.ref('usuarios/'+currentUser.uid).once('value');
-    const u=snap.val()||{};
-    const pedSnap=await db.ref('pedidos').orderByChild('clienteId').equalTo(currentUser.uid).once('value');
-    const peds=pedSnap.val()||{};
-    document.getElementById('perfilDetalhes').innerHTML=`
-      <div style="text-align:center;margin-bottom:16px">
-        <div style="width:60px;height:60px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;margin:0 auto 8px">${(u.nome||'U')[0].toUpperCase()}</div>
-        <div style="font-size:14px;font-weight:700;margin-bottom:3px">${u.nome}</div>
-        <div style="font-size:10px;color:var(--text-dim)">${currentUser.email}</div>
-      </div>
-      <div class="item-row"><div class="item-info"><div class="item-title">Total de pedidos</div></div><div class="item-sub">${Object.keys(peds).length}</div></div>
-      <button class="btn btn-red" onclick="logout()" style="margin-top:12px">🚪 Sair da Conta</button>
-    `;
-  }
-}
+// INICIALIZAR TELAS
+function carregarCategorias(){db.ref('categorias').on('value',snap=>{todasCategorias=snap.val()||{};if(document.getElementById('screen-categorias').classList.contains('active'))renderCategorias()})}
+function carregarCupons(){db.ref('cupons').on('value',snap=>{todosCupons=snap.val()||{};if(document.getElementById('screen-cupons').classList.contains('active'))renderCupons()})}
+function carregarBanners(){db.ref('banners').on('value',snap=>{todosBanners=snap.val()||{};if(document.getElementById('screen-banners').classList.contains('active'))renderBanners()})}
 </script>
 </body>
 </html>
