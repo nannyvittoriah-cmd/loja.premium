@@ -9,6 +9,10 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);color:var(--text);min-height:100vh}
 .hide{display:none!important}
+#loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:99999;flex-direction:column;gap:16px}
+#loading.hide{display:none}
+.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--purple);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 .screen{display:none;width:100%;min-height:100vh}
 .screen.active{display:flex;align-items:center;justify-content:center;padding:16px;flex-direction:column}
 .card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px 20px;width:100%;max-width:340px}
@@ -81,7 +85,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .img-list{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
 .img-list-item{height:80px;background:var(--input);border:1px solid var(--border);border-radius:8px;position:relative;overflow:hidden}
 .img-list-item img{width:100%;height:100%;object-fit:cover}
-.img-list-item.del{position:absolute;top:4px;right:4px;width:20px;height:20px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
+.img-list-item .del{position:absolute;top:4px;right:4px;width:20px;height:20px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
 .badge-status{padding:3px 7px;border-radius:5px;font-size:9px;font-weight:700;text-transform:uppercase;border:1px solid}
 .badge-ativo{background:rgba(16,185,129,0.1);color:var(--green);border-color:var(--green)}
 .badge-inativo{background:rgba(239,68,68,0.1);color:var(--red);border-color:var(--red)}
@@ -111,9 +115,14 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 </head>
 <body>
 
+<div id="loading">
+  <div class="spinner"></div>
+  <div style="font-size:12px;color:var(--text-dim)">Carregando...</div>
+</div>
+
 <div id="debug"></div>
 
-<div class="screen active" id="screen-login">
+<div class="screen" id="screen-login">
   <div class="card">
     <h2>LOGIN - E-MAIL</h2>
     <div class="logo">Prime Store VZ</div>
@@ -121,14 +130,15 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
     <div class="alert error" id="loginError"></div>
     <div class="input-group">
       <label>📧 E-mail</label>
-      <div class="input-box"><input type="email" id="loginEmail" placeholder="admin@admin.com" value="admin@admin.com"></div>
+      <div class="input-box"><input type="email" id="loginEmail" placeholder="vittoriahvahz@gmail.com" value="vittoriahvahz@gmail.com"></div>
     </div>
     <div class="input-group">
       <label>🔑 Senha</label>
       <div class="input-box">
-        <input type="password" id="loginPassword" placeholder="••••••••" value="123456">
+        <input type="password" id="loginPassword" placeholder="••••••••" value="Lorrannyh.101225">
         <span class="toggle" onclick="togglePass('loginPassword',this)">👁️</span>
       </div>
+    </div>
     <button class="btn btn-primary" id="btnLogin" onclick="fazerLogin()">🚀 ENTRAR</button>
   </div>
 </div>
@@ -443,7 +453,7 @@ try {
   let todosProdutos = {};
   let todosSubcats = {};
   let imagensProduto = [];
-  let authCarregado = false;
+  let authInicializado = false;
 
   function togglePass(id,el){
     const input = document.getElementById(id);
@@ -487,7 +497,7 @@ try {
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
     document.querySelectorAll('.side-item').forEach(i=>i.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    el.classList.add('active');
+        el.classList.add('active');
     toggleMenu();
     if(id==='dash') carregarDashboard();
     if(id==='produtos') carregarProdutos();
@@ -527,7 +537,7 @@ try {
   }
 
   function previewMultipleImg(input){
-        const files = Array.from(input.files).slice(0,5);
+    const files = Array.from(input.files).slice(0,5);
     const list = document.getElementById('prodImgList');
     list.innerHTML = '';
     imagensProduto = [];
@@ -1154,30 +1164,19 @@ try {
     }
   }
 
-  // CORRIGIDO: Não pisca mais a tela
+  // CORRIGIDO: Sem piscar, sem reload rápido
   auth.onAuthStateChanged(async user=>{
-    if(authCarregado) return; // Trava pra não rodar 2x
-    authCarregado = true;
+    if(authInicializado) return;
+    authInicializado = true;
+
+    document.getElementById('loading').classList.add('hide');
+
     if(user){
       currentUser = user;
-      document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+      document.getElementById('screen-login').classList.remove('active');
       document.getElementById('adminPanel').classList.add('active');
       document.getElementById('userBadge').textContent = user.email[0].toUpperCase();
       await carregarDashboard();
       await carregarConfig();
     }else{
-      document.getElementById('adminPanel').classList.remove('active');
-      document.getElementById('screen-login').classList.add('active');
-      currentUser = null;
-      document.getElementById('btnLogin').disabled = false;
-      document.getElementById('btnLogin').textContent = '🚀 ENTRAR';
-    }
-    setTimeout(()=>{authCarregado = false}, 500); // Libera depois de 500ms
-  });
-
-} catch(e) {
-  debug('ERRO AO INICIAR: ' + e.message);
-}
-</script>
-</body>
-</html>
+      document.getElementById
