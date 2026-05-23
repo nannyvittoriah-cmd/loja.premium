@@ -59,7 +59,7 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 .btn-green{background:linear-gradient(135deg,var(--green) 0%,#059669 100%)}
 .btn-blue{background:linear-gradient(135deg,var(--blue) 0%,#2563eb 100%)}
 .btn-yellow{background:linear-gradient(135deg,var(--yellow) 0%,#d97706 100%)}
-.input-box{width:100%;min-height:38px;background:var(--input);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;padding:0 12px;gap:8px;margin-bottom:10px}
+.input-box{width:100%;min-height:38px;background:var(--input);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;padding:0 12px;gap:8px;margin-bottom:10px;position:relative}
 .input-box input,.input-box textarea,.input-box select{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:11px}
 .input-box textarea{min-height:60px;resize:vertical;padding:10px 0}
 .input-box select option{background:var(--input)}
@@ -89,7 +89,7 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 .upload-box{aspect-ratio:1;background:var(--input);border:2px dashed var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden}
 .upload-box:hover{border-color:var(--purple)}
 .upload-box img{width:100%;height:100%;object-fit:cover;position:absolute}
-.upload-box.remove-btn{position:absolute;top:4px;right:4px;width:20px;height:20px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;z-index:2;cursor:pointer}
+.remove-btn{position:absolute;top:4px;right:4px;width:20px;height:20px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;z-index:2;cursor:pointer}
 .user-card{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;cursor:pointer}
 .user-card:active{border-color:var(--purple)}
 .user-avatar{width:40px;height:40px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800}
@@ -160,7 +160,7 @@ body{background:var(--bg);color:var(--text);font-size:11px}
     </div>
     <button class="icon-btn" onclick="logout()">🚪</button>
   </div>
-  
+
   <div class="screen active" id="screen-dashboard">
     <div class="stats">
       <div class="stat-card"><div class="stat-card-top"><div class="stat-icon">💰</div><div class="stat-info"><div class="stat-label">Vendas hoje</div><div class="stat-value" id="statVendas">R$ 0,00</div></div></div></div>
@@ -215,7 +215,7 @@ body{background:var(--bg);color:var(--text);font-size:11px}
         <div class="header-title">DETALHES DO PEDIDO</div>
       </div>
     </div>
-    
+
     <div class="card">
       <div class="card-title">📋 Informações do Pedido</div>
       <div class="item-row">
@@ -367,7 +367,7 @@ body{background:var(--bg);color:var(--text);font-size:11px}
       <div id="tab-pagamento" style="display:none">
         <div class="card-title" style="font-size:11px;margin-bottom:10px">💳 PIX</div>
         <div class="input-box"><input type="text" id="cfgPix" placeholder="Chave PIX"></div>
-        
+
         <div class="card-title" style="font-size:11px;margin:16px 0 10px">🏦 Dados Bancários</div>
         <div class="input-box"><input type="text" id="cfgBanco" placeholder="Banco"></div>
         <div class="grid-2">
@@ -375,14 +375,14 @@ body{background:var(--bg);color:var(--text);font-size:11px}
           <div class="input-box"><input type="text" id="cfgConta" placeholder="Conta"></div>
         </div>
         <div class="input-box"><input type="text" id="cfgTitular" placeholder="Nome do Titular"></div>
-        
+
         <div class="card-title" style="font-size:11px;margin:16px 0 10px">💳 Mercado Pago</div>
         <div class="input-box"><input type="text" id="cfgMercadoPago" placeholder="Token Mercado Pago"></div>
-        
+
         <div class="toggle-row"><div class="toggle-label">Aceitar PIX</div><div class="toggle-switch active" onclick="toggleSwitch(this)"></div></div>
         <div class="toggle-row"><div class="toggle-label">Aceitar Transferência Bancária</div><div class="toggle-switch active" onclick="toggleSwitch(this)"></div></div>
         <div class="toggle-row"><div class="toggle-label">Aceitar Cartão</div><div class="toggle-switch active" onclick="toggleSwitch(this)"></div></div>
-                <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
+        <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
       </div>
       <div id="tab-notif" style="display:none">
         <div class="toggle-row"><div class="toggle-label">Notificar novo pedido</div><div class="toggle-switch active" onclick="toggleSwitch(this)"></div></div>
@@ -393,7 +393,7 @@ body{background:var(--bg);color:var(--text);font-size:11px}
       <div id="tab-loja" style="display:none">
         <div class="input-box"><input type="text" id="cfgCorPrimaria" placeholder="Cor primária" value="#8b5cf6"></div>
         <div class="input-box"><input type="text" id="cfgLogo" placeholder="URL do Logo"></div>
-        <div class="input-box"><input type="text" id="cfgBanner" placeholder="URL do Banner"></div>
+                <div class="input-box"><input type="text" id="cfgBanner" placeholder="URL do Banner"></div>
         <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
       </div>
     </div>
@@ -586,7 +586,7 @@ async function salvarProduto(){
   const estoque=parseInt(document.getElementById('prodEstoque').value)||0;
   const desc=document.getElementById('prodDesc').value.trim();
   if(!nome||!preco){alert('Preencha nome e preço');return}
-  
+
   const urls=[];
   for(let i=0;i<imagensProduto.length;i++){
     if(imagensProduto[i]){
@@ -595,7 +595,7 @@ async function salvarProduto(){
       urls.push(await ref.getDownloadURL());
     }
   }
-  
+
   await db.ref('produtos').push({nome,preco,categoria,estoque,descricao:desc,imagens:urls,criadoEm:Date.now()});
   fecharModal('modalProduto');
   carregarProdutos();
@@ -644,14 +644,14 @@ function previewImagem(input,id){
 async function salvarCategoria(){
   const nome=document.getElementById('catNome').value.trim();
   if(!nome){alert('Preencha o nome');return}
-  
+
   let imgUrl='';
   if(imgCategoria){
     const ref=storage.ref('categorias/'+Date.now()+'.jpg');
     await ref.put(imgCategoria);
     imgUrl=await ref.getDownloadURL();
   }
-  
+
   await db.ref('categorias').push({nome,imagem:imgUrl,criadoEm:Date.now()});
   fecharModal('modalCategoria');
   carregarCategorias();
@@ -691,15 +691,15 @@ function verPedido(id){
   pedidoAtualId=id;
   db.ref('pedidos/'+id).once('value',snap=>{
     const p=snap.val();if(!p)return;
-    
+
     document.getElementById('detPedidoId').textContent='#'+id.substring(0,8);
     document.getElementById('detPedidoData').textContent=new Date(p.criadoEm).toLocaleString('pt-BR');
     document.getElementById('detPedidoStatus').value=p.status||'pendente';
     document.getElementById('detClienteNome').textContent=p.clienteNome||'Cliente';
     document.getElementById('detClienteEmail').textContent=p.clienteEmail||'';
-    document.getElementById('detClienteTel').textContent='WhatsApp: '+p.clienteTelefone||'';
+    document.getElementById('detClienteTel').textContent='WhatsApp: '+(p.clienteTelefone||'');
     document.getElementById('detPedidoObs').value=p.observacao||'';
-    
+
     let htmlItens='';let subtotal=0;
     if(p.itens){
       Object.values(p.itens).forEach(item=>{
@@ -711,13 +711,13 @@ function verPedido(id){
     document.getElementById('detPedidoSubtotal').textContent='R$ '+subtotal.toFixed(2);
     document.getElementById('detPedidoDesconto').textContent='R$ '+(p.desconto||0).toFixed(2);
     document.getElementById('detPedidoTotal').textContent='R$ '+(p.total||0).toFixed(2);
-    
+
     if(p.comprovante){
       document.getElementById('detComprovanteBox').innerHTML=`<img src="${p.comprovante}" style="width:100%;border-radius:10px;margin-bottom:8px">`;
     }else{
       document.getElementById('detComprovanteBox').innerHTML='<div class="empty">Nenhum comprovante enviado</div>';
     }
-    
+
     mostrarTela('detalhes-pedido');
   });
 }
@@ -726,11 +726,11 @@ async function adicionarProdutoPedido(){
   const prodId=document.getElementById('addProdutoId').value.trim();
   const qtd=parseInt(document.getElementById('addProdutoQtd').value)||1;
   if(!prodId||!pedidoAtualId){alert('Digite o ID do produto');return}
-  
+
   const snap=await db.ref('produtos/'+prodId).once('value');
   if(!snap.exists()){alert('Produto não encontrado');return}
   const prod=snap.val();
-  
+
   await db.ref('pedidos/'+pedidoAtualId+'/itens').push({
     produtoId:prodId,
     nome:prod.nome,
@@ -738,7 +738,7 @@ async function adicionarProdutoPedido(){
     imagem:prod.imagens&&prod.imagens[0]?prod.imagens[0]:'',
     qtd:qtd
   });
-  
+
   document.getElementById('addProdutoId').value='';
   document.getElementById('addProdutoQtd').value='1';
   alert('Produto adicionado!');
@@ -803,9 +803,9 @@ async function salvarCupom(){
   const limiteDiario=parseInt(document.getElementById('cupomLimiteDiario').value)||0;
   const validade=parseInt(document.getElementById('cupomValidade').value)||30;
   const produtos=Array.from(document.getElementById('cupomProdutos').selectedOptions).map(o=>o.value).filter(v=>v);
-  
+
   if(!nome||!codigo||!valor){alert('Preencha todos os campos obrigatórios');return}
-  
+
   await db.ref('cupons').push({nome,codigo,tipo,valor,limite,limiteDiario,validade,produtos,ativo:true,usos:0,criadoEm:Date.now()});
   fecharModal('modalCupom');
   carregarCupons();
@@ -859,10 +859,10 @@ async function enviarNotificacao(){
   const titulo=document.getElementById('notifTitulo').value.trim();
   const msg=document.getElementById('notifMsg').value.trim();
   const alert=document.getElementById('alertNotif');
-  
+
   if(!titulo||!msg){alert.textContent='Preencha título e mensagem';alert.className='alert error';alert.style.display='block';return}
   if(!todos&&!email){alert.textContent='Digite um e-mail ou marque notificar todos';alert.className='alert error';alert.style.display='block';return}
-  
+
   if(todos){
     const snap=await db.ref('usuarios').once('value');
     const usuarios=snap.val()||{};
@@ -877,7 +877,7 @@ async function enviarNotificacao(){
     db.ref('notificacoes/'+uid).push({titulo,msg,lida:false,criadoEm:Date.now()});
     alert.textContent='Notificação enviada!';
   }
-  
+
   alert.className='alert success';alert.style.display='block';
   document.getElementById('notifTitulo').value='';document.getElementById('notifMsg').value='';document.getElementById('notifEmail').value='';
   setTimeout(()=>alert.style.display='none',3000);
