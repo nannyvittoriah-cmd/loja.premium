@@ -126,6 +126,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <input type="password" id="loginPassword" placeholder="••••••••">
         <span class="toggle" onclick="togglePass('loginPassword',this)">👁️</span>
       </div>
+    </div>
     <button class="btn btn-primary" id="btnLogin" onclick="fazerLogin()">🚀 ENTRAR</button>
   </div>
 </div>
@@ -272,7 +273,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <label>Estoque</label>
         <div class="input-box"><input type="number" id="prodEstoque" placeholder="0"></div>
       </div>
-    </div>
     <div class="grid-2">
       <div class="input-group">
         <label>Categoria</label>
@@ -282,6 +282,10 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <label>Subcategoria</label>
         <div class="input-box"><select id="prodSubcatId"></select></div>
       </div>
+    </div>
+    <div class="input-group">
+      <label>Cupom Vinculado</label>
+      <div class="input-box"><select id="prodCupomId"><option value="">Nenhum</option></select></div>
     </div>
     <div class="input-group">
       <label>Descrição</label>
@@ -527,9 +531,19 @@ async function abrirModalProduto(id=null){
   });
   await carregarSubcats();
 
+  const cupomSelect = document.getElementById('prodCupomId');
+  cupomSelect.innerHTML = '<option value="">Nenhum</option>';
+  const cupomSnap = await db.ref('cupons').orderByChild('ativo').equalTo(true).once('value');
+  const cups = cupomSnap.val()||{};
+  Object.entries(cups).forEach(([cid,c])=>{
+    if(!c.expiraEm||c.expiraEm>Date.now()){
+      cupomSelect.innerHTML += `<option value="${cid}">${c.codigo} - ${c.desconto}%</option>`;
+    }
+  });
+
   document.getElementById('prodId').value = id||'';
   imagensProduto = [];
-  if(id){
+    if(id){
     db.ref('produtos/'+id).once('value',async snap=>{
       const p = snap.val();
       document.getElementById('prodNome').value = p.nome;
@@ -539,6 +553,7 @@ async function abrirModalProduto(id=null){
       document.getElementById('prodPreco').value = p.preco;
       document.getElementById('prodEstoque').value = p.estoque;
       document.getElementById('prodDesc').value = p.descricao;
+      document.getElementById('prodCupomId').value = p.cupomId||'';
       if(p.imagens){
         const list = document.getElementById('prodImgList');
         list.innerHTML = '';
@@ -558,7 +573,7 @@ async function abrirModalProduto(id=null){
 async function carregarSubcats(){
   const catId = document.getElementById('prodCatId').value;
   const select = document.getElementById('prodSubcatId');
-    select.innerHTML = '<option value="">Selecione</option>';
+  select.innerHTML = '<option value="">Selecione</option>';
   if(!catId) return;
   const snap = await db.ref('subcategorias').orderByChild('categoriaId').equalTo(catId).once('value');
   const subs = snap.val()||{};
@@ -575,6 +590,7 @@ async function salvarProduto(){
   const preco = parseFloat(document.getElementById('prodPreco').value);
   const estoque = parseInt(document.getElementById('prodEstoque').value);
   const descricao = document.getElementById('prodDesc').value.trim();
+  const cupomId = document.getElementById('prodCupomId').value;
   if(!nome||!preco||isNaN(estoque)) return alert('Preencha nome, preço e estoque');
 
   let imagens = [];
@@ -587,7 +603,7 @@ async function salvarProduto(){
     }
   }
 
-  const data = {nome,categoriaId,subcategoriaId,preco,estoque,descricao,imagens,criadoEm:Date.now()};
+  const data = {nome,categoriaId,subcategoriaId,preco,estoque,descricao,cupomId,imagens,criadoEm:Date.now()};
   if(id) await db.ref('produtos/'+id).update(data);
   else await db.ref('produtos').push(data);
   fecharModal('modalProduto');
@@ -601,15 +617,18 @@ function carregarProdutos(){
     if(!todosProdutos||Object.keys(todosProdutos).length===0){lista.innerHTML='<div class="empty">Nenhum produto 📦</div>';return}
     const catSnap = await db.ref('categorias').once('value');
     const cats = catSnap.val()||{};
+    const cupSnap = await db.ref('cupons').once('value');
+    const cups = cupSnap.val()||{};
     let html = '';
     Object.entries(todosProdutos).forEach(([id,p])=>{
       const catNome = cats[p.categoriaId]?.nome||'Sem categoria';
       const img = p.imagens&&p.imagens.length?p.imagens[0]:'';
+      const cupomNome = p.cupomId&&cups[p.cupomId]?`🎟️ ${cups[p.cupomId].codigo}`:'';
       html += `<div class="item-row clickable" onclick="abrirModalProduto('${id}')">
         <img src="${img}" class="img-thumb" onerror="this.style.display='none'">
         <div class="item-info">
           <div class="item-title">📦 ${p.nome}</div>
-          <div class="item-sub">💵 R$ ${p.preco.toFixed(2)} • ${catNome} • 📊 ${p.estoque}</div>
+          <div class="item-sub">💵 R$ ${p.preco.toFixed(2)} • ${catNome} • 📊 ${p.estoque} ${cupomNome}</div>
         </div>
         <div class="actions">
           <button class="btn btn-sm btn-red" onclick="event.stopPropagation();deletarProduto('${id}')">🗑️</button>
