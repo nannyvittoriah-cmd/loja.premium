@@ -29,7 +29,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .btn-primary:active{background:#7c3aed;transform:scale(0.96)}
 .btn-sm{height:36px;font-size:11px;width:auto;padding:0 12px}
 .btn-red{border-color:var(--red);color:var(--red)}
-.btn-red:active{background:rgba(239,68,68,0.1)}
+.btn-red:active{background:rgba(239,68,0.1)}
 .btn-green{border-color:var(--green);color:var(--green)}
 .btn-green:active{background:rgba(16,185,129,0.1)}
 .btn-blue{border-color:var(--blue);color:var(--blue)}
@@ -131,6 +131,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <input type="password" id="loginPassword" placeholder="••••••••">
         <span class="toggle" onclick="togglePass('loginPassword',this)">👁️</span>
       </div>
+    </div>
     <button class="btn btn-primary" id="btnLogin" onclick="fazerLogin()">🚀 ENTRAR</button>
   </div>
 </div>
@@ -248,7 +249,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
-<!-- MODAIS -->
 <div class="modal" id="modalProduto">
   <div class="modal-box">
     <div class="modal-head">
@@ -288,7 +288,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <label>Subcategoria</label>
         <div class="input-box"><select id="prodSubcatId"></select></div>
       </div>
-    </div>
     <div class="input-group">
       <label>Descrição</label>
       <div class="input-box"><textarea id="prodDesc" placeholder="Descrição do produto..."></textarea></div>
@@ -352,11 +351,11 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
             <option value="0">Ilimitado</option>
           </select>
         </div>
+      </div>
       <div class="input-group">
         <label>Uso por Cliente</label>
         <div class="input-box"><input type="number" id="cupomUsoCliente" placeholder="1" min="1" value="1"></div>
       </div>
-    </div>
     <div class="input-group">
       <label class="checkbox"><input type="checkbox" id="cupomAtivo" checked><span>Cupom Ativo</span></label>
     </div>
@@ -522,7 +521,6 @@ async function uploadImg(file,path){
   return await ref.getDownloadURL();
 }
 
-// PRODUTOS
 async function abrirModalProduto(id=null){
   const catSelect = document.getElementById('prodCatId');
   catSelect.innerHTML = '<option value="">Selecione</option>';
@@ -538,11 +536,11 @@ async function abrirModalProduto(id=null){
   if(id){
     db.ref('produtos/'+id).once('value',async snap=>{
       const p = snap.val();
-            document.getElementById('prodNome').value = p.nome;
+      document.getElementById('prodNome').value = p.nome;
       document.getElementById('prodCatId').value = p.categoriaId;
       await carregarSubcats();
       document.getElementById('prodSubcatId').value = p.subcategoriaId||'';
-      document.getElementById('prodPreco').value = p.preco;
+            document.getElementById('prodPreco').value = p.preco;
       document.getElementById('prodEstoque').value = p.estoque;
       document.getElementById('prodDesc').value = p.descricao;
       if(p.imagens){
