@@ -129,7 +129,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <input type="password" id="loginPassword" placeholder="••••••••" value="123456">
         <span class="toggle" onclick="togglePass('loginPassword',this)">👁️</span>
       </div>
-    </div>
     <button class="btn btn-primary" id="btnLogin" onclick="fazerLogin()">🚀 ENTRAR</button>
   </div>
 </div>
@@ -288,7 +287,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <label>Subcategoria</label>
         <div class="input-box"><select id="prodSubcatId"></select></div>
       </div>
-    </div>
     <div class="input-group">
       <label>Cupom Vinculado</label>
       <div class="input-box"><select id="prodCupomId"><option value="">Nenhum</option></select></div>
@@ -375,6 +373,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
             <option value="0">Ilimitado</option>
           </select>
         </div>
+      </div>
       <div class="input-group">
         <label>Uso por Cliente</label>
         <div class="input-box"><input type="number" id="cupomUsoCliente" placeholder="1" min="1" value="1"></div>
@@ -417,6 +416,7 @@ function debug(msg){
   const d = document.getElementById('debug');
   d.textContent = 'ERRO: ' + msg;
   d.style.display = 'block';
+  setTimeout(()=>d.style.display='none',5000);
 }
 window.onerror = function(msg){ debug(msg); }
 
@@ -443,6 +443,7 @@ try {
   let todosProdutos = {};
   let todosSubcats = {};
   let imagensProduto = [];
+  let authCarregado = false;
 
   function togglePass(id,el){
     const input = document.getElementById(id);
@@ -463,6 +464,7 @@ try {
     const btn = document.getElementById('btnLogin');
     if(!email||!senha) return showAlert('loginError','Preencha todos os campos','error');
     btn.disabled = true;
+    btn.textContent = 'ENTRANDO...';
     try{
       await auth.signInWithEmailAndPassword(email,senha);
     }catch(e){
@@ -470,10 +472,11 @@ try {
       if(e.code==='auth/user-not-found') msg='Usuário não encontrado. Crie no Firebase > Authentication';
       if(e.code==='auth/wrong-password') msg='Senha incorreta';
       if(e.code==='auth/invalid-credential') msg='Email ou senha inválidos';
-      if(e.code==='auth/operation-not-allowed') msg='Ative Email/Password no Firebase Console > Authentication > Sign-in method';
+      if(e.code==='auth/operation-not-allowed') msg='Ative Email/Password no Firebase Console';
       debug(e.code + ' - ' + e.message);
       showAlert('loginError',msg,'error');
       btn.disabled = false;
+      btn.textContent = '🚀 ENTRAR';
     }
   }
 
@@ -524,8 +527,8 @@ try {
   }
 
   function previewMultipleImg(input){
-    const files = Array.from(input.files).slice(0,5);
-        const list = document.getElementById('prodImgList');
+        const files = Array.from(input.files).slice(0,5);
+    const list = document.getElementById('prodImgList');
     list.innerHTML = '';
     imagensProduto = [];
     files.forEach((file,idx)=>{
@@ -561,13 +564,13 @@ try {
 
   async function abrirModalProduto(id=null){
     const catSelect = document.getElementById('prodCatId');
-    catSelect.innerHTML = '<option value="">Selecione</option>';
+    catSelect.innerHTML = '<option value="">Carregando...</option>';
     const catSnap = await db.ref('categorias').once('value');
     const cats = catSnap.val()||{};
+    catSelect.innerHTML = '<option value="">Selecione</option>';
     Object.entries(cats).forEach(([cid,c])=>{
       catSelect.innerHTML += `<option value="${cid}">${c.nome}</option>`;
     });
-    await carregarSubcats();
 
     const cupomSelect = document.getElementById('prodCupomId');
     cupomSelect.innerHTML = '<option value="">Nenhum</option>';
@@ -582,28 +585,29 @@ try {
     document.getElementById('prodId').value = id||'';
     imagensProduto = [];
     if(id){
-      db.ref('produtos/'+id).once('value',async snap=>{
-        const p = snap.val();
-        document.getElementById('prodNome').value = p.nome;
-        document.getElementById('prodCatId').value = p.categoriaId;
-        await carregarSubcats();
-        document.getElementById('prodSubcatId').value = p.subcategoriaId||'';
-        document.getElementById('prodPreco').value = p.preco;
-        document.getElementById('prodEstoque').value = p.estoque;
-        document.getElementById('prodDesc').value = p.descricao;
-        document.getElementById('prodCupomId').value = p.cupomId||'';
-        if(p.imagens){
-          const list = document.getElementById('prodImgList');
-          list.innerHTML = '';
-          p.imagens.forEach((url,i)=>{
-            imagensProduto.push({url});
-            list.innerHTML += `<div class="img-list-item">
-              <img src="${url}">
-              <div class="del" onclick="removerImg(${i})">×</div>
-            </div>`;
-          });
-        }
-      });
+      const snap = await db.ref('produtos/'+id).once('value');
+      const p = snap.val();
+      document.getElementById('prodNome').value = p.nome;
+      document.getElementById('prodCatId').value = p.categoriaId;
+      await carregarSubcats();
+      document.getElementById('prodSubcatId').value = p.subcategoriaId||'';
+      document.getElementById('prodPreco').value = p.preco;
+      document.getElementById('prodEstoque').value = p.estoque;
+      document.getElementById('prodDesc').value = p.descricao;
+      document.getElementById('prodCupomId').value = p.cupomId||'';
+      if(p.imagens){
+        const list = document.getElementById('prodImgList');
+        list.innerHTML = '';
+        p.imagens.forEach((url,i)=>{
+          imagensProduto.push({url});
+          list.innerHTML += `<div class="img-list-item">
+            <img src="${url}">
+            <div class="del" onclick="removerImg(${i})">×</div>
+          </div>`;
+        });
+      }
+    } else {
+      document.getElementById('prodSubcatId').innerHTML = '<option value="">Selecione a categoria primeiro</option>';
     }
     document.getElementById('modalProduto').classList.add('active');
   }
@@ -611,13 +615,20 @@ try {
   async function carregarSubcats(){
     const catId = document.getElementById('prodCatId').value;
     const select = document.getElementById('prodSubcatId');
-    select.innerHTML = '<option value="">Selecione</option>';
-    if(!catId) return;
+    select.innerHTML = '<option value="">Carregando...</option>';
+    if(!catId) {
+      select.innerHTML = '<option value="">Selecione a categoria primeiro</option>';
+      return;
+    }
     const snap = await db.ref('subcategorias').orderByChild('categoriaId').equalTo(catId).once('value');
     const subs = snap.val()||{};
+    select.innerHTML = '<option value="">Selecione</option>';
     Object.entries(subs).forEach(([sid,s])=>{
       select.innerHTML += `<option value="${sid}">${s.nome}</option>`;
     });
+    if(Object.keys(subs).length===0){
+      select.innerHTML = '<option value="">Nenhuma subcategoria cadastrada</option>';
+    }
   }
 
   async function salvarProduto(){
@@ -630,6 +641,7 @@ try {
     const descricao = document.getElementById('prodDesc').value.trim();
     const cupomId = document.getElementById('prodCupomId').value;
     if(!nome||!preco||isNaN(estoque)) return alert('Preencha nome, preço e estoque');
+    if(!categoriaId) return alert('Selecione uma categoria');
 
     let imagens = [];
     for(let img of imagensProduto){
@@ -772,9 +784,10 @@ try {
 
   async function abrirModalSubcategoria(id=null){
     const catSelect = document.getElementById('subcatCatId');
-    catSelect.innerHTML = '<option value="">Selecione</option>';
+    catSelect.innerHTML = '<option value="">Carregando...</option>';
     const catSnap = await db.ref('categorias').once('value');
     const cats = catSnap.val()||{};
+    catSelect.innerHTML = '<option value="">Selecione</option>';
     Object.entries(cats).forEach(([cid,c])=>{
       catSelect.innerHTML += `<option value="${cid}">${c.nome}</option>`;
     });
@@ -959,7 +972,6 @@ try {
     const p = todosPedidos[id];
     const userSnap = await db.ref('usuarios/'+p.clienteId).once('value');
     const user = userSnap.val()||{};
-
     let itensHtml = '';
     if(p.produtos){
       Object.values(p.produtos).forEach(prod=>{
@@ -975,9 +987,7 @@ try {
         </div>`;
       });
     }
-
     const pagoBadge = p.pago?'<span class="badge-status badge-ativo" style="float:right">Pago</span>':'';
-
     document.getElementById('pedidoDetalhes').innerHTML = `
       <div style="margin-bottom:20px">
         <div style="font-size:13px;color:var(--text-dim);margin-bottom:4px">Pedido #${id.slice(-8).toUpperCase()}</div>
@@ -1144,7 +1154,10 @@ try {
     }
   }
 
+  // CORRIGIDO: Não pisca mais a tela
   auth.onAuthStateChanged(async user=>{
+    if(authCarregado) return; // Trava pra não rodar 2x
+    authCarregado = true;
     if(user){
       currentUser = user;
       document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -1157,7 +1170,9 @@ try {
       document.getElementById('screen-login').classList.add('active');
       currentUser = null;
       document.getElementById('btnLogin').disabled = false;
+      document.getElementById('btnLogin').textContent = '🚀 ENTRAR';
     }
+    setTimeout(()=>{authCarregado = false}, 500); // Libera depois de 500ms
   });
 
 } catch(e) {
