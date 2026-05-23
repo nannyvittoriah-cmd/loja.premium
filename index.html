@@ -33,13 +33,14 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .btn-primary:active{background:#7c3aed;transform:scale(0.96)}
 .btn-sm{height:36px;font-size:11px;width:auto;padding:0 12px}
 .btn-red{border-color:var(--red);color:var(--red)}
-.btn-red:active{background:rgba(239,68,68,0.1)}
+.btn-red:active{background:rgba(239,68,0.1)}
 .btn-green{border-color:var(--green);color:var(--green)}
 .btn-green:active{background:rgba(16,185,129,0.1)}
 .btn-blue{border-color:var(--blue);color:var(--blue)}
 .btn-blue:active{background:rgba(59,130,246,0.1)}
 .alert{padding:12px 14px;border-radius:10px;font-size:11px;margin-bottom:16px;display:none;text-align:center;font-weight:600;border:1px solid}
 .alert.error{background:rgba(239,68,68,0.15);border-color:#ef4444;color:#fca5a5}
+.alert.success{background:rgba(16,185,129,0.15);border-color:#10b981;color:#6ee7b7}
 .admin{display:none;min-height:100vh}
 .admin.active{display:block}
 .admin-header{position:fixed;top:0;left:0;right:0;height:52px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 10px;z-index:50}
@@ -138,7 +139,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <input type="password" id="loginPassword" placeholder="••••••••" value="Lorrannyh.101225">
         <span class="toggle" onclick="togglePass('loginPassword',this)">👁️</span>
       </div>
-    </div>
     <button class="btn btn-primary" id="btnLogin" onclick="fazerLogin()">🚀 ENTRAR</button>
   </div>
 </div>
@@ -174,7 +174,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <div class="stat-card"><div class="stat-label">👥 Clientes</div><div class="stat-value" style="color:var(--yellow)" id="totalClientes">0</div></div>
         <div class="stat-card"><div class="stat-label">📦 Produtos</div><div class="stat-value" style="color:var(--green)" id="totalProdutos">0</div></div>
       </div>
-    </div>
     <div id="produtos" class="page">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
         <h3>📦 Produtos</h3>
@@ -287,7 +286,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <label>Estoque</label>
         <div class="input-box"><input type="number" id="prodEstoque" placeholder="0"></div>
       </div>
-    </div>
     <div class="grid-2">
       <div class="input-group">
         <label>Categoria</label>
@@ -297,6 +295,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <label>Subcategoria</label>
         <div class="input-box"><select id="prodSubcatId"></select></div>
       </div>
+    </div>
     <div class="input-group">
       <label>Cupom Vinculado</label>
       <div class="input-box"><select id="prodCupomId"><option value="">Nenhum</option></select></div>
@@ -383,7 +382,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
             <option value="0">Ilimitado</option>
           </select>
         </div>
-      </div>
       <div class="input-group">
         <label>Uso por Cliente</label>
         <div class="input-box"><input type="number" id="cupomUsoCliente" placeholder="1" min="1" value="1"></div>
@@ -453,7 +451,7 @@ try {
   let todosProdutos = {};
   let todosSubcats = {};
   let imagensProduto = [];
-  let authInicializado = false;
+  let authVerificado = false;
 
   function togglePass(id,el){
     const input = document.getElementById(id);
@@ -483,6 +481,7 @@ try {
       if(e.code==='auth/wrong-password') msg='Senha incorreta';
       if(e.code==='auth/invalid-credential') msg='Email ou senha inválidos';
       if(e.code==='auth/operation-not-allowed') msg='Ative Email/Password no Firebase Console';
+      if(e.code==='auth/too-many-requests') msg='Muitas tentativas. Tente mais tarde';
       debug(e.code + ' - ' + e.message);
       showAlert('loginError',msg,'error');
       btn.disabled = false;
@@ -497,12 +496,12 @@ try {
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
     document.querySelectorAll('.side-item').forEach(i=>i.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-        el.classList.add('active');
+    el.classList.add('active');
     toggleMenu();
     if(id==='dash') carregarDashboard();
     if(id==='produtos') carregarProdutos();
-    if(id==='pedidos') carregarPedidos();
-    if(id==='clientes') carregarClientes();
+    if(id==='pedidos') carregarPedidos ();
+        if(id==='clientes') carregarClientes();
     if(id==='categorias') carregarCategorias();
     if(id==='subcategorias') carregarSubcategorias();
     if(id==='cupons') carregarCupons();
@@ -567,7 +566,7 @@ try {
   }
 
   async function uploadImg(file,path){
-    const ref = storage.ref(path+'/'+Date.now()+'_'+file.name);
+    const ref = storage.ref(path+'/'+Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9.]/g,'_'));
     await ref.put(file);
     return await ref.getDownloadURL();
   }
@@ -603,7 +602,7 @@ try {
       document.getElementById('prodSubcatId').value = p.subcategoriaId||'';
       document.getElementById('prodPreco').value = p.preco;
       document.getElementById('prodEstoque').value = p.estoque;
-      document.getElementById('prodDesc').value = p.descricao;
+      document.getElementById('prodDesc').value = p.descricao||'';
       document.getElementById('prodCupomId').value = p.cupomId||'';
       if(p.imagens){
         const list = document.getElementById('prodImgList');
@@ -650,24 +649,55 @@ try {
     const estoque = parseInt(document.getElementById('prodEstoque').value);
     const descricao = document.getElementById('prodDesc').value.trim();
     const cupomId = document.getElementById('prodCupomId').value;
-    if(!nome||!preco||isNaN(estoque)) return alert('Preencha nome, preço e estoque');
-    if(!categoriaId) return alert('Selecione uma categoria');
 
-    let imagens = [];
-    for(let img of imagensProduto){
-      if(img.file){
-        const url = await uploadImg(img.file,'produtos');
-        imagens.push(url);
-      }else{
-        imagens.push(img.url);
+    if(!nome) return alert('❌ Preencha o nome do produto');
+    if(!preco || preco <= 0) return alert('❌ Preço inválido');
+    if(isNaN(estoque) || estoque < 0) return alert('❌ Estoque inválido');
+    if(!categoriaId) return alert('❌ Selecione uma categoria');
+
+    const btn = document.querySelector('#modalProduto.btn-primary');
+    btn.disabled = true;
+    btn.textContent = 'SALVANDO...';
+
+    try {
+      let imagens = [];
+      for(let img of imagensProduto){
+        if(img.file){
+          const url = await uploadImg(img.file,'produtos');
+          imagens.push(url);
+        }else if(img.url){
+          imagens.push(img.url);
+        }
       }
-    }
 
-    const data = {nome,categoriaId,subcategoriaId,preco,estoque,descricao,cupomId,imagens,criadoEm:Date.now()};
-    if(id) await db.ref('produtos/'+id).update(data);
-    else await db.ref('produtos').push(data);
-    fecharModal('modalProduto');
-    carregarProdutos();
+      const data = {
+        nome,
+        categoriaId,
+        subcategoriaId: subcategoriaId || '',
+        preco,
+        estoque,
+        descricao,
+        cupomId: cupomId || '',
+        imagens,
+        atualizadoEm: Date.now()
+      };
+
+      if(!id) data.criadoEm = Date.now();
+
+      if(id) await db.ref('produtos/'+id).update(data);
+      else await db.ref('produtos').push(data);
+
+      fecharModal('modalProduto');
+      carregarProdutos();
+      showAlert('loginError','✅ Produto salvo com sucesso!','success');
+      setTimeout(()=>document.getElementById('loginError').style.display='none',3000);
+    } catch(e) {
+      debug('ERRO AO SALVAR PRODUTO: ' + e.message);
+      alert('❌ Erro ao salvar: ' + e.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'SALVAR PRODUTO';
+    }
   }
 
   function carregarProdutos(){
@@ -1155,7 +1185,7 @@ try {
         await db.ref('produtos').remove();
         await db.ref('pedidos').remove();
         await db.ref('usuarios').remove();
-        await db.ref('cupons').remove();
+                await db.ref('cupons').remove();
         await db.ref('categorias').remove();
         await db.ref('subcategorias').remove();
         alert('✅ Banco zerado com sucesso!');
@@ -1164,10 +1194,10 @@ try {
     }
   }
 
-  // CORRIGIDO: Sem piscar, sem reload rápido
+  // CORRIGIDO: Sem piscar, sem reload rápido, sem tela preta
   auth.onAuthStateChanged(async user=>{
-    if(authInicializado) return;
-    authInicializado = true;
+    if(authVerificado) return;
+    authVerificado = true;
 
     document.getElementById('loading').classList.add('hide');
 
@@ -1179,15 +1209,15 @@ try {
       await carregarDashboard();
       await carregarConfig();
     }else{
-            document.getElementById('adminPanel').classList.remove('active');
+      document.getElementById('adminPanel').classList.remove('active');
       document.getElementById('screen-login').classList.add('active');
       currentUser = null;
       document.getElementById('btnLogin').disabled = false;
       document.getElementById('btnLogin').textContent = '🚀 ENTRAR';
     }
-    
+
     // Libera pra próximo login/logout sem piscar
-    setTimeout(()=>{authInicializado = false}, 1000);
+    setTimeout(()=>{authVerificado = false}, 1000);
   });
 
 } catch(e) {
