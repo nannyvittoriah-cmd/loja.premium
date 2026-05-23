@@ -8,17 +8,47 @@
 :root{--bg:#0a0a12;--card:#16161f;--input:#1e1e2a;--border:#2f2f42;--purple:#8b5cf6;--purple-dark:#7c3aed;--text:#fff;--text-dim:#8b8ba1;--green:#10b981;--red:#ef4444;--blue:#3b82f6;--yellow:#f59e0b}
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);color:var(--text);font-size:11px;padding-bottom:70px}
-.login-screen{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;justify-content:center;padding:20px}
-.login-logo{font-size:24px;font-weight:800;text-align:center;margin-bottom:8px}
-.login-sub{font-size:11px;color:var(--text-dim);text-align:center;margin-bottom:32px}
-.input-box{width:100%;height:44px;background:var(--input);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;padding:0 12px;gap:8px;margin-bottom:12px}
+.auth-screen{position:fixed;inset:0;background:var(--bg);z-index:999;overflow-y:auto;padding:20px;display:none}
+.auth-screen.active{display:block}
+.auth-container{max-width:400px;margin:0 auto;padding-top:40px}
+.auth-logo-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:20px}
+.auth-logo-icon{width:64px;height:64px;margin-bottom:8px}
+.auth-logo-icon svg{width:100%;height:100%;filter:drop-shadow(0 4px 12px rgba(139,92,246,0.4))}
+.auth-logo-text{font-size:22px;font-weight:900;letter-spacing:-0.5px}
+.auth-logo-text span{color:var(--purple)}
+.auth-sub{font-size:11px;color:var(--text-dim);text-align:center;margin-bottom:24px}
+.auth-tabs{display:flex;background:var(--input);border:1px solid var(--border);border-radius:10px;padding:4px;margin-bottom:20px}
+.auth-tab{flex:1;height:36px;border:none;background:transparent;color:var(--text-dim);font-size:10px;font-weight:700;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.auth-tab.active{background:var(--purple);color:#fff}
+.auth-title{font-size:14px;font-weight:800;margin-bottom:4px}
+.auth-desc{font-size:10px;color:var(--text-dim);margin-bottom:16px;line-height:1.5}
+.input-box{width:100%;min-height:44px;background:var(--input);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;padding:0 12px;gap:8px;margin-bottom:12px}
 .input-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:11px}
+.input-icon{font-size:14px;color:var(--text-dim)}
+.input-eye{font-size:14px;color:var(--text-dim);cursor:pointer}
 .btn{width:100%;height:44px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border:none;border-radius:12px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:12px}
 .btn:active{transform:scale(0.98)}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
 .btn-outline{background:transparent;border:1px solid var(--purple);color:var(--purple)}
-.login-divisor{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--text-dim);font-size:10px}
-.login-divisor:before,.login-divisor:after{content:'';flex:1;height:1px;background:var(--border)}
-.login-error{font-size:10px;color:var(--red);text-align:center;margin-bottom:12px;display:none}
+.auth-error{font-size:10px;color:var(--red);text-align:center;margin-bottom:12px;display:none;padding:8px;background:rgba(239,68,68,0.1);border:1px solid var(--red);border-radius:8px}
+.auth-success{font-size:10px;color:var(--green);text-align:center;margin-bottom:12px;display:none;padding:8px;background:rgba(16,185,129,0.1);border:1px solid var(--green);border-radius:8px}
+.pass-rules{background:var(--input);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px}
+.pass-rules-title{font-size:9px;font-weight:700;color:var(--text-dim);margin-bottom:8px}
+.pass-rule{display:flex;align-items:center;gap:6px;font-size:9px;color:var(--text-dim);margin-bottom:6px}
+.pass-rule:last-child{margin-bottom:0}
+.pass-rule.ok{color:var(--green)}
+.pass-rule-icon{width:14px;height:14px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px}
+.pass-rule.ok .pass-rule-icon{background:var(--green);border-color:var(--green);color:#fff}
+.checkbox-row{display:flex;align-items:center;gap:8px;margin-bottom:16px;font-size:9px}
+.checkbox-row input{width:16px;height:16px;accent-color:var(--purple)}
+.checkbox-row a{color:var(--purple);text-decoration:none}
+.auth-link{text-align:center;font-size:10px;color:var(--text-dim);margin-top:16px}
+.auth-link span{color:var(--purple);font-weight:700;cursor:pointer}
+.auth-back{font-size:10px;color:var(--purple);font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;margin-bottom:20px}
+.auth-icon-box{width:80px;height:80px;background:rgba(139,92,246,0.1);border:2px solid var(--purple);border-radius:16px;margin:24px auto;display:flex;align-items:center;justify-content:center;font-size:36px}
+.auth-info-box{background:var(--input);border:1px solid var(--border);border-radius:10px;padding:12px;margin:16px 0;text-align:center}
+.auth-info-title{font-size:11px;font-weight:700;margin-bottom:4px}
+.auth-info-text{font-size:9px;color:var(--text-dim);line-height:1.5}
 .header{height:56px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 14px;position:sticky;top:0;z-index:50}
 .header-left{display:flex;align-items:center;gap:10px}
 .back-btn{width:32px;height:32px;background:var(--input);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px}
@@ -122,36 +152,163 @@ body{background:var(--bg);color:var(--text);font-size:11px;padding-bottom:70px}
 </style>
 </head>
 <body>
-<!-- LOGIN -->
-<div class="login-screen" id="loginScreen">
-  <div class="login-logo">Prime Store VZ</div>
-  <div class="login-sub">Entre na sua conta para continuar</div>
-  <div class="login-error" id="loginError"></div>
-  <div class="input-box"><span>📧</span><input type="email" id="loginEmail" placeholder="Seu email"></div>
-  <div class="input-box"><span>🔒</span><input type="password" id="loginSenha" placeholder="Sua senha"></div>
-  <button class="btn" onclick="fazerLogin()">ENTRAR</button>
-  <button class="btn btn-outline" onclick="mostrarCadastro()">CRIAR CONTA</button>
-  <div class="login-divisor">ou</div>
-  <button class="btn btn-outline" onclick="loginGoogle()">ENTRAR COM GOOGLE</button>
+<!-- TELA LOGIN -->
+<div class="auth-screen active" id="authLogin">
+  <div class="auth-container">
+    <div class="auth-logo-wrap">
+      <div class="auth-logo-icon">
+        <svg viewBox="0 0 64 64" fill="none">
+          <defs>
+            <linearGradient id="logoGrad1" x1="0" y1="0" x2="64" y2="64">
+              <stop offset="0%" stop-color="#a78bfa"/>
+              <stop offset="100%" stop-color="#7c3aed"/>
+            </linearGradient>
+          </defs>
+          <path d="M20 8C20 8 20 20 20 32C20 44 28 52 40 52C52 52 56 44 56 32C56 20 48 12 36 12C32 12 28 13 24 16" stroke="url(#logoGrad1)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20 32C20 32 28 32 36 32C44 32 48 28 48 24" stroke="url(#logoGrad1)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="auth-logo-text">Prime <span>store Vz</span></div>
+    </div>
+    <div class="auth-sub">Sua loja, sua experiência.</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchAuthTab('login')">→ Login</button>
+      <button class="auth-tab" onclick="switchAuthTab('cadastro')">👤 Cadastrar</button>
+      <button class="auth-tab" onclick="switchAuthTab('senha')">🔒 Esqueci senha</button>
+    </div>
+    <div class="auth-error" id="loginError"></div>
+    <div class="input-box"><span class="input-icon">📧</span><input type="email" id="loginEmail" placeholder="seuemail@email.com"></div>
+    <div class="input-box"><span class="input-icon">🔒</span><input type="password" id="loginSenha" placeholder="Sua senha"><span class="input-eye" onclick="togglePass('loginSenha',this)">👁️</span></div>
+    <button class="btn" onclick="fazerLogin()">ENTRAR</button>
+    <div class="auth-link">Não tem uma conta? <span onclick="switchAuthTab('cadastro')">Cadastre-se</span></div>
+  </div>
 </div>
 
-<!-- CADASTRO -->
-<div class="login-screen hidden" id="cadastroScreen">
-  <div class="login-logo">Criar Conta</div>
-  <div class="login-sub">Preencha seus dados</div>
-  <div class="login-error" id="cadastroError"></div>
-  <div class="input-box"><span>👤</span><input type="text" id="cadNome" placeholder="Nome completo"></div>
-  <div class="input-box"><span>📧</span><input type="email" id="cadEmail" placeholder="Seu email"></div>
-  <div class="input-box"><span>🔒</span><input type="password" id="cadSenha" placeholder="Crie uma senha"></div>
-  <button class="btn" onclick="fazerCadastro()">CRIAR CONTA</button>
-  <button class="btn btn-outline" onclick="mostrarLogin()">JÁ TENHO CONTA</button>
+<!-- TELA CADASTRO -->
+<div class="auth-screen" id="authCadastro">
+  <div class="auth-container">
+    <div class="auth-logo-wrap">
+      <div class="auth-logo-icon">
+        <svg viewBox="0 0 64 64" fill="none">
+          <defs>
+            <linearGradient id="logoGrad2" x1="0" y1="0" x2="64" y2="64">
+              <stop offset="0%" stop-color="#a78bfa"/>
+              <stop offset="100%" stop-color="#7c3aed"/>
+            </linearGradient>
+          </defs>
+          <path d="M20 8C20 8 20 20 20 32C20 44 28 52 40 52C52 52 56 44 56 32C56 20 48 12 36 12C32 12 28 13 24 16" stroke="url(#logoGrad2)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20 32C20 32 28 32 36 32C44 32 48 28 48 24" stroke="url(#logoGrad2)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="auth-logo-text">Prime <span>store Vz</span></div>
+    </div>
+    <div class="auth-sub">Sua loja, sua experiência.</div>
+    <div class="auth-tabs">
+      <button class="auth-tab" onclick="switchAuthTab('login')">→ Login</button>
+      <button class="auth-tab active" onclick="switchAuthTab('cadastro')">👤 Cadastrar</button>
+      <button class="auth-tab" onclick="switchAuthTab('senha')">🔒 Esqueci senha</button>
+    </div>
+    <div class="auth-title">Crie sua conta</div>
+    <div class="auth-desc">Preencha os dados abaixo para começar sua jornada.</div>
+    <div class="auth-error" id="cadastroError"></div>
+    <div class="input-box"><span class="input-icon">👤</span><input type="text" id="cadNome" placeholder="Seu nome completo"></div>
+    <div class="input-box"><span class="input-icon">📧</span><input type="email" id="cadEmail" placeholder="seuemail@email.com"></div>
+    <div class="input-box"><span class="input-icon">🔒</span><input type="password" id="cadSenha" placeholder="Crie uma senha" oninput="validarSenha()"><span class="input-eye" onclick="togglePass('cadSenha',this)">👁️</span></div>
+    <div class="input-box"><span class="input-icon">🔒</span><input type="password" id="cadSenha2" placeholder="Confirme sua senha" oninput="validarSenha()"><span class="input-eye" onclick="togglePass('cadSenha2',this)">👁️</span></div>
+    <div class="pass-rules">
+      <div class="pass-rules-title">A senha deve conter:</div>
+      <div class="pass-rule" id="rule8"><div class="pass-rule-icon">✓</div>Mínimo de 8 caracteres</div>
+      <div class="pass-rule" id="ruleMai"><div class="pass-rule-icon">✓</div>Uma letra maiúscula</div>
+      <div class="pass-rule" id="ruleNum"><div class="pass-rule-icon">✓</div>Um número</div>
+      <div class="pass-rule" id="ruleEsp"><div class="pass-rule-icon">✓</div>Um caractere especial</div>
+    </div>
+    <div class="checkbox-row">
+      <input type="checkbox" id="cadTermos">
+      <label for="cadTermos">Li e aceito os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a></label>
+    </div>
+    <button class="btn" onclick="fazerCadastro()" id="btnCadastrar" disabled>Cadastrar</button>
+    <div class="auth-link">Já tem uma conta? <span onclick="switchAuthTab('login')">Faça login</span></div>
+  </div>
+</div>
+
+<!-- TELA ESQUECI SENHA -->
+<div class="auth-screen" id="authSenha">
+  <div class="auth-container">
+    <div class="auth-logo-wrap">
+      <div class="auth-logo-icon">
+        <svg viewBox="0 0 64 64" fill="none">
+          <defs>
+            <linearGradient id="logoGrad3" x1="0" y1="0" x2="64" y2="64">
+              <stop offset="0%" stop-color="#a78bfa"/>
+              <stop offset="100%" stop-color="#7c3aed"/>
+            </linearGradient>
+          </defs>
+          <path d="M20 8C20 8 20 20 20 32C20 44 28 52 40 52C52 52 56 44 56 32C56 20 48 12 36 12C32 12 28 13 24 16" stroke="url(#logoGrad3)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20 32C20 32 28 32 36 32C44 32 48 28 48 24" stroke="url(#logoGrad3)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="auth-logo-text">Prime <span>store Vz</span></div>
+    </div>
+    <div class="auth-sub">Sua loja, sua experiência.</div>
+    <div class="auth-tabs">
+      <button class="auth-tab" onclick="switchAuthTab('login')">→ Login</button>
+      <button class="auth-tab" onclick="switchAuthTab('cadastro')">👤 Cadastrar</button>
+      <button class="auth-tab active" onclick="switchAuthTab('senha')">🔒 Esqueci senha</button>
+    </div>
+    <div class="auth-title">Esqueceu sua senha?</div>
+    <div class="auth-desc">Informe seu e-mail e enviaremos um link para redefinir sua senha.</div>
+    <div class="auth-error" id="senhaError"></div>
+    <div class="input-box"><span class="input-icon">📧</span><input type="email" id="senhaEmail" placeholder="seuemail@email.com"></div>
+    <button class="btn" onclick="enviarReset()">Enviar link de redefinição</button>
+    <div class="auth-back" onclick="switchAuthTab('login')">← Voltar para o login</div>
+    <div class="auth-icon-box">🔒</div>
+    <div class="auth-info-box">
+      <div class="auth-info-title">Não se preocupe!</div>
+      <div class="auth-info-text">Enviaremos um e-mail seguro para você redefinir sua senha.</div>
+    </div>
+  </div>
+</div>
+
+<!-- TELA EMAIL ENVIADO -->
+<div class="auth-screen" id="authEnviado">
+  <div class="auth-container">
+    <div class="auth-logo-wrap">
+      <div class="auth-logo-icon">
+        <svg viewBox="0 0 64 64" fill="none">
+          <defs>
+            <linearGradient id="logoGrad4" x1="0" y1="0" x2="64" y2="64">
+              <stop offset="0%" stop-color="#a78bfa"/>
+              <stop offset="100%" stop-color="#7c3aed"/>
+            </linearGradient>
+          </defs>
+          <path d="M20 8C20 8 20 20 20 32C20 44 28 52 40 52C52 52 56 44 56 32C56 20 48 12 36 12C32 12 28 13 24 16" stroke="url(#logoGrad4)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20 32C20 32 28 32 36 32C44 32 48 28 48 24" stroke="url(#logoGrad4)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="auth-logo-text">Prime <span>store Vz</span></div>
+    </div>
+    <div class="auth-icon-box" style="background:rgba(16,185,129,0.1);border-color:var(--green);color:var(--green)">✓</div>
+    <div class="auth-title" style="text-align:center">E-mail enviado!</div>
+    <div class="auth-desc" style="text-align:center">Enviamos um link de redefinição para <span id="emailEnviado"></span><br>Verifique sua caixa de entrada e spam.</div>
+    <button class="btn" onclick="switchAuthTab('login')">Voltar para o login</button>
+  </div>
 </div>
 
 <!-- APP PRINCIPAL -->
 <div id="appContainer" class="hidden">
   <div class="header">
     <div class="header-left">
-      <div class="logo-text" id="headerLogo">Prime Store VZ</div>
+      <svg width="28" height="28" viewBox="0 0 64 64" fill="none">
+        <defs>
+          <linearGradient id="logoGradH" x1="0" y1="0" x2="64" y2="64">
+            <stop offset="0%" stop-color="#a78bfa"/>
+            <stop offset="100%" stop-color="#7c3aed"/>
+          </linearGradient>
+        </defs>
+        <path d="M20 8C20 8 20 20 20 32C20 44 28 52 40 52C52 52 56 44 56 32C56 20 48 12 36 12C32 12 28 13 24 16" stroke="url(#logoGradH)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M20 32C20 32 28 32 36 32C44 32 48 28 48 24" stroke="url(#logoGradH)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="logo-text">Prime <span style="color:var(--purple)">store Vz</span></div>
     </div>
     <div class="header-icons">
       <div class="icon-btn" onclick="mostrarTela('carrinho')">🛒<span class="cart-badge" id="cartBadge" style="display:none">0</span></div>
@@ -237,7 +394,7 @@ body{background:var(--bg);color:var(--text);font-size:11px;padding-bottom:70px}
     </div>
     <div id="listaCarrinho"><div class="empty">Carrinho vazio</div></div>
     <div class="order-summary" id="resumoCarrinho" style="display:none">
-      <div class="input-box" style="margin-bottom:12px">
+            <div class="input-box" style="margin-bottom:12px">
         <input type="text" id="cupomCarrinho" placeholder="Cupom de desconto">
         <button class="btn-sm btn" style="width:auto" onclick="aplicarCupom()">Aplicar</button>
       </div>
@@ -386,6 +543,7 @@ body{background:var(--bg);color:var(--text);font-size:11px;padding-bottom:70px}
         <div class="order-stat-icon">❌</div>
         <div class="order-stat-label">CANCELADOS</div>
       </div>
+    </div>
     <div class="section-title" style="margin-bottom:12px">MINHA CONTA</div>
     <div class="menu-list">
       <div class="menu-row" onclick="alert('Em breve')">
@@ -454,65 +612,82 @@ let userId=null,carrinho=[],produtoAtual=null,categoriaAtual=null,metodoPagament
 auth.onAuthStateChanged(user=>{
   if(user){
     userId=user.uid;
-    document.getElementById('loginScreen').classList.add('hidden');
-    document.getElementById('cadastroScreen').classList.add('hidden');
+    document.querySelectorAll('.auth-screen').forEach(s=>s.classList.remove('active'));
     document.getElementById('appContainer').classList.remove('hidden');
     carregarPerfil();
     carregarHome();
     carregarCarrinho();
     atualizarBadgePedidos();
   }else{
-    document.getElementById('loginScreen').classList.remove('hidden');
-    document.getElementById('cadastroScreen').classList.add('hidden');
     document.getElementById('appContainer').classList.add('hidden');
+    switchAuthTab('login');
   }
 });
 
-function mostrarLogin(){
-  document.getElementById('loginScreen').classList.remove('hidden');
-  document.getElementById('cadastroScreen').classList.add('hidden');
+function switchAuthTab(tab){
+  document.querySelectorAll('.auth-screen').forEach(s=>s.classList.remove('active'));
+  if(tab==='login')document.getElementById('authLogin').classList.add('active');
+  if(tab==='cadastro')document.getElementById('authCadastro').classList.add('active');
+  if(tab==='senha')document.getElementById('authSenha').classList.add('active');
 }
-function mostrarCadastro(){
-  document.getElementById('loginScreen').classList.add('hidden');
-  document.getElementById('cadastroScreen').classList.remove('hidden');
+
+function togglePass(id,el){
+  const input=document.getElementById(id);
+  if(input.type==='password'){input.type='text';el.textContent='🙈'}
+  else{input.type='password';el.textContent='👁️'}
 }
+
+function validarSenha(){
+  const s=document.getElementById('cadSenha').value;
+  const s2=document.getElementById('cadSenha2').value;
+  document.getElementById('rule8').classList.toggle('ok',s.length>=8);
+  document.getElementById('ruleMai').classList.toggle('ok',/[A-Z]/.test(s));
+  document.getElementById('ruleNum').classList.toggle('ok',/[0-9]/.test(s));
+  document.getElementById('ruleEsp').classList.toggle('ok',/[^A-Za-z0-9]/.test(s));
+  const valido=s.length>=8&&/[A-Z]/.test(s)&&/[0-9]/.test(s)&&/[^A-Za-z0-9]/.test(s)&&s===s2&&document.getElementById('cadTermos').checked;
+  document.getElementById('btnCadastrar').disabled=!valido;
+}
+
+document.getElementById('cadTermos')?.addEventListener('change',validarSenha);
 
 function fazerLogin(){
   const email=document.getElementById('loginEmail').value;
   const senha=document.getElementById('loginSenha').value;
   const err=document.getElementById('loginError');
   err.style.display='none';
-    if(!nome||!email||!senha){err.textContent='Preencha todos os campos';err.style.display='block';return}
-  if(senha.length<6){err.textContent='Senha deve ter 6+ caracteres';err.style.display='block';return}
-  auth.createUserWithEmailAndPassword(email,senha).then(cred=>{
-    return db.ref('usuarios/'+cred.user.uid).set({
-      nome:nome,
-      email:email,
-      criadoEm:Date.now()
-    });
-  }).catch(e=>{
-    err.textContent='Erro: '+e.message;
+  if(!email||!senha){err.textContent='Preencha todos os campos';err.style.display='block';return}
+  auth.signInWithEmailAndPassword(email,senha).catch(e=>{
+    err.textContent=e.code==='auth/user-not-found'?'Conta não encontrada':e.code==='auth/wrong-password'?'Senha incorreta':'Erro ao fazer login';
     err.style.display='block';
   });
 }
 
-function loginGoogle(){
-  const provider=new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider).then(result=>{
-    const user=result.user;
-    return db.ref('usuarios/'+user.uid).once('value').then(snap=>{
-      if(!snap.exists()){
-        return db.ref('usuarios/'+user.uid).set({
-          nome:user.displayName,
-          email:user.email,
-          foto:user.photoURL,
-          criadoEm:Date.now()
-        });
-      }
-    });
+function fazerCadastro(){
+  const nome=document.getElementById('cadNome').value;
+  const email=document.getElementById('cadEmail').value;
+  const senha=document.getElementById('cadSenha').value;
+  const err=document.getElementById('cadastroError');
+  err.style.display='none';
+  auth.createUserWithEmailAndPassword(email,senha).then(cred=>{
+    return db.ref('usuarios/'+cred.user.uid).set({nome:nome,email:email,criadoEm:Date.now()});
   }).catch(e=>{
-    document.getElementById('loginError').textContent='Erro no Google';
-    document.getElementById('loginError').style.display='block';
+    err.textContent=e.code==='auth/email-already-in-use'?'Email já cadastrado':e.message;
+    err.style.display='block';
+  });
+}
+
+function enviarReset(){
+  const email=document.getElementById('senhaEmail').value;
+  const err=document.getElementById('senhaError');
+  err.style.display='none';
+  if(!email){err.textContent='Digite seu email';err.style.display='block';return}
+  auth.sendPasswordResetEmail(email).then(()=>{
+    document.getElementById('emailEnviado').textContent=email;
+    document.querySelectorAll('.auth-screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById('authEnviado').classList.add('active');
+  }).catch(e=>{
+    err.textContent=e.code==='auth/user-not-found'?'Email não cadastrado':'Erro ao enviar email';
+    err.style.display='block';
   });
 }
 
@@ -529,6 +704,7 @@ function mostrarTela(tela,el){
   }
   window.scrollTo(0,0);
   if(tela==='pedidos')carregarMeusPedidos();
+  if(tela==='carrinho')carregarCarrinho();
 }
 
 function carregarPerfil(){
@@ -547,7 +723,6 @@ function carregarHome(){
     });
     document.getElementById('homeCategorias').innerHTML=html||'<div class="empty">Nenhuma categoria</div>';
   });
-
   db.ref('produtos').limitToLast(6).once('value',snap=>{
     const prods=snap.val()||{};let html='';
     Object.entries(prods).forEach(([id,p])=>{
@@ -610,11 +785,8 @@ function verProduto(id){
 function adicionarCarrinho(){
   if(!produtoAtual)return;
   const idx=carrinho.findIndex(i=>i.id===produtoAtual.id);
-  if(idx>=0){
-    carrinho[idx].qtd++;
-  }else{
-    carrinho.push({...produtoAtual,qtd:1});
-  }
+  if(idx>=0)carrinho[idx].qtd++;
+  else carrinho.push({...produtoAtual,qtd:1});
   atualizarBadgeCarrinho();
   alert('Produto adicionado ao carrinho!');
   mostrarTela('carrinho');
@@ -634,7 +806,6 @@ function carregarCarrinho(){
     document.getElementById('btnFinalizar').style.display='none';
     return;
   }
-
   let html='';let subtotal=0;
   carrinho.forEach((item,i)=>{
     subtotal+=item.preco*item.qtd;
@@ -654,7 +825,7 @@ function carregarCarrinho(){
   });
   document.getElementById('listaCarrinho').innerHTML=html;
   document.getElementById('carrinhoSubtotal').textContent='R$ '+subtotal.toFixed(2);
-  document.getElementById('carrinhoTotal').textContent='R$ '+subtotal.toFixed(2);
+  document.getElementById('carrinhoTotal').textContent='R$ '+(subtotal-(cupomAplicado||0)).toFixed(2);
   document.getElementById('resumoCarrinho').style.display='block';
   document.getElementById('btnFinalizar').style.display='block';
 }
@@ -708,10 +879,8 @@ function copiarPix(){
 
 function confirmarPagamento(){
   if(carrinho.length===0){alert('Carrinho vazio');return}
-
   const subtotal=carrinho.reduce((s,i)=>s+i.preco*i.qtd,0);
   const total=subtotal-(cupomAplicado||0);
-
   const pedido={
     clienteId:userId,
     clienteNome:document.getElementById('perfilNome').textContent,
@@ -725,7 +894,6 @@ function confirmarPagamento(){
     pagamento:metodoPagamento,
     criadoEm:Date.now()
   };
-
   db.ref('pedidos').push(pedido).then(snap=>{
     const id=snap.key;
     document.getElementById('compId').textContent='#'+id.substring(0,12);
@@ -735,8 +903,7 @@ function confirmarPagamento(){
     });
     document.getElementById('compItens').innerHTML=htmlItens;
     document.getElementById('compTotal').textContent='R$ '+pedido.total.toFixed(2);
-    carrinho=[];
-    cupomAplicado=null;
+    carrinho=[];cupomAplicado=null;
     atualizarBadgeCarrinho();
     atualizarBadgePedidos();
     mostrarTela('comprovante');
@@ -755,7 +922,7 @@ function carregarMeusPedidos(){
     Object.entries(pedidos).reverse().forEach(([id,p])=>{
       const data=new Date(p.criadoEm).toLocaleString('pt-BR');
       const status=p.status||'pendente';
-      html+=`<div class="item-row" onclick="alert('Detalhes do pedido #${id.substring(0,12)}')"><div class="item-info"><div class="item-title">#${id.substring(0,12)}</div><div class="item-sub">${data}</div></div><div style="text-align:right"><div class="item-title">R$ ${p.total.toFixed(2)}</div><span class="badge-status ${status}">${status.charAt(0).toUpperCase()+status.slice(1)}</span></div></div>`;
+      html+=`<div class="item-row"><div class="item-info"><div class="item-title">#${id.substring(0,12)}</div><div class="item-sub">${data}</div></div><div style="text-align:right"><div class="item-title">R$ ${p.total.toFixed(2)}</div><span class="badge-status ${status}">${status.charAt(0).toUpperCase()+status.slice(1)}</span></div></div>`;
     });
     document.getElementById('listaMeusPedidos').innerHTML=html||'<div class="empty">Nenhum pedido</div>';
   });
@@ -784,20 +951,13 @@ function atualizarBadgePedidos(){
     const pedidos=snap.val()||{};let pendentes=0;
     Object.values(pedidos).forEach(p=>{if(p.status==='pendente')pendentes++});
     const badge=document.getElementById('badgePendentes');
-    if(pendentes>0){
-      badge.textContent=pendentes;
-      badge.style.display='flex';
-    }else{
-      badge.style.display='none';
-    }
+    if(pendentes>0){badge.textContent=pendentes;badge.style.display='flex'}
+    else{badge.style.display='none'}
   });
 }
 
 function buscarHome(q){
-  if(!q){
-    carregarHome();
-    return;
-  }
+  if(!q){carregarHome();return}
   db.ref('produtos').orderByChild('nome').startAt(q).endAt(q+'\uf8ff').once('value',snap=>{
     const prods=snap.val()||{};let html='';
     Object.entries(prods).forEach(([id,p])=>{
