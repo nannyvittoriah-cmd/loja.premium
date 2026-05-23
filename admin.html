@@ -74,9 +74,10 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 .item-title{font-size:11px;font-weight:700;margin-bottom:2px}
 .item-sub{font-size:9px;color:var(--text-dim)}
 .badge-status{font-size:9px;font-weight:700;padding:3px 8px;border-radius:6px}
-.badge-status.pago{background:rgba(16,185,129,0.15);color:var(--green);border:1px solid var(--green)}
+.badge-status.pago,.badge-status.concluido{background:rgba(16,185,129,0.15);color:var(--green);border:1px solid var(--green)}
 .badge-status.pendente{background:rgba(245,158,11,0.15);color:var(--yellow);border:1px solid var(--yellow)}
 .badge-status.cancelado{background:rgba(239,68,68,0.15);color:var(--red);border:1px solid var(--red)}
+.badge-status.enviado{background:rgba(59,130,246,0.15);color:var(--blue);border:1px solid var(--blue)}
 .actions{display:flex;gap:6px}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .upload-area{width:100%;height:200px;background:var(--input);border:2px dashed var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;margin-bottom:10px;position:relative;overflow:hidden}
@@ -88,7 +89,7 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 .upload-box{aspect-ratio:1;background:var(--input);border:2px dashed var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden}
 .upload-box:hover{border-color:var(--purple)}
 .upload-box img{width:100%;height:100%;object-fit:cover;position:absolute}
-.upload-box .remove-btn{position:absolute;top:4px;right:4px;width:20px;height:20px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;z-index:2;cursor:pointer}
+.upload-box.remove-btn{position:absolute;top:4px;right:4px;width:20px;height:20px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;z-index:2;cursor:pointer}
 .user-card{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;cursor:pointer}
 .user-card:active{border-color:var(--purple)}
 .user-avatar{width:40px;height:40px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800}
@@ -207,6 +208,92 @@ body{background:var(--bg);color:var(--text);font-size:11px}
     </div>
   </div>
 
+  <div class="screen" id="screen-detalhes-pedido">
+    <div class="header" style="margin-bottom:16px">
+      <div class="header-left">
+        <button class="back-btn" onclick="mostrarTela('pedidos',document.querySelectorAll('.menu-item')[4])">←</button>
+        <div class="header-title">DETALHES DO PEDIDO</div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-title">📋 Informações do Pedido</div>
+      <div class="item-row">
+        <div class="item-info">
+          <div class="item-title">ID: <span id="detPedidoId">#00000000</span></div>
+          <div class="item-sub">Data: <span id="detPedidoData">--/--/----</span></div>
+        </div>
+        <select id="detPedidoStatus" class="btn-sm" style="width:auto;background:var(--input);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:8px" onchange="atualizarStatusPedido()">
+          <option value="pendente">Pendente</option>
+          <option value="pago">Pago</option>
+          <option value="enviado">Enviado</option>
+          <option value="concluido">Concluído</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">👤 Cliente</div>
+      <div class="item-row">
+        <div class="item-info">
+          <div class="item-title" id="detClienteNome">Nome do Cliente</div>
+          <div class="item-sub" id="detClienteEmail">email@cliente.com</div>
+          <div class="item-sub" id="detClienteTel">WhatsApp: (00) 00000-0000</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📦 Itens do Pedido</div>
+      <div id="detPedidoItens"></div>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <span class="item-sub">Subtotal:</span>
+          <span class="item-title" id="detPedidoSubtotal">R$ 0,00</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <span class="item-sub">Desconto:</span>
+          <span class="item-title" id="detPedidoDesconto">R$ 0,00</span>
+        </div>
+        <div style="display:flex;justify-content:space-between">
+          <span class="item-title">Total:</span>
+          <span class="item-title" style="color:var(--purple);font-size:14px" id="detPedidoTotal">R$ 0,00</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">➕ Adicionar Produto ao Pedido</div>
+      <div class="input-box">
+        <input type="text" id="addProdutoId" placeholder="Digite o ID do produto">
+      </div>
+      <div class="input-box">
+        <input type="number" id="addProdutoQtd" placeholder="Quantidade" value="1" min="1">
+      </div>
+      <button class="btn" onclick="adicionarProdutoPedido()">ADICIONAR PRODUTO</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">💰 Comprovante de Pagamento</div>
+      <div id="detComprovanteBox">
+        <div class="empty">Nenhum comprovante enviado</div>
+      </div>
+      <button class="btn btn-outline" onclick="document.getElementById('uploadComprovante').click()">
+        📎 ENVIAR COMPROVANTE
+      </button>
+      <input type="file" id="uploadComprovante" style="display:none" accept="image/*,.pdf" onchange="enviarComprovanteAdmin(event)">
+    </div>
+
+    <div class="card">
+      <div class="card-title">📝 Observações</div>
+      <div class="input-box">
+        <textarea id="detPedidoObs" placeholder="Adicionar observação..."></textarea>
+      </div>
+      <button class="btn btn-blue" onclick="salvarObservacao()">SALVAR OBSERVAÇÃO</button>
+    </div>
+  </div>
+
   <div class="screen" id="screen-usuarios">
     <div class="card">
       <div class="card-title">👥 CLIENTES</div>
@@ -278,11 +365,24 @@ body{background:var(--bg);color:var(--text);font-size:11px}
         <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
       </div>
       <div id="tab-pagamento" style="display:none">
+        <div class="card-title" style="font-size:11px;margin-bottom:10px">💳 PIX</div>
         <div class="input-box"><input type="text" id="cfgPix" placeholder="Chave PIX"></div>
+        
+        <div class="card-title" style="font-size:11px;margin:16px 0 10px">🏦 Dados Bancários</div>
+        <div class="input-box"><input type="text" id="cfgBanco" placeholder="Banco"></div>
+        <div class="grid-2">
+          <div class="input-box"><input type="text" id="cfgAgencia" placeholder="Agência"></div>
+          <div class="input-box"><input type="text" id="cfgConta" placeholder="Conta"></div>
+        </div>
+        <div class="input-box"><input type="text" id="cfgTitular" placeholder="Nome do Titular"></div>
+        
+        <div class="card-title" style="font-size:11px;margin:16px 0 10px">💳 Mercado Pago</div>
         <div class="input-box"><input type="text" id="cfgMercadoPago" placeholder="Token Mercado Pago"></div>
+        
         <div class="toggle-row"><div class="toggle-label">Aceitar PIX</div><div class="toggle-switch active" onclick="toggleSwitch(this)"></div></div>
+        <div class="toggle-row"><div class="toggle-label">Aceitar Transferência Bancária</div><div class="toggle-switch active" onclick="toggleSwitch(this)"></div></div>
         <div class="toggle-row"><div class="toggle-label">Aceitar Cartão</div><div class="toggle-switch active" onclick="toggleSwitch(this)"></div></div>
-        <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
+                <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
       </div>
       <div id="tab-notif" style="display:none">
         <div class="toggle-row"><div class="toggle-label">Notificar novo pedido</div><div class="toggle-switch active" onclick="toggleSwitch(this)"></div></div>
@@ -334,7 +434,7 @@ body{background:var(--bg);color:var(--text);font-size:11px}
       <div class="upload-icon">+</div><div class="upload-text">Selecionar imagem da galeria</div>
       <input type="file" id="uploadCatImg" style="display:none" accept="image/*" onchange="previewImagem(this,'uploadAreaCat')">
     </div>
-      <div class="input-box"><input type="text" id="catNome" placeholder="Nome da categoria"></div>
+    <div class="input-box"><input type="text" id="catNome" placeholder="Nome da categoria"></div>
     <button class="btn" onclick="salvarCategoria()">SALVAR CATEGORIA</button>
   </div>
 </div>
@@ -376,7 +476,7 @@ const firebaseConfig={apiKey:"AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",authDomai
 firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth();const db=firebase.database();const storage=firebase.storage();
 const ADMIN_EMAIL='vittoriahvahz@gmail.com';
-let imagensProduto=[],imgCategoria='';
+let imagensProduto=[],imgCategoria='',pedidoAtualId=null;
 
 auth.onAuthStateChanged(user=>{
   if(!user||user.email!==ADMIN_EMAIL){window.location.href='index.html';return}
@@ -587,7 +687,85 @@ function filtrarPedidos(status,el){
   });
 }
 
-function verPedido(id){alert('Ver detalhes do pedido: '+id)}
+function verPedido(id){
+  pedidoAtualId=id;
+  db.ref('pedidos/'+id).once('value',snap=>{
+    const p=snap.val();if(!p)return;
+    
+    document.getElementById('detPedidoId').textContent='#'+id.substring(0,8);
+    document.getElementById('detPedidoData').textContent=new Date(p.criadoEm).toLocaleString('pt-BR');
+    document.getElementById('detPedidoStatus').value=p.status||'pendente';
+    document.getElementById('detClienteNome').textContent=p.clienteNome||'Cliente';
+    document.getElementById('detClienteEmail').textContent=p.clienteEmail||'';
+    document.getElementById('detClienteTel').textContent='WhatsApp: '+p.clienteTelefone||'';
+    document.getElementById('detPedidoObs').value=p.observacao||'';
+    
+    let htmlItens='';let subtotal=0;
+    if(p.itens){
+      Object.values(p.itens).forEach(item=>{
+        subtotal+=item.preco*item.qtd;
+        htmlItens+=`<div class="item-row"><img src="${item.imagem||'https://via.placeholder.com/40'}" class="img-thumb"><div class="item-info"><div class="item-title">${item.nome}</div><div class="item-sub">Qtd: ${item.qtd} • R$ ${item.preco.toFixed(2)}</div></div><div class="item-title">R$ ${(item.preco*item.qtd).toFixed(2)}</div></div>`;
+      });
+    }
+    document.getElementById('detPedidoItens').innerHTML=htmlItens||'<div class="empty">Nenhum item</div>';
+    document.getElementById('detPedidoSubtotal').textContent='R$ '+subtotal.toFixed(2);
+    document.getElementById('detPedidoDesconto').textContent='R$ '+(p.desconto||0).toFixed(2);
+    document.getElementById('detPedidoTotal').textContent='R$ '+(p.total||0).toFixed(2);
+    
+    if(p.comprovante){
+      document.getElementById('detComprovanteBox').innerHTML=`<img src="${p.comprovante}" style="width:100%;border-radius:10px;margin-bottom:8px">`;
+    }else{
+      document.getElementById('detComprovanteBox').innerHTML='<div class="empty">Nenhum comprovante enviado</div>';
+    }
+    
+    mostrarTela('detalhes-pedido');
+  });
+}
+
+async function adicionarProdutoPedido(){
+  const prodId=document.getElementById('addProdutoId').value.trim();
+  const qtd=parseInt(document.getElementById('addProdutoQtd').value)||1;
+  if(!prodId||!pedidoAtualId){alert('Digite o ID do produto');return}
+  
+  const snap=await db.ref('produtos/'+prodId).once('value');
+  if(!snap.exists()){alert('Produto não encontrado');return}
+  const prod=snap.val();
+  
+  await db.ref('pedidos/'+pedidoAtualId+'/itens').push({
+    produtoId:prodId,
+    nome:prod.nome,
+    preco:prod.preco,
+    imagem:prod.imagens&&prod.imagens[0]?prod.imagens[0]:'',
+    qtd:qtd
+  });
+  
+  document.getElementById('addProdutoId').value='';
+  document.getElementById('addProdutoQtd').value='1';
+  alert('Produto adicionado!');
+  verPedido(pedidoAtualId);
+}
+
+function atualizarStatusPedido(){
+  const status=document.getElementById('detPedidoStatus').value;
+  db.ref('pedidos/'+pedidoAtualId).update({status:status,atualizadoEm:Date.now()});
+  alert('Status atualizado para: '+status);
+}
+
+async function enviarComprovanteAdmin(e){
+  const file=e.target.files[0];if(!file||!pedidoAtualId)return;
+  const ref=storage.ref('comprovantes/'+pedidoAtualId+'_'+Date.now()+'.jpg');
+  await ref.put(file);
+  const url=await ref.getDownloadURL();
+  await db.ref('pedidos/'+pedidoAtualId).update({comprovante:url});
+  alert('Comprovante enviado!');
+  verPedido(pedidoAtualId);
+}
+
+function salvarObservacao(){
+  const obs=document.getElementById('detPedidoObs').value.trim();
+  db.ref('pedidos/'+pedidoAtualId).update({observacao:obs});
+  alert('Observação salva!');
+}
 
 function carregarClientes(){
   db.ref('usuarios').once('value',snap=>{
