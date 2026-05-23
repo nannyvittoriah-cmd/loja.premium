@@ -378,6 +378,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
             <option value="0">Ilimitado</option>
           </select>
         </div>
+      </div>
       <div class="input-group">
         <label>Uso por Cliente</label>
         <div class="input-box"><input type="number" id="cupomUsoCliente" placeholder="1" min="1" value="1"></div>
@@ -537,7 +538,7 @@ function removerImg(idx){
   const list = document.getElementById('prodImgList');
   list.innerHTML = '';
   imagensProduto.forEach((img,i)=>{
-        list.innerHTML += `<div class="img-list-item">
+    list.innerHTML += `<div class="img-list-item">
       <img src="${img.url}">
       <div class="del" onclick="removerImg(${i})">×</div>
     </div>`;
@@ -551,7 +552,7 @@ async function uploadImg(file,path){
 }
 
 async function abrirModalProduto(id=null){
-  const catSelect = document.getElementById('prodCatId');
+    const catSelect = document.getElementById('prodCatId');
   catSelect.innerHTML = '<option value="">Selecione</option>';
   const catSnap = await db.ref('categorias').once('value');
   const cats = catSnap.val()||{};
@@ -700,7 +701,6 @@ function filtrarProdutos(){
   lista.innerHTML = html||'<div class="empty">Nenhum produto encontrado 📦</div>';
 }
 
-// CATEGORIAS
 function abrirModalCategoria(id=null){
   document.getElementById('catId').value = id||'';
   if(id){
@@ -762,7 +762,6 @@ async function deletarCategoria(id){
   }
 }
 
-// SUBCATEGORIAS
 async function abrirModalSubcategoria(id=null){
   const catSelect = document.getElementById('subcatCatId');
   catSelect.innerHTML = '<option value="">Selecione</option>';
@@ -826,7 +825,6 @@ async function deletarSubcategoria(id){
   }
 }
 
-// CUPONS
 function abrirModalCupom(id=null){
   document.getElementById('cupomId').value = id||'';
   if(id){
@@ -910,7 +908,6 @@ async function deletarCupom(id){
   }
 }
 
-// PEDIDOS
 function carregarPedidos(){
   db.ref('pedidos').once('value',snap=>{
     todosPedidos = snap.val()||{};
@@ -1012,7 +1009,6 @@ async function atualizarStatusPedido(id,status){
   carregarPedidos();
 }
 
-// CLIENTES
 function carregarClientes(){
   db.ref('usuarios').once('value',snap=>{
     todosClientes = snap.val()||{};
@@ -1092,12 +1088,11 @@ async function verCliente(uid){
       </div>
     </div>`:''}
 
-    <button class="btn btn-primary" style="margin-top:20px" onclick="fecharModal('modalCliente')">Já tem uma conta!</button>
+    <button class="btn btn-primary" style="margin-top:20px" onclick="fecharModal('modalCliente')">Fechar</button>
   `;
   document.getElementById('modalCliente').classList.add('active');
 }
 
-// CONFIG
 async function salvarConfig(){
   const data = {
     nome:document.getElementById('configNome').value,
@@ -1121,7 +1116,6 @@ function carregarConfig(){
   });
 }
 
-// DASHBOARD
 function carregarDashboard(){
   db.ref('produtos').once('value',s=>document.getElementById('totalProdutos').textContent=Object.keys(s.val()||{}).length);
   db.ref('usuarios').once('value',s=>document.getElementById('totalClientes').textContent=Object.keys(s.val()||{}).length);
@@ -1141,7 +1135,6 @@ function carregarDashboard(){
   });
 }
 
-// ZERAR BANCO
 async function zerarBanco(){
   if(confirm('⚠️ ATENÇÃO! Isso vai apagar TUDO: produtos, pedidos, clientes, cupons, categorias, subcategorias.\n\nTem certeza?')){
     if(confirm('Última chance! Realmente quer ZERAR o banco de dados?')){
@@ -1157,15 +1150,14 @@ async function zerarBanco(){
   }
 }
 
-// AUTH
 auth.onAuthStateChanged(async user=>{
   if(user){
     currentUser = user;
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     document.getElementById('adminPanel').classList.add('active');
     document.getElementById('userBadge').textContent = user.email[0].toUpperCase();
-    carregarDashboard();
-    carregarConfig();
+    await carregarDashboard();
+    await carregarConfig();
   }else{
     document.getElementById('adminPanel').classList.remove('active');
     document.getElementById('screen-login').classList.add('active');
