@@ -1179,4 +1179,22 @@ try {
       await carregarDashboard();
       await carregarConfig();
     }else{
-      document.getElementById
+            document.getElementById('adminPanel').classList.remove('active');
+      document.getElementById('screen-login').classList.add('active');
+      currentUser = null;
+      document.getElementById('btnLogin').disabled = false;
+      document.getElementById('btnLogin').textContent = '🚀 ENTRAR';
+    }
+    
+    // Libera pra próximo login/logout sem piscar
+    setTimeout(()=>{authInicializado = false}, 1000);
+  });
+
+} catch(e) {
+  debug('ERRO AO INICIAR: ' + e.message);
+  document.getElementById('loading').classList.add('hide');
+  document.getElementById('screen-login').classList.add('active');
+}
+</script>
+</body>
+</html>
