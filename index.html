@@ -126,7 +126,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <input type="password" id="loginPassword" placeholder="••••••••">
         <span class="toggle" onclick="togglePass('loginPassword',this)">👁️</span>
       </div>
-    </div>
     <button class="btn btn-primary" id="btnLogin" onclick="fazerLogin()">🚀 ENTRAR</button>
   </div>
 </div>
@@ -147,6 +146,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
     <div class="side-item" onclick="trocarPage('pedidos',this)">🛒 Pedidos</div>
     <div class="side-item" onclick="trocarPage('clientes',this)">👥 Clientes</div>
     <div class="side-item" onclick="trocarPage('categorias',this)">📁 Categorias</div>
+    <div class="side-item" onclick="trocarPage('subcategorias',this)">📂 Subcategorias</div>
     <div class="side-item" onclick="trocarPage('cupons',this)">🎟️ Cupons</div>
     <div class="side-item" onclick="trocarPage('config',this)">⚙️ Config</div>
     <div class="side-item btn-red" onclick="zerarBanco()">🗑️ ZERAR BANCO</div>
@@ -199,6 +199,14 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <button class="btn btn-sm btn-primary" onclick="abrirModalCategoria()">➕ Adicionar</button>
       </div>
       <div id="listaCategorias"><div class="empty">Nenhuma categoria</div></div>
+    </div>
+
+    <div id="subcategorias" class="page">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <h3>📂 Subcategorias</h3>
+        <button class="btn btn-sm btn-primary" onclick="abrirModalSubcategoria()">➕ Adicionar</button>
+      </div>
+      <div id="listaSubcategorias"><div class="empty">Nenhuma subcategoria</div></div>
     </div>
 
     <div id="cupons" class="page">
@@ -319,6 +327,25 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
   </div>
 </div>
 
+<div class="modal" id="modalSubcategoria">
+  <div class="modal-box">
+    <div class="modal-head">
+      <button class="close-btn" onclick="fecharModal('modalSubcategoria')" style="position:absolute;left:16px;top:16px">←</button>
+      <div class="modal-title" style="width:100%;text-align:center">📂 NOVA SUBCATEGORIA</div>
+    </div>
+    <input type="hidden" id="subcatId">
+    <div class="input-group">
+      <label>Categoria Pai</label>
+      <div class="input-box"><select id="subcatCatId"></select></div>
+    </div>
+    <div class="input-group">
+      <label>Nome da Subcategoria</label>
+      <div class="input-box"><input type="text" id="subcatNome" placeholder="Netflix"></div>
+    </div>
+    <button class="btn btn-primary" onclick="salvarSubcategoria()">SALVAR SUBCATEGORIA</button>
+  </div>
+</div>
+
 <div class="modal" id="modalCupom">
   <div class="modal-box">
     <div class="modal-head">
@@ -351,7 +378,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
             <option value="0">Ilimitado</option>
           </select>
         </div>
-      </div>
       <div class="input-group">
         <label>Uso por Cliente</label>
         <div class="input-box"><input type="number" id="cupomUsoCliente" placeholder="1" min="1" value="1"></div>
@@ -409,6 +435,7 @@ let todosPedidos = {};
 let todosCupons = {};
 let todosClientes = {};
 let todosProdutos = {};
+let todosSubcats = {};
 let imagensProduto = [];
 
 function togglePass(id,el){
@@ -455,6 +482,7 @@ function trocarPage(id,el){
   if(id==='pedidos') carregarPedidos();
   if(id==='clientes') carregarClientes();
   if(id==='categorias') carregarCategorias();
+  if(id==='subcategorias') carregarSubcategorias();
   if(id==='cupons') carregarCupons();
 }
 
@@ -509,7 +537,7 @@ function removerImg(idx){
   const list = document.getElementById('prodImgList');
   list.innerHTML = '';
   imagensProduto.forEach((img,i)=>{
-    list.innerHTML += `<div class="img-list-item">
+        list.innerHTML += `<div class="img-list-item">
       <img src="${img.url}">
       <div class="del" onclick="removerImg(${i})">×</div>
     </div>`;
@@ -544,7 +572,7 @@ async function abrirModalProduto(id=null){
 
   document.getElementById('prodId').value = id||'';
   imagensProduto = [];
-    if(id){
+  if(id){
     db.ref('produtos/'+id).once('value',async snap=>{
       const p = snap.val();
       document.getElementById('prodNome').value = p.nome;
@@ -618,18 +646,21 @@ function carregarProdutos(){
     if(!todosProdutos||Object.keys(todosProdutos).length===0){lista.innerHTML='<div class="empty">Nenhum produto 📦</div>';return}
     const catSnap = await db.ref('categorias').once('value');
     const cats = catSnap.val()||{};
+    const subcatSnap = await db.ref('subcategorias').once('value');
+    const subcats = subcatSnap.val()||{};
     const cupSnap = await db.ref('cupons').once('value');
     const cups = cupSnap.val()||{};
     let html = '';
     Object.entries(todosProdutos).forEach(([id,p])=>{
       const catNome = cats[p.categoriaId]?.nome||'Sem categoria';
+      const subcatNome = p.subcategoriaId&&subcats[p.subcategoriaId]?` > ${subcats[p.subcategoriaId].nome}`:'';
       const img = p.imagens&&p.imagens.length?p.imagens[0]:'';
       const cupomNome = p.cupomId&&cups[p.cupomId]?`🎟️ ${cups[p.cupomId].codigo}`:'';
       html += `<div class="item-row clickable" onclick="abrirModalProduto('${id}')">
         <img src="${img}" class="img-thumb" onerror="this.style.display='none'">
         <div class="item-info">
           <div class="item-title">📦 ${p.nome}</div>
-          <div class="item-sub">💵 R$ ${p.preco.toFixed(2)} • ${catNome} • 📊 ${p.estoque} ${cupomNome}</div>
+          <div class="item-sub">💵 R$ ${p.preco.toFixed(2)} • ${catNome}${subcatNome} • 📊 ${p.estoque} ${cupomNome}</div>
         </div>
         <div class="actions">
           <button class="btn btn-sm btn-red" onclick="event.stopPropagation();deletarProduto('${id}')">🗑️</button>
@@ -722,9 +753,76 @@ function carregarCategorias(){
 }
 
 async function deletarCategoria(id){
-  if(confirm('Deletar categoria?')){
+  if(confirm('Deletar categoria? Isso vai apagar as subcategorias também!')){
     await db.ref('categorias/'+id).remove();
+    const subSnap = await db.ref('subcategorias').orderByChild('categoriaId').equalTo(id).once('value');
+    const subs = subSnap.val()||{};
+    Object.keys(subs).forEach(async sid=>{await db.ref('subcategorias/'+sid).remove()});
     carregarCategorias();
+  }
+}
+
+// SUBCATEGORIAS
+async function abrirModalSubcategoria(id=null){
+  const catSelect = document.getElementById('subcatCatId');
+  catSelect.innerHTML = '<option value="">Selecione</option>';
+  const catSnap = await db.ref('categorias').once('value');
+  const cats = catSnap.val()||{};
+  Object.entries(cats).forEach(([cid,c])=>{
+    catSelect.innerHTML += `<option value="${cid}">${c.nome}</option>`;
+  });
+
+  document.getElementById('subcatId').value = id||'';
+  if(id){
+    db.ref('subcategorias/'+id).once('value',snap=>{
+      const s = snap.val();
+      document.getElementById('subcatNome').value = s.nome;
+      document.getElementById('subcatCatId').value = s.categoriaId;
+    });
+  }
+  document.getElementById('modalSubcategoria').classList.add('active');
+}
+
+async function salvarSubcategoria(){
+  const id = document.getElementById('subcatId').value;
+  const nome = document.getElementById('subcatNome').value.trim();
+  const categoriaId = document.getElementById('subcatCatId').value;
+  if(!nome||!categoriaId) return alert('Preencha todos os campos');
+  const data = {nome,categoriaId,criadoEm:Date.now()};
+  if(id) await db.ref('subcategorias/'+id).update(data);
+  else await db.ref('subcategorias').push(data);
+  fecharModal('modalSubcategoria');
+  carregarSubcategorias();
+}
+
+function carregarSubcategorias(){
+  db.ref('subcategorias').once('value',async snap=>{
+    const lista = document.getElementById('listaSubcategorias');
+    todosSubcats = snap.val()||{};
+    if(!todosSubcats||Object.keys(todosSubcats).length===0){lista.innerHTML='<div class="empty">Nenhuma subcategoria 📂</div>';return}
+    const catSnap = await db.ref('categorias').once('value');
+    const cats = catSnap.val()||{};
+    let html = '';
+    Object.entries(todosSubcats).forEach(([id,s])=>{
+      const catNome = cats[s.categoriaId]?.nome||'Sem categoria';
+      html += `<div class="item-row clickable" onclick="abrirModalSubcategoria('${id}')">
+        <div class="item-info">
+          <div class="item-title">📂 ${s.nome}</div>
+          <div class="item-sub">📁 ${catNome}</div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-sm btn-red" onclick="event.stopPropagation();deletarSubcategoria('${id}')">🗑️</button>
+        </div>
+      </div>`;
+    });
+    lista.innerHTML = html;
+  });
+}
+
+async function deletarSubcategoria(id){
+  if(confirm('Deletar subcategoria?')){
+    await db.ref('subcategorias/'+id).remove();
+    carregarSubcategorias();
   }
 }
 
@@ -1045,7 +1143,7 @@ function carregarDashboard(){
 
 // ZERAR BANCO
 async function zerarBanco(){
-  if(confirm('⚠️ ATENÇÃO! Isso vai apagar TUDO: produtos, pedidos, clientes, cupons, categorias.\n\nTem certeza?')){
+  if(confirm('⚠️ ATENÇÃO! Isso vai apagar TUDO: produtos, pedidos, clientes, cupons, categorias, subcategorias.\n\nTem certeza?')){
     if(confirm('Última chance! Realmente quer ZERAR o banco de dados?')){
       await db.ref('produtos').remove();
       await db.ref('pedidos').remove();
