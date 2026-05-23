@@ -5,186 +5,236 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Prime Store VZ</title>
 <style>
-:root{--bg:#0a0a12;--card:#16161f;--input:#1e1e2a;--border:#2f2f42;--purple:#8b5cf6;--purple-dark:#7c3aed;--text:#fff;--text-dim:#8b8ba1;--green:#10b981;--red:#ef4444;--blue:#3b82f6}
+:root{--bg:#0a0a12;--card:#16161f;--input:#1e1e2a;--border:#2f2f42;--purple:#8b5cf6;--purple-dark:#7c3aed;--text:#fff;--text-dim:#8b8ba1;--green:#10b981;--red:#ef4444}
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);color:var(--text);font-size:11px;padding-bottom:70px}
-.hide{display:none!important}
-.header{position:fixed;top:0;left:0;right:0;height:50px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:100}
-.header-left{display:flex;align-items:center;gap:10px}
-.menu-btn{width:32px;height:32px;background:var(--input);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px}
-.logo{font-weight:800;font-size:13px;background:linear-gradient(135deg,#fff 0%,var(--purple) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.header-icons{display:flex;gap:8px}
-.icon-btn{width:32px;height:32px;background:transparent;border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;position:relative}
-.icon-btn:active{transform:scale(0.95);border-color:var(--purple)}
-.badge{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;font-size:8px;font-weight:700;padding:2px 5px;border-radius:10px;min-width:16px;text-align:center}
-.content{padding:62px 10px 10px;max-width:480px;margin:0 auto}
-.search-box{width:100%;min-height:40px;background:var(--input);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;padding:0 12px;gap:8px;margin-bottom:14px}
-.search-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:11px}
-.search-box input::placeholder{color:var(--text-dim)}
-.banner{background:linear-gradient(135deg,#1e1e2a 0%,#2a1a4a 100%);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:16px;position:relative;overflow:hidden}
-.banner::before{content:'';position:absolute;top:-50px;right:-50px;width:150px;height:150px;background:radial-gradient(circle,rgba(139,92,246,0.3) 0%,transparent 70%);filter:blur(40px)}
-.banner-title{font-size:13px;font-weight:800;margin-bottom:4px;position:relative;z-index:1}
-.banner-sub{font-size:10px;color:var(--text-dim);margin-bottom:10px;position:relative;z-index:1}
-.banner-btn{height:32px;padding:0 16px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border:none;border-radius:9px;color:#fff;font-size:10px;font-weight:700;cursor:pointer;position:relative;z-index:1}
-.banner-img{position:absolute;right:10px;bottom:0;width:80px;height:80px;object-fit:contain;z-index:0}
-.section{margin-bottom:16px}
-.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.section-title{font-size:12px;font-weight:800}
-.section-link{font-size:10px;color:var(--purple);cursor:pointer;font-weight:600}
-.cat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.cat-item{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
-.cat-icon{width:48px;height:48px;background:var(--card);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
-.cat-icon:active{transform:scale(0.95);border-color:var(--purple)}
-.cat-name{font-size:9px;color:var(--text-dim);text-align:center}
-.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.prod-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:8px;cursor:pointer}
-.prod-card:active{transform:scale(0.98);border-color:var(--purple)}
-.prod-img{width:100%;aspect-ratio:1;background:var(--input);border-radius:8px;margin-bottom:6px;object-fit:cover}
-.prod-title{font-size:9px;font-weight:700;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.prod-price{font-size:10px;font-weight:900;color:var(--purple)}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:60px;background:var(--card);border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;z-index:50}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;color:var(--text-dim);cursor:pointer;position:relative}
-.nav-item.active{color:var(--purple)}
-.nav-icon{font-size:18px}
-.nav-badge{position:absolute;top:-2px;right:8px;background:var(--red);color:#fff;font-size:7px;font-weight:700;padding:1px 4px;border-radius:8px;min-width:14px;text-align:center}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.9);backdrop-filter:blur(10px);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
-.modal.active{display:flex}
-.modal-content{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;width:100%;max-width:440px;max-height:90vh;overflow-y:auto}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.modal-title{font-size:13px;font-weight:800}
-.close-btn{width:28px;height:28px;background:var(--input);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px}
-.notif-item{background:var(--input);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:8px;font-size:10px;cursor:pointer}
-.notif-item.unread{border-color:var(--purple);background:rgba(139,92,246,0.1)}
-.notif-title{font-size:11px;font-weight:700;margin-bottom:3px}
-.notif-time{font-size:8px;color:var(--text-dim);margin-top:4px}
-.empty{text-align:center;padding:30px 20px;color:var(--text-dim);font-size:11px}
-.sidebar{position:fixed;left:-260px;top:0;bottom:0;width:260px;background:var(--card);border-right:1px solid var(--border);padding:16px;overflow-y:auto;z-index:150;transition:0.3s}
-.sidebar.open{left:0}
-.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:149;display:none}
-.sidebar-overlay.active{display:block}
-.sidebar-header{display:flex;align-items:center;gap:10px;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:16px}
-.user-avatar{width:40px;height:40px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800}
-.user-info{flex:1}
-.user-name{font-size:12px;font-weight:700;margin-bottom:2px}
-.user-email{font-size:9px;color:var(--text-dim)}
-.menu-item{display:flex;align-items:center;gap:10px;padding:10px 12px;margin:2px 0;border-radius:10px;color:var(--text-dim);font-size:11px;font-weight:500;cursor:pointer}
-.menu-item:active,.menu-item.active{background:var(--input);color:var(--text)}
-.menu-icon{font-size:16px;width:18px;text-align:center}
-.btn{width:100%;height:40px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border:none;border-radius:10px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:8px}
+body{background:var(--bg);color:var(--text);min-height:100vh;position:relative;overflow-x:hidden}
+body::before{content:'';position:fixed;top:-150px;left:50%;transform:translateX(-50%);width:400px;height:400px;background:radial-gradient(circle,rgba(139,92,246,0.12) 0%,transparent 70%);filter:blur(80px);pointer-events:none;z-index:0}
+.screen{display:none;min-height:100vh;width:100%;position:relative;z-index:1}
+.screen.active{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px}
+.logo-area{text-align:center;margin-bottom:20px}
+.logo-p{width:64px;height:64px;margin:0 auto 12px;position:relative}
+.logo-p svg{width:100%;height:100%;filter:drop-shadow(0 6px 20px rgba(139,92,246,0.4))}
+.logo-text{font-size:22px;font-weight:800;margin-bottom:3px;letter-spacing:-0.5px}
+.logo-text.prime{color:#fff}
+.logo-text.store{color:var(--purple)}
+.logo-sub{font-size:11px;color:var(--text-dim)}
+.tabs{display:flex;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:3px;width:100%;max-width:360px;margin-bottom:16px}
+.tab{flex:1;height:36px;background:transparent;border:none;border-radius:9px;color:var(--text-dim);font-size:11px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all 0.2s}
+.tab.active{background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);color:#fff;box-shadow:0 3px 10px rgba(139,92,246,0.3)}
+.card{width:100%;max-width:360px;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px}
+.card-title{font-size:16px;font-weight:800;text-align:center;margin-bottom:4px}
+.card-subtitle{font-size:11px;color:var(--text-dim);text-align:center;margin-bottom:18px}
+.input-group{margin-bottom:12px}
+.input-label{font-size:10px;color:var(--text-dim);margin-bottom:5px;font-weight:500}
+.input-box{width:100%;min-height:44px;background:var(--input);border:1px solid var(--border);border-radius:11px;display:flex;align-items:center;padding:0 12px;gap:8px;transition:all 0.2s}
+.input-box:focus-within{border-color:var(--purple);box-shadow:0 0 0 3px rgba(139,92,246,0.08)}
+.input-icon{font-size:15px;color:var(--text-dim);flex-shrink:0}
+.input-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:12px}
+.input-box input::placeholder{color:var(--text-dim)}
+.toggle{cursor:pointer;color:var(--text-dim);font-size:15px}
+.checkbox-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.checkbox-label{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--text-dim);cursor:pointer}
+.checkbox-label input{width:15px;height:15px;accent-color:var(--purple);cursor:pointer}
+.link-small{color:var(--purple);font-size:10px;font-weight:600;cursor:pointer;text-decoration:none}
+.btn{width:100%;height:44px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border:none;border-radius:11px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px rgba(139,92,246,0.25);transition:all 0.2s}
 .btn:active{transform:scale(0.98)}
-.btn-sm{height:30px;font-size:10px;padding:0 12px;width:auto}
-.btn-red{background:linear-gradient(135deg,var(--red) 0%,#dc2626 100%)}
-.item-row{display:flex;align-items:center;gap:10px;padding:10px;background:var(--input);border:1px solid var(--border);border-radius:10px;margin-bottom:8px}
-.img-thumb{width:40px;height:40px;background:var(--card);border-radius:8px;object-fit:cover}
-.item-info{flex:1}
-.item-title{font-size:11px;font-weight:700;margin-bottom:2px}
-.item-sub{font-size:9px;color:var(--text-dim)}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
+.alert{padding:9px 12px;border-radius:9px;font-size:10px;margin-bottom:12px;display:none;font-weight:600;border:1px solid;text-align:center}
+.alert.error{background:rgba(239,68,68,0.15);border-color:var(--red);color:#fca5a5}
+.alert.success{background:rgba(16,185,129,0.15);border-color:var(--green);color:#6ee7b7}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:20px;padding:14px;background:var(--card);border:1px solid var(--border);border-radius:14px;width:100%;max-width:360px}
+.feature{display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center}
+.feature-icon{width:28px;height:28px;background:var(--input);border:1px solid var(--border);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--purple)}
+.feature-title{font-size:9px;font-weight:700;color:var(--text);line-height:1.2}
+.feature-desc{font-size:8px;color:var(--text-dim);line-height:1.2}
+.footer{font-size:8px;color:var(--text-dim);text-align:center;margin-top:16px}
+.requirements{background:var(--input);border:1px solid var(--border);border-radius:11px;padding:10px;margin-bottom:12px}
+.req-title{font-size:9px;color:var(--text-dim);margin-bottom:7px}
+.req-item{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--text-dim);margin-bottom:4px}
+.req-item:last-child{margin-bottom:0}
+.req-item.valid{color:var(--green)}
+.req-check{width:13px;height:13px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px}
+.req-item.valid.req-check{background:var(--green);border-color:var(--green);color:#fff}
+.info-box{background:var(--input);border:1px solid var(--border);border-radius:11px;padding:10px;margin-bottom:12px}
+.info-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px}
+.info-row:last-child{margin-bottom:0}
+.info-icon{width:28px;height:28px;background:var(--card);border:1px solid var(--border);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.info-text{flex:1}
+.info-title{font-size:10px;font-weight:700;margin-bottom:1px}
+.info-desc{font-size:9px;color:var(--text-dim);line-height:1.3}
+.success-circle{width:64px;height:64px;margin:0 auto 14px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 6px 20px rgba(139,92,246,0.4)}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-left">
-    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
-    <div class="logo">Prime Store VZ</div>
+<div class="screen active" id="screen-login">
+  <div class="logo-area">
+    <div class="logo-p">
+      <svg viewBox="0 0 64 64" fill="none">
+        <defs><linearGradient id="logoG1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs>
+        <path d="M32 6L14 20v24l18 14 18-14V20L32 6z" fill="url(#logoG1)"/>
+        <path d="M32 16L22 25v14l10 9 10-9V25L32 16z" fill="#0a12"/>
+        <path d="M32 24L26 30v8l6 6 6-6v-8l-6-6z" fill="url(#logoG1)"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="prime">Prime</span> <span class="store">store Vz</span></div>
+    <div class="logo-sub">Sua loja, sua experiência.</div>
   </div>
-  <div class="header-icons">
-    <button class="icon-btn" onclick="abrirModal('modalNotif')">🔔<span class="badge hide" id="badgeNotif">0</span></button>
-    <button class="icon-btn" onclick="abrirModal('modalCarrinho')">🛒<span class="badge hide" id="badgeCarrinho">0</span></button>
+
+  <div class="tabs">
+    <button class="tab active" onclick="mudarTab('login')">→] Login</button>
+    <button class="tab" onclick="mudarTab('cadastro')">👤 Cadastrar</button>
+    <button class="tab" onclick="mudarTab('esqueci')">🔒 Esqueceu senha</button>
   </div>
+
+  <div class="card">
+    <div class="card-title">Bem-vindo de volta!</div>
+    <div class="card-subtitle">Faça login para continuar</div>
+    <div class="alert error" id="loginError"></div>
+    <div class="alert success" id="loginSuccess"></div>
+    <div class="input-group">
+      <div class="input-label">E-mail</div>
+      <div class="input-box"><span class="input-icon">📧</span><input type="email" id="loginEmail" placeholder="seuemail@email.com"></div>
+    </div>
+    <div class="input-group">
+      <div class="input-label">Senha</div>
+      <div class="input-box"><span class="input-icon">🔒</span><input type="password" id="loginSenha" placeholder="Sua senha"><span class="toggle" onclick="toggleSenha('loginSenha',this)">👁️</span></div>
+    </div>
+    <div class="checkbox-row">
+      <label class="checkbox-label"><input type="checkbox" id="lembrar"><span>Lembrar de mim</span></label>
+      <a class="link-small" onclick="mudarTab('esqueci')">Esqueceu sua senha?</a>
+    </div>
+    <button class="btn" id="btnLogin" onclick="fazerLogin()">Entrar</button>
+  </div>
+
+  <div class="features">
+    <div class="feature"><div class="feature-icon">🛡️</div><div class="feature-title">Compra segura</div><div class="feature-desc">Seus dados protegidos</div></div>
+    <div class="feature"><div class="feature-icon">🎧</div><div class="feature-title">Suporte dedicado</div><div class="feature-desc">Estamos aqui para ajudar</div></div>
+    <div class="feature"><div class="feature-icon">🚚</div><div class="feature-title">Entrega rápida</div><div class="feature-desc">Produtos digitais na hora</div></div>
+  </div>
+
+  <div class="footer">© 2024 Prime store Vz. Todos os direitos reservados.</div>
 </div>
 
-<div class="sidebar" id="sidebar">
-  <div class="sidebar-header">
-    <div class="user-avatar" id="userAvatar">U</div>
-    <div class="user-info">
-      <div class="user-name" id="userName">Usuário</div>
-      <div class="user-email" id="userEmail">email@email.com</div>
+<div class="screen" id="screen-cadastro">
+  <div class="logo-area">
+    <div class="logo-p">
+      <svg viewBox="0 0 64 64" fill="none">
+        <defs><linearGradient id="logoG2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs>
+        <path d="M32 6L14 20v24l18 14 18-14V20L32 6z" fill="url(#logoG2)"/>
+        <path d="M32 16L22 25v14l10 9 10-9V25L32 16z" fill="#0a0a12"/>
+        <path d="M32 24L26 30v8l6 6 6-6v-8l-6-6z" fill="url(#logoG2)"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="prime">Prime</span> <span class="store">store Vz</span></div>
+    <div class="logo-sub">Crie sua conta e comece sua jornada.</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab" onclick="mudarTab('login')">→] Login</button>
+    <button class="tab active" onclick="mudarTab('cadastro')">👤 Cadastrar</button>
+    <button class="tab" onclick="mudarTab('esqueci')">🔒 Esqueceu senha</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Criar conta</div>
+    <div class="card-subtitle">Preencha os dados para criar sua conta.</div>
+    <div class="alert error" id="cadastroError"></div>
+    <div class="alert success" id="cadastroSuccess"></div>
+    <div class="input-group">
+      <div class="input-label">Nome completo</div>
+      <div class="input-box"><span class="input-icon">👤</span><input type="text" id="cadNome" placeholder="Seu nome completo"></div>
+    </div>
+    <div class="input-group">
+      <div class="input-label">E-mail</div>
+      <div class="input-box"><span class="input-icon">📧</span><input type="email" id="cadEmail" placeholder="seuemail@email.com"></div>
+    </div>
+    <div class="input-group">
+      <div class="input-label">Senha</div>
+      <div class="input-box"><span class="input-icon">🔒</span><input type="password" id="cadSenha" placeholder="Mínimo 8 caracteres" oninput="validarSenha()"><span class="toggle" onclick="toggleSenha('cadSenha',this)">👁️</span></div>
+    </div>
+    <div class="input-group">
+      <div class="input-label">Confirmar senha</div>
+      <div class="input-box"><span class="input-icon">🔒</span><input type="password" id="cadConfirmaSenha" placeholder="Confirme sua senha"><span class="toggle" onclick="toggleSenha('cadConfirmaSenha',this)">👁️</span></div>
+    </div>
+    <div class="requirements">
+      <div class="req-title">A senha deve conter:</div>
+      <div class="req-item" id="req8"><div class="req-check">✓</div>Mínimo de 8 caracteres</div>
+      <div class="req-item" id="reqMaiuscula"><div class="req-check">✓</div>Uma letra maiúscula</div>
+      <div class="req-item" id="reqNumero"><div class="req-check">✓</div>Um número</div>
+      <div class="req-item" id="reqEspecial"><div class="req-check">✓</div>Um caractere especial</div>
+    </div>
+    <label class="checkbox-label" style="margin-bottom:18px"><input type="checkbox" id="aceiteTermos"><span style="font-size:10px">Li e aceito os <a href="#" style="color:var(--purple)">Termos de Uso</a> e a <a href="#" style="color:var(--purple)">Política de Privacidade</a></span></label>
+    <button class="btn" id="btnCadastrar" onclick="fazerCadastro()">👤 Cadastrar</button>
+  </div>
+
+  <div class="footer">© 2024 Prime store Vz. Todos os direitos reservados.</div>
+</div>
+
+<div class="screen" id="screen-esqueci">
+  <div class="logo-area">
+    <div class="logo-p">
+      <svg viewBox="0 0 64 64" fill="none">
+        <defs><linearGradient id="logoG3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs>
+        <path d="M32 6L14 20v24l18 14 18-14V20L32 6z" fill="url(#logoG3)"/>
+        <path d="M32 16L22 25v14l10 9 10-9V25L32 16z" fill="#0a0a12"/>
+        <path d="M32 24L26 30v8l6 6 6-6v-8l-6-6z" fill="url(#logoG3)"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="prime">Prime</span> <span class="store">store Vz</span></div>
+    <div class="logo-sub">Recupere o acesso à sua conta.</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab" onclick="mudarTab('login')">→] Login</button>
+    <button class="tab" onclick="mudarTab('cadastro')">👤 Cadastrar</button>
+    <button class="tab active" onclick="mudarTab('esqueci')">🔒 Esqueceu senha</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Esqueceu sua senha?</div>
+    <div class="card-subtitle">Informe o e-mail da sua conta que enviaremos um link para redefinir sua senha.</div>
+    <div class="alert error" id="esqueciError"></div>
+    <div class="input-group">
+      <div class="input-label">E-mail</div>
+      <div class="input-box"><span class="input-icon">📧</span><input type="email" id="esqueciEmail" placeholder="seuemail@email.com"></div>
+    </div>
+    <button class="btn" id="btnEsqueci" onclick="enviarLink()">✈️ Enviar link de redefinição</button>
+    <div class="info-box" style="margin-top:14px">
+      <div class="info-row"><div class="info-icon">🛡️</div><div class="info-text"><div class="info-title">Por segurança, o link expira em 15 minutos.</div></div></div>
     </div>
   </div>
-  <div class="menu-item active" onclick="irPara('home')"><span class="menu-icon">🏠</span>Início</div>
-  <div class="menu-item" onclick="irPara('pedidos')"><span class="menu-icon">📦</span>Meus Pedidos</div>
-  <div class="menu-item" onclick="irPara('favoritos')"><span class="menu-icon">❤️</span>Favoritos</div>
-  <div class="menu-item" onclick="irPara('carteira')"><span class="menu-icon">💰</span>Carteira</div>
-  <div class="menu-item" onclick="irPara('suporte')"><span class="menu-icon">💬</span>Suporte</div>
-  <div class="menu-item" onclick="irPara('config')"><span class="menu-icon">⚙️</span>Configurações</div>
-  <div class="menu-item" onclick="logout()"><span class="menu-icon">🚪</span>Sair</div>
+
+  <div class="footer">© 2024 Prime store Vz. Todos os direitos reservados.</div>
 </div>
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
-<div class="content">
-  <div class="search-box">
-    <span class="input-icon">🔍</span>
-    <input type="text" id="searchInput" placeholder="Buscar produtos..." oninput="buscarProdutos()">
-  </div>
-
-  <div class="banner">
-    <div class="banner-title">OFERTAS EXCLUSIVAS</div>
-    <div class="banner-sub">ATÉ 70% OFF</div>
-    <button class="banner-btn" onclick="irPara('ofertas')">VER OFERTAS</button>
-    <img src="https://i.imgur.com/placeholder.png" class="banner-img" id="bannerImg">
-  </div>
-
-  <div class="section">
-    <div class="section-header">
-      <div class="section-title">Categorias</div>
-      <div class="section-link" onclick="irPara('categorias')">Ver todas</div>
+<div class="screen" id="screen-enviado">
+  <div class="logo-area">
+    <div class="logo-p">
+      <svg viewBox="0 0 64 64" fill="none">
+        <defs><linearGradient id="logoG4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs>
+        <path d="M32 6L14 20v24l18 14 18-14V20L32 6z" fill="url(#logoG4)"/>
+        <path d="M32 16L22 25v14l10 9 10-9V25L32 16z" fill="#0a0a12"/>
+        <path d="M32 24L26 30v8l6 6-6v-8l-6-6z" fill="url(#logoG4)"/>
+      </svg>
     </div>
-    <div class="cat-grid" id="catGrid"></div>
+    <div class="logo-text"><span class="prime">Prime</span> <span class="store">store Vz</span></div>
   </div>
 
-  <div class="section">
-    <div class="section-header">
-      <div class="section-title">Produtos em destaque</div>
-      <div class="section-link" onclick="irPara('produtos')">Ver todos</div>
+  <div class="success-circle">✓</div>
+
+  <div class="card" style="text-align:center">
+    <div class="card-title" style="margin-bottom:6px">E-mail enviado!</div>
+    <div class="card-subtitle" style="margin-bottom:18px">Enviamos um link de redefinição para<br><strong id="emailEnviado" style="color:var(--purple)"></strong></div>
+    <div class="info-box">
+      <div class="info-row"><div class="info-icon">📧</div><div class="info-text"><div class="info-title">Verifique sua caixa de entrada</div><div class="info-desc">(e o spam/lixo eletrônico).</div></div></div>
+      <div class="info-row"><div class="info-icon">⏰</div><div class="info-text"><div class="info-title">O link expira em 15 minutos.</div></div></div>
+      <div class="info-row"><div class="info-icon">🛡️</div><div class="info-text"><div class="info-title">Não recebeu o e-mail?</div><div class="info-desc"><a href="#" onclick="mudarTab('esqueci')" style="color:var(--purple)">Enviar novamente</a></div>
     </div>
-    <div class="prod-grid" id="prodGrid"></div>
+    <button class="btn" onclick="mudarTab('login')">← Voltar para o login</button>
   </div>
-</div>
 
-<div class="bottom-nav">
-  <div class="nav-item active" onclick="irPara('home')"><div class="nav-icon">🏠</div>Início</div>
-  <div class="nav-item" onclick="irPara('categorias')"><div class="nav-icon">📁</div>Categorias</div>
-  <div class="nav-item" onclick="abrirModal('modalCarrinho')"><div class="nav-icon">🛒</div>Carrinho<span class="nav-badge hide" id="navBadgeCarrinho">0</span></div>
-  <div class="nav-item" onclick="irPara('pedidos')"><div class="nav-icon">📦</div>Pedidos</div>
-  <div class="nav-item" onclick="abrirModal('modalPerfil')"><div class="nav-icon">👤</div>Perfil</div>
-</div>
-
-<!-- MODAL NOTIFICAÇÕES -->
-<div class="modal" id="modalNotif">
-  <div class="modal-content">
-    <div class="modal-header"><div class="modal-title">🔔 Notificações</div><button class="close-btn" onclick="fecharModal('modalNotif')">×</button></div>
-    <div id="listaNotifs"></div>
-  </div>
-</div>
-
-<!-- MODAL CARRINHO -->
-<div class="modal" id="modalCarrinho">
-  <div class="modal-content">
-    <div class="modal-header"><div class="modal-title">🛒 Carrinho</div><button class="close-btn" onclick="fecharModal('modalCarrinho')">×</button></div>
-    <div id="listaCarrinho"></div>
-    <div class="card" style="margin-top:10px">
-      <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-size:10px;color:var(--text-dim)">Subtotal:</span><span style="font-size:11px;font-weight:700" id="cartSubtotal">R$ 0,00</span></div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:12px"><span style="font-size:12px;font-weight:800">Total:</span><span style="font-size:14px;font-weight:900;color:var(--purple)" id="cartTotal">R$ 0,00</span></div>
-      <button class="btn" onclick="finalizarCompra()">💳 Finalizar Compra</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL PERFIL -->
-<div class="modal" id="modalPerfil">
-  <div class="modal-content">
-    <div class="modal-header"><div class="modal-title">👤 Meu Perfil</div><button class="close-btn" onclick="fecharModal('modalPerfil')">×</button></div>
-    <div id="perfilDetalhes"></div>
-  </div>
-</div>
-
-<!-- MODAL PRODUTO -->
-<div class="modal" id="modalProduto">
-  <div class="modal-content">
-    <div class="modal-header"><div class="modal-title" id="prodModalNome">Produto</div><button class="close-btn" onclick="fecharModal('modalProduto')">×</button></div>
-    <div id="prodModalConteudo"></div>
-  </div>
+  <div class="footer">© 2024 Prime store Vz. Todos os direitos reservados.</div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -204,189 +254,122 @@ firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth();
 const db=firebase.database();
 
-let currentUser=null,todosProdutos={},todasCategorias={},carrinho={},notificacoes={};
+// EMAIL DO ADM - SÓ ESSE ENTRA NO PAINEL
+const ADMIN_EMAIL='vittoriahvahz@gmail.com';
 
-auth.onAuthStateChanged(async user=>{
-  if(!user){window.location.href='index.html';return}
-  currentUser=user;
-  const snap=await db.ref('usuarios/'+user.uid).once('value');
-  const u=snap.val()||{};
-  document.getElementById('userName').textContent=u.nome||'Usuário';
-  document.getElementById('userEmail').textContent=user.email;
-  document.getElementById('userAvatar').textContent=(u.nome||'U')[0].toUpperCase();
-  carregarCategorias();carregarProdutos();carregarCarrinho();carregarNotificacoes();carregarBanner();
+function mudarTab(tela){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+tela).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  const tabs=document.querySelectorAll('.tab');
+  if(tela==='login')tabs[0].classList.add('active');
+  else if(tela==='cadastro')tabs[1].classList.add('active');
+  else tabs[2].classList.add('active');
+  document.querySelectorAll('.alert').forEach(a=>a.style.display='none');
+}
+
+function toggleSenha(id,el){
+  const input=document.getElementById(id);
+  if(input.type==='password'){input.type='text';el.textContent='🙈'}
+  else{input.type='password';el.textContent='👁️'}
+}
+
+function validarSenha(){
+  const s=document.getElementById('cadSenha').value;
+  document.getElementById('req8').classList.toggle('valid',s.length>=8);
+  document.getElementById('reqMaiuscula').classList.toggle('valid',/[A-Z]/.test(s));
+  document.getElementById('reqNumero').classList.toggle('valid',/[0-9]/.test(s));
+  document.getElementById('reqEspecial').classList.toggle('valid',/[^A-Za-z0-9]/.test(s));
+}
+
+async function fazerLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const senha=document.getElementById('loginSenha').value;
+  const btn=document.getElementById('btnLogin');
+  const err=document.getElementById('loginError');
+  const suc=document.getElementById('loginSuccess');
+  err.style.display='none';suc.style.display='none';
+  if(!email||!senha){err.textContent='Preencha todos os campos';err.style.display='block';return}
+  btn.disabled=true;btn.textContent='ENTRANDO...';
+  try{
+    await auth.signInWithEmailAndPassword(email,senha);
+    suc.textContent='Login realizado! Redirecionando...';suc.style.display='block';
+  }catch(e){
+    let msg='Erro ao fazer login';
+    if(e.code==='auth/user-not-found')msg='Usuário não encontrado';
+    if(e.code==='auth/wrong-password')msg='Senha incorreta';
+    if(e.code==='auth/invalid-credential')msg='Email ou senha inválidos';
+    if(e.code==='auth/too-many-requests')msg='Muitas tentativas. Tente mais tarde';
+    if(e.code==='auth/invalid-email')msg='E-mail inválido';
+    err.textContent=msg;err.style.display='block';
+  }finally{
+    btn.disabled=false;btn.textContent='Entrar';
+  }
+}
+
+async function fazerCadastro(){
+  const nome=document.getElementById('cadNome').value.trim();
+  const email=document.getElementById('cadEmail').value.trim();
+  const senha=document.getElementById('cadSenha').value;
+  const confirma=document.getElementById('cadConfirmaSenha').value;
+  const aceite=document.getElementById('aceiteTermos').checked;
+  const btn=document.getElementById('btnCadastrar');
+  const err=document.getElementById('cadastroError');
+  const suc=document.getElementById('cadastroSuccess');
+  err.style.display='none';suc.style.display='none';
+  if(!nome||!email||!senha||!confirma){err.textContent='Preencha todos os campos';err.style.display='block';return}
+  if(senha!==confirma){err.textContent='As senhas não coincidem';err.style.display='block';return}
+  if(senha.length<8||!/[A-Z]/.test(senha)||!/[0-9]/.test(senha)||!/[^A-Za-z0-9]/.test(senha)){err.textContent='A senha não atende aos requisitos';err.style.display='block';return}
+  if(!aceite){err.textContent='Aceite os termos de uso';err.style.display='block';return}
+  btn.disabled=true;btn.textContent='CADASTRANDO...';
+  try{
+    const cred=await auth.createUserWithEmailAndPassword(email,senha);
+    await db.ref('usuarios/'+cred.user.uid).set({nome,email,criadoEm:Date.now(),role:'cliente'});
+    suc.textContent='Conta criada com sucesso!';suc.style.display='block';
+    setTimeout(()=>mudarTab('login'),2000);
+  }catch(e){
+    let msg='Erro ao cadastrar';
+    if(e.code==='auth/email-already-in-use')msg='Este e-mail já está cadastrado';
+    if(e.code==='auth/invalid-email')msg='E-mail inválido';
+    if(e.code==='auth/weak-password')msg='Senha muito fraca';
+    err.textContent=msg;err.style.display='block';
+  }finally{
+    btn.disabled=false;btn.textContent='👤 Cadastrar';
+  }
+}
+
+async function enviarLink(){
+  const email=document.getElementById('esqueciEmail').value.trim();
+  const btn=document.getElementById('btnEsqueci');
+  const err=document.getElementById('esqueciError');
+  err.style.display='none';
+  if(!email){err.textContent='Digite seu e-mail';err.style.display='block';return}
+  btn.disabled=true;btn.textContent='ENVIANDO...';
+  try{
+    await auth.sendPasswordResetEmail(email);
+    document.getElementById('emailEnviado').textContent=email;
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById('screen-enviado').classList.add('active');
+  }catch(e){
+    let msg='Erro ao enviar e-mail';
+    if(e.code==='auth/user-not-found')msg='E-mail não cadastrado';
+    if(e.code==='auth/invalid-email')msg='E-mail inválido';
+    err.textContent=msg;err.style.display='block';
+  }finally{
+    btn.disabled=false;btn.textContent='✈️ Enviar link de redefinição';
+  }
+}
+
+// REDIRECIONA PRO PAINEL CERTO
+auth.onAuthStateChanged(user=>{
+  if(user){
+    if(user.email===ADMIN_EMAIL){
+      window.location.href='admin.html';
+    }else{
+      window.location.href='home.html';
+    }
+  }
 });
-
-function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('active')}
-function abrirModal(id){document.getElementById(id).classList.add('active')}
-function fecharModal(id){document.getElementById(id).classList.remove('active')}
-function irPara(pagina){if(pagina==='home'){window.scrollTo(0,0);toggleSidebar()}else{alert('Página: '+pagina);toggleSidebar()}}
-
-async function carregarCategorias(){
-  const snap=await db.ref('categorias').once('value');
-  todasCategorias=snap.val()||{};
-  let html='';const icons={Games:'🎮',Streaming:'📺',Redes:'🌐',Sociais:'👥','Gift Cards':'🎁',Apps:'📱'};
-  Object.entries(todasCategorias).slice(0,5).forEach(([id,c])=>{
-    html+=`<div class="cat-item" onclick="filtrarCategoria('${id}')"><div class="cat-icon">${icons[c.nome]||'📁'}</div><div class="cat-name">${c.nome}</div></div>`;
-  });
-  document.getElementById('catGrid').innerHTML=html||'<div class="empty" style="grid-column:1/-1">Nenhuma categoria</div>';
-}
-
-async function carregarProdutos(){
-  const snap=await db.ref('produtos').limitToLast(6).once('value');
-  todosProdutos=snap.val()||{};
-  let html='';
-  Object.entries(todosProdutos).forEach(([id,p])=>{
-    const img=p.imagens&&p.imagens.length?p.imagens[0]:'https://via.placeholder.com/100';
-    html+=`<div class="prod-card" onclick="abrirProduto('${id}')">
-      <img src="${img}" class="prod-img" onerror="this.src='https://via.placeholder.com/100'">
-      <div class="prod-title">${p.nome}</div>
-      <div class="prod-price">R$ ${p.preco.toFixed(2)}</div>
-    </div>`;
-  });
-  document.getElementById('prodGrid').innerHTML=html||'<div class="empty" style="grid-column:1/-1">Nenhum produto</div>';
-}
-
-async function carregarBanner(){
-  const snap=await db.ref('banners').orderByChild('ativo').equalTo(true).limitToFirst(1).once('value');
-  const banners=snap.val()||{};
-  const banner=Object.values(banners)[0];
-  if(banner&&banner.imagem)document.getElementById('bannerImg').src=banner.imagem;
-}
-
-function buscarProdutos(){
-  const busca=document.getElementById('searchInput').value.toLowerCase();
-  let html='';
-  Object.entries(todosProdutos).forEach(([id,p])=>{
-    if(!busca||p.nome.toLowerCase().includes(busca)){
-      const img=p.imagens&&p.imagens.length?p.imagens[0]:'https://via.placeholder.com/100';
-      html+=`<div class="prod-card" onclick="abrirProduto('${id}')">
-        <img src="${img}" class="prod-img" onerror="this.src='https://via.placeholder.com/100'">
-        <div class="prod-title">${p.nome}</div>
-        <div class="prod-price">R$ ${p.preco.toFixed(2)}</div>
-      </div>`;
-    }
-  });
-  document.getElementById('prodGrid').innerHTML=html||'<div class="empty" style="grid-column:1/-1">Nenhum produto encontrado</div>';
-}
-
-function filtrarCategoria(catId){
-  let html='';
-  Object.entries(todosProdutos).forEach(([id,p])=>{
-    if(p.categoriaId===catId){
-      const img=p.imagens&&p.imagens.length?p.imagens[0]:'https://via.placeholder.com/100';
-      html+=`<div class="prod-card" onclick="abrirProduto('${id}')">
-        <img src="${img}" class="prod-img" onerror="this.src='https://via.placeholder.com/100'">
-        <div class="prod-title">${p.nome}</div>
-        <div class="prod-price">R$ ${p.preco.toFixed(2)}</div>
-      </div>`;
-    }
-  });
-  document.getElementById('prodGrid').innerHTML=html||'<div class="empty" style="grid-column:1/-1">Nenhum produto nesta categoria</div>';
-}
-
-async function abrirProduto(id){
-  const p=todosProdutos[id];
-  const img=p.imagens&&p.imagens.length?p.imagens[0]:'https://via.placeholder.com/300';
-  document.getElementById('prodModalNome').textContent=p.nome;
-  document.getElementById('prodModalConteudo').innerHTML=`
-    <img src="${img}" style="width:100%;height:200px;object-fit:cover;border-radius:10px;margin-bottom:12px" onerror="this.src='https://via.placeholder.com/300'">
-    <div style="font-size:16px;font-weight:900;color:var(--purple);margin-bottom:8px">R$ ${p.preco.toFixed(2)}</div>
-    <div style="font-size:10px;color:var(--text-dim);margin-bottom:12px;line-height:1.4">${p.descricao||'Sem descrição'}</div>
-    <div style="font-size:10px;color:var(--text-dim);margin-bottom:12px">📊 Estoque: ${p.estoque}</div>
-    <button class="btn" onclick="addCarrinho('${id}')">🛒 Adicionar ao Carrinho</button>
-  `;
-  abrirModal('modalProduto');
-}
-
-async function addCarrinho(prodId){
-  if(!carrinho[prodId])carrinho[prodId]=0;
-  carrinho[prodId]++;
-  await db.ref('carrinhos/'+currentUser.uid).set(carrinho);
-  carregarCarrinho();
-  fecharModal('modalProduto');
-  alert('✅ Produto adicionado ao carrinho!');
-}
-
-async function carregarCarrinho(){
-  const snap=await db.ref('carrinhos/'+currentUser.uid).once('value');
-  carrinho=snap.val()||{};
-  const qtd=Object.values(carrinho).reduce((a,b)=>a+b,0);
-  document.getElementById('badgeCarrinho').textContent=qtd;
-  document.getElementById('badgeCarrinho').classList.toggle('hide',qtd===0);
-  document.getElementById('navBadgeCarrinho').textContent=qtd;
-  document.getElementById('navBadgeCarrinho').classList.toggle('hide',qtd===0);
-  
-  let html='',subtotal=0;
-  for(let[prodId,qtd]of Object.entries(carrinho)){
-    const p=todosProdutos[prodId];
-    if(p){
-      const img=p.imagens&&p.imagens.length?p.imagens[0]:'https://via.placeholder.com/100';
-      subtotal+=p.preco*qtd;
-      html+=`<div class="item-row">
-        <img src="${img}" class="img-thumb" onerror="this.src='https://via.placeholder.com/100'">
-        <div class="item-info">
-          <div class="item-title">${p.nome}</div>
-          <div class="item-sub">Qtd: ${qtd} • R$ ${(p.preco*qtd).toFixed(2)}</div>
-        </div>
-        <button class="btn-sm btn-red" onclick="removerCarrinho('${prodId}')">🗑️</button>
-      </div>`;
-    }
-  }
-  document.getElementById('listaCarrinho').innerHTML=html||'<div class="empty">Carrinho vazio</div>';
-  document.getElementById('cartSubtotal').textContent='R$ '+subtotal.toFixed(2);
-  document.getElementById('cartTotal').textContent='R$ '+subtotal.toFixed(2);
-}
-
-async function removerCarrinho(prodId){
-  delete carrinho[prodId];
-  await db.ref('carrinhos/'+currentUser.uid).set(carrinho);
-  carregarCarrinho();
-}
-
-async function finalizarCompra(){
-  if(Object.keys(carrinho).length===0)return alert('Carrinho vazio');
-  let total=0,produtos=[];
-  for(let[prodId,qtd]of Object.entries(carrinho)){
-    const p=todosProdutos[prodId];
-    if(p){total+=p.preco*qtd;produtos.push({id:prodId,nome:p.nome,preco:p.preco,qtd})}
-  }
-  await db.ref('pedidos').push({
-    clienteId:currentUser.uid,
-    clienteNome:document.getElementById('userName').textContent,
-    clienteEmail:currentUser.email,
-    produtos,total,status:'pendente',criadoEm:Date.now()
-  });
-  await db.ref('carrinhos/'+currentUser.uid).remove();
-  carrinho={};
-  carregarCarrinho();
-  fecharModal('modalCarrinho');
-  alert('✅ Pedido realizado! Aguarde confirmação.');
-}
-
-async function carregarNotificacoes(){
-  db.ref('notificacoes/'+currentUser.uid).orderByChild('criadoEm').on('value',snap=>{
-    notificacoes=snap.val()||{};
-    const naoLidas=Object.values(notificacoes).filter(n=>!n.lida).length;
-    document.getElementById('badgeNotif').textContent=naoLidas;
-    document.getElementById('badgeNotif').classList.toggle('hide',naoLidas===0);
-    
-    let html='';
-    Object.entries(notificacoes).reverse().forEach(([id,n])=>{
-      html+=`<div class="notif-item ${!n.lida?'unread':''}" onclick="marcarLida('${id}')">
-        <div class="notif-title">${n.mensagem}</div>
-        <div class="notif-time">${new Date(n.criadoEm).toLocaleString('pt-BR')}</div>
-      </div>`;
-    });
-    document.getElementById('listaNotifs').innerHTML=html||'<div class="empty">Nenhuma notificação</div>';
-  });
-}
-
-async function marcarLida(notifId){
-  await db.ref('notificacoes/'+currentUser.uid+'/'+notifId).update({lida:true});
-}
-
-function logout(){if(confirm('Deseja sair?'))auth.signOut()}
 </script>
 </body>
 </html>
