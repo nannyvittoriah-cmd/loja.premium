@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Prime Store - ADM</title>
 <style>
-:root{--bg:#0a0a12;--sidebar:#0f0f1a;--card:#16161f;--input:#1e1e2a;--border:#2f2f42;--purple:#8b5cf6;--purple-dark:#7c3aed;--text:#fff;--text-dim:#8b8ba1;--green:#10b981;--red:#ef4444;--blue:#3b82f6}
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+:root{--bg:#0a0a12;--sidebar:#0f0f1a;--card:#16161f;--input:#1e1e2a;--border:#2f2f42;--purple:#8b5cf6;--purple-dark:#7c3aed;--text:#fff;--text-dim:#8b8ba1;--green:#10b981;--red:#ef4444;--blue:#3b82f6;--yellow:#f59e0b}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);color:var(--text);font-size:11px}
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:220px;background:var(--sidebar);border-right:1px solid var(--border);padding:16px 0;overflow-y:auto;z-index:100;transition:transform 0.3s}
 .sidebar.mobile{transform:translateX(-100%)}
@@ -16,9 +16,9 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 .logo-text{font-size:16px;font-weight:800;margin-bottom:2px}
 .logo-sub{font-size:9px;color:var(--purple);letter-spacing:1px}
 .menu-label{font-size:9px;color:var(--text-dim);padding:0 16px;margin-bottom:8px;font-weight:600;letter-spacing:0.5px}
-.menu-item{display:flex;align-items:center;gap:10px;padding:10px 16px;margin:2px 8px;border-radius:10px;color:var(--text-dim);font-size:11px;font-weight:500;cursor:pointer}
-.menu-item:hover{background:var(--input);color:var(--text)}
-.menu-item.active{background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);color:#fff;box-shadow:0 4px 12px rgba(139,92,246,0.3)}
+.menu-item{display:flex;align-items:center;gap:10px;padding:10px 16px;margin:2px 8px;border-radius:10px;color:var(--text-dim);font-size:11px;font-weight:500;cursor:pointer;transition:all 0.2s;border:1px solid transparent}
+.menu-item:hover{background:var(--input);color:var(--text);border-color:var(--border)}
+.menu-item.active{background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);color:#fff;box-shadow:0 4px 12px rgba(139,92,246,0.3);border-color:var(--purple)}
 .menu-icon{font-size:16px;width:18px;text-align:center}
 .main{margin-left:220px;min-height:100vh;padding:16px;transition:margin 0.3s}
 .main.mobile{margin-left:0}
@@ -30,13 +30,42 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 .screen{display:none}
 .screen.active{display:block}
 .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
-.card-title{font-size:12px;font-weight:800;margin-bottom:10px}
+.card-title{font-size:12px;font-weight:800;margin-bottom:10px;display:flex;align-items:center;gap:6px}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:12px}
 .stat-card{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center}
 .stat-value{font-size:18px;font-weight:900;color:var(--purple);margin-bottom:2px}
 .stat-label{font-size:9px;color:var(--text-dim)}
-.btn{width:100%;height:40px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border:none;border-radius:10px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;margin-bottom:8px}
+.btn{width:100%;height:40px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border:none;border-radius:10px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:8px}
+.btn:active{transform:scale(0.98)}
+.btn-sm{height:30px;font-size:10px;padding:0 12px;width:auto}
 .btn-red{background:linear-gradient(135deg,var(--red) 0%,#dc2626 100%)}
+.btn-green{background:linear-gradient(135deg,var(--green) 0%,#059669 100%)}
+.btn-blue{background:linear-gradient(135deg,var(--blue) 0%,#2563eb 100%)}
+.btn-yellow{background:linear-gradient(135deg,var(--yellow) 0%,#d97706 100%)}
+.input-box{width:100%;min-height:38px;background:var(--input);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;padding:0 12px;gap:8px;margin-bottom:10px}
+.input-box input,.input-box textarea,.input-box select{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:11px}
+.input-box textarea{min-height:60px;resize:vertical;padding:10px 0}
+.tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto}
+.tab{height:34px;padding:0 12px;background:var(--input);border:1px solid var(--border);border-radius:9px;color:var(--text-dim);font-size:10px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.tab.active{background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);color:#fff;border-color:var(--purple)}
+.item-row{display:flex;align-items:center;gap:10px;padding:10px;background:var(--input);border:1px solid var(--border);border-radius:10px;margin-bottom:8px}
+.item-row.clickable{cursor:pointer}
+.item-row.clickable:active{border-color:var(--purple)}
+.img-thumb{width:40px;height:40px;background:var(--card);border-radius:8px;object-fit:cover}
+.item-info{flex:1}
+.item-title{font-size:11px;font-weight:700;margin-bottom:2px}
+.item-sub{font-size:9px;color:var(--text-dim)}
+.actions{display:flex;gap:6px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.9);backdrop-filter:blur(10px);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.active{display:flex}
+.modal-content{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;width:100%;max-width:440px;max-height:90vh;overflow-y:auto}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.modal-title{font-size:13px;font-weight:800}
+.close-btn{width:28px;height:28px;background:var(--input);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px}
+.empty{text-align:center;padding:30px 20px;color:var(--text-dim);font-size:11px}
+.alert{padding:9px 12px;border-radius:9px;font-size:10px;margin-bottom:12px;display:none;font-weight:600;border:1px solid;text-align:center}
+.alert.success{background:rgba(16,185,129,0.15);border-color:var(--green);color:#6ee7b7}
+.alert.error{background:rgba(239,68,68,0.15);border-color:var(--red);color:#fca5a5}
 @media(max-width:768px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.menu-btn{display:flex}}
 </style>
 </head>
@@ -48,11 +77,19 @@ body{background:var(--bg);color:var(--text);font-size:11px}
     <div class="logo-sub">STORE</div>
   </div>
   <div class="menu-label">PAINEL ADMIN</div>
-  <div class="menu-item active"><span class="menu-icon">💼</span>Dashboard</div>
-  <div class="menu-item"><span class="menu-icon">📦</span>Produtos</div>
-  <div class="menu-item"><span class="menu-icon">📁</span>Categorias</div>
-  <div class="menu-item"><span class="menu-icon">🛒</span>Pedidos</div>
-  <div class="menu-item"><span class="menu-icon">👥</span>Usuários</div>
+  <div class="menu-item active" onclick="mostrarTela('dashboard')"><span class="menu-icon">💼</span>Dashboard</div>
+  <div class="menu-item" onclick="mostrarTela('produtos')"><span class="menu-icon">📦</span>Produtos</div>
+  <div class="menu-item" onclick="mostrarTela('categorias')"><span class="menu-icon">📁</span>Categorias</div>
+  <div class="menu-item" onclick="mostrarTela('subcategorias')"><span class="menu-icon">🗂️</span>Subcategorias</div>
+  <div class="menu-item" onclick="mostrarTela('pedidos')"><span class="menu-icon">🛒</span>Pedidos</div>
+  <div class="menu-item" onclick="mostrarTela('usuarios')"><span class="menu-icon">👥</span>Usuários</div>
+  <div class="menu-item" onclick="mostrarTela('cupons')"><span class="menu-icon">🎫</span>Cupons</div>
+  <div class="menu-item" onclick="mostrarTela('slider')"><span class="menu-icon">🖼️</span>Slider / Banners</div>
+  <div class="menu-item" onclick="mostrarTela('notificar')"><span class="menu-icon">🔔</span>Notificar Cliente</div>
+  <div class="menu-item" onclick="mostrarTela('config')"><span class="menu-icon">⚙️</span>Configurações</div>
+  <div class="menu-item" onclick="mostrarTela('relatorios')"><span class="menu-icon">📊</span>Relatorios</div>
+  <div class="menu-item" onclick="mostrarTela('suporte')"><span class="menu-icon">💬</span>Suporte</div>
+  <div class="menu-item" onclick="mostrarTela('logs')"><span class="menu-icon">📄</span>Logs do Sistema</div>
   <div class="menu-item" onclick="logout()"><span class="menu-icon">🚪</span>Sair</div>
 </div>
 
@@ -60,12 +97,13 @@ body{background:var(--bg);color:var(--text);font-size:11px}
   <div class="header">
     <div class="header-left">
       <button class="menu-btn" onclick="toggleSidebar()">☰</button>
-      <div class="header-title">Dashboard</div>
+      <div class="header-title" id="headerTitle">Dashboard</div>
     </div>
     <button class="icon-btn" onclick="logout()">🚪</button>
   </div>
   
-  <div class="screen active">
+  <!-- DASHBOARD -->
+  <div class="screen active" id="screen-dashboard">
     <div class="stats">
       <div class="stat-card"><div class="stat-value" id="statVendas">R$ 0</div><div class="stat-label">Vendas Hoje</div></div>
       <div class="stat-card"><div class="stat-value" id="statPedidos">0</div><div class="stat-label">Pedidos</div></div>
@@ -74,10 +112,66 @@ body{background:var(--bg);color:var(--text);font-size:11px}
     </div>
     <div class="card">
       <div class="card-title">⚡ Ações Rápidas</div>
-      <button class="btn" onclick="alert('Adicionar produto')">➕ Novo Produto</button>
-      <button class="btn btn-red" onclick="logout()">🚪 Sair</button>
+      <button class="btn" onclick="mostrarTela('produtos')">➕ Novo Produto</button>
+      <button class="btn btn-blue" onclick="mostrarTela('notificar')">🔔 Notificar Cliente</button>
+      <button class="btn btn-green" onclick="mostrarTela('cupons')">🎫 Criar Cupom</button>
     </div>
   </div>
+
+  <!-- PRODUTOS -->
+  <div class="screen" id="screen-produtos">
+    <div class="card">
+      <div class="card-title">📦 Gerenciar Produtos</div>
+      <button class="btn" onclick="alert('Abrir modal novo produto')">➕ Novo Produto</button>
+      <div id="listaProdutos"><div class="empty">Nenhum produto cadastrado</div></div>
+    </div>
+  </div>
+
+  <!-- CATEGORIAS -->
+  <div class="screen" id="screen-categorias">
+    <div class="card">
+      <div class="card-title">📁 Gerenciar Categorias</div>
+      <button class="btn" onclick="alert('Nova categoria')">➕ Nova Categoria</button>
+      <div id="listaCategorias"><div class="empty">Nenhuma categoria</div></div>
+    </div>
+  </div>
+
+  <!-- SUBCATEGORIAS -->
+  <div class="screen" id="screen-subcategorias">
+    <div class="card">
+      <div class="card-title">🗂️ Gerenciar Subcategorias</div>
+      <button class="btn" onclick="alert('Nova subcategoria')">➕ Nova Subcategoria</button>
+      <div id="listaSubcategorias"><div class="empty">Nenhuma subcategoria</div></div>
+    </div>
+  </div>
+
+  <!-- NOTIFICAR CLIENTE -->
+  <div class="screen" id="screen-notificar">
+    <div class="card">
+      <div class="card-title">🔔 Notificar Cliente</div>
+      <div class="alert success" id="alertNotif"></div>
+      <div class="input-box">
+        <select id="notifUsuario"><option value="">Selecione um usuário</option></select>
+      </div>
+      <div class="input-box">
+        <input type="text" id="notifTitulo" placeholder="Título da notificação">
+      </div>
+      <div class="input-box">
+        <textarea id="notifMsg" placeholder="Mensagem..."></textarea>
+      </div>
+      <button class="btn" onclick="enviarNotificacao()">📤 Enviar Notificação</button>
+    </div>
+  </div>
+
+  <!-- OUTRAS TELAS -->
+  <div class="screen" id="screen-pedidos"><div class="card"><div class="card-title">🛒 Pedidos</div><div class="empty">Em desenvolvimento</div></div></div>
+  <div class="screen" id="screen-usuarios"><div class="card"><div class="card-title">👥 Usuários</div><div class="empty">Em desenvolvimento</div></div></div>
+  <div class="screen" id="screen-cupons"><div class="card"><div class="card-title">🎫 Cupons</div><div class="empty">Em desenvolvimento</div></div></div>
+  <div class="screen" id="screen-slider"><div class="card"><div class="card-title">🖼️ Slider / Banners</div><div class="empty">Em desenvolvimento</div></div></div>
+  <div class="screen" id="screen-config"><div class="card"><div class="card-title">⚙️ Configurações</div><div class="empty">Em desenvolvimento</div></div></div>
+  <div class="screen" id="screen-relatorios"><div class="card"><div class="card-title">📊 Relatorios</div><div class="empty">Em desenvolvimento</div></div></div>
+  <div class="screen" id="screen-suporte"><div class="card"><div class="card-title">💬 Suporte</div><div class="empty">Em desenvolvimento</div></div></div>
+  <div class="screen" id="screen-logs"><div class="card"><div class="card-title">📄 Logs do Sistema</div><div class="empty">Em desenvolvimento</div></div></div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -92,10 +186,22 @@ const ADMIN_EMAIL='vittoriahvahz@gmail.com';
 auth.onAuthStateChanged(user=>{
   if(!user||user.email!==ADMIN_EMAIL){window.location.href='index.html';return}
   carregarDashboard();
+  carregarUsuarios();
 });
 
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open')}
 function logout(){auth.signOut().then(()=>window.location.href='index.html')}
+
+function mostrarTela(tela){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active'));
+  document.getElementById('screen-'+tela).classList.add('active');
+  event.target.closest('.menu-item').classList.add('active');
+  const titulos={dashboard:'Dashboard',produtos:'Produtos',categorias:'Categorias',subcategorias:'Subcategorias',pedidos:'Pedidos',usuarios:'Usuários',cupons:'Cupons',slider:'Slider / Banners',notificar:'Notificar Cliente',config:'Configurações',relatorios:'Relatorios',suporte:'Suporte',logs:'Logs do Sistema'};
+  document.getElementById('headerTitle').textContent=titulos[tela]||'Dashboard';
+  if(window.innerWidth<=768)toggleSidebar();
+}
+
 function carregarDashboard(){
   db.ref('produtos').once('value',s=>document.getElementById('statProdutos').textContent=Object.keys(s.val()||{}).length);
   db.ref('usuarios').once('value',s=>document.getElementById('statClientes').textContent=Object.keys(s.val()||{}).length);
@@ -105,6 +211,28 @@ function carregarDashboard(){
     document.getElementById('statVendas').textContent='R$ '+totalVendas.toFixed(2);
     document.getElementById('statPedidos').textContent=totalPedidos;
   });
+}
+
+function carregarUsuarios(){
+  db.ref('usuarios').once('value',snap=>{
+    const usuarios=snap.val()||{};
+    let html='<option value="">Selecione um usuário</option>';
+    Object.entries(usuarios).forEach(([uid,u])=>{
+      html+=`<option value="${uid}">${u.nome||u.email}</option>`;
+    });
+    document.getElementById('notifUsuario').innerHTML=html;
+  });
+}
+
+function enviarNotificacao(){
+  const uid=document.getElementById('notifUsuario').value;
+  const titulo=document.getElementById('notifTitulo').value.trim();
+  const msg=document.getElementById('notifMsg').value.trim();
+  const alert=document.getElementById('alertNotif');
+  if(!uid||!titulo||!msg){alert.textContent='Preencha todos os campos';alert.className='alert error';alert.style.display='block';return}
+  db.ref('notificacoes/'+uid).push({titulo,msg,lida:false,criadoEm:Date.now()});
+  alert.textContent='Notificação enviada com sucesso!';alert.className='alert success';alert.style.display='block';
+  document.getElementById('notifTitulo').value='';document.getElementById('notifMsg').value='';
 }
 </script>
 </body>
