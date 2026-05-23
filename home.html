@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prime Store VZ</title>
+<style>
+:root{--bg:#0a0a12;--card:#16161f;--input:#1e1e2a;--border:#2f2f42;--purple:#8b5cf6;--purple-dark:#7c3aed;--text:#fff;--text-dim:#8b8ba1;--green:#10b981;--red:#ef4444;--blue:#3b82f6;--yellow:#f59e0b}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);font-size:11px;padding-bottom:60px}
+.header{position:fixed;top:0;left:0;right:0;height:50px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 12px;z-index:100}
+.header-left{display:flex;align-items:center;gap:10px}
+.menu-btn{width:32px;height:32px;background:var(--input);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px}
+.logo{font-size:13px;font-weight:800}
+.header-icons{display:flex;gap:8px}
+.icon-btn{width:32px;height:32px;background:var(--input);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;position:relative}
+.badge{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;font-size:8px;font-weight:700;padding:2px 5px;border-radius:10px;min-width:16px;text-align:center}
+.content{padding:62px 10px 10px;max-width:480px;margin:0 auto}
+.search-box{width:100%;min-height:40px;background:var(--input);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;padding:0 12px;gap:8px;margin-bottom:14px}
+.search-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:11px}
+.banner{background:linear-gradient(135deg,#1e1e2a 0%,#2a1a4a 100%);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:16px;position:relative;overflow:hidden}
+.banner::before{content:'';position:absolute;top:-50px;right:-50px;width:150px;height:150px;background:radial-gradient(circle,rgba(139,92,246,0.3) 0%,transparent 70%);filter:blur(40px)}
+.banner-title{font-size:13px;font-weight:800;margin-bottom:4px;position:relative;z-index:1}
+.banner-sub{font-size:10px;color:var(--text-dim);margin-bottom:10px;position:relative;z-index:1}
+.banner-btn{height:32px;padding:0 16px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border:none;border-radius:9px;color:#fff;font-size:10px;font-weight:700;cursor:pointer;position:relative;z-index:1}
+.section{margin-bottom:16px}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.section-title{font-size:12px;font-weight:800}
+.section-link{font-size:10px;color:var(--purple);cursor:pointer;font-weight:600}
+.cat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.cat-item{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
+.cat-icon{width:48px;height:48px;background:var(--card);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.cat-icon:active{transform:scale(0.95);border-color:var(--purple)}
+.cat-name{font-size:9px;color:var(--text-dim);text-align:center}
+.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.prod-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:8px;cursor:pointer}
+.prod-card:active{transform:scale(0.98);border-color:var(--purple)}
+.prod-img{width:100%;aspect-ratio:1;background:var(--input);border-radius:8px;margin-bottom:6px;object-fit:cover}
+.prod-title{font-size:9px;font-weight:700;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prod-price{font-size:10px;font-weight:900;color:var(--purple)}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:60px;background:var(--card);border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;z-index:50}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;color:var(--text-dim);cursor:pointer}
+.nav-item.active{color:var(--purple)}
+.nav-icon{font-size:18px}
+.sidebar{position:fixed;left:-260px;top:0;bottom:0;width:260px;background:var(--card);border-right:1px solid var(--border);padding:16px;overflow-y:auto;z-index:150;transition:0.3s}
+.sidebar.open{left:0}
+.sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:149;display:none}
+.sidebar-overlay.active{display:block}
+.sidebar-header{display:flex;align-items:center;gap:10px;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.user-avatar{width:40px;height:40px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800}
+.user-info{flex:1}
+.user-name{font-size:12px;font-weight:700;margin-bottom:2px}
+.user-email{font-size:9px;color:var(--text-dim)}
+.menu-item{display:flex;align-items:center;gap:10px;padding:10px;margin:2px 0;border-radius:10px;color:var(--text-dim);font-size:11px;font-weight:500;cursor:pointer}
+.menu-item.active{background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);color:#fff}
+.menu-icon{font-size:16px;width:18px;text-align:center}
+.empty{text-align:center;padding:30px 20px;color:var(--text-dim);font-size:11px}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-left">
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    <div class="logo">Prime Store VZ</div>
+  </div>
+  <div class="header-icons">
+    <button class="icon-btn" onclick="alert('Carrinho')">🛒<span class="badge hide" id="badgeCarrinho">0</span></button>
+    <button class="icon-btn" onclick="logout()">🚪</button>
+  </div>
+</div>
+
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="user-avatar" id="userAvatar">U</div>
+    <div class="user-info">
+      <div class="user-name" id="userName">Usuário</div>
+      <div class="user-email" id="userEmail">email@email.com</div>
+    </div>
+  </div>
+  <div class="menu-item active"><span class="menu-icon">🏠</span>Início</div>
+  <div class="menu-item" onclick="alert('Pedidos')"><span class="menu-icon">📦</span>Meus Pedidos</div>
+  <div class="menu-item" onclick="logout()"><span class="menu-icon">🚪</span>Sair</div>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<div class="content">
+  <div class="search-box">
+    <span>🔍</span>
+    <input type="text" placeholder="Buscar produtos..." oninput="buscarProdutos()">
+  </div>
+
+  <div class="banner">
+    <div class="banner-title">OFERTAS EXCLUSIVAS</div>
+    <div class="banner-sub">ATÉ 70% OFF</div>
+    <button class="banner-btn">VER OFERTAS</button>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Categorias</div>
+      <div class="section-link">Ver todas</div>
+    </div>
+    <div class="cat-grid" id="catGrid"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Produtos em destaque</div>
+      <div class="section-link">Ver todos</div>
+    </div>
+    <div class="prod-grid" id="prodGrid"></div>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <div class="nav-item active"><div class="nav-icon">🏠</div>Início</div>
+  <div class="nav-item"><div class="nav-icon">📁</div>Categorias</div>
+  <div class="nav-item"><div class="nav-icon">🛒</div>Carrinho</div>
+  <div class="nav-item"><div class="nav-icon">📦</div>Pedidos</div>
+  <div class="nav-item"><div class="nav-icon">👤</div>Perfil</div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig={apiKey:"AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",authDomain:"premium-store-aa58b.firebaseapp.com",databaseURL:"https://premium-store-aa58b-default-rtdb.firebaseio.com",projectId:"premium-store-aa58b",storageBucket:"premium-store-aa58b.firebasestorage.app",messagingSenderId:"462239500057",appId:"1:462239500057:web:f1b7cea162ed308a866788"};
+firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth();const db=firebase.database();
+
+auth.onAuthStateChanged(async user=>{
+  if(!user){window.location.href='index.html';return}
+  const snap=await db.ref('usuarios/'+user.uid).once('value');
+  const u=snap.val()||{};
+  document.getElementById('userName').textContent=u.nome||'Usuário';
+  document.getElementById('userEmail').textContent=user.email;
+  document.getElementById('userAvatar').textContent=(u.nome||'U')[0].toUpperCase();
+  carregarCategorias();carregarProdutos();
+});
+
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('active')}
+function logout(){auth.signOut().then(()=>window.location.href='index.html')}
+function buscarProdutos(){console.log('buscar')}
+function carregarCategorias(){
+  const icons={Games:'🎮',Streaming:'📺',Redes:'🌐',Sociais:'👥','Gift Cards':'🎁'};
+  const cats=['Games','Streaming','Redes','Sociais','Gift Cards'];
+  let html='';cats.forEach(c=>{html+=`<div class="cat-item"><div class="cat-icon">${icons[c]||'📁'}</div><div class="cat-name">${c}</div></div>`});
+  document.getElementById('catGrid').innerHTML=html;
+}
+function carregarProdutos(){
+  db.ref('produtos').limitToLast(6).once('value',snap=>{
+    const produtos=snap.val()||{};let html='';
+    Object.entries(produtos).forEach(([id,p])=>{
+      const img=p.imagens&&p.imagens.length?p.imagens[0]:'https://via.placeholder.com/100';
+      html+=`<div class="prod-card"><img src="${img}" class="prod-img"><div class="prod-title">${p.nome}</div><div class="prod-price">R$ ${p.preco.toFixed(2)}</div></div>`;
+    });
+    document.getElementById('prodGrid').innerHTML=html||'<div class="empty" style="grid-column:1/-1">Nenhum produto</div>';
+  });
+}
+</script>
+</body>
+</html>
