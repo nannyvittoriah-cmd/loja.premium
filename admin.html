@@ -62,13 +62,14 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 .input-box{width:100%;min-height:38px;background:var(--input);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;padding:0 12px;gap:8px;margin-bottom:10px}
 .input-box input,.input-box textarea,.input-box select{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:11px}
 .input-box textarea{min-height:60px;resize:vertical;padding:10px 0}
+.input-box select option{background:var(--input)}
 .tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto}
 .tab{height:34px;padding:0 12px;background:var(--input);border:1px solid var(--border);border-radius:9px;color:var(--text-dim);font-size:10px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0}
 .tab.active{background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);color:#fff;border-color:var(--purple)}
 .item-row{display:flex;align-items:center;gap:10px;padding:10px;background:var(--input);border:1px solid var(--border);border-radius:10px;margin-bottom:8px}
 .item-row.clickable{cursor:pointer}
 .item-row.clickable:active{border-color:var(--purple)}
-.img-thumb{width:40px;height:40px;background:var(--card);border-radius:8px;object-fit:cover}
+.img-thumb{width:40px;height:40px;background:var(--card);border-radius:8px;object-fit:cover;border:1px solid var(--border)}
 .item-info{flex:1}
 .item-title{font-size:11px;font-weight:700;margin-bottom:2px}
 .item-sub{font-size:9px;color:var(--text-dim)}
@@ -78,10 +79,11 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 .badge-status.cancelado{background:rgba(239,68,68,0.15);color:var(--red);border:1px solid var(--red)}
 .actions{display:flex;gap:6px}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.upload-area{width:100%;height:120px;background:var(--input);border:2px dashed var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;margin-bottom:10px}
+.upload-area{width:100%;height:120px;background:var(--input);border:2px dashed var(--border);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;margin-bottom:10px;position:relative;overflow:hidden}
 .upload-area:hover{border-color:var(--purple)}
-.upload-icon{font-size:24px;margin-bottom:6px;color:var(--text-dim)}
-.upload-text{font-size:10px;color:var(--text-dim)}
+.upload-area img{width:100%;height:100%;object-fit:cover;position:absolute}
+.upload-icon{font-size:24px;margin-bottom:6px;color:var(--text-dim);z-index:1}
+.upload-text{font-size:10px;color:var(--text-dim);z-index:1}
 .user-card{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;cursor:pointer}
 .user-card:active{border-color:var(--purple)}
 .user-avatar{width:40px;height:40px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800}
@@ -109,12 +111,8 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 .alert{padding:9px 12px;border-radius:9px;font-size:10px;margin-bottom:12px;display:none;font-weight:600;border:1px solid;text-align:center}
 .alert.success{background:rgba(16,185,129,0.15);border-color:var(--green);color:#6ee7b7}
 .alert.error{background:rgba(239,68,68,0.15);border-color:var(--red);color:#fca5a5}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.9);backdrop-filter:blur(10px);z-index:200;display:none;align-items:center;justify-content:center;padding:16px}
-.modal.active{display:flex}
-.modal-content{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;width:100%;max-width:440px;max-height:90vh;overflow-y:auto}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.modal-title{font-size:13px;font-weight:800}
-.close-btn{width:28px;height:28px;background:var(--input);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px}
+.checkbox-row{display:flex;align-items:center;gap:8px;padding:8px;background:var(--input);border:1px solid var(--border);border-radius:10px;margin-bottom:8px}
+.checkbox-row input[type="checkbox"]{width:16px;height:16px}
 @media(max-width:768px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.menu-btn{display:flex}.stats{grid-template-columns:1fr}}
 </style>
 </head>
@@ -154,208 +152,23 @@ body{background:var(--bg);color:var(--text);font-size:11px}
   <!-- DASHBOARD -->
   <div class="screen active" id="screen-dashboard">
     <div class="stats">
-      <div class="stat-card">
-        <div class="stat-card-top">
-          <div class="stat-icon">💰</div>
-          <div class="stat-info">
-            <div class="stat-label">Vendas hoje</div>
-            <div class="stat-value" id="statVendas">R$ 1.250,00</div>
-          </div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-card-top">
-          <div class="stat-icon">🛒</div>
-          <div class="stat-info">
-            <div class="stat-label">Pedidos hoje</div>
-            <div class="stat-value" id="statPedidos">38</div>
-          </div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-card-top">
-          <div class="stat-icon">👥</div>
-          <div class="stat-info">
-            <div class="stat-label">Clientes</div>
-            <div class="stat-value" id="statClientes">1.345</div>
-          </div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-card-top">
-          <div class="stat-icon">📦</div>
-          <div class="stat-info">
-            <div class="stat-label">Produtos</div>
-            <div class="stat-value" id="statProdutos">542</div>
-          </div>
-        </div>
-      </div>
+      <div class="stat-card"><div class="stat-card-top"><div class="stat-icon">💰</div><div class="stat-info"><div class="stat-label">Vendas hoje</div><div class="stat-value" id="statVendas">R$ 0,00</div></div></div></div>
+      <div class="stat-card"><div class="stat-card-top"><div class="stat-icon">🛒</div><div class="stat-info"><div class="stat-label">Pedidos hoje</div><div class="stat-value" id="statPedidos">0</div></div></div></div>
+      <div class="stat-card"><div class="stat-card-top"><div class="stat-icon">👥</div><div class="stat-info"><div class="stat-label">Clientes</div><div class="stat-value" id="statClientes">0</div></div></div></div>
+      <div class="stat-card"><div class="stat-card-top"><div class="stat-icon">📦</div><div class="stat-info"><div class="stat-label">Produtos</div><div class="stat-value" id="statProdutos">0</div></div></div></div>
     </div>
-    
     <div class="chart-box">
       <div class="chart-title">Vendas nos últimos 7 dias</div>
       <div class="chart-bars">
-        <div class="chart-bar" style="height:60%"></div>
-        <div class="chart-bar" style="height:80%"></div>
-        <div class="chart-bar" style="height:45%"></div>
-        <div class="chart-bar" style="height:90%"></div>
-        <div class="chart-bar" style="height:70%"></div>
-        <div class="chart-bar" style="height:95%"></div>
-        <div class="chart-bar" style="height:85%"></div>
+        <div class="chart-bar" style="height:0%"></div><div class="chart-bar" style="height:0%"></div><div class="chart-bar" style="height:0%"></div><div class="chart-bar" style="height:0%"></div><div class="chart-bar" style="height:0%"></div><div class="chart-bar" style="height:0%"></div><div class="chart-bar" style="height:0%"></div>
       </div>
       <div class="chart-labels"><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sab</span><span>Dom</span></div>
     </div>
-
     <div class="card">
       <div class="card-title">📊 Pedidos por status</div>
-      <div class="status-box"><div class="status-dot green"></div><div class="status-text">Concluídos</div><div class="status-value">120</div></div>
-      <div class="status-box"><div class="status-dot yellow"></div><div class="status-text">Pendentes</div><div class="status-value">15</div></div>
-      <div class="status-box"><div class="status-dot red"></div><div class="status-text">Cancelados</div><div class="status-value">5</div></div>
-    </div>
-  </div>
-
-  <!-- PEDIDOS -->
-  <div class="screen" id="screen-pedidos">
-    <div class="card">
-      <div class="card-title">🛒 PEDIDOS</div>
-      <div class="tabs">
-        <div class="tab active">Todos</div>
-        <div class="tab">Pendentes</div>
-        <div class="tab">Concluídos</div>
-        <div class="tab">Cancelados</div>
-      </div>
-      <div id="listaPedidos">
-        <div class="item-row clickable" onclick="verDetalhesPedido('001')">
-          <div class="item-info">
-            <div class="item-title">#PVZ-202401180001</div>
-            <div class="item-sub">18/03/2024 às 11:30 • VZ Prime</div>
-          </div>
-          <div style="text-align:right">
-            <div class="item-title">R$ 38,80</div>
-            <span class="badge-status pago">Pago</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- DETALHES DO PEDIDO -->
-  <div class="screen" id="screen-detalhes-pedido">
-    <div class="header" style="margin-bottom:16px">
-      <div class="header-left">
-        <button class="back-btn" onclick="mostrarTela('pedidos')">←</button>
-        <div class="header-title">DETALHES DO PEDIDO</div>
-      </div>
-    </div>
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;margin-bottom:12px">
-        <div>
-          <div class="item-title">Pedido #PVZ-202401180001</div>
-          <div class="item-sub">18/03/2024 às 11:30</div>
-        </div>
-        <span class="badge-status pago">Pago</span>
-      </div>
-      <div style="border-top:1px solid var(--border);padding-top:12px;margin-bottom:12px">
-        <div class="card-title">Cliente</div>
-        <div class="item-title">VZ Prime</div>
-        <div class="item-sub">vzprime@gmail.com</div>
-        <div class="item-sub">(11) 99999-9999</div>
-      </div>
-      <div style="border-top:1px solid var(--border);padding-top:12px;margin-bottom:12px">
-        <div class="card-title">Itens do pedido</div>
-        <div class="item-row">
-          <img src="https://via.placeholder.com/40" class="img-thumb">
-          <div class="item-info">
-            <div class="item-title">520 Diamantes</div>
-            <div class="item-sub">Free Fire</div>
-          </div>
-          <div class="item-title">R$ 20,90</div>
-        </div>
-        <div class="item-row">
-          <img src="https://via.placeholder.com/40" class="img-thumb">
-          <div class="item-info">
-            <div class="item-title">Netflix Premium</div>
-            <div class="item-sub">1 Mês</div>
-          </div>
-          <div class="item-title">R$ 17,90</div>
-        </div>
-      </div>
-      <div style="border-top:1px solid var(--border);padding-top:12px;margin-bottom:12px">
-        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-          <div class="item-title">Total</div>
-          <div class="item-title">R$ 38,80</div>
-        </div>
-        <div class="item-sub">Pagamento: Pix</div>
-      </div>
-      <div style="border-top:1px solid var(--border);padding-top:12px">
-        <div class="card-title">Comprovante</div>
-        <button class="btn btn-outline btn-sm">Visualizar comprovante</button>
-      </div>
-      <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:12px">
-        <div class="card-title">Ações</div>
-        <button class="btn btn-green btn-sm">Marcar como concluído</button>
-        <button class="btn btn-red btn-sm">Cancelar pedido</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- CLIENTES -->
-  <div class="screen" id="screen-usuarios">
-    <div class="card">
-      <div class="card-title">👥 CLIENTES</div>
-      <div class="input-box">
-        <span>🔍</span>
-        <input type="text" placeholder="Buscar cliente...">
-        <button class="btn-sm btn-outline">Filtrar</button>
-      </div>
-      <div class="user-card" onclick="verClienteDetalhes('1')">
-        <div class="user-avatar">VZ</div>
-        <div class="user-details">
-          <div class="user-name">VZ Prime</div>
-          <div class="user-email">vzprime@gmail.com</div>
-          <div class="user-stats">Pedidos: 15 • Total: R$ 310,40</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- CLIENTE DETALHES -->
-  <div class="screen" id="screen-cliente-detalhes">
-    <div class="header" style="margin-bottom:16px">
-      <div class="header-left">
-        <button class="back-btn" onclick="mostrarTela('usuarios')">←</button>
-        <div class="header-title">CLIENTE - DETALHES</div>
-      </div>
-    </div>
-    <div class="card">
-      <div style="text-align:center;margin-bottom:16px">
-        <div class="user-avatar" style="width:60px;height:60px;margin:0 auto 10px;font-size:24px">VZ</div>
-        <div class="user-name" style="font-size:14px">João Silva</div>
-        <div class="user-email">vzprime@gmail.com</div>
-        <div class="user-email">(11) 99999-9999</div>
-        <div class="user-email">Cliente desde: 01/03/2024</div>
-      </div>
-      <div style="border-top:1px solid var(--border);padding-top:12px">
-        <div class="card-title">Resumo</div>
-        <div class="grid-2" style="margin-bottom:12px">
-          <div><div class="item-sub">Total de pedidos</div><div class="item-title">5</div></div>
-          <div><div class="item-sub">Total gasto</div><div class="item-title">R$ 180,60</div></div>
-          <div><div class="item-sub">Pedidos concluídos</div><div class="item-title">3</div></div>
-          <div><div class="item-sub">Pedidos pendentes</div><div class="item-title">1</div></div>
-        </div>
-        <div class="item-title" style="margin-bottom:8px">Último pedido</div>
-        <div class="item-row">
-          <div class="item-info">
-            <div class="item-title">#PVZ-202401180002</div>
-            <div class="item-sub">18/03/2024 às 14:20</div>
-          </div>
-          <div style="text-align:right">
-            <div class="item-title">R$ 20,90</div>
-            <span class="badge-status pago">Pago</span>
-          </div>
-        </div>
-        <button class="btn" style="margin-top:12px">Já tem umas client</button>
-      </div>
+      <div class="status-box"><div class="status-dot green"></div><div class="status-text">Concluídos</div><div class="status-value">0</div></div>
+      <div class="status-box"><div class="status-dot yellow"></div><div class="status-text">Pendentes</div><div class="status-value">0</div></div>
+      <div class="status-box"><div class="status-dot red"></div><div class="status-text">Cancelados</div><div class="status-value">0</div></div>
     </div>
   </div>
 
@@ -364,102 +177,34 @@ body{background:var(--bg);color:var(--text);font-size:11px}
     <div class="card">
       <div class="card-title">📦 PRODUTOS</div>
       <div style="display:flex;gap:8px;margin-bottom:12px">
-        <div class="input-box" style="margin:0">
-          <span>🔍</span>
-          <input type="text" placeholder="Buscar produto...">
-        </div>
-        <button class="btn btn-sm" style="width:auto" onclick="mostrarTela('adicionar-produto')">Adicionar</button>
+        <div class="input-box" style="margin:0"><span>🔍</span><input type="text" placeholder="Buscar produto..." oninput="buscarProdutos(this.value)"></div>
+        <button class="btn btn-sm" style="width:auto" onclick="abrirModalProduto()">Adicionar</button>
       </div>
-      <div class="item-row">
-        <img src="https://via.placeholder.com/40" class="img-thumb">
-        <div class="item-info">
-          <div class="item-title">520 Diamantes</div>
-          <div class="item-sub">Free Fire • R$ 20,90 • Estoque: 999</div>
-        </div>
-      </div>
-      <div class="item-row">
-        <img src="https://via.placeholder.com/40" class="img-thumb">
-        <div class="item-info">
-          <div class="item-title">Netflix Premium</div>
-          <div class="item-sub">1 Mês • R$ 17,90 • Estoque: 999</div>
-        </div>
-      </div>
+      <div id="listaProdutos"><div class="empty">Nenhum produto cadastrado</div></div>
     </div>
   </div>
 
-  <!-- ADICIONAR PRODUTO -->
-  <div class="screen" id="screen-adicionar-produto">
-    <div class="header" style="margin-bottom:16px">
-      <div class="header-left">
-        <button class="back-btn" onclick="mostrarTela('produtos')">←</button>
-        <div class="header-title">ADICIONAR PRODUTO</div>
-      </div>
-    </div>
+  <!-- PEDIDOS -->
+  <div class="screen" id="screen-pedidos">
     <div class="card">
-      <div class="card-title">Imagem do produto</div>
-      <div class="upload-area">
-        <div class="upload-icon">+</div>
-        <div class="upload-text">Selecionar imagem</div>
+      <div class="card-title">🛒 PEDIDOS</div>
+      <div class="input-box" style="margin-bottom:12px"><span>🔍</span><input type="text" id="searchPedido" placeholder="Buscar por ID do pedido..." oninput="buscarPedido()"></div>
+      <div class="tabs">
+        <div class="tab active" onclick="filtrarPedidos('todos')">Todos</div>
+        <div class="tab" onclick="filtrarPedidos('pendente')">Pendentes</div>
+        <div class="tab" onclick="filtrarPedidos('concluido')">Concluídos</div>
+        <div class="tab" onclick="filtrarPedidos('cancelado')">Cancelados</div>
       </div>
-      <div class="input-box">
-        <input type="text" placeholder="Nome do produto">
-      </div>
-      <div class="input-box">
-        <input type="number" placeholder="Preço">
-      </div>
-      <div class="grid-2">
-        <div class="input-box">
-          <select><option>Categoria</option></select>
-        </div>
-        <div class="input-box">
-          <select><option>Subcategoria</option></select>
-        </div>
-      </div>
-      <div class="input-box">
-        <input type="number" placeholder="Estoque">
-      </div>
-      <div class="input-box">
-        <textarea placeholder="Descrição do produto..."></textarea>
-      </div>
-      <button class="btn">SALVAR PRODUTO</button>
+      <div id="listaPedidos"><div class="empty">Nenhum pedido encontrado</div></div>
     </div>
   </div>
 
-  <!-- CATEGORIAS -->
-  <div class="screen" id="screen-categorias">
+  <!-- CLIENTES -->
+  <div class="screen" id="screen-usuarios">
     <div class="card">
-      <div class="card-title">📁 CATEGORIAS</div>
-      <button class="btn" style="margin-bottom:12px">Adicionar</button>
-      <div class="item-row clickable">
-        <div class="item-info">
-          <div class="item-title">🎮 Games</div>
-          <div class="item-sub">5 subcategorias</div>
-        </div>
-        <span>›</span>
-      </div>
-      <div class="item-row clickable">
-        <div class="item-info">
-          <div class="item-title">📺 Streaming</div>
-          <div class="item-sub">4 subcategorias</div>
-        </div>
-        <span>›</span>
-      </div>
-      <div class="item-row clickable">
-        <div class="item-info">
-          <div class="item-title">🌐 Redes Sociais</div>
-          <div class="item-sub">3 subcategorias</div>
-        </div>
-        <span>›</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- SUBCATEGORIAS -->
-  <div class="screen" id="screen-subcategorias">
-    <div class="card">
-      <div class="card-title">🗂️ SUBCATEGORIAS</div>
-      <button class="btn" style="margin-bottom:12px">Adicionar</button>
-      <div class="empty">Selecione uma categoria primeiro</div>
+      <div class="card-title">👥 CLIENTES</div>
+      <div class="input-box"><span>🔍</span><input type="text" placeholder="Buscar cliente..." oninput="buscarClientes(this.value)"></div>
+      <div id="listaClientes"><div class="empty">Nenhum cliente cadastrado</div></div>
     </div>
   </div>
 
@@ -467,23 +212,26 @@ body{background:var(--bg);color:var(--text);font-size:11px}
   <div class="screen" id="screen-cupons">
     <div class="card">
       <div class="card-title">🎫 CUPONS DE DESCONTO</div>
-      <button class="btn" style="margin-bottom:12px">Adicionar</button>
-      <div class="coupon-card">
-        <div class="coupon-header">
-          <div class="coupon-code">PRIME10</div>
-          <span class="coupon-badge ativo">Ativo</span>
-        </div>
-        <div class="coupon-info">10% de desconto</div>
-        <div class="coupon-info">Usos: 45/100</div>
-      </div>
-      <div class="coupon-card">
-        <div class="coupon-header">
-          <div class="coupon-code">PRIME20</div>
-          <span class="coupon-badge ativo">Ativo</span>
-        </div>
-        <div class="coupon-info">20% de desconto</div>
-        <div class="coupon-info">Usos: 12/50</div>
-      </div>
+      <button class="btn" style="margin-bottom:12px" onclick="abrirModalCupom()">Adicionar</button>
+      <div id="listaCupons"><div class="empty">Nenhum cupom cadastrado</div></div>
+    </div>
+  </div>
+
+  <!-- CATEGORIAS -->
+  <div class="screen" id="screen-categorias">
+    <div class="card">
+      <div class="card-title">📁 CATEGORIAS</div>
+      <button class="btn" style="margin-bottom:12px" onclick="abrirModalCategoria()">Adicionar</button>
+      <div id="listaCategorias"><div class="empty">Nenhuma categoria</div></div>
+    </div>
+  </div>
+
+  <!-- SUBCATEGORIAS -->
+  <div class="screen" id="screen-subcategorias">
+    <div class="card">
+      <div class="card-title">🗂️ SUBCATEGORIAS</div>
+      <button class="btn" style="margin-bottom:12px" onclick="abrirModalSubcategoria()">Adicionar</button>
+      <div id="listaSubcategorias"><div class="empty">Nenhuma subcategoria</div></div>
     </div>
   </div>
 
@@ -491,30 +239,26 @@ body{background:var(--bg);color:var(--text);font-size:11px}
   <div class="screen" id="screen-slider">
     <div class="card">
       <div class="card-title">🖼️ SLIDER / BANNERS</div>
-      <button class="btn" style="margin-bottom:12px">Adicionar Banner</button>
-      <div class="empty">Nenhum banner cadastrado</div>
+      <button class="btn" style="margin-bottom:12px" onclick="document.getElementById('uploadBanner').click()">Adicionar Banner</button>
+      <input type="file" id="uploadBanner" style="display:none" accept="image/*" onchange="uploadBanner(event)">
+      <div id="listaBanners"><div class="empty">Nenhum banner cadastrado</div></div>
     </div>
   </div>
 
-    <!-- NOTIFICAR CLIENTE -->
+  <!-- NOTIFICAR CLIENTE -->
   <div class="screen" id="screen-notificar">
     <div class="card">
       <div class="card-title">🔔 NOTIFICAR CLIENTE</div>
       <div class="alert success" id="alertNotif"></div>
-      <div class="input-box">
-        <select id="notifUsuario"><option value="">Selecione um usuário</option><option value="todos">Todos os usuários</option></select>
-      </div>
-      <div class="input-box">
-        <input type="text" id="notifTitulo" placeholder="Título da notificação">
-      </div>
-      <div class="input-box">
-        <textarea id="notifMsg" placeholder="Mensagem..."></textarea>
-      </div>
+      <div class="checkbox-row"><input type="checkbox" id="notifTodos" onchange="toggleNotificarTodos()"><label for="notifTodos">Notificar todos os clientes</label></div>
+      <div class="input-box" id="boxEmailNotif"><span>🔍</span><input type="email" id="notifEmail" placeholder="Pesquisar e-mail do cliente..."></div>
+      <div class="input-box"><input type="text" id="notifTitulo" placeholder="Título da notificação"></div>
+      <div class="input-box"><textarea id="notifMsg" placeholder="Mensagem..."></textarea></div>
       <button class="btn" onclick="enviarNotificacao()">📤 Enviar Notificação</button>
     </div>
   </div>
 
-  <!-- CONFIGURAÇÕES -->
+  <!-- CONFIG -->
   <div class="screen" id="screen-config">
     <div class="card">
       <div class="card-title">⚙️ CONFIGURAÇÕES</div>
@@ -524,163 +268,118 @@ body{background:var(--bg);color:var(--text);font-size:11px}
         <button class="config-tab" onclick="mudarTabConfig('notif',event)">Notificações</button>
         <button class="config-tab" onclick="mudarTabConfig('loja',event)">Loja</button>
       </div>
-      
-      <!-- ABA GERAL -->
       <div id="tab-geral">
-        <div class="input-box">
-          <input type="text" id="cfgNomeLoja" placeholder="Nome da loja" value="Prime Store VZ">
-        </div>
-        <div class="input-box">
-          <textarea id="cfgDescLoja" placeholder="Descrição da loja">A melhor loja de produtos digitais!</textarea>
-        </div>
-        <div class="input-box">
-          <input type="email" id="cfgEmail" placeholder="E-mail de contato" value="contato@primestorevz.com">
-        </div>
-        <div class="input-box">
-          <input type="text" id="cfgWhats" placeholder="WhatsApp" value="+55 11 99999-9999">
-        </div>
-        <div class="toggle-row">
-          <div class="toggle-label">Modo de manutenção</div>
-          <div class="toggle-switch" id="toggleManutencao" onclick="toggleSwitch(this)"></div>
-        </div>
+        <div class="input-box"><input type="text" id="cfgNomeLoja" placeholder="Nome da loja" value="Prime Store VZ"></div>
+        <div class="input-box"><textarea id="cfgDescLoja" placeholder="Descrição da loja">A melhor loja de produtos digitais!</textarea></div>
+        <div class="input-box"><input type="email" id="cfgEmail" placeholder="E-mail de contato" value="contato@primestorevz.com"></div>
+        <div class="input-box"><input type="text" id="cfgWhats" placeholder="WhatsApp" value="+55 11 99999-9999"></div>
+        <div class="toggle-row"><div class="toggle-label">Modo de manutenção</div><div class="toggle-switch" id="toggleManutencao" onclick="toggleSwitch(this)"></div></div>
         <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
       </div>
-
-      <!-- ABA PAGAMENTO -->
       <div id="tab-pagamento" style="display:none">
-        <div class="input-box">
-          <input type="text" id="cfgPix" placeholder="Chave PIX">
-        </div>
-        <div class="input-box">
-          <input type="text" id="cfgMercadoPago" placeholder="Token Mercado Pago">
-        </div>
-        <div class="toggle-row">
-          <div class="toggle-label">Aceitar PIX</div>
-          <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
-        </div>
-        <div class="toggle-row">
-          <div class="toggle-label">Aceitar Cartão</div>
-          <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
-        </div>
+        <div class="input-box"><input type="text" id="cfgPix" placeholder="Chave PIX"></div>
+        <div class="input-box"><input type="text" id="cfgMercadoPago" placeholder="Token Mercado Pago"></div>
+        <div class="toggle-row"><div class="toggle-label">Aceitar PIX</div><div class="toggle-switch active" onclick="toggleSwitch(this)"></div></div>
+        <div class="toggle-row"><div class="toggle-label">Aceitar Cartão</div><div class="toggle-switch active" onclick="toggleSwitch(this)"></div></div>
         <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
       </div>
-
-      <!-- ABA NOTIFICAÇÕES -->
       <div id="tab-notif" style="display:none">
-        <div class="toggle-row">
-          <div class="toggle-label">Notificar novo pedido</div>
-          <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
-        </div>
-        <div class="toggle-row">
-          <div class="toggle-label">Notificar pagamento aprovado</div>
-          <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
-        </div>
-        <div class="toggle-row">
-          <div class="toggle-label">Notificar novo cliente</div>
-          <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
-        </div>
+        <div class="toggle-row"><div class="toggle-label">Notificar novo pedido</div><div class="toggle-switch active" onclick="toggleSwitch(this)"></div></div>
+        <div class="toggle-row"><div class="toggle-label">Notificar pagamento aprovado</div><div class="toggle-switch active" onclick="toggleSwitch(this)"></div></div>
+        <div class="toggle-row"><div class="toggle-label">Notificar novo cliente</div><div class="toggle-switch" onclick="toggleSwitch(this)"></div></div>
         <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
       </div>
-
-      <!-- ABA LOJA -->
       <div id="tab-loja" style="display:none">
-        <div class="input-box">
-          <input type="text" id="cfgCorPrimaria" placeholder="Cor primária" value="#8b5cf6">
-        </div>
-        <div class="input-box">
-          <input type="text" id="cfgLogo" placeholder="URL do Logo">
-        </div>
-        <div class="input-box">
-          <input type="text" id="cfgBanner" placeholder="URL do Banner">
-        </div>
+        <div class="input-box"><input type="text" id="cfgCorPrimaria" placeholder="Cor primária" value="#8b5cf6"></div>
+        <div class="input-box"><input type="text" id="cfgLogo" placeholder="URL do Logo"></div>
+        <div class="input-box"><input type="text" id="cfgBanner" placeholder="URL do Banner"></div>
         <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
       </div>
     </div>
   </div>
 
   <!-- RELATORIOS -->
-  <div class="screen" id="screen-relatorios">
-    <div class="card">
-      <div class="card-title">📊 RELATORIOS</div>
-      <div class="grid-2" style="margin-bottom:12px">
-        <button class="btn btn-blue btn-sm">📈 Vendas</button>
-        <button class="btn btn-green btn-sm">💰 Faturamento</button>
-        <button class="btn btn-yellow btn-sm">📦 Produtos</button>
-        <button class="btn btn-red btn-sm">👥 Clientes</button>
-      </div>
-      <div class="empty">Selecione um relatório acima</div>
-    </div>
-  </div>
+  <div class="screen" id="screen-relatorios"><div class="card"><div class="card-title">📊 RELATORIOS</div><div class="empty">Em desenvolvimento</div></div></div>
+  <div class="screen" id="screen-suporte"><div class="card"><div class="card-title">💬 SUPORTE</div><div class="empty">Em desenvolvimento</div></div></div>
+  <div class="screen" id="screen-logs"><div class="card"><div class="card-title">📄 LOGS DO SISTEMA</div><div class="empty">Em desenvolvimento</div></div></div>
+</div>
 
-  <!-- SUPORTE -->
-  <div class="screen" id="screen-suporte">
-    <div class="card">
-      <div class="card-title">💬 SUPORTE</div>
-      <div class="tabs">
-        <div class="tab active">Abertos</div>
-        <div class="tab">Respondidos</div>
-        <div class="tab">Fechados</div>
-      </div>
-      <div class="empty">Nenhum ticket de suporte</div>
+<!-- MODAL PRODUTO -->
+<div class="modal" id="modalProduto">
+  <div class="modal-content">
+    <div class="modal-header"><div class="modal-title">Novo Produto</div><button class="close-btn" onclick="fecharModal('modalProduto')">✕</button></div>
+    <div class="upload-area" onclick="document.getElementById('uploadProdutoImg').click()" id="uploadAreaProduto">
+      <div class="upload-icon">+</div><div class="upload-text">Selecionar imagem</div>
+      <input type="file" id="uploadProdutoImg" style="display:none" accept="image/*" onchange="previewImagem(this,'uploadAreaProduto')">
     </div>
+    <div class="input-box"><input type="text" id="prodNome" placeholder="Nome do produto"></div>
+    <div class="input-box"><input type="number" id="prodPreco" placeholder="Preço"></div>
+    <div class="grid-2">
+      <div class="input-box"><select id="prodCategoria"><option value="">Categoria</option></select></div>
+      <div class="input-box"><input type="number" id="prodEstoque" placeholder="Estoque"></div>
+    </div>
+    <div class="input-box"><textarea id="prodDesc" placeholder="Descrição do produto..."></textarea></div>
+    <button class="btn" onclick="salvarProduto()">SALVAR PRODUTO</button>
   </div>
+</div>
 
-  <!-- LOGS DO SISTEMA -->
-  <div class="screen" id="screen-logs">
-    <div class="card">
-      <div class="card-title">📄 LOGS DO SISTEMA</div>
-      <div class="input-box">
-        <span>🔍</span>
-        <input type="text" placeholder="Buscar nos logs...">
-      </div>
-      <div class="item-row">
-        <div class="item-info">
-          <div class="item-title">Login admin</div>
-          <div class="item-sub">18/03/2024 14:30 • vittoriahvahz@gmail.com</div>
-        </div>
-      </div>
-      <div class="item-row">
-        <div class="item-info">
-          <div class="item-title">Produto criado</div>
-          <div class="item-sub">18/03/2024 14:25 • ID: prod_001</div>
-        </div>
-      </div>
+<!-- MODAL CATEGORIA -->
+<div class="modal" id="modalCategoria">
+  <div class="modal-content">
+    <div class="modal-header"><div class="modal-title">Nova Categoria</div><button class="close-btn" onclick="fecharModal('modalCategoria')">✕</button></div>
+    <div class="upload-area" onclick="document.getElementById('uploadCatImg').click()" id="uploadAreaCat">
+      <div class="upload-icon">+</div><div class="upload-text">Selecionar imagem</div>
+      <input type="file" id="uploadCatImg" style="display:none" accept="image/*" onchange="previewImagem(this,'uploadAreaCat')">
     </div>
+    <div class="input-box"><input type="text" id="catNome" placeholder="Nome da categoria"></div>
+    <button class="btn" onclick="salvarCategoria()">SALVAR CATEGORIA</button>
+  </div>
+</div>
+
+<!-- MODAL CUPOM -->
+<div class="modal" id="modalCupom">
+  <div class="modal-content">
+    <div class="modal-header"><div class="modal-title">Novo Cupom</div><button class="close-btn" onclick="fecharModal('modalCupom')">✕</button></div>
+    <div class="input-box"><input type="text" id="cupomNome" placeholder="Nome do cupom"></div>
+    <div class="input-box"><input type="text" id="cupomCodigo" placeholder="Código do cupom"></div>
+    <div class="grid-2">
+      <div class="input-box"><select id="cupomTipo"><option value="porcentagem">Desconto %</option><option value="valor">Desconto R$</option></select></div>
+      <div class="input-box"><input type="number" id="cupomValor" placeholder="Valor do desconto"></div>
+    </div>
+    <div class="grid-2">
+      <div class="input-box"><input type="number" id="cupomLimite" placeholder="Limite de uso"></div>
+      <div class="input-box"><input type="number" id="cupomLimiteDiario" placeholder="Limite diário"></div>
+    </div>
+    <div class="input-box"><input type="number" id="cupomValidade" placeholder="Validade (dias)"></div>
+    <div class="input-box"><select id="cupomProdutos" multiple><option value="">Todos os produtos</option></select></div>
+    <button class="btn" onclick="salvarCupom()">SALVAR CUPOM</button>
   </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <script>
 const firebaseConfig={apiKey:"AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",authDomain:"premium-store-aa58b.firebaseapp.com",databaseURL:"https://premium-store-aa58b-default-rtdb.firebaseio.com",projectId:"premium-store-aa58b",storageBucket:"premium-store-aa58b.firebasestorage.app",messagingSenderId:"462239500057",appId:"1:462239500057:web:f1b7cea162ed308a866788"};
 firebase.initializeApp(firebaseConfig);
-const auth=firebase.auth();const db=firebase.database();
+const auth=firebase.auth();const db=firebase.database();const storage=firebase.storage();
 const ADMIN_EMAIL='vittoriahvahz@gmail.com';
+let imgProdutoTemp='',imgCatTemp='';
 
 auth.onAuthStateChanged(user=>{
   if(!user||user.email!==ADMIN_EMAIL){window.location.href='index.html';return}
   carregarDashboard();
-  carregarUsuarios();
   carregarProdutos();
+  carregarCategorias();
+  carregarCupons();
   carregarPedidos();
+  carregarClientes();
 });
 
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open')}
 function logout(){auth.signOut().then(()=>window.location.href='index.html')}
-
-function mostrarTela(tela){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active'));
-  document.getElementById('screen-'+tela).classList.add('active');
-  event.target.closest('.menu-item').classList.add('active');
-  const titulos={dashboard:'Dashboard',produtos:'Produtos',categorias:'Categorias',subcategorias:'Subcategorias',pedidos:'Pedidos',usuarios:'Clientes',cupons:'Cupons',slider:'Slider / Banners',notificar:'Notificar Cliente',config:'Configurações',relatorios:'Relatorios',suporte:'Suporte',logs:'Logs do Sistema'};
-  document.getElementById('headerTitle').textContent=titulos[tela]||'Dashboard';
-  if(window.innerWidth<=768)toggleSidebar();
-}
-
-function verDetalhesPedido(id){mostrarTela('detalhes-pedido')}
-function verClienteDetalhes(id){mostrarTela('cliente-detalhes')}
+function mostrarTela(tela){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.menu-item').forEach(m=>m.classList.remove('active'));document.getElementById('screen-'+tela).classList.add('active');event.target.closest('.menu-item').classList.add('active');const titulos={dashboard:'Dashboard',produtos:'Produtos',categorias:'Categorias',subcategorias:'Subcategorias',pedidos:'Pedidos',usuarios:'Clientes',cupons:'Cupons',slider:'Slider / Banners',notificar:'Notificar Cliente',config:'Configurações',relatorios:'Relatorios',suporte:'Suporte',logs:'Logs do Sistema'};document.getElementById('headerTitle').textContent=titulos[tela]||'Dashboard';if(window.innerWidth<=768)toggleSidebar();}
 
 function mudarTabConfig(tab,e){
   document.querySelectorAll('.config-tab').forEach(t=>t.classList.remove('active'));
@@ -693,6 +392,7 @@ function mudarTabConfig(tab,e){
 }
 
 function toggleSwitch(el){el.classList.toggle('active')}
+function toggleNotificarTodos(){document.getElementById('boxEmailNotif').style.display=document.getElementById('notifTodos').checked?'none':'flex'}
 
 function carregarDashboard(){
   db.ref('produtos').once('value',s=>document.getElementById('statProdutos').textContent=Object.keys(s.val()||{}).length);
@@ -705,26 +405,108 @@ function carregarDashboard(){
   });
 }
 
-function carregarUsuarios(){
-  db.ref('usuarios').once('value',snap=>{
-    const usuarios=snap.val()||{};
-    let html='<option value="">Selecione um usuário</option><option value="todos">Todos os usuários</option>';
-    Object.entries(usuarios).forEach(([uid,u])=>{
-      html+=`<option value="${uid}">${u.nome||u.email}</option>`;
-    });
-    document.getElementById('notifUsuario').innerHTML=html;
-  });
-}
-
 function carregarProdutos(){
   db.ref('produtos').once('value',snap=>{
     const produtos=snap.val()||{};let html='';
     Object.entries(produtos).forEach(([id,p])=>{
-      const img=p.imagens&&p.imagens.length?p.imagens[0]:'https://via.placeholder.com/40';
-      html+=`<div class="item-row"><img src="${img}" class="img-thumb"><div class="item-info"><div class="item-title">${p.nome}</div><div class="item-sub">${p.categoria||'Sem categoria'} • R$ ${p.preco.toFixed(2)} • Estoque: ${p.estoque||0}</div></div></div>`;
+      const img=p.imagem||'https://via.placeholder.com/40';
+      html+=`<div class="item-row"><img src="${img}" class="img-thumb"><div class="item-info"><div class="item-title">${p.nome}</div><div class="item-sub">${p.categoria||'Sem categoria'} • R$ ${(p.preco||0).toFixed(2)} • Estoque: ${p.estoque||0}</div></div><div class="actions"><button class="btn-sm btn-red" onclick="deletarProduto('${id}')">🗑️</button></div></div>`;
     });
-    if(html)document.getElementById('listaProdutos').innerHTML=html;
+    document.getElementById('listaProdutos').innerHTML=html||'<div class="empty">Nenhum produto cadastrado</div>';
+    carregarProdutosSelect();
   });
+}
+
+function carregarProdutosSelect(){
+  db.ref('produtos').once('value',snap=>{
+    const produtos=snap.val()||{};let html='<option value="">Todos os produtos</option>';
+    Object.entries(produtos).forEach(([id,p])=>{html+=`<option value="${id}">${p.nome}</option>`});
+    document.getElementById('cupomProdutos').innerHTML=html;
+  });
+}
+
+function buscarProdutos(q){
+  const rows=document.querySelectorAll('#listaProdutos.item-row');
+  rows.forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q.toLowerCase())?'flex':'none'});
+}
+
+function abrirModalProduto(){
+  document.getElementById('modalProduto').classList.add('active');
+  carregarCategoriasSelect();
+}
+
+function abrirModalCategoria(){document.getElementById('modalCategoria').classList.add('active')}
+function abrirModalCupom(){document.getElementById('modalCupom').classList.add('active')}
+function fecharModal(id){document.getElementById(id).classList.remove('active');imgProdutoTemp='';imgCatTemp=''}
+
+function previewImagem(input,id){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{document.getElementById(id).innerHTML=`<img src="${e.target.result}">`;};
+  reader.readAsDataURL(file);
+  if(id==='uploadAreaProduto')imgProdutoTemp=file;
+  if(id==='uploadAreaCat')imgCatTemp=file;
+}
+
+async function salvarProduto(){
+  const nome=document.getElementById('prodNome').value.trim();
+  const preco=parseFloat(document.getElementById('prodPreco').value)||0;
+  const categoria=document.getElementById('prodCategoria').value;
+  const estoque=parseInt(document.getElementById('prodEstoque').value)||0;
+  const desc=document.getElementById('prodDesc').value.trim();
+  if(!nome||!preco){alert('Preencha nome e preço');return}
+  
+  let imgUrl='';
+  if(imgProdutoTemp){
+    const ref=storage.ref('produtos/'+Date.now()+'.jpg');
+    await ref.put(imgProdutoTemp);
+    imgUrl=await ref.getDownloadURL();
+  }
+  
+  await db.ref('produtos').push({nome,preco,categoria,estoque,descricao:desc,imagem:imgUrl,criadoEm:Date.now()});
+  fecharModal('modalProduto');
+  carregarProdutos();
+  alert('Produto salvo!');
+}
+
+function deletarProduto(id){
+  if(confirm('Deletar produto?')){db.ref('produtos/'+id).remove();carregarProdutos()}
+}
+
+function carregarCategorias(){
+  db.ref('categorias').once('value',snap=>{
+    const cats=snap.val()||{};let html='';
+    Object.entries(cats).forEach(([id,c])=>{
+      const img=c.imagem||'https://via.placeholder.com/40';
+      html+=`<div class="item-row clickable"><img src="${img}" class="img-thumb"><div class="item-info"><div class="item-title">${c.nome}</div><div class="item-sub">${c.subcategorias?Object.keys(c.subcategorias).length:0} subcategorias</div></div><span>›</span></div>`;
+    });
+    document.getElementById('listaCategorias').innerHTML=html||'<div class="empty">Nenhuma categoria</div>';
+  });
+}
+
+function carregarCategoriasSelect(){
+  db.ref('categorias').once('value',snap=>{
+    const cats=snap.val()||{};let html='<option value="">Categoria</option>';
+    Object.entries(cats).forEach(([id,c])=>{html+=`<option value="${id}">${c.nome}</option>`});
+    document.getElementById('prodCategoria').innerHTML=html;
+  });
+}
+
+async function salvarCategoria(){
+  const nome=document.getElementById('catNome').value.trim();
+  if(!nome){alert('Preencha o nome');return}
+  
+  let imgUrl='';
+  if(imgCatTemp){
+    const ref=storage.ref('categorias/'+Date.now()+'.jpg');
+    await ref.put(imgCatTemp);
+    imgUrl=await ref.getDownloadURL();
+  }
+  
+  await db.ref('categorias').push({nome,imagem:imgUrl,criadoEm:Date.now()});
+  fecharModal('modalCategoria');
+  carregarCategorias();
+  alert('Categoria salva!');
 }
 
 function carregarPedidos(){
@@ -733,38 +515,131 @@ function carregarPedidos(){
     Object.entries(pedidos).reverse().forEach(([id,p])=>{
       const data=new Date(p.criadoEm).toLocaleString('pt-BR');
       const status=p.status||'pendente';
-      html+=`<div class="item-row clickable" onclick="verDetalhesPedido('${id}')"><div class="item-info"><div class="item-title">#${id}</div><div class="item-sub">${data} • ${p.clienteNome||'Cliente'}</div></div><div style="text-align:right"><div class="item-title">R$ ${(p.total||0).toFixed(2)}</div><span class="badge-status ${status}">${status.charAt(0).toUpperCase()+status.slice(1)}</span></div></div>`;
+      html+=`<div class="item-row clickable" onclick="verPedido('${id}')"><div class="item-info"><div class="item-title">#${id.substring(0,8)}</div><div class="item-sub">${data} • ${p.clienteNome||'Cliente'}</div></div><div style="text-align:right"><div class="item-title">R$ ${(p.total||0).toFixed(2)}</div><span class="badge-status ${status}">${status.charAt(0).toUpperCase()+status.slice(1)}</span></div></div>`;
     });
-    if(html)document.getElementById('listaPedidos').innerHTML=html;
+    document.getElementById('listaPedidos').innerHTML=html||'<div class="empty">Nenhum pedido encontrado</div>';
   });
 }
 
-function enviarNotificacao(){
-  const uid=document.getElementById('notifUsuario').value;
+function buscarPedido(){
+  const q=document.getElementById('searchPedido').value.toLowerCase();
+  const rows=document.querySelectorAll('#listaPedidos.item-row');
+  rows.forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'flex':'none'});
+}
+
+function filtrarPedidos(status){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  event.target.classList.add('active');
+  const rows=document.querySelectorAll('#listaPedidos.item-row');
+  rows.forEach(r=>{
+    if(status==='todos'){r.style.display='flex';return}
+    const st=r.querySelector('.badge-status').textContent.toLowerCase();
+    r.style.display=st===status?'flex':'none';
+  });
+}
+
+function verPedido(id){alert('Ver detalhes do pedido: '+id)}
+
+function carregarClientes(){
+  db.ref('usuarios').once('value',snap=>{
+    const usuarios=snap.val()||{};let html='';
+    Object.entries(usuarios).forEach(([uid,u])=>{
+      html+=`<div class="user-card"><div class="user-avatar">${(u.nome||'U')[0].toUpperCase()}</div><div class="user-details"><div class="user-name">${u.nome||u.email}</div><div class="user-email">${u.email}</div><div class="user-stats">Pedidos: ${u.totalPedidos||0} • Total: R$ ${(u.totalGasto||0).toFixed(2)}</div></div></div>`;
+    });
+    document.getElementById('listaClientes').innerHTML=html||'<div class="empty">Nenhum cliente cadastrado</div>';
+  });
+}
+
+function buscarClientes(q){
+  const rows=document.querySelectorAll('#listaClientes.user-card');
+  rows.forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q.toLowerCase())?'flex':'none'});
+}
+
+function carregarCupons(){
+  db.ref('cupons').once('value',snap=>{
+    const cupons=snap.val()||{};let html='';
+    Object.entries(cupons).forEach(([id,c])=>{
+      const ativo=c.ativo?'ativo':'inativo';
+      const desconto=c.tipo==='porcentagem'?c.valor+'%':'R$ '+c.valor.toFixed(2);
+      html+=`<div class="coupon-card"><div class="coupon-header"><div class="coupon-code">${c.codigo}</div><span class="coupon-badge ${ativo}">${ativo.charAt(0).toUpperCase()+ativo.slice(1)}</span></div><div class="coupon-info">${desconto} de desconto</div><div class="coupon-info">Usos: ${c.usos||0}/${c.limite||'∞'} • Diário: ${c.limiteDiario||'∞'}</div><div class="coupon-info">Validade: ${c.validade} dias</div></div>`;
+    });
+    document.getElementById('listaCupons').innerHTML=html||'<div class="empty">Nenhum cupom cadastrado</div>';
+  });
+}
+
+async function salvarCupom(){
+  const nome=document.getElementById('cupomNome').value.trim();
+  const codigo=document.getElementById('cupomCodigo').value.trim().toUpperCase();
+  const tipo=document.getElementById('cupomTipo').value;
+  const valor=parseFloat(document.getElementById('cupomValor').value)||0;
+  const limite=parseInt(document.getElementById('cupomLimite').value)||0;
+  const limiteDiario=parseInt(document.getElementById('cupomLimiteDiario').value)||0;
+  const validade=parseInt(document.getElementById('cupomValidade').value)||30;
+  const produtos=Array.from(document.getElementById('cupomProdutos').selectedOptions).map(o=>o.value).filter(v=>v);
+  
+  if(!nome||!codigo||!valor){alert('Preencha todos os campos obrigatórios');return}
+  
+  await db.ref('cupons').push({nome,codigo,tipo,valor,limite,limiteDiario,validade,produtos,ativo:true,usos:0,criadoEm:Date.now()});
+  fecharModal('modalCupom');
+  carregarCupons();
+  alert('Cupom salvo!');
+}
+
+async function uploadBanner(e){
+  const file=e.target.files[0];if(!file)return;
+  const ref=storage.ref('banners/'+Date.now()+'.jpg');
+  await ref.put(file);
+  const url=await ref.getDownloadURL();
+  await db.ref('banners').push({url,criadoEm:Date.now()});
+  alert('Banner enviado!');
+  carregarBanners();
+}
+
+function carregarBanners(){
+  db.ref('banners').once('value',snap=>{
+    const banners=snap.val()||{};let html='';
+    Object.entries(banners).forEach(([id,b])=>{
+      html+=`<div class="item-row"><img src="${b.url}" class="img-thumb"><div class="item-info"><div class="item-title">Banner</div><div class="item-sub">${new Date(b.criadoEm).toLocaleDateString('pt-BR')}</div></div><button class="btn-sm btn-red" onclick="deletarBanner('${id}')">🗑️</button></div>`;
+    });
+    document.getElementById('listaBanners').innerHTML=html||'<div class="empty">Nenhum banner cadastrado</div>';
+  });
+}
+
+function deletarBanner(id){
+  if(confirm('Deletar banner?')){db.ref('banners/'+id).remove();carregarBanners()}
+}
+
+async function enviarNotificacao(){
+  const todos=document.getElementById('notifTodos').checked;
+  const email=document.getElementById('notifEmail').value.trim();
   const titulo=document.getElementById('notifTitulo').value.trim();
   const msg=document.getElementById('notifMsg').value.trim();
   const alert=document.getElementById('alertNotif');
-  if(!uid||!titulo||!msg){alert.textContent='Preencha todos os campos';alert.className='alert error';alert.style.display='block';return}
   
-  if(uid==='todos'){
-    db.ref('usuarios').once('value',snap=>{
-      const usuarios=snap.val()||{};
-      Object.keys(usuarios).forEach(userId=>{
-        db.ref('notificacoes/'+userId).push({titulo,msg,lida:false,criadoEm:Date.now()});
-      });
+  if(!titulo||!msg){alert.textContent='Preencha título e mensagem';alert.className='alert error';alert.style.display='block';return}
+  if(!todos&&!email){alert.textContent='Digite um e-mail ou marque notificar todos';alert.className='alert error';alert.style.display='block';return}
+  
+  if(todos){
+    const snap=await db.ref('usuarios').once('value');
+    const usuarios=snap.val()||{};
+    Object.keys(usuarios).forEach(uid=>{
+      db.ref('notificacoes/'+uid).push({titulo,msg,lida:false,criadoEm:Date.now()});
     });
+    alert.textContent='Notificação enviada para todos os clientes!';
   }else{
+    const snap=await db.ref('usuarios').orderByChild('email').equalTo(email).once('value');
+    if(!snap.exists()){alert.textContent='E-mail não encontrado';alert.className='alert error';alert.style.display='block';return}
+    const uid=Object.keys(snap.val())[0];
     db.ref('notificacoes/'+uid).push({titulo,msg,lida:false,criadoEm:Date.now()});
+    alert.textContent='Notificação enviada!';
   }
   
-  alert.textContent='Notificação enviada com sucesso!';alert.className='alert success';alert.style.display='block';
-  document.getElementById('notifTitulo').value='';document.getElementById('notifMsg').value='';
+  alert.className='alert success';alert.style.display='block';
+  document.getElementById('notifTitulo').value='';document.getElementById('notifMsg').value='';document.getElementById('notifEmail').value='';
   setTimeout(()=>alert.style.display='none',3000);
 }
 
-function salvarConfig(){
-  alert('Configurações salvas com sucesso!');
-}
+function salvarConfig(){alert('Configurações salvas com sucesso!')}
 </script>
 </body>
 </html>
