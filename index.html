@@ -33,7 +33,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
 .btn-primary:active{background:#7c3aed;transform:scale(0.96)}
 .btn-sm{height:36px;font-size:11px;width:auto;padding:0 12px}
 .btn-red{border-color:var(--red);color:var(--red)}
-.btn-red:active{background:rgba(239,68,0.1)}
+.btn-red:active{background:rgba(239,68,68,0.1)}
 .btn-green{border-color:var(--green);color:var(--green)}
 .btn-green:active{background:rgba(16,185,129,0.1)}
 .btn-blue{border-color:var(--blue);color:var(--blue)}
@@ -139,6 +139,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <input type="password" id="loginPassword" placeholder="••••••••" value="Lorrannyh.101225">
         <span class="toggle" onclick="togglePass('loginPassword',this)">👁️</span>
       </div>
+    </div>
     <button class="btn btn-primary" id="btnLogin" onclick="fazerLogin()">🚀 ENTRAR</button>
   </div>
 </div>
@@ -174,6 +175,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <div class="stat-card"><div class="stat-label">👥 Clientes</div><div class="stat-value" style="color:var(--yellow)" id="totalClientes">0</div></div>
         <div class="stat-card"><div class="stat-label">📦 Produtos</div><div class="stat-value" style="color:var(--green)" id="totalProdutos">0</div></div>
       </div>
+    </div>
     <div id="produtos" class="page">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
         <h3>📦 Produtos</h3>
@@ -286,6 +288,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
         <label>Estoque</label>
         <div class="input-box"><input type="number" id="prodEstoque" placeholder="0"></div>
       </div>
+    </div>
     <div class="grid-2">
       <div class="input-group">
         <label>Categoria</label>
@@ -382,6 +385,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
             <option value="0">Ilimitado</option>
           </select>
         </div>
+      </div>
       <div class="input-group">
         <label>Uso por Cliente</label>
         <div class="input-box"><input type="number" id="cupomUsoCliente" placeholder="1" min="1" value="1"></div>
@@ -426,7 +430,7 @@ function debug(msg){
   d.style.display = 'block';
   setTimeout(()=>d.style.display='none',5000);
 }
-window.onerror = function(msg){ debug(msg); }
+window.onerror = function(msg,url,line){ debug(msg + ' Linha: ' + line); }
 
 try {
   const firebaseConfig = {
@@ -439,10 +443,12 @@ try {
     appId: "1:462239500057:web:f1b7cea162ed308a866788",
     measurementId: "G-CN88J28WRX"
   };
+  
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
   const db = firebase.database();
   const storage = firebase.storage();
+  
   let currentUser = null;
   let filtroPedidoStatus = 'todos';
   let todosPedidos = {};
@@ -477,11 +483,12 @@ try {
       await auth.signInWithEmailAndPassword(email,senha);
     }catch(e){
       let msg = 'Erro ao fazer login';
-      if(e.code==='auth/user-not-found') msg='Usuário não encontrado. Crie no Firebase > Authentication';
+      if(e.code==='auth/user-not-found') msg='Usuário não encontrado. Crie no Firebase > Authentication > Users';
       if(e.code==='auth/wrong-password') msg='Senha incorreta';
       if(e.code==='auth/invalid-credential') msg='Email ou senha inválidos';
-      if(e.code==='auth/operation-not-allowed') msg='Ative Email/Password no Firebase Console';
+            if(e.code==='auth/operation-not-allowed') msg='Ative Email/Password no Firebase Console > Authentication > Sign-in method';
       if(e.code==='auth/too-many-requests') msg='Muitas tentativas. Tente mais tarde';
+      if(e.code==='auth/network-request-failed') msg='Sem internet ou Firebase bloqueado';
       debug(e.code + ' - ' + e.message);
       showAlert('loginError',msg,'error');
       btn.disabled = false;
@@ -500,8 +507,8 @@ try {
     toggleMenu();
     if(id==='dash') carregarDashboard();
     if(id==='produtos') carregarProdutos();
-    if(id==='pedidos') carregarPedidos ();
-        if(id==='clientes') carregarClientes();
+    if(id==='pedidos') carregarPedidos();
+    if(id==='clientes') carregarClientes();
     if(id==='categorias') carregarCategorias();
     if(id==='subcategorias') carregarSubcategorias();
     if(id==='cupons') carregarCupons();
@@ -566,9 +573,14 @@ try {
   }
 
   async function uploadImg(file,path){
-    const ref = storage.ref(path+'/'+Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9.]/g,'_'));
-    await ref.put(file);
-    return await ref.getDownloadURL();
+    try{
+      const ref = storage.ref(path+'/'+Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9.]/g,'_'));
+      await ref.put(file);
+      return await ref.getDownloadURL();
+    }catch(e){
+      debug('ERRO STORAGE: ' + e.message);
+      throw new Error('Falha no upload. Ative o Storage no Firebase');
+    }
   }
 
   async function abrirModalProduto(id=null){
@@ -1162,7 +1174,7 @@ try {
 
   function carregarDashboard(){
     db.ref('produtos').once('value',s=>document.getElementById('totalProdutos').textContent=Object.keys(s.val()||{}).length);
-    db.ref('usuarios').once('value',s=>document.getElementById('totalClientes').textContent=Object.keys(s.val()||{}).length);
+        db.ref('usuarios').once('value',s=>document.getElementById('totalClientes').textContent=Object.keys(s.val()||{}).length);
     db.ref('pedidos').once('value',s=>{
       const p = s.val()||{};
       const hoje = new Date().setHours(0,0,0,0);
@@ -1185,7 +1197,7 @@ try {
         await db.ref('produtos').remove();
         await db.ref('pedidos').remove();
         await db.ref('usuarios').remove();
-                await db.ref('cupons').remove();
+        await db.ref('cupons').remove();
         await db.ref('categorias').remove();
         await db.ref('subcategorias').remove();
         alert('✅ Banco zerado com sucesso!');
