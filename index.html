@@ -129,6 +129,7 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
     <div class="logo">Prime Store VZ</div>
     <div class="subtitle">Painel Administrativo 🔐</div>
     <div class="alert error" id="loginError"></div>
+    <div class="alert success" id="loginSuccess"></div>
     <div class="input-group">
       <label>📧 E-mail</label>
       <div class="input-box"><input type="email" id="loginEmail" placeholder="vittoriahvahz@gmail.com" value="vittoriahvahz@gmail.com"></div>
@@ -385,7 +386,6 @@ h2{font-size:11px;font-weight:700;text-align:center;margin-bottom:12px;color:var
             <option value="0">Ilimitado</option>
           </select>
         </div>
-      </div>
       <div class="input-group">
         <label>Uso por Cliente</label>
         <div class="input-box"><input type="number" id="cupomUsoCliente" placeholder="1" min="1" value="1"></div>
@@ -428,7 +428,7 @@ function debug(msg){
   const d = document.getElementById('debug');
   d.textContent = 'ERRO: ' + msg;
   d.style.display = 'block';
-  setTimeout(()=>d.style.display='none',5000);
+  setTimeout(()=>d.style.display='none',8000);
 }
 window.onerror = function(msg,url,line){ debug(msg + ' Linha: ' + line); }
 
@@ -476,6 +476,8 @@ try {
     const email = document.getElementById('loginEmail').value.trim();
     const senha = document.getElementById('loginPassword').value;
     const btn = document.getElementById('btnLogin');
+    document.getElementById('loginError').style.display='none';
+    document.getElementById('loginSuccess').style.display='none';
     if(!email||!senha) return showAlert('loginError','Preencha todos os campos','error');
     btn.disabled = true;
     btn.textContent = 'ENTRANDO...';
@@ -486,8 +488,8 @@ try {
       if(e.code==='auth/user-not-found') msg='Usuário não encontrado. Crie no Firebase > Authentication > Users';
       if(e.code==='auth/wrong-password') msg='Senha incorreta';
       if(e.code==='auth/invalid-credential') msg='Email ou senha inválidos';
-            if(e.code==='auth/operation-not-allowed') msg='Ative Email/Password no Firebase Console > Authentication > Sign-in method';
-      if(e.code==='auth/too-many-requests') msg='Muitas tentativas. Tente mais tarde';
+      if(e.code==='auth/operation-not-allowed') msg='Ative Email/Password no Firebase Console > Authentication > Sign-in method';
+            if(e.code==='auth/too-many-requests') msg='Muitas tentativas. Tente mais tarde';
       if(e.code==='auth/network-request-failed') msg='Sem internet ou Firebase bloqueado';
       debug(e.code + ' - ' + e.message);
       showAlert('loginError',msg,'error');
@@ -579,58 +581,63 @@ try {
       return await ref.getDownloadURL();
     }catch(e){
       debug('ERRO STORAGE: ' + e.message);
-      throw new Error('Falha no upload. Ative o Storage no Firebase');
+      throw new Error('Falha no upload. Ative o Storage no Firebase e libere as Rules');
     }
   }
 
   async function abrirModalProduto(id=null){
-    const catSelect = document.getElementById('prodCatId');
-    catSelect.innerHTML = '<option value="">Carregando...</option>';
-    const catSnap = await db.ref('categorias').once('value');
-    const cats = catSnap.val()||{};
-    catSelect.innerHTML = '<option value="">Selecione</option>';
-    Object.entries(cats).forEach(([cid,c])=>{
-      catSelect.innerHTML += `<option value="${cid}">${c.nome}</option>`;
-    });
+    try{
+      const catSelect = document.getElementById('prodCatId');
+      catSelect.innerHTML = '<option value="">Carregando...</option>';
+      const catSnap = await db.ref('categorias').once('value');
+      const cats = catSnap.val()||{};
+      catSelect.innerHTML = '<option value="">Selecione</option>';
+      Object.entries(cats).forEach(([cid,c])=>{
+        catSelect.innerHTML += `<option value="${cid}">${c.nome}</option>`;
+      });
 
-    const cupomSelect = document.getElementById('prodCupomId');
-    cupomSelect.innerHTML = '<option value="">Nenhum</option>';
-    const cupomSnap = await db.ref('cupons').once('value');
-    const cups = cupomSnap.val()||{};
-    Object.entries(cups).forEach(([cid,c])=>{
-      if(c.ativo && (!c.expiraEm||c.expiraEm>Date.now())){
-        cupomSelect.innerHTML += `<option value="${cid}">${c.codigo} - ${c.desconto}%</option>`;
-      }
-    });
+      const cupomSelect = document.getElementById('prodCupomId');
+      cupomSelect.innerHTML = '<option value="">Nenhum</option>';
+      const cupomSnap = await db.ref('cupons').once('value');
+      const cups = cupomSnap.val()||{};
+      Object.entries(cups).forEach(([cid,c])=>{
+        if(c.ativo && (!c.expiraEm||c.expiraEm>Date.now())){
+          cupomSelect.innerHTML += `<option value="${cid}">${c.codigo} - ${c.desconto}%</option>`;
+        }
+      });
 
-    document.getElementById('prodId').value = id||'';
-    imagensProduto = [];
-    if(id){
-      const snap = await db.ref('produtos/'+id).once('value');
-      const p = snap.val();
-      document.getElementById('prodNome').value = p.nome;
-      document.getElementById('prodCatId').value = p.categoriaId;
-      await carregarSubcats();
-      document.getElementById('prodSubcatId').value = p.subcategoriaId||'';
-      document.getElementById('prodPreco').value = p.preco;
-      document.getElementById('prodEstoque').value = p.estoque;
-      document.getElementById('prodDesc').value = p.descricao||'';
-      document.getElementById('prodCupomId').value = p.cupomId||'';
-      if(p.imagens){
-        const list = document.getElementById('prodImgList');
-        list.innerHTML = '';
-        p.imagens.forEach((url,i)=>{
-          imagensProduto.push({url});
-          list.innerHTML += `<div class="img-list-item">
-            <img src="${url}">
-            <div class="del" onclick="removerImg(${i})">×</div>
-          </div>`;
-        });
+      document.getElementById('prodId').value = id||'';
+      imagensProduto = [];
+      if(id){
+        const snap = await db.ref('produtos/'+id).once('value');
+        const p = snap.val();
+        document.getElementById('prodNome').value = p.nome;
+        document.getElementById('prodCatId').value = p.categoriaId;
+        await carregarSubcats();
+        document.getElementById('prodSubcatId').value = p.subcategoriaId||'';
+        document.getElementById('prodPreco').value = p.preco;
+        document.getElementById('prodEstoque').value = p.estoque;
+        document.getElementById('prodDesc').value = p.descricao||'';
+        document.getElementById('prodCupomId').value = p.cupomId||'';
+        if(p.imagens){
+          const list = document.getElementById('prodImgList');
+          list.innerHTML = '';
+          p.imagens.forEach((url,i)=>{
+            imagensProduto.push({url});
+            list.innerHTML += `<div class="img-list-item">
+              <img src="${url}">
+              <div class="del" onclick="removerImg(${i})">×</div>
+            </div>`;
+          });
+        }
+      } else {
+        document.getElementById('prodSubcatId').innerHTML = '<option value="">Selecione a categoria primeiro</option>';
       }
-    } else {
-      document.getElementById('prodSubcatId').innerHTML = '<option value="">Selecione a categoria primeiro</option>';
+      document.getElementById('modalProduto').classList.add('active');
+    }catch(e){
+      debug('ERRO ABRIR PRODUTO: ' + e.message);
+      alert('Erro: ' + e.message);
     }
-    document.getElementById('modalProduto').classList.add('active');
   }
 
   async function carregarSubcats(){
@@ -701,8 +708,8 @@ try {
 
       fecharModal('modalProduto');
       carregarProdutos();
-      showAlert('loginError','✅ Produto salvo com sucesso!','success');
-      setTimeout(()=>document.getElementById('loginError').style.display='none',3000);
+      showAlert('loginSuccess','✅ Produto salvo com sucesso!','success');
+      setTimeout(()=>document.getElementById('loginSuccess').style.display='none',3000);
     } catch(e) {
       debug('ERRO AO SALVAR PRODUTO: ' + e.message);
       alert('❌ Erro ao salvar: ' + e.message);
@@ -741,7 +748,7 @@ try {
         </div>`;
       });
       lista.innerHTML = html;
-    });
+    }).catch(e=>debug('ERRO CARREGAR PRODUTOS: '+e.message));
   }
 
   async function deletarProduto(id){
@@ -794,13 +801,18 @@ try {
     const nome = document.getElementById('catNome').value.trim();
     const file = document.getElementById('catImgInput').files[0];
     if(!nome) return alert('Preencha o nome');
-    let imagem = document.getElementById('catImgPreview').src||'';
-    if(file) imagem = await uploadImg(file,'categorias');
-    const data = {nome,imagem,criadoEm:Date.now()};
-    if(id) await db.ref('categorias/'+id).update(data);
-    else await db.ref('categorias').push(data);
-    fecharModal('modalCategoria');
-    carregarCategorias();
+    try{
+      let imagem = document.getElementById('catImgPreview').src||'';
+      if(file) imagem = await uploadImg(file,'categorias');
+      const data = {nome,imagem,criadoEm:Date.now()};
+      if(id) await db.ref('categorias/'+id).update(data);
+      else await db.ref('categorias').push(data);
+      fecharModal('modalCategoria');
+      carregarCategorias();
+    }catch(e){
+      debug('ERRO SALVAR CATEGORIA: '+e.message);
+      alert('Erro: '+e.message);
+    }
   }
 
   function carregarCategorias(){
@@ -860,11 +872,16 @@ try {
     const nome = document.getElementById('subcatNome').value.trim();
     const categoriaId = document.getElementById('subcatCatId').value;
     if(!nome||!categoriaId) return alert('Preencha todos os campos');
-    const data = {nome,categoriaId,criadoEm:Date.now()};
-    if(id) await db.ref('subcategorias/'+id).update(data);
-    else await db.ref('subcategorias').push(data);
-    fecharModal('modalSubcategoria');
-    carregarSubcategorias();
+    try{
+      const data = {nome,categoriaId,criadoEm:Date.now()};
+      if(id) await db.ref('subcategorias/'+id).update(data);
+      else await db.ref('subcategorias').push(data);
+      fecharModal('modalSubcategoria');
+      carregarSubcategorias();
+    }catch(e){
+      debug('ERRO SALVAR SUBCATEGORIA: '+e.message);
+      alert('Erro: '+e.message);
+    }
   }
 
   function carregarSubcategorias(){
@@ -1167,14 +1184,14 @@ try {
       if(c.nome) document.getElementById('configNome').value = c.nome;
       if(c.desc) document.getElementById('configDesc').value = c.desc;
       if(c.email) document.getElementById('configEmail').value = c.email;
-      if(c.whats) document.getElementById('configWhats').value = c.whats;
+            if(c.whats) document.getElementById('configWhats').value = c.whats;
       if(c.manutencao) document.getElementById('configManutencao').checked = c.manutencao;
     });
   }
 
   function carregarDashboard(){
     db.ref('produtos').once('value',s=>document.getElementById('totalProdutos').textContent=Object.keys(s.val()||{}).length);
-        db.ref('usuarios').once('value',s=>document.getElementById('totalClientes').textContent=Object.keys(s.val()||{}).length);
+    db.ref('usuarios').once('value',s=>document.getElementById('totalClientes').textContent=Object.keys(s.val()||{}).length);
     db.ref('pedidos').once('value',s=>{
       const p = s.val()||{};
       const hoje = new Date().setHours(0,0,0,0);
