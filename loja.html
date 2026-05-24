@@ -6,7 +6,7 @@
 <title>Premium Store</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0a0a0a;--card:#141414;--input:#1e1e1e;--text:#fff;--muted:#888;--purple:#8b5cf6;--purple2:#7c3aed;--border:#2a2a2a;--green:#4ade80;--red:#f87171}
+:root{--bg:#0a0a0a;--card:#141414;--input:#1e1e1e;--text:#fff;--muted:#888;--purple:#8b5cf6;--purple2:#7c3aed;--border:#2a2a2a;--green:#4ade80;--red:#f87171;--yellow:#fbbf24}
 body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);padding-bottom:80px}
 .tela{display:none;min-height:100vh}
 .tela.ativa{display:block}
@@ -65,8 +65,10 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 .produto-detalhe-desc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:16px}
 .produto-detalhe-desc-titulo{font-size:14px;font-weight:700;margin-bottom:8px}
 .produto-detalhe-desc-texto{font-size:13px;color:var(--muted);line-height:1.6}
-.btn-comprar{width:100%;background:linear-gradient(135deg,var(--purple),var(--purple2));color:#fff;border:none;padding:16px;border-radius:14px;font-weight:700;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-comprar svg{width:20px;height:20px;stroke:#fff;stroke-width:2}
+.btn{width:100%;background:linear-gradient(135deg,var(--purple),var(--purple2));color:#fff;border:none;padding:16px;border-radius:14px;font-weight:700;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn svg{width:20px;height:20px;stroke:#fff;stroke-width:2}
+.btn-outline{width:100%;background:transparent;color:var(--purple);border:2px solid var(--purple);padding:14px;border-radius:14px;font-weight:700;cursor:pointer;font-size:15px;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-outline svg{width:18px;height:18px;stroke:var(--purple);stroke-width:2}
 .nav-bottom{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 0;z-index:100}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px;cursor:pointer;color:var(--muted)}
 .nav-item.active{color:var(--purple)}
@@ -75,6 +77,18 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 .empty{text-align:center;padding:60px 20px;color:var(--muted)}
 .empty-title{font-size:16px;font-weight:700;margin-bottom:8px;color:var(--text)}
 .empty-text{font-size:13px}
+.item-carrinho{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;display:flex;gap:12px;margin-bottom:10px}
+.item-carrinho-img{width:60px;height:60px;background:var(--input);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:28px}
+.item-carrinho-img img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+.item-carrinho-info{flex:1}
+.item-carrinho-nome{font-size:13px;font-weight:700;margin-bottom:4px}
+.item-carrinho-preco{font-size:14px;font-weight:700;color:var(--purple)}
+.item-carrinho-qtd{display:flex;align-items:center;gap:8px}
+.btn-qtd{width:32px;height:32px;background:var(--input);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:18px;cursor:pointer}
+.sucesso-icon{width:72px;height:72px;background:var(--purple);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.sucesso-icon svg{width:36px;height:36px;stroke:#fff;stroke-width:3}
+.status-pendente{color:var(--yellow);font-weight:700}
+.status-aprovado{color:var(--green);font-weight:700}
 </style>
 </head>
 <body>
@@ -88,7 +102,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
       </div>
       <div class="header-icons">
         <div class="icon-btn" onclick="abrirCarrinho()">
-          <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0.955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0.75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0.75.75 0 0 1 1.5 0Z"/></svg>
+          <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/></svg>
           <div class="badge" id="badgeCarrinho" style="display:none">0</div>
         </div>
       </div>
@@ -97,19 +111,17 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
       <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg>
       <input type="text" placeholder="Buscar produtos..." id="buscaHome" oninput="buscarProdutos()">
       <button class="search-btn" onclick="buscarProdutos()">
-        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607Z"/></svg>
+        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg>
       </button>
     </div>
   </div>
-
-  <div class="secao" id="secaoCategorias">
+  <div class="secao" id="secaoCategorias" style="display:none">
     <div class="secao-header">
       <div class="secao-titulo">CATEGORIAS</div>
       <div class="secao-link" onclick="irPara('categorias')">Ver todas</div>
     </div>
     <div class="categorias-grid" id="gridCategorias"></div>
   </div>
-
   <div class="secao">
     <div class="secao-header">
       <div class="secao-titulo">PRODUTOS EM DESTAQUE</div>
@@ -128,15 +140,15 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
       </div>
       <div style="font-size:16px;font-weight:700">CATEGORIAS</div>
       <div class="icon-btn" onclick="abrirCarrinho()">
-        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0.955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0.75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0.75.75 0 0 1 1.5 0Z"/></svg>
+        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/></svg>
         <div class="badge" id="badgeCarrinho2" style="display:none">0</div>
       </div>
     </div>
     <div class="search-box">
-      <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg>
+      <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg>
       <input type="text" placeholder="Buscar categorias..." id="buscaCats">
       <button class="search-btn">
-        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg>
+        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg>
       </button>
     </div>
   </div>
@@ -160,7 +172,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
       </div>
       <div style="font-size:16px;font-weight:700" id="tituloSubcats">SUBCATEGORIAS</div>
       <div class="icon-btn" onclick="abrirCarrinho()">
-        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0.955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0.75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0.75.75 0 0 1 1.5 0Z"/></svg>
+        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/></svg>
         <div class="badge" id="badgeCarrinho3" style="display:none">0</div>
       </div>
     </div>
@@ -179,7 +191,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
       </div>
       <div style="font-size:16px;font-weight:700" id="tituloProdutos">PRODUTOS</div>
       <div class="icon-btn" onclick="abrirCarrinho()">
-        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0.955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0.75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0.75.75 0 0 1 1.5 0Z"/></svg>
+        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/></svg>
         <div class="badge" id="badgeCarrinho4" style="display:none">0</div>
       </div>
     </div>
@@ -207,21 +219,180 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
         <div class="produto-detalhe-desc-titulo">DESCRIÇÃO</div>
         <div class="produto-detalhe-desc-texto" id="produtoDesc">Descrição do produto</div>
       </div>
-      <button class="btn-comprar" onclick="adicionarCarrinho()">
-        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0.955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0.75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0.75.75 0 0 1 1.5 0Z"/></svg>
+      <button class="btn" onclick="adicionarCarrinho()">
+        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/></svg>
         COMPRAR
       </button>
     </div>
   </div>
 </div>
 
+<!-- TELA CARRINHO -->
+<div id="tela-carrinho" class="tela">
+  <div class="header">
+    <div class="header-top">
+      <div class="btn-voltar" onclick="voltar()">
+        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6"/></svg>
+      </div>
+      <div style="font-size:16px;font-weight:700">CARRINHO</div>
+      <div class="icon-btn" onclick="limparCarrinho()">
+        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12.562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/></svg>
+      </div>
+    </div>
+  </div>
+  <div class="secao" id="listaCarrinho"></div>
+  <div class="secao">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px">
+      <div style="font-size:13px;font-weight:700;margin-bottom:10px">CUPOM DE DESCONTO</div>
+      <div style="display:flex;gap:8px">
+        <input type="text" id="cupomInput" placeholder="Digite o cupom" style="flex:1;background:var(--input);border:1px solid var(--border);border-radius:10px;padding:10px;color:var(--text);font-size:14px;outline:none">
+        <button onclick="aplicarCupom()" style="background:var(--purple);color:#fff;border:none;border-radius:10px;padding:0 16px;font-weight:700;font-size:13px;cursor:pointer">Aplicar</button>
+      </div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px">
+        <span style="color:var(--muted)">Subtotal</span>
+        <span id="subtotalCarrinho">R$ 0,00</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px" id="linhaDesconto" style="display:none">
+        <span style="color:var(--muted)">Desconto</span>
+        <span style="color:var(--green)" id="descontoCarrinho">- R$ 0,00</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:800;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">
+        <span>Total</span>
+        <span id="totalCarrinho">R$ 0,00</span>
+      </div>
+    </div>
+    <button class="btn" style="margin-top:16px" onclick="irPara('pagamento')">FINALIZAR PEDIDO</button>
+  </div>
+</div>
+
+<!-- TELA PAGAMENTO -->
+<div id="tela-pagamento" class="tela">
+  <div class="header">
+    <div class="header-top">
+      <div class="btn-voltar" onclick="voltar()">
+        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6"/></svg>
+      </div>
+      <div style="font-size:16px;font-weight:700">PAGAMENTO</div>
+      <div style="width:40px"></div>
+    </div>
+  </div>
+  <div class="secao">
+    <div style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--muted)">MÉTODO DE PAGAMENTO</div>
+    <div style="background:var(--card);border:2px solid var(--purple);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <div style="width:44px;height:44px;background:rgba(139,92,246,.1);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px">💳</div>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:700">PIX</div>
+        <div style="font-size:12px;color:var(--muted)">Aprovação manual</div>
+      </div>
+      <div style="width:20px;height:20px;background:var(--purple);border-radius:50%;display:flex;align-items:center;justify-content:center">
+        <svg fill="none" viewBox="0 0 24 24" style="width:12px;height:12px;stroke:#fff;stroke-width:3"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 9-13.5"/></svg>
+      </div>
+    </div>
+    <div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--muted)">PAGAR COM PIX</div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center">
+      <div style="width:180px;height:180px;background:#fff;border-radius:12px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=98984853563" style="width:160px;height:160px">
+      </div>
+      <div style="background:var(--input);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px">
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Chave PIX Celular:</div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:4px">(98) 98485-3563</div>
+        <div style="font-size:11px;color:var(--muted)">Lorrane Vitória Alves Vaz</div>
+      </div>
+      <button onclick="copiarChave()" style="width:100%;background:var(--input);border:1px solid var(--border);color:var(--text);padding:12px;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer">COPIAR CHAVE</button>
+    </div>
+    <button class="btn" style="margin-top:16px" onclick="confirmarPagamento()">JÁ PAGUEI</button>
+  </div>
+</div>
+
+<!-- TELA COMPROVANTE -->
+<div id="tela-comprovante" class="tela">
+  <div class="header">
+    <div class="header-top">
+      <div style="width:40px"></div>
+      <div style="font-size:16px;font-weight:700">COMPROVANTE</div>
+      <div style="width:40px"></div>
+    </div>
+  </div>
+  <div class="secao">
+    <div style="text-align:center;margin-bottom:20px">
+      <div class="sucesso-icon">
+        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3.75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0.414.336.75.75.75h4.5a.75.75 0 0 0.75-.75 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0.621.504 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"/></svg>
+      </div>
+      <div style="font-size:20px;font-weight:800;margin-bottom:6px">Pedido realizado com sucesso!</div>
+      <div style="font-size:13px;color:var(--muted)">Aguardando confirmação do pagamento.</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px">
+        <span style="color:var(--muted)">NÚMERO DO PEDIDO</span>
+        <span style="font-weight:700" id="numeroPedido">#000000</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px">
+        <span style="color:var(--muted)">DATA</span>
+        <span id="dataPedido">00/00/0000 - 00:00</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:13px">
+        <span style="color:var(--muted)">PAGAMENTO</span>
+        <span>PIX</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:13px">
+        <span style="color:var(--muted)">STATUS</span>
+        <span class="status-pendente">● Pendente</span>
+      </div>
+    </div>
+    <div style="font-size:13px;font-weight:700;margin-bottom:10px;color:var(--muted)">ITENS DO PEDIDO</div>
+    <div id="itensPedido" style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px"></div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:800">
+        <span>Total</span>
+        <span id="totalPedido">R$ 0,00</span>
+      </div>
+    </div>
+    <button class="btn" onclick="irPara('home')">VOLTAR PARA HOME</button>
+  </div>
+</div>
+
+<!-- TELA PEDIDOS -->
+<div id="tela-pedidos" class="tela">
+  <div class="header">
+    <div class="header-top">
+      <div style="font-size:16px;font-weight:700">MEUS PEDIDOS</div>
+      <div class="icon-btn" onclick="abrirCarrinho()">
+        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0.955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0.75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0.75.75 0 0 1 1.5 0Z"/></svg>
+        <div class="badge" id="badgeCarrinho5" style="display:none">0</div>
+      </div>
+    </div>
+  <div class="secao" id="listaPedidos"></div>
+</div>
+
+<!-- TELA PERFIL -->
+<div id="tela-perfil" class="tela">
+  <div class="header">
+    <div class="header-top">
+      <div style="font-size:16px;font-weight:700">PERFIL</div>
+      <div class="icon-btn" onclick="sair()">
+        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"/></svg>
+      </div>
+    </div>
+  </div>
+  <div class="secao">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;margin-bottom:16px">
+      <div style="width:80px;height:80px;background:rgba(139,92,246,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:36px">👤</div>
+      <div style="font-size:18px;font-weight:800;margin-bottom:4px" id="perfilNome">Usuário</div>
+      <div style="font-size:13px;color:var(--muted)" id="perfilEmail">email@email.com</div>
+    </div>
+    <button class="btn-outline" onclick="sair()">SAIR DA CONTA</button>
+  </div>
+</div>
+
 <div class="nav-bottom">
   <div class="nav-item active" onclick="irPara('home')">
-    <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0.621.504 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
+    <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0.621.504 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
     <div class="nav-item-texto">Home</div>
   </div>
   <div class="nav-item" onclick="irPara('categorias')">
-    <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/></svg>
+    <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 0 0 1 2.25-2.25H18A2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 0 0 1 18 20.25h-2.25A2.25 0 0 1 13.5 18v-2.25Z"/></svg>
     <div class="nav-item-texto">Categorias</div>
   </div>
   <div class="nav-item" onclick="abrirCarrinho()">
@@ -229,11 +400,11 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
     <div class="nav-item-texto">Carrinho</div>
   </div>
   <div class="nav-item" onclick="irPara('pedidos')">
-    <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3.75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0.414.336.75.75.75h4.5a.75.75 0 0 0.75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0.621.504 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"/></svg>
+    <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3.75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0.414.336.75.75.75h4.5a.75.75 0 0 0.75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0.621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"/></svg>
     <div class="nav-item-texto">Pedidos</div>
   </div>
   <div class="nav-item" onclick="irPara('perfil')">
-    <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/></svg>
+    <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/></svg>
     <div class="nav-item-texto">Perfil</div>
   </div>
 </div>
@@ -264,19 +435,23 @@ let produtoAtual=null;
 let categoriaAtual=null;
 let subcategoriaAtual=null;
 let telaAnterior='home';
+let descontoAplicado=0;
+let cupomUsado='';
 
 auth.onAuthStateChanged(user=>{
   if(!user){window.location.href='index.html';return}
   usuario=user;
+  document.getElementById('perfilNome').textContent=user.displayName||'Usuário';
+  document.getElementById('perfilEmail').textContent=user.email;
   carregarCategorias();
   carregarProdutos();
   carregarCarrinho();
+  carregarPedidos();
 });
 
 function irPara(tela){
   document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-
   if(tela==='home'){
     document.getElementById('tela-home').classList.add('ativa');
     document.querySelectorAll('.nav-item')[0].classList.add('active');
@@ -292,6 +467,19 @@ function irPara(tela){
     renderizarProdutos();
   }else if(tela==='produto'){
     document.getElementById('tela-produto').classList.add('ativa');
+  }else if(tela==='carrinho'){
+    document.getElementById('tela-carrinho').classList.add('ativa');
+  }else if(tela==='pagamento'){
+    if(carrinho.length===0){alert('Carrinho vazio');return}
+    document.getElementById('tela-pagamento').classList.add('ativa');
+  }else if(tela==='comprovante'){
+    document.getElementById('tela-comprovante').classList.add('ativa');
+  }else if(tela==='pedidos'){
+    document.getElementById('tela-pedidos').classList.add('ativa');
+    document.querySelectorAll('.nav-item')[3].classList.add('active');
+  }else if(tela==='perfil'){
+    document.getElementById('tela-perfil').classList.add('ativa');
+    document.querySelectorAll('.nav-item')[4].classList.add('active');
   }
   window.scrollTo(0,0);
 }
@@ -303,9 +491,7 @@ function voltar(){
 function carregarCategorias(){
   db.ref('categorias').on('value',snap=>{
     todasCategorias=[];
-    snap.forEach(c=>{
-      todasCategorias.push({key:c.key,...c.val()});
-    });
+    snap.forEach(c=>{todasCategorias.push({key:c.key,...c.val()})});
     renderizarCategoriasHome();
   });
 }
@@ -313,9 +499,7 @@ function carregarCategorias(){
 function carregarProdutos(){
   db.ref('produtos').on('value',snap=>{
     todosProdutos=[];
-    snap.forEach(p=>{
-      todosProdutos.push({key:p.key,...p.val()});
-    });
+    snap.forEach(p=>{todosProdutos.push({key:p.key,...p.val()})});
     renderizarDestaques();
   });
 }
@@ -323,7 +507,10 @@ function carregarProdutos(){
 function renderizarCategoriasHome(){
   const grid=document.getElementById('gridCategorias');
   if(todasCategorias.length===0){
-    .getElementById('secaoCategorias').style.display='block';
+    document.getElementById('secaoCategorias').style.display='none';
+    return;
+  }
+  document.getElementById('secaoCategorias').style.display='block';
   grid.innerHTML=todasCategorias.slice(0,6).map(c=>`
     <div class="cat-card" onclick="abrirCategoria('${c.key}')">
       <div class="cat-icon">${c.icone||'📦'}</div>
@@ -335,12 +522,10 @@ function renderizarCategoriasHome(){
 function renderizarDestaques(){
   const grid=document.getElementById('gridDestaques');
   const destaques=todosProdutos.filter(p=>p.destaque).slice(0,6);
-
   if(destaques.length===0){
     grid.innerHTML='<div class="empty"><div class="empty-text">Nenhum produto em destaque</div></div>';
     return;
   }
-
   grid.innerHTML=destaques.map(p=>`
     <div class="produto-card" onclick="verProduto('${p.key}')">
       <div class="produto-img">${p.imagem?`<img src="${p.imagem}">`:'🎁'}</div>
@@ -356,7 +541,6 @@ function renderizarCategorias(){
     lista.innerHTML='<div class="empty"><div class="empty-title">Nenhuma categoria</div><div class="empty-text">O admin ainda não adicionou categorias</div></div>';
     return;
   }
-
   lista.innerHTML=todasCategorias.map(c=>`
     <div class="cat-item" onclick="abrirCategoria('${c.key}')">
       <div class="cat-item-icon">${c.icone||'📦'}</div>
@@ -369,7 +553,6 @@ function renderizarCategorias(){
       </div>
     </div>
   `).join('');
-
   renderizarSubcatsDestaque();
 }
 
@@ -383,12 +566,10 @@ function renderizarSubcatsDestaque(){
       });
     }
   });
-
   if(subcats.length===0){
     grid.innerHTML='<div class="empty"><div class="empty-text">Nenhuma subcategoria</div></div>';
     return;
   }
-
   grid.innerHTML=subcats.slice(0,4).map(s=>`
     <div class="subcat-card" onclick="abrirSubcategoria('${s.catKey}','${s.key}')">
       <div class="subcat-img">${s.imagem?`<img src="${s.imagem}">`:'🎮'}</div>
@@ -410,7 +591,6 @@ function renderizarSubcategorias(){
     grid.innerHTML='<div class="empty"><div class="empty-title">Nenhuma subcategoria</div><div class="empty-text">Esta categoria não tem subcategorias</div></div>';
     return;
   }
-
   const subcats=Object.keys(categoriaAtual.subcategorias).map(k=>({...categoriaAtual.subcategorias[k],key:k}));
   grid.innerHTML=subcats.map(s=>`
     <div class="subcat-card" onclick="abrirSubcategoria('${categoriaAtual.key}','${s.key}')">
@@ -431,12 +611,10 @@ function abrirSubcategoria(catKey,subKey){
 function renderizarProdutos(){
   const grid=document.getElementById('gridProdutos');
   const produtos=todosProdutos.filter(p=>p.categoria===categoriaAtual.key&&p.subcategoria===subcategoriaAtual.key);
-
   if(produtos.length===0){
     grid.innerHTML='<div class="empty"><div class="empty-title">Nenhum produto</div><div class="empty-text">Esta subcategoria não tem produtos</div></div>';
     return;
   }
-
   grid.innerHTML=produtos.map(p=>`
     <div class="produto-card" onclick="verProduto('${p.key}')">
       <div class="produto-img">${p.imagem?`<img src="${p.imagem}">`:'🎁'}</div>
@@ -476,15 +654,12 @@ function verTodosProdutos(){
 function buscarProdutos(){
   const termo=document.getElementById('buscaHome').value.toLowerCase();
   if(!termo){renderizarDestaques();return}
-
   const filtrados=todosProdutos.filter(p=>p.nome.toLowerCase().includes(termo));
   const grid=document.getElementById('gridDestaques');
-
   if(filtrados.length===0){
     grid.innerHTML='<div class="empty"><div class="empty-text">Nenhum produto encontrado</div></div>';
     return;
   }
-
   grid.innerHTML=filtrados.map(p=>`
     <div class="produto-card" onclick="verProduto('${p.key}')">
       <div class="produto-img">${p.imagem?`<img src="${p.imagem}">`:'🎁'}</div>
@@ -514,32 +689,171 @@ function atualizarBadge(){
 }
 
 function adicionarCarrinho(){
-  if(!produtoAtual||produtoAtual.estoque===0)return;
-
+  if(!produtoAtual||produtoAtual.estoque===0){alert('Produto indisponível');return}
   const idx=carrinho.findIndex(i=>i.id===produtoAtual.key);
   if(idx>-1){
     carrinho[idx].qtd++;
   }else{
-    carrinho.push({
-      id:produtoAtual.key,
-      nome:produtoAtual.nome,
-      preco:produtoAtual.preco,
-      imagem:produtoAtual.imagem,
-      qtd:1
-    });
+    carrinho.push({id:produtoAtual.key,nome:produtoAtual.nome,preco:produtoAtual.preco,imagem:produtoAtual.imagem,qtd:1});
   }
   salvarCarrinho();
   alert('Produto adicionado ao carrinho!');
 }
 
 function abrirCarrinho(){
-  alert('Tela do carrinho ainda não implementada. Próximo passo.');
+  telaAnterior='home';
+  renderizarCarrinho();
+  irPara('carrinho');
 }
 
-// Placeholder para outras telas
-function irPara(t){
-  if(t==='pedidos')alert('Tela de pedidos em construção');
-  if(t==='perfil')alert('Tela de perfil em construção');
+function renderizarCarrinho(){
+  const lista=document.getElementById('listaCarrinho');
+  if(carrinho.length===0){
+    lista.innerHTML='<div class="empty"><div class="empty-title">Carrinho vazio</div><div class="empty-text">Adicione produtos para continuar</div></div>';
+    document.getElementById('subtotalCarrinho').textContent='R$ 0,00';
+    document.getElementById('totalCarrinho').textContent='R$ 0,00';
+    return;
+  }
+  lista.innerHTML=carrinho.map((item,i)=>`
+    <div class="item-carrinho">
+      <div class="item-carrinho-img">${item.imagem?`<img src="${item.imagem}">`:'🎁'}</div>
+      <div class="item-carrinho-info">
+        <div class="item-carrinho-nome">${item.nome}</div>
+        <div class="item-carrinho-preco">R$ ${parseFloat(item.preco).toFixed(2).replace('.',',')}</div>
+      </div>
+      <div class="item-carrinho-qtd">
+        <button class="btn-qtd" onclick="alterarQtd(${i},-1)">-</button>
+        <span style="min-width:24px;text-align:center;font-weight:700">${item.qtd}</span>
+        <button class="btn-qtd" onclick="alterarQtd(${i},1)">+</button>
+      </div>
+    </div>
+  `).join('');
+  calcularTotal();
+}
+
+function alterarQtd(idx,delta){
+  carrinho[idx].qtd+=delta;
+  if(carrinho[idx].qtd<=0){carrinho.splice(idx,1)}
+  salvarCarrinho();
+  renderizarCarrinho();
+}
+
+function limparCarrinho(){
+  if(confirm('Limpar carrinho?')){
+    carrinho=[];
+    salvarCarrinho();
+    renderizarCarrinho();
+  }
+}
+
+function calcularTotal(){
+  const subtotal=carrinho.reduce((s,i)=>s+(i.preco*i.qtd),0);
+  const total=subtotal-descontoAplicado;
+  document.getElementById('subtotalCarrinho').textContent='R$ '+subtotal.toFixed(2).replace('.',',');
+  document.getElementById('totalCarrinho').textContent='R$ '+total.toFixed(2).replace('.',',');
+  if(descontoAplicado>0){
+    document.getElementById('linhaDesconto').style.display='flex';
+    document.getElementById('descontoCarrinho').textContent='- R$ '+descontoAplicado.toFixed(2).replace('.',',');
+  }else{
+    document.getElementById('linhaDesconto').style.display='none';
+  }
+}
+
+function aplicarCupom(){
+  const cupom=document.getElementById('cupomInput').value.trim().toUpperCase();
+  if(cupom==='DESCONTO10'){
+    const subtotal=carrinho.reduce((s,i)=>s+(i.preco*i.qtd),0);
+    descontoAplicado=subtotal*0.1;
+    cupomUsado=cupom;
+    calcularTotal();
+    alert('Cupom aplicado: 10% de desconto!');
+  }else if(cupom){
+    alert('Cupom inválido');
+  }
+}
+
+function copiarChave(){
+  navigator.clipboard.writeText('(98) 98485-3563');
+  alert('Chave PIX copiada!');
+}
+
+function confirmarPagamento(){
+  const pedido={
+    id:Date.now(),
+    numero:'#'+Math.floor(100000+Math.random()*900000),
+    data:new Date().toLocaleString('pt-BR'),
+    itens:[...carrinho],
+    subtotal:carrinho.reduce((s,i)=>s+(i.preco*i.qtd),0),
+    desconto:descontoAplicado,
+    total:carrinho.reduce((s,i)=>s+(i.preco*i.qtd),0)-descontoAplicado,
+    cupom:cupomUsado,
+    status:'Pendente',
+    usuario:usuario.email,
+    nomeUsuario:usuario.displayName||'Cliente'
+  };
+  db.ref('pedidos/'+pedido.id).set(pedido);
+
+  let msg=`Olá! Acabei de fazer o pagamento via PIX%0A%0A`;
+  msg+=`*PEDIDO ${pedido.numero}*%0A`;
+  msg+=`Data: ${pedido.data}%0A%0A`;
+  msg+=`*ITENS:*%0A`;
+  pedido.itens.forEach(i=>{
+    msg+=`${i.nome} - R$ ${parseFloat(i.preco).toFixed(2).replace('.',',')} x${i.qtd}%0A`;
+  });
+  msg+=`%0A*Total: R$ ${pedido.total.toFixed(2).replace('.',',')}*%0A%0A`;
+  msg+=`Segue foto do comprovante:`;
+
+  window.open(`https://wa.me/5598984853563?text=${msg}`,'_blank');
+
+  carrinho=[];
+  descontoAplicado=0;
+  cupomUsado='';
+  salvarCarrinho();
+
+  document.getElementById('numeroPedido').textContent=pedido.numero;
+  document.getElementById('dataPedido').textContent=pedido.data;
+  document.getElementById('totalPedido').textContent='R$ '+pedido.total.toFixed(2).replace('.',',');
+  document.getElementById('itensPedido').innerHTML=pedido.itens.map(i=>`
+    <div style="display:flex;gap:12px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)">
+      <div style="width:50px;height:50px;background:var(--input);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:24px">${i.imagem?`<img src="${i.imagem}" style="width:100%;height:100%;object-fit:cover;border-radius:8px">`:'🎁'}</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:700">${i.nome}</div>
+        <div style="font-size:12px;color:var(--muted)">R$ ${parseFloat(i.preco).toFixed(2).replace('.',',')} x${i.qtd}</div>
+      </div>
+    </div>
+  `).join('');
+
+  telaAnterior='home';
+  irPara('comprovante');
+}
+
+function carregarPedidos(){
+  db.ref('pedidos').orderByChild('usuario').equalTo(usuario.email).on('value',snap=>{
+    const lista=document.getElementById('listaPedidos');
+    if(!snap.exists()){
+      lista.innerHTML='<div class="empty"><div class="empty-title">Nenhum pedido</div><div class="empty-text">Você ainda não fez pedidos</div></div>';
+      return;
+    }
+    let pedidos=[];
+    snap.forEach(p=>{pedidos.push({key:p.key,...p.val()})});
+    pedidos.reverse();
+    lista.innerHTML=pedidos.map(p=>`
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+          <span style="font-weight:700">${p.numero}</span>
+          <span class="${p.status==='Pendente'?'status-pendente':'status-aprovado'}">● ${p.status}</span>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:8px">${p.data}</div>
+        <div style="font-size:14px;font-weight:700">R$ ${p.total.toFixed(2).replace('.',',')}</div>
+      </div>
+    `).join('');
+  });
+}
+
+function sair(){
+  if(confirm('Deseja sair da conta?')){
+    auth.signOut();
+  }
 }
 </script>
 </body>
