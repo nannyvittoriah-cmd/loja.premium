@@ -1,378 +1,275 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Prime Store VZ - Login</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prime Store VC</title>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0a0a0a;--card:#141414;--input:#1e1e1e;--text:#fff;--muted:#888;--purple:#8b5cf6;--purple2:#7c3aed;--border:#2a2a2a;--green:#4ade80;--red:#f87171}
-body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:20px}
-.logo-top{width:100%;max-width:400px;margin:40px 0 24px;text-align:center}
-.logo-top img{width:100px;height:auto;filter:drop-shadow(0 0 20px rgba(139,92,246,.5))}
-.logo-texto{font-size:26px;font-weight:800;margin-top:8px}
-.logo-texto span{color:var(--purple);font-weight:600}
-.logo-sub{font-size:13px;color:var(--muted);margin-top:4px}
-.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:400px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:6px;margin-bottom:16px}
-.tab{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border-radius:10px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;transition:.2s}
-.tab.active{background:var(--purple);color:#fff}
-.tab svg{width:16px;height:16px;stroke:currentColor;stroke-width:2}
-.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;width:100%;max-width:400px}
-.tela{display:none}
-.tela.ativa{display:block}
-.card-titulo{font-size:20px;font-weight:700;text-align:center;margin-bottom:6px}
-.card-desc{font-size:13px;color:var(--muted);text-align:center;margin-bottom:24px}
-.input-group{margin-bottom:16px}
-.input-label{font-size:13px;font-weight:600;margin-bottom:8px;display:block}
-.input-box{position:relative}
-.input-box svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;stroke:var(--muted);stroke-width:2}
-.input-box input{width:100%;background:var(--input);border:1px solid var(--border);border-radius:12px;padding:14px 14px 14px 44px;color:var(--text);font-size:15px;outline:none}
-.input-box input:focus{border-color:var(--purple)}
-.input-box input::placeholder{color:var(--muted)}
-.olho{position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer}
-.olho svg{width:18px;height:18px;stroke:var(--muted);stroke-width:2}
-.linha-check{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-.checkbox{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer}
-.checkbox input{width:18px;height:18px;cursor:pointer}
-.link{color:var(--purple);text-decoration:none;font-weight:600;font-size:13px;cursor:pointer}
-.btn{width:100%;background:linear-gradient(135deg,var(--purple),var(--purple2));color:#fff;border:none;padding:16px;border-radius:14px;font-weight:700;cursor:pointer;font-size:16px}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-.checks{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:16px}
-.check-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-bottom:6px}
-.check-item:last-child{margin-bottom:0}
-.check-item svg{width:16px;height:16px;stroke:var(--green);stroke-width:2.5;opacity:0}
-.check-item.ok{color:var(--green)}
-.check-item.ok svg{opacity:1}
-.termos{display:flex;align-items:flex-start;gap:10px;margin-bottom:20px;font-size:13px;color:var(--muted)}
-.termos input{margin-top:2px;cursor:pointer;width:18px;height:18px}
-.termos a{color:var(--purple);text-decoration:none}
-.erro{background:rgba(248,113,113,.1);border:1px solid var(--red);color:var(--red);padding:12px;border-radius:10px;font-size:13px;margin-bottom:16px;display:none}
-.erro.show{display:block}
-.features{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:400px;margin-top:24px}
-.feature{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center}
-.feature svg{width:24px;height:24px;stroke:var(--purple);stroke-width:2;margin:0 auto 8px}
-.feature-titulo{font-size:12px;font-weight:600;margin-bottom:2px}
-.feature-texto{font-size:11px;color:var(--muted);line-height:1.4}
-.footer{font-size:11px;color:var(--muted);text-align:center;margin-top:24px}
-.sucesso-icon{width:72px;height:72px;background:var(--purple);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
-.sucesso-icon svg{width:36px;height:36px;stroke:#fff;stroke-width:3}
-.sucesso-titulo{font-size:22px;font-weight:800;text-align:center;margin-bottom:8px}
-.sucesso-texto{font-size:14px;color:var(--muted);text-align:center;margin-bottom:24px;line-height:1.6}
-.sucesso-texto strong{color:var(--purple)}
-.info-item{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:10px}
-.info-item svg{width:20px;height:20px;stroke:var(--purple);stroke-width:2;flex-shrink:0}
-.info-texto{flex:1;font-size:13px;color:var(--muted)}
-.info-texto strong{color:var(--text)}
-.btn-outline{width:100%;background:transparent;color:var(--purple);border:2px solid var(--purple);padding:14px;border-radius:14px;font-weight:700;cursor:pointer;font-size:15px;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-outline svg{width:18px;height:18px;stroke:var(--purple);stroke-width:2}
+body{
+margin:0;
+font-family:Arial;
+background:#000;
+color:#fff;
+font-size:13px;
+}
+
+/* HEADER */
+header{
+text-align:center;
+padding:12px;
+border-bottom:1px solid #3b1b5c;
+}
+
+header h1{
+margin:0;
+font-size:18px;
+color:#b18cff;
+}
+
+header img{
+width:70px;
+margin-top:8px;
+border-radius:10px;
+border:1px solid #3b1b5c;
+}
+
+/* LOGIN */
+#login{
+display:flex;
+flex-direction:column;
+padding:20px;
+gap:8px;
+}
+
+input, select{
+padding:10px;
+background:#111;
+border:1px solid #3b1b5c;
+color:#fff;
+border-radius:8px;
+font-size:12px;
+}
+
+button{
+padding:10px;
+background:#b18cff;
+border:none;
+color:#000;
+font-weight:bold;
+border-radius:8px;
+font-size:12px;
+}
+
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+padding:10px;
+}
+
+/* CARD */
+.card{
+background:#111;
+border:1px solid #3b1b5c;
+border-radius:10px;
+overflow:hidden;
+}
+
+.card img{
+width:100%;
+height:90px;
+object-fit:cover;
+}
+
+.card .content{
+padding:8px;
+}
+
+.small{
+font-size:11px;
+opacity:0.8;
+}
+
+.price{
+font-weight:bold;
+color:#b18cff;
+margin-top:5px;
+}
+
+/* ADMIN */
+#admin{
+display:none;
+padding:10px;
+border-top:1px solid #3b1b5c;
+}
 </style>
 </head>
+
 <body>
-<div class="logo-top">
-  <img src="https://i.postimg.cc/PJ2Vcty8/e1befe8d-0630-444f-aea5-9b0a96d5f84b.jpg" alt="Prime Store VZ">
-  <div class="logo-texto">Prime <span>store Vz</span></div>
-  <div class="logo-sub">Sua loja, sua experiência.</div>
+
+<header>
+<h1>Prime Store VC</h1>
+<img src="https://i.postimg.cc/PJ2Vcty8/e1befe8d-0630-444f-aea5-9b0a96d5f84b.jpg">
+</header>
+
+<!-- LOGIN -->
+<div id="login">
+<input id="email" placeholder="E-mail">
+<input id="senha" placeholder="Senha" type="password">
+<button onclick="entrar()">Entrar</button>
 </div>
 
-<div class="tabs">
-  <div class="tab active" onclick="trocarAba('login')">
-    <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"/></svg>
-    Login
-  </div>
-  <div class="tab" onclick="trocarAba('cadastro')">
-    <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 0 0 1 12.75 0v.11A6.375 6.375 0 0 1 3 19.235Z"/></svg>
-    Cadastrar
-  </div>
-  <div class="tab" onclick="trocarAba('esqueceu')">
-    <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25H6.75a2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
-    Esqueceu senha
-  </div>
+<!-- LOJA -->
+<div id="loja" style="display:none">
+
+<select id="cat" onchange="loadSub()"></select>
+<select id="sub" onchange="render()"></select>
+
+<div class="grid" id="grid"></div>
+
 </div>
 
-<div class="card">
-  <!-- TELA LOGIN -->
-  <div id="tela-login" class="tela ativa">
-    <div class="card-titulo">Bem-vindo de volta!</div>
-    <div class="card-desc">Faça login para continuar</div>
-    <div class="erro" id="erroLogin"></div>
-    <div class="input-group">
-      <label class="input-label">E-mail</label>
-      <div class="input-box">
-        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
-        <input type="email" id="emailLogin" placeholder="seuemail@email.com">
-      </div>
-    </div>
-    <div class="input-group">
-      <label class="input-label">Senha</label>
-      <div class="input-box">
-        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
-        <input type="password" id="senhaLogin" placeholder="Sua senha">
-        <div class="olho" onclick="toggleSenha('senhaLogin')">
-          <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
-        </div>
-      </div>
-    </div>
-    <div class="linha-check">
-      <label class="checkbox">
-        <input type="checkbox" id="lembrar">
-        Lembrar de mim
-      </label>
-      <a class="link" onclick="trocarAba('esqueceu')">Esqueceu sua senha?</a>
-    </div>
-    <button class="btn" onclick="fazerLogin()">Entrar</button>
-  </div>
+<!-- ADMIN -->
+<div id="admin">
 
-  <!-- TELA CADASTRO -->
-  <div id="tela-cadastro" class="tela">
-    <div class="card-titulo">Crie sua conta</div>
-    <div class="card-desc">Preencha os dados para começar</div>
-    <div class="erro" id="erroCadastro"></div>
-    <div class="input-group">
-      <label class="input-label">Nome completo</label>
-      <div class="input-box">
-        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 0 0 1 14.998 0A17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/></svg>
-        <input type="text" id="nomeCadastro" placeholder="Seu nome completo">
-      </div>
-    </div>
-    <div class="input-group">
-      <label class="input-label">E-mail</label>
-      <div class="input-box">
-        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
-        <input type="email" id="emailCadastro" placeholder="seuemail@email.com">
-      </div>
-    </div>
-    <div class="input-group">
-      <label class="input-label">Senha</label>
-      <div class="input-box">
-        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
-        <input type="password" id="senhaCadastro" placeholder="Mínimo 8 caracteres" oninput="validarSenha()">
-        <div class="olho" onclick="toggleSenha('senhaCadastro')">
-          <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
-        </div>
-      </div>
-    </div>
-    <div class="input-group">
-      <label class="input-label">Confirmar senha</label>
-      <div class="input-box">
-        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
-        <input type="password" id="confirmarSenha" placeholder="Digite a senha novamente">
-        <div class="olho" onclick="toggleSenha('confirmarSenha')">
-          <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
-        </div>
-      </div>
-    </div>
-    <div class="checks">
-      <div class="check-item" id="check1">
-        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
-        Mínimo de 8 caracteres
-      </div>
-      <div class="check-item" id="check2">
-        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
-        Uma letra maiúscula
-      </div>
-      <div class="check-item" id="check3">
-        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
-        Um número
-      </div>
-      <div class="check-item" id="check4">
-        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
-        Um caractere especial
-      </div>
-    </div>
-    <div class="termos">
-      <input type="checkbox" id="termos">
-      <label for="termos">Li e aceito os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a></label>
-    </div>
-    <button class="btn" onclick="fazerCadastro()">Criar conta</button>
-  </div>
+<h3 style="color:#b18cff">Painel Admin</h3>
 
-  <!-- TELA ESQUECEU SENHA -->
-  <div id="tela-esqueceu" class="tela">
-    <div class="card-titulo">Esqueceu sua senha?</div>
-    <div class="card-desc">Informe o e-mail da sua conta que enviaremos um link para redefinir sua senha.</div>
-    <div class="erro" id="erroEsqueceu"></div>
-    <div class="input-group">
-      <label class="input-label">E-mail</label>
-      <div class="input-box">
-        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
-        <input type="email" id="emailEsqueceu" placeholder="seuemail@email.com">
-      </div>
-    </div>
-    <button class="btn" onclick="enviarRedefinicao()">Enviar link de redefinição</button>
-  </div>
+<input id="catName" placeholder="Nova Categoria">
+<button onclick="addCat()">Adicionar Categoria</button>
 
-  <!-- TELA E-MAIL ENVIADO -->
-  <div id="tela-enviado" class="tela">
-    <div class="sucesso-icon">
-      <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
-    </div>
-    <div class="sucesso-titulo">E-mail enviado!</div>
-    <div class="sucesso-texto">Enviamos um link de redefinição para<br><strong id="emailEnviado">seuemail@email.com</strong></div>
-    <div class="info-item">
-      <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
-      <div class="info-texto"><strong>Verifique sua caixa de entrada</strong><br>(e o spam/lixo eletrônico).</div>
-    </div>
-    <div class="info-item">
-      <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
-      <div class="info-texto">O link expira em <strong>15 minutos</strong>.</div>
-    </div>
-    <button class="btn-outline" onclick="trocarAba('login')">Voltar para o login</button>
-  </div>
+<input id="subName" placeholder="Nova Subcategoria">
+<button onclick="addSub()">Adicionar Subcategoria</button>
+
+<hr>
+
+<input id="pname" placeholder="Nome produto">
+<input id="pdesc" placeholder="Descrição">
+<input id="pprice" placeholder="Preço">
+<input id="pstock" placeholder="Estoque">
+<input type="file" id="pimg">
+
+<button onclick="addProduct()">Adicionar Produto</button>
+
 </div>
 
-<div class="features">
-  <div class="feature">
-    <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"/></svg>
-    <div class="feature-titulo">Compra segura</div>
-    <div class="feature-texto">Seus dados protegidos</div>
-  </div>
-  <div class="feature">
-    <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"/></svg>
-    <div class="feature-titulo">Suporte dedicado</div>
-    <div class="feature-texto">Estamos aqui para ajudar</div>
-  </div>
-  <div class="feature">
-    <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1 3 0m-3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>
-    <div class="feature-titulo">Entrega rápida</div>
-    <div class="feature-texto">Produtos digitais na hora</div>
-  </div>
-</div>
-
-<div class="footer">© 2024 Prime store Vz. Todos os direitos reservados.</div>
-
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
-  authDomain: "premium-store-aa58b.firebaseapp.com",
-  databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
-  projectId: "premium-store-aa58b",
-  storageBucket: "premium-store-aa58b.firebasestorage.app",
-  messagingSenderId: "462239500057",
-  appId: "1:462239500057:web:f1b7cea162ed308a866788",
-    measurementId: "G-CN88J28WRX"
+let db = JSON.parse(localStorage.getItem("prime_vc")) || {
+cats:{},
+products:[]
 };
 
-firebase.initializeApp(firebaseConfig);
-const auth=firebase.auth();
+/* LOGIN SIMPLES */
+function entrar(){
+let email = document.getElementById("email").value;
+let senha = document.getElementById("senha").value;
 
-auth.onAuthStateChanged(user=>{
-  if(user&&user.email==='vittoriahvahz@gmail.com'){
-    window.location.href='admin.html';
-  }else if(user){
-    window.location.href='loja.html';
-  }
+if(email === "nannyvittoriah@gmail.com" && senha === "Lorrannyh.101225"){
+document.getElementById("login").style.display="none";
+document.getElementById("loja").style.display="block";
+document.getElementById("admin").style.display="block";
+loadCats();
+}else{
+alert("Acesso negado");
+}
+}
+
+/* SALVAR */
+function save(){
+localStorage.setItem("prime_vc",JSON.stringify(db));
+}
+
+/* CATEGORIA */
+function addCat(){
+let c = catName.value;
+db.cats[c] = [];
+save();
+loadCats();
+}
+
+/* SUB */
+function addSub(){
+let c = cat.value;
+db.cats[c].push(subName.value);
+save();
+loadCats();
+}
+
+/* LOAD CATS */
+function loadCats(){
+cat.innerHTML = Object.keys(db.cats).map(c=>`<option>${c}</option>`).join("");
+loadSub();
+}
+
+/* LOAD SUB */
+function loadSub(){
+let c = cat.value;
+sub.innerHTML = (db.cats[c]||[]).map(s=>`<option>${s}</option>`).join("");
+render();
+}
+
+/* ADD PRODUTO */
+function addProduct(){
+let file = pimg.files[0];
+let reader = new FileReader();
+
+reader.onload = function(){
+db.products.push({
+id:Date.now(),
+cat:cat.value,
+sub:sub.value,
+name:pname.value,
+desc:pdesc.value,
+price:pprice.value,
+stock:pstock.value,
+img:reader.result
 });
 
-function trocarAba(aba){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
+save();
+render();
+};
 
-  if(aba==='login'){
-    document.querySelectorAll('.tab')[0].classList.add('active');
-    document.getElementById('tela-login').classList.add('ativa');
-  }else if(aba==='cadastro'){
-    document.querySelectorAll('.tab')[1].classList.add('active');
-    document.getElementById('tela-cadastro').classList.add('ativa');
-  }else if(aba==='esqueceu'){
-    document.querySelectorAll('.tab')[2].classList.add('active');
-    document.getElementById('tela-esqueceu').classList.add('ativa');
-  }
-
-  document.getElementById('erroLogin').classList.remove('show');
-  document.getElementById('erroCadastro').classList.remove('show');
-  document.getElementById('erroEsqueceu').classList.remove('show');
+reader.readAsDataURL(file);
 }
 
-function toggleSenha(id){
-  const input=document.getElementById(id);
-  input.type=input.type==='password'?'text':'password';
+/* RENDER */
+function render(){
+grid.innerHTML = "";
+
+db.products
+.filter(p=>p.cat===cat.value && p.sub===sub.value)
+.forEach(p=>{
+grid.innerHTML += `
+<div class="card">
+<img src="${p.img}">
+<div class="content">
+<b>${p.name}</b>
+<div class="small">${p.desc}</div>
+<div class="price">R$ ${p.price}</div>
+<div class="small">Estoque: ${p.stock}</div>
+<button onclick="info(${p.id})">Informações</button>
+</div>
+</div>
+`;
+});
 }
 
-function validarSenha(){
-  const s=document.getElementById('senhaCadastro').value;
-  document.getElementById('check1').classList.toggle('ok',s.length>=8);
-  document.getElementById('check2').classList.toggle('ok',/[A-Z]/.test(s));
-  document.getElementById('check3').classList.toggle('ok',/[0-9]/.test(s));
-  document.getElementById('check4').classList.toggle('ok',/[!@#$%^&*(),.?":{}|<>]/.test(s));
-}
+/* INFO PRODUTO */
+function info(id){
+let p = db.products.find(x=>x.id===id);
 
-function mostrarErro(id,msg){
-  const e=document.getElementById(id);
-  e.textContent=msg;
-  e.classList.add('show');
-  setTimeout(()=>e.classList.remove('show'),4000);
-}
+alert(`
+PRODUTO COMPLETO:
 
-function fazerLogin(){
-  const email=document.getElementById('emailLogin').value.trim();
-  const senha=document.getElementById('senhaLogin').value;
-
-  if(!email||!senha){
-    mostrarErro('erroLogin','Preencha todos os campos');
-    return;
-  }
-
-  auth.signInWithEmailAndPassword(email,senha).catch(err=>{
-    if(err.code==='auth/user-not-found')mostrarErro('erroLogin','Usuário não encontrado');
-    else if(err.code==='auth/wrong-password')mostrarErro('erroLogin','Senha incorreta');
-    else if(err.code==='auth/invalid-email')mostrarErro('erroLogin','E-mail inválido');
-    else mostrarErro('erroLogin','Erro ao fazer login');
-  });
-}
-
-function fazerCadastro(){
-  const nome=document.getElementById('nomeCadastro').value.trim();
-  const email=document.getElementById('emailCadastro').value.trim();
-  const senha=document.getElementById('senhaCadastro').value;
-  const confirmar=document.getElementById('confirmarSenha').value;
-  const termos=document.getElementById('termos').checked;
-
-  if(!nome||!email||!senha||!confirmar){
-    mostrarErro('erroCadastro','Preencha todos os campos');
-    return;
-  }
-  if(senha!==confirmar){
-    mostrarErro('erroCadastro','As senhas não coincidem');
-    return;
-  }
-  if(senha.length<8||!/[A-Z]/.test(senha)||!/[0-9]/.test(senha)||!/[!@#$%^&*(),.?":{}|<>]/.test(senha)){
-    mostrarErro('erroCadastro','A senha não atende aos requisitos');
-    return;
-  }
-  if(!termos){
-    mostrarErro('erroCadastro','Aceite os termos de uso');
-    return;
-  }
-
-  auth.createUserWithEmailAndPassword(email,senha).then(cred=>{
-    return cred.user.updateProfile({displayName:nome});
-  }).catch(err=>{
-    if(err.code==='auth/email-already-in-use')mostrarErro('erroCadastro','E-mail já cadastrado');
-    else if(err.code==='auth/invalid-email')mostrarErro('erroCadastro','E-mail inválido');
-    else mostrarErro('erroCadastro','Erro ao criar conta');
-  });
-}
-
-function enviarRedefinicao(){
-  const email=document.getElementById('emailEsqueceu').value.trim();
-
-  if(!email){
-    mostrarErro('erroEsqueceu','Digite seu e-mail');
-    return;
-  }
-
-  auth.sendPasswordResetEmail(email).then(()=>{
-    document.getElementById('emailEnviado').textContent=email;
-    document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
-    document.getElementById('tela-enviado').classList.add('ativa');
-  }).catch(err=>{
-    if(err.code==='auth/user-not-found')mostrarErro('erroEsqueceu','E-mail não encontrado');
-    else if(err.code==='auth/invalid-email')mostrarErro('erroEsqueceu','E-mail inválido');
-    else mostrarErro('erroEsqueceu','Erro ao enviar e-mail');
-  });
+Nome: ${p.name}
+Descrição: ${p.desc}
+Preço: R$ ${p.price}
+Estoque: ${p.stock}
+ID Compra: ${p.id}
+`);
 }
 </script>
+
 </body>
 </html>
