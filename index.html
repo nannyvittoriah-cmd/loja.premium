@@ -1,316 +1,765 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prime Store VC</title>
-
+<title>SMM PREMIUM STORE</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
+:root{
+  --bg:#0a0a0f;
+  --card:#1a1a22;
+  --pink:#ff1493;
+  --blue:#3b82f6;
+  --green:#22c55e;
+  --border:#333;
+  --text:#fff;
+  --muted:#888;
+}
+*{box-sizing:border-box;margin:0;padding:0}
 body{
-margin:0;
-font-family:Arial;
-background:#000;
-color:#fff;
-font-size:13px;
+  background:var(--bg);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+  color:var(--text);
+  padding:20px;
+  min-height:100vh;
 }
-
-/* HEADER */
-header{
-text-align:center;
-padding:12px;
-border-bottom:1px solid #3b1b5c;
+.container{max-width:420px;margin:0 auto;margin-top:80px}
+.top-bar{
+  position:absolute;top:15px;right:15px;
+  display:flex;gap:10px;align-items:center;
 }
-
-header h1{
-margin:0;
-font-size:18px;
-color:#b18cff;
+.user-info{
+  display:none;align-items:center;gap:10px;
+  background:rgba(255,20,147,0.1);
+  border:2px solid var(--pink);
+  padding:6px 12px;border-radius:20px;
 }
-
-header img{
-width:70px;
-margin-top:8px;
-border-radius:10px;
-border:1px solid #3b1b5c;
+.user-info img{width:32px;height:32px;border-radius:50%;border:2px solid var(--pink)}
+.btn-logout,.btn-adm{
+  background:transparent;padding:6px 12px;border-radius:20px;
+  cursor:pointer;font-weight:bold;font-size:12px;border:2px solid;
 }
-
-/* LOGIN */
-#login{
-display:flex;
-flex-direction:column;
-padding:20px;
-gap:8px;
+.btn-logout{color:#ff4444;border-color:#ff4444}
+.btn-adm{color:var(--blue);border-color:var(--blue);display:none}
+h1{
+  text-align:center;color:var(--pink);
+  margin-bottom:20px;text-shadow:0 0 15px rgba(255,20,147,0.8)
 }
-
-/* INPUTS */
-input, select{
-padding:10px;
-background:#111;
-border:1px solid #3b1b5c;
-color:#fff;
-border-radius:8px;
-font-size:12px;
-}
-
-button{
-padding:10px;
-background:#b18cff;
-border:none;
-color:#000;
-font-weight:bold;
-border-radius:8px;
-font-size:12px;
-}
-
-/* GRID */
-.grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:10px;
-padding:10px;
-}
-
-/* CARD */
 .card{
-background:#111;
-border:1px solid #3b1b5c;
-border-radius:10px;
-overflow:hidden;
+  background:var(--card);padding:20px;border-radius:16px;
+  margin-bottom:20px;border:1px solid var(--border)
 }
-
-.card img{
-width:100%;
-height:90px;
-object-fit:cover;
+.saldo-card{
+  background:linear-gradient(135deg,var(--pink),#a855f7);
+  padding:20px;border-radius:16px;text-align:center;margin-bottom:20px
 }
-
-.card .content{
-padding:8px;
+.saldo-card h2{font-size:32px;margin-bottom:5px}
+label{font-size:15px;margin-bottom:8px;display:block;color:#fff}
+input,select,button,textarea{
+  width:100%;padding:14px;margin-bottom:12px;border-radius:12px;
+  border:2px solid var(--border);background:var(--card);color:var(--text);font-size:15px
 }
-
-.small{
-font-size:11px;
-opacity:0.8;
+input:focus,select:focus,textarea:focus{
+  border-color:var(--pink);box-shadow:0 0 0 2px rgba(255,20,147,0.3);outline:none
 }
-
-.price{
-font-weight:bold;
-color:#b18cff;
-margin-top:5px;
+button{
+  background:var(--pink);border:none;font-weight:bold;cursor:pointer;
+  transition:0.3s
 }
-
-/* ADMIN */
-#admin{
-display:none;
-padding:10px;
-border-top:1px solid #3b1b5c;
+button:hover{background:#ff3ca8}
+.btn-green{background:var(--green)}
+.btn-green:hover{background:#16a34a}
+.btn-cancel{background:#333}
+.btn-cancel:hover{background:#444}
+.btn-group{display:flex;gap:10px}
+.menu{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px
 }
-
-/* MODAL */
-#modal{
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.8);
+.menu button{
+  background:var(--card);border:2px solid var(--border);
+  padding:15px 5px;font-size:12px;border-radius:12px
 }
-
-.modal-box{
-background:#111;
-margin:20% 10px;
-padding:15px;
-border-radius:10px;
-border:1px solid #b18cff;
+.modal{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);
+  justify-content:center;align-items:center;padding:20px;z-index:1000
+}
+.modal.active{display:flex}
+.modal-content{
+  background:var(--card);padding:25px;border-radius:16px;
+  border:2px solid var(--pink);width:100%;max-width:500px;
+  max-height:80vh;overflow-y:auto
+}
+.close{float:right;font-size:28px;cursor:pointer;color:var(--muted)}
+.chat-msg{
+  padding:10px 14px;margin-bottom:8px;border-radius:18px;max-width:85%
+}
+.chat-msg.me{background:var(--pink);margin-left:auto;text-align:right}
+.chat-msg.auto{background:#333;font-style:italic}
+.badge{
+  background:var(--pink);color:#fff;padding:2px 8px;border-radius:8px;font-size:11px
+}
+.transacao{
+  padding:10px;border-bottom:1px solid #333;display:flex;justify-content:space-between
+}
+.transacao.entrada{color:var(--green)}
+.transacao.saida{color:#ff4444}
+.comprovante-img{
+  width:100%;max-height:300px;object-fit:contain;border-radius:12px;margin:10px 0;border:2px solid var(--border)
+}
+.info-box{
+  background:var(--bg);padding:12px;border-radius:8px;margin:10px 0;border:1px solid var(--border)
 }
 </style>
 </head>
-
 <body>
 
-<header>
-<h1>Prime Store VC</h1>
-<img src="https://i.postimg.cc/PJ2Vcty8/e1befe8d-0630-444f-aea5-9b0a96d5f84b.jpg">
-</header>
+<div class="top-bar">
+  <div id="g_id_onload"
+       data-client_id="462239500057-uap87312j0f7qhaiocgaab47udtkjsfb.apps.googleusercontent.com"
+       data-callback="handleCredentialResponse"
+       data-auto_prompt="false">
+  </div>
+  <div class="g_id_signin" data-type="standard" data-size="large"></div>
 
-<!-- LOGIN -->
-<div id="login">
-<input id="email" placeholder="E-mail">
-<input id="senha" type="password" placeholder="Senha">
-<button onclick="entrar()">Entrar</button>
+  <div class="user-info" id="userInfo">
+    <img id="userPic" src="" alt="">
+    <span id="userName"></span>
+    <button class="btn-adm" id="btnAdm" onclick="abrir('admin')">ADM</button>
+    <button class="btn-logout" onclick="logout()">Sair</button>
+  </div>
 </div>
 
-<!-- LOJA -->
-<div id="loja" style="display:none">
+<div class="container">
+  <h1>SMM PREMIUM STORE</h1>
 
-<select id="cat" onchange="loadSub()"></select>
-<select id="sub" onchange="render()"></select>
+  <div id="loginRequired" class="card" style="text-align:center;border-color:var(--pink)">
+    <p style="color:var(--pink)">🔒 Faça login com Google para continuar</p>
+  </div>
 
-<div class="grid" id="grid"></div>
+  <div id="app" style="display:none">
 
+    <div class="saldo-card">
+      <p>Saldo disponível</p>
+      <h2 id="saldoValor">R$ 0,00</h2>
+      <button onclick="abrir('carteira')" style="margin-top:10px;background:rgba(255,255,255,0.2)">Adicionar Saldo</button>
+    </div>
+
+    <div class="menu">
+      <button onclick="abrir('conta')">⚙️ Conta</button>
+      <button onclick="abrir('chat')">💬 Chat</button>
+      <button onclick="abrir('compras')">📦 Compras</button>
+      <button onclick="abrir('status')">📊 Status</button>
+    </div>
+
+    <div class="card">
+      <label>👇 Escolha a categoria abaixo</label>
+      <select id="categoria" onchange="mudarCat()">
+        <option value="">Selecione</option>
+      </select>
+    </div>
+
+    <div class="card">
+      <label>👇 Escolha o serviço abaixo</label>
+      <select id="servico" onchange="mudarServ()">
+        <option value="">Selecione uma categoria</option>
+      </select>
+    </div>
+
+    <div class="card">
+      <label>🔗 Link</label>
+      <input type="url" id="link" placeholder="Cole o link do post/perfil">
+
+      <label>💰 Valor</label>
+      <input type="text" id="valor" readonly placeholder="R$ 0,00">
+
+      <button onclick="fazerPedido()">Enviar Pedido</button>
+    </div>
+
+    <div class="card">
+      <img src="https://i.postimg.cc/Lsyc5CBJ/IMG-4472.jpg" style="width:100%;border-radius:12px;margin-bottom:10px">
+      <button onclick="abrir('desc')">VER DESCRIÇÃO DO PRODUTO</button>
+    </div>
+  </div>
 </div>
 
-<!-- ADMIN -->
-<div id="admin">
-
-<h3 style="color:#b18cff">Painel Admin</h3>
-
-<input id="catName" placeholder="Nova Categoria">
-<button onclick="addCat()">Adicionar Categoria</button>
-
-<input id="subName" placeholder="Nova Subcategoria">
-<button onclick="addSub()">Adicionar Subcategoria</button>
-
-<hr>
-
-<input id="pname" placeholder="Nome produto">
-<input id="pdesc" placeholder="Descrição curta">
-<input id="pinfo" placeholder="Informações completas">
-<input id="pprice" placeholder="Preço">
-<input id="pstock" placeholder="Estoque">
-<input type="file" id="pimg">
-
-<button onclick="addProduct()">Adicionar Produto</button>
-
+<!-- MODAIS -->
+<div class="modal" id="modalCarteira">
+  <div class="modal-content">
+    <span class="close" onclick="fechar('carteira')">×</span>
+    <h3>💳 Carteira</h3>
+    <p style="color:var(--muted);margin-bottom:15px">Adicione saldo via PIX, Mercado Pago ou fale com o ADM</p>
+    <input type="number" id="valorDeposito" placeholder="Valor do depósito">
+    <input type="file" id="comprovanteUpload" accept="image/*" onchange="previewComprovante()">
+    <img id="previewImg" class="comprovante-img" style="display:none">
+    <button onclick="solicitarDeposito()">Solicitar Depósito</button>
+    <h4 style="margin-top:20px">Histórico de Transações</h4>
+    <div id="historicoTransacoes"></div>
+  </div>
 </div>
 
-<!-- MODAL INFO -->
-<div id="modal" onclick="closeModal()">
-<div class="modal-box" onclick="event.stopPropagation()">
-<div id="modalContent"></div>
-<button onclick="closeModal()">Fechar</button>
-</div>
+<div class="modal" id="modalConta">
+  <div class="modal-content">
+    <span class="close" onclick="fechar('conta')">×</span>
+    <h3>Minha Conta</h3>
+    <div id="contaInfo"></div>
+    <h4 style="margin-top:15px">Histórico de Pedidos</h4>
+    <div id="historico"></div>
+  </div>
 </div>
 
+<div class="modal" id="modalChat">
+  <div class="modal-content">
+    <span class="close" onclick="fechar('chat')">×</span>
+    <h3>Chat</h3>
+    <select id="chatSelect" onchange="carregarChat()" style="margin-bottom:10px">
+      <option value="">Selecione um pedido</option>
+    </select>
+    <div id="chatBox" style="height:250px;overflow-y:auto;background:var(--bg);padding:10px;border-radius:8px"></div>
+  </div>
+</div>
+
+<div class="modal" id="modalCompras">
+  <div class="modal-content">
+    <span class="close" onclick="fechar('compras')">×</span>
+    <h3>Minhas Compras</h3>
+    <div id="listaCompras"></div>
+  </div>
+</div>
+
+<div class="modal" id="modalStatus">
+  <div class="modal-content">
+    <span class="close" onclick="fechar('status')">×</span>
+    <h3>Status dos Pedidos</h3>
+    <div id="listaStatus"></div>
+  </div>
+</div>
+
+<div class="modal" id="modalDesc">
+  <div class="modal-content">
+    <span class="close" onclick="fechar('desc')">×</span>
+    <h3 id="descTitulo">Descrição</h3>
+    <p id="descTexto">Selecione um serviço</p>
+  </div>
+</div>
+
+<div class="modal" id="modalAdmin">
+  <div class="modal-content">
+    <span class="close" onclick="fechar('admin')">×</span>
+    <h3>Painel ADM</h3>
+
+    <h4>Adicionar Serviço</h4>
+    <input type="text" id="admCat" placeholder="Categoria">
+    <input type="text" id="admNome" placeholder="Nome do serviço">
+    <input type="number" id="admPreco" placeholder="Preço">
+    <textarea id="admDesc" placeholder="Descrição"></textarea>
+    <button onclick="addServico()">Adicionar Serviço</button>
+    <div id="listaServicos" style="margin-top:15px"></div>
+
+    <h4 style="margin-top:20px">Adicionar Saldo ao Usuário</h4>
+    <input type="email" id="admEmail" placeholder="Email do usuário">
+    <input type="number" id="admValor" placeholder="Valor para adicionar">
+    <button class="btn-green" onclick="adicionarSaldo()">Adicionar Saldo</button>
+
+    <h4 style="margin-top:20px">Consultar Saldo do Cliente</h4>
+    <input type="email" id="admEmailConsulta" placeholder="Email do cliente">
+    <button onclick="consultarSaldoCliente()">Consultar</button>
+    <div id="resultadoSaldoCliente" style="margin-top:10px;padding:10px;background:var(--bg);border-radius:8px;display:none;">
+      <p><strong>Email:</strong> <span id="saldoEmail"></span></p>
+      <p><strong>Saldo:</strong> <span id="saldoValorCliente"></span></p>
+    </div>
+
+    <h4 style="margin-top:20px">Pedidos</h4>
+    <div id="adminPedidos"></div>
+
+    <h4 style="margin-top:20px">Solicitações de Depósito</h4>
+    <div id="adminDepositos"></div>
+  </div>
+</div>
+
+<!-- MODAL CONFIRMAÇÃO -->
+<div class="modal" id="modalConfirm">
+  <div class="modal-content" style="max-width:450px">
+    <h3>⚠️ Confirmar Aprovação</h3>
+    <div class="info-box">
+      <p><strong>Cliente:</strong> <span id="confirmEmail"></span></p>
+      <p><strong>Valor:</strong> <span id="confirmValor"></span></p>
+      <p><strong>Saldo Atual:</strong> <span id="confirmSaldoAtual"></span></p>
+      <p><strong>Saldo Após Aprovação:</strong> <span id="confirmSaldoNovo" style="color:var(--green)"></span></p>
+    </div>
+    <div id="confirmComprovanteBox" style="display:none">
+      <p><strong>Comprovante:</strong></p>
+      <img id="confirmComprovante" class="comprovante-img">
+    </div>
+    <div class="btn-group">
+      <button class="btn-cancel" onclick="fecharConfirm()">Cancelar</button>
+      <button class="btn-green" onclick="confirmarAprovacao()">Confirmar e Aprovar</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
+// Mensagens automáticas da IA
+const mensagensIA=[
+  "Pedido recebido! Já estamos processando 🔥",
+  "Obrigado pela compra! Status atualizado em até 5 min.",
+  "Boa! Seu pedido entrou na fila. Fica de olho no chat.",
+  "Recebemos! Se tiver problema me chama aqui.",
+  "Pedido confirmado! Iniciando em breve.",
+  "Valeu! Estamos cuidando disso agora.",
+  "Pedido na fila! Tempo estimado: 5-30 min.",
+  "Processando seu pedido... não fecha a página!"
+];
 
-let db = JSON.parse(localStorage.getItem("prime_vc")) || {
-cats:{},
-products:[]
-};
+// Dados
+let servicos=JSON.parse(localStorage.getItem('servicos'))||[
+  {id:1,cat:'Instagram',nome:'1000 Seguidores',preco:15.00,desc:'Seguidores reais e ativos',promo:false},
+  {id:2,cat:'Instagram',nome:'5000 Likes',preco:8.00,desc:'Likes brasileiros',promo:true},
+  {id:3,cat:'TikTok',nome:'1000 Views',preco:5.00,desc:'Views rápidas',promo:false}
+];
+let pedidos=JSON.parse(localStorage.getItem('pedidos'))||[];
+let chats=JSON.parse(localStorage.getItem('chats'))||{};
+let carteiras=JSON.parse(localStorage.getItem('carteiras'))||{};
+let transacoes=JSON.parse(localStorage.getItem('transacoes'))||{};
+let depositos=JSON.parse(localStorage.getItem('depositos'))||[];
+let usuario=null;
+let servicoAtual=null;
+let depositoParaAprovar=null;
+let comprovanteBase64=null;
 
-/* LOGIN */
-function entrar(){
-let email = document.getElementById("email").value;
-let senha = document.getElementById("senha").value;
+// LOGIN GOOGLE
+function handleCredentialResponse(response){
+  const data=parseJwt(response.credential);
+  usuario={nome:data.name,email:data.email,foto:data.picture};
+  localStorage.setItem('user',JSON.stringify(usuario));
 
-if(email==="nannyvittoriah@gmail.com" && senha==="Lorrannyh.101225"){
-login.style.display="none";
-loja.style.display="block";
-admin.style.display="block";
-loadCats();
-}else{
-alert("Acesso negado");
-}
-}
+  if(!carteiras[usuario.email]){
+    carteiras[usuario.email]={saldo:0};
+    transacoes[usuario.email]=[];
+    localStorage.setItem('carteiras',JSON.stringify(carteiras));
+    localStorage.setItem('transacoes',JSON.stringify(transacoes));
+  }
 
-/* SAVE */
-function save(){
-localStorage.setItem("prime_vc",JSON.stringify(db));
-}
-
-/* CAT */
-function addCat(){
-db.cats[catName.value]=[];
-save();
-loadCats();
-}
-
-/* SUB */
-function addSub(){
-db.cats[cat.value].push(subName.value);
-save();
-loadCats();
-}
-
-/* LOAD */
-function loadCats(){
-cat.innerHTML = Object.keys(db.cats).map(c=>`<option>${c}</option>`).join("");
-loadSub();
+  iniciarApp();
 }
 
-function loadSub(){
-sub.innerHTML = (db.cats[cat.value]||[]).map(s=>`<option>${s}</option>`).join("");
-render();
+function parseJwt(token){
+  var base64Url=token.split('.')[1];
+  var base64=base64Url.replace(/-/g,'+').replace(/_/g,'/');
+  var jsonPayload=decodeURIComponent(atob(base64).split('').map(function(c){
+    return'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+  return JSON.parse(jsonPayload);
 }
 
-/* ADD PRODUCT */
-function addProduct(){
-let file = pimg.files[0];
-let reader = new FileReader();
-
-reader.onload = function(){
-db.products.push({
-id:Date.now(),
-cat:cat.value,
-sub:sub.value,
-name:pname.value,
-desc:pdesc.value,
-info:pinfo.value,
-price:pprice.value,
-stock:pstock.value,
-img:reader.result
-});
-
-save();
-render();
-};
-
-reader.readAsDataURL(file);
+function logout(){
+  localStorage.removeItem('user');
+  location.reload();
 }
 
-/* RENDER */
-function render(){
-grid.innerHTML="";
+function iniciarApp(){
+  usuario=JSON.parse(localStorage.getItem('user'));
+  if(!usuario)return;
+  document.getElementById('loginRequired').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('userInfo').style.display='flex';
+  document.getElementById('userName').textContent=usuario.nome.split(' ')[0];
+  document.getElementById('userPic').src=usuario.foto;
 
-db.products
-.filter(p=>p.cat===cat.value && p.sub===sub.value)
-.forEach(p=>{
-grid.innerHTML += `
-<div class="card">
-<img src="${p.img}">
-<div class="content">
-<b>${p.name}</b>
-<div class="small">${p.desc}</div>
-<div class="price">R$ ${p.price}</div>
-<div class="small">Estoque: ${p.stock}</div>
-<button onclick="openInfo(${p.id})">Informações</button>
-</div>
-</div>
-`;
-});
+  if(usuario.email==='nannyvittoriah@gmail.com'){
+    document.getElementById('btnAdm').style.display='block';
+  }
+
+  atualizarSaldo();
+  carregarCats();
 }
 
-/* MODAL INFO */
-function openInfo(id){
-let p = db.products.find(x=>x.id===id);
-
-modalContent.innerHTML = `
-<b>${p.name}</b><br><br>
-<div class="small">${p.desc}</div><br>
-<div>${p.info}</div><br>
-<strong>Preço:</strong> R$ ${p.price}<br>
-<strong>Estoque:</strong> ${p.stock}<br>
-<strong>ID:</strong> ${p.id}<br><br>
-
-<button onclick="buy('${p.name}','${p.price}')">Comprar no WhatsApp</button>
-`;
-
-modal.style.display="block";
+function atualizarSaldo(){
+  let saldo=carteiras[usuario.email]?.saldo||0;
+  document.getElementById('saldoValor').textContent='R$ '+saldo.toFixed(2);
 }
 
-function closeModal(){
-modal.style.display="none";
+// PREVIEW COMPROVANTE
+function previewComprovante(){
+  const file = document.getElementById('comprovanteUpload').files[0];
+  if(!file)return;
+
+  const reader = new FileReader();
+  reader.onload = function(e){
+    comprovanteBase64 = e.target.result;
+    document.getElementById('previewImg').src = comprovanteBase64;
+    document.getElementById('previewImg').style.display = 'block';
+  }
+  reader.readAsDataURL(file);
 }
 
-/* BUY */
-function buy(name,price){
-let msg = `Quero comprar:\n${name}\nR$ ${price}`;
-window.open("https://wa.me/5599999999999?text="+encodeURIComponent(msg));
+// FORMULÁRIO
+function carregarCats(){
+  let cats=[...new Set(servicos.map(s=>s.cat))];
+  let sel=document.getElementById('categoria');
+  sel.innerHTML='<option value="">Selecione</option>';
+  cats.forEach(c=>{sel.innerHTML+=`<option value="${c}">${c}</option>`});
 }
 
+function mudarCat(){
+  let cat=document.getElementById('categoria').value;
+  let sel=document.getElementById('servico');
+  sel.innerHTML='<option value="">Selecione</option>';
+  servicos.filter(s=>s.cat===cat).forEach(s=>{
+    let promo=s.promo?' 🔥PROMO':'';
+    sel.innerHTML+=`<option value="${s.id}">${s.nome} - R$${s.preco.toFixed(2)}${promo}</option>`;
+  });
+}
+
+function mudarServ(){
+  let id=document.getElementById('servico').value;
+  servicoAtual=servicos.find(s=>s.id==id);
+  if(servicoAtual){
+    document.getElementById('valor').value='R$ '+servicoAtual.preco.toFixed(2);
+  }
+}
+
+function fazerPedido(){
+  if(!usuario)return alert('Faça login');
+  if(!servicoAtual)return alert('Escolha um serviço');
+
+  let link=document.getElementById('link').value;
+  if(!link)return alert('Cole o link');
+
+  let saldo=carteiras[usuario.email].saldo;
+  if(saldo<servicoAtual.preco)return alert('Saldo insuficiente! Adicione saldo na carteira.');
+
+  carteiras[usuario.email].saldo-=servicoAtual.preco;
+  transacoes[usuario.email].push({
+    tipo:'saida',
+    valor:servicoAtual.preco,
+    desc:`Compra: ${servicoAtual.nome}`,
+    data:new Date().toLocaleString()
+  });
+
+  localStorage.setItem('carteiras',JSON.stringify(carteiras));
+  localStorage.setItem('transacoes',JSON.stringify(transacoes));
+
+  let pedido={
+    id:Date.now(),
+    email:usuario.email,
+    nome:usuario.nome,
+    servico:servicoAtual.nome,
+    preco:servicoAtual.preco,
+    link:link,
+    status:'pendente',
+    data:new Date().toLocaleString()
+  };
+
+  pedidos.push(pedido);
+  localStorage.setItem('pedidos',JSON.stringify(pedidos));
+
+  let msgAleatoria=mensagensIA[Math.floor(Math.random()*mensagensIA.length)];
+  chats[pedido.id]=[{from:'admin',msg:msgAleatoria,time:Date.now()}];
+  localStorage.setItem('chats',JSON.stringify(chats));
+
+  alert('Pedido enviado! Saldo descontado da carteira.');
+  document.getElementById('link').value='';
+  document.getElementById('valor').value='';
+  atualizarSaldo();
+}
+
+// CARTEIRA
+function solicitarDeposito(){
+  let valor=parseFloat(document.getElementById('valorDeposito').value);
+  if(!valor||valor<=0)return alert('Digite um valor válido');
+
+  depositos.push({
+    id:Date.now(),
+    email:usuario.email,
+    valor:valor,
+    comprovante:comprovanteBase64,
+    status:'pendente',
+    data:new Date().toLocaleString()
+  });
+  localStorage.setItem('depositos',JSON.stringify(depositos));
+
+  alert('Solicitação enviada! O ADM vai aprovar em breve.');
+  document.getElementById('valorDeposito').value='';
+  document.getElementById('comprovanteUpload').value='';
+  document.getElementById('previewImg').style.display='none';
+  comprovanteBase64=null;
+}
+
+function carregarTransacoes(){
+  let trans=transacoes[usuario.email]||[];
+  let html='';
+  trans.slice().reverse().forEach(t=>{
+    html+=`<div class="transacao ${t.tipo}">
+      <span>${t.desc}</span>
+      <span>${t.tipo==='entrada'?'+':'-'}R$${t.valor.toFixed(2)}</span>
+    </div>`;
+  });
+  document.getElementById('historicoTransacoes').innerHTML=html||'Nenhuma transação';
+}
+
+// MODAIS
+function abrir(tipo){
+  document.getElementById('modal'+tipo.charAt(0).toUpperCase()+tipo.slice(1)).classList.add('active');
+  if(tipo==='conta')carregarConta();
+  if(tipo==='compras')carregarCompras();
+  if(tipo==='status')carregarStatus();
+  if(tipo==='chat')carregarChatSelect();
+  if(tipo==='desc')carregarDesc();
+  if(tipo==='admin')carregarAdmin();
+  if(tipo==='carteira')carregarTransacoes();
+}
+
+function fechar(tipo){
+  document.getElementById('modal'+tipo.charAt(0).toUpperCase()+tipo.slice(1)).classList.remove('active');
+}
+
+function carregarConta(){
+  document.getElementById('contaInfo').innerHTML=`
+    <p><strong>Nome:</strong>${usuario.nome}</p>
+    <p><strong>Email:</strong>${usuario.email}</p>
+    <p><strong>Saldo:</strong>R$${carteiras[usuario.email].saldo.toFixed(2)}</p>
+  `;
+  let html='';
+  pedidos.filter(p=>p.email===usuario.email).forEach(p=>{
+    html+=`<div style="padding:10px;border-bottom:1px solid #333">
+      ${p.data}-${p.servico}-R$${p.preco}-${p.status}
+    </div>`;
+  });
+  document.getElementById('historico').innerHTML=html||'Nenhum pedido';
+}
+
+function carregarCompras(){
+  let html='';
+  pedidos.filter(p=>p.email===usuario.email&&p.status==='enviado').forEach(p=>{
+    html+=`<div style="padding:10px;border-bottom:1px solid #333">
+      ${p.servico}-R$${p.preco}-${p.data}
+    </div>`;
+  });
+  document.getElementById('listaCompras').innerHTML=html||'Nenhuma compra';
+}
+
+function carregarStatus(){
+  let html='';
+  pedidos.filter(p=>p.email===usuario.email).forEach(p=>{
+    html+=`<div style="padding:10px;border-bottom:1px solid #333">
+      ${p.servico}-Status:${p.status}
+    </div>`;
+  });
+  document.getElementById('listaStatus').innerHTML=html||'Nenhum pedido';
+}
+
+function carregarChatSelect(){
+  let sel=document.getElementById('chatSelect');
+  sel.innerHTML='<option value="">Selecione um pedido</option>';
+  pedidos.filter(p=>p.email===usuario.email).forEach(p=>{
+    sel.innerHTML+=`<option value="${p.id}">#${p.id}-${p.servico}</option>`;
+  });
+}
+
+function carregarChat(){
+  let id=document.getElementById('chatSelect').value;
+  let chat=chats[id]||[];
+  let html='';
+  chat.forEach(c=>{
+    let classe=c.from==='admin'?'auto':'me';
+    html+=`<div class="chat-msg${classe}">${c.msg}</div>`;
+  });
+  document.getElementById('chatBox').innerHTML=html||'Sem mensagens';
+}
+
+function carregarDesc(){
+  if(servicoAtual){
+    document.getElementById('descTitulo').textContent=servicoAtual.nome;
+    document.getElementById('descTexto').textContent=servicoAtual.desc;
+  }else{
+    document.getElementById('descTexto').textContent='Selecione um serviço primeiro';
+  }
+}
+
+// ADMIN
+function carregarAdmin(){
+  carregarServicosAdmin();
+  carregarAdminPedidos();
+  carregarAdminDepositos();
+}
+
+function addServico(){
+  let serv={
+    id:Date.now(),
+    cat:document.getElementById('admCat').value,
+    nome:document.getElementById('admNome').value,
+    preco:parseFloat(document.getElementById('admPreco').value),
+    desc:document.getElementById('admDesc').value,
+    promo:false
+  };
+  servicos.push(serv);
+  localStorage.setItem('servicos',JSON.stringify(servicos));
+  alert('Serviço adicionado!');
+  carregarServicosAdmin();
+  carregarCats();
+}
+
+function carregarServicosAdmin(){
+  let html='';
+  servicos.forEach(s=>{
+    html+=`<div style="padding:10px;border-bottom:1px solid #333">
+      ${s.nome}-R$${s.preco}
+      <button onclick="removerServ(${s.id})"style="float:right;padding:5px 10px;background:#ff4444;width:auto">X</button>
+    </div>`;
+  });
+  document.getElementById('listaServicos').innerHTML=html;
+}
+
+function removerServ(id){
+  servicos=servicos.filter(s=>s.id!==id);
+  localStorage.setItem('servicos',JSON.stringify(servicos));
+  carregarServicosAdmin();
+  carregarCats();
+}
+
+function adicionarSaldo(){
+  let email=document.getElementById('admEmail').value;
+  let valor=parseFloat(document.getElementById('admValor').value);
+
+  if(!carteiras[email])return alert('Usuário não encontrado');
+  if(!valor||valor<=0)return alert('Valor inválido');
+
+  carteiras[email].saldo+=valor;
+  if(!transacoes[email])transacoes[email]=[];
+  transacoes[email].push({
+    tipo:'entrada',
+    valor:valor,
+    desc:'Saldo adicionado pelo ADM',
+    data:new Date().toLocaleString()
+  });
+
+  localStorage.setItem('carteiras',JSON.stringify(carteiras));
+  localStorage.setItem('transacoes',JSON.stringify(transacoes));
+  alert('Saldo adicionado!');
+}
+
+function consultarSaldoCliente(){
+  let email = document.getElementById('admEmailConsulta').value;
+  if(!email) return alert('Digite o email do cliente');
+
+  let carteira = carteiras[email];
+  if(!carteira){
+    alert('Cliente não encontrado ou nunca fez login');
+    document.getElementById('resultadoSaldoCliente').style.display = 'none';
+    return;
+  }
+
+  document.getElementById('saldoEmail').textContent = email;
+  document.getElementById('saldoValorCliente').textContent = 'R$ ' + carteira.saldo.toFixed(2);
+  document.getElementById('resultadoSaldoCliente').style.display = 'block';
+}
+
+function carregarAdminPedidos(){
+  let html='';
+  pedidos.slice().reverse().forEach(p=>{
+    html+=`<div style="padding:10px;border-bottom:1px solid #333">
+      ${p.nome}-${p.servico}-R$${p.preco}
+      <select onchange="mudarStatus(${p.id},this.value)"style="float:right;width:auto;padding:5px">
+        <option value="pendente"${p.status==='pendente'?'selected':''}>Pendente</option>
+        <option value="enviado"${p.status==='enviado'?'selected':''}>Enviado</option>
+        <option value="cancelado"${p.status==='cancelado'?'selected':''}>Cancelado</option>
+      </select>
+    </div>`;
+  });
+  document.getElementById('adminPedidos').innerHTML=html||'Nenhum pedido';
+}
+
+function mudarStatus(id,status){
+  let pedido=pedidos.find(p=>p.id===id);
+  pedido.status=status;
+  localStorage.setItem('pedidos',JSON.stringify(pedidos));
+
+  if(!chats[id])chats[id]=[];
+  chats[id].push({from:'admin',msg:`Status alterado para:${status}`,time:Date.now()});
+  localStorage.setItem('chats',JSON.stringify(chats));
+
+  if(status==='cancelado'){
+    carteiras[pedido.email].saldo+=pedido.preco;
+    transacoes[pedido.email].push({
+      tipo:'entrada',
+      valor:pedido.preco,
+      desc:`Reembolso:${pedido.servico}`,
+      data:new Date().toLocaleString()
+    });
+    localStorage.setItem('carteiras',JSON.stringify(carteiras));
+    localStorage.setItem('transacoes',JSON.stringify(transacoes));
+  }
+}
+
+function carregarAdminDepositos(){
+  let html='';
+  depositos.slice().reverse().forEach(d=>{
+    html+=`<div style="padding:10px;border-bottom:1px solid #333">
+      <p><strong>${d.email}</strong> - R$${d.valor.toFixed(2)} - ${d.status}</p>
+      ${d.comprovante?'<small style="color:var(--muted)">Com comprovante</small>':''}
+      ${d.status==='pendente'?`<button onclick="abrirConfirm(${d.id})"style="float:right;padding:5px 10px;background:var(--green);width:auto;margin-top:-25px">Aprovar</button>`:''}
+    </div>`;
+  });
+  document.getElementById('adminDepositos').innerHTML=html||'Nenhuma solicitação';
+}
+
+function abrirConfirm(id){
+  depositoParaAprovar=id;
+  let dep=depositos.find(d=>d.id===id);
+  let saldoAtual=carteiras[dep.email]?.saldo||0;
+  let saldoNovo=saldoAtual+dep.valor;
+
+  document.getElementById('confirmEmail').textContent=dep.email;
+  document.getElementById('confirmValor').textContent='R$ '+dep.valor.toFixed(2);
+  document.getElementById('confirmSaldoAtual').textContent='R$ '+saldoAtual.toFixed(2);
+  document.getElementById('confirmSaldoNovo').textContent='R$ '+saldoNovo.toFixed(2);
+
+  if(dep.comprovante){
+    document.getElementById('confirmComprovante').src=dep.comprovante;
+    document.getElementById('confirmComprovanteBox').style.display='block';
+  }else{
+    document.getElementById('confirmComprovanteBox').style.display='none';
+  }
+
+  document.getElementById('modalConfirm').classList.add('active');
+}
+
+function fecharConfirm(){
+  document.getElementById('modalConfirm').classList.remove('active');
+  depositoParaAprovar=null;
+}
+
+function confirmarAprovacao(){
+  if(!depositoParaAprovar)return;
+
+  let dep=depositos.find(d=>d.id===depositoParaAprovar);
+  dep.status='aprovado';
+  carteiras[dep.email].saldo+=dep.valor;
+  transacoes[dep.email].push({
+    tipo:'entrada',
+    valor:dep.valor,
+    desc:'Depósito aprovado',
+    data:new Date().toLocaleString()
+  });
+  localStorage.setItem('depositos',JSON.stringify(depositos));
+  localStorage.setItem('carteiras',JSON.stringify(carteiras));
+  localStorage.setItem('transacoes',JSON.stringify(transacoes));
+
+  fecharConfirm();
+  fechar('admin');
+  abrir('carteira');
+
+  alert('Depósito aprovado! Saldo liberado para o cliente.');
+  carregarAdminDepositos();
+}
+
+// AUTO LOGIN
+window.onload=function(){
+  usuario=JSON.parse(localStorage.getItem('user'));
+  if(usuario)iniciarApp();
+}
 </script>
-
 </body>
-</html>
+<html>
