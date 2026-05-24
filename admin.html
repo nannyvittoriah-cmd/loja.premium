@@ -653,10 +653,57 @@ function fecharModal(id){document.getElementById(id).classList.remove('active');
 function previewImagem(input,id){
   const file=input.files[0];if(!file)return;
   const reader=new FileReader();
-  reader.onload=e=>{document.getElementById(id).innerHTML=`<img src="${e.target.result}">`;};
+  reader.onload=e=>{
+    document.getElementById(id).innerHTML=`<img src="${e.target.result}">`;
+    if(id==='uploadAreaCat')imgCategoria=e.target.result;
+    if(id==='uploadAreaSubcat')imgSubcategoria=e.target.result;
+  };
   reader.readAsDataURL(file);
-  if(id==='uploadAreaCat')imgCategoria=file;
-  if(id==='uploadAreaSubcat')imgSubcategoria=file;
+}
+
+async function salvarCategoria(){
+  const nome=document.getElementById('catNome').value.trim();
+  if(!nome){alert('Preencha o nome');return}
+  const btn=event.target;btn.disabled=true;btn.textContent='SALVANDO...';
+  try{
+    await db.ref('categorias').push({
+      nome: nome,
+      imagem: imgCategoria || '',
+      criadoEm: Date.now()
+    });
+    fecharModal('modalCategoria');
+    carregarCategorias();
+    alert('Categoria salva com sucesso!');
+  }catch(e){
+    console.error('ERRO:',e);
+    alert('Erro ao salvar: '+e.message);
+  }finally{
+    btn.disabled=false;
+    btn.textContent='SALVAR CATEGORIA';
+  }
+}
+
+async function salvarSubcategoria(){
+  const catId=document.getElementById('subcatCategoria').value;
+  const nome=document.getElementById('subcatNome').value.trim();
+  if(!catId||!nome){alert('Preencha todos os campos');return}
+  const btn=event.target;btn.disabled=true;btn.textContent='SALVANDO...';
+  try{
+    await db.ref('categorias/'+catId+'/subcategorias').push({
+      nome,
+      imagem: imgSubcategoria || '',
+      criadoEm: Date.now()
+    });
+    fecharModal('modalSubcategoria');
+    carregarSubcategorias();
+    alert('Subcategoria salva com sucesso!');
+  }catch(e){
+    console.error('ERRO:',e);
+    alert('Erro ao salvar: '+e.message);
+  }finally{
+    btn.disabled=false;
+    btn.textContent='SALVAR SUBCATEGORIA';
+  }
 }
 
 async function salvarCategoria(){
