@@ -6,7 +6,7 @@
 <title>Prime Store Vz</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
-:root{--bg:#0a0a12;--card:#16161f;--input:#1e1e2a;--border:#2f2f42;--purple:#8b5cf6;--purple-dark:#7c3aed;--text:#fff;--text-dim:#8b8ba1;--green:#10b981;--red:#ef4444}
+:root{--bg:#0a0a12;--card:#16161f;--input:#1e1e2a;--border:#2f2f42;--purple:#8b5cf6;--purple-dark:#7c3aed;--text:#fff;--text-dim:#8b8ba1;--green:#10b981;--red:#ef4444;--yellow:#f59e0b}
 body{background:var(--bg);color:var(--text);font-size:11px}
 .hide{display:none!important}
 .auth-wrap{background:var(--bg);min-height:100vh;padding:20px}
@@ -70,8 +70,6 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 .info-row-icon{font-size:18px;color:var(--text-dim)}
 .info-row-text{flex:1;font-size:10px;color:var(--text-dim);line-height:1.4}
 .info-row-text a{color:var(--purple);font-weight:600;text-decoration:none}
-
-/* HOME LOGADO */
 #app{display:none;padding-bottom:70px}
 .header{height:56px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 14px;position:sticky;top:0;z-index:50}
 .header-left{display:flex;align-items:center;gap:10px}
@@ -79,6 +77,7 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 .header-icons{display:flex;gap:8px}
 .icon-btn{width:32px;height:32px;background:var(--input);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;position:relative}
 .cart-badge{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;font-size:8px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.badge-admin{background:linear-gradient(135deg,var(--yellow),#d97706);color:#000;font-size:8px;font-weight:900;padding:2px 6px;border-radius:4px;margin-left:6px}
 .screen{padding:16px}
 .search-box{width:100%;height:40px;background:var(--input);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;padding:0 12px;gap:8px;margin-bottom:16px}
 .search-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:11px}
@@ -106,6 +105,7 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-dim);font-size:9px;cursor:pointer;padding:8px 12px}
 .nav-item.active{color:var(--purple)}
 .nav-icon{font-size:18px}
+.empty{text-align:center;padding:40px 20px;color:var(--text-dim);font-size:11px}
 </style>
 </head>
 <body>
@@ -269,9 +269,10 @@ body{background:var(--bg);color:var(--text);font-size:11px}
         <path d="M20 12C20 12 20 24 20 32C20 42 27 50 37 50C47 50 52 44 52 34C52 24 46 18 38 18C34 18 30 19 27 21" stroke="url(#gH)" stroke-width="8" stroke-linecap="round"/>
         <path d="M20 32C20 32 27 32 35 32C43 32 47 28 47 24" stroke="url(#gH)" stroke-width="8" stroke-linecap="round"/>
       </svg>
-      <div class="logo-header">Prime <span style="color:var(--purple)">store Vz</span></div>
+      <div class="logo-header">Prime <span style="color:var(--purple)">store Vz</span><span id="badgeAdmin" class="badge-admin hide">ADM</span></div>
     </div>
     <div class="header-icons">
+      <div class="icon-btn" id="btnAdmin" onclick="abrirAdmin()" style="display:none">⚙️</div>
       <div class="icon-btn">🛒<span class="cart-badge" id="cartBadge" style="display:none">0</span></div>
       <div class="icon-btn" onclick="sair()">👤</div>
     </div>
@@ -279,7 +280,6 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 
   <div class="screen">
     <div class="search-box"><span>🔍</span><input type="text" placeholder="Buscar produtos..."></div>
-
     <div class="banner">
       <div>
         <div class="banner-title">OFERTAS EXCLUSIVAS</div>
@@ -287,7 +287,6 @@ body{background:var(--bg);color:var(--text);font-size:11px}
       </div>
       <button class="banner-btn">VER OFERTAS</button>
     </div>
-
     <div class="section-header">
       <div class="section-title">Categorias</div>
       <div class="section-link">Ver todas</div>
@@ -299,7 +298,6 @@ body{background:var(--bg);color:var(--text);font-size:11px}
       <div class="cat-item"><div class="cat-icon-box">🎁</div><div class="cat-name">Gift Cards</div></div>
       <div class="cat-item"><div class="cat-icon-box">📱</div><div class="cat-name">Apps</div></div>
     </div>
-
     <div class="section-header">
       <div class="section-title">Produtos em destaque</div>
       <div class="section-link">Ver todos</div>
@@ -320,7 +318,6 @@ body{background:var(--bg);color:var(--text);font-size:11px}
           <div class="product-sub">Premium</div>
           <div class="product-price">R$ 17,90</div>
         </div>
-      </div>
       <div class="product-card">
         <div class="product-img" style="background:#1db954">♪</div>
         <div class="product-info">
@@ -359,14 +356,25 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
+let isAdmin = false;
 let emailResetAtual = '';
+
+// EMAILS ADM AUTORIZADOS
+const ADMINS = ['vittoriahvahz@gmail.com'];
 
 auth.onAuthStateChanged(user => {
   if(user){
+    isAdmin = ADMINS.includes(user.email);
+    if(isAdmin){
+      console.log('👑 ADM LOGADO:', user.email);
+      document.getElementById('badgeAdmin').classList.remove('hide');
+      document.getElementById('btnAdmin').style.display = 'flex';
+    }
     ocultarTelas();
     document.getElementById('app').style.display = 'block';
     carregarHome();
   }else{
+    isAdmin = false;
     document.getElementById('app').style.display = 'none';
     trocarTela('login');
   }
@@ -408,7 +416,7 @@ function entrar(){
   btn.textContent = 'Entrando...';
   btn.disabled = true;
   auth.signInWithEmailAndPassword(email, senha)
-  .catch(e => {
+.catch(e => {
       btn.textContent = 'Entrar';
       btn.disabled = false;
       if(e.code === 'auth/user-not-found') mostrarErro('erroLogin', 'Conta não encontrada');
@@ -427,7 +435,7 @@ function validarSenha(){
   document.getElementById('rule8').classList.toggle('ok', s.length >= 8);
   document.getElementById('ruleMai').classList.toggle('ok', /[A-Z]/.test(s));
   document.getElementById('ruleNum').classList.toggle('ok', /[0-9]/.test(s));
-  document.getElementById('ruleEsp').classList.toggle('ok', /[^A-Za-z0-9]/.test(s));
+    document.getElementById('ruleEsp').classList.toggle('ok', /[^A-Za-z0-9]/.test(s));
   const valido = s.length >= 8 && /[A-Z]/.test(s) && /[0-9]/.test(s) && /[^A-Za-z0-9]/.test(s) && s === s2 && document.getElementById('termos').checked;
   document.getElementById('btnCad').disabled =!valido;
 }
@@ -436,7 +444,7 @@ document.getElementById('termos')?.addEventListener('change', validarSenha);
 
 function cadastrar(){
   limparErro('erroCad');
-    const nome = document.getElementById('nomeCad').value.trim();
+  const nome = document.getElementById('nomeCad').value.trim();
   const email = document.getElementById('emailCad').value.trim();
   const senha = document.getElementById('senhaCad').value;
   const btn = document.getElementById('btnCad');
@@ -444,15 +452,16 @@ function cadastrar(){
   btn.textContent = 'Cadastrando...';
   btn.disabled = true;
   auth.createUserWithEmailAndPassword(email, senha)
- .then(cred => cred.user.updateProfile({displayName: nome}))
- .then(() => {
+.then(cred => cred.user.updateProfile({displayName: nome}))
+.then(() => {
       return db.ref('usuarios/'+auth.currentUser.uid).set({
         nome: nome,
         email: email,
-        criadoEm: Date.now()
+        criadoEm: Date.now(),
+        admin: ADMINS.includes(email)
       });
     })
- .catch(e => {
+.catch(e => {
       btn.textContent = 'Cadastrar';
       btn.disabled = false;
       if(e.code === 'auth/email-already-in-use') mostrarErro('erroCad', 'Email já cadastrado');
@@ -470,14 +479,14 @@ function enviarReset(){
   btn.textContent = 'Enviando...';
   btn.disabled = true;
   auth.sendPasswordResetEmail(email)
- .then(() => {
+.then(() => {
       emailResetAtual = email;
       document.getElementById('emailEnviado').textContent = email;
       trocarTela('enviado');
       btn.textContent = 'Enviar link de redefinição';
       btn.disabled = false;
     })
- .catch(e => {
+.catch(e => {
       btn.textContent = 'Enviar link de redefinição';
       btn.disabled = false;
       if(e.code === 'auth/user-not-found') mostrarErro('erroSenha', 'Email não cadastrado');
@@ -502,21 +511,24 @@ function sair(){
   auth.signOut();
 }
 
-function carregarHome(){
-  // Carrega categorias do Firebase
-  db.ref('categorias').limitToFirst(5).once('value',snap=>{
-    const cats = snap.val()||{};
-    // Por enquanto usa as fixas do print
-  });
+function abrirAdmin(){
+  if(!isAdmin){
+    alert('Acesso negado');
+    return;
+  }
+  window.location.href = 'admin.html';
+}
 
-  // Carrega produtos em destaque do Firebase
+function carregarHome(){
+  // Mostra botão ADM se for admin
+  if(isAdmin) document.getElementById('btnAdmin').style.display = 'flex';
+
+  // Carrega produtos do Firebase
   db.ref('produtos').limitToLast(6).once('value',snap=>{
     const prods = snap.val()||{};
     let html = '';
-    if(Object.keys(prods).length === 0){
-      // Usa os do print como fallback
-      return;
-    }
+    if(Object.keys(prods).length === 0) return; // Mantém os do print
+
     Object.entries(prods).forEach(([id,p])=>{
       const img = p.imagens&&p.imagens[0]?`<img src="${p.imagens[0]}" style="width:100%;height:100%;object-fit:cover">`:p.emoji||'📦';
       html+=`<div class="product-card" onclick="verProduto('${id}')">
@@ -529,6 +541,12 @@ function carregarHome(){
       </div>`;
     });
     document.getElementById('homeProdutos').innerHTML = html;
+  });
+
+  // Carrega categorias do Firebase
+  db.ref('categorias').limitToFirst(5).once('value',snap=>{
+    const cats = snap.val()||{};
+    // Por enquanto mantém as fixas do print
   });
 }
 
