@@ -177,9 +177,9 @@ body{background:var(--bg);color:var(--text);font-size:11px}
     </div>
     <div class="card">
       <div class="card-title">📊 Pedidos por status</div>
-      <div class="status-box"><div class="status-dot green"></div><div class="status-text">Concluídos</div><div class="status-value">0</div></div>
-      <div class="status-box"><div class="status-dot yellow"></div><div class="status-text">Pendentes</div><div class="status-value">0</div></div>
-      <div class="status-box"><div class="status-dot red"></div><div class="status-text">Cancelados</div><div class="status-value">0</div></div>
+      <div class="status-box"><div class="status-dot green"></div><div class="status-text">Concluídos</div><div class="status-value" id="statusConcluidos">0</div></div>
+      <div class="status-box"><div class="status-dot yellow"></div><div class="status-text">Pendentes</div><div class="status-value" id="statusPendentes">0</div></div>
+      <div class="status-box"><div class="status-dot red"></div><div class="status-text">Cancelados</div><div class="status-value" id="statusCancelados">0</div></div>
     </div>
   </div>
 
@@ -265,31 +265,21 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 
     <div class="card">
       <div class="card-title">➕ Adicionar Produto ao Pedido</div>
-      <div class="input-box">
-        <input type="text" id="addProdutoId" placeholder="Digite o ID do produto">
-      </div>
-      <div class="input-box">
-        <input type="number" id="addProdutoQtd" placeholder="Quantidade" value="1" min="1">
-      </div>
+      <div class="input-box"><input type="text" id="addProdutoId" placeholder="Digite o ID do produto"></div>
+      <div class="input-box"><input type="number" id="addProdutoQtd" placeholder="Quantidade" value="1" min="1"></div>
       <button class="btn" onclick="adicionarProdutoPedido()">ADICIONAR PRODUTO</button>
     </div>
 
     <div class="card">
       <div class="card-title">💰 Comprovante de Pagamento</div>
-      <div id="detComprovanteBox">
-        <div class="empty">Nenhum comprovante enviado</div>
-      </div>
-      <button class="btn btn-outline" onclick="document.getElementById('uploadComprovante').click()">
-        📎 ENVIAR COMPROVANTE
-      </button>
+      <div id="detComprovanteBox"><div class="empty">Nenhum comprovante enviado</div></div>
+      <button class="btn btn-outline" onclick="document.getElementById('uploadComprovante').click()">📎 ENVIAR COMPROVANTE</button>
       <input type="file" id="uploadComprovante" style="display:none" accept="image/*,.pdf" onchange="enviarComprovanteAdmin(event)">
     </div>
 
     <div class="card">
       <div class="card-title">📝 Observações</div>
-      <div class="input-box">
-        <textarea id="detPedidoObs" placeholder="Adicionar observação..."></textarea>
-      </div>
+      <div class="input-box"><textarea id="detPedidoObs" placeholder="Adicionar observação..."></textarea></div>
       <button class="btn btn-blue" onclick="salvarObservacao()">SALVAR OBSERVAÇÃO</button>
     </div>
   </div>
@@ -367,7 +357,6 @@ body{background:var(--bg);color:var(--text);font-size:11px}
       <div id="tab-pagamento" style="display:none">
         <div class="card-title" style="font-size:11px;margin-bottom:10px">💳 PIX</div>
         <div class="input-box"><input type="text" id="cfgPix" placeholder="Chave PIX"></div>
-
         <div class="card-title" style="font-size:11px;margin:16px 0 10px">🏦 Dados Bancários</div>
         <div class="input-box"><input type="text" id="cfgBanco" placeholder="Banco"></div>
         <div class="grid-2">
@@ -375,10 +364,8 @@ body{background:var(--bg);color:var(--text);font-size:11px}
           <div class="input-box"><input type="text" id="cfgConta" placeholder="Conta"></div>
         </div>
         <div class="input-box"><input type="text" id="cfgTitular" placeholder="Nome do Titular"></div>
-
         <div class="card-title" style="font-size:11px;margin:16px 0 10px">💳 Mercado Pago</div>
         <div class="input-box"><input type="text" id="cfgMercadoPago" placeholder="Token Mercado Pago"></div>
-
         <div class="toggle-row"><div class="toggle-label">Aceitar PIX</div><div class="toggle-switch active" onclick="toggleSwitch(this)"></div></div>
         <div class="toggle-row"><div class="toggle-label">Aceitar Transferência Bancária</div><div class="toggle-switch active" onclick="toggleSwitch(this)"></div></div>
         <div class="toggle-row"><div class="toggle-label">Aceitar Cartão</div><div class="toggle-switch active" onclick="toggleSwitch(this)"></div></div>
@@ -393,13 +380,11 @@ body{background:var(--bg);color:var(--text);font-size:11px}
       <div id="tab-loja" style="display:none">
         <div class="input-box"><input type="text" id="cfgCorPrimaria" placeholder="Cor primária" value="#8b5cf6"></div>
         <div class="input-box"><input type="text" id="cfgLogo" placeholder="URL do Logo"></div>
-                <div class="input-box"><input type="text" id="cfgBanner" placeholder="URL do Banner"></div>
+        <div class="input-box"><input type="text" id="cfgBanner" placeholder="URL do Banner"></div>
         <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
       </div>
     </div>
-  </div>
-
-  <div class="screen" id="screen-relatorios"><div class="card"><div class="card-title">📊 RELATORIOS</div><div class="empty">Em desenvolvimento</div></div></div>
+      <div class="screen" id="screen-relatorios"><div class="card"><div class="card-title">📊 RELATORIOS</div><div class="empty">Em desenvolvimento</div></div></div>
   <div class="screen" id="screen-suporte"><div class="card"><div class="card-title">💬 SUPORTE</div><div class="empty">Em desenvolvimento</div></div></div>
   <div class="screen" id="screen-logs"><div class="card"><div class="card-title">📄 LOGS DO SISTEMA</div><div class="empty">Em desenvolvimento</div></div></div>
 </div>
@@ -487,6 +472,7 @@ auth.onAuthStateChanged(user=>{
   carregarPedidos();
   carregarClientes();
   carregarBanners();
+  carregarSubcategorias();
 });
 
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open')}
@@ -498,7 +484,7 @@ function mostrarTela(tela,el){
   document.getElementById('screen-'+tela).classList.add('active');
   if(el)el.classList.add('active');
   const titulos={dashboard:'Dashboard',produtos:'Produtos',categorias:'Categorias',subcategorias:'Subcategorias',pedidos:'Pedidos',usuarios:'Clientes',cupons:'Cupons',slider:'Slider / Banners',notificar:'Notificar Cliente',config:'Configurações',relatorios:'Relatorios',suporte:'Suporte',logs:'Logs do Sistema'};
-  document.getElementById('headerTitle').textContent=titulos||'Dashboard';
+  document.getElementById('headerTitle').textContent=titulos[tela]||'Dashboard';
   if(window.innerWidth<=768)toggleSidebar();
 }
 
@@ -519,10 +505,18 @@ function carregarDashboard(){
   db.ref('produtos').once('value',s=>document.getElementById('statProdutos').textContent=Object.keys(s.val()||{}).length);
   db.ref('usuarios').once('value',s=>document.getElementById('statClientes').textContent=Object.keys(s.val()||{}).length);
   db.ref('pedidos').once('value',s=>{
-    const p=s.val()||{};const hoje=new Date().setHours(0,0,0,0);let totalVendas=0,totalPedidos=0;
-    Object.values(p).forEach(ped=>{if(ped.criadoEm>=hoje&&ped.status!=='cancelado'){totalVendas+=ped.total||0;totalPedidos++}});
+    const p=s.val()||{};const hoje=new Date().setHours(0,0,0,0);let totalVendas=0,totalPedidos=0,concluidos=0,pendentes=0,cancelados=0;
+    Object.values(p).forEach(ped=>{
+      if(ped.criadoEm>=hoje&&ped.status!=='cancelado'){totalVendas+=ped.total||0;totalPedidos++}
+      if(ped.status==='concluido')concluidos++;
+      else if(ped.status==='pendente')pendentes++;
+      else if(ped.status==='cancelado')cancelados++;
+    });
     document.getElementById('statVendas').textContent='R$ '+totalVendas.toFixed(2);
     document.getElementById('statPedidos').textContent=totalPedidos;
+    document.getElementById('statusConcluidos').textContent=concluidos;
+    document.getElementById('statusPendentes').textContent=pendentes;
+    document.getElementById('statusCancelados').textContent=cancelados;
   });
 }
 
@@ -644,18 +638,48 @@ function previewImagem(input,id){
 async function salvarCategoria(){
   const nome=document.getElementById('catNome').value.trim();
   if(!nome){alert('Preencha o nome');return}
-
   let imgUrl='';
   if(imgCategoria){
     const ref=storage.ref('categorias/'+Date.now()+'.jpg');
     await ref.put(imgCategoria);
     imgUrl=await ref.getDownloadURL();
   }
-
   await db.ref('categorias').push({nome,imagem:imgUrl,criadoEm:Date.now()});
   fecharModal('modalCategoria');
   carregarCategorias();
   alert('Categoria salva!');
+}
+
+function carregarSubcategorias(){
+  db.ref('categorias').once('value',snap=>{
+    const cats=snap.val()||{};let html='';
+    Object.entries(cats).forEach(([catId,cat])=>{
+      if(cat.subcategorias){
+        Object.entries(cat.subcategorias).forEach(([subId,sub])=>{
+          html+=`<div class="item-row"><div class="item-info"><div class="item-title">${sub.nome}</div><div class="item-sub">Categoria: ${cat.nome}</div></div></div>`;
+        });
+      }
+    });
+    document.getElementById('listaSubcategorias').innerHTML=html||'<div class="empty">Nenhuma subcategoria</div>';
+  });
+}
+
+function carregarCategoriasSelectSub(){
+  db.ref('categorias').once('value',snap=>{
+    const cats=snap.val()||{};let html='<option value="">Selecione a categoria</option>';
+    Object.entries(cats).forEach(([id,c])=>{html+=`<option value="${id}">${c.nome}</option>`});
+    document.getElementById('subcatCategoria').innerHTML=html;
+  });
+}
+
+async function salvarSubcategoria(){
+  const catId=document.getElementById('subcatCategoria').value;
+  const nome=document.getElementById('subcatNome').value.trim();
+  if(!catId||!nome){alert('Preencha todos os campos');return}
+  await db.ref('categorias/'+catId+'/subcategorias').push({nome,criadoEm:Date.now()});
+  fecharModal('modalSubcategoria');
+  carregarSubcategorias();
+  alert('Subcategoria salva!');
 }
 
 function carregarPedidos(){
@@ -691,7 +715,6 @@ function verPedido(id){
   pedidoAtualId=id;
   db.ref('pedidos/'+id).once('value',snap=>{
     const p=snap.val();if(!p)return;
-
     document.getElementById('detPedidoId').textContent='#'+id.substring(0,8);
     document.getElementById('detPedidoData').textContent=new Date(p.criadoEm).toLocaleString('pt-BR');
     document.getElementById('detPedidoStatus').value=p.status||'pendente';
@@ -699,7 +722,6 @@ function verPedido(id){
     document.getElementById('detClienteEmail').textContent=p.clienteEmail||'';
     document.getElementById('detClienteTel').textContent='WhatsApp: '+(p.clienteTelefone||'');
     document.getElementById('detPedidoObs').value=p.observacao||'';
-
     let htmlItens='';let subtotal=0;
     if(p.itens){
       Object.values(p.itens).forEach(item=>{
@@ -711,13 +733,11 @@ function verPedido(id){
     document.getElementById('detPedidoSubtotal').textContent='R$ '+subtotal.toFixed(2);
     document.getElementById('detPedidoDesconto').textContent='R$ '+(p.desconto||0).toFixed(2);
     document.getElementById('detPedidoTotal').textContent='R$ '+(p.total||0).toFixed(2);
-
     if(p.comprovante){
       document.getElementById('detComprovanteBox').innerHTML=`<img src="${p.comprovante}" style="width:100%;border-radius:10px;margin-bottom:8px">`;
     }else{
       document.getElementById('detComprovanteBox').innerHTML='<div class="empty">Nenhum comprovante enviado</div>';
     }
-
     mostrarTela('detalhes-pedido');
   });
 }
@@ -726,19 +746,12 @@ async function adicionarProdutoPedido(){
   const prodId=document.getElementById('addProdutoId').value.trim();
   const qtd=parseInt(document.getElementById('addProdutoQtd').value)||1;
   if(!prodId||!pedidoAtualId){alert('Digite o ID do produto');return}
-
   const snap=await db.ref('produtos/'+prodId).once('value');
   if(!snap.exists()){alert('Produto não encontrado');return}
   const prod=snap.val();
-
   await db.ref('pedidos/'+pedidoAtualId+'/itens').push({
-    produtoId:prodId,
-    nome:prod.nome,
-    preco:prod.preco,
-    imagem:prod.imagens&&prod.imagens[0]?prod.imagens[0]:'',
-    qtd:qtd
+    produtoId:prodId,nome:prod.nome,preco:prod.preco,imagem:prod.imagens&&prod.imagens[0]?prod.imagens[0]:'',qtd:qtd
   });
-
   document.getElementById('addProdutoId').value='';
   document.getElementById('addProdutoQtd').value='1';
   alert('Produto adicionado!');
@@ -803,9 +816,7 @@ async function salvarCupom(){
   const limiteDiario=parseInt(document.getElementById('cupomLimiteDiario').value)||0;
   const validade=parseInt(document.getElementById('cupomValidade').value)||30;
   const produtos=Array.from(document.getElementById('cupomProdutos').selectedOptions).map(o=>o.value).filter(v=>v);
-
   if(!nome||!codigo||!valor){alert('Preencha todos os campos obrigatórios');return}
-
   await db.ref('cupons').push({nome,codigo,tipo,valor,limite,limiteDiario,validade,produtos,ativo:true,usos:0,criadoEm:Date.now()});
   fecharModal('modalCupom');
   carregarCupons();
@@ -859,10 +870,8 @@ async function enviarNotificacao(){
   const titulo=document.getElementById('notifTitulo').value.trim();
   const msg=document.getElementById('notifMsg').value.trim();
   const alert=document.getElementById('alertNotif');
-
   if(!titulo||!msg){alert.textContent='Preencha título e mensagem';alert.className='alert error';alert.style.display='block';return}
   if(!todos&&!email){alert.textContent='Digite um e-mail ou marque notificar todos';alert.className='alert error';alert.style.display='block';return}
-
   if(todos){
     const snap=await db.ref('usuarios').once('value');
     const usuarios=snap.val()||{};
@@ -877,13 +886,26 @@ async function enviarNotificacao(){
     db.ref('notificacoes/'+uid).push({titulo,msg,lida:false,criadoEm:Date.now()});
     alert.textContent='Notificação enviada!';
   }
-
   alert.className='alert success';alert.style.display='block';
   document.getElementById('notifTitulo').value='';document.getElementById('notifMsg').value='';document.getElementById('notifEmail').value='';
   setTimeout(()=>alert.style.display='none',3000);
 }
 
 function salvarConfig(){alert('Configurações salvas com sucesso!')}
+
+function carregarSubcategorias(){
+  db.ref('categorias').once('value',snap=>{
+    const cats=snap.val()||{};let html='';
+    Object.entries(cats).forEach(([catId,cat])=>{
+      if(cat.subcategorias){
+        Object.entries(cat.subcategorias).forEach(([subId,sub])=>{
+          html+=`<div class="item-row"><div class="item-info"><div class="item-title">${sub.nome}</div><div class="item-sub">Categoria: ${cat.nome}</div></div></div>`;
+        });
+      }
+    });
+    document.getElementById('listaSubcategorias').innerHTML=html||'<div class="empty">Nenhuma subcategoria</div>';
+  });
+}
 
 function carregarCategoriasSelectSub(){
   db.ref('categorias').once('value',snap=>{
@@ -899,12 +921,8 @@ async function salvarSubcategoria(){
   if(!catId||!nome){alert('Preencha todos os campos');return}
   await db.ref('categorias/'+catId+'/subcategorias').push({nome,criadoEm:Date.now()});
   fecharModal('modalSubcategoria');
+  carregarSubcategorias();
   alert('Subcategoria salva!');
-}
-
-function abrirModalSubcategoria(){
-  carregarCategoriasSelectSub();
-  document.getElementById('modalSubcategoria').classList.add('active');
 }
 </script>
 </body>
