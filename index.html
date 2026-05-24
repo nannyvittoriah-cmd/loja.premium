@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Mobile App Builder</title>
+<title>Builder Studio</title>
 
 <style>
 
@@ -18,32 +18,32 @@ font-family:Arial;
 
 body{
 background:#050505;
-color:white;
 height:100vh;
 display:flex;
 overflow:hidden;
+color:white;
 }
 
-/* PAINEL */
+/* MENU */
 
-.editor{
+.menu{
 width:370px;
 background:#0d0d0d;
-border-right:1px solid #2b1042;
+border-right:1px solid #1d1d1d;
 padding:14px;
 overflow:auto;
 }
 
 .logo{
-font-size:22px;
+font-size:24px;
 font-weight:bold;
-margin-bottom:18px;
-color:#9f55ff;
+margin-bottom:20px;
+color:#4da3ff;
 }
 
-.card{
-background:#141414;
-border:1px solid #2d1047;
+.box{
+background:#111;
+border:1px solid #1f1f1f;
 padding:14px;
 border-radius:18px;
 margin-bottom:15px;
@@ -51,27 +51,32 @@ margin-bottom:15px;
 
 .label{
 font-size:12px;
-color:#999;
-margin-bottom:10px;
+color:#888;
+margin-bottom:8px;
 }
 
 input,
-textarea,
-select{
+select,
+textarea{
 width:100%;
-background:#090909;
-border:none;
-outline:none;
 padding:12px;
 border-radius:14px;
+border:none;
+outline:none;
+background:#1a1a1a;
 color:white;
 font-size:13px;
-margin-top:10px;
+margin-top:8px;
 }
 
 textarea{
-height:90px;
+height:80px;
 resize:none;
+}
+
+input[type="color"]{
+padding:4px;
+height:50px;
 }
 
 button{
@@ -79,59 +84,67 @@ width:100%;
 height:50px;
 border:none;
 border-radius:14px;
-background:#7b1fff;
+background:#4da3ff;
 color:white;
 font-weight:bold;
-margin-top:12px;
+margin-top:10px;
 font-size:14px;
+cursor:pointer;
 }
+
+button:hover{
+opacity:0.9;
+}
+
+/* LISTA */
 
 .lista{
 display:flex;
 flex-direction:column;
 gap:12px;
-margin-top:14px;
+margin-top:10px;
 }
 
 .item{
-background:#0a0a0a;
+background:#181818;
+border-radius:16px;
 padding:12px;
-border-radius:14px;
-border:1px solid #252525;
+border:1px solid #242424;
 }
 
 .item img{
 width:100%;
-border-radius:12px;
+border-radius:14px;
 margin-top:10px;
 }
 
-/* CELULAR */
+/* PREVIEW */
 
 .previewArea{
 flex:1;
 display:flex;
 justify-content:center;
 align-items:center;
-background:#050505;
 padding:20px;
+overflow:auto;
+background:#050505;
 }
 
 .phone{
-width:360px;
-height:740px;
+width:390px;
+height:800px;
 background:white;
-border-radius:40px;
+border-radius:42px;
 overflow:hidden;
-border:8px solid #181818;
-box-shadow:0 0 40px rgba(0,0,0,0.5);
+border:10px solid #111;
 position:relative;
+box-shadow:0 0 40px rgba(0,0,0,0.5);
 }
 
 .notch{
-width:140px;
-height:26px;
-background:#181818;
+width:150px;
+height:28px;
+background:#111;
 position:absolute;
 top:0;
 left:50%;
@@ -146,7 +159,7 @@ height:100%;
 border:none;
 }
 
-/* MODAL CÓDIGO */
+/* MODAL */
 
 .modal{
 position:fixed;
@@ -154,7 +167,7 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:rgba(0,0,0,0.9);
+background:rgba(0,0,0,0.8);
 display:none;
 justify-content:center;
 align-items:center;
@@ -166,19 +179,24 @@ z-index:999;
 width:100%;
 max-width:900px;
 height:90%;
-background:#0d0d0d;
-border-radius:20px;
+background:#111;
+border-radius:22px;
 padding:18px;
 display:flex;
 flex-direction:column;
 }
 
-.modal textarea{
+.codigo{
 flex:1;
+margin-top:15px;
 background:#050505;
-color:#6eff97;
+border:none;
+outline:none;
+padding:14px;
+border-radius:14px;
+color:#66ff99;
 font-size:12px;
-margin-top:14px;
+font-family:monospace;
 }
 
 /* MOBILE */
@@ -191,10 +209,10 @@ height:auto;
 overflow:auto;
 }
 
-.editor{
+.menu{
 width:100%;
 border-right:none;
-border-bottom:1px solid #2b1042;
+border-bottom:1px solid #1d1d1d;
 }
 
 .previewArea{
@@ -215,15 +233,15 @@ height:700px;
 
 <body>
 
-<!-- EDITOR -->
+<!-- MENU -->
 
-<div class="editor">
+<div class="menu">
 
 <div class="logo">
-Mobile App Builder
+Builder Studio
 </div>
 
-<div class="card">
+<div class="box">
 
 <div class="label">
 TIPO DE ELEMENTO
@@ -253,36 +271,50 @@ Card
 
 </select>
 
-<textarea
+<input
+type="text"
 id="texto"
-placeholder="Digite o conteúdo..."
-></textarea>
+placeholder="Digite aqui..."
+oninput="previewTempoReal()"
+>
+
+<input
+type="color"
+id="cor"
+value="#4da3ff"
+oninput="previewTempoReal()"
+>
+
+<input
+type="number"
+id="tamanho"
+placeholder="Tamanho da fonte"
+value="18"
+oninput="previewTempoReal()"
+>
 
 <input
 type="file"
 id="imagem"
 accept="image/*"
+onchange="previewTempoReal()"
 >
 
-<button onclick="adicionar()">
+<button onclick="adicionarElemento()">
 ADICIONAR ELEMENTO
 </button>
 
 </div>
 
-<div class="card">
+<div class="box">
 
 <div class="label">
-ESTRUTURA
+ESTRUTURA DO SITE
 </div>
 
 <div class="lista" id="lista"></div>
 
-<button onclick="gerarSite()">
-ATUALIZAR PREVIEW
-</button>
-
-<button onclick="abrirCodigo()">
+<button onclick="gerarCodigo()">
 GERAR CÓDIGO
 </button>
 
@@ -314,7 +346,7 @@ GERAR CÓDIGO
 FECHAR
 </button>
 
-<textarea id="codigoFinal"></textarea>
+<textarea class="codigo" id="codigo"></textarea>
 
 </div>
 
@@ -324,11 +356,15 @@ FECHAR
 
 let elementos = [];
 
-function adicionar(){
+function adicionarElemento(){
 
 const tipo = document.getElementById("tipo").value;
 
 const texto = document.getElementById("texto").value;
+
+const cor = document.getElementById("cor").value;
+
+const tamanho = document.getElementById("tamanho").value;
 
 const imagemInput = document.getElementById("imagem");
 
@@ -348,10 +384,14 @@ reader.onload = function(e){
 elementos.push({
 tipo,
 texto,
+cor,
+tamanho,
 imagem:e.target.result
 });
 
-render();
+renderLista();
+
+atualizarPreview();
 
 }
 
@@ -361,16 +401,20 @@ reader.readAsDataURL(file);
 
 elementos.push({
 tipo,
-texto
+texto,
+cor,
+tamanho
 });
 
-render();
+renderLista();
+
+atualizarPreview();
 
 }
 
 }
 
-function render(){
+function renderLista(){
 
 const lista = document.getElementById("lista");
 
@@ -384,11 +428,15 @@ div.className = "item";
 
 div.innerHTML = `
 
-<b>
+<b style="color:#4da3ff;">
 ${item.tipo.toUpperCase()}
 </b>
 
-<p style="font-size:12px;margin-top:8px;color:#aaa;">
+<p style="
+margin-top:8px;
+font-size:${item.tamanho}px;
+color:${item.cor};
+">
 ${item.texto}
 </p>
 
@@ -410,7 +458,9 @@ function remover(index){
 
 elementos.splice(index,1);
 
-render();
+renderLista();
+
+atualizarPreview();
 
 }
 
@@ -423,9 +473,15 @@ elementos.forEach(item=>{
 if(item.tipo === "titulo"){
 
 estrutura += `
-<h1 class="titulo">
+
+<h1 style="
+font-size:${item.tamanho}px;
+color:${item.cor};
+margin-bottom:16px;
+">
 ${item.texto}
 </h1>
+
 `;
 
 }
@@ -433,9 +489,16 @@ ${item.texto}
 if(item.tipo === "texto"){
 
 estrutura += `
-<p class="texto">
+
+<p style="
+font-size:${item.tamanho}px;
+color:${item.cor};
+margin-bottom:16px;
+line-height:1.5;
+">
 ${item.texto}
 </p>
+
 `;
 
 }
@@ -443,9 +506,20 @@ ${item.texto}
 if(item.tipo === "botao"){
 
 estrutura += `
-<button class="botao">
+
+<button style="
+width:100%;
+height:52px;
+background:${item.cor};
+border:none;
+border-radius:16px;
+color:white;
+font-size:${item.tamanho}px;
+margin-bottom:16px;
+">
 ${item.texto}
 </button>
+
 `;
 
 }
@@ -453,7 +527,16 @@ ${item.texto}
 if(item.tipo === "imagem"){
 
 estrutura += `
-<img class="imagem" src="${item.imagem}">
+
+<img 
+src="${item.imagem}"
+style="
+width:100%;
+border-radius:18px;
+margin-bottom:16px;
+"
+>
+
 `;
 
 }
@@ -461,9 +544,23 @@ estrutura += `
 if(item.tipo === "card"){
 
 estrutura += `
-<div class="cardItem">
-<h2>${item.texto}</h2>
+
+<div style="
+padding:18px;
+border-radius:18px;
+background:${item.cor};
+margin-bottom:16px;
+color:white;
+">
+
+<h2 style="
+font-size:${item.tamanho}px;
+">
+${item.texto}
+</h2>
+
 </div>
+
 `;
 
 }
@@ -492,47 +589,8 @@ font-family:Arial;
 }
 
 body{
-background:#050505;
 padding:14px;
-color:white;
-}
-
-.titulo{
-font-size:28px;
-margin-bottom:16px;
-}
-
-.texto{
-font-size:14px;
-line-height:1.5;
-color:#ccc;
-margin-bottom:16px;
-}
-
-.botao{
-width:100%;
-height:52px;
-background:#7b1fff;
-border:none;
-border-radius:16px;
-color:white;
-font-weight:bold;
-margin-bottom:16px;
-}
-
-.imagem{
-width:100%;
-border-radius:18px;
-margin-bottom:16px;
-display:block;
-}
-
-.cardItem{
-background:#111;
-padding:18px;
-border-radius:20px;
-border:1px solid #341051;
-margin-bottom:16px;
+background:white;
 }
 
 </style>
@@ -551,7 +609,7 @@ ${estrutura}
 
 }
 
-function gerarSite(){
+function atualizarPreview(){
 
 const html = gerarHTML();
 
@@ -559,11 +617,11 @@ document.getElementById("preview").srcdoc = html;
 
 }
 
-function abrirCodigo(){
+function gerarCodigo(){
 
 const html = gerarHTML();
 
-document.getElementById("codigoFinal").value = html;
+document.getElementById("codigo").value = html;
 
 document.getElementById("modal").style.display = "flex";
 
@@ -572,6 +630,12 @@ document.getElementById("modal").style.display = "flex";
 function fecharCodigo(){
 
 document.getElementById("modal").style.display = "none";
+
+}
+
+function previewTempoReal(){
+
+atualizarPreview();
 
 }
 
