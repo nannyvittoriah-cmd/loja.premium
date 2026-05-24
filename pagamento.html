@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prime Store VZ - Pagamento</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0a;--card:#141414;--input:#1e1e1e;--text:#fff;--muted:#888;--purple:#8b5cf6;--purple2:#7c3aed;--border:#2a2a2a;--green:#4ade80}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);padding-bottom:90px}
+.header{display:flex;align-items:center;gap:16px;padding:16px 20px;position:sticky;top:0;background:var(--bg);z-index:10;border-bottom:1px solid var(--border)}
+.header svg{width:24px;height:24px;stroke:var(--text);stroke-width:2;cursor:pointer}
+.header-title{font-size:18px;font-weight:700;flex:1}
+.section{padding:20px}
+.label-section{font-size:14px;font-weight:600;color:var(--muted);margin-bottom:12px}
+.metodos{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.metodo{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:.2s}
+.metodo.ativo{border-color:var(--purple);background:rgba(139,92,246,.1)}
+.metodo svg{width:24px;height:24px;stroke:var(--purple);stroke-width:2}
+.metodo-info{flex:1}
+.metodo-nome{font-size:15px;font-weight:600;margin-bottom:2px}
+.metodo-desc{font-size:12px;color:var(--muted)}
+.check{width:20px;height:20px;border:2px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.metodo.ativo .check{border-color:var(--purple);background:var(--purple)}
+.metodo.ativo .check svg{width:12px;height:12px;stroke:#fff;stroke-width:3}
+.card-pix{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center}
+.pix-titulo{font-size:16px;font-weight:700;margin-bottom:16px}
+.qr-box{background:#fff;padding:20px;border-radius:12px;display:inline-block;margin-bottom:16px}
+.qr-box img{width:200px;height:200px;display:block}
+.pix-texto{font-size:13px;color:var(--muted);margin-bottom:12px}
+.pix-codigo{background:var(--input);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:11px;color:var(--muted);word-break:break-all;margin-bottom:12px;font-family:monospace}
+.btn-copiar{width:100%;background:var(--input);border:1px solid var(--border);color:var(--text);padding:12px;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;margin-bottom:20px}
+.btn-copiar:active{background:var(--purple);border-color:var(--purple)}
+.btn{width:100%;background:linear-gradient(135deg,var(--purple),var(--purple2));color:#fff;border:none;padding:16px;border-radius:14px;font-weight:700;cursor:pointer;font-size:16px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.resumo{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:20px}
+.resumo-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font-size:14px}
+.resumo-row.total{font-size:18px;font-weight:800;padding-top:10px;border-top:1px solid var(--border);margin-bottom:0}
+.resumo-label{color:var(--muted)}
+.resumo-valor{font-weight:700}
+.resumo-valor.total{color:var(--purple);font-size:22px}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:var(--green);color:#fff;padding:12px 24px;border-radius:12px;font-weight:600;z-index:100;transition:.3s}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+<div class="header">
+  <svg fill="none" viewBox="0 0 24 24" onclick="history.back()">
+    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 18l-6-6 6-6"/>
+  </svg>
+  <div class="header-title">Pagamento</div>
+</div>
+
+<div class="section">
+  <div class="label-section">Método de pagamento</div>
+  <div class="metodos">
+    <div class="metodo ativo" onclick="selecionarMetodo('pix')">
+      <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41"/></svg>
+      <div class="metodo-info">
+        <div class="metodo-nome">PIX</div>
+        <div class="metodo-desc">Aprovação instantânea</div>
+      </div>
+      <div class="check">
+        <svg fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+      </div>
+    </div>
+    <div class="metodo" style="opacity:.5;pointer-events:none">
+      <svg fill="none" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="5" rx="2" stroke="currentColor"/><path stroke="currentColor" d="M2 10h20M7 15h.01M12 15h.01"/></svg>
+      <div class="metodo-info">
+        <div class="metodo-nome">Cartão de crédito</div>
+        <div class="metodo-desc">Em breve</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="resumo">
+    <div class="resumo-row">
+      <div class="resumo-label">Subtotal</div>
+      <div class="resumo-valor" id="subtotal">R$ 0,00</div>
+    </div>
+    <div class="resumo-row total">
+      <div class="resumo-label">Total</div>
+      <div class="resumo-valor total" id="total">R$ 0,00</div>
+    </div>
+  </div>
+
+  <div class="card-pix">
+    <div class="pix-titulo">PAGAR COM PIX</div>
+    <div class="pix-texto">Escaneie o QR Code abaixo para realizar o pagamento:</div>
+    <div class="qr-box">
+      <img id="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020126360014BR.GOV.BCB.PIX0114+551199999999952040000530398654040.005802BR5913PRIME STORE VZ6009SAO PAULO62070503***6304" alt="QR Code PIX">
+    </div>
+    <div class="pix-texto">Ou copie o código PIX:</div>
+    <div class="pix-codigo" id="codigoPix">00020126360014BR.GOV.BCB.PIX0114+551199999999952040000530398654040.005802BR5913PRIME STORE VZ6009SAO PAULO62070503***6304</div>
+    <button class="btn-copiar" onclick="copiarPix()">Copiar código PIX</button>
+  </div>
+
+  <button class="btn" onclick="jaPaguei()">JÁ PAGUEI</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
+  authDomain: "premium-store-aa58b.firebaseapp.com",
+  databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
+  projectId: "premium-store-aa58b",
+  storageBucket: "premium-store-aa58b.firebasestorage.app",
+  messagingSenderId: "462239500057",
+  appId: "1:462239500057:web:f1b7cea162ed308a866788",
+  measurementId: "G-CN88J28WRX"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth();
+const db=firebase.database();
+
+let usuario=null;
+let total=0;
+
+auth.onAuthStateChanged(user=>{
+  if(!user){
+    window.location.href='index.html';
+  }else{
+    usuario=user;
+    carregarTotal();
+  }
+});
+
+function carregarTotal(){
+  db.ref('carrinho/'+usuario.uid).once('value',snap=>{
+    if(!snap.exists()){
+      window.location.href='carrinho.html';
+      return;
+    }
+    
+    total=0;
+    snap.forEach(child=>{
+      const item=child.val();
+      total+=item.preco*item.quantidade;
+    });
+    
+    document.getElementById('subtotal').textContent='R$ '+total.toFixed(2).replace('.',',');
+    document.getElementById('total').textContent='R$ '+total.toFixed(2).replace('.',',');
+  });
+}
+
+function selecionarMetodo(metodo){
+  // Por enquanto só PIX
+}
+
+function copiarPix(){
+  const codigo=document.getElementById('codigoPix').textContent;
+  navigator.clipboard.writeText(codigo).then(()=>{
+    mostrarToast('Código PIX copiado!');
+  });
+}
+
+function jaPaguei(){
+  const btn=event.target;
+  btn.disabled=true;
+  btn.textContent='Confirmando...';
+  
+  db.ref('carrinho/'+usuario.uid).once('value',snap=>{
+    if(!snap.exists()){
+      window.location.href='carrinho.html';
+      return;
+    }
+    
+    const itens=[];
+    snap.forEach(child=>{
+      itens.push(child.val());
+    });
+    
+    const pedidoId='PSVZ-'+Date.now();
+    const pedido={
+      id:pedidoId,
+      usuarioId:usuario.uid,
+      usuarioNome:usuario.displayName||usuario.email,
+      usuarioEmail:usuario.email,
+      itens:itens,
+      total:total,
+      status:'aprovado',
+      metodoPagamento:'PIX',
+      criadoEm:Date.now()
+    };
+    
+    db.ref('pedidos/'+pedidoId).set(pedido).then(()=>{
+      db.ref('carrinho/'+usuario.uid).remove().then(()=>{
+        window.location.href='comprovante.html?id='+pedidoId;
+      });
+    });
+  });
+}
+
+function mostrarToast(msg){
+  const toast=document.getElementById('toast');
+  toast.textContent=msg;
+  toast.classList.add('show');
+  setTimeout(()=>toast.classList.remove('show'),3000);
+}
+</script>
+</body>
+</html>
