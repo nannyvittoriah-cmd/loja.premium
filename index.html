@@ -3,13 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prime Store VZ</title>
+<title>Prime Store Vz</title>
 <style>
-:root{--bg:#0a0a12;--card:#16161f;--input:#1e1e2a;--border:#2f2f42;--purple:#8b5cf6;--purple-dark:#7c3aed;--text:#fff;--text-dim:#8b8ba1;--green:#10b981;--red:#ef4444;--blue:#3b82f6;--yellow:#f59e0b}
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);color:var(--text);font-size:11px;padding-bottom:70px}
+:root{--bg:#0a0a12;--card:#16161f;--input:#1e1e2a;--border:#2f2f42;--purple:#8b5cf6;--purple-dark:#7c3aed;--text:#fff;--text-dim:#8b8ba1;--green:#10b981;--red:#ef4444}
+body{background:var(--bg);color:var(--text);font-size:11px}
+.hide{display:none!important}
 .auth-wrap{background:var(--bg);min-height:100vh;padding:20px}
-.auth-container{max-width:400px;margin:0 auto;padding-top:40px}
+.auth-container{max-width:400px;margin:0 auto;padding-top:20px}
+.auth-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.back-btn{width:36px;height:36px;background:var(--input);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--text)}
 .auth-logo-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:12px}
 .auth-logo-icon{width:80px;height:80px;margin-bottom:8px}
 .auth-logo-icon svg{width:100%;height:100%;filter:drop-shadow(0 0 30px rgba(139,92,246,0.8))}
@@ -23,8 +26,10 @@ body{background:var(--bg);color:var(--text);font-size:11px;padding-bottom:70px}
 .auth-screen{display:none}
 .auth-screen.active{display:block}
 .auth-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px}
-.auth-title{font-size:16px;font-weight:800;margin-bottom:6px;text-align:center}
-.auth-desc{font-size:10px;color:var(--text-dim);margin-bottom:20px;line-height:1.5;text-align:center}
+.auth-card-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.auth-card-icon{width:36px;height:36px;background:var(--input);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.auth-title{font-size:16px;font-weight:800}
+.auth-desc{font-size:10px;color:var(--text-dim);margin-bottom:20px;line-height:1.5}
 .input-label{font-size:10px;font-weight:600;color:var(--text-dim);margin-bottom:6px;display:block}
 .input-box{width:100%;min-height:46px;background:var(--input);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;padding:0 12px;gap:8px;margin-bottom:14px}
 .input-box:focus-within{border-color:var(--purple)}
@@ -34,18 +39,12 @@ body{background:var(--bg);color:var(--text);font-size:11px;padding-bottom:70px}
 .checkbox-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;font-size:10px}
 .checkbox-wrap{display:flex;align-items:center;gap:8px}
 .checkbox-wrap input{width:16px;height:16px;accent-color:var(--purple)}
-.checkbox-wrap label{color:var(--text-dim)}
+.checkbox-wrap label{color:var(--text-dim);line-height:1.4}
 .link-purple{color:var(--purple);font-weight:600;cursor:pointer;text-decoration:none}
 .btn{width:100%;height:46px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border:none;border-radius:12px;color:#fff;font-size:11px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:12px;box-shadow:0 4px 16px rgba(139,92,246,0.3)}
 .btn:active{transform:scale(0.98)}
 .btn:disabled{opacity:0.5;cursor:not-allowed}
-.btn-outline{background:transparent;border:1px solid var(--border);color:#fff;box-shadow:none}
-.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px;padding:16px;background:var(--card);border:1px solid var(--border);border-radius:14px}
-.feature-item{text-align:center}
-.feature-icon{font-size:20px;margin-bottom:6px}
-.feature-title{font-size:9px;font-weight:700;margin-bottom:2px}
-.feature-desc{font-size:8px;color:var(--text-dim);line-height:1.3}
-.auth-error{font-size:10px;color:var(--red);text-align:center;margin-bottom:12px;display:none;padding:10px;background:rgba(239,68,68,0.1);border:1px solid var(--red);border-radius:10px}
+.btn-outline{background:transparent;border:1px solid var(--border);box-shadow:none}
 .pass-rules{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:14px}
 .pass-rules-title{font-size:9px;font-weight:700;color:var(--text-dim);margin-bottom:8px}
 .pass-rule{display:flex;align-items:center;gap:6px;font-size:9px;color:var(--text-dim);margin-bottom:6px}
@@ -53,59 +52,43 @@ body{background:var(--bg);color:var(--text);font-size:11px;padding-bottom:70px}
 .pass-rule.ok{color:var(--green)}
 .pass-rule-icon{width:14px;height:14px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px}
 .pass-rule.ok.pass-rule-icon{background:var(--green);border-color:var(--green);color:#fff}
-.auth-back{font-size:10px;color:var(--purple);font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;margin-bottom:20px}
-.auth-icon-box{width:80px;height:80px;background:rgba(139,92,246,0.1);border:2px solid var(--purple);border-radius:16px;margin:24px auto;display:flex;align-items:center;justify-content:center}
-.auth-icon-box svg{width:40px;height:40px}
-.auth-info-box{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:14px;margin:16px 0;text-align:center}
-.auth-info-title{font-size:11px;font-weight:700;margin-bottom:4px}
-.auth-info-text{font-size:9px;color:var(--text-dim);line-height:1.5}
+.auth-error{font-size:10px;color:var(--red);text-align:center;margin-bottom:12px;display:none;padding:10px;background:rgba(239,68,68,0.1);border:1px solid var(--red);border-radius:10px}
+.auth-info-box{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:14px;margin:16px 0;display:flex;align-items:center;gap:10px}
+.auth-info-icon{width:36px;height:36px;background:rgba(139,92,246,0.1);border:1px solid var(--purple);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--purple);flex-shrink:0}
+.auth-info-text{flex:1;font-size:10px;color:var(--text-dim);line-height:1.4}
+.auth-info-text strong{color:var(--text);font-weight:700}
+.auth-back{font-size:10px;color:var(--purple);font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;margin-top:16px}
+.auth-icon-big{width:80px;height:80px;background:rgba(139,92,246,0.1);border:2px solid var(--purple);border-radius:20px;margin:24px auto;display:flex;align-items:center;justify-content:center;font-size:40px;color:var(--purple)}
+.auth-icon-big.success{background:rgba(16,185,129,0.1);border-color:var(--green);color:var(--green)}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px;padding:16px;background:var(--card);border:1px solid var(--border);border-radius:14px}
+.feature-item{text-align:center}
+.feature-icon{font-size:20px;margin-bottom:6px}
+.feature-title{font-size:9px;font-weight:700;margin-bottom:2px}
+.feature-desc{font-size:8px;color:var(--text-dim);line-height:1.3}
 .footer-text{font-size:9px;color:var(--text-dim);text-align:center;margin-top:24px}
-#appContainer{display:none}
-.header{height:56px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 14px;position:sticky;top:0;z-index:50}
-.header-left{display:flex;align-items:center;gap:10px}
-.back-btn{width:32px;height:32px;background:var(--input);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px}
-.logo-text{font-size:14px;font-weight:800}
-.header-icons{display:flex;gap:8px}
-.icon-btn{width:32px;height:32px;background:var(--input);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;position:relative}
-.cart-badge{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;font-size:8px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.screen{display:none;padding:16px}
-.screen.active{display:block}
-.search-box{width:100%;height:40px;background:var(--input);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;padding:0 12px;gap:8px;margin-bottom:16px}
-.search-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:11px}
-.banner{width:100%;height:140px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border-radius:14px;padding:16px;display:flex;flex-direction:column;justify-content:space-between;margin-bottom:16px;position:relative;overflow:hidden}
-.banner-title{font-size:14px;font-weight:800;margin-bottom:4px}
-.banner-sub{font-size:10px;opacity:0.9}
-.banner-btn{height:32px;padding:0 14px;background:rgba(255,255,255,0.2);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#fff;font-size:10px;font-weight:700;width:fit-content;cursor:pointer}
-.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.section-title{font-size:12px;font-weight:800}
-.section-link{font-size:10px;color:var(--purple);font-weight:600;cursor:pointer}
-.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
-.cat-item{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
-.cat-item:active{border-color:var(--purple)}
-.cat-icon{font-size:24px}
-.cat-name{font-size:9px;text-align:center}
-.product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.product-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer}
-.product-card:active{border-color:var(--purple)}
-.product-img{width:100%;aspect-ratio:1;background:var(--input);object-fit:cover}
-.product-info{padding:10px}
-.product-name{font-size:11px;font-weight:700;margin-bottom:4px}
-.product-cat{font-size:9px;color:var(--text-dim);margin-bottom:6px}
-.product-price{font-size:13px;font-weight:900;color:var(--purple)}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:60px;background:var(--card);border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;z-index:100}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-dim);font-size:9px;cursor:pointer;padding:8px 12px}
-.nav-item.active{color:var(--purple)}
-.nav-icon{font-size:18px}
-.empty{text-align:center;padding:40px 20px;color:var(--text-dim);font-size:11px}
+.info-list{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:4px;margin:16px 0}
+.info-row{display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-row-icon{font-size:18px;color:var(--text-dim)}
+.info-row-text{flex:1;font-size:10px;color:var(--text-dim);line-height:1.4}
+.info-row-text a{color:var(--purple);font-weight:600;text-decoration:none}
+#app{display:none}
 </style>
 </head>
 <body>
-<div id="authWrap" class="auth-wrap">
+
+<!-- TELA LOGIN -->
+<div id="loginWrap" class="auth-wrap">
   <div class="auth-container">
     <div class="auth-logo-wrap">
       <div class="auth-logo-icon">
         <svg viewBox="0 0 64 64" fill="none">
-          <defs><linearGradient id="g1" x1="0" y1="0" x2="64" y2="64"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs>
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="64" y2="64">
+              <stop offset="0%" stop-color="#a78bfa"/>
+              <stop offset="100%" stop-color="#7c3aed"/>
+            </linearGradient>
+          </defs>
           <path d="M20 12C20 12 20 24 20 32C20 42 27 50 37 50C47 50 52 44 52 34C52 24 46 18 38 18C34 18 30 19 27 21" stroke="url(#g1)" stroke-width="8" stroke-linecap="round"/>
           <path d="M20 32C20 32 27 32 35 32C43 32 47 28 47 24" stroke="url(#g1)" stroke-width="8" stroke-linecap="round"/>
         </svg>
@@ -113,372 +96,242 @@ body{background:var(--bg);color:var(--text);font-size:11px;padding-bottom:70px}
       <div class="auth-logo-text"><span class="prime">Prime</span> <span class="store">store Vz</span></div>
     </div>
     <div class="auth-sub">Sua loja, sua experiência.</div>
+
     <div class="auth-tabs">
-      <button class="auth-tab active" onclick="switchAuthTab('login')">→ Login</button>
-      <button class="auth-tab" onclick="switchAuthTab('cadastro')">👤 Cadastrar</button>
-      <button class="auth-tab" onclick="switchAuthTab('senha')">🔒 Esqueci senha</button>
+      <button class="auth-tab active" onclick="trocarTela('login')">→ Login</button>
+      <button class="auth-tab" onclick="trocarTela('cadastro')">👤 Cadastrar</button>
+      <button class="auth-tab" onclick="trocarTela('senha')">🔒 Esqueceu senha</button>
     </div>
 
-    <div class="auth-screen active" id="authLogin">
-      <div class="auth-card">
-        <div class="auth-title">Bem-vindo de volta!</div>
-        <div class="auth-desc">Faça login para continuar</div>
-        <div class="auth-error" id="loginError"></div>
-        <label class="input-label">E-mail</label>
-        <div class="input-box"><span class="input-icon">📧</span><input type="email" id="loginEmail" placeholder="seuemail@email.com"></div>
-        <label class="input-label">Senha</label>
-        <div class="input-box"><span class="input-icon">🔒</span><input type="password" id="loginSenha" placeholder="Sua senha"><span class="input-eye" onclick="togglePass('loginSenha',this)">👁️</span></div>
-        <div class="checkbox-row">
-          <div class="checkbox-wrap">
-            <input type="checkbox" id="lembrar"><label for="lembrar">Lembrar de mim</label>
-          </div>
-          <a class="link-purple" onclick="switchAuthTab('senha')">Esqueceu sua senha?</a>
+    <div class="auth-card">
+      <div class="auth-title">Bem-vindo de volta!</div>
+      <div class="auth-desc">Faça login para continuar</div>
+      <div class="auth-error" id="erroLogin"></div>
+
+      <label class="input-label">E-mail</label>
+      <div class="input-box">
+        <span class="input-icon">📧</span>
+        <input type="email" id="emailLogin" placeholder="seuemail@email.com">
+      </div>
+
+      <label class="input-label">Senha</label>
+      <div class="input-box">
+        <span class="input-icon">🔒</span>
+        <input type="password" id="senhaLogin" placeholder="Sua senha">
+        <span class="input-eye" onclick="toggleSenha('senhaLogin')">👁️</span>
+      </div>
+
+      <div class="checkbox-row">
+        <div class="checkbox-wrap">
+          <input type="checkbox" id="lembrar">
+          <label for="lembrar">Lembrar de mim</label>
         </div>
-        <button class="btn" id="btnLogin" onclick="fazerLogin()">Entrar</button>
+        <a class="link-purple" onclick="trocarTela('senha')">Esqueceu sua senha?</a>
       </div>
-      <div class="features-grid">
-        <div class="feature-item"><div class="feature-icon">🛡️</div><div class="feature-title">Compra segura</div><div class="feature-desc">Seus dados protegidos</div></div>
-        <div class="feature-item"><div class="feature-icon">💬</div><div class="feature-title">Suporte dedicado</div><div class="feature-desc">Estamos aqui para ajudar</div></div>
-        <div class="feature-item"><div class="feature-icon">🚚</div><div class="feature-title">Entrega rápida</div><div class="feature-desc">Produtos digitais na hora</div></div>
-      </div>
-      <div class="footer-text">© 2024 Prime store Vz. Todos os direitos reservados.</div>
+
+      <button class="btn" id="btnLogin" onclick="entrar()">Entrar</button>
     </div>
 
-    <div class="auth-screen" id="authCadastro">
-      <div class="auth-card">
-        <div class="auth-title">Crie sua conta</div>
-        <div class="auth-desc">Preencha os dados abaixo para começar sua jornada.</div>
-        <div class="auth-error" id="cadastroError"></div>
-        <label class="input-label">Nome completo</label>
-        <div class="input-box"><span class="input-icon">👤</span><input type="text" id="cadNome" placeholder="Seu nome completo"></div>
-        <label class="input-label">E-mail</label>
-        <div class="input-box"><span class="input-icon">📧</span><input type="email" id="cadEmail" placeholder="seuemail@email.com"></div>
-        <label class="input-label">Senha</label>
-        <div class="input-box"><span class="input-icon">🔒</span><input type="password" id="cadSenha" placeholder="Crie uma senha" oninput="validarSenha()"><span class="input-eye" onclick="togglePass('cadSenha',this)">👁️</span></div>
-        <label class="input-label">Confirmar senha</label>
-        <div class="input-box"><span class="input-icon">🔒</span><input type="password" id="cadSenha2" placeholder="Confirme sua senha" oninput="validarSenha()"><span class="input-eye" onclick="togglePass('cadSenha2',this)">👁️</span></div>
-        <div class="pass-rules">
-          <div class="pass-rules-title">A senha deve conter:</div>
-          <div class="pass-rule" id="rule8"><div class="pass-rule-icon">✓</div>Mínimo de 8 caracteres</div>
-          <div class="pass-rule" id="ruleMai"><div class="pass-rule-icon">✓</div>Uma letra maiúscula</div>
-          <div class="pass-rule" id="ruleNum"><div class="pass-rule-icon">✓</div>Um número</div>
-          <div class="pass-rule" id="ruleEsp"><div class="pass-rule-icon">✓</div>Um caractere especial</div>
-        </div>
-        <div class="checkbox-row">
-          <div class="checkbox-wrap">
-            <input type="checkbox" id="cadTermos">
-            <label for="cadTermos">Li e aceito os <a href="#" class="link-purple">Termos de Uso</a> e a <a href="#" class="link-purple">Política de Privacidade</a></label>
-          </div>
-        </div>
-        <button class="btn" onclick="fazerCadastro()" id="btnCadastrar" disabled>Cadastrar</button>
+    <div class="features-grid">
+      <div class="feature-item">
+        <div class="feature-icon">🛡️</div>
+        <div class="feature-title">Compra segura</div>
+        <div class="feature-desc">Seus dados protegidos</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">💬</div>
+        <div class="feature-title">Suporte dedicado</div>
+        <div class="feature-desc">Estamos aqui para ajudar</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🚚</div>
+        <div class="feature-title">Entrega rápida</div>
+        <div class="feature-desc">Produtos digitais na hora</div>
       </div>
     </div>
 
-    <div class="auth-screen" id="authSenha">
-      <div class="auth-card">
-        <div class="auth-title">Esqueceu sua senha?</div>
-        <div class="auth-desc">Informe seu e-mail e enviaremos um link para redefinir sua senha.</div>
-        <div class="auth-error" id="senhaError"></div>
-        <label class="input-label">E-mail</label>
-        <div class="input-box"><span class="input-icon">📧</span><input type="email" id="senhaEmail" placeholder="seuemail@email.com"></div>
-        <button class="btn" onclick="enviarReset()">Enviar link de redefinição</button>
-        <div class="auth-back" onclick="switchAuthTab('login')">← Voltar para o login</div>
+    <div class="footer-text">© 2024 Prime store Vz. Todos os direitos reservados.</div>
+  </div>
+</div>
+
+<!-- TELA CADASTRO -->
+<div id="cadastroWrap" class="auth-wrap hide">
+  <div class="auth-container">
+    <div class="auth-header">
+      <div class="back-btn" onclick="trocarTela('login')">←</div>
+    </div>
+
+    <div class="auth-logo-wrap">
+      <div class="auth-logo-icon">
+        <svg viewBox="0 0 64 64" fill="none">
+          <defs>
+            <linearGradient id="g2" x1="0" y1="0" x2="64" y2="64">
+              <stop offset="0%" stop-color="#a78bfa"/>
+              <stop offset="100%" stop-color="#7c3aed"/>
+            </linearGradient>
+          </defs>
+          <path d="M20 12C20 12 20 24 20 32C20 42 27 50 37 50C47 50 52 44 52 34C52 24 46 18 38 18C34 18 30 19 27 21" stroke="url(#g2)" stroke-width="8" stroke-linecap="round"/>
+          <path d="M20 32C20 32 27 32 35 32C43 32 47 28 47 24" stroke="url(#g2)" stroke-width="8" stroke-linecap="round"/>
+        </svg>
       </div>
+      <div class="auth-logo-text"><span class="prime">Prime</span> <span class="store">store Vz</span></div>
+    </div>
+    <div class="auth-sub">Crie sua conta e começe sua jornada.</div>
+
+    <div class="auth-card">
+      <div class="auth-card-header">
+        <div class="auth-card-icon">👤</div>
+        <div>
+          <div class="auth-title" style="text-align:left;margin:0">Cadastro</div>
+          <div class="auth-desc" style="text-align:left;margin:0">Preencha os dados para criar sua conta.</div>
+        </div>
+      </div>
+
+      <div class="auth-error" id="erroCad"></div>
+
+      <label class="input-label">Nome completo</label>
+      <div class="input-box">
+        <span class="input-icon">👤</span>
+        <input type="text" id="nomeCad" placeholder="Nome completo">
+      </div>
+
+      <label class="input-label">E-mail</label>
+      <div class="input-box">
+        <span class="input-icon">📧</span>
+        <input type="email" id="emailCad" placeholder="seuemail@email.com">
+      </div>
+
+      <label class="input-label">Senha</label>
+      <div class="input-box">
+        <span class="input-icon">🔒</span>
+        <input type="password" id="senhaCad" placeholder="Crie uma senha" oninput="validarSenha()">
+        <span class="input-eye" onclick="toggleSenha('senhaCad')">👁️</span>
+      </div>
+
+      <label class="input-label">Confirmar senha</label>
+      <div class="input-box">
+        <span class="input-icon">🔒</span>
+        <input type="password" id="senhaCad2" placeholder="Confirme sua senha" oninput="validarSenha()">
+        <span class="input-eye" onclick="toggleSenha('senhaCad2')">👁️</span>
+      </div>
+
+      <div class="pass-rules">
+        <div class="pass-rules-title">A senha deve conter:</div>
+        <div class="pass-rule" id="rule8"><div class="pass-rule-icon">✓</div>Mínimo de 8 caracteres</div>
+        <div class="pass-rule" id="ruleMai"><div class="pass-rule-icon">✓</div>Uma letra maiúscula</div>
+        <div class="pass-rule" id="ruleNum"><div class="pass-rule-icon">✓</div>Um número</div>
+        <div class="pass-rule" id="ruleEsp"><div class="pass-rule-icon">✓</div>Um caractere especial</div>
+      </div>
+
+      <div class="checkbox-wrap" style="margin-bottom:20px">
+        <input type="checkbox" id="termos">
+        <label for="termos">Li e aceito os <a class="link-purple">Termos de Uso</a> e a <a class="link-purple">Política de Privacidade</a></label>
+      </div>
+
+      <button class="btn" id="btnCad" onclick="cadastrar()" disabled>👤 Cadastrar</button>
+    </div>
+
+    <div style="text-align:center;font-size:10px;color:var(--text-dim)">
+      Já tem uma conta?<br>
+      <a class="link-purple" onclick="trocarTela('login')" style="display:inline-block;margin-top:6px">Fazer login</a>
     </div>
   </div>
 </div>
 
-<div id="appContainer">
-  <div class="header">
-    <div class="header-left">
-      <svg width="28" height="28" viewBox="0 0 64 64" fill="none">
-        <defs><linearGradient id="gH" x1="0" y1="0" x2="64" y2="64"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs>
-        <path d="M20 12C20 12 20 24 20 32C20 42 27 50 37 50C47 50 52 44 52 34C52 24 46 18 38 18C34 18 30 19 27 21" stroke="url(#gH)" stroke-width="8" stroke-linecap="round"/>
-        <path d="M20 32C20 32 27 32 35 32C43 32 47 28 47 24" stroke="url(#gH)" stroke-width="8" stroke-linecap="round"/>
-      </svg>
-      <div class="logo-text">Prime <span style="color:var(--purple)">store Vz</span></div>
+<!-- TELA ESQUECEU SENHA -->
+<div id="senhaWrap" class="auth-wrap hide">
+  <div class="auth-container">
+    <div class="auth-header">
+      <div class="back-btn" onclick="trocarTela('login')">←</div>
     </div>
-    <div class="header-icons">
-      <div class="icon-btn" onclick="mostrarTela('carrinho')">🛒<span class="cart-badge" id="cartBadge" style="display:none">0</span></div>
-      <div class="icon-btn" onclick="mostrarTela('perfil')">👤</div>
-    </div>
-  </div>
 
-  <div class="screen active" id="screen-home">
-    <div class="search-box"><span>🔍</span><input type="text" placeholder="Buscar produtos..." oninput="buscarHome(this.value)"></div>
-    <div class="banner">
-      <div>
-        <div class="banner-title">OFERTAS EXCLUSIVAS</div>
-        <div class="banner-sub">ATÉ 70% OFF</div>
+    <div class="auth-logo-wrap">
+      <div class="auth-logo-icon">
+        <svg viewBox="0 0 64 64" fill="none">
+          <defs>
+            <linearGradient id="g3" x1="0" y1="0" x2="64" y2="64">
+              <stop offset="0%" stop-color="#a78bfa"/>
+              <stop offset="100%" stop-color="#7c3aed"/>
+            </linearGradient>
+          </defs>
+          <path d="M20 12C20 12 20 24 20 32C20 42 27 50 37 50C47 50 52 44 52 34C52 24 46 18 38 18C34 18 30 19 27 21" stroke="url(#g3)" stroke-width="8" stroke-linecap="round"/>
+          <path d="M20 32C20 32 27 32 35 32C43 32 47 28 47 24" stroke="url(#g3)" stroke-width="8" stroke-linecap="round"/>
+        </svg>
       </div>
-      <button class="banner-btn">VER OFERTAS</button>
+      <div class="auth-logo-text"><span class="prime">Prime</span> <span class="store">store Vz</span></div>
     </div>
-    <div class="section-header">
-      <div class="section-title">Categorias</div>
-      <div class="section-link" onclick="mostrarTela('categorias')">Ver todas</div>
-    </div>
-    <div class="cat-grid" id="homeCategorias"><div class="empty">Nenhuma categoria</div></div>
-    <div class="section-header">
-      <div class="section-title">Produtos em destaque</div>
-      <div class="section-link" onclick="mostrarTela('produtos')">Ver todos</div>
-    </div>
-    <div class="product-grid" id="homeProdutos"><div class="empty">Nenhum produto</div></div>
-  </div>
+    <div class="auth-sub">Recupere o acesso à sua conta.</div>
 
-  <div class="screen" id="screen-categorias">
-    <div class="header" style="margin:-16px -16px 16px -16px">
-      <div class="header-left">
-        <button class="back-btn" onclick="mostrarTela('home')">←</button>
-        <div class="logo-text">Categorias</div>
-      </div>
-    <div class="search-box"><span>🔍</span><input type="text" placeholder="Buscar categorias..." oninput="buscarCategorias(this.value)"></div>
-    <div class="cat-grid" id="listaCategorias"><div class="empty">Nenhuma categoria</div></div>
-  </div>
+    <div class="auth-icon-big">📧</div>
 
-  <div class="screen" id="screen-produtos">
-    <div class="header" style="margin:-16px -16px 16px -16px">
-      <div class="header-left">
-        <button class="back-btn" onclick="mostrarTela('categorias')">←</button>
-        <div class="logo-text" id="tituloCategoria">Produtos</div>
-      </div>
-    </div>
-    <div class="search-box"><span>🔍</span><input type="text" placeholder="Buscar produtos..." oninput="buscarProdutos(this.value)"></div>
-    <div class="tabs" id="subcatTabs"></div>
-    <div class="product-grid" id="listaProdutos"><div class="empty">Nenhum produto</div></div>
-  </div>
+    <div class="auth-card">
+      <div class="auth-title">Esqueceu sua senha?</div>
+      <div class="auth-desc">Informe o e-mail da sua conta que enviaremos um link para redefinir sua senha.</div>
 
-  <div class="screen" id="screen-detalhe">
-    <div class="header" style="margin:-16px -16px 16px -16px">
-      <div class="header-left">
-        <button class="back-btn" onclick="mostrarTela('produtos')">←</button>
-        <div class="logo-text">Detalhes</div>
-      </div>
-    </div>
-    <img src="" class="detail-img" id="detImg">
-    <div class="detail-header">
-      <div class="detail-name" id="detNome">Nome do Produto</div>
-      <div class="detail-cat" id="detCat">Categoria</div>
-      <div class="detail-price" id="detPreco">R$ 0,00</div>
-      <span class="detail-badge">Em estoque</span>
-    </div>
-    <div class="card-title">DESCRIÇÃO</div>
-    <div class="detail-desc" id="detDesc">Descrição do produto...</div>
-    <div class="card-title">INFORMAÇÕES</div>
-    <div class="detail-info" id="detInfo"></div>
-    <button class="btn" onclick="adicionarCarrinho()">🛒 COMPRAR AGORA</button>
-  </div>
+      <div class="auth-error" id="erroSenha"></div>
 
-  <div class="screen" id="screen-carrinho">
-    <div class="header" style="margin:-16px -16px 16px -16px">
-      <div class="header-left">
-        <button class="back-btn" onclick="mostrarTela('home')">←</button>
-        <div class="logo-text">Meu carrinho</div>
-      </div>
-    </div>
-    <div id="listaCarrinho"><div class="empty">Carrinho vazio</div></div>
-    <div class="order-summary" id="resumoCarrinho" style="display:none">
-      <div class="input-box" style="margin-bottom:12px">
-        <input type="text" id="cupomCarrinho" placeholder="Cupom de desconto">
-        <button class="btn-sm btn" style="width:auto" onclick="aplicarCupom()">Aplicar</button>
-      </div>
-      <div class="summary-row">
-        <span class="summary-label">Subtotal</span>
-        <span class="summary-value" id="carrinhoSubtotal">R$ 0,00</span>
-      </div>
-      <div class="summary-row">
-        <span class="summary-label">Desconto</span>
-        <span class="summary-value" id="carrinhoDesconto">R$ 0,00</span>
-      </div>
-      <div class="summary-row total">
-        <span class="summary-label">Total</span>
-        <span class="summary-value" id="carrinhoTotal">R$ 0,00</span>
-      </div>
-    </div>
-    <button class="btn" id="btnFinalizar" style="display:none" onclick="mostrarTela('pagamento')">FINALIZAR COMPRA</button>
-  </div>
-
-  <div class="screen" id="screen-pagamento">
-    <div class="header" style="margin:-16px -16px 16px -16px">
-      <div class="header-left">
-        <button class="back-btn" onclick="mostrarTela('carrinho')">←</button>
-        <div class="logo-text">Pagamento</div>
-      </div>
-    </div>
-    <div class="card-title">Método de pagamento</div>
-    <div class="payment-method active" onclick="selecionarPagamento('pix',this)">
-      <div class="payment-icon">💳</div>
-      <div class="payment-info">
-        <div class="payment-name">PIX</div>
-        <div class="payment-desc">Aprovação instantânea</div>
-      </div>
-    </div>
-    <div class="payment-method" onclick="selecionarPagamento('cartao',this)">
-      <div class="payment-icon">💳</div>
-      <div class="payment-info">
-        <div class="payment-name">Cartão de crédito</div>
-        <div class="payment-desc">Até 12x sem juros</div>
-      </div>
-    </div>
-    <div class="payment-method" onclick="selecionarPagamento('boleto',this)">
-      <div class="payment-icon">📄</div>
-      <div class="payment-info">
-        <div class="payment-name">Boleto bancário</div>
-        <div class="payment-desc">Compensação em até 3 dias</div>
-      </div>
-    </div>
-    <div id="pixBox" style="display:block">
-      <div class="card-title" style="margin-top:16px">PAGAR COM PIX</div>
-      <div class="detail-desc">Escaneie o QR Code abaixo para realizar o pagamento</div>
-      <div class="qr-box">
-        <div class="qr-code" id="qrCode"></div>
-      </div>
-      <div class="detail-desc" style="text-align:center;margin-bottom:12px">Ou copie o código PIX</div>
+      <label class="input-label">E-mail</label>
       <div class="input-box">
-        <input type="text" id="codigoPix" value="" readonly>
-        <button class="btn-sm btn" style="width:auto" onclick="copiarPix()">Copiar</button>
+        <span class="input-icon">📧</span>
+        <input type="email" id="emailSenha" placeholder="seuemail@email.com">
       </div>
-    </div>
-    <button class="btn" onclick="confirmarPagamento()">JÁ PAGUEI</button>
-  </div>
 
-  <div class="screen" id="screen-comprovante">
-    <div style="text-align:center;padding:40px 20px">
-      <div style="font-size:48px;margin-bottom:16px">✅</div>
-      <div style="font-size:18px;font-weight:800;margin-bottom:8px">Pedido realizado!</div>
-      <div style="font-size:10px;color:var(--text-dim);margin-bottom:24px">Pagamento aprovado</div>
+      <button class="btn" id="btnSenha" onclick="enviarReset()">✈️ Enviar link de redefinição</button>
     </div>
-    <div class="card">
-      <div class="card-title">ID do pedido</div>
-      <div class="detail-desc" id="compId">#00000000</div>
-      <div class="card-title" style="margin-top:16px">Itens do pedido</div>
-      <div id="compItens"></div>
-      <div class="order-summary" style="margin-top:16px">
-        <div class="summary-row total">
-          <span class="summary-label">Total pago</span>
-          <span class="summary-value" id="compTotal">R$ 0,00</span>
+
+    <div class="auth-info-box">
+      <div class="auth-info-icon">🛡️</div>
+      <div class="auth-info-text">Por segurança, o link expira em <strong>15 minutos</strong>.</div>
+    </div>
+
+    <div class="auth-back" onclick="trocarTela('login')">← Voltar para o login</div>
+  </div>
+</div>
+
+<!-- TELA EMAIL ENVIADO -->
+<div id="enviadoWrap" class="auth-wrap hide">
+  <div class="auth-container">
+    <div class="auth-header">
+      <div class="back-btn" onclick="trocarTela('login')">←</div>
+    </div>
+
+    <div class="auth-icon-big success">✓</div>
+
+    <div class="auth-card">
+      <div class="auth-title">E-mail enviado!</div>
+      <div class="auth-desc">Enviamos um link de redefinição para <strong id="emailEnviado" style="color:var(--purple)"></strong></div>
+
+      <div class="info-list">
+        <div class="info-row">
+          <div class="info-row-icon">📧</div>
+          <div class="info-row-text">Verifique sua caixa de entrada<br>(e o spam/lixo eletrônico).</div>
+        </div>
+        <div class="info-row">
+          <div class="info-row-icon">⏰</div>
+          <div class="info-row-text">O link expira em <strong>15 minutos</strong>.</div>
+        </div>
+        <div class="info-row">
+          <div class="info-row-icon">🛡️</div>
+          <div class="info-row-text">Não recebeu o e-mail?<br><a onclick="reenviarEmail()">Enviar novamente</a></div>
         </div>
       </div>
-    </div>
-    <button class="btn" onclick="mostrarTela('pedidos')">VER MEUS PEDIDOS</button>
-    <button class="btn btn-outline" onclick="document.getElementById('uploadComp').click()">ENVIAR COMPROVANTE</button>
-    <input type="file" id="uploadComp" style="display:none" accept="image/*,.pdf" onchange="enviarComprovante(event)">
-  </div>
 
-  <div class="screen" id="screen-pedidos">
-    <div class="header" style="margin:-16px -16px 16px -16px">
-      <div class="header-left">
-        <button class="back-btn" onclick="mostrarTela('home')">←</button>
-        <div class="logo-text">Meus pedidos</div>
-      </div>
-    </div>
-    <div class="tabs">
-      <div class="tab active" onclick="filtrarMeusPedidos('todos',this)">Todos</div>
-      <div class="tab" onclick="filtrarMeusPedidos('pendente',this)">Pendentes</div>
-      <div class="tab" onclick="filtrarMeusPedidos('concluido',this)">Concluídos</div>
-      <div class="tab" onclick="filtrarMeusPedidos('cancelado',this)">Cancelados</div>
-    </div>
-    <div id="listaMeusPedidos"><div class="empty">Nenhum pedido</div></div>
-  </div>
-
-  <div class="screen" id="screen-perfil">
-    <div class="header" style="margin:-16px -16px 16px -16px">
-      <div class="header-left">
-        <button class="back-btn" onclick="mostrarTela('home')">←</button>
-        <div class="logo-text">PERFIL</div>
-      </div>
-      <div class="header-icons">
-        <div class="icon-btn" onclick="alert('Notificações em breve')">🔔</div>
-      </div>
-    <div class="profile-top">
-      <div class="profile-user">
-        <div class="profile-avatar-big">👤</div>
-        <div class="profile-user-info">
-          <div class="profile-user-name" id="perfilNome">Carregando...</div>
-          <div class="profile-user-email" id="perfilEmail">Carregando...</div>
-        </div>
-      </div>
-      <span class="profile-badge">👑 CLIENTE VIP</span>
-    </div>
-    <div class="section-header">
-      <div class="section-title">MEUS PEDIDOS</div>
-      <div class="section-link" onclick="mostrarTela('pedidos')">Ver todos</div>
-    </div>
-    <div class="orders-grid">
-      <div class="order-stat" onclick="mostrarTela('pedidos');filtrarMeusPedidos('pendente',document.querySelectorAll('.tab')[1])">
-        <div class="order-stat-badge" id="badgePendentes" style="display:none">0</div>
-        <div class="order-stat-icon">📄</div>
-        <div class="order-stat-label">PENDENTES</div>
-      </div>
-      <div class="order-stat" onclick="alert('Em breve')">
-        <div class="order-stat-icon">⏳</div>
-        <div class="order-stat-label">EM ANÁLISE</div>
-      </div>
-      <div class="order-stat" onclick="mostrarTela('pedidos');filtrarMeusPedidos('concluido',document.querySelectorAll('.tab')[2])">
-        <div class="order-stat-icon">✅</div>
-        <div class="order-stat-label">CONCLUÍDOS</div>
-      </div>
-      <div class="order-stat" onclick="mostrarTela('pedidos');filtrarMeusPedidos('cancelado',document.querySelectorAll('.tab')[3])">
-        <div class="order-stat-icon">❌</div>
-        <div class="order-stat-label">CANCELADOS</div>
-      </div>
-    <div class="section-title" style="margin-bottom:12px">MINHA CONTA</div>
-    <div class="menu-list">
-      <div class="menu-row" onclick="alert('Em breve')">
-        <div class="menu-row-icon">👤</div>
-        <div class="menu-row-text">DADOS PESSOAIS</div>
-        <div class="menu-row-arrow">›</div>
-      </div>
-      <div class="menu-row" onclick="alert('Em breve')">
-        <div class="menu-row-icon">📍</div>
-        <div class="menu-row-text">ENDEREÇOS</div>
-        <div class="menu-row-arrow">›</div>
-      </div>
-      <div class="menu-row" onclick="alert('Em breve')">
-        <div class="menu-row-icon">💳</div>
-        <div class="menu-row-text">MÉTODOS DE PAGAMENTO</div>
-        <div class="menu-row-arrow">›</div>
-      </div>
-      <div class="menu-row" onclick="
-              <div class="menu-row-icon">🔒</div>
-        <div class="menu-row-text">SEGURANÇA</div>
-        <div class="menu-row-arrow">›</div>
-      </div>
-      <div class="menu-row" onclick="logout()">
-        <div class="menu-row-icon">🚪</div>
-        <div class="menu-row-text">SAIR DA CONTA</div>
-        <div class="menu-row-arrow">›</div>
-      </div>
+      <button class="btn" onclick="trocarTela('login')">← Voltar para o login</button>
     </div>
   </div>
+</div>
 
-  <div class="bottom-nav">
-    <div class="nav-item active" onclick="mostrarTela('home',this)">
-      <div class="nav-icon">🏠</div>
-      <div>Início</div>
-    </div>
-    <div class="nav-item" onclick="mostrarTela('categorias',this)">
-      <div class="nav-icon">📁</div>
-      <div>Categorias</div>
-    </div>
-    <div class="nav-item" onclick="mostrarTela('carrinho',this)">
-      <div class="nav-icon">🛒</div>
-      <div>Carrinho</div>
-    </div>
-    <div class="nav-item" onclick="mostrarTela('pedidos',this)">
-      <div class="nav-icon">📦</div>
-      <div>Pedidos</div>
-    </div>
-    <div class="nav-item" onclick="mostrarTela('perfil',this)">
-      <div class="nav-icon">👤</div>
-      <div>Perfil</div>
-    </div>
+<!-- APP LOGADO -->
+<div id="app">
+  <div style="padding:40px;text-align:center">
+    <h1 style="color:var(--purple);margin-bottom:10px">Logado! 🎉</h1>
+    <p style="color:var(--text-dim);font-size:12px" id="userEmail"></p>
+    <button class="btn" style="margin-top:20px;max-width:200px" onclick="sair()">Sair</button>
   </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -492,447 +345,159 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-const auth=firebase.auth();
-const db=firebase.database();
-const storage=firebase.storage();
-let userId=null,carrinho=[],produtoAtual=null,categoriaAtual=null,metodoPagamento='pix',cupomAplicado=null,isAdmin=false;
+const auth = firebase.auth();
+let emailResetAtual = '';
 
-console.log('Firebase inicializado');
-
-auth.onAuthStateChanged(user=>{
-  console.log('Auth state:', user? user.email : 'deslogado');
+auth.onAuthStateChanged(user => {
   if(user){
-    userId=user.uid;
-    const emailKey=user.email.replace(/\./g,',');
-    db.ref('admins/'+emailKey).once('value',snap=>{
-      if(snap.exists()){
-        isAdmin=true;
-        alert('Bem-vinda, ADM Vittoria!');
-      }
-      document.getElementById('authWrap').remove();
-      document.getElementById('appContainer').style.display='block';
-      carregarPerfil();
-      carregarHome();
-      carregarCarrinho();
-      atualizarBadgePedidos();
-    });
+    ocultarTelas();
+    document.getElementById('app').style.display = 'block';
+    document.getElementById('userEmail').textContent = user.email;
   }else{
-    document.getElementById('appContainer').style.display='none';
-    if(!document.getElementById('authWrap'))location.reload();
+    document.getElementById('app').style.display = 'none';
+    trocarTela('login');
   }
 });
 
-function switchAuthTab(tab){
-  document.querySelectorAll('.auth-screen').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
-  if(tab==='login'){
-    document.getElementById('authLogin').classList.add('active');
-    document.querySelectorAll('.auth-tab')[0].classList.add('active');
-  }
-  if(tab==='cadastro'){
-    document.getElementById('authCadastro').classList.add('active');
-    document.querySelectorAll('.auth-tab')[1].classList.add('active');
-  }
-  if(tab==='senha'){
-    document.getElementById('authSenha').classList.add('active');
-    document.querySelectorAll('.auth-tab')[2].classList.add('active');
-  }
+function ocultarTelas(){
+  document.getElementById('loginWrap').classList.add('hide');
+  document.getElementById('cadastroWrap').classList.add('hide');
+  document.getElementById('senhaWrap').classList.add('hide');
+  document.getElementById('enviadoWrap').classList.add('hide');
+  document.getElementById('app').style.display = 'none';
 }
 
-function togglePass(id,el){
-  const input=document.getElementById(id);
-  if(input.type==='password'){input.type='text';el.textContent='🙈'}
-  else{input.type='password';el.textContent='👁️'}
+function trocarTela(tela){
+  ocultarTelas();
+  document.getElementById(tela+'Wrap').classList.remove('hide');
+  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
+  if(tela==='login') document.querySelectorAll('.auth-tab')[0].classList.add('active');
+  if(tela==='cadastro') document.querySelectorAll('.auth-tab')[1].classList.add('active');
+  if(tela==='senha') document.querySelectorAll('.auth-tab')[2].classList.add('active');
+}
+
+function mostrarErro(id, msg){
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function limparErro(id){
+  document.getElementById(id).style.display = 'none';
+}
+
+function entrar(){
+  limparErro('erroLogin');
+  const email = document.getElementById('emailLogin').value.trim();
+  const senha = document.getElementById('senhaLogin').value;
+  const btn = document.getElementById('btnLogin');
+
+  if(!email ||!senha){
+    mostrarErro('erroLogin', 'Preencha email e senha');
+    return;
+  }
+
+  btn.textContent = 'Entrando...';
+  btn.disabled = true;
+
+  auth.signInWithEmailAndPassword(email, senha)
+   .catch(e => {
+      btn.textContent = 'Entrar';
+      btn.disabled = false;
+      if(e.code === 'auth/user-not-found') mostrarErro('erroLogin', 'Conta não encontrada');
+      else if(e.code === 'auth/wrong-password') mostrarErro('erroLogin', 'Senha incorreta');
+      else if(e.code === 'auth/invalid-email') mostrarErro('erroLogin', 'Email inválido');
+      else if(e.code === 'auth/invalid-credential') mostrarErro('erroLogin', 'Email ou senha incorretos');
+      else if(e.code === 'auth/operation-not-allowed') mostrarErro('erroLogin', 'Ative Email/Password no Firebase Console');
+      else if(e.code === 'auth/network-request-failed') mostrarErro('erroLogin', 'Erro de conexão. Verifique domínio autorizado');
+      else mostrarErro('erroLogin', e.message);
+    });
 }
 
 function validarSenha(){
-  const s=document.getElementById('cadSenha').value;
-  const s2=document.getElementById('cadSenha2').value;
-  document.getElementById('rule8').classList.toggle('ok',s.length>=8);
-  document.getElementById('ruleMai').classList.toggle('ok',/[A-Z]/.test(s));
-  document.getElementById('ruleNum').classList.toggle('ok',/[0-9]/.test(s));
-  document.getElementById('ruleEsp').classList.toggle('ok',/[^A-Za-z0-9]/.test(s));
-  const valido=s.length>=8&&/[A-Z]/.test(s)&&/[0-9]/.test(s)&&/[^A-Za-z0-9]/.test(s)&&s===s2&&document.getElementById('cadTermos').checked;
-  document.getElementById('btnCadastrar').disabled=!valido;
+  const s = document.getElementById('senhaCad').value;
+  const s2 = document.getElementById('senhaCad2').value;
+  document.getElementById('rule8').classList.toggle('ok', s.length >= 8);
+  document.getElementById('ruleMai').classList.toggle('ok', /[A-Z]/.test(s));
+  document.getElementById('ruleNum').classList.toggle('ok', /[0-9]/.test(s));
+  document.getElementById('ruleEsp').classList.toggle('ok', /[^A-Za-z0-9]/.test(s));
+  const valido = s.length >= 8 && /[A-Z]/.test(s) && /[0-9]/.test(s) && /[^A-Za-z0-9]/.test(s) && s === s2 && document.getElementById('termos').checked;
+  document.getElementById('btnCad').disabled =!valido;
 }
 
-document.getElementById('cadTermos')?.addEventListener('change',validarSenha);
+document.getElementById('termos')?.addEventListener('change', validarSenha);
 
-function fazerLogin(){
-  console.log('Tentando login...');
-  const email=document.getElementById('loginEmail').value.trim();
-  const senha=document.getElementById('loginSenha').value;
-  const err=document.getElementById('loginError');
-  const btn=document.getElementById('btnLogin');
-  err.style.display='none';
+function cadastrar(){
+  limparErro('erroCad');
+  const nome = document.getElementById('nomeCad').value.trim();
+  const email = document.getElementById('emailCad').value.trim();
+  const senha = document.getElementById('senhaCad').value;
+  const btn = document.getElementById('btnCad');
 
-  if(!email||!senha){
-    err.textContent='Preencha todos os campos';
-    err.style.display='block';
+  if(!nome ||!email ||!senha){
+    mostrarErro('erroCad', 'Preencha todos os campos');
     return;
   }
 
-  btn.textContent='Entrando...';
-  btn.disabled=true;
+  btn.textContent = 'Cadastrando...';
+  btn.disabled = true;
 
-  auth.signInWithEmailAndPassword(email,senha).then(cred=>{
-    console.log('Login OK:',cred.user.email);
-  }).catch(e=>{
-    console.error('ERRO LOGIN:',e.code,e.message);
-    btn.textContent='Entrar';
-    btn.disabled=false;
-    err.style.display='block';
-
-    if(e.code==='auth/user-not-found')err.textContent='Conta não encontrada. Cadastre-se primeiro.';
-    else if(e.code==='auth/wrong-password')err.textContent='Senha incorreta.';
-    else if(e.code==='auth/invalid-email')err.textContent='Email inválido.';
-    else if(e.code==='auth/too-many-requests')err.textContent='Muitas tentativas. Tente mais tarde.';
-    else if(e.code==='auth/network-request-failed')err.textContent='Sem internet ou domínio não autorizado no Firebase.';
-    else if(e.code==='auth/operation-not-allowed')err.textContent='Email/senha DESATIVADO no Firebase. Ative em Authentication > Sign-in method';
-    else if(e.code==='auth/invalid-credential')err.textContent='Email ou senha incorretos.';
-    else err.textContent='Erro: '+e.message;
-  });
-}
-
-function fazerCadastro(){
-  const nome=document.getElementById('cadNome').value;
-  const email=document.getElementById('cadEmail').value;
-  const senha=document.getElementById('cadSenha').value;
-  const err=document.getElementById('cadastroError');
-  err.style.display='none';
-  if(!nome){err.textContent='Digite seu nome';err.style.display='block';return}
-  auth.createUserWithEmailAndPassword(email,senha).then(cred=>{
-    return db.ref('usuarios/'+cred.user.uid).set({nome:nome,email:email,criadoEm:Date.now()});
-  }).catch(e=>{
-    err.textContent=e.code==='auth/email-already-in-use'?'Email já cadastrado':e.message;
-    err.style.display='block';
-  });
+  auth.createUserWithEmailAndPassword(email, senha)
+   .then(cred => cred.user.updateProfile({displayName: nome}))
+   .catch(e => {
+      btn.textContent = 'Cadastrar';
+      btn.disabled = false;
+      if(e.code === 'auth/email-already-in-use') mostrarErro('erroCad', 'Email já cadastrado');
+      else if(e.code === 'auth/weak-password') mostrarErro('erroCad', 'Senha muito fraca');
+      else if(e.code === 'auth/invalid-email') mostrarErro('erroCad', 'Email inválido');
+      else mostrarErro('erroCad', e.message);
+    });
 }
 
 function enviarReset(){
-  const email=document.getElementById('senhaEmail').value;
-  const err=document.getElementById('senhaError');
-  err.style.display='none';
-  if(!email){err.textContent='Digite seu email';err.style.display='block';return}
-  auth.sendPasswordResetEmail(email).then(()=>{
-    alert('Email enviado! Verifique sua caixa de entrada.');
-    switchAuthTab('login');
-  }).catch(e=>{
-    err.textContent=e.code==='auth/user-not-found'?'Email não cadastrado':'Erro ao enviar email';
-    err.style.display='block';
-  });
-}
+  limparErro('erroSenha');
+  const email = document.getElementById('emailSenha').value.trim();
+  const btn = document.getElementById('btnSenha');
 
-function logout(){
-  auth.signOut();
-}
-
-function mostrarTela(tela,el){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-'+tela).classList.add('active');
-  if(el&&el.classList.contains('nav-item')){
-    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-    el.classList.add('active');
-  }
-  window.scrollTo(0,0);
-  if(tela==='pedidos')carregarMeusPedidos();
-  if(tela==='carrinho')carregarCarrinho();
-  if(tela==='categorias')carregarCategorias();
-}
-
-function carregarPerfil(){
-  db.ref('usuarios/'+userId).once('value',snap=>{
-    const u=snap.val()||{};
-    document.getElementById('perfilNome').textContent=u.nome||'Usuário';
-    document.getElementById('perfilEmail').textContent=u.email||auth.currentUser.email;
-  });
-}
-
-function carregarHome(){
-  db.ref('categorias').limitToFirst(8).once('value',snap=>{
-    const cats=snap.val()||{};let html='';
-    Object.entries(cats).forEach(([id,c])=>{
-      html+=`<div class="cat-item" onclick="abrirCategoria('${id}','${c.nome}')"><div class="cat-icon">🎮</div><div class="cat-name">${c.nome}</div></div>`;
-    });
-    document.getElementById('homeCategorias').innerHTML=html||'<div class="empty">Nenhuma categoria</div>';
-  });
-  db.ref('produtos').limitToLast(6).once('value',snap=>{
-    const prods=snap.val()||{};let html='';
-    Object.entries(prods).forEach(([id,p])=>{
-      const img=p.imagens&&p.imagens[0]?p.imagens[0]:'https://via.placeholder.com/200';
-      html+=`<div class="product-card" onclick="verProduto('${id}')"><img src="${img}" class="product-img"><div class="product-info"><div class="product-name">${p.nome}</div><div class="product-cat">${p.categoria||''}</div><div class="product-price">R$ ${p.preco.toFixed(2)}</div></div></div>`;
-    });
-    document.getElementById('homeProdutos').innerHTML=html||'<div class="empty">Nenhum produto</div>';
-  });
-}
-
-function carregarCategorias(){
-  db.ref('categorias').once('value',snap=>{
-    const cats=snap.val()||{};let html='';
-    Object.entries(cats).forEach(([id,c])=>{
-      html+=`<div class="cat-item" onclick="abrirCategoria('${id}','${c.nome}')"><div class="cat-icon">🎮</div><div class="cat-name">${c.nome}</div></div>`;
-    });
-    document.getElementById('listaCategorias').innerHTML=html||'<div class="empty">Nenhuma categoria</div>';
-  });
-}
-
-function abrirCategoria(id,nome){
-  categoriaAtual={id,nome};
-  document.getElementById('tituloCategoria').textContent=nome;
-  db.ref('categorias/'+id+'/subcategorias').once('value',snap=>{
-    const subs=snap.val()||{};let html='<div class="tab active" onclick="filtrarSubcat(\'todos\',this)">Todos</div>';
-    Object.entries(subs).forEach(([sid,s])=>{
-      html+=`<div class="tab" onclick="filtrarSubcat('${sid}',this)">${s.nome}</div>`;
-    });
-    document.getElementById('subcatTabs').innerHTML=html;
-  });
-  carregarProdutosCategoria(id);
-  mostrarTela('produtos');
-}
-
-function carregarProdutosCategoria(catId){
-  db.ref('produtos').orderByChild('categoria').equalTo(catId).once('value',snap=>{
-    const prods=snap.val()||{};let html='';
-    Object.entries(prods).forEach(([id,p])=>{
-      const img=p.imagens&&p.imagens[0]?p.imagens[0]:'https://via.placeholder.com/200';
-      html+=`<div class="product-card" onclick="verProduto('${id}')"><img src="${img}" class="product-img"><div class="product-info"><div class="product-name">${p.nome}</div><div class="product-price">R$ ${p.preco.toFixed(2)}</div></div></div>`;
-    });
-    document.getElementById('listaProdutos').innerHTML=html||'<div class="empty">Nenhum produto</div>';
-  });
-}
-
-function filtrarSubcat(subId,el){
-  document.querySelectorAll('#subcatTabs.tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  carregarProdutosCategoria(categoriaAtual.id);
-}
-
-function verProduto(id){
-  db.ref('produtos/'+id).once('value',snap=>{
-    const p=snap.val();if(!p)return;
-    produtoAtual={id,...p};
-    document.getElementById('detImg').src=p.imagens&&p.imagens[0]?p.imagens[0]:'https://via.placeholder.com/400';
-    document.getElementById('detNome').textContent=p.nome;
-    document.getElementById('detCat').textContent=p.categoria||'';
-    document.getElementById('detPreco').textContent='R$ '+p.preco.toFixed(2);
-    document.getElementById('detDesc').textContent=p.descricao||'Sem descrição';
-    document.getElementById('detInfo').innerHTML=`
-      <div class="detail-info-row"><span class="detail-info-label">Entrega:</span><span class="detail-info-value">Automática</span></div>
-      <div class="detail-info-row"><span class="detail-info-label">Prazo:</span><span class="detail-info-value">Imediato</span></div>
-      <div class="detail-info-row"><span class="detail-info-label">Estoque:</span><span class="detail-info-value">${p.estoque||0} unidades</span></div>
-    `;
-    mostrarTela('detalhe');
-  });
-}
-
-function adicionarCarrinho(){
-  if(!produtoAtual)return;
-  const idx=carrinho.findIndex(i=>i.id===produtoAtual.id);
-  if(idx>=0)carrinho[idx].qtd++;
-  else carrinho.push({...produtoAtual,qtd:1});
-  atualizarBadgeCarrinho();
-  alert('Produto adicionado ao carrinho!');
-  mostrarTela('carrinho');
-}
-
-function atualizarBadgeCarrinho(){
-  const total=carrinho.reduce((s,i)=>s+i.qtd,0);
-  const badge=document.getElementById('cartBadge');
-  badge.textContent=total;
-  badge.style.display=total>0?'flex':'none';
-}
-
-function carregarCarrinho(){
-  if(carrinho.length===0){
-    document.getElementById('listaCarrinho').innerHTML='<div class="empty">Carrinho vazio</div>';
-    document.getElementById('resumoCarrinho').style.display='none';
-    document.getElementById('btnFinalizar').style.display='none';
+  if(!email){
+    mostrarErro('erroSenha', 'Digite seu email');
     return;
   }
-  let html='';let subtotal=0;
-  carrinho.forEach((item,i)=>{
-    subtotal+=item.preco*item.qtd;
-    const img=item.imagens&&item.imagens[0]?item.imagens[0]:'https://via.placeholder.com/50';
-    html+=`<div class="item-row">
-      <img src="${img}" class="img-thumb">
-      <div class="item-info">
-        <div class="item-title">${item.nome}</div>
-        <div class="item-sub">R$ ${item.preco.toFixed(2)}</div>
-      </div>
-      <div class="qty-controls">
-        <div class="qty-btn" onclick="alterarQtd(${i},-1)">-</div>
-        <span>${item.qtd}</span>
-        <div class="qty-btn" onclick="alterarQtd(${i},1)">+</div>
-      </div>
-    </div>`;
-  });
-  document.getElementById('listaCarrinho').innerHTML=html;
-  document.getElementById('carrinhoSubtotal').textContent='R$ '+subtotal.toFixed(2);
-  document.getElementById('carrinhoTotal').textContent='R$ '+(subtotal-(cupomAplicado||0)).toFixed(2);
-  document.getElementById('resumoCarrinho').style.display='block';
-  document.getElementById('btnFinalizar').style.display='block';
-}
 
-function alterarQtd(idx,delta){
-  carrinho[idx].qtd+=delta;
-  if(carrinho[idx].qtd<=0)carrinho.splice(idx,1);
-  atualizarBadgeCarrinho();
-  carregarCarrinho();
-}
+  btn.textContent = 'Enviando...';
+  btn.disabled = true;
 
-function aplicarCupom(){
-  const codigo=document.getElementById('cupomCarrinho').value.trim().toUpperCase();
-  if(!codigo){alert('Digite um cupom');return}
-  db.ref('cupons').orderByChild('codigo').equalTo(codigo).once('value',snap=>{
-    if(!snap.exists()){alert('Cupom inválido');return}
-    const cupom=Object.values(snap.val())[0];
-    if(!cupom.ativo){alert('Cupom inativo');return}
-    const subtotal=carrinho.reduce((s,i)=>s+i.preco*i.qtd,0);
-    const desconto=cupom.tipo==='porcentagem'?subtotal*(cupom.valor/100):cupom.valor;
-    cupomAplicado=desconto;
-    document.getElementById('carrinhoDesconto').textContent='R$ '+desconto.toFixed(2);
-    document.getElementById('carrinhoTotal').textContent='R$ '+(subtotal-desconto).toFixed(2);
-    alert('Cupom aplicado!');
-  });
-}
-
-function selecionarPagamento(tipo,el){
-  metodoPagamento=tipo;
-  document.querySelectorAll('.payment-method').forEach(m=>m.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('pixBox').style.display=tipo==='pix'?'block':'none';
-  if(tipo==='pix')gerarPix();
-}
-
-function gerarPix(){
-  const subtotal=carrinho.reduce((s,i)=>s+i.preco*i.qtd,0);
-  const total=subtotal-(cupomAplicado||0);
-  const codigo='00020126580014br.gov.bcb.pix0136'+userId+'5204000053039865404'+total.toFixed(2)+'5802BR5925Prime Store VZ6009SAO PAULO62070503***6304';
-  document.getElementById('codigoPix').value=codigo;
-  const qr=document.getElementById('qrCode');
-  qr.innerHTML='<div style="width:100%;height:100%;background:#000;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px">QR CODE PIX</div>';
-}
-
-function copiarPix(){
-  const input=document.getElementById('codigoPix');
-  input.select();
-  document.execCommand('copy');
-  alert('Código PIX copiado!');
-}
-
-function confirmarPagamento(){
-  if(carrinho.length===0){alert('Carrinho vazio');return}
-  const subtotal=carrinho.reduce((s,i)=>s+i.preco*i.qtd,0);
-  const total=subtotal-(cupomAplicado||0);
-  const pedido={
-    clienteId:userId,
-    clienteNome:document.getElementById('perfilNome').textContent,
-    clienteEmail:document.getElementById('perfilEmail').textContent,
-    clienteTelefone:'',
-    itens:carrinho.map(i=>({produtoId:i.id,nome:i.nome,preco:i.preco,qtd:i.qtd,imagem:i.imagens&&i.imagens[0]?i.imagens[0]:''})),
-    subtotal:subtotal,
-    desconto:cupomAplicado||0,
-    total:total,
-    status:'pendente',
-    pagamento:metodoPagamento,
-    criadoEm:Date.now()
-  };
-  db.ref('pedidos').push(pedido).then(snap=>{
-    const id=snap.key;
-    document.getElementById('compId').textContent='#'+id.substring(0,12);
-    let htmlItens='';
-    pedido.itens.forEach(item=>{
-      htmlItens+=`<div class="item-row"><img src="${item.imagem||'https://via.placeholder.com/40'}" class="img-thumb"><div class="item-info"><div class="item-title">${item.nome}</div><div class="item-sub">Qtd: ${item.qtd}</div></div><div class="item-title">R$ ${(item.preco*item.qtd).toFixed(2)}</div></div>`;
+  auth.sendPasswordResetEmail(email)
+   .then(() => {
+      emailResetAtual = email;
+      document.getElementById('emailEnviado').textContent = email;
+      trocarTela('enviado');
+      btn.textContent = 'Enviar link de redefinição';
+      btn.disabled = false;
+    })
+   .catch(e => {
+      btn.textContent = 'Enviar link de redefinição';
+      btn.disabled = false;
+      if(e.code === 'auth/user-not-found') mostrarErro('erroSenha', 'Email não cadastrado');
+      else if(e.code === 'auth/invalid-email') mostrarErro('erroSenha', 'Email inválido');
+      else mostrarErro('erroSenha', e.message);
     });
-    document.getElementById('compItens').innerHTML=htmlItens;
-    document.getElementById('compTotal').textContent='R$ '+pedido.total.toFixed(2);
-    carrinho=[];cupomAplicado=null;
-    atualizarBadgeCarrinho();
-    atualizarBadgePedidos();
-    mostrarTela('comprovante');
-  });
 }
 
-function enviarComprovante(e){
-  const file=e.target.files[0];if(!file)return;
-  alert('Comprovante enviado! Aguarde aprovação.');
+function reenviarEmail(){
+  if(!emailResetAtual) return;
+  document.getElementById('emailSenha').value = emailResetAtual;
+  enviarReset();
+  trocarTela('senha');
 }
 
-function carregarMeusPedidos(){
-  if(!userId)return;
-  db.ref('pedidos').orderByChild('clienteId').equalTo(userId).once('value',snap=>{
-    const pedidos=snap.val()||{};let html='';
-    Object.entries(pedidos).reverse().forEach(([id,p])=>{
-      const data=new Date(p.criadoEm).toLocaleString('pt-BR');
-      const status=p.status||'pendente';
-      html+=`<div class="item-row"><div class="item-info"><div class="item-title">#${id.substring(0,12)}</div><div class="item-sub">${data}</div></div><div style="text-align:right"><div class="item-title">R$ ${p.total.toFixed(2)}</div><span class="badge-status ${status}">${status.charAt(0).toUpperCase()+status.slice(1)}</span></div></div>`;
-    });
-    document.getElementById('listaMeusPedidos').innerHTML=html||'<div class="empty">Nenhum pedido</div>';
-  });
+function toggleSenha(id){
+  const input = document.getElementById(id);
+  input.type = input.type === 'password'? 'text' : 'password';
 }
 
-function filtrarMeusPedidos(status,el){
-  document.querySelectorAll('#screen-pedidos.tab').forEach(t=>t.classList.remove('active'));
-  if(el)el.classList.add('active');
-  if(!userId)return;
-  db.ref('pedidos').orderByChild('clienteId').equalTo(userId).once('value',snap=>{
-    const pedidos=snap.val()||{};let html='';
-    Object.entries(pedidos).reverse().forEach(([id,p])=>{
-      if(status==='todos'||p.status===status){
-        const data=new Date(p.criadoEm).toLocaleString('pt-BR');
-        const st=p.status||'pendente';
-        html+=`<div class="item-row"><div class="item-info"><div class="item-title">#${id.substring(0,12)}</div><div class="item-sub">${data}</div></div><div style="text-align:right"><div class="item-title">R$ ${p.total.toFixed(2)}</div><span class="badge-status ${st}">${st.charAt(0).toUpperCase()+st.slice(1)}</span></div></div>`;
-      }
-    });
-    document.getElementById('listaMeusPedidos').innerHTML=html||'<div class="empty">Nenhum pedido</div>';
-  });
-}
-
-function atualizarBadgePedidos(){
-  if(!userId)return;
-  db.ref('pedidos').orderByChild('clienteId').equalTo(userId).once('value',snap=>{
-    const pedidos=snap.val()||{};let pendentes=0;
-    Object.values(pedidos).forEach(p=>{if(p.status==='pendente')pendentes++});
-    const badge=document.getElementById('badgePendentes');
-    if(pendentes>0){badge.textContent=pendentes;badge.style.display='flex'}
-    else{badge.style.display='none'}
-  });
-}
-
-function buscarHome(q){
-  if(!q){carregarHome();return}
-  db.ref('produtos').orderByChild('nome').startAt(q).endAt(q+'\uf8ff').once('value',snap=>{
-    const prods=snap.val()||{};let html='';
-    Object.entries(prods).forEach(([id,p])=>{
-      const img=p.imagens&&p.imagens[0]?p.imagens[0]:'https://via.placeholder.com/200';
-      html+=`<div class="product-card" onclick="verProduto('${id}')"><img src="${img}" class="product-img"><div class="product-info"><div class="product-name">${p.nome}</div><div class="product-cat">${p.categoria||''}</div><div class="product-price">R$ ${p.preco.toFixed(2)}</div></div></div>`;
-    });
-    document.getElementById('homeProdutos').innerHTML=html||'<div class="empty">Nenhum produto encontrado</div>';
-  });
-}
-
-function buscarCategorias(q){
-  db.ref('categorias').orderByChild('nome').startAt(q).endAt(q+'\uf8ff').once('value',snap=>{
-    const cats=snap.val()||{};let html='';
-    Object.entries(cats).forEach(([id,c])=>{
-      html+=`<div class="cat-item" onclick="abrirCategoria('${id}','${c.nome}')"><div class="cat-icon">🎮</div><div class="cat-name">${c.nome}</div></div>`;
-    });
-    document.getElementById('listaCategorias').innerHTML=html||'<div class="empty">Nenhuma categoria</div>';
-  });
-}
-
-function buscarProdutos(q){
-  if(!categoriaAtual)return;
-  db.ref('produtos').orderByChild('categoria').equalTo(categoriaAtual.id).once('value',snap=>{
-    const prods=snap.val()||{};let html='';
-    Object.entries(prods).forEach(([id,p])=>{
-      if(p.nome.toLowerCase().includes(q.toLowerCase())){
-        const img=p.imagens&&p.imagens[0]?p.imagens[0]:'https://via.placeholder.com/200';
-        html+=`<div class="product-card" onclick="verProduto('${id}')"><img src="${img}" class="product-img"><div class="product-info"><div class="product-name">${p.nome}</div><div class="product-price">R$ ${p.preco.toFixed(2)}</div></div></div>`;
-      }
-    });
-    document.getElementById('listaProdutos').innerHTML=html||'<div class="empty">Nenhum produto encontrado</div>';
-  });
+function sair(){
+  auth.signOut();
 }
 </script>
 </body>
