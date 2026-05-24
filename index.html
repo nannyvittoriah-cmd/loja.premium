@@ -3,61 +3,301 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Login - Premium Store</title>
+<title>Prime Store Vz</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:system-ui;background:#0f0f0f;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh}
-.card{background:#1a1a1a;border:1px solid #333;border-radius:16px;padding:32px;width:100%;max-width:400px}
-h1{text-align:center;margin-bottom:24px;background:linear-gradient(135deg,#d4af37,#b8960f);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.input-box{background:#242424;border:1px solid #333;border-radius:12px;padding:12px 16px;margin-bottom:16px}
-.input-box input{width:100%;background:transparent;border:none;outline:none;color:#fff;font-size:15px}
-.btn{width:100%;background:linear-gradient(135deg,#d4af37,#b8960f);color:#000;border:none;padding:14px;border-radius:12px;font-weight:600;cursor:pointer;font-size:15px}
-.btn:disabled{opacity:.5}
-.error{color:#f44336;font-size:14px;margin-top:8px;text-align:center}
+:root{--bg:#0a0a0a;--card:#141414;--input:#1e1e1e;--text:#fff;--muted:#888;--purple:#8b5cf6;--purple2:#7c3aed;--border:#2a2a2a;--green:#4ade80;--red:#f87171}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background-image:radial-gradient(circle at 20% 20%,rgba(139,92,246,.1) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(139,92,246,.08) 0%,transparent 50%)}
+.container{width:100%;max-width:420px}
+.logo-header{text-align:center;margin-bottom:16px}
+.logo-header img{width:180px;height:auto;margin:0 auto;display:block;filter:drop-shadow(0 0 20px rgba(139,92,246,.3))}
+.logo-header.tagline{font-size:14px;color:var(--muted);margin-top:8px}
+.tabs{display:flex;gap:0;margin-bottom:20px;background:var(--card);padding:6px;border-radius:14px;border:1px solid var(--border)}
+.tab{flex:1;padding:12px;border:none;background:transparent;color:var(--muted);border-radius:10px;cursor:pointer;font-size:14px;font-weight:600;transition:.2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.tab.active{background:var(--purple);color:#fff;box-shadow:0 4px 12px rgba(139,92,246,.4)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px}
+.card-title{font-size:20px;font-weight:700;margin-bottom:6px;text-align:center}
+.card-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:24px}
+.label{font-size:14px;font-weight:500;margin-bottom:8px;display:block}
+.input-box{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;transition:.2s}
+.input-box:focus-within{border-color:var(--purple)}
+.input-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:15px}
+.input-box input::placeholder{color:#555}
+.input-box span{color:var(--muted);font-size:18px}
+.input-box.eye{cursor:pointer;margin-left:auto}
+.checkbox-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.checkbox-wrap{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+.checkbox-wrap input{width:16px;height:16px;accent-color:var(--purple)}
+.link-roxo{color:var(--purple);text-decoration:none;font-size:14px;font-weight:600}
+.btn{width:100%;background:linear-gradient(135deg,var(--purple),var(--purple2));color:#fff;border:none;padding:14px;border-radius:12px;font-weight:700;cursor:pointer;font-size:15px;margin-bottom:16px;transition:.2s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(139,92,246,.4)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.link-bottom{text-align:center;font-size:14px;color:var(--muted)}
+.link-bottom a{color:var(--purple);text-decoration:none;font-weight:600}
+.checkbox-wrap-full{display:flex;align-items:flex-start;gap:8px;margin:16px 0;font-size:13px;color:var(--muted);line-height:1.5}
+.checkbox-wrap-full input{margin-top:2px;flex-shrink:0}
+.checkbox-wrap-full a{color:var(--purple);text-decoration:none}
+.requisitos{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:16px;margin:16px 0}
+.requisitos-title{font-size:13px;font-weight:600;margin-bottom:12px;color:var(--muted)}
+.requisito{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-bottom:8px}
+.requisito.ok{color:var(--green)}
+.requisito span{font-size:16px;width:16px;text-align:center}
+.error{color:var(--red);font-size:14px;margin-top:8px;text-align:center}
+.success{text-align:center;padding:20px 0}
+.success-icon{width:64px;height:64px;background:var(--purple);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:32px}
+.success-title{font-size:18px;font-weight:700;margin-bottom:8px}
+.success-text{font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.6}
+.form{display:none}
+.form.active{display:block}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)}
+.feature{text-align:center}
+.feature-icon{font-size:24px;margin-bottom:6px}
+.feature-title{font-size:12px;font-weight:600;margin-bottom:2px}
+.feature-text{font-size:11px;color:var(--muted)}
+.footer{text-align:center;font-size:12px;color:var(--muted);margin-top:20px}
 </style>
 </head>
 <body>
-<div class="card">
-  <h1>Premium Store</h1>
-  <div class="input-box"><input type="email" id="email" placeholder="E-mail"></div>
-  <div class="input-box"><input type="password" id="senha" placeholder="Senha"></div>
-  <button type="button" class="btn" onclick="login()">ENTRAR</button>
-  <div id="erro" class="error"></div>
+<div class="container">
+  <div class="logo-header">
+    <img src="https://i.postimg.cc/PJ2Vcty8/e1befe8d-0630-444f-aea5-9b0a96d5f84b.jpg" alt="Prime Store Vz">
+    <div class="tagline">Sua loja, sua experiência.</div>
+  </div>
+
+  <div class="tabs">
+    <button type="button" class="tab active" onclick="mudarForm('login',this)">
+      <span>➡️</span> Login
+    </button>
+    <button type="button" class="tab" onclick="mudarForm('cadastro',this)">
+      <span>👤</span> Cadastrar
+    </button>
+    <button type="button" class="tab" onclick="mudarForm('esqueceu',this)">
+      <span>🔒</span> Esqueceu senha
+    </button>
+  </div>
+
+  <div class="card">
+    <!-- LOGIN -->
+    <div class="form active" id="form-login">
+      <div class="card-title">Bem-vindo de volta!</div>
+      <div class="card-sub">Faça login para continuar</div>
+
+      <label class="label">E-mail</label>
+      <div class="input-box"><span>✉️</span><input type="email" id="loginEmail" placeholder="seuemail@email.com"></div>
+
+      <label class="label">Senha</label>
+      <div class="input-box"><span>🔒</span><input type="password" id="loginSenha" placeholder="Sua senha"><span class="eye" onclick="toggleSenha('loginSenha')">👁️</span></div>
+
+      <div class="checkbox-row">
+        <label class="checkbox-wrap">
+          <input type="checkbox" id="lembrar">
+          <span>Lembrar de mim</span>
+        </label>
+        <a href="#" class="link-roxo" onclick="mudarForm('esqueceu',document.querySelectorAll('.tab')[2]);return false">Esqueceu sua senha?</a>
+      </div>
+
+      <button type="button" class="btn" onclick="fazerLogin()">Entrar</button>
+
+      <div class="link-bottom">Não tem conta? <a href="#" onclick="mudarForm('cadastro',document.querySelectorAll('.tab')[1]);return false">Cadastre-se</a></div>
+      <div id="erroLogin" class="error"></div>
+
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">🛡️</div>
+          <div class="feature-title">Compra segura</div>
+          <div class="feature-text">Seus dados protegidos</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">💬</div>
+          <div class="feature-title">Suporte dedicado</div>
+          <div class="feature-text">Estamos aqui para ajudar</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🚚</div>
+          <div class="feature-title">Entrega rápida</div>
+          <div class="feature-text">Produtos digitais na hora</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CADASTRO -->
+    <div class="form" id="form-cadastro">
+      <div class="card-title">Crie sua conta</div>
+      <div class="card-sub">Preencha os dados abaixo para começar sua jornada</div>
+
+      <label class="label">Nome completo</label>
+      <div class="input-box"><span>👤</span><input type="text" id="cadNome" placeholder="Seu nome completo"></div>
+
+      <label class="label">E-mail</label>
+      <div class="input-box"><span>✉️</span><input type="email" id="cadEmail" placeholder="seuemail@email.com"></div>
+
+      <label class="label">Senha</label>
+      <div class="input-box"><span>🔒</span><input type="password" id="cadSenha" placeholder="Crie uma senha" oninput="validarSenha(this.value)"><span class="eye" onclick="toggleSenha('cadSenha')">👁️</span></div>
+
+      <label class="label">Confirmar senha</label>
+      <div class="input-box"><span>🔒</span><input type="password" id="cadConfirmaSenha" placeholder="Confirme sua senha"><span class="eye" onclick="toggleSenha('cadConfirmaSenha')">👁️</span></div>
+
+      <div class="requisitos">
+        <div class="requisitos-title">A senha deve conter:</div>
+        <div class="requisito" id="req8"><span>○</span> Mínimo de 8 caracteres</div>
+        <div class="requisito" id="reqMai"><span>○</span> Uma letra maiúscula</div>
+        <div class="requisito" id="reqNum"><span>○</span> Um número</div>
+        <div class="requisito" id="reqEsp"><span>○</span> Um caractere especial</div>
+      </div>
+
+      <label class="checkbox-wrap-full">
+        <input type="checkbox" id="aceite">
+        <span>Li e aceito os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a></span>
+      </label>
+
+      <button type="button" class="btn" onclick="fazerCadastro()">Cadastrar</button>
+      <div class="link-bottom">Já tem uma conta? <a href="#" onclick="mudarForm('login',document.querySelectorAll('.tab')[0]);return false">Faça login</a></div>
+      <div id="erroCad" class="error"></div>
+    </div>
+
+    <!-- ESQUECEU SENHA -->
+    <div class="form" id="form-esqueceu">
+      <div class="card-title">Esqueceu sua senha?</div>
+      <div class="card-sub">Informe seu e-mail e enviaremos um link para redefinir sua senha</div>
+
+      <label class="label">E-mail</label>
+      <div class="input-box"><span>✉️</span><input type="email" id="esqEmail" placeholder="seuemail@email.com"></div>
+
+      <button type="button" class="btn" onclick="enviarReset()">Enviar link de redefinição</button>
+      <div class="link-bottom"><a href="#" onclick="mudarForm('login',document.querySelectorAll('.tab')[0]);return false">← Voltar para o login</a></div>
+      <div id="erroEsq" class="error"></div>
+    </div>
+
+    <!-- SUCESSO RESET -->
+    <div class="form" id="form-sucesso">
+      <div class="success">
+        <div class="success-icon">✓</div>
+        <div class="success-title">E-mail enviado!</div>
+        <div class="success-text">Enviamos um link de redefinição para seu e-mail. Verifique sua caixa de entrada e spam.</div>
+        <button type="button" class="btn" onclick="mudarForm('login',document.querySelectorAll('.tab')[0])">Voltar para login</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">© 2024 Prime Store Vz. Todos os direitos reservados.</div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <script>
-const firebaseConfig={
-  apiKey:"AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
-  authDomain:"premium-store-aa58b.firebaseapp.com",
-  databaseURL:"https://premium-store-aa58b-default-rtdb.firebaseio.com",
-  projectId:"premium-store-aa58b",
-  storageBucket:"premium-store-aa58b.appspot.com",
-  messagingSenderId:"462239500057",
-  appId:"1:462239500057:web:f1b7cea162ed308a866788"
+const firebaseConfig = {
+  apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
+  authDomain: "premium-store-aa58b.firebaseapp.com",
+  databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
+  projectId: "premium-store-aa58b",
+  storageBucket: "premium-store-aa58b.firebasestorage.app",
+  messagingSenderId: "462239500057",
+  appId: "1:462239500057:web:f1b7cea162ed308a866788",
+  measurementId: "G-CN88J28WRX"
 };
 
 firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth();
+const db=firebase.database();
 
 auth.onAuthStateChanged(user=>{
   if(user&&user.email==='vittoriahvahz@gmail.com'){
     window.location.href='admin.html';
+  }else if(user){
+    window.location.href='loja.html';
   }
 });
 
-async function login(){
-  const email=document.getElementById('email').value.trim();
-  const senha=document.getElementById('senha').value;
-  const btn=event.target;btn.disabled=true;btn.textContent='ENTRANDO...';
-  document.getElementById('erro').textContent='';
+function mudarForm(form,el){
+  document.querySelectorAll('.form').forEach(f=>f.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('form-'+form).classList.add('active');
+  el.classList.add('active');
+  document.querySelectorAll('.error').forEach(e=>e.textContent='');
+}
+
+function toggleSenha(id){
+  const input=document.getElementById(id);
+  input.type=input.type==='password'?'text':'password';
+}
+
+function validarSenha(s){
+  document.getElementById('req8').classList.toggle('ok',s.length>=8);
+  document.getElementById('reqMai').classList.toggle('ok',/[A-Z]/.test(s));
+  document.getElementById('reqNum').classList.toggle('ok',/[0-9]/.test(s));
+  document.getElementById('reqEsp').classList.toggle('ok',/[!@#$%^&*]/.test(s));
+  document.querySelectorAll('.requisito.ok span').forEach(s=>s.textContent='✓');
+  document.querySelectorAll('.requisito:not(.ok) span').forEach(s=>s.textContent='○');
+}
+
+async function fazerLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const senha=document.getElementById('loginSenha').value;
+  const btn=event.target;btn.disabled=true;btn.textContent='Entrando...';
+  document.getElementById('erroLogin').textContent='';
   try{
+    const lemb= document.getElementById('lembrar').checked;
+    await auth.setPersistence(lemb?firebase.auth.Auth.Persistence.LOCAL:firebase.auth.Auth.Persistence.SESSION);
     await auth.signInWithEmailAndPassword(email,senha);
   }catch(e){
-    document.getElementById('erro').textContent=e.message;
+    document.getElementById('erroLogin').textContent=e.message;
     btn.disabled=false;
-    btn.textContent='ENTRAR';
+    btn.textContent='Entrar';
+  }
+}
+
+async function fazerCadastro(){
+  const nome=document.getElementById('cadNome').value.trim();
+  const email=document.getElementById('cadEmail').value.trim();
+  const senha=document.getElementById('cadSenha').value;
+  const confirma=document.getElementById('cadConfirmaSenha').value;
+  const aceite=document.getElementById('aceite').checked;
+  const erro=document.getElementById('erroCad');
+
+  if(!nome||!email||!senha){erro.textContent='Preencha todos os campos';return}
+  if(senha!==confirma){erro.textContent='As senhas não conferem';return}
+  if(!aceite){erro.textContent='Aceite os termos para continuar';return}
+  if(senha.length<8||!/[A-Z]/.test(senha)||!/[0-9]/.test(senha)||!/[!@#$%^&*]/.test(senha)){
+    erro.textContent='A senha não atende aos requisitos';return
+  }
+
+  const btn=event.target;btn.disabled=true;btn.textContent='Cadastrando...';
+  erro.textContent='';
+
+  try{
+    const cred=await auth.createUserWithEmailAndPassword(email,senha);
+    await cred.user.updateProfile({displayName:nome});
+    await db.ref('usuarios/'+cred.user.uid).set({
+      nome:nome,
+      email:email,
+      criadoEm:Date.now(),
+      totalPedidos:0,
+      totalGasto:0
+    });
+  }catch(e){
+    erro.textContent=e.message;
+    btn.disabled=false;
+    btn.textContent='Cadastrar';
+  }
+}
+
+async function enviarReset(){
+  const email=document.getElementById('esqEmail').value.trim();
+  const erro=document.getElementById('erroEsq');
+  if(!email){erro.textContent='Digite seu e-mail';return}
+
+  const btn=event.target;btn.disabled=true;btn.textContent='Enviando...';
+  erro.textContent='';
+
+  try{
+    await auth.sendPasswordResetEmail(email);
+    document.getElementById('form-esqueceu').classList.remove('active');
+    document.getElementById('form-sucesso').classList.add('active');
+  }catch(e){
+    erro.textContent=e.message;
+    btn.disabled=false;
+    btn.textContent='Enviar link de redefinição';
   }
 }
 </script>
