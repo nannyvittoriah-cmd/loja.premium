@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Prime Store - ADM</title>
 <style>
-:root{--bg:#0a0a12;--sidebar:#0f0f1a;--card:#16161f;--input:#1e1e2a;--border:#2f2f42;--purple:#8b5cf6;--purple-dark:#7c3aed;--text:#fff;--text-dim:#8b8ba1;--green:#10b981;--red:#ef4444;--blue:#3b82f6;--yellow:#f59e0b}
+:root{--bg:#0a0a12;--sidebar:#0f0f1a;--card:#16161f;--input:#1e1e2a;--border:#2f42;--purple:#8b5cf6;--purple-dark:#7c3aed;--text:#fff;--text-dim:#8b8ba1;--green:#10b981;--red:#ef4444;--blue:#3b82f6;--yellow:#f59e0b}
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);color:var(--text);font-size:11px}
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:220px;background:var(--sidebar);border-right:1px solid var(--border);padding:16px 0;overflow-y:auto;z-index:100;transition:transform 0.3s}
@@ -53,6 +53,7 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 .status-value{font-size:10px;font-weight:700}
 .btn{width:100%;height:40px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border:none;border-radius:10px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:8px}
 .btn:active{transform:scale(0.98)}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
 .btn-sm{height:30px;font-size:10px;padding:0 12px;width:auto}
 .btn-outline{background:transparent;border:1px solid var(--purple);color:var(--purple)}
 .btn-red{background:linear-gradient(135deg,var(--red) 0%,#dc2626 100%)}
@@ -102,7 +103,7 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 .coupon-code{font-size:14px;font-weight:900;color:var(--purple)}
 .coupon-badge{font-size:8px;font-weight:700;padding:3px 8px;border-radius:6px}
 .coupon-badge.ativo{background:rgba(16,185,129,0.15);color:var(--green);border:1px solid var(--green)}
-.coupon-badge.inativo{background:rgba(239,68,68,0.15);color:var(--red);border:1px solid var(--red)}
+.coupon-badge.inativo{background:rgba(239,68,0.15);color:var(--red);border:1px solid var(--red)}
 .coupon-info{font-size:10px;color:var(--text-dim);margin-bottom:4px}
 .config-tabs{display:flex;gap:6px;margin-bottom:12px;border-bottom:1px solid var(--border);padding-bottom:12px}
 .config-tab{padding:6px 12px;background:transparent;border:none;color:var(--text-dim);font-size:10px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent}
@@ -366,12 +367,12 @@ body{background:var(--bg);color:var(--text);font-size:11px}
         <div class="input-box"><input type="text" id="cfgCorPrimaria" placeholder="Cor primária" value="#8b5cf6"></div>
         <div class="input-box"><input type="text" id="cfgLogo" placeholder="URL do Logo"></div>
         <div class="input-box"><input type="text" id="cfgBanner" placeholder="URL do Banner"></div>
-        <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
+                <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
       </div>
     </div>
   </div>
 
-  <div class="screen" id="screen-relatorios">      <div class="card-title">📊 RELATORIOS</div><div class="empty">Em desenvolvimento</div></div></div>
+  <div class="screen" id="screen-relatorios"><div class="card"><div class="card-title">📊 RELATORIOS</div><div class="empty">Em desenvolvimento</div></div></div>
   <div class="screen" id="screen-suporte"><div class="card"><div class="card-title">💬 SUPORTE</div><div class="empty">Em desenvolvimento</div></div></div>
   <div class="screen" id="screen-logs"><div class="card"><div class="card-title">📄 LOGS DO SISTEMA</div><div class="empty">Em desenvolvimento</div></div></div>
 </div>
@@ -395,7 +396,7 @@ body{background:var(--bg);color:var(--text);font-size:11px}
       <div class="input-box"><input type="number" id="prodEstoque" placeholder="Estoque"></div>
     </div>
     <div class="input-box"><textarea id="prodDesc" placeholder="Descrição do produto..."></textarea></div>
-    <button class="btn" onclick="salvarProduto()">SALVAR PRODUTO</button>
+    <button type="button" class="btn" onclick="salvarProduto()">SALVAR PRODUTO</button>
   </div>
 </div>
 
@@ -407,7 +408,7 @@ body{background:var(--bg);color:var(--text);font-size:11px}
       <input type="file" id="uploadCatImg" style="display:none" accept="image/*" onchange="previewImagem(this,'uploadAreaCat')">
     </div>
     <div class="input-box"><input type="text" id="catNome" placeholder="Nome da categoria"></div>
-    <button class="btn" onclick="salvarCategoria()">SALVAR CATEGORIA</button>
+    <button type="button" class="btn" onclick="salvarCategoria()">SALVAR CATEGORIA</button>
   </div>
 </div>
 
@@ -420,7 +421,7 @@ body{background:var(--bg);color:var(--text);font-size:11px}
     </div>
     <div class="input-box"><select id="subcatCategoria"><option value="">Selecione a categoria</option></select></div>
     <div class="input-box"><input type="text" id="subcatNome" placeholder="Nome da subcategoria"></div>
-    <button class="btn" onclick="salvarSubcategoria()">SALVAR SUBCATEGORIA</button>
+    <button type="button" class="btn" onclick="salvarSubcategoria()">SALVAR SUBCATEGORIA</button>
   </div>
 </div>
 
@@ -439,7 +440,7 @@ body{background:var(--bg);color:var(--text);font-size:11px}
     </div>
     <div class="input-box"><input type="number" id="cupomValidade" placeholder="Validade (dias)"></div>
     <div class="input-box"><select id="cupomProdutos" multiple style="min-height:80px"><option value="">Todos os produtos</option></select></div>
-    <button class="btn" onclick="salvarCupom()">SALVAR CUPOM</button>
+    <button type="button" class="btn" onclick="salvarCupom()">SALVAR CUPOM</button>
   </div>
 </div>
 
@@ -448,7 +449,6 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 <script>
-// CONFIG FIREBASE CORRIGIDO
 const firebaseConfig={
   apiKey:"AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
   authDomain:"premium-store-aa58b.firebaseapp.com",
@@ -485,7 +485,7 @@ function mostrarTela(tela,el){
   document.getElementById('screen-'+tela).classList.add('active');
   if(el)el.classList.add('active');
   const titulos={dashboard:'Dashboard',produtos:'Produtos',categorias:'Categorias',subcategorias:'Subcategorias',pedidos:'Pedidos',usuarios:'Clientes',cupons:'Cupons',slider:'Slider / Banners',notificar:'Notificar Cliente',config:'Configurações',relatorios:'Relatorios',suporte:'Suporte',logs:'Logs do Sistema'};
-  document.getElementById('headerTitle').textContent=titulos[tela]||'Dashboard';
+  document.getElementById('headerTitle').textContent=titulos||'Dashboard';
   if(window.innerWidth<=768)toggleSidebar();
 }
 
@@ -652,20 +652,26 @@ function previewImagem(input,id){
 async function salvarCategoria(){
   const nome=document.getElementById('catNome').value.trim();
   if(!nome){alert('Preencha o nome');return}
+  const btn=event.target;
+  btn.disabled=true;
+  btn.textContent='SALVANDO...';
   try{
     let imgUrl='';
     if(imgCategoria){
       const ref=storage.ref('categorias/'+Date.now()+'.jpg');
-      await ref.put(imgCategoria);
-      imgUrl=await ref.getDownloadURL();
+      const snapshot=await ref.put(imgCategoria);
+      imgUrl=await snapshot.ref.getDownloadURL();
     }
     await db.ref('categorias').push({nome,imagem:imgUrl,criadoEm:Date.now()});
     fecharModal('modalCategoria');
     carregarCategorias();
-    alert('Categoria salva!');
+    alert('Categoria salva com sucesso!');
   }catch(e){
+    console.error('Erro Firebase:',e);
     alert('Erro ao salvar: '+e.message);
-    console.error(e);
+  }finally{
+    btn.disabled=false;
+    btn.textContent='SALVAR CATEGORIA';
   }
 }
 
@@ -703,20 +709,26 @@ async function salvarSubcategoria(){
   const catId=document.getElementById('subcatCategoria').value;
   const nome=document.getElementById('subcatNome').value.trim();
   if(!catId||!nome){alert('Preencha todos os campos');return}
+  const btn=event.target;
+  btn.disabled=true;
+  btn.textContent='SALVANDO...';
   try{
     let imgUrl='';
     if(imgSubcategoria){
       const ref=storage.ref('subcategorias/'+Date.now()+'.jpg');
-      await ref.put(imgSubcategoria);
-      imgUrl=await ref.getDownloadURL();
+      const snapshot=await ref.put(imgSubcategoria);
+      imgUrl=await snapshot.ref.getDownloadURL();
     }
     await db.ref('categorias/'+catId+'/subcategorias').push({nome,imagem:imgUrl,criadoEm:Date.now()});
     fecharModal('modalSubcategoria');
     carregarSubcategorias();
-    alert('Subcategoria salva!');
+    alert('Subcategoria salva com sucesso!');
   }catch(e){
+    console.error('Erro Firebase:',e);
     alert('Erro ao salvar: '+e.message);
-    console.error(e);
+  }finally{
+    btn.disabled=false;
+    btn.textContent='SALVAR SUBCATEGORIA';
   }
 }
 
@@ -925,6 +937,9 @@ async function enviarNotificacao(){
     });
     alert.textContent='Notificação enviada para todos os clientes!';
   }else{
+    const snap=await db.ref('usuarios').orderByChild('email').equalTo(email).once('value');
+    if(!snap.exists()){alert.textContent='E-mail não encontrado';alert.className='alert error';alert
+      }else{
     const snap=await db.ref('usuarios').orderByChild('email').equalTo(email).once('value');
     if(!snap.exists()){alert.textContent='E-mail não encontrado';alert.className='alert error';alert.style.display='block';return}
     const uid=Object.keys(snap.val())[0];
