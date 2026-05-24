@@ -2,761 +2,291 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SMM PREMIUM STORE</title>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Premium Store</title>
 <style>
-:root{
-  --bg:#0a0a0f;
-  --card:#1a1a22;
-  --pink:#ff1493;
-  --blue:#3b82f6;
-  --green:#22c55e;
-  --border:#333;
-  --text:#fff;
-  --muted:#888;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  background:var(--bg);
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
-  color:var(--text);
-  padding:20px;
-  min-height:100vh;
-}
-.container{max-width:420px;margin:0 auto;margin-top:80px}
-.top-bar{
-  position:absolute;top:15px;right:15px;
-  display:flex;gap:10px;align-items:center;
-}
-.user-info{
-  display:none;align-items:center;gap:10px;
-  background:rgba(255,20,147,0.1);
-  border:2px solid var(--pink);
-  padding:6px 12px;border-radius:20px;
-}
-.user-info img{width:32px;height:32px;border-radius:50%;border:2px solid var(--pink)}
-.btn-logout,.btn-adm{
-  background:transparent;padding:6px 12px;border-radius:20px;
-  cursor:pointer;font-weight:bold;font-size:12px;border:2px solid;
-}
-.btn-logout{color:#ff4444;border-color:#ff4444}
-.btn-adm{color:var(--blue);border-color:var(--blue);display:none}
-h1{
-  text-align:center;color:var(--pink);
-  margin-bottom:20px;text-shadow:0 0 15px rgba(255,20,147,0.8)
-}
-.card{
-  background:var(--card);padding:20px;border-radius:16px;
-  margin-bottom:20px;border:1px solid var(--border)
-}
-.saldo-card{
-  background:linear-gradient(135deg,var(--pink),#a855f7);
-  padding:20px;border-radius:16px;text-align:center;margin-bottom:20px
-}
-.saldo-card h2{font-size:32px;margin-bottom:5px}
-label{font-size:15px;margin-bottom:8px;display:block;color:#fff}
-input,select,button,textarea{
-  width:100%;padding:14px;margin-bottom:12px;border-radius:12px;
-  border:2px solid var(--border);background:var(--card);color:var(--text);font-size:15px
-}
-input:focus,select:focus,textarea:focus{
-  border-color:var(--pink);box-shadow:0 0 0 2px rgba(255,20,147,0.3);outline:none
-}
-button{
-  background:var(--pink);border:none;font-weight:bold;cursor:pointer;
-  transition:0.3s
-}
-button:hover{background:#ff3ca8}
-.btn-green{background:var(--green)}
-.btn-green:hover{background:#16a34a}
-.btn-cancel{background:#333}
-.btn-cancel:hover{background:#444}
-.btn-group{display:flex;gap:10px}
-.menu{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px
-}
-.menu button{
-  background:var(--card);border:2px solid var(--border);
-  padding:15px 5px;font-size:12px;border-radius:12px
-}
-.modal{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);
-  justify-content:center;align-items:center;padding:20px;z-index:1000
-}
-.modal.active{display:flex}
-.modal-content{
-  background:var(--card);padding:25px;border-radius:16px;
-  border:2px solid var(--pink);width:100%;max-width:500px;
-  max-height:80vh;overflow-y:auto
-}
-.close{float:right;font-size:28px;cursor:pointer;color:var(--muted)}
-.chat-msg{
-  padding:10px 14px;margin-bottom:8px;border-radius:18px;max-width:85%
-}
-.chat-msg.me{background:var(--pink);margin-left:auto;text-align:right}
-.chat-msg.auto{background:#333;font-style:italic}
-.badge{
-  background:var(--pink);color:#fff;padding:2px 8px;border-radius:8px;font-size:11px
-}
-.transacao{
-  padding:10px;border-bottom:1px solid #333;display:flex;justify-content:space-between
-}
-.transacao.entrada{color:var(--green)}
-.transacao.saida{color:#ff4444}
-.comprovante-img{
-  width:100%;max-height:300px;object-fit:contain;border-radius:12px;margin:10px 0;border:2px solid var(--border)
-}
-.info-box{
-  background:var(--bg);padding:12px;border-radius:8px;margin:10px 0;border:1px solid var(--border)
-}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0a;--card:#141414;--input:#1e1e1e;--text:#fff;--muted:#888;--purple:#8b5cf6;--purple2:#7c3aed;--border:#2a2a2a;--green:#4ade80;--red:#f87171;--yellow:#fbbf24}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);padding-bottom:80px}
+.tela{display:none;min-height:100vh}
+.tela.ativa{display:block}
+.header{position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--border);padding:12px 16px}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:12px}
+.menu-btn{width:40px;height:40px;background:var(--card);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.menu-btn svg{width:20px;height:20px;stroke:var(--text);stroke-width:2;fill:none}
+.logo-header{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:800;flex:1}
+.logo-header img{width:32px;height:32px}
+.logo-header span{color:var(--purple)}
+.header-icons{display:flex;gap:12px;align-items:center}
+.icon-btn{position:relative;width:40px;height:40px;background:var(--card);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.icon-btn svg{width:20px;height:20px;stroke:var(--text);stroke-width:2;fill:none}
+.badge{position:absolute;top:-4px;right:-4px;background:var(--purple);color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.search-box{position:relative}
+.search-box svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;stroke:var(--muted);stroke-width:2;fill:none}
+.search-box input{width:100%;background:var(--input);border:1px solid var(--border);border-radius:12px;padding:12px 14px 12px 44px;color:var(--text);font-size:14px;outline:none}
+.search-box input:focus{border-color:var(--purple)}
+.search-btn{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:36px;height:36px;background:var(--purple);border:none;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.search-btn svg{width:18px;height:18px;stroke:#fff;stroke-width:2;fill:none}
+.secao{padding:16px}
+.secao-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.secao-titulo{font-size:16px;font-weight:700}
+.secao-link{font-size:13px;color:var(--purple);font-weight:600;cursor:pointer}
+.categorias-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.cat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;cursor:pointer}
+.cat-icon{width:44px;height:44px;background:rgba(139,92,246,.1);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:22px}
+.cat-nome{font-size:12px;font-weight:600;line-height:1.3}
+.produtos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.produto-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px;cursor:pointer}
+.produto-img{width:100%;aspect-ratio:1;background:var(--input);border-radius:10px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden}
+.produto-img img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+.produto-nome{font-size:12px;font-weight:700;margin-bottom:2px;line-height:1.2;min-height:28px}
+.produto-preco{font-size:14px;font-weight:700;color:var(--purple);margin-bottom:8px}
+.btn{width:100%;background:linear-gradient(135deg,var(--purple),var(--purple2));color:#fff;border:none;padding:16px;border-radius:14px;font-weight:700;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-outline{width:100%;background:transparent;color:var(--purple);border:2px solid var(--purple);padding:14px;border-radius:14px;font-weight:700;cursor:pointer;font-size:15px;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px}
+.nav-bottom{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(5,1fr);padding:8px 0;z-index:100}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px;cursor:pointer;color:var(--muted)}
+.nav-item.active{color:var(--purple)}
+.nav-item svg{width:22px;height:22px;stroke:currentColor;stroke-width:2;fill:none}
+.nav-item-texto{font-size:10px;font-weight:600}
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-title{font-size:16px;font-weight:700;margin-bottom:8px;color:var(--text)}
+.empty-text{font-size:13px}
+.sidebar{position:fixed;top:0;left:-280px;width:280px;height:100vh;background:var(--card);border-right:1px solid var(--border);z-index:200;transition:left.3s;padding:20px;overflow-y:auto}
+.sidebar.ativo{left:0}
+.sidebar-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:199;display:none}
+.sidebar-overlay.ativo{display:block}
+.sidebar-header{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.sidebar-logo{width:40px;height:40px}
+.sidebar-titulo{font-size:16px;font-weight:800}
+.sidebar-titulo span{color:var(--purple)}
+.sidebar-menu{display:flex;flex-direction:column;gap:8px}
+.sidebar-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;cursor:pointer;font-size:14px;font-weight:600;color:var(--muted)}
+.sidebar-item:hover{background:var(--input);color:var(--text)}
+.sidebar-item svg{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none}
+.titulo-tela{font-size:16px;font-weight:700;text-align:center;flex:1}
+.btn-voltar{width:40px;height:40px;background:var(--card);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.btn-voltar svg{width:20px;height:20px;stroke:var(--text);stroke-width:2;fill:none}
 </style>
 </head>
 <body>
-
-<div class="top-bar">
-  <div id="g_id_onload"
-       data-client_id="462239500057-uap87312j0f7qhaiocgaab47udtkjsfb.apps.googleusercontent.com"
-       data-callback="handleCredentialResponse"
-       data-auto_prompt="false">
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="fecharMenu()"></div>
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <img src="https://i.postimg.cc/PJ2Vcty8/e1befe8d-0630-444f-aea5-9b0a96d5f84b.jpg" class="sidebar-logo">
+    <div class="sidebar-titulo">PREMIUM <span>STORE</span></div>
   </div>
-  <div class="g_id_signin" data-type="standard" data-size="large"></div>
-
-  <div class="user-info" id="userInfo">
-    <img id="userPic" src="" alt="">
-    <span id="userName"></span>
-    <button class="btn-adm" id="btnAdm" onclick="abrir('admin')">ADM</button>
-    <button class="btn-logout" onclick="logout()">Sair</button>
-  </div>
-</div>
-
-<div class="container">
-  <h1>SMM PREMIUM STORE</h1>
-
-  <div id="loginRequired" class="card" style="text-align:center;border-color:var(--pink)">
-    <p style="color:var(--pink)">🔒 Faça login com Google para continuar</p>
-  </div>
-
-  <div id="app" style="display:none">
-
-    <div class="saldo-card">
-      <p>Saldo disponível</p>
-      <h2 id="saldoValor">R$ 0,00</h2>
-      <button onclick="abrir('carteira')" style="margin-top:10px;background:rgba(255,255,255,0.2)">Adicionar Saldo</button>
+  <div class="sidebar-menu">
+    <div class="sidebar-item" onclick="irPara('home');fecharMenu()">
+      <svg viewBox="0 0 24 24"><path d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0.621.504 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
+      Início
     </div>
-
-    <div class="menu">
-      <button onclick="abrir('conta')">⚙️ Conta</button>
-      <button onclick="abrir('chat')">💬 Chat</button>
-      <button onclick="abrir('compras')">📦 Compras</button>
-      <button onclick="abrir('status')">📊 Status</button>
-    </div>
-
-    <div class="card">
-      <label>👇 Escolha a categoria abaixo</label>
-      <select id="categoria" onchange="mudarCat()">
-        <option value="">Selecione</option>
-      </select>
-    </div>
-
-    <div class="card">
-      <label>👇 Escolha o serviço abaixo</label>
-      <select id="servico" onchange="mudarServ()">
-        <option value="">Selecione uma categoria</option>
-      </select>
-    </div>
-
-    <div class="card">
-      <label>🔗 Link</label>
-      <input type="url" id="link" placeholder="Cole o link do post/perfil">
-
-      <label>💰 Valor</label>
-      <input type="text" id="valor" readonly placeholder="R$ 0,00">
-
-      <button onclick="fazerPedido()">Enviar Pedido</button>
-    </div>
-
-    <div class="card">
-      <img src="https://i.postimg.cc/Lsyc5CBJ/IMG-4472.jpg" style="width:100%;border-radius:12px;margin-bottom:10px">
-      <button onclick="abrir('desc')">VER DESCRIÇÃO DO PRODUTO</button>
+    <div class="sidebar-item" onclick="irPara('como-funciona');fecharMenu()">
+      <svg viewBox="0 0 24 24"><path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"/></svg>
+      Como Funciona
     </div>
   </div>
 </div>
 
-<!-- MODAIS -->
-<div class="modal" id="modalCarteira">
-  <div class="modal-content">
-    <span class="close" onclick="fechar('carteira')">×</span>
-    <h3>💳 Carteira</h3>
-    <p style="color:var(--muted);margin-bottom:15px">Adicione saldo via PIX, Mercado Pago ou fale com o ADM</p>
-    <input type="number" id="valorDeposito" placeholder="Valor do depósito">
-    <input type="file" id="comprovanteUpload" accept="image/*" onchange="previewComprovante()">
-    <img id="previewImg" class="comprovante-img" style="display:none">
-    <button onclick="solicitarDeposito()">Solicitar Depósito</button>
-    <h4 style="margin-top:20px">Histórico de Transações</h4>
-    <div id="historicoTransacoes"></div>
-  </div>
-</div>
-
-<div class="modal" id="modalConta">
-  <div class="modal-content">
-    <span class="close" onclick="fechar('conta')">×</span>
-    <h3>Minha Conta</h3>
-    <div id="contaInfo"></div>
-    <h4 style="margin-top:15px">Histórico de Pedidos</h4>
-    <div id="historico"></div>
-  </div>
-</div>
-
-<div class="modal" id="modalChat">
-  <div class="modal-content">
-    <span class="close" onclick="fechar('chat')">×</span>
-    <h3>Chat</h3>
-    <select id="chatSelect" onchange="carregarChat()" style="margin-bottom:10px">
-      <option value="">Selecione um pedido</option>
-    </select>
-    <div id="chatBox" style="height:250px;overflow-y:auto;background:var(--bg);padding:10px;border-radius:8px"></div>
-  </div>
-</div>
-
-<div class="modal" id="modalCompras">
-  <div class="modal-content">
-    <span class="close" onclick="fechar('compras')">×</span>
-    <h3>Minhas Compras</h3>
-    <div id="listaCompras"></div>
-  </div>
-</div>
-
-<div class="modal" id="modalStatus">
-  <div class="modal-content">
-    <span class="close" onclick="fechar('status')">×</span>
-    <h3>Status dos Pedidos</h3>
-    <div id="listaStatus"></div>
-  </div>
-</div>
-
-<div class="modal" id="modalDesc">
-  <div class="modal-content">
-    <span class="close" onclick="fechar('desc')">×</span>
-    <h3 id="descTitulo">Descrição</h3>
-    <p id="descTexto">Selecione um serviço</p>
-  </div>
-</div>
-
-<div class="modal" id="modalAdmin">
-  <div class="modal-content">
-    <span class="close" onclick="fechar('admin')">×</span>
-    <h3>Painel ADM</h3>
-
-    <h4>Adicionar Serviço</h4>
-    <input type="text" id="admCat" placeholder="Categoria">
-    <input type="text" id="admNome" placeholder="Nome do serviço">
-    <input type="number" id="admPreco" placeholder="Preço">
-    <textarea id="admDesc" placeholder="Descrição"></textarea>
-    <button onclick="addServico()">Adicionar Serviço</button>
-    <div id="listaServicos" style="margin-top:15px"></div>
-
-    <h4 style="margin-top:20px">Adicionar Saldo ao Usuário</h4>
-    <input type="email" id="admEmail" placeholder="Email do usuário">
-    <input type="number" id="admValor" placeholder="Valor para adicionar">
-    <button class="btn-green" onclick="adicionarSaldo()">Adicionar Saldo</button>
-
-    <h4 style="margin-top:20px">Consultar Saldo do Cliente</h4>
-    <input type="email" id="admEmailConsulta" placeholder="Email do cliente">
-    <button onclick="consultarSaldoCliente()">Consultar</button>
-    <div id="resultadoSaldoCliente" style="margin-top:10px;padding:10px;background:var(--bg);border-radius:8px;display:none;">
-      <p><strong>Email:</strong> <span id="saldoEmail"></span></p>
-      <p><strong>Saldo:</strong> <span id="saldoValorCliente"></span></p>
-    </div>
-
-    <h4 style="margin-top:20px">Pedidos</h4>
-    <div id="adminPedidos"></div>
-
-    <h4 style="margin-top:20px">Solicitações de Depósito</h4>
-    <div id="adminDepositos"></div>
-  </div>
-</div>
-
-<!-- MODAL CONFIRMAÇÃO -->
-<div class="modal" id="modalConfirm">
-  <div class="modal-content" style="max-width:450px">
-    <h3>⚠️ Confirmar Aprovação</h3>
-    <div class="info-box">
-      <p><strong>Cliente:</strong> <span id="confirmEmail"></span></p>
-      <p><strong>Valor:</strong> <span id="confirmValor"></span></p>
-      <p><strong>Saldo Atual:</strong> <span id="confirmSaldoAtual"></span></p>
-      <p><strong>Saldo Após Aprovação:</strong> <span id="confirmSaldoNovo" style="color:var(--green)"></span></p>
-    </div>
-    <div id="confirmComprovanteBox" style="display:none">
-      <p><strong>Comprovante:</strong></p>
-      <img id="confirmComprovante" class="comprovante-img">
-    </div>
-    <div class="btn-group">
-      <button class="btn-cancel" onclick="fecharConfirm()">Cancelar</button>
-      <button class="btn-green" onclick="confirmarAprovacao()">Confirmar e Aprovar</button>
+<div id="tela-home" class="tela ativa">
+  <div class="header">
+    <div class="header-top">
+      <div class="menu-btn" onclick="abrirMenu()">
+        <svg viewBox="0 0 24 24"><path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+      </div>
+      <div class="logo-header">
+        <img src="https://i.postimg.cc/PJ2Vcty8/e1befe8d-0630-444f-aea5-9b0a96d5f84b.jpg" alt="Logo">
+        PREMIUM <span>STORE</span>
+      </div>
+      <div class="header-icons">
+        <div class="icon-btn" onclick="alert('Carrinho')">
+          <svg viewBox="0 0 24 24"><path d="M2.25 3h1.386c.51 0.955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0.75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0.75.75 0 0 1 1.5 0Z"/></svg>
+          <div class="badge" id="badgeCarrinho" style="display:none">0</div>
+        </div>
+      </div>
+    <div class="search-box">
+      <svg viewBox="0 0 24 24"><path d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196a7.5 7.5 0 0 0 10.607Z"/></svg>
+      <input type="text" placeholder="Buscar produtos...">
+      <button class="search-btn">
+        <svg viewBox="0 0 24 24"><path d="m21 21-5.197-5.197m0 0A7.5 0 1 0 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg>
+      </button>
     </div>
   </div>
+
+  <div style="background:linear-gradient(135deg,#1a0b2e 0%,#2d1b4e 50%,#0a0a0a 100%);padding:20px 16px;margin-bottom:16px;position:relative;overflow:hidden">
+    <div style="position:relative;z-index:2;max-width:70%">
+      <div style="font-size:20px;font-weight:900;line-height:1.2;margin-bottom:4px">
+        COMPRE REDES SOCIAIS,<br>JOGOS E ASSINATURAS
+      </div>
+      <div style="font-size:20px;font-weight:900;color:var(--purple);margin-bottom:8px">PREMIUM</div>
+      <div style="font-size:12px;color:var(--muted);font-weight:600">ENTREGA RÁPIDA E SEGURA!</div>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:16px;position:relative;z-index:2">
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600">
+        <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--purple);stroke-width:2;fill:none"><path d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"/></svg>
+        100% SEGURO
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600">
+        <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--purple);stroke-width:2;fill:none"><path d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"/></svg>
+        ENTREGA RÁPIDA
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600">
+        <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:var(--purple);stroke-width:2;fill:none"><path d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+        SUPORTE 24H
+      </div>
+    </div>
+  </div>
+
+  <div class="secao" style="padding-top:0">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+      <div onclick="irPara('como-funciona')" style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;cursor:pointer">
+        <div style="width:40px;height:40px;background:rgba(139,92,246,.1);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px">
+          <svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--purple);stroke-width:2;fill:none"><path d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/></svg>
+        </div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:2px">REDES SOCIAIS</div>
+        <div style="font-size:10px;color:var(--muted)">Ver produtos</div>
+      </div>
+      <div onclick="irPara('como-funciona')" style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;cursor:pointer">
+        <div style="width:40px;height:40px;background:rgba(139,92,246,.1);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px">
+          <svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--purple);stroke-width:2;fill:none"><path d="M6 12 3.269 3.126A59.768 0 0 1 21.485 12 59.77 59.77 0 0 1 3.27 20.876L5.999 12Zm0 0h7.5"/></svg>
+        </div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:2px">JOGOS</div>
+        <div style="font-size:10px;color:var(--muted)">Ver produtos</div>
+      </div>
+      <div onclick="irPara('como-funciona')" style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center;cursor:pointer">
+        <div style="width:40px;height:40px;background:rgba(139,92,246,.1);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px">
+          <svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--purple);stroke-width:2;fill:none"><path d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125.504 1.125 1.125v11.25c0.621-.504 1.125-1.125 1.125h-18c-.621 0-1.125-.504-1.125-1.125V12.375c0-.621.504-1.125 1.125-1.125Z"/></svg>
+        </div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:2px">ASSINATURAS</div>
+        <div style="font-size:10px;color:var(--muted)">Ver produtos</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="secao" style="padding-top:8px">
+    <div class="secao-header">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:3px;height:16px;background:var(--purple);border-radius:2px"></div>
+        <div class="secao-titulo">PRODUTOS EM DESTAQUE</div>
+      </div>
+      <div class="secao-link" onclick="alert('Ver todos')">VER TODOS</div>
+    </div>
+    <div class="produtos-grid">
+      <div class="produto-card">
+        <div class="produto-img">🎁</div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:2px;line-height:1.2;min-height:28px">Netflix Premium</div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:6px">Entrega: 5 a 30 min</div>
+        <div class="produto-preco" style="font-size:14px;margin-bottom:8px">R$ 19,90</div>
+        <button style="width:100%;background:var(--purple);color:#fff;border:none;border-radius:8px;padding:8px;font-weight:700;font-size:11px;cursor:pointer">COMPRAR</button>
+      </div>
+      <div class="produto-card">
+        <div class="produto-img">🎮</div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:2px;line-height:1.2;min-height:28px">Xbox Game Pass</div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:6px">Entrega: 5 a 30 min</div>
+        <div class="produto-preco" style="font-size:14px;margin-bottom:8px">R$ 29,90</div>
+        <button style="width:100%;background:var(--purple);color:#fff;border:none;border-radius:8px;padding:8px;font-weight:700;font-size:11px;cursor:pointer">COMPRAR</button>
+      </div>
+    </div>
+    <button style="width:100%;background:transparent;border:1px solid var(--border);color:var(--purple);padding:12px;border-radius:12px;font-weight:700;font-size:13px;margin-top:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
+      VER MAIS PRODUTOS
+      <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:var(--purple);stroke-width:2;fill:none"><path d="m19.5 8.25-7.5 7.5-7.5"/></svg>
+    </button>
+  </div>
 </div>
 
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+<div id="tela-como-funciona" class="tela">
+  <div class="header">
+    <div class="header-top">
+      <div class="btn-voltar" onclick="voltar()">
+        <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+      </div>
+      <div class="titulo-tela">COMO FUNCIONA</div>
+      <div style="width:40px"></div>
+    </div>
+  </div>
+  <div class="secao">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px">
+      <div style="display:flex;gap:14px;margin-bottom:20px">
+        <div style="width:36px;height:36px;background:var(--purple);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0">1</div>
+        <div>
+          <div style="font-size:14px;font-weight:800;margin-bottom:4px">ESCOLHA O PRODUTO</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">Navegue e escolha o que deseja comprar.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:14px;margin-bottom:20px">
+        <div style="width:36px;height:36px;background:var(--purple);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0">2</div>
+        <div>
+          <div style="font-size:14px;font-weight:800;margin-bottom:4px">PREENCHA OS DADOS</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">Preencha corretamente os dados para o pedido.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:14px;margin-bottom:20px">
+        <div style="width:36px;height:36px;background:var(--purple);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0">3</div>
+        <div>
+          <div style="font-size:14px;font-weight:800;margin-bottom:4px">ENVIE O PEDIDO</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">Seu pedido será enviado para nós.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:14px">
+        <div style="width:36px;height:36px;background:var(--purple);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0">4</div>
+        <div>
+          <div style="font-size:14px;font-weight:800;margin-bottom:4px">AGUARDE A ENTREGA</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">Faremos a entrega manual o mais rápido possível.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px">
+      <div style="font-size:13px;font-weight:800;color:var(--purple);margin-bottom:16px">FORMAS DE PAGAMENTO</div>
+      <div style="display:flex;gap:20px;align-items:center">
+        <div style="display:flex;align-items:center;gap:8px">
+          <img src="https://logodownload.org/wp-content/uploads/2020/02/pix-bc-logo-0.png" style="height:24px">
+          <span style="font-size:13px;font-weight:700">Pix</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <img src="https://logodownload.org/wp-content/uploads/2019/09/picpay-logo-0.png" style="height:24px">
+          <span style="font-size:13px;font-weight:700">PicPay</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="nav-bottom">
+  <div class="nav-item active" onclick="irPara('home')">
+    <svg viewBox="0 0 24 24"><path d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0.621.504 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>
+    <div class="nav-item-texto">Home</div>
+  </div>
+  <div class="nav-item" onclick="irPara('como-funciona')">
+    <svg viewBox="0 0 24 24"><path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"/></svg>
+    <div class="nav-item-texto">Como Funciona</div>
+  </div>
+</div>
+
 <script>
-// Mensagens automáticas da IA
-const mensagensIA=[
-  "Pedido recebido! Já estamos processando 🔥",
-  "Obrigado pela compra! Status atualizado em até 5 min.",
-  "Boa! Seu pedido entrou na fila. Fica de olho no chat.",
-  "Recebemos! Se tiver problema me chama aqui.",
-  "Pedido confirmado! Iniciando em breve.",
-  "Valeu! Estamos cuidando disso agora.",
-  "Pedido na fila! Tempo estimado: 5-30 min.",
-  "Processando seu pedido... não fecha a página!"
-];
-
-// Dados
-let servicos=JSON.parse(localStorage.getItem('servicos'))||[
-  {id:1,cat:'Instagram',nome:'1000 Seguidores',preco:15.00,desc:'Seguidores reais e ativos',promo:false},
-  {id:2,cat:'Instagram',nome:'5000 Likes',preco:8.00,desc:'Likes brasileiros',promo:true},
-  {id:3,cat:'TikTok',nome:'1000 Views',preco:5.00,desc:'Views rápidas',promo:false}
-];
-let pedidos=JSON.parse(localStorage.getItem('pedidos'))||[];
-let chats=JSON.parse(localStorage.getItem('chats'))||{};
-let carteiras=JSON.parse(localStorage.getItem('carteiras'))||{};
-let transacoes=JSON.parse(localStorage.getItem('transacoes'))||{};
-let depositos=JSON.parse(localStorage.getItem('depositos'))||[];
-let usuario=null;
-let servicoAtual=null;
-let depositoParaAprovar=null;
-let comprovanteBase64=null;
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
-  authDomain: "premium-store-aa58b.firebaseapp.com",
-  databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
-  projectId: "premium-store-aa58b",
-  storageBucket: "premium-store-aa58b.firebasestorage.app",
-  messagingSenderId: "462239500057",
-  appId: "1:462239500057:web:f1b7cea162ed308a866788",
-  measurementId: "G-CN88J28WRX"
-};
-  iniciarApp();
+let telaAnterior='home';
+function abrirMenu(){
+  document.getElementById('sidebar').classList.add('ativo');
+  document.getElementById('sidebarOverlay').classList.add('ativo');
 }
-
-function parseJwt(token){
-  var base64Url=token.split('.')[1];
-  var base64=base64Url.replace(/-/g,'+').replace(/_/g,'/');
-  var jsonPayload=decodeURIComponent(atob(base64).split('').map(function(c){
-    return'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
-  return JSON.parse(jsonPayload);
+function fecharMenu(){
+  document.getElementById('sidebar').classList.remove('ativo');
+  document.getElementById('sidebarOverlay').classList.remove('ativo');
 }
-
-function logout(){
-  localStorage.removeItem('user');
-  location.reload();
-}
-
-function iniciarApp(){
-  usuario=JSON.parse(localStorage.getItem('user'));
-  if(!usuario)return;
-  document.getElementById('loginRequired').style.display='none';
-  document.getElementById('app').style.display='block';
-  document.getElementById('userInfo').style.display='flex';
-  document.getElementById('userName').textContent=usuario.nome.split(' ')[0];
-  document.getElementById('userPic').src=usuario.foto;
-
-  if(usuario.email==='nannyvittoriah@gmail.com'){
-    document.getElementById('btnAdm').style.display='block';
+function irPara(tela){
+  document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(tela==='home'){
+    document.getElementById('tela-home').classList.add('ativa');
+    document.querySelectorAll('.nav-item')[0].classList.add('active');
+  }else if(tela==='como-funciona'){
+    document.getElementById('tela-como-funciona').classList.add('ativa');
+    document.querySelectorAll('.nav-item')[1].classList.add('active');
   }
-
-  atualizarSaldo();
-  carregarCats();
+  window.scrollTo(0,0);
 }
-
-function atualizarSaldo(){
-  let saldo=carteiras[usuario.email]?.saldo||0;
-  document.getElementById('saldoValor').textContent='R$ '+saldo.toFixed(2);
-}
-
-// PREVIEW COMPROVANTE
-function previewComprovante(){
-  const file = document.getElementById('comprovanteUpload').files[0];
-  if(!file)return;
-
-  const reader = new FileReader();
-  reader.onload = function(e){
-    comprovanteBase64 = e.target.result;
-    document.getElementById('previewImg').src = comprovanteBase64;
-    document.getElementById('previewImg').style.display = 'block';
-  }
-  reader.readAsDataURL(file);
-}
-
-// FORMULÁRIO
-function carregarCats(){
-  let cats=[...new Set(servicos.map(s=>s.cat))];
-  let sel=document.getElementById('categoria');
-  sel.innerHTML='<option value="">Selecione</option>';
-  cats.forEach(c=>{sel.innerHTML+=`<option value="${c}">${c}</option>`});
-}
-
-function mudarCat(){
-  let cat=document.getElementById('categoria').value;
-  let sel=document.getElementById('servico');
-  sel.innerHTML='<option value="">Selecione</option>';
-  servicos.filter(s=>s.cat===cat).forEach(s=>{
-    let promo=s.promo?' 🔥PROMO':'';
-    sel.innerHTML+=`<option value="${s.id}">${s.nome} - R$${s.preco.toFixed(2)}${promo}</option>`;
-  });
-}
-
-function mudarServ(){
-  let id=document.getElementById('servico').value;
-  servicoAtual=servicos.find(s=>s.id==id);
-  if(servicoAtual){
-    document.getElementById('valor').value='R$ '+servicoAtual.preco.toFixed(2);
-  }
-}
-
-function fazerPedido(){
-  if(!usuario)return alert('Faça login');
-  if(!servicoAtual)return alert('Escolha um serviço');
-
-  let link=document.getElementById('link').value;
-  if(!link)return alert('Cole o link');
-
-  let saldo=carteiras[usuario.email].saldo;
-  if(saldo<servicoAtual.preco)return alert('Saldo insuficiente! Adicione saldo na carteira.');
-
-  carteiras[usuario.email].saldo-=servicoAtual.preco;
-  transacoes[usuario.email].push({
-    tipo:'saida',
-    valor:servicoAtual.preco,
-    desc:`Compra: ${servicoAtual.nome}`,
-    data:new Date().toLocaleString()
-  });
-
-  localStorage.setItem('carteiras',JSON.stringify(carteiras));
-  localStorage.setItem('transacoes',JSON.stringify(transacoes));
-
-  let pedido={
-    id:Date.now(),
-    email:usuario.email,
-    nome:usuario.nome,
-    servico:servicoAtual.nome,
-    preco:servicoAtual.preco,
-    link:link,
-    status:'pendente',
-    data:new Date().toLocaleString()
-  };
-
-  pedidos.push(pedido);
-  localStorage.setItem('pedidos',JSON.stringify(pedidos));
-
-  let msgAleatoria=mensagensIA[Math.floor(Math.random()*mensagensIA.length)];
-  chats[pedido.id]=[{from:'admin',msg:msgAleatoria,time:Date.now()}];
-  localStorage.setItem('chats',JSON.stringify(chats));
-
-  alert('Pedido enviado! Saldo descontado da carteira.');
-  document.getElementById('link').value='';
-  document.getElementById('valor').value='';
-  atualizarSaldo();
-}
-
-// CARTEIRA
-function solicitarDeposito(){
-  let valor=parseFloat(document.getElementById('valorDeposito').value);
-  if(!valor||valor<=0)return alert('Digite um valor válido');
-
-  depositos.push({
-    id:Date.now(),
-    email:usuario.email,
-    valor:valor,
-    comprovante:comprovanteBase64,
-    status:'pendente',
-    data:new Date().toLocaleString()
-  });
-  localStorage.setItem('depositos',JSON.stringify(depositos));
-
-  alert('Solicitação enviada! O ADM vai aprovar em breve.');
-  document.getElementById('valorDeposito').value='';
-  document.getElementById('comprovanteUpload').value='';
-  document.getElementById('previewImg').style.display='none';
-  comprovanteBase64=null;
-}
-
-function carregarTransacoes(){
-  let trans=transacoes[usuario.email]||[];
-  let html='';
-  trans.slice().reverse().forEach(t=>{
-    html+=`<div class="transacao ${t.tipo}">
-      <span>${t.desc}</span>
-      <span>${t.tipo==='entrada'?'+':'-'}R$${t.valor.toFixed(2)}</span>
-    </div>`;
-  });
-  document.getElementById('historicoTransacoes').innerHTML=html||'Nenhuma transação';
-}
-
-// MODAIS
-function abrir(tipo){
-  document.getElementById('modal'+tipo.charAt(0).toUpperCase()+tipo.slice(1)).classList.add('active');
-  if(tipo==='conta')carregarConta();
-  if(tipo==='compras')carregarCompras();
-  if(tipo==='status')carregarStatus();
-  if(tipo==='chat')carregarChatSelect();
-  if(tipo==='desc')carregarDesc();
-  if(tipo==='admin')carregarAdmin();
-  if(tipo==='carteira')carregarTransacoes();
-}
-
-function fechar(tipo){
-  document.getElementById('modal'+tipo.charAt(0).toUpperCase()+tipo.slice(1)).classList.remove('active');
-}
-
-function carregarConta(){
-  document.getElementById('contaInfo').innerHTML=`
-    <p><strong>Nome:</strong>${usuario.nome}</p>
-    <p><strong>Email:</strong>${usuario.email}</p>
-    <p><strong>Saldo:</strong>R$${carteiras[usuario.email].saldo.toFixed(2)}</p>
-  `;
-  let html='';
-  pedidos.filter(p=>p.email===usuario.email).forEach(p=>{
-    html+=`<div style="padding:10px;border-bottom:1px solid #333">
-      ${p.data}-${p.servico}-R$${p.preco}-${p.status}
-    </div>`;
-  });
-  document.getElementById('historico').innerHTML=html||'Nenhum pedido';
-}
-
-function carregarCompras(){
-  let html='';
-  pedidos.filter(p=>p.email===usuario.email&&p.status==='enviado').forEach(p=>{
-    html+=`<div style="padding:10px;border-bottom:1px solid #333">
-      ${p.servico}-R$${p.preco}-${p.data}
-    </div>`;
-  });
-  document.getElementById('listaCompras').innerHTML=html||'Nenhuma compra';
-}
-
-function carregarStatus(){
-  let html='';
-  pedidos.filter(p=>p.email===usuario.email).forEach(p=>{
-    html+=`<div style="padding:10px;border-bottom:1px solid #333">
-      ${p.servico}-Status:${p.status}
-    </div>`;
-  });
-  document.getElementById('listaStatus').innerHTML=html||'Nenhum pedido';
-}
-
-function carregarChatSelect(){
-  let sel=document.getElementById('chatSelect');
-  sel.innerHTML='<option value="">Selecione um pedido</option>';
-  pedidos.filter(p=>p.email===usuario.email).forEach(p=>{
-    sel.innerHTML+=`<option value="${p.id}">#${p.id}-${p.servico}</option>`;
-  });
-}
-
-function carregarChat(){
-  let id=document.getElementById('chatSelect').value;
-  let chat=chats[id]||[];
-  let html='';
-  chat.forEach(c=>{
-    let classe=c.from==='admin'?'auto':'me';
-    html+=`<div class="chat-msg${classe}">${c.msg}</div>`;
-  });
-  document.getElementById('chatBox').innerHTML=html||'Sem mensagens';
-}
-
-function carregarDesc(){
-  if(servicoAtual){
-    document.getElementById('descTitulo').textContent=servicoAtual.nome;
-    document.getElementById('descTexto').textContent=servicoAtual.desc;
-  }else{
-    document.getElementById('descTexto').textContent='Selecione um serviço primeiro';
-  }
-}
-
-// ADMIN
-function carregarAdmin(){
-  carregarServicosAdmin();
-  carregarAdminPedidos();
-  carregarAdminDepositos();
-}
-
-function addServico(){
-  let serv={
-    id:Date.now(),
-    cat:document.getElementById('admCat').value,
-    nome:document.getElementById('admNome').value,
-    preco:parseFloat(document.getElementById('admPreco').value),
-    desc:document.getElementById('admDesc').value,
-    promo:false
-  };
-  servicos.push(serv);
-  localStorage.setItem('servicos',JSON.stringify(servicos));
-  alert('Serviço adicionado!');
-  carregarServicosAdmin();
-  carregarCats();
-}
-
-function carregarServicosAdmin(){
-  let html='';
-  servicos.forEach(s=>{
-    html+=`<div style="padding:10px;border-bottom:1px solid #333">
-      ${s.nome}-R$${s.preco}
-      <button onclick="removerServ(${s.id})"style="float:right;padding:5px 10px;background:#ff4444;width:auto">X</button>
-    </div>`;
-  });
-  document.getElementById('listaServicos').innerHTML=html;
-}
-
-function removerServ(id){
-  servicos=servicos.filter(s=>s.id!==id);
-  localStorage.setItem('servicos',JSON.stringify(servicos));
-  carregarServicosAdmin();
-  carregarCats();
-}
-
-function adicionarSaldo(){
-  let email=document.getElementById('admEmail').value;
-  let valor=parseFloat(document.getElementById('admValor').value);
-
-  if(!carteiras[email])return alert('Usuário não encontrado');
-  if(!valor||valor<=0)return alert('Valor inválido');
-
-  carteiras[email].saldo+=valor;
-  if(!transacoes[email])transacoes[email]=[];
-  transacoes[email].push({
-    tipo:'entrada',
-    valor:valor,
-    desc:'Saldo adicionado pelo ADM',
-    data:new Date().toLocaleString()
-  });
-
-  localStorage.setItem('carteiras',JSON.stringify(carteiras));
-  localStorage.setItem('transacoes',JSON.stringify(transacoes));
-  alert('Saldo adicionado!');
-}
-
-function consultarSaldoCliente(){
-  let email = document.getElementById('admEmailConsulta').value;
-  if(!email) return alert('Digite o email do cliente');
-
-  let carteira = carteiras[email];
-  if(!carteira){
-    alert('Cliente não encontrado ou nunca fez login');
-    document.getElementById('resultadoSaldoCliente').style.display = 'none';
-    return;
-  }
-
-  document.getElementById('saldoEmail').textContent = email;
-  document.getElementById('saldoValorCliente').textContent = 'R$ ' + carteira.saldo.toFixed(2);
-  document.getElementById('resultadoSaldoCliente').style.display = 'block';
-}
-
-function carregarAdminPedidos(){
-  let html='';
-  pedidos.slice().reverse().forEach(p=>{
-    html+=`<div style="padding:10px;border-bottom:1px solid #333">
-      ${p.nome}-${p.servico}-R$${p.preco}
-      <select onchange="mudarStatus(${p.id},this.value)"style="float:right;width:auto;padding:5px">
-        <option value="pendente"${p.status==='pendente'?'selected':''}>Pendente</option>
-        <option value="enviado"${p.status==='enviado'?'selected':''}>Enviado</option>
-        <option value="cancelado"${p.status==='cancelado'?'selected':''}>Cancelado</option>
-      </select>
-    </div>`;
-  });
-  document.getElementById('adminPedidos').innerHTML=html||'Nenhum pedido';
-}
-
-function mudarStatus(id,status){
-  let pedido=pedidos.find(p=>p.id===id);
-  pedido.status=status;
-  localStorage.setItem('pedidos',JSON.stringify(pedidos));
-
-  if(!chats[id])chats[id]=[];
-  chats[id].push({from:'admin',msg:`Status alterado para:${status}`,time:Date.now()});
-  localStorage.setItem('chats',JSON.stringify(chats));
-
-  if(status==='cancelado'){
-    carteiras[pedido.email].saldo+=pedido.preco;
-    transacoes[pedido.email].push({
-      tipo:'entrada',
-      valor:pedido.preco,
-      desc:`Reembolso:${pedido.servico}`,
-      data:new Date().toLocaleString()
-    });
-    localStorage.setItem('carteiras',JSON.stringify(carteiras));
-    localStorage.setItem('transacoes',JSON.stringify(transacoes));
-  }
-}
-
-function carregarAdminDepositos(){
-  let html='';
-  depositos.slice().reverse().forEach(d=>{
-    html+=`<div style="padding:10px;border-bottom:1px solid #333">
-      <p><strong>${d.email}</strong> - R$${d.valor.toFixed(2)} - ${d.status}</p>
-      ${d.comprovante?'<small style="color:var(--muted)">Com comprovante</small>':''}
-      ${d.status==='pendente'?`<button onclick="abrirConfirm(${d.id})"style="float:right;padding:5px 10px;background:var(--green);width:auto;margin-top:-25px">Aprovar</button>`:''}
-    </div>`;
-  });
-  document.getElementById('adminDepositos').innerHTML=html||'Nenhuma solicitação';
-}
-
-function abrirConfirm(id){
-  depositoParaAprovar=id;
-  let dep=depositos.find(d=>d.id===id);
-  let saldoAtual=carteiras[dep.email]?.saldo||0;
-  let saldoNovo=saldoAtual+dep.valor;
-
-  document.getElementById('confirmEmail').textContent=dep.email;
-  document.getElementById('confirmValor').textContent='R$ '+dep.valor.toFixed(2);
-  document.getElementById('confirmSaldoAtual').textContent='R$ '+saldoAtual.toFixed(2);
-  document.getElementById('confirmSaldoNovo').textContent='R$ '+saldoNovo.toFixed(2);
-
-  if(dep.comprovante){
-    document.getElementById('confirmComprovante').src=dep.comprovante;
-    document.getElementById('confirmComprovanteBox').style.display='block';
-  }else{
-    document.getElementById('confirmComprovanteBox').style.display='none';
-  }
-
-  document.getElementById('modalConfirm').classList.add('active');
-}
-
-function fecharConfirm(){
-  document.getElementById('modalConfirm').classList.remove('active');
-  depositoParaAprovar=null;
-}
-
-function confirmarAprovacao(){
-  if(!depositoParaAprovar)return;
-
-  let dep=depositos.find(d=>d.id===depositoParaAprovar);
-  dep.status='aprovado';
-  carteiras[dep.email].saldo+=dep.valor;
-  transacoes[dep.email].push({
-    tipo:'entrada',
-    valor:dep.valor,
-    desc:'Depósito aprovado',
-    data:new Date().toLocaleString()
-  });
-  localStorage.setItem('depositos',JSON.stringify(depositos));
-  localStorage.setItem('carteiras',JSON.stringify(carteiras));
-  localStorage.setItem('transacoes',JSON.stringify(transacoes));
-
-  fecharConfirm();
-  fechar('admin');
-  abrir('carteira');
-
-  alert('Depósito aprovado! Saldo liberado para o cliente.');
-  carregarAdminDepositos();
-}
-
-// AUTO LOGIN
-window.onload=function(){
-  usuario=JSON.parse(localStorage.getItem('user'));
-  if(usuario)iniciarApp();
+function voltar(){
+  irPara(telaAnterior);
 }
 </script>
 </body>
-<html>
+</html>
