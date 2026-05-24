@@ -5,7 +5,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Builder Studio</title>
+<title>Prime AI VZ</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 
@@ -13,216 +15,243 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial;
+font-family:'Poppins',sans-serif;
 }
 
 body{
-background:#050505;
+background:#070707;
+color:white;
 height:100vh;
 display:flex;
 overflow:hidden;
-color:white;
 }
 
-/* MENU */
+/* SIDEBAR */
 
-.menu{
-width:370px;
-background:#0d0d0d;
-border-right:1px solid #1d1d1d;
-padding:14px;
-overflow:auto;
-}
-
-.logo{
-font-size:24px;
-font-weight:bold;
-margin-bottom:20px;
-color:#4da3ff;
-}
-
-.box{
-background:#111;
-border:1px solid #1f1f1f;
-padding:14px;
-border-radius:18px;
-margin-bottom:15px;
-}
-
-.label{
-font-size:12px;
-color:#888;
-margin-bottom:8px;
-}
-
-input,
-select,
-textarea{
-width:100%;
-padding:12px;
-border-radius:14px;
-border:none;
-outline:none;
-background:#1a1a1a;
-color:white;
-font-size:13px;
-margin-top:8px;
-}
-
-textarea{
-height:80px;
-resize:none;
-}
-
-input[type="color"]{
-padding:4px;
-height:50px;
-}
-
-button{
-width:100%;
-height:50px;
-border:none;
-border-radius:14px;
-background:#4da3ff;
-color:white;
-font-weight:bold;
-margin-top:10px;
-font-size:14px;
-cursor:pointer;
-}
-
-button:hover{
-opacity:0.9;
-}
-
-/* LISTA */
-
-.lista{
-display:flex;
-flex-direction:column;
-gap:12px;
-margin-top:10px;
-}
-
-.item{
-background:#181818;
-border-radius:16px;
-padding:12px;
-border:1px solid #242424;
-}
-
-.item img{
-width:100%;
-border-radius:14px;
-margin-top:10px;
-}
-
-/* PREVIEW */
-
-.previewArea{
-flex:1;
-display:flex;
-justify-content:center;
-align-items:center;
-padding:20px;
-overflow:auto;
-background:#050505;
-}
-
-.phone{
-width:390px;
-height:800px;
-background:white;
-border-radius:42px;
-overflow:hidden;
-border:10px solid #111;
-position:relative;
-box-shadow:0 0 40px rgba(0,0,0,0.5);
-}
-
-.notch{
-width:150px;
-height:28px;
-background:#111;
-position:absolute;
-top:0;
-left:50%;
-transform:translateX(-50%);
-border-radius:0 0 20px 20px;
-z-index:10;
-}
-
-iframe{
-width:100%;
-height:100%;
-border:none;
-}
-
-/* MODAL */
-
-.modal{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.8);
-display:none;
-justify-content:center;
-align-items:center;
-padding:20px;
-z-index:999;
-}
-
-.modalBox{
-width:100%;
-max-width:900px;
-height:90%;
-background:#111;
-border-radius:22px;
+.sidebar{
+width:270px;
+background:#0f0f0f;
+border-right:1px solid #1f1f1f;
 padding:18px;
 display:flex;
 flex-direction:column;
+gap:20px;
 }
 
-.codigo{
-flex:1;
-margin-top:15px;
-background:#050505;
+.logo{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.logo-icon{
+width:48px;
+height:48px;
+border-radius:15px;
+background:linear-gradient(135deg,#7b2eff,#a855f7);
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:700;
+font-size:18px;
+}
+
+.logo h1{
+font-size:18px;
+}
+
+.new-chat{
+height:50px;
 border:none;
-outline:none;
-padding:14px;
 border-radius:14px;
-color:#66ff99;
+background:#7b2eff;
+color:white;
+font-weight:600;
+cursor:pointer;
+}
+
+.history{
+display:flex;
+flex-direction:column;
+gap:10px;
+overflow:auto;
+}
+
+.history-item{
+background:#161616;
+border:1px solid #252525;
+padding:12px;
+border-radius:12px;
 font-size:12px;
-font-family:monospace;
+cursor:pointer;
+transition:.3s;
+}
+
+.history-item:hover{
+border-color:#7b2eff;
+}
+
+/* MAIN */
+
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+height:100vh;
+}
+
+/* TOP */
+
+.top{
+height:75px;
+border-bottom:1px solid #1f1f1f;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 20px;
+background:#0b0b0b;
+}
+
+.top-title{
+font-size:16px;
+font-weight:600;
+}
+
+.top-btn{
+background:#171717;
+border:none;
+padding:10px 14px;
+border-radius:12px;
+color:white;
+font-size:12px;
+}
+
+/* CHAT */
+
+.chat{
+flex:1;
+overflow:auto;
+padding:25px;
+display:flex;
+flex-direction:column;
+gap:20px;
+}
+
+/* MESSAGE */
+
+.message{
+display:flex;
+gap:12px;
+align-items:flex-start;
+}
+
+.avatar{
+width:42px;
+height:42px;
+border-radius:14px;
+background:linear-gradient(135deg,#7b2eff,#a855f7);
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:700;
+flex-shrink:0;
+}
+
+.bubble{
+background:#121212;
+border:1px solid #242424;
+padding:16px;
+border-radius:18px;
+max-width:700px;
+}
+
+.bubble p{
+font-size:14px;
+line-height:25px;
+color:#e1e1e1;
+}
+
+/* IMAGE RESULT */
+
+.image-box{
+margin-top:15px;
+border-radius:18px;
+overflow:hidden;
+border:1px solid #262626;
+}
+
+.image-box img{
+width:100%;
+display:block;
+}
+
+/* INPUT */
+
+.bottom{
+padding:18px;
+border-top:1px solid #1f1f1f;
+background:#0b0b0b;
+}
+
+.input-area{
+background:#111;
+border:1px solid #222;
+border-radius:20px;
+padding:14px;
+display:flex;
+gap:12px;
+align-items:flex-end;
+}
+
+textarea{
+flex:1;
+background:none;
+border:none;
+resize:none;
+outline:none;
+color:white;
+font-size:14px;
+max-height:140px;
+}
+
+.send-btn{
+width:52px;
+height:52px;
+border:none;
+border-radius:16px;
+background:#7b2eff;
+color:white;
+font-size:18px;
+cursor:pointer;
+}
+
+/* LOADING */
+
+.loading{
+display:none;
+margin-top:12px;
+font-size:12px;
+color:#9b9b9b;
 }
 
 /* MOBILE */
 
-@media(max-width:900px){
+@media(max-width:800px){
 
-body{
-flex-direction:column;
-height:auto;
-overflow:auto;
+.sidebar{
+display:none;
 }
 
-.menu{
-width:100%;
-border-right:none;
-border-bottom:1px solid #1d1d1d;
+.top-title{
+font-size:14px;
 }
 
-.previewArea{
-padding:14px;
+.chat{
+padding:15px;
 }
 
-.phone{
-width:100%;
-max-width:390px;
-height:700px;
+.bubble{
+max-width:100%;
 }
 
 }
@@ -233,120 +262,110 @@ height:700px;
 
 <body>
 
-<!-- MENU -->
+<!-- SIDEBAR -->
 
-<div class="menu">
+<div class="sidebar">
 
 <div class="logo">
-Builder Studio
+
+<div class="logo-icon">
+P
 </div>
 
-<div class="box">
+<h1>
+Prime AI VZ
+</h1>
 
-<div class="label">
-TIPO DE ELEMENTO
 </div>
 
-<select id="tipo">
+<button class="new-chat">
++ Novo Chat
+</button>
 
-<option value="titulo">
-Título
-</option>
+<div class="history">
 
-<option value="texto">
-Texto
-</option>
+<div class="history-item">
+Site gamer preto e roxo
+</div>
 
-<option value="botao">
-Botão
-</option>
+<div class="history-item">
+Banner Free Fire
+</div>
 
-<option value="imagem">
-Imagem
-</option>
+<div class="history-item">
+Logo premium neon
+</div>
 
-<option value="card">
-Card
-</option>
+</div>
 
-</select>
+</div>
 
-<input
-type="text"
-id="texto"
-placeholder="Digite aqui..."
-oninput="previewTempoReal()"
->
+<!-- MAIN -->
 
-<input
-type="color"
-id="cor"
-value="#4da3ff"
-oninput="previewTempoReal()"
->
+<div class="main">
 
-<input
-type="number"
-id="tamanho"
-placeholder="Tamanho da fonte"
-value="18"
-oninput="previewTempoReal()"
->
+<!-- TOP -->
 
-<input
-type="file"
-id="imagem"
-accept="image/*"
-onchange="previewTempoReal()"
->
+<div class="top">
 
-<button onclick="adicionarElemento()">
-ADICIONAR ELEMENTO
+<div class="top-title">
+Prime AI VZ
+</div>
+
+<button class="top-btn">
+Premium
 </button>
 
 </div>
 
-<div class="box">
+<!-- CHAT -->
 
-<div class="label">
-ESTRUTURA DO SITE
+<div class="chat" id="chat">
+
+<div class="message">
+
+<div class="avatar">
+AI
 </div>
 
-<div class="lista" id="lista"></div>
+<div class="bubble">
 
-<button onclick="gerarCodigo()">
-GERAR CÓDIGO
+<p>
+Olá 👋<br><br>
+
+Descreva a imagem que deseja gerar.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- INPUT -->
+
+<div class="bottom">
+
+<div class="input-area">
+
+<textarea
+id="prompt"
+placeholder="Descreva sua imagem..."
+rows="1"
+></textarea>
+
+<button
+class="send-btn"
+onclick="gerarImagem()"
+>
+➜
 </button>
 
 </div>
 
+<div class="loading" id="loading">
+Gerando imagem...
 </div>
-
-<!-- PREVIEW -->
-
-<div class="previewArea">
-
-<div class="phone">
-
-<div class="notch"></div>
-
-<iframe id="preview"></iframe>
-
-</div>
-
-</div>
-
-<!-- MODAL -->
-
-<div class="modal" id="modal">
-
-<div class="modalBox">
-
-<button onclick="fecharCodigo()">
-FECHAR
-</button>
-
-<textarea class="codigo" id="codigo"></textarea>
 
 </div>
 
@@ -354,288 +373,109 @@ FECHAR
 
 <script>
 
-let elementos = [];
+/* EXEMPLOS DE IMAGENS */
 
-function adicionarElemento(){
+const imagens = [
 
-const tipo = document.getElementById("tipo").value;
+"https://images.unsplash.com/photo-1518770660439-4636190af475",
 
-const texto = document.getElementById("texto").value;
+"https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5",
 
-const cor = document.getElementById("cor").value;
+"https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
 
-const tamanho = document.getElementById("tamanho").value;
+"https://images.unsplash.com/photo-1498050108023-c5249f4df085"
 
-const imagemInput = document.getElementById("imagem");
+];
 
-if(tipo === "imagem"){
+/* GERAR IMAGEM */
 
-const file = imagemInput.files[0];
+function gerarImagem(){
 
-if(!file){
-alert("Selecione uma imagem");
-return;
-}
+let prompt =
+document.getElementById("prompt").value;
 
-const reader = new FileReader();
+if(prompt.trim() == "") return;
 
-reader.onload = function(e){
+let chat =
+document.getElementById("chat");
 
-elementos.push({
-tipo,
-texto,
-cor,
-tamanho,
-imagem:e.target.result
-});
+let loading =
+document.getElementById("loading");
 
-renderLista();
+/* USER MESSAGE */
 
-atualizarPreview();
+chat.innerHTML += `
 
-}
+<div class="message">
 
-reader.readAsDataURL(file);
+<div class="avatar">
+V
+</div>
 
-}else{
+<div class="bubble">
 
-elementos.push({
-tipo,
-texto,
-cor,
-tamanho
-});
+<p>${prompt}</p>
 
-renderLista();
-
-atualizarPreview();
-
-}
-
-}
-
-function renderLista(){
-
-const lista = document.getElementById("lista");
-
-lista.innerHTML = "";
-
-elementos.forEach((item,index)=>{
-
-const div = document.createElement("div");
-
-div.className = "item";
-
-div.innerHTML = `
-
-<b style="color:#4da3ff;">
-${item.tipo.toUpperCase()}
-</b>
-
-<p style="
-margin-top:8px;
-font-size:${item.tamanho}px;
-color:${item.cor};
-">
-${item.texto}
-</p>
-
-${item.imagem ? `<img src="${item.imagem}">` : ""}
-
-<button onclick="remover(${index})">
-REMOVER
-</button>
-
-`;
-
-lista.appendChild(div);
-
-});
-
-}
-
-function remover(index){
-
-elementos.splice(index,1);
-
-renderLista();
-
-atualizarPreview();
-
-}
-
-function gerarHTML(){
-
-let estrutura = "";
-
-elementos.forEach(item=>{
-
-if(item.tipo === "titulo"){
-
-estrutura += `
-
-<h1 style="
-font-size:${item.tamanho}px;
-color:${item.cor};
-margin-bottom:16px;
-">
-${item.texto}
-</h1>
-
-`;
-
-}
-
-if(item.tipo === "texto"){
-
-estrutura += `
-
-<p style="
-font-size:${item.tamanho}px;
-color:${item.cor};
-margin-bottom:16px;
-line-height:1.5;
-">
-${item.texto}
-</p>
-
-`;
-
-}
-
-if(item.tipo === "botao"){
-
-estrutura += `
-
-<button style="
-width:100%;
-height:52px;
-background:${item.cor};
-border:none;
-border-radius:16px;
-color:white;
-font-size:${item.tamanho}px;
-margin-bottom:16px;
-">
-${item.texto}
-</button>
-
-`;
-
-}
-
-if(item.tipo === "imagem"){
-
-estrutura += `
-
-<img 
-src="${item.imagem}"
-style="
-width:100%;
-border-radius:18px;
-margin-bottom:16px;
-"
->
-
-`;
-
-}
-
-if(item.tipo === "card"){
-
-estrutura += `
-
-<div style="
-padding:18px;
-border-radius:18px;
-background:${item.cor};
-margin-bottom:16px;
-color:white;
-">
-
-<h2 style="
-font-size:${item.tamanho}px;
-">
-${item.texto}
-</h2>
+</div>
 
 </div>
 
 `;
 
-}
+loading.style.display = "block";
 
-});
+/* SCROLL */
 
-return `
+chat.scrollTop = chat.scrollHeight;
 
-<!DOCTYPE html>
-<html lang="pt-BR">
+/* SIMULAR IA */
 
-<head>
+setTimeout(()=>{
 
-<meta charset="UTF-8">
+loading.style.display = "none";
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+/* IMAGEM RANDOM */
 
-<style>
+let imagem =
+imagens[Math.floor(Math.random()*imagens.length)];
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial;
-}
+/* IA RESPONSE */
 
-body{
-padding:14px;
-background:white;
-}
+chat.innerHTML += `
 
-</style>
+<div class="message">
 
-</head>
+<div class="avatar">
+AI
+</div>
 
-<body>
+<div class="bubble">
 
-${estrutura}
+<p>
+Imagem gerada com sucesso.
+</p>
 
-</body>
+<div class="image-box">
 
-</html>
+<img src="${imagem}">
+
+</div>
+
+</div>
+
+</div>
 
 `;
 
-}
+/* LIMPAR */
 
-function atualizarPreview(){
+document.getElementById("prompt").value = "";
 
-const html = gerarHTML();
+/* SCROLL */
 
-document.getElementById("preview").srcdoc = html;
+chat.scrollTop = chat.scrollHeight;
 
-}
-
-function gerarCodigo(){
-
-const html = gerarHTML();
-
-document.getElementById("codigo").value = html;
-
-document.getElementById("modal").style.display = "flex";
-
-}
-
-function fecharCodigo(){
-
-document.getElementById("modal").style.display = "none";
-
-}
-
-function previewTempoReal(){
-
-atualizarPreview();
+},2000);
 
 }
 
