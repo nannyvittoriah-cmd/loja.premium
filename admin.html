@@ -379,12 +379,14 @@ body{background:var(--bg);color:var(--text);font-size:11px}
       </div>
       <div id="tab-loja" style="display:none">
         <div class="input-box"><input type="text" id="cfgCorPrimaria" placeholder="Cor primária" value="#8b5cf6"></div>
-        <div class="input-box"><input type="text" id="cfgLogo" placeholder="URL do Logo"></div>
+                <div class="input-box"><input type="text" id="cfgLogo" placeholder="URL do Logo"></div>
         <div class="input-box"><input type="text" id="cfgBanner" placeholder="URL do Banner"></div>
         <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
       </div>
     </div>
-      <div class="screen" id="screen-relatorios"><div class="card"><div class="card-title">📊 RELATORIOS</div><div class="empty">Em desenvolvimento</div></div></div>
+  </div>
+
+  <div class="screen" id="screen-relatorios"><div class="card"><div class="card-title">📊 RELATORIOS</div><div class="empty">Em desenvolvimento</div></div></div>
   <div class="screen" id="screen-suporte"><div class="card"><div class="card-title">💬 SUPORTE</div><div class="empty">Em desenvolvimento</div></div></div>
   <div class="screen" id="screen-logs"><div class="card"><div class="card-title">📄 LOGS DO SISTEMA</div><div class="empty">Em desenvolvimento</div></div></div>
 </div>
@@ -427,6 +429,10 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 <div class="modal" id="modalSubcategoria">
   <div class="modal-content">
     <div class="modal-header"><div class="modal-title">Nova Subcategoria</div><button class="close-btn" onclick="fecharModal('modalSubcategoria')">✕</button></div>
+    <div class="upload-area" onclick="document.getElementById('uploadSubcatImg').click()" id="uploadAreaSubcat">
+      <div class="upload-icon">+</div><div class="upload-text">Selecionar imagem da galeria</div>
+      <input type="file" id="uploadSubcatImg" style="display:none" accept="image/*" onchange="previewImagem(this,'uploadAreaSubcat')">
+    </div>
     <div class="input-box"><select id="subcatCategoria"><option value="">Selecione a categoria</option></select></div>
     <div class="input-box"><input type="text" id="subcatNome" placeholder="Nome da subcategoria"></div>
     <button class="btn" onclick="salvarSubcategoria()">SALVAR SUBCATEGORIA</button>
@@ -461,7 +467,7 @@ const firebaseConfig={apiKey:"AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",authDomai
 firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth();const db=firebase.database();const storage=firebase.storage();
 const ADMIN_EMAIL='vittoriahvahz@gmail.com';
-let imagensProduto=[],imgCategoria='',pedidoAtualId=null;
+let imagensProduto=[],imgCategoria='',imgSubcategoria='',pedidoAtualId=null;
 
 auth.onAuthStateChanged(user=>{
   if(!user||user.email!==ADMIN_EMAIL){window.location.href='index.html';return}
@@ -484,7 +490,7 @@ function mostrarTela(tela,el){
   document.getElementById('screen-'+tela).classList.add('active');
   if(el)el.classList.add('active');
   const titulos={dashboard:'Dashboard',produtos:'Produtos',categorias:'Categorias',subcategorias:'Subcategorias',pedidos:'Pedidos',usuarios:'Clientes',cupons:'Cupons',slider:'Slider / Banners',notificar:'Notificar Cliente',config:'Configurações',relatorios:'Relatorios',suporte:'Suporte',logs:'Logs do Sistema'};
-  document.getElementById('headerTitle').textContent=titulos[tela]||'Dashboard';
+  document.getElementById('headerTitle').textContent=titulos||'Dashboard';
   if(window.innerWidth<=768)toggleSidebar();
 }
 
@@ -580,7 +586,6 @@ async function salvarProduto(){
   const estoque=parseInt(document.getElementById('prodEstoque').value)||0;
   const desc=document.getElementById('prodDesc').value.trim();
   if(!nome||!preco){alert('Preencha nome e preço');return}
-
   const urls=[];
   for(let i=0;i<imagensProduto.length;i++){
     if(imagensProduto[i]){
@@ -589,7 +594,6 @@ async function salvarProduto(){
       urls.push(await ref.getDownloadURL());
     }
   }
-
   await db.ref('produtos').push({nome,preco,categoria,estoque,descricao:desc,imagens:urls,criadoEm:Date.now()});
   fecharModal('modalProduto');
   carregarProdutos();
@@ -605,7 +609,7 @@ function carregarCategorias(){
     const cats=snap.val()||{};let html='';
     Object.entries(cats).forEach(([id,c])=>{
       const img=c.imagem||'https://via.placeholder.com/40';
-      html+=`<div class="item-row clickable"><img src="${img}" class="img-thumb"><div class="item-info"><div class="item-title">${c.nome}</div><div class="item-sub">${c.subcategorias?Object.keys(c.subcategorias).length:0} subcategorias</div></div><span>›</span></div>`;
+      html+=`<div class="item-row"><img src="${img}" class="img-thumb"><div class="item-info"><div class="item-title">${c.nome}</div><div class="item-sub">${c.subcategorias?Object.keys(c.subcategorias).length:0} subcategorias</div></div><div class="actions"><button class="btn-sm btn-red" onclick="deletarCategoria('${id}')">🗑️</button></div></div>`;
     });
     document.getElementById('listaCategorias').innerHTML=html||'<div class="empty">Nenhuma categoria</div>';
   });
@@ -619,13 +623,15 @@ function carregarCategoriasSelect(){
   });
 }
 
-function abrirModalCategoria(){document.getElementById('modalCategoria').classList.add('active')}
+function abrirModalCategoria(){imgCategoria='';document.getElementById('uploadAreaCat').innerHTML='<div class="upload-icon">+</div><div class="upload-text">Selecionar imagem da galeria</div><input type="file" id="uploadCatImg" style="display:none" accept="image/*" onchange="previewImagem(this,\'uploadAreaCat\')">';document.getElementById('modalCategoria').classList.add('active')}
 function abrirModalSubcategoria(){
+  imgSubcategoria='';
+  document.getElementById('uploadAreaSubcat').innerHTML='<div class="upload-icon">+</div><div class="upload-text">Selecionar imagem da galeria</div><input type="file" id="uploadSubcatImg" style="display:none" accept="image/*" onchange="previewImagem(this,\'uploadAreaSubcat\')">';
   carregarCategoriasSelectSub();
   document.getElementById('modalSubcategoria').classList.add('active');
 }
 function abrirModalCupom(){document.getElementById('modalCupom').classList.add('active')}
-function fecharModal(id){document.getElementById(id).classList.remove('active');imagensProduto=[];imgCategoria=''}
+function fecharModal(id){document.getElementById(id).classList.remove('active');imagensProduto=[];imgCategoria='';imgSubcategoria=''}
 
 function previewImagem(input,id){
   const file=input.files[0];if(!file)return;
@@ -633,6 +639,7 @@ function previewImagem(input,id){
   reader.onload=e=>{document.getElementById(id).innerHTML=`<img src="${e.target.result}">`;};
   reader.readAsDataURL(file);
   if(id==='uploadAreaCat')imgCategoria=file;
+  if(id==='uploadAreaSubcat')imgSubcategoria=file;
 }
 
 async function salvarCategoria(){
@@ -650,13 +657,21 @@ async function salvarCategoria(){
   alert('Categoria salva!');
 }
 
+function deletarCategoria(id){
+  if(confirm('Deletar categoria? Todas as subcategorias também serão deletadas!')){
+    db.ref('categorias/'+id).remove();
+    carregarCategorias();
+  }
+}
+
 function carregarSubcategorias(){
   db.ref('categorias').once('value',snap=>{
     const cats=snap.val()||{};let html='';
     Object.entries(cats).forEach(([catId,cat])=>{
       if(cat.subcategorias){
         Object.entries(cat.subcategorias).forEach(([subId,sub])=>{
-          html+=`<div class="item-row"><div class="item-info"><div class="item-title">${sub.nome}</div><div class="item-sub">Categoria: ${cat.nome}</div></div></div>`;
+          const img=sub.imagem||'https://via.placeholder.com/40';
+          html+=`<div class="item-row"><img src="${img}" class="img-thumb"><div class="item-info"><div class="item-title">${sub.nome}</div><div class="item-sub">Categoria: ${cat.nome}</div></div><div class="actions"><button class="btn-sm btn-red" onclick="deletarSubcategoria('${catId}','${subId}')">🗑️</button></div></div>`;
         });
       }
     });
@@ -676,10 +691,23 @@ async function salvarSubcategoria(){
   const catId=document.getElementById('subcatCategoria').value;
   const nome=document.getElementById('subcatNome').value.trim();
   if(!catId||!nome){alert('Preencha todos os campos');return}
-  await db.ref('categorias/'+catId+'/subcategorias').push({nome,criadoEm:Date.now()});
+  let imgUrl='';
+  if(imgSubcategoria){
+    const ref=storage.ref('subcategorias/'+Date.now()+'.jpg');
+    await ref.put(imgSubcategoria);
+    imgUrl=await ref.getDownloadURL();
+  }
+  await db.ref('categorias/'+catId+'/subcategorias').push({nome,imagem:imgUrl,criadoEm:Date.now()});
   fecharModal('modalSubcategoria');
   carregarSubcategorias();
   alert('Subcategoria salva!');
+}
+
+function deletarSubcategoria(catId,subId){
+  if(confirm('Deletar subcategoria?')){
+    db.ref('categorias/'+catId+'/subcategorias/'+subId).remove();
+    carregarSubcategorias();
+  }
 }
 
 function carregarPedidos(){
@@ -784,7 +812,7 @@ function carregarClientes(){
   db.ref('usuarios').once('value',snap=>{
     const usuarios=snap.val()||{};let html='';
     Object.entries(usuarios).forEach(([uid,u])=>{
-      html+=`<div class="user-card"><div class="user-avatar">${(u.nome||'U')[0].toUpperCase()}</div><div class="user-details"><div class="user-name">${u.nome||u.email}</div><div class="user-email">${u.email}</div><div class="user-stats">Pedidos: ${u.totalPedidos||0} • Total: R$ ${(u.totalGasto||0).toFixed(2)}</div></div></div>`;
+      html+=`<div class="user-card"><div class="user-avatar">${(u.nome||'U')[0].toUpperCase()}</div><div class="user-details"><div class="user-name">${u.nome||u.email}</div><div class="user-email">${u.email}</div><div class="user-stats">Pedidos: ${u.totalPedidos||0} • Total: R$ ${(u.totalGasto||0).toFixed(2)}</div></div>`;
     });
     document.getElementById('listaClientes').innerHTML=html||'<div class="empty">Nenhum cliente cadastrado</div>';
   });
@@ -892,38 +920,6 @@ async function enviarNotificacao(){
 }
 
 function salvarConfig(){alert('Configurações salvas com sucesso!')}
-
-function carregarSubcategorias(){
-  db.ref('categorias').once('value',snap=>{
-    const cats=snap.val()||{};let html='';
-    Object.entries(cats).forEach(([catId,cat])=>{
-      if(cat.subcategorias){
-        Object.entries(cat.subcategorias).forEach(([subId,sub])=>{
-          html+=`<div class="item-row"><div class="item-info"><div class="item-title">${sub.nome}</div><div class="item-sub">Categoria: ${cat.nome}</div></div></div>`;
-        });
-      }
-    });
-    document.getElementById('listaSubcategorias').innerHTML=html||'<div class="empty">Nenhuma subcategoria</div>';
-  });
-}
-
-function carregarCategoriasSelectSub(){
-  db.ref('categorias').once('value',snap=>{
-    const cats=snap.val()||{};let html='<option value="">Selecione a categoria</option>';
-    Object.entries(cats).forEach(([id,c])=>{html+=`<option value="${id}">${c.nome}</option>`});
-    document.getElementById('subcatCategoria').innerHTML=html;
-  });
-}
-
-async function salvarSubcategoria(){
-  const catId=document.getElementById('subcatCategoria').value;
-  const nome=document.getElementById('subcatNome').value.trim();
-  if(!catId||!nome){alert('Preencha todos os campos');return}
-  await db.ref('categorias/'+catId+'/subcategorias').push({nome,criadoEm:Date.now()});
-  fecharModal('modalSubcategoria');
-  carregarSubcategorias();
-  alert('Subcategoria salva!');
-}
 </script>
 </body>
 </html>
