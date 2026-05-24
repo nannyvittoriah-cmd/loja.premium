@@ -231,6 +231,7 @@ body{background:var(--bg);color:var(--text);font-size:11px}
         <button class="back-btn" onclick="mostrarTela('pedidos',document.querySelectorAll('.menu-item')[4])">←</button>
         <div class="header-title">DETALHES DO PEDIDO</div>
       </div>
+    </div>
     <div class="card">
       <div class="card-title">📋 Informações do Pedido</div>
       <div class="item-row">
@@ -362,11 +363,11 @@ body{background:var(--bg);color:var(--text);font-size:11px}
         <div class="toggle-row"><div class="toggle-label">Notificar novo cliente</div><div class="toggle-switch" onclick="toggleSwitch(this)"></div></div>
         <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
       </div>
-           <div id="tab-loja" style="display:none">
+      <div id="tab-loja" style="display:none">
         <div class="input-box"><input type="text" id="cfgCorPrimaria" placeholder="Cor primária" value="#8b5cf6"></div>
         <div class="input-box"><input type="text" id="cfgLogo" placeholder="URL do Logo"></div>
         <div class="input-box"><input type="text" id="cfgBanner" placeholder="URL do Banner"></div>
-        <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
+              <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
       </div>
     </div>
   </div>
@@ -590,7 +591,8 @@ async function salvarProduto(){
     for(let i=0;i<imagensProduto.length;i++){
       if(imagensProduto[i]){
         const ref=storage.ref('produtos/'+Date.now()+'_'+i+'.jpg');
-        const snapshot=await ref.put(imagensProduto[i]);
+        const metadata={contentType:imagensProduto[i].type};
+        const snapshot=await ref.put(imagensProduto[i],metadata);
         urls.push(await snapshot.ref.getDownloadURL());
       }
     }
@@ -598,8 +600,13 @@ async function salvarProduto(){
     fecharModal('modalProduto');
     carregarProdutos();
     alert('Produto salvo!');
-  }catch(e){console.error(e);alert('Erro: '+e.message)}
-  finally{btn.disabled=false;btn.textContent='SALVAR PRODUTO'}
+  }catch(e){
+    console.error('ERRO:',e);
+    alert('Erro: '+e.message);
+  }finally{
+    btn.disabled=false;
+    btn.textContent='SALVAR PRODUTO';
+  }
 }
 
 function deletarProduto(id){
@@ -660,15 +667,21 @@ async function salvarCategoria(){
     let imgUrl='';
     if(imgCategoria){
       const ref=storage.ref('categorias/'+Date.now()+'.jpg');
-      const snapshot=await ref.put(imgCategoria);
+      const metadata={contentType:imgCategoria.type};
+      const snapshot=await ref.put(imgCategoria,metadata);
       imgUrl=await snapshot.ref.getDownloadURL();
     }
     await db.ref('categorias').push({nome,imagem:imgUrl,criadoEm:Date.now()});
     fecharModal('modalCategoria');
     carregarCategorias();
     alert('Categoria salva com sucesso!');
-  }catch(e){console.error('Erro Firebase:',e);alert('Erro ao salvar: '+e.message)}
-  finally{btn.disabled=false;btn.textContent='SALVAR CATEGORIA'}
+  }catch(e){
+    console.error('ERRO FIREBASE:',e);
+    alert('Erro ao salvar: '+e.message);
+  }finally{
+    btn.disabled=false;
+    btn.textContent='SALVAR CATEGORIA';
+  }
 }
 
 function deletarCategoria(id){
@@ -710,15 +723,21 @@ async function salvarSubcategoria(){
     let imgUrl='';
     if(imgSubcategoria){
       const ref=storage.ref('subcategorias/'+Date.now()+'.jpg');
-      const snapshot=await ref.put(imgSubcategoria);
+      const metadata={contentType:imgSubcategoria.type};
+      const snapshot=await ref.put(imgSubcategoria,metadata);
       imgUrl=await snapshot.ref.getDownloadURL();
     }
     await db.ref('categorias/'+catId+'/subcategorias').push({nome,imagem:imgUrl,criadoEm:Date.now()});
     fecharModal('modalSubcategoria');
     carregarSubcategorias();
     alert('Subcategoria salva com sucesso!');
-  }catch(e){console.error('Erro Firebase:',e);alert('Erro ao salvar: '+e.message)}
-  finally{btn.disabled=false;btn.textContent='SALVAR SUBCATEGORIA'}
+  }catch(e){
+    console.error('ERRO:',e);
+    alert('Erro ao salvar: '+e.message);
+  }finally{
+    btn.disabled=false;
+    btn.textContent='SALVAR SUBCATEGORIA';
+  }
 }
 
 function deletarSubcategoria(catId,subId){
@@ -813,7 +832,8 @@ function atualizarStatusPedido(){
 async function enviarComprovanteAdmin(e){
   const file=e.target.files[0];if(!file||!pedidoAtualId)return;
   const ref=storage.ref('comprovantes/'+pedidoAtualId+'_'+Date.now()+'.jpg');
-  await ref.put(file);
+  const metadata={contentType:file.type};
+  await ref.put(file,metadata);
   const url=await ref.getDownloadURL();
   await db.ref('pedidos/'+pedidoAtualId).update({comprovante:url});
   alert('Comprovante enviado!');
@@ -872,7 +892,8 @@ async function salvarCupom(){
 async function uploadBanner(e){
   const file=e.target.files[0];if(!file)return;
   const ref=storage.ref('banners/'+Date.now()+'.jpg');
-  await ref.put(file);
+  const metadata={contentType:file.type};
+  await ref.put(file,metadata);
   const url=await ref.getDownloadURL();
   await db.ref('banners').push({url,criadoEm:Date.now()});
   alert('Banner enviado!');
@@ -916,8 +937,8 @@ async function enviarNotificacao(){
   const titulo=document.getElementById('notifTitulo').value.trim();
   const msg=document.getElementById('notifMsg').value.trim();
   const alert=document.getElementById('alertNotif');
-    if(!titulo||!msg){alert.textContent='Preencha título e mensagem';alert.className='alert error';alert.style.display='block';return}
-  if(!todos&&!email){alert.textContent='Digite um e-mail ou marque notificar todos';alert.className='alert error';alert.style.display='block';return}
+  if(!titulo||!msg){alert.textContent='Preencha título e mensagem';alert.className='alert error';alert.style.display='block';return}
+    if(!todos&&!email){alert.textContent='Digite um e-mail ou marque notificar todos';alert.className='alert error';alert.style.display='block';return}
   if(todos){
     const snap=await db.ref('usuarios').once('value');
     const usuarios=snap.val()||{};
