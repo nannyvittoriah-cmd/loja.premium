@@ -35,6 +35,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 .input-box input,.input-box select,.input-box textarea{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:15px;font-family:inherit}
 .input-box textarea{min-height:80px;resize:vertical}
 .btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none;padding:12px 24px;border-radius:12px;font-weight:600;cursor:pointer;font-size:15px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 .btn-sm{padding:8px 16px;font-size:14px;border-radius:8px;border:none;cursor:pointer;font-weight:600}
 .btn-red{background:var(--red);color:#fff}
 .item-row{display:flex;align-items:center;gap:12px;padding:16px;border:1px solid var(--border);border-radius:12px;margin-bottom:8px;background:var(--input);transition:.2s}
@@ -150,7 +151,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
         <div class="card-title">Gerenciar Produtos</div>
         <div class="search-box">
           <div class="input-box"><span>🔍</span><input type="text" id="searchProduto" placeholder="Buscar produto..." oninput="buscarProdutos(this.value)"></div>
-          <button class="btn" onclick="abrirModalProduto()">+ Adicionar</button>
+          <button type="button" class="btn" onclick="abrirModalProduto()">+ Adicionar</button>
         </div>
         <div id="listaProdutos"></div>
       </div>
@@ -159,7 +160,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
     <div class="screen" id="screen-categorias">
       <div class="card">
         <div class="card-title">Categorias</div>
-        <button class="btn" style="margin-bottom:16px" onclick="abrirModalCategoria()">+ Nova Categoria</button>
+        <button type="button" class="btn" style="margin-bottom:16px" onclick="abrirModalCategoria()">+ Nova Categoria</button>
         <div id="listaCategorias"></div>
       </div>
     </div>
@@ -167,7 +168,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
     <div class="screen" id="screen-subcategorias">
       <div class="card">
         <div class="card-title">Subcategorias</div>
-        <button class="btn" style="margin-bottom:16px" onclick="abrirModalSubcategoria()">+ Nova Subcategoria</button>
+        <button type="button" class="btn" style="margin-bottom:16px" onclick="abrirModalSubcategoria()">+ Nova Subcategoria</button>
         <div id="listaSubcategorias"></div>
       </div>
     </div>
@@ -177,10 +178,10 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
         <div class="card-title">Todos os Pedidos</div>
         <div class="input-box" style="margin-bottom:16px"><span>🔍</span><input type="text" id="searchPedido" placeholder="Buscar por ID ou cliente..." oninput="buscarPedido()"></div>
         <div class="tabs">
-          <button class="tab active" onclick="filtrarPedidos('todos',this)">Todos</button>
-          <button class="tab" onclick="filtrarPedidos('pendente',this)">Pendentes</button>
-          <button class="tab" onclick="filtrarPedidos('concluido',this)">Concluidos</button>
-          <button class="tab" onclick="filtrarPedidos('cancelado',this)">Cancelados</button>
+          <button type="button" class="tab active" onclick="filtrarPedidos('todos',this)">Todos</button>
+          <button type="button" class="tab" onclick="filtrarPedidos('pendente',this)">Pendentes</button>
+          <button type="button" class="tab" onclick="filtrarPedidos('concluido',this)">Concluidos</button>
+          <button type="button" class="tab" onclick="filtrarPedidos('cancelado',this)">Cancelados</button>
         </div>
         <div id="listaPedidos"></div>
       </div>
@@ -189,7 +190,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
     <div class="screen" id="screen-detalhes-pedido">
       <div class="card">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
-          <button class="btn-sm" style="background:var(--input);color:var(--text)" onclick="mostrarTela('pedidos')">← Voltar</button>
+          <button type="button" class="btn-sm" style="background:var(--input);color:var(--text)" onclick="mostrarTela('pedidos')">← Voltar</button>
           <div><div class="card-title" style="margin:0" id="detPedidoId">#000</div><div style="font-size:13px;color:var(--muted)" id="detPedidoData"></div></div>
         </div>
         <div class="card-title">Status do Pedido</div>
@@ -216,15 +217,15 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
           <div class="input-box"><input type="text" id="addProdutoId" placeholder="ID do produto"></div>
           <div class="input-box"><input type="number" id="addProdutoQtd" placeholder="Qtd" value="1"></div>
         </div>
-        <button class="btn" style="width:100%;margin-bottom:16px" onclick="adicionarProdutoPedido()">+ ADICIONAR PRODUTO</button>
+        <button type="button" class="btn" style="width:100%;margin-bottom:16px" onclick="adicionarProdutoPedido()">+ ADICIONAR PRODUTO</button>
         <div class="card-title">Observação</div>
         <div class="input-box" style="margin-bottom:16px"><textarea id="detPedidoObs" placeholder="Adicione uma observação..."></textarea></div>
         <div class="grid-2">
-          <button class="btn" onclick="atualizarStatusPedido()">ATUALIZAR STATUS</button>
-          <button class="btn" onclick="document.getElementById('uploadComprovante').click()">ENVIAR COMPROVANTE</button>
+          <button type="button" class="btn" onclick="atualizarStatusPedido()">ATUALIZAR STATUS</button>
+          <button type="button" class="btn" onclick="document.getElementById('uploadComprovante').click()">ENVIAR COMPROVANTE</button>
         </div>
         <input type="file" id="uploadComprovante" style="display:none" accept="image/*" onchange="enviarComprovanteAdmin(event)">
-        <button class="btn" style="width:100%;margin-top:16px;background:var(--green)" onclick="salvarObservacao()">SALVAR OBSERVAÇÃO</button>
+        <button type="button" class="btn" style="width:100%;margin-top:16px;background:var(--green)" onclick="salvarObservacao()">SALVAR OBSERVAÇÃO</button>
       </div>
     </div>
 
@@ -239,7 +240,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
     <div class="screen" id="screen-cupons">
       <div class="card">
         <div class="card-title">Cupons de Desconto</div>
-        <button class="btn" style="margin-bottom:16px" onclick="abrirModalCupom()">+ Novo Cupom</button>
+        <button type="button" class="btn" style="margin-bottom:16px" onclick="abrirModalCupom()">+ Novo Cupom</button>
         <div id="listaCupons"></div>
       </div>
     </div>
@@ -264,7 +265,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
         <div id="sugestaoEmail" style="display:none;background:var(--input);border:1px solid var(--border);border-radius:8px;margin-bottom:16px;max-height:200px;overflow-y:auto"></div>
         <div class="input-box" style="margin-bottom:16px"><input type="text" id="notifTitulo" placeholder="Título da notificação"></div>
         <div class="input-box" style="margin-bottom:16px"><textarea id="notifMsg" placeholder="Mensagem..."></textarea></div>
-        <button class="btn" onclick="enviarNotificacao()">ENVIAR NOTIFICAÇÃO</button>
+        <button type="button" class="btn" onclick="enviarNotificacao()">ENVIAR NOTIFICAÇÃO</button>
       </div>
     </div>
 
@@ -272,10 +273,10 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
       <div class="card">
         <div class="card-title">Configurações</div>
         <div class="config-tabs">
-          <button class="config-tab active" onclick="mudarTabConfig('geral',event)">Geral</button>
-          <button class="config-tab" onclick="mudarTabConfig('pagamento',event)">Pagamento</button>
-          <button class="config-tab" onclick="mudarTabConfig('notif',event)">Notificações</button>
-          <button class="config-tab" onclick="mudarTabConfig('loja',event)">Loja</button>
+          <button type="button" class="config-tab active" onclick="mudarTabConfig('geral',event)">Geral</button>
+          <button type="button" class="config-tab" onclick="mudarTabConfig('pagamento',event)">Pagamento</button>
+          <button type="button" class="config-tab" onclick="mudarTabConfig('notif',event)">Notificações</button>
+          <button type="button" class="config-tab" onclick="mudarTabConfig('loja',event)">Loja</button>
         </div>
         <div id="tab-geral">
           <div class="input-box" style="margin-bottom:16px"><input type="text" id="cfgNomeLoja" placeholder="Nome da loja"></div>
@@ -294,7 +295,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
           <div class="switch-row"><div class="switch-info"><div class="switch-label">Loja Ativa</div></div><div class="switch active" onclick="toggleSwitch(this)"><div class="switch-thumb"></div></div></div>
           <div class="switch-row"><div class="switch-info"><div class="switch-label">Modo Manutenção</div></div><div class="switch" onclick="toggleSwitch(this)"><div class="switch-thumb"></div></div></div>
         </div>
-        <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
+        <button type="button" class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
       </div>
     </div>
 
@@ -306,7 +307,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 
 <div class="modal" id="modalProduto">
   <div class="modal-content">
-    <div class="modal-header"><div class="modal-title">Novo Produto</div><button class="close-btn" onclick="fecharModal('modalProduto')">✕</button></div>
+    <div class="modal-header"><div class="modal-title">Novo Produto</div><button type="button" class="close-btn" onclick="fecharModal('modalProduto')">✕</button></div>
     <div class="card-title">Fotos do produto (máx 6)</div>
     <div class="upload-grid" id="uploadGridProduto">
       <div class="upload-box" onclick="document.getElementById('uploadProd1').click()"><div class="upload-icon">+</div><input type="file" id="uploadProd1" style="display:none" accept="image/*" onchange="addImagemProduto(this,0)"></div>
@@ -329,7 +330,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 
 <div class="modal" id="modalCategoria">
   <div class="modal-content">
-    <div class="modal-header"><div class="modal-title">Nova Categoria</div><button class="close-btn" onclick="fecharModal('modalCategoria')">✕</button></div>
+    <div class="modal-header"><div class="modal-title">Nova Categoria</div><button type="button" class="close-btn" onclick="fecharModal('modalCategoria')">✕</button></div>
     <div class="upload-area" onclick="document.getElementById('uploadCatImg').click()" id="uploadAreaCat">
       <div class="upload-icon">+</div><div class="upload-text">Selecionar imagem da galeria</div>
       <input type="file" id="uploadCatImg" style="display:none" accept="image/*" onchange="previewImagem(this,'uploadAreaCat')">
@@ -341,7 +342,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 
 <div class="modal" id="modalSubcategoria">
   <div class="modal-content">
-    <div class="modal-header"><div class="modal-title">Nova Subcategoria</div><button class="close-btn" onclick="fecharModal('modalSubcategoria')">✕</button></div>
+    <div class="modal-header"><div class="modal-title">Nova Subcategoria</div><button type="button" class="close-btn" onclick="fecharModal('modalSubcategoria')">✕</button></div>
     <div class="upload-area" onclick="document.getElementById('uploadSubcatImg').click()" id="uploadAreaSubcat">
       <div class="upload-icon">+</div><div class="upload-text">Selecionar imagem da galeria</div>
       <input type="file" id="uploadSubcatImg" style="display:none" accept="image/*" onchange="previewImagem(this,'uploadAreaSubcat')">
@@ -354,7 +355,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 
 <div class="modal" id="modalCupom">
   <div class="modal-content">
-    <div class="modal-header"><div class="modal-title">Novo Cupom</div><button class="close-btn" onclick="fecharModal('modalCupom')">✕</button></div>
+    <div class="modal-header"><div class="modal-title">Novo Cupom</div><button type="button" class="close-btn" onclick="fecharModal('modalCupom')">✕</button></div>
     <div class="input-box"><input type="text" id="cupomNome" placeholder="Nome do cupom"></div>
     <div class="input-box"><input type="text" id="cupomCodigo" placeholder="Código do cupom"></div>
     <div class="grid-2">
@@ -378,7 +379,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 const firebaseConfig={
   apiKey:"AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
   authDomain:"premium-store-aa58b.firebaseapp.com",
-  databaseURL:"https://premium-store-aa58b-default-rtdb.firebaseio.com",
+    databaseURL:"https://premium-store-aa58b-default-rtdb.firebaseio.com",
   projectId:"premium-store-aa58b",
   storageBucket:"premium-store-aa58b.appspot.com",
   messagingSenderId:"462239500057",
@@ -452,7 +453,7 @@ function carregarProdutos(){
     const produtos=snap.val()||{};let html='';
     Object.entries(produtos).forEach(([id,p])=>{
       const img=p.imagens&&p.imagens.length?p.imagens[0]:'https://via.placeholder.com/40';
-      html+=`<div class="item-row"><img src="${img}" class="img-thumb"><div class="item-info"><div class="item-title">${p.nome}</div><div class="item-sub">${p.categoria||'Sem categoria'} • R$ ${(p.preco||0).toFixed(2)} • Estoque: ${p.estoque||0}</div></div><div class="actions"><button class="btn-sm btn-red" onclick="deletarProduto('${id}')">🗑️</button></div></div>`;
+      html+=`<div class="item-row"><img src="${img}" class="img-thumb"><div class="item-info"><div class="item-title">${p.nome}</div><div class="item-sub">${p.categoria||'Sem categoria'} • R$ ${(p.preco||0).toFixed(2)} • Estoque: ${p.estoque||0}</div></div><div class="actions"><button type="button" class="btn-sm btn-red" onclick="deletarProduto('${id}')">🗑️</button></div></div>`;
     });
     document.getElementById('listaProdutos').innerHTML=html||'<div class="empty">Nenhum produto cadastrado</div>';
     carregarProdutosSelect();
@@ -491,7 +492,7 @@ function addImagemProduto(input,idx){
   const reader=new FileReader();
   reader.onload=e=>{
     imagensProduto[idx]=e.target.result;
-    input.parentElement.innerHTML=`<img src="${e.target.result}"><div class="remove-btn" onclick="removerImagemProduto(${idx},event)">✕</div>`;
+    input.parentElement.innerHTML=`<img src="${e.target.result}"><button type="button" class="remove-btn" onclick="removerImagemProduto(${idx},event)">✕</button>`;
   };
   reader.readAsDataURL(file);
 }
@@ -531,12 +532,68 @@ function deletarProduto(id){
   if(confirm('Deletar produto?')){db.ref('produtos/'+id).remove();carregarProdutos()}
 }
 
+function previewImagem(input,id){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    document.getElementById(id).innerHTML=`<img src="${e.target.result}">`;
+    if(id==='uploadAreaCat')imgCategoria=e.target.result;
+    if(id==='uploadAreaSubcat')imgSubcategoria=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+async function salvarCategoria(){
+  const nome=document.getElementById('catNome').value.trim();
+  if(!nome){alert('Preencha o nome');return}
+  const btn=event.target;btn.disabled=true;btn.textContent='SALVANDO...';
+  try{
+    await db.ref('categorias').push({
+      nome: nome,
+      imagem: imgCategoria || '',
+      criadoEm: Date.now()
+    });
+    fecharModal('modalCategoria');
+    carregarCategorias();
+    alert('Categoria salva!');
+  }catch(e){
+    console.error('ERRO:',e);
+    alert('Erro: '+e.message);
+  }finally{
+    btn.disabled=false;
+    btn.textContent='SALVAR CATEGORIA';
+  }
+}
+
+async function salvarSubcategoria(){
+  const catId=document.getElementById('subcatCategoria').value;
+  const nome=document.getElementById('subcatNome').value.trim();
+  if(!catId||!nome){alert('Preencha todos os campos');return}
+  const btn=event.target;btn.disabled=true;btn.textContent='SALVANDO...';
+  try{
+    await db.ref('categorias/'+catId+'/subcategorias').push({
+      nome,
+      imagem: imgSubcategoria || '',
+      criadoEm: Date.now()
+    });
+    fecharModal('modalSubcategoria');
+    carregarSubcategorias();
+    alert('Subcategoria salva!');
+  }catch(e){
+    console.error('ERRO:',e);
+    alert('Erro: '+e.message);
+  }finally{
+    btn.disabled=false;
+    btn.textContent='SALVAR SUBCATEGORIA';
+  }
+}
+
 function carregarCategorias(){
   db.ref('categorias').once('value',snap=>{
     const cats=snap.val()||{};let html='';
     Object.entries(cats).forEach(([id,c])=>{
       const img=c.imagem||'https://via.placeholder.com/40';
-      html+=`<div class="item-row"><img src="${img}" class="img-thumb"><div class="item-info"><div class="item-title">${c.nome}</div><div class="item-sub">${c.subcategorias?Object.keys(c.subcategorias).length:0} subcategorias</div></div><div class="actions"><button class="btn-sm btn-red" onclick="deletarCategoria('${id}')">🗑️</button></div></div>`;
+      html+=`<div class="item-row"><img src="${img}" class="img-thumb"><div class="item-info"><div class="item-title">${c.nome}</div><div class="item-sub">${c.subcategorias?Object.keys(c.subcategorias).length:0} subcategorias</div></div><div class="actions"><button type="button" class="btn-sm btn-red" onclick="deletarCategoria('${id}')">🗑️</button></div></div>`;
     });
     document.getElementById('listaCategorias').innerHTML=html||'<div class="empty">Nenhuma categoria</div>';
   });
@@ -582,7 +639,7 @@ function carregarSubcategorias(){
       if(cat.subcategorias){
         Object.entries(cat.subcategorias).forEach(([subId,sub])=>{
           const img=sub.imagem||'https://via.placeholder.com/40';
-          html+=`<div class="item-row"><img src="${img}" class="img-thumb"><div class="item-info"><div class="item-title">${sub.nome}</div><div class="item-sub">Categoria: ${cat.nome}</div></div><div class="actions"><button class="btn-sm btn-red" onclick="deletarSubcategoria('${catId}','${subId}')">🗑️</button></div></div>`;
+          html+=`<div class="item-row"><img src="${img}" class="img-thumb"><div class="item-info"><div class="item-title">${sub.nome}</div><div class="item-sub">Categoria: ${cat.nome}</div></div><div class="actions"><button type="button" class="btn-sm btn-red" onclick="deletarSubcategoria('${catId}','${subId}')">🗑️</button></div></div>`;
         });
       }
     });
@@ -762,7 +819,7 @@ function carregarBanners(){
   db.ref('banners').once('value',snap=>{
     const banners=snap.val()||{};let html='';
     Object.entries(banners).forEach(([id,b])=>{
-      html+=`<div class="item-row"><img src="${b.url}" class="img-thumb"><div class="item-info"><div class="item-title">Banner</div><div class="item-sub">${new Date(b.criadoEm).toLocaleDateString('pt-BR')}</div></div><button class="btn-sm btn-red" onclick="deletarBanner('${id}')">🗑️</button></div>`;
+      html+=`<div class="item-row"><img src="${b.url}" class="img-thumb"><div class="item-info"><div class="item-title">Banner</div><div class="item-sub">${new Date(b.criadoEm).toLocaleDateString('pt-BR')}</div></div><button type="button" class="btn-sm btn-red" onclick="deletarBanner('${id}')">🗑️</button></div>`;
     });
     document.getElementById('listaBanners').innerHTML=html||'<div class="empty">Nenhum banner cadastrado</div>';
   });
