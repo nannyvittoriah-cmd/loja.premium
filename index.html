@@ -328,19 +328,16 @@ let servicoAtual=null;
 let depositoParaAprovar=null;
 let comprovanteBase64=null;
 
-// LOGIN GOOGLE
-function handleCredentialResponse(response){
-  const data=parseJwt(response.credential);
-  usuario={nome:data.name,email:data.email,foto:data.picture};
-  localStorage.setItem('user',JSON.stringify(usuario));
-
-  if(!carteiras[usuario.email]){
-    carteiras[usuario.email]={saldo:0};
-    transacoes[usuario.email]=[];
-    localStorage.setItem('carteiras',JSON.stringify(carteiras));
-    localStorage.setItem('transacoes',JSON.stringify(transacoes));
-  }
-
+const firebaseConfig = {
+  apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
+  authDomain: "premium-store-aa58b.firebaseapp.com",
+  databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
+  projectId: "premium-store-aa58b",
+  storageBucket: "premium-store-aa58b.firebasestorage.app",
+  messagingSenderId: "462239500057",
+  appId: "1:462239500057:web:f1b7cea162ed308a866788",
+  measurementId: "G-CN88J28WRX"
+};
   iniciarApp();
 }
 
