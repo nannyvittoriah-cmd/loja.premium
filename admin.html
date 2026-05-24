@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Prime Store - ADM</title>
 <style>
-:root{--bg:#0a0a12;--sidebar:#0f0f1a;--card:#16161f;--input:#1e1e2a;--border:#2f42;--purple:#8b5cf6;--purple-dark:#7c3aed;--text:#fff;--text-dim:#8b8ba1;--green:#10b981;--red:#ef4444;--blue:#3b82f6;--yellow:#f59e0b}
+:root{--bg:#0a0a12;--sidebar:#0f0f1a;--card:#16161f;--input:#1e1e2a;--border:#2f2f42;--purple:#8b5cf6;--purple-dark:#7c3aed;--text:#fff;--text-dim:#8b8ba1;--green:#10b981;--red:#ef4444;--blue:#3b82f6;--yellow:#f59e0b}
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
 body{background:var(--bg);color:var(--text);font-size:11px}
 .sidebar{position:fixed;left:0;top:0;bottom:0;width:220px;background:var(--sidebar);border-right:1px solid var(--border);padding:16px 0;overflow-y:auto;z-index:100;transition:transform 0.3s}
@@ -103,7 +103,7 @@ body{background:var(--bg);color:var(--text);font-size:11px}
 .coupon-code{font-size:14px;font-weight:900;color:var(--purple)}
 .coupon-badge{font-size:8px;font-weight:700;padding:3px 8px;border-radius:6px}
 .coupon-badge.ativo{background:rgba(16,185,129,0.15);color:var(--green);border:1px solid var(--green)}
-.coupon-badge.inativo{background:rgba(239,68,0.15);color:var(--red);border:1px solid var(--red)}
+.coupon-badge.inativo{background:rgba(239,68,68,0.15);color:var(--red);border:1px solid var(--red)}
 .coupon-info{font-size:10px;color:var(--text-dim);margin-bottom:4px}
 .config-tabs{display:flex;gap:6px;margin-bottom:12px;border-bottom:1px solid var(--border);padding-bottom:12px}
 .config-tab{padding:6px 12px;background:transparent;border:none;color:var(--text-dim);font-size:10px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent}
@@ -195,6 +195,22 @@ body{background:var(--bg);color:var(--text);font-size:11px}
     </div>
   </div>
 
+  <div class="screen" id="screen-categorias">
+    <div class="card">
+      <div class="card-title">📁 CATEGORIAS</div>
+      <button class="btn" style="margin-bottom:12px" onclick="abrirModalCategoria()">Adicionar</button>
+      <div id="listaCategorias"><div class="empty">Nenhuma categoria</div></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-subcategorias">
+    <div class="card">
+      <div class="card-title">🗂️ SUBCATEGORIAS</div>
+      <button class="btn" style="margin-bottom:12px" onclick="abrirModalSubcategoria()">Adicionar</button>
+      <div id="listaSubcategorias"><div class="empty">Nenhuma subcategoria</div></div>
+    </div>
+  </div>
+
   <div class="screen" id="screen-pedidos">
     <div class="card">
       <div class="card-title">🛒 PEDIDOS</div>
@@ -215,7 +231,6 @@ body{background:var(--bg);color:var(--text);font-size:11px}
         <button class="back-btn" onclick="mostrarTela('pedidos',document.querySelectorAll('.menu-item')[4])">←</button>
         <div class="header-title">DETALHES DO PEDIDO</div>
       </div>
-    </div>
     <div class="card">
       <div class="card-title">📋 Informações do Pedido</div>
       <div class="item-row">
@@ -286,22 +301,6 @@ body{background:var(--bg);color:var(--text);font-size:11px}
     </div>
   </div>
 
-  <div class="screen" id="screen-categorias">
-    <div class="card">
-      <div class="card-title">📁 CATEGORIAS</div>
-      <button class="btn" style="margin-bottom:12px" onclick="abrirModalCategoria()">Adicionar</button>
-      <div id="listaCategorias"><div class="empty">Nenhuma categoria</div></div>
-    </div>
-  </div>
-
-  <div class="screen" id="screen-subcategorias">
-    <div class="card">
-      <div class="card-title">🗂️ SUBCATEGORIAS</div>
-      <button class="btn" style="margin-bottom:12px" onclick="abrirModalSubcategoria()">Adicionar</button>
-      <div id="listaSubcategorias"><div class="empty">Nenhuma subcategoria</div></div>
-    </div>
-  </div>
-
   <div class="screen" id="screen-slider">
     <div class="card">
       <div class="card-title">🖼️ SLIDER / BANNERS</div>
@@ -363,11 +362,11 @@ body{background:var(--bg);color:var(--text);font-size:11px}
         <div class="toggle-row"><div class="toggle-label">Notificar novo cliente</div><div class="toggle-switch" onclick="toggleSwitch(this)"></div></div>
         <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
       </div>
-      <div id="tab-loja" style="display:none">
+           <div id="tab-loja" style="display:none">
         <div class="input-box"><input type="text" id="cfgCorPrimaria" placeholder="Cor primária" value="#8b5cf6"></div>
         <div class="input-box"><input type="text" id="cfgLogo" placeholder="URL do Logo"></div>
         <div class="input-box"><input type="text" id="cfgBanner" placeholder="URL do Banner"></div>
-                <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
+        <button class="btn" onclick="salvarConfig()">SALVAR ALTERAÇÕES</button>
       </div>
     </div>
   </div>
@@ -485,7 +484,7 @@ function mostrarTela(tela,el){
   document.getElementById('screen-'+tela).classList.add('active');
   if(el)el.classList.add('active');
   const titulos={dashboard:'Dashboard',produtos:'Produtos',categorias:'Categorias',subcategorias:'Subcategorias',pedidos:'Pedidos',usuarios:'Clientes',cupons:'Cupons',slider:'Slider / Banners',notificar:'Notificar Cliente',config:'Configurações',relatorios:'Relatorios',suporte:'Suporte',logs:'Logs do Sistema'};
-  document.getElementById('headerTitle').textContent=titulos||'Dashboard';
+  document.getElementById('headerTitle').textContent=titulos[tela]||'Dashboard';
   if(window.innerWidth<=768)toggleSidebar();
 }
 
@@ -585,18 +584,22 @@ async function salvarProduto(){
   const estoque=parseInt(document.getElementById('prodEstoque').value)||0;
   const desc=document.getElementById('prodDesc').value.trim();
   if(!nome||!preco){alert('Preencha nome e preço');return}
-  const urls=[];
-  for(let i=0;i<imagensProduto.length;i++){
-    if(imagensProduto[i]){
-      const ref=storage.ref('produtos/'+Date.now()+'_'+i+'.jpg');
-      await ref.put(imagensProduto[i]);
-      urls.push(await ref.getDownloadURL());
+  const btn=event.target;btn.disabled=true;btn.textContent='SALVANDO...';
+  try{
+    const urls=[];
+    for(let i=0;i<imagensProduto.length;i++){
+      if(imagensProduto[i]){
+        const ref=storage.ref('produtos/'+Date.now()+'_'+i+'.jpg');
+        const snapshot=await ref.put(imagensProduto[i]);
+        urls.push(await snapshot.ref.getDownloadURL());
+      }
     }
-  }
-  await db.ref('produtos').push({nome,preco,categoria,estoque,descricao:desc,imagens:urls,criadoEm:Date.now()});
-  fecharModal('modalProduto');
-  carregarProdutos();
-  alert('Produto salvo!');
+    await db.ref('produtos').push({nome,preco,categoria,estoque,descricao:desc,imagens:urls,criadoEm:Date.now()});
+    fecharModal('modalProduto');
+    carregarProdutos();
+    alert('Produto salvo!');
+  }catch(e){console.error(e);alert('Erro: '+e.message)}
+  finally{btn.disabled=false;btn.textContent='SALVAR PRODUTO'}
 }
 
 function deletarProduto(id){
@@ -652,9 +655,7 @@ function previewImagem(input,id){
 async function salvarCategoria(){
   const nome=document.getElementById('catNome').value.trim();
   if(!nome){alert('Preencha o nome');return}
-  const btn=event.target;
-  btn.disabled=true;
-  btn.textContent='SALVANDO...';
+  const btn=event.target;btn.disabled=true;btn.textContent='SALVANDO...';
   try{
     let imgUrl='';
     if(imgCategoria){
@@ -666,13 +667,8 @@ async function salvarCategoria(){
     fecharModal('modalCategoria');
     carregarCategorias();
     alert('Categoria salva com sucesso!');
-  }catch(e){
-    console.error('Erro Firebase:',e);
-    alert('Erro ao salvar: '+e.message);
-  }finally{
-    btn.disabled=false;
-    btn.textContent='SALVAR CATEGORIA';
-  }
+  }catch(e){console.error('Erro Firebase:',e);alert('Erro ao salvar: '+e.message)}
+  finally{btn.disabled=false;btn.textContent='SALVAR CATEGORIA'}
 }
 
 function deletarCategoria(id){
@@ -709,9 +705,7 @@ async function salvarSubcategoria(){
   const catId=document.getElementById('subcatCategoria').value;
   const nome=document.getElementById('subcatNome').value.trim();
   if(!catId||!nome){alert('Preencha todos os campos');return}
-  const btn=event.target;
-  btn.disabled=true;
-  btn.textContent='SALVANDO...';
+  const btn=event.target;btn.disabled=true;btn.textContent='SALVANDO...';
   try{
     let imgUrl='';
     if(imgSubcategoria){
@@ -723,13 +717,8 @@ async function salvarSubcategoria(){
     fecharModal('modalSubcategoria');
     carregarSubcategorias();
     alert('Subcategoria salva com sucesso!');
-  }catch(e){
-    console.error('Erro Firebase:',e);
-    alert('Erro ao salvar: '+e.message);
-  }finally{
-    btn.disabled=false;
-    btn.textContent='SALVAR SUBCATEGORIA';
-  }
+  }catch(e){console.error('Erro Firebase:',e);alert('Erro ao salvar: '+e.message)}
+  finally{btn.disabled=false;btn.textContent='SALVAR SUBCATEGORIA'}
 }
 
 function deletarSubcategoria(catId,subId){
@@ -927,7 +916,7 @@ async function enviarNotificacao(){
   const titulo=document.getElementById('notifTitulo').value.trim();
   const msg=document.getElementById('notifMsg').value.trim();
   const alert=document.getElementById('alertNotif');
-  if(!titulo||!msg){alert.textContent='Preencha título e mensagem';alert.className='alert error';alert.style.display='block';return}
+    if(!titulo||!msg){alert.textContent='Preencha título e mensagem';alert.className='alert error';alert.style.display='block';return}
   if(!todos&&!email){alert.textContent='Digite um e-mail ou marque notificar todos';alert.className='alert error';alert.style.display='block';return}
   if(todos){
     const snap=await db.ref('usuarios').once('value');
@@ -937,9 +926,6 @@ async function enviarNotificacao(){
     });
     alert.textContent='Notificação enviada para todos os clientes!';
   }else{
-    const snap=await db.ref('usuarios').orderByChild('email').equalTo(email).once('value');
-    if(!snap.exists()){alert.textContent='E-mail não encontrado';alert.className='alert error';alert
-      }else{
     const snap=await db.ref('usuarios').orderByChild('email').equalTo(email).once('value');
     if(!snap.exists()){alert.textContent='E-mail não encontrado';alert.className='alert error';alert.style.display='block';return}
     const uid=Object.keys(snap.val())[0];
