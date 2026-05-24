@@ -2,556 +2,63 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prime Store Vz</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login - Premium Store</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
-:root{--bg:#0a0a12;--card:#16161f;--input:#1e1e2a;--border:#2f2f42;--purple:#8b5cf6;--purple-dark:#7c3aed;--text:#fff;--text-dim:#8b8ba1;--green:#10b981;--red:#ef4444;--yellow:#f59e0b}
-body{background:var(--bg);color:var(--text);font-size:11px}
-.hide{display:none!important}
-.auth-wrap{background:var(--bg);min-height:100vh;padding:20px}
-.auth-container{max-width:400px;margin:0 auto;padding-top:20px}
-.auth-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
-.back-btn{width:36px;height:36px;background:var(--input);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--text)}
-.auth-logo-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:12px}
-.auth-logo-icon{width:80px;height:80px;margin-bottom:8px}
-.auth-logo-icon svg{width:100%;height:100%;filter:drop-shadow(0 0 30px rgba(139,92,246,0.8))}
-.auth-logo-text{font-size:26px;font-weight:900;letter-spacing:-0.5px}
-.auth-logo-text.prime{color:#fff}
-.auth-logo-text.store{color:var(--purple)}
-.auth-sub{font-size:11px;color:var(--text-dim);text-align:center;margin-bottom:24px}
-.auth-tabs{display:flex;background:var(--input);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:24px}
-.auth-tab{flex:1;height:38px;border:none;background:transparent;color:var(--text-dim);font-size:10px;font-weight:700;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
-.auth-tab.active{background:var(--purple);color:#fff;box-shadow:0 4px 12px rgba(139,92,246,0.4)}
-.auth-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px}
-.auth-card-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.auth-card-icon{width:36px;height:36px;background:var(--input);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
-.auth-title{font-size:16px;font-weight:800}
-.auth-desc{font-size:10px;color:var(--text-dim);margin-bottom:20px;line-height:1.5}
-.input-label{font-size:10px;font-weight:600;color:var(--text-dim);margin-bottom:6px;display:block}
-.input-box{width:100%;min-height:46px;background:var(--input);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;padding:0 12px;gap:8px;margin-bottom:14px}
-.input-box:focus-within{border-color:var(--purple)}
-.input-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:11px}
-.input-icon{font-size:16px;color:var(--text-dim)}
-.input-eye{font-size:16px;color:var(--text-dim);cursor:pointer}
-.checkbox-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;font-size:10px}
-.checkbox-wrap{display:flex;align-items:center;gap:8px}
-.checkbox-wrap input{width:16px;height:16px;accent-color:var(--purple)}
-.checkbox-wrap label{color:var(--text-dim);line-height:1.4}
-.link-purple{color:var(--purple);font-weight:600;cursor:pointer;text-decoration:none}
-.btn{width:100%;height:46px;background:linear-gradient(135deg,var(--purple) 0%,var(--purple-dark) 100%);border:none;border-radius:12px;color:#fff;font-size:11px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:12px;box-shadow:0 4px 16px rgba(139,92,246,0.3)}
-.btn:active{transform:scale(0.98)}
-.btn:disabled{opacity:0.5;cursor:not-allowed}
-.btn-outline{background:transparent;border:1px solid var(--border);box-shadow:none}
-.pass-rules{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:14px}
-.pass-rules-title{font-size:9px;font-weight:700;color:var(--text-dim);margin-bottom:8px}
-.pass-rule{display:flex;align-items:center;gap:6px;font-size:9px;color:var(--text-dim);margin-bottom:6px}
-.pass-rule:last-child{margin-bottom:0}
-.pass-rule.ok{color:var(--green)}
-.pass-rule-icon{width:14px;height:14px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px}
-.pass-rule.ok.pass-rule-icon{background:var(--green);border-color:var(--green);color:#fff}
-.auth-error{font-size:10px;color:var(--red);text-align:center;margin-bottom:12px;display:none;padding:10px;background:rgba(239,68,68,0.1);border:1px solid var(--red);border-radius:10px}
-.auth-info-box{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:14px;margin:16px 0;display:flex;align-items:center;gap:10px}
-.auth-info-icon{width:36px;height:36px;background:rgba(139,92,246,0.1);border:1px solid var(--purple);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--purple);flex-shrink:0}
-.auth-info-text{flex:1;font-size:10px;color:var(--text-dim);line-height:1.4}
-.auth-info-text strong{color:var(--text);font-weight:700}
-.auth-back{font-size:10px;color:var(--purple);font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;margin-top:16px}
-.auth-icon-big{width:80px;height:80px;background:rgba(139,92,246,0.1);border:2px solid var(--purple);border-radius:20px;margin:24px auto;display:flex;align-items:center;justify-content:center;font-size:40px;color:var(--purple)}
-.auth-icon-big.success{background:rgba(16,185,129,0.1);border-color:var(--green);color:var(--green)}
-.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px;padding:16px;background:var(--card);border:1px solid var(--border);border-radius:14px}
-.feature-item{text-align:center}
-.feature-icon{font-size:20px;margin-bottom:6px}
-.feature-title{font-size:9px;font-weight:700;margin-bottom:2px}
-.feature-desc{font-size:8px;color:var(--text-dim);line-height:1.3}
-.footer-text{font-size:9px;color:var(--text-dim);text-align:center;margin-top:24px}
-.info-list{background:var(--input);border:1px solid var(--border);border-radius:12px;padding:4px;margin:16px 0}
-.info-row{display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--border)}
-.info-row:last-child{border-bottom:none}
-.info-row-icon{font-size:18px;color:var(--text-dim)}
-.info-row-text{flex:1;font-size:10px;color:var(--text-dim);line-height:1.4}
-.info-row-text a{color:var(--purple);font-weight:600;text-decoration:none}
-#app{display:none;padding-bottom:70px}
-.header{height:56px;background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 14px;position:sticky;top:0;z-index:50}
-.header-left{display:flex;align-items:center;gap:10px}
-.logo-header{font-size:14px;font-weight:800}
-.header-icons{display:flex;gap:8px}
-.icon-btn{width:32px;height:32px;background:var(--input);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;position:relative}
-.cart-badge{position:absolute;top:-4px;right:-4px;background:var(--red);color:#fff;font-size:8px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.badge-admin{background:linear-gradient(135deg,var(--yellow),#d97706);color:#000;font-size:8px;font-weight:900;padding:2px 6px;border-radius:4px;margin-left:6px}
-.screen{padding:16px}
-.search-box{width:100%;height:40px;background:var(--input);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;padding:0 12px;gap:8px;margin-bottom:16px}
-.search-box input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:11px}
-.banner{width:100%;height:140px;background:linear-gradient(135deg,#5b21b6 0%,#7c3aed 50%,#a78bfa 100%);border-radius:14px;padding:16px;display:flex;flex-direction:column;justify-content:space-between;margin-bottom:16px;position:relative;overflow:hidden}
-.banner::after{content:'';position:absolute;right:10px;bottom:0;width:100px;height:100px;background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.1)"/></svg>');background-size:contain}
-.banner-title{font-size:14px;font-weight:900;margin-bottom:4px}
-.banner-sub{font-size:10px;opacity:0.9}
-.banner-btn{height:32px;padding:0 14px;background:rgba(255,255,255,0.2);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#fff;font-size:10px;font-weight:700;width:fit-content;cursor:pointer}
-.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.section-title{font-size:12px;font-weight:800}
-.section-link{font-size:10px;color:var(--purple);font-weight:600;cursor:pointer}
-.cat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
-.cat-item{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
-.cat-icon-box{width:50px;height:50px;background:var(--input);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px}
-.cat-name{font-size:9px;text-align:center;color:var(--text-dim)}
-.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.product-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer}
-.product-card:active{border-color:var(--purple)}
-.product-img{width:100%;aspect-ratio:1;background:var(--input);object-fit:cover;display:flex;align-items:center;justify-content:center;font-size:32px}
-.product-info{padding:10px}
-.product-name{font-size:10px;font-weight:700;margin-bottom:2px}
-.product-sub{font-size:8px;color:var(--text-dim);margin-bottom:6px}
-.product-price{font-size:12px;font-weight:900;color:var(--purple)}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:60px;background:var(--card);border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;z-index:100}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text-dim);font-size:9px;cursor:pointer;padding:8px 12px}
-.nav-item.active{color:var(--purple)}
-.nav-icon{font-size:18px}
-.empty{text-align:center;padding:40px 20px;color:var(--text-dim);font-size:11px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui;background:#0f0f0f;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh}
+.card{background:#1a1a1a;border:1px solid #333;border-radius:16px;padding:32px;width:100%;max-width:400px}
+h1{text-align:center;margin-bottom:24px;background:linear-gradient(135deg,#d4af37,#b8960f);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.input-box{background:#242424;border:1px solid #333;border-radius:12px;padding:12px 16px;margin-bottom:16px}
+.input-box input{width:100%;background:transparent;border:none;outline:none;color:#fff;font-size:15px}
+.btn{width:100%;background:linear-gradient(135deg,#d4af37,#b8960f);color:#000;border:none;padding:14px;border-radius:12px;font-weight:600;cursor:pointer;font-size:15px}
+.btn:disabled{opacity:.5}
+.error{color:#f44336;font-size:14px;margin-top:8px;text-align:center}
 </style>
 </head>
 <body>
-
-<!-- LOGIN -->
-<div id="loginWrap" class="auth-wrap">
-  <div class="auth-container">
-    <div class="auth-logo-wrap">
-      <div class="auth-logo-icon">
-        <svg viewBox="0 0 64 64" fill="none">
-          <defs><linearGradient id="g1" x1="0" y1="0" x2="64" y2="64"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs>
-          <path d="M20 12C20 12 20 24 20 32C20 42 27 50 37 50C47 50 52 44 52 34C52 24 46 18 38 18C34 18 30 19 27 21" stroke="url(#g1)" stroke-width="8" stroke-linecap="round"/>
-          <path d="M20 32C20 32 27 32 35 32C43 32 47 28 47 24" stroke="url(#g1)" stroke-width="8" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="auth-logo-text"><span class="prime">Prime</span> <span class="store">store Vz</span></div>
-    </div>
-    <div class="auth-sub">Sua loja, sua experiência.</div>
-    <div class="auth-tabs">
-      <button class="auth-tab active" onclick="trocarTela('login')">→ Login</button>
-      <button class="auth-tab" onclick="trocarTela('cadastro')">👤 Cadastrar</button>
-      <button class="auth-tab" onclick="trocarTela('senha')">🔒 Esqueceu senha</button>
-    </div>
-    <div class="auth-card">
-      <div class="auth-title">Bem-vindo de volta!</div>
-      <div class="auth-desc">Faça login para continuar</div>
-      <div class="auth-error" id="erroLogin"></div>
-      <label class="input-label">E-mail</label>
-      <div class="input-box"><span class="input-icon">📧</span><input type="email" id="emailLogin" placeholder="seuemail@email.com"></div>
-      <label class="input-label">Senha</label>
-      <div class="input-box"><span class="input-icon">🔒</span><input type="password" id="senhaLogin" placeholder="Sua senha"><span class="input-eye" onclick="toggleSenha('senhaLogin')">👁️</span></div>
-      <div class="checkbox-row">
-        <div class="checkbox-wrap"><input type="checkbox" id="lembrar"><label for="lembrar">Lembrar de mim</label></div>
-        <a class="link-purple" onclick="trocarTela('senha')">Esqueceu sua senha?</a>
-      </div>
-      <button class="btn" id="btnLogin" onclick="entrar()">Entrar</button>
-    </div>
-    <div class="features-grid">
-      <div class="feature-item"><div class="feature-icon">🛡️</div><div class="feature-title">Compra segura</div><div class="feature-desc">Seus dados protegidos</div></div>
-      <div class="feature-item"><div class="feature-icon">💬</div><div class="feature-title">Suporte dedicado</div><div class="feature-desc">Estamos aqui para ajudar</div></div>
-      <div class="feature-item"><div class="feature-icon">🚚</div><div class="feature-title">Entrega rápida</div><div class="feature-desc">Produtos digitais na hora</div></div>
-    </div>
-    <div class="footer-text">© 2024 Prime store Vz. Todos os direitos reservados.</div>
-  </div>
-</div>
-
-<!-- CADASTRO -->
-<div id="cadastroWrap" class="auth-wrap hide">
-  <div class="auth-container">
-    <div class="auth-header"><div class="back-btn" onclick="trocarTela('login')">←</div></div>
-    <div class="auth-logo-wrap">
-      <div class="auth-logo-icon">
-        <svg viewBox="0 0 64 64" fill="none">
-          <defs><linearGradient id="g2" x1="0" y1="0" x2="64" y2="64"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs>
-          <path d="M20 12C20 12 20 24 20 32C20 42 27 50 37 50C47 50 52 44 52 34C52 24 46 18 38 18C34 18 30 19 27 21" stroke="url(#g2)" stroke-width="8" stroke-linecap="round"/>
-          <path d="M20 32C20 32 27 32 35 32C43 32 47 28 47 24" stroke="url(#g2)" stroke-width="8" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="auth-logo-text"><span class="prime">Prime</span> <span class="store">store Vz</span></div>
-    </div>
-    <div class="auth-sub">Crie sua conta e começe sua jornada.</div>
-    <div class="auth-card">
-      <div class="auth-card-header">
-        <div class="auth-card-icon">👤</div>
-        <div><div class="auth-title" style="text-align:left;margin:0">Cadastro</div><div class="auth-desc" style="text-align:left;margin:0">Preencha os dados para criar sua conta.</div></div>
-      </div>
-      <div class="auth-error" id="erroCad"></div>
-      <label class="input-label">Nome completo</label>
-      <div class="input-box"><span class="input-icon">👤</span><input type="text" id="nomeCad" placeholder="Nome completo"></div>
-      <label class="input-label">E-mail</label>
-      <div class="input-box"><span class="input-icon">📧</span><input type="email" id="emailCad" placeholder="seuemail@email.com"></div>
-      <label class="input-label">Senha</label>
-      <div class="input-box"><span class="input-icon">🔒</span><input type="password" id="senhaCad" placeholder="Crie uma senha" oninput="validarSenha()"><span class="input-eye" onclick="toggleSenha('senhaCad')">👁️</span></div>
-      <label class="input-label">Confirmar senha</label>
-      <div class="input-box"><span class="input-icon">🔒</span><input type="password" id="senhaCad2" placeholder="Confirme sua senha" oninput="validarSenha()"><span class="input-eye" onclick="toggleSenha('senhaCad2')">👁️</span></div>
-      <div class="pass-rules">
-        <div class="pass-rules-title">A senha deve conter:</div>
-        <div class="pass-rule" id="rule8"><div class="pass-rule-icon">✓</div>Mínimo de 8 caracteres</div>
-        <div class="pass-rule" id="ruleMai"><div class="pass-rule-icon">✓</div>Uma letra maiúscula</div>
-        <div class="pass-rule" id="ruleNum"><div class="pass-rule-icon">✓</div>Um número</div>
-        <div class="pass-rule" id="ruleEsp"><div class="pass-rule-icon">✓</div>Um caractere especial</div>
-      </div>
-      <div class="checkbox-wrap" style="margin-bottom:20px">
-        <input type="checkbox" id="termos">
-        <label for="termos">Li e aceito os <a class="link-purple">Termos de Uso</a> e a <a class="link-purple">Política de Privacidade</a></label>
-      </div>
-      <button class="btn" id="btnCad" onclick="cadastrar()" disabled>👤 Cadastrar</button>
-    </div>
-    <div style="text-align:center;font-size:10px;color:var(--text-dim)">
-      Já tem uma conta?<br>
-      <a class="link-purple" onclick="trocarTela('login')" style="display:inline-block;margin-top:6px">Fazer login</a>
-    </div>
-  </div>
-</div>
-
-<!-- ESQUECEU SENHA -->
-<div id="senhaWrap" class="auth-wrap hide">
-  <div class="auth-container">
-    <div class="auth-header"><div class="back-btn" onclick="trocarTela('login')">←</div></div>
-    <div class="auth-logo-wrap">
-      <div class="auth-logo-icon">
-        <svg viewBox="0 0 64 64" fill="none">
-          <defs><linearGradient id="g3" x1="0" y1="0" x2="64" y2="64"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs>
-          <path d="M20 12C20 12 20 24 20 32C20 42 27 50 37 50C47 50 52 44 52 34C52 24 46 18 38 18C34 18 30 19 27 21" stroke="url(#g3)" stroke-width="8" stroke-linecap="round"/>
-          <path d="M20 32C20 32 27 32 35 32C43 32 47 28 47 24" stroke="url(#g3)" stroke-width="8" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="auth-logo-text"><span class="prime">Prime</span> <span class="store">store Vz</span></div>
-    </div>
-    <div class="auth-sub">Recupere o acesso à sua conta.</div>
-    <div class="auth-icon-big">📧</div>
-    <div class="auth-card">
-      <div class="auth-title">Esqueceu sua senha?</div>
-      <div class="auth-desc">Informe o e-mail da sua conta que enviaremos um link para redefinir sua senha.</div>
-      <div class="auth-error" id="erroSenha"></div>
-      <label class="input-label">E-mail</label>
-      <div class="input-box"><span class="input-icon">📧</span><input type="email" id="emailSenha" placeholder="seuemail@email.com"></div>
-      <button class="btn" id="btnSenha" onclick="enviarReset()">✈️ Enviar link de redefinição</button>
-    </div>
-    <div class="auth-info-box">
-      <div class="auth-info-icon">🛡️</div>
-      <div class="auth-info-text">Por segurança, o link expira em <strong>15 minutos</strong>.</div>
-    </div>
-    <div class="auth-back" onclick="trocarTela('login')">← Voltar para o login</div>
-  </div>
-</div>
-
-<!-- EMAIL ENVIADO -->
-<div id="enviadoWrap" class="auth-wrap hide">
-  <div class="auth-container">
-    <div class="auth-header"><div class="back-btn" onclick="trocarTela('login')">←</div></div>
-    <div class="auth-icon-big success">✓</div>
-    <div class="auth-card">
-      <div class="auth-title">E-mail enviado!</div>
-      <div class="auth-desc">Enviamos um link de redefinição para <strong id="emailEnviado" style="color:var(--purple)"></strong></div>
-      <div class="info-list">
-        <div class="info-row">
-          <div class="info-row-icon">📧</div>
-          <div class="info-row-text">Verifique sua caixa de entrada<br>(e o spam/lixo eletrônico).</div>
-        </div>
-        <div class="info-row">
-          <div class="info-row-icon">⏰</div>
-          <div class="info-row-text">O link expira em <strong>15 minutos</strong>.</div>
-        </div>
-        <div class="info-row">
-          <div class="info-row-icon">🛡️</div>
-          <div class="info-row-text">Não recebeu o e-mail?<br><a onclick="reenviarEmail()">Enviar novamente</a></div>
-        </div>
-      </div>
-      <button class="btn" onclick="trocarTela('login')">← Voltar para o login</button>
-    </div>
-  </div>
-</div>
-
-<!-- APP LOGADO - HOME -->
-<div id="app">
-  <div class="header">
-    <div class="header-left">
-      <svg width="28" height="28" viewBox="0 0 64 64" fill="none">
-        <defs><linearGradient id="gH" x1="0" y1="0" x2="64" y2="64"><stop offset="0%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs>
-        <path d="M20 12C20 12 20 24 20 32C20 42 27 50 37 50C47 50 52 44 52 34C52 24 46 18 38 18C34 18 30 19 27 21" stroke="url(#gH)" stroke-width="8" stroke-linecap="round"/>
-        <path d="M20 32C20 32 27 32 35 32C43 32 47 28 47 24" stroke="url(#gH)" stroke-width="8" stroke-linecap="round"/>
-      </svg>
-      <div class="logo-header">Prime <span style="color:var(--purple)">store Vz</span><span id="badgeAdmin" class="badge-admin hide">ADM</span></div>
-    </div>
-    <div class="header-icons">
-      <div class="icon-btn" id="btnAdmin" onclick="abrirAdmin()" style="display:none">⚙️</div>
-      <div class="icon-btn">🛒<span class="cart-badge" id="cartBadge" style="display:none">0</span></div>
-      <div class="icon-btn" onclick="sair()">👤</div>
-    </div>
-  </div>
-
-  <div class="screen">
-    <div class="search-box"><span>🔍</span><input type="text" placeholder="Buscar produtos..."></div>
-    <div class="banner">
-      <div>
-        <div class="banner-title">OFERTAS EXCLUSIVAS</div>
-        <div class="banner-sub">ATÉ 70% OFF</div>
-      </div>
-      <button class="banner-btn">VER OFERTAS</button>
-    </div>
-    <div class="section-header">
-      <div class="section-title">Categorias</div>
-      <div class="section-link">Ver todas</div>
-    </div>
-    <div class="cat-grid">
-      <div class="cat-item"><div class="cat-icon-box">🎮</div><div class="cat-name">Games</div></div>
-      <div class="cat-item"><div class="cat-icon-box">📺</div><div class="cat-name">Streaming</div></div>
-      <div class="cat-item"><div class="cat-icon-box">💳</div><div class="cat-name">Redes<br>Sociais</div></div>
-      <div class="cat-item"><div class="cat-icon-box">🎁</div><div class="cat-name">Gift Cards</div></div>
-      <div class="cat-item"><div class="cat-icon-box">📱</div><div class="cat-name">Apps</div></div>
-    </div>
-    <div class="section-header">
-      <div class="section-title">Produtos em destaque</div>
-      <div class="section-link">Ver todos</div>
-    </div>
-    <div class="product-grid" id="homeProdutos">
-      <div class="product-card">
-        <div class="product-img">💎</div>
-        <div class="product-info">
-          <div class="product-name">510 Diamantes</div>
-          <div class="product-sub">mobile</div>
-          <div class="product-price">R$ 20,90</div>
-        </div>
-      </div>
-      <div class="product-card">
-        <div class="product-img" style="background:#e50914">N</div>
-        <div class="product-info">
-          <div class="product-name">Netflix</div>
-          <div class="product-sub">Premium</div>
-          <div class="product-price">R$ 17,90</div>
-        </div>
-      <div class="product-card">
-        <div class="product-img" style="background:#1db954">♪</div>
-        <div class="product-info">
-          <div class="product-name">Spotify</div>
-          <div class="product-sub">Premium</div>
-          <div class="product-price">R$ 10,90</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="bottom-nav">
-    <div class="nav-item active"><div class="nav-icon">🏠</div><div>Home</div></div>
-    <div class="nav-item"><div class="nav-icon">📁</div><div>Categorias</div></div>
-    <div class="nav-item"><div class="nav-icon">🛒</div><div>Carrinho</div></div>
-    <div class="nav-item"><div class="nav-icon">📦</div><div>Pedidos</div></div>
-    <div class="nav-item"><div class="nav-icon">👤</div><div>Perfil</div></div>
-  </div>
+<div class="card">
+  <h1>Premium Store</h1>
+  <div class="input-box"><input type="email" id="email" placeholder="E-mail"></div>
+  <div class="input-box"><input type="password" id="senha" placeholder="Senha"></div>
+  <button type="button" class="btn" onclick="login()">ENTRAR</button>
+  <div id="erro" class="error"></div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
-  authDomain: "premium-store-aa58b.firebaseapp.com",
-  databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
-  projectId: "premium-store-aa58b",
-  storageBucket: "premium-store-aa58b.firebasestorage.app",
-  messagingSenderId: "462239500057",
-  appId: "1:462239500057:web:f1b7cea162ed308a866788",
-  measurementId: "G-CN88J28WRX"
+const firebaseConfig={
+  apiKey:"AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
+  authDomain:"premium-store-aa58b.firebaseapp.com",
+  databaseURL:"https://premium-store-aa58b-default-rtdb.firebaseio.com",
+  projectId:"premium-store-aa58b",
+  storageBucket:"premium-store-aa58b.appspot.com",
+  messagingSenderId:"462239500057",
+  appId:"1:462239500057:web:f1b7cea162ed308a866788"
 };
 
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.database();
-let isAdmin = false;
-let emailResetAtual = '';
+const auth=firebase.auth();
 
-// EMAILS ADM AUTORIZADOS
-const ADMINS = ['vittoriahvahz@gmail.com'];
-
-auth.onAuthStateChanged(user => {
-  if(user){
-    isAdmin = ADMINS.includes(user.email);
-    if(isAdmin){
-      console.log('👑 ADM LOGADO:', user.email);
-      document.getElementById('badgeAdmin').classList.remove('hide');
-      document.getElementById('btnAdmin').style.display = 'flex';
-    }
-    ocultarTelas();
-    document.getElementById('app').style.display = 'block';
-    carregarHome();
-  }else{
-    isAdmin = false;
-    document.getElementById('app').style.display = 'none';
-    trocarTela('login');
+auth.onAuthStateChanged(user=>{
+  if(user&&user.email==='vittoriahvahz@gmail.com'){
+    window.location.href='admin.html';
   }
 });
 
-function ocultarTelas(){
-  document.getElementById('loginWrap').classList.add('hide');
-  document.getElementById('cadastroWrap').classList.add('hide');
-  document.getElementById('senhaWrap').classList.add('hide');
-  document.getElementById('enviadoWrap').classList.add('hide');
-  document.getElementById('app').style.display = 'none';
-}
-
-function trocarTela(tela){
-  ocultarTelas();
-  document.getElementById(tela+'Wrap').classList.remove('hide');
-  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
-  if(tela==='login') document.querySelectorAll('.auth-tab')[0]?.classList.add('active');
-  if(tela==='cadastro') document.querySelectorAll('.auth-tab')[1]?.classList.add('active');
-  if(tela==='senha') document.querySelectorAll('.auth-tab')[2]?.classList.add('active');
-}
-
-function mostrarErro(id, msg){
-  const el = document.getElementById(id);
-  el.textContent = msg;
-  el.style.display = 'block';
-}
-
-function limparErro(id){
-  document.getElementById(id).style.display = 'none';
-}
-
-function entrar(){
-  limparErro('erroLogin');
-  const email = document.getElementById('emailLogin').value.trim();
-  const senha = document.getElementById('senhaLogin').value;
-  const btn = document.getElementById('btnLogin');
-  if(!email ||!senha){mostrarErro('erroLogin', 'Preencha email e senha');return}
-  btn.textContent = 'Entrando...';
-  btn.disabled = true;
-  auth.signInWithEmailAndPassword(email, senha)
-.catch(e => {
-      btn.textContent = 'Entrar';
-      btn.disabled = false;
-      if(e.code === 'auth/user-not-found') mostrarErro('erroLogin', 'Conta não encontrada');
-      else if(e.code === 'auth/wrong-password') mostrarErro('erroLogin', 'Senha incorreta');
-      else if(e.code === 'auth/invalid-email') mostrarErro('erroLogin', 'Email inválido');
-      else if(e.code === 'auth/invalid-credential') mostrarErro('erroLogin', 'Email ou senha incorretos');
-      else if(e.code === 'auth/operation-not-allowed') mostrarErro('erroLogin', 'Ative Email/Password no Firebase Console');
-      else if(e.code === 'auth/network-request-failed') mostrarErro('erroLogin', 'Erro de conexão. Verifique domínio autorizado');
-      else mostrarErro('erroLogin', e.message);
-    });
-}
-
-function validarSenha(){
-  const s = document.getElementById('senhaCad').value;
-  const s2 = document.getElementById('senhaCad2').value;
-  document.getElementById('rule8').classList.toggle('ok', s.length >= 8);
-  document.getElementById('ruleMai').classList.toggle('ok', /[A-Z]/.test(s));
-  document.getElementById('ruleNum').classList.toggle('ok', /[0-9]/.test(s));
-    document.getElementById('ruleEsp').classList.toggle('ok', /[^A-Za-z0-9]/.test(s));
-  const valido = s.length >= 8 && /[A-Z]/.test(s) && /[0-9]/.test(s) && /[^A-Za-z0-9]/.test(s) && s === s2 && document.getElementById('termos').checked;
-  document.getElementById('btnCad').disabled =!valido;
-}
-
-document.getElementById('termos')?.addEventListener('change', validarSenha);
-
-function cadastrar(){
-  limparErro('erroCad');
-  const nome = document.getElementById('nomeCad').value.trim();
-  const email = document.getElementById('emailCad').value.trim();
-  const senha = document.getElementById('senhaCad').value;
-  const btn = document.getElementById('btnCad');
-  if(!nome ||!email ||!senha){mostrarErro('erroCad', 'Preencha todos os campos');return}
-  btn.textContent = 'Cadastrando...';
-  btn.disabled = true;
-  auth.createUserWithEmailAndPassword(email, senha)
-.then(cred => cred.user.updateProfile({displayName: nome}))
-.then(() => {
-      return db.ref('usuarios/'+auth.currentUser.uid).set({
-        nome: nome,
-        email: email,
-        criadoEm: Date.now(),
-        admin: ADMINS.includes(email)
-      });
-    })
-.catch(e => {
-      btn.textContent = 'Cadastrar';
-      btn.disabled = false;
-      if(e.code === 'auth/email-already-in-use') mostrarErro('erroCad', 'Email já cadastrado');
-      else if(e.code === 'auth/weak-password') mostrarErro('erroCad', 'Senha muito fraca');
-      else if(e.code === 'auth/invalid-email') mostrarErro('erroCad', 'Email inválido');
-      else mostrarErro('erroCad', e.message);
-    });
-}
-
-function enviarReset(){
-  limparErro('erroSenha');
-  const email = document.getElementById('emailSenha').value.trim();
-  const btn = document.getElementById('btnSenha');
-  if(!email){mostrarErro('erroSenha', 'Digite seu email');return}
-  btn.textContent = 'Enviando...';
-  btn.disabled = true;
-  auth.sendPasswordResetEmail(email)
-.then(() => {
-      emailResetAtual = email;
-      document.getElementById('emailEnviado').textContent = email;
-      trocarTela('enviado');
-      btn.textContent = 'Enviar link de redefinição';
-      btn.disabled = false;
-    })
-.catch(e => {
-      btn.textContent = 'Enviar link de redefinição';
-      btn.disabled = false;
-      if(e.code === 'auth/user-not-found') mostrarErro('erroSenha', 'Email não cadastrado');
-      else if(e.code === 'auth/invalid-email') mostrarErro('erroSenha', 'Email inválido');
-      else mostrarErro('erroSenha', e.message);
-    });
-}
-
-function reenviarEmail(){
-  if(!emailResetAtual) return;
-  document.getElementById('emailSenha').value = emailResetAtual;
-  enviarReset();
-  trocarTela('senha');
-}
-
-function toggleSenha(id){
-  const input = document.getElementById(id);
-  input.type = input.type === 'password'? 'text' : 'password';
-}
-
-function sair(){
-  auth.signOut();
-}
-
-function abrirAdmin(){
-  if(!isAdmin){
-    alert('Acesso negado');
-    return;
+async function login(){
+  const email=document.getElementById('email').value.trim();
+  const senha=document.getElementById('senha').value;
+  const btn=event.target;btn.disabled=true;btn.textContent='ENTRANDO...';
+  document.getElementById('erro').textContent='';
+  try{
+    await auth.signInWithEmailAndPassword(email,senha);
+  }catch(e){
+    document.getElementById('erro').textContent=e.message;
+    btn.disabled=false;
+    btn.textContent='ENTRAR';
   }
-  window.location.href = 'admin.html';
-}
-
-function carregarHome(){
-  // Mostra botão ADM se for admin
-  if(isAdmin) document.getElementById('btnAdmin').style.display = 'flex';
-
-  // Carrega produtos do Firebase
-  db.ref('produtos').limitToLast(6).once('value',snap=>{
-    const prods = snap.val()||{};
-    let html = '';
-    if(Object.keys(prods).length === 0) return; // Mantém os do print
-
-    Object.entries(prods).forEach(([id,p])=>{
-      const img = p.imagens&&p.imagens[0]?`<img src="${p.imagens[0]}" style="width:100%;height:100%;object-fit:cover">`:p.emoji||'📦';
-      html+=`<div class="product-card" onclick="verProduto('${id}')">
-        <div class="product-img">${img}</div>
-        <div class="product-info">
-          <div class="product-name">${p.nome}</div>
-          <div class="product-sub">${p.categoria||''}</div>
-          <div class="product-price">R$ ${p.preco.toFixed(2)}</div>
-        </div>
-      </div>`;
-    });
-    document.getElementById('homeProdutos').innerHTML = html;
-  });
-
-  // Carrega categorias do Firebase
-  db.ref('categorias').limitToFirst(5).once('value',snap=>{
-    const cats = snap.val()||{};
-    // Por enquanto mantém as fixas do print
-  });
-}
-
-function verProduto(id){
-  alert('Abrir produto: '+id);
 }
 </script>
 </body>
