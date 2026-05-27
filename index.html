@@ -38,12 +38,12 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 .input,.textarea{background:#141414;border:1px solid #2a2a2a;border-radius:10px;padding:10px 12px;font-size:10px;color:#fff;width:100%;outline:none;margin-bottom:6px}
 .textarea{min-height:60px;resize:vertical}
 .input:focus,.textarea:focus{border-color:#8b5cf6}
-.info{font-size:9px;color:#888;margin:3px 0 12px}
-.custo-box{background:#141414;border:1px solid #2a2a2a;border-radius:10px;padding:10px 12px;font-size:11px;font-weight:700;color:#8b5cf6;margin-bottom:12px;min-height:36px;display:flex;align-items:center}
+.valor-box{background:#141414;border:1px solid #2a2a2a;border-radius:10px;padding:10px 12px;font-size:14px;font-weight:800;color:#8b5cf6;margin-bottom:12px;min-height:40px;display:flex;align-items:center}
 .btn{width:100%;background:#8b5cf6;color:#fff;border:none;border-radius:10px;padding:12px;font-weight:700;font-size:11px;cursor:pointer;margin-top:6px}
 .btn:active{transform:scale(.98)}
 .btn-red{background:#ef4444}
 .btn-sec{background:#1e1e1e}
+.btn-desc{background:transparent;border:1px solid #8b5cf6;color:#8b5cf6}
 .btn-voltar{width:28px;height:28px;background:#141414;border:1px solid #2a2a2a;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px}
 .titulo{font-size:12px;font-weight:800;margin-bottom:12px}
 .lista-item{background:#141414;border:1px solid #2a2a2a;border-radius:10px;padding:10px;margin-bottom:8px}
@@ -62,6 +62,8 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 .add{position:fixed;bottom:16px;right:16px;width:44px;height:44px;background:#8b5cf6;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px rgba(139,92,246,.4);z-index:90;font-size:20px;font-weight:700}
 .upload{width:100%;aspect-ratio:16/9;background:#1e1e1e;border:2px dashed #2a2a2a;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;cursor:pointer;overflow:hidden;font-size:9px;color:#888}
 .upload img{width:100%;height:100%;object-fit:cover}
+.desc-box{background:#141414;border:1px solid #2a2a2a;border-radius:10px;padding:12px;font-size:10px;line-height:1.6;color:#aaa;white-space:pre-wrap;margin-bottom:12px;display:none}
+.desc-box.ativo{display:block}
 </style>
 </head>
 <body>
@@ -111,14 +113,13 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
     <div class="label">🔗 Link:</div>
     <input type="text" class="input" id="link" placeholder="Cole o link aqui">
 
-    <div class="label">Quantidade:</div>
-    <input type="number" class="input" id="qtd" placeholder="Digite a quantidade" oninput="calcCusto()">
-    <div class="info" id="minmax">Selecione um serviço</div>
+    <div class="label">💵 Valor:</div>
+    <div class="valor-box" id="valor">R$ 0,00</div>
 
-    <div class="label">💵 Custo :</div>
-    <div class="custo-box" id="custo">R$ 0,00</div>
+    <div class="desc-box" id="descBox"></div>
 
     <button class="btn" onclick="finalizar()">FAZER PEDIDO</button>
+    <button class="btn btn-desc" onclick="toggleDesc()">VER DESCRIÇÃO</button>
   </div>
 </div>
 
@@ -225,6 +226,8 @@ function setCat(k){
   document.getElementById('catDrop').classList.remove('ativo');
   document.getElementById('servText').textContent='Selecione um serviço';
   document.getElementById('servId').textContent='---';
+  document.getElementById('valor').textContent='R$ 0,00';
+  document.getElementById('descBox').classList.remove('ativo');
   renderServsDrop();
 }
 
@@ -233,29 +236,20 @@ function setServ(k){
   const s=db.serv.find(x=>x.k===k);
   document.getElementById('servText').textContent=s.nome;
   document.getElementById('servId').textContent=s.k.slice(-4);
-  document.getElementById('minmax').textContent=`Mínimo: ${s.min} - Max: ${s.max.toLocaleString('pt-BR')}`;
-  document.getElementById('qtd').value='';
-  document.getElementById('custo').textContent='R$ 0,00';
+  document.getElementById('valor').textContent='R$ '+s.preco.toFixed(2).replace('.',',');
+  document.getElementById('descBox').textContent=s.desc||'Sem descrição';
   document.getElementById('servDrop').classList.remove('ativo');
 }
 
-function calcCusto(){
-  if(!servSel)return;
-  const s=db.serv.find(x=>x.k===servSel);
-  let qtd=parseInt(document.getElementById('qtd').value)||0;
-  if(qtd<s.min)qtd=s.min;
-  if(qtd>s.max)qtd=s.max;
-  let total=(qtd/1000)*s.preco;
-  document.getElementById('custo').textContent='R$ '+total.toFixed(2).replace('.',',');
+function toggleDesc(){
+  if(!servSel){alert('Selecione um serviço primeiro');return}
+  document.getElementById('descBox').classList.toggle('ativo');
 }
 
 function finalizar(){
   if(!servSel){alert('Selecione um serviço');return}
   let link=document.getElementById('link').value;
-  let qtd=parseInt(document.getElementById('qtd').value);
-  const s=db.serv.find(x=>x.k===servSel);
-  if(!link||!qtd){alert('Preencha link e quantidade');return}
-  if(qtd<s.min||qtd>s.max){alert(`Quantidade deve ser entre ${s.min} e ${s.max}`);return}
+  if(!link){alert('Cole o link');return}
   alert('Pedido enviado!');
 }
 
@@ -276,7 +270,7 @@ function renderServsDrop(){
   if(servs.length===0){
     servDrop.innerHTML='<div class="dropdown-item">Nenhum serviço</div>';
   }else{
-    servDrop.innerHTML=servs.map(s=>`<div class="dropdown-item" onclick="setServ('${s.k}')">${s.nome}</div>`).join('');
+    servDrop.innerHTML=servs.map(s=>`<div class="dropdown-item" onclick="setServ('${s.k}')">${s.nome} - R$ ${s.preco.toFixed(2)}</div>`).join('');
   }
 }
 
@@ -307,7 +301,7 @@ function abrirServs(){
           <button class="btn-mini btn-del" onclick="delServ('${s.k}')">EXCLUIR</button>
         </div>
       </div>
-      <div class="lista-info">Cat: ${c?.nome||'-'} | R$ ${s.preco.toFixed(2)} | Min: ${s.min} | Max: ${s.max} | Estoque: ${s.estoque}</div>
+      <div class="lista-info">Cat: ${c?.nome||'-'} | R$ ${s.preco.toFixed(2)} | Estoque: ${s.estoque}</div>
     </div>`}).join('');
   document.getElementById('adminBody').innerHTML=`<div class="titulo">SERVIÇOS</div>${lista||'<div class="empty">Nenhum serviço</div>'}<div class="add" onclick="formServ()">+</div><button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>`;
 }
@@ -330,10 +324,8 @@ function formServ(k=null){
   document.getElementById('modalBody').innerHTML=`
     <select class="input" id="catS">${opts}</select>
     <input type="text" class="input" id="nomeS" value="${d?.nome||''}" placeholder="Nome do serviço">
-    <textarea class="textarea" id="descS" placeholder="Descrição">${d?.desc||''}</textarea>
-    <input type="number" step="0.01" class="input" id="precoS" value="${d?.preco||''}" placeholder="Valor por 1000">
-    <input type="number" class="input" id="minS" value="${d?.min||''}" placeholder="Quantidade mínima">
-    <input type="number" class="input" id="maxS" value="${d?.max||''}" placeholder="Quantidade máxima">
+    <textarea class="textarea" id="descS" placeholder="Descrição do serviço">${d?.desc||''}</textarea>
+    <input type="number" step="0.01" class="input" id="precoS" value="${d?.preco||''}" placeholder="Valor do serviço">
     <input type="number" class="input" id="estS" value="${d?.estoque||''}" placeholder="Estoque">
     <button class="btn" onclick="salvarServ('${k||''}')">${k?'SALVAR':'CRIAR'}</button>
     <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
@@ -360,11 +352,9 @@ function salvarServ(k){
   const nome=document.getElementById('nomeS').value.trim();
   const desc=document.getElementById('descS').value.trim();
   const preco=parseFloat(document.getElementById('precoS').value);
-  const min=parseInt(document.getElementById('minS').value);
-  const max=parseInt(document.getElementById('maxS').value);
   const estoque=parseInt(document.getElementById('estS').value)||0;
-  if(!cat||!nome||!preco||!min||!max){alert('Preencha todos os campos');return}
-  const dados={k:k||'s'+Date.now(),cat,nome,desc,preco,min,max,estoque};
+  if(!cat||!nome||!preco){alert('Preencha categoria, nome e valor');return}
+  const dados={k:k||'s'+Date.now(),cat,nome,desc,preco,estoque};
   if(k){db.serv[db.serv.findIndex(x=>x.k===k)]=dados}else{db.serv.push(dados)}
   save();fecharModal();abrirServs();renderHome();
 }
