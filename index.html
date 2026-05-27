@@ -12,9 +12,11 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 .header{background:#0a0a0a;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1a1a1a;position:sticky;top:0;z-index:50}
 .header-left{display:flex;align-items:center;gap:12px}
 .menu{font-size:18px;cursor:pointer;color:#fff}
-.logo{width:24px;height:24px;background:#fff;border-radius:50%;position:relative}
-.logo::before{content:'';position:absolute;top:0;left:-6px;width:12px;height:12px;background:#0a0a0a;border-radius:50%}
-.logo::after{content:'';position:absolute;top:-4px;left:6px;width:3px;height:3px;background:#fff;border-radius:50%;box-shadow:4px 1px 0 #fff,2px 6px 0 #fff,-1px 4px 0 #fff}
+.logo-box{display:flex;align-items:center;gap:8px}
+.logo-img{width:28px;height:28px;border-radius:6px}
+.logo-text{font-size:14px;font-weight:800;letter-spacing:.5px}
+.logo-text .premium{color:#fff}
+.logo-text .store{color:#8b5cf6}
 .header-right{display:flex;align-items:center;gap:12px;font-size:16px}
 .icon{cursor:pointer;color:#8b5cf6}
 .sidebar{position:fixed;top:0;left:-250px;width:250px;height:100vh;background:#141414;border-right:1px solid #2a2a2a;z-index:200;transition:left .3s;padding:16px;overflow-y:auto}
@@ -32,7 +34,7 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 .dropdown{position:absolute;top:100%;left:0;right:0;background:#141414;border:1px solid #2a2a2a;border-radius:10px;margin-top:3px;z-index:10;display:none;max-height:160px;overflow-y:auto}
 .dropdown.ativo{display:block}
 .dropdown-item{padding:9px 12px;cursor:pointer;font-size:10px;border-bottom:1px solid #1a1a1a}
-.dropdown-item:hover{background:#1e1e1e}
+.dropdown-item:hover{background:#1e1e}
 .dropdown-item:last-child{border-bottom:none}
 .id-azul{color:#3b82f6;font-weight:700}
 .input,.textarea{background:#141414;border:1px solid #2a2a2a;border-radius:10px;padding:10px 12px;font-size:10px;color:#fff;width:100%;outline:none;margin-bottom:6px}
@@ -85,7 +87,10 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
   <div class="header">
     <div class="header-left">
       <div class="menu" onclick="abrirMenu()">☰</div>
-      <div class="logo"></div>
+      <div class="logo-box">
+        <img src="attachment://0" class="logo-img" alt="Logo">
+        <div class="logo-text"><span class="premium">PREMIUM</span> <span class="store">STORE</span></div>
+      </div>
     </div>
     <div class="header-right">
       <div class="icon">☀️</div>
@@ -200,7 +205,7 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 <script>
 let db={cat:JSON.parse(localStorage.getItem('cat')||'[]'),serv:JSON.parse(localStorage.getItem('serv')||'[]'),config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"Ao utilizar nosso painel, o usuário concorda automaticamente com todos os termos e condições abaixo.\\n\\n• Não garantimos resultados permanentes em serviços de redes sociais.\\n• O cliente é totalmente responsável pelo link enviado no pedido.\\n• Pedidos com links inválidos poderão ser cancelados sem aviso.\\n• Não realizamos reembolso após o início do serviço.\\n• O tempo de entrega pode variar conforme o serviço solicitado.\\n• Não aceitamos conteúdos ilegais, proibidos ou que violem políticas das plataformas.\\n• O uso do painel é de total responsabilidade do usuário.\\n• Alguns serviços podem sofrer quedas naturais após a entrega.\\n• O cliente concorda em utilizar o site de forma correta e sem tentativas de abuso ou spam.\\n• Alterações nos termos podem ocorrer a qualquer momento sem aviso prévio.\\n\\n💜 Ao continuar utilizando o painel, você concorda com todos os termos acima.","teste":{"desc":"Teste de Curtidas: São 10 curtidas grátis\\nTeste de Seguidores: São 30 seguidores grátis"},"premiacao":{"img":"","texto":""}}')};
 let logado=false,catSel=null,servSel=null;
-const EMAIL='nannyvittoriah@gmail.com',SENHA='Lorrannyh.101225',WHATSAPP='5598984853563';
+const EMAIL='nannyvittoriah@gmail.com',SENHA='Lorrannyh.101225',WHATSAPP='5511999999999';
 
 function save(){localStorage.setItem('cat',JSON.stringify(db.cat));localStorage.setItem('serv',JSON.stringify(db.serv));localStorage.setItem('config',JSON.stringify(db.config))}
 function abrirMenu(){document.getElementById('sidebar').classList.add('ativo');document.getElementById('overlay').classList.add('ativo')}
@@ -268,7 +273,7 @@ function finalizar(){
 💜 PREMIUM STORE
 ━━━━━━━━━━
 
-🚀 Novo pedido enviado
+🚀 Novo pedido realizado
 
 📦 Serviço: ${s.nome}
 💰 Valor: R$ ${s.preco.toFixed(2).replace('.',',')}
