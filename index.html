@@ -15,11 +15,13 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 .logo-box{display:flex;align-items:center;gap:8px}
 .logo-img{width:28px;height:28px;border-radius:6px;object-fit:cover}
 .logo-text{font-size:14px;font-weight:800;letter-spacing:.5px}
-.logo-text .premium{color:#fff}
-.logo-text .store{color:#8b5cf6}
+.logo-text.premium{color:#fff}
+.logo-text.store{color:#8b5cf6}
 .header-right{display:flex;align-items:center;gap:12px;font-size:16px}
 .icon{cursor:pointer;color:#8b5cf6}
-.sidebar{position:fixed;top:0;left:-250px;width:250px;height:100vh;background:#141414;border-right:1px solid #2a2a2a;z-index:200;transition:left .3s;padding:16px;overflow-y:auto}
+.user-info{display:flex;align-items:center;gap:6px;font-size:10px;color:#8b5cf6;cursor:pointer}
+.user-avatar{width:24px;height:24px;border-radius:50%;background:#8b5cf6;display:flex;align-items:center;justify-content:center;font-weight:700}
+.sidebar{position:fixed;top:0;left:-250px;width:250px;height:100vh;background:#141414;border-right:1px solid #2a2a2a;z-index:200;transition:left.3s;padding:16px;overflow-y:auto}
 .sidebar.ativo{left:0}
 .sidebar-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:199;display:none}
 .sidebar-overlay.ativo{display:block}
@@ -27,6 +29,22 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 .sidebar-item{padding:10px;border-radius:8px;cursor:pointer;font-size:10px;font-weight:600;color:#888;margin-bottom:4px;display:flex;align-items:center;gap:8px}
 .sidebar-item:hover{background:#1e1e1e;color:#fff}
 .container{padding:12px;max-width:600px;margin:0 auto}
+.login-container{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+.login-box{background:#141414;border:1px solid #2a2a2a;border-radius:14px;padding:24px;width:100%;max-width:360px}
+.login-logo{text-align:center;margin-bottom:24px}
+.login-logo img{width:60px;height:60px;border-radius:12px;margin-bottom:8px}
+.login-logo h1{font-size:16px;font-weight:800}
+.login-logo p{font-size:9px;color:#888;margin-top:4px}
+.login-tabs{display:flex;gap:6px;margin-bottom:16px}
+.login-tab{flex:1;padding:8px;background:#1e1e1e;border:1px solid #2a2a2a;border-radius:8px;font-size:10px;font-weight:600;text-align:center;cursor:pointer;color:#888}
+.login-tab.ativo{background:#8b5cf6;border-color:#8b5cf6;color:#fff}
+.login-form{display:none}
+.login-form.ativo{display:block}
+.btn-google{width:100%;background:#fff;color:#000;border:none;border-radius:10px;padding:12px;font-weight:700;font-size:11px;cursor:pointer;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px}
+.divider{display:flex;align-items:center;gap:8px;margin:16px 0;color:#666;font-size:9px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:#2a2a2a}
+.link-roxo{color:#8b5cf6;cursor:pointer;font-size:9px;text-align:center;margin-top:12px}
+.link-roxo:hover{text-decoration:underline}
 .label{font-size:10px;font-weight:600;margin:12px 0 6px;display:flex;align-items:center;gap:4px}
 .select-wrap{position:relative;margin-bottom:6px}
 .select{background:#141414;border:1px solid #2a2a2a;border-radius:10px;padding:10px 12px;font-size:10px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
@@ -72,6 +90,52 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 </head>
 <body>
 
+<div id="login" class="tela ativa">
+  <div class="login-container">
+    <div class="login-box">
+      <div class="login-logo">
+        <img src="https://i.postimg.cc/PJ2Vcty8/e1befe8d-0630-444f-aea5-9b0a96d5f84b.jpg" alt="Logo">
+        <h1>PREMIUM STORE</h1>
+        <p>Entre para continuar</p>
+      </div>
+      
+      <div class="login-tabs">
+        <div class="login-tab ativo" onclick="trocarTabLogin('entrar')">Entrar</div>
+        <div class="login-tab" onclick="trocarTabLogin('cadastrar')">Cadastrar</div>
+      </div>
+
+      <div id="formEntrar" class="login-form ativo">
+        <button class="btn-google" onclick="loginGoogle()">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Entrar com Google
+        </button>
+        
+        <div class="divider">ou</div>
+        
+        <input type="email" class="input" id="loginEmail" placeholder="E-mail">
+        <input type="password" class="input" id="loginSenha" placeholder="Senha">
+        <button class="btn" onclick="fazerLogin()">ENTRAR</button>
+        <div class="link-roxo" onclick="abrirEsqueciSenha()">Esqueci minha senha</div>
+      </div>
+
+      <div id="formCadastrar" class="login-form">
+        <button class="btn-google" onclick="loginGoogle()">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Cadastrar com Google
+        </button>
+        
+        <div class="divider">ou</div>
+        
+        <input type="text" class="input" id="cadNome" placeholder="Nome completo">
+        <input type="email" class="input" id="cadEmail" placeholder="E-mail">
+        <input type="password" class="input" id="cadSenha" placeholder="Senha">
+        <input type="password" class="input" id="cadSenha2" placeholder="Confirmar senha">
+        <button class="btn" onclick="fazerCadastro()">CADASTRAR</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="sidebar-overlay" id="overlay" onclick="fecharMenu()"></div>
 <div class="sidebar" id="sidebar">
   <div class="sidebar-tit">MENU</div>
@@ -81,9 +145,10 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
   <div class="sidebar-item" onclick="ir('teste');fecharMenu()">🎁 Teste grátis</div>
   <div class="sidebar-item" onclick="ir('premiacao');fecharMenu()">🏆 Premiação</div>
   <div class="sidebar-item" onclick="abrirAdmin();fecharMenu()">👤 Adm</div>
+  <div class="sidebar-item" onclick="logout();fecharMenu()">🚪 Sair</div>
 </div>
 
-<div id="home" class="tela ativa">
+<div id="home" class="tela">
   <div class="header">
     <div class="header-left">
       <div class="menu" onclick="abrirMenu()">☰</div>
@@ -93,9 +158,10 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
       </div>
     </div>
     <div class="header-right">
-      <div class="icon">☀️</div>
-      <div class="icon">⚙️</div>
-      <div class="icon">⏻</div>
+      <div class="user-info" onclick="abrirPerfil()">
+        <div class="user-avatar" id="userAvatar">U</div>
+        <span id="userNome">Usuário</span>
+      </div>
     </div>
   </div>
   <div class="container">
@@ -203,33 +269,171 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 </div>
 
 <script>
-let db={cat:JSON.parse(localStorage.getItem('cat')||'[]'),serv:JSON.parse(localStorage.getItem('serv')||'[]'),config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"Ao utilizar nosso painel, o usuário concorda automaticamente com todos os termos e condições abaixo.\\n\\n• Não garantimos resultados permanentes em serviços de redes sociais.\\n• O cliente é totalmente responsável pelo link enviado no pedido.\\n• Pedidos com links inválidos poderão ser cancelados sem aviso.\\n• Não realizamos reembolso após o início do serviço.\\n• O tempo de entrega pode variar conforme o serviço solicitado.\\n• Não aceitamos conteúdos ilegais, proibidos ou que violem políticas das plataformas.\\n• O uso do painel é de total responsabilidade do usuário.\\n• Alguns serviços podem sofrer quedas naturais após a entrega.\\n• O cliente concorda em utilizar o site de forma correta e sem tentativas de abuso ou spam.\\n• Alterações nos termos podem ocorrer a qualquer momento sem aviso prévio.\\n\\n💜 Ao continuar utilizando o painel, você concorda com todos os termos acima.","teste":{"desc":"Teste de Curtidas: São 10 curtidas grátis\\nTeste de Seguidores: São 30 seguidores grátis"},"premiacao":{"img":"","texto":""}}')};
-let logado=false,catSel=null,servSel=null;
-const EMAIL='nannyvittoriah@gmail.com',SENHA='Lorrannyh.101225',WHATSAPP='5598984853563';
+let db={
+  cat:JSON.parse(localStorage.getItem('cat')||'[]'),
+  serv:JSON.parse(localStorage.getItem('serv')||'[]'),
+  usuarios:JSON.parse(localStorage.getItem('usuarios')||'[]'),
+  config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"Ao utilizar nosso painel, o usuário concorda automaticamente com todos os termos e condições abaixo.\\n\\n• Não garantimos resultados permanentes em serviços de redes sociais.\\n• O cliente é totalmente responsável pelo link enviado no pedido.\\n• Pedidos com links inválidos poderão ser cancelados sem aviso.\\n• Não realizamos reembolso após o início do serviço.\\n• O tempo de entrega pode variar conforme o serviço solicitado.\\n• Não aceitamos conteúdos ilegais, proibidos ou que violem políticas das plataformas.\\n• O uso do painel é de total responsabilidade do usuário.\\n• Alguns serviços podem sofrer quedas naturais após a entrega.\\n• O cliente concorda em utilizar o site de forma correta e sem tentativas de abuso ou spam.\\n• Alterações nos termos podem ocorrer a qualquer momento sem aviso prévio.\\n\\n💜 Ao continuar utilizando o painel, você concorda com todos os termos acima.","teste":{"desc":"Teste de Curtidas: São 10 curtidas grátis\\nTeste de Seguidores: São 30 seguidores grátis"},"premiacao":{"img":"","texto":""}}')
+};
+let logado=false,catSel=null,servSel=null,usuarioAtual=null;
+const EMAIL_ADM='nannyvittoriah@gmail.com',SENHA_ADM='Lorrannyh.101225',WHATSAPP='5598984853563';
 
-function save(){localStorage.setItem('cat',JSON.stringify(db.cat));localStorage.setItem('serv',JSON.stringify(db.serv));localStorage.setItem('config',JSON.stringify(db.config))}
+function save(){localStorage.setItem('cat',JSON.stringify(db.cat));localStorage.setItem('serv',JSON.stringify(db.serv));localStorage.setItem('usuarios',JSON.stringify(db.usuarios));localStorage.setItem('config',JSON.stringify(db.config))}
+
+function verificarLogin(){
+  const userSalvo=localStorage.getItem('usuarioLogado');
+  if(userSalvo){
+    usuarioAtual=JSON.parse(userSalvo);
+    logado=true;
+    document.getElementById('login').classList.remove('ativa');
+    document.getElementById('home').classList.add('ativa');
+    atualizarHeaderUsuario();
+    renderHome();
+  }else{
+    document.getElementById('login').classList.add('ativa');
+  }
+}
+
+function atualizarHeaderUsuario(){
+  if(usuarioAtual){
+    document.getElementById('userNome').textContent=usuarioAtual.nome.split(' ')[0];
+    document.getElementById('userAvatar').textContent=usuarioAtual.nome.charAt(0).toUpperCase();
+  }
+}
+
+function trocarTabLogin(tab){
+  document.querySelectorAll('.login-tab').forEach(t=>t.classList.remove('ativo'));
+  document.querySelectorAll('.login-form').forEach(f=>f.classList.remove('ativo'));
+  event.target.classList.add('ativo');
+  document.getElementById(tab==='entrar'?'formEntrar':'formCadastrar').classList.add('ativo');
+}
+
+function fazerLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const senha=document.getElementById('loginSenha').value;
+  if(!email||!senha){alert('Preencha todos os campos');return}
+  
+  if(email===EMAIL_ADM&&senha===SENHA_ADM){
+    usuarioAtual={nome:'Administrador',email:EMAIL_ADM,admin:true};
+    localStorage.setItem('usuarioLogado',JSON.stringify(usuarioAtual));
+    logado=true;
+    document.getElementById('login').classList.remove('ativa');
+    document.getElementById('home').classList.add('ativa');
+    atualizarHeaderUsuario();
+    renderHome();
+    return;
+  }
+  
+  const user=db.usuarios.find(u=>u.email===email&&u.senha===senha);
+  if(user){
+    usuarioAtual=user;
+    localStorage.setItem('usuarioLogado',JSON.stringify(user));
+    logado=true;
+    document.getElementById('login').classList.remove('ativa');
+    document.getElementById('home').classList.add('ativa');
+    atualizarHeaderUsuario();
+    renderHome();
+  }else{
+    alert('E-mail ou senha incorretos');
+  }
+}
+
+function fazerCadastro(){
+  const nome=document.getElementById('cadNome').value.trim();
+  const email=document.getElementById('cadEmail').value.trim();
+  const senha=document.getElementById('cadSenha').value;
+  const senha2=document.getElementById('cadSenha2').value;
+  
+  if(!nome||!email||!senha||!senha2){alert('Preencha todos os campos');return}
+  if(senha!==senha2){alert('As senhas não coincidem');return}
+  if(db.usuarios.find(u=>u.email===email)){alert('E-mail já cadastrado');return}
+  
+  const novoUser={id:Date.now(),nome,email,senha,admin:false};
+  db.usuarios.push(novoUser);
+  save();
+  
+  usuarioAtual=novoUser;
+  localStorage.setItem('usuarioLogado',JSON.stringify(novoUser));
+  logado=true;
+  document.getElementById('login').classList.remove('ativa');
+  document.getElementById('home').classList.add('ativa');
+  atualizarHeaderUsuario();
+  renderHome();
+  alert('Cadastro realizado com sucesso!');
+}
+
+function loginGoogle(){
+  alert('Login com Google simulado. Em produção, use OAuth do Google.');
+  const nomeGoogle=prompt('Digite seu nome:')||'Usuário Google';
+  const emailGoogle=prompt('Digite seu e-mail:')||'usuario@gmail.com';
+  
+  let user=db.usuarios.find(u=>u.email===emailGoogle);
+  if(!user){
+    user={id:Date.now(),nome:nomeGoogle,email:emailGoogle,senha:'google',admin:false};
+    db.usuarios.push(user);
+    save();
+  }
+  
+  usuarioAtual=user;
+  localStorage.setItem('usuarioLogado',JSON.stringify(user));
+  logado=true;
+  document.getElementById('login').classList.remove('ativa');
+  document.getElementById('home').classList.add('ativa');
+  atualizarHeaderUsuario();
+  renderHome();
+}
+
+function abrirEsqueciSenha(){
+  document.getElementById('modalTit').textContent='RECUPERAR SENHA';
+  document.getElementById('modalBody').innerHTML=`
+    <input type="email" class="input" id="recEmail" placeholder="Digite seu e-mail">
+    <button class="btn" onclick="recuperarSenha()">ENVIAR</button>
+    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
+  document.getElementById('modal').classList.add('ativo');
+}
+
+function recuperarSenha(){
+  const email=document.getElementById('recEmail').value.trim();
+  if(!email){alert('Digite seu e-mail');return}
+  const user=db.usuarios.find(u=>u.email===email);
+  if(user){
+    alert('Link de recuperação enviado para: '+email+'\n\n(Simulação - em produção enviaria e-mail real)');
+    fecharModal();
+  }else{
+    alert('E-mail não encontrado');
+  }
+}
+
+function logout(){
+  if(confirm('Deseja sair?')){
+    localStorage.removeItem('usuarioLogado');
+    usuarioAtual=null;
+    logado=false;
+    document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
+    document.getElementById('login').classList.add('ativa');
+  }
+}
+
+function abrirPerfil(){
+  alert(`Nome: ${usuarioAtual.nome}\nE-mail: ${usuarioAtual.email}\n\nTipo: ${usuarioAtual.admin?'Administrador':'Cliente'}`);
+}
+
 function abrirMenu(){document.getElementById('sidebar').classList.add('ativo');document.getElementById('overlay').classList.add('ativo')}
 function fecharMenu(){document.getElementById('sidebar').classList.remove('ativo');document.getElementById('overlay').classList.remove('ativo')}
 function ir(t){document.querySelectorAll('.tela').forEach(e=>e.classList.remove('ativa'));document.getElementById(t).classList.add('ativa');if(t==='home')renderHome();if(t==='faq')renderFaq();if(t==='termos')renderTermos();if(t==='teste')renderTeste();if(t==='premiacao')renderPremiacao()}
 
 function abrirAdmin(){
-  if(!logado){
-    document.getElementById('adminBody').innerHTML=`<input type="email" class="input" id="e" placeholder="E-mail"><input type="password" class="input" id="s" placeholder="Senha"><button class="btn" onclick="login()">ENTRAR</button>`
-  }else{
-    document.getElementById('adminBody').innerHTML=`
-    <button class="btn" onclick="abrirCats()">📂 CATEGORIAS</button>
-    <button class="btn" onclick="abrirServs()">📦 SERVIÇOS</button>
-    <button class="btn" onclick="formFaq()">❓ DÚVIDAS FREQUENTES</button>
-    <button class="btn" onclick="formTermos()">📄 TERMOS DO SITE</button>
-    <button class="btn" onclick="formTeste()">🎁 TESTE GRÁTIS</button>
-    <button class="btn" onclick="formPremiacao()">🏆 PREMIAÇÃO</button>
-    <button class="btn btn-red" onclick="sair()">SAIR</button>`
-  }
-  ir('admin')
+  if(!usuarioAtual.admin){alert('Acesso negado. Apenas administradores.');return}
+  document.getElementById('adminBody').innerHTML=`
+  <button class="btn" onclick="abrirCats()">📂 CATEGORIAS</button>
+  <button class="btn" onclick="abrirServs()">📦 SERVIÇOS</button>
+  <button class="btn" onclick="formFaq()">❓ DÚVIDAS FREQUENTES</button>
+  <button class="btn" onclick="formTermos()">📄 TERMOS DO SITE</button>
+  <button class="btn" onclick="formTeste()">🎁 TESTE GRÁTIS</button>
+  <button class="btn" onclick="formPremiacao()">🏆 PREMIAÇÃO</button>
+  <button class="btn btn-red" onclick="ir('home')">VOLTAR</button>`;
+  ir('admin');
 }
-
-function login(){if(document.getElementById('e').value===EMAIL&&document.getElementById('s').value===SENHA){logado=true;abrirAdmin()}else{alert('Senha errada')}}
-function sair(){logado=false;ir('home')}
 
 function toggleDrop(tipo){
   document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('ativo'));
@@ -303,7 +507,7 @@ function enviarTeste(){
 
 📌 Status: Em análise
 ━━━━━━━━━━`;
-  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
+    window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
   document.getElementById('testeLinkCurtidas').value='';
   document.getElementById('testeLinkSeguidores').value='';
 }
@@ -488,8 +692,7 @@ document.addEventListener('click',e=>{
   }
 });
 
-renderHome();
-renderTeste();
+verificarLogin();
 </script>
 
 </body>
