@@ -4,7 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Premium Store</title>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+  import { getDatabase, ref, set, get } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
+    authDomain: "premium-store-aa58b.firebaseapp.com",
+    databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
+    projectId: "premium-store-aa58b",
+    storageBucket: "premium-store-aa58b.firebasestorage.app",
+    messagingSenderId: "462239500057",
+    appId: "1:462239500057:web:f1b7cea162ed308a866788",
+    measurementId: "G-CN88J28WRX"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+
+  window.firebaseAuth = { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, db, ref, set, get };
+</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11px}
@@ -42,8 +63,6 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 .login-tab.ativo{background:#8b5cf6;border-color:#8b5cf6;color:#fff}
 .login-form{display:none}
 .login-form.ativo{display:block}
-.divider{display:flex;align-items:center;gap:8px;margin:16px 0;color:#666;font-size:9px}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:#2a2a2a}
 .link-roxo{color:#8b5cf6;cursor:pointer;font-size:9px;text-align:center;margin-top:12px}
 .link-roxo:hover{text-decoration:underline}
 .label{font-size:10px;font-weight:600;margin:12px 0 6px;display:flex;align-items:center;gap:4px}
@@ -87,10 +106,13 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 .desc-box.ativo{display:block}
 .info-teste{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:10px;font-size:9px;color:#8b5cf6;margin-bottom:12px;line-height:1.5}
 .texto-geral{font-size:10px;line-height:1.6;white-space:pre-wrap;color:#aaa}
-#googleBtn,#googleBtn2{margin-bottom:12px}
+.loading{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:500;display:none;align-items:center;justify-content:center;font-size:12px}
+.loading.ativo{display:flex}
 </style>
 </head>
 <body>
+
+<div class="loading" id="loading">Carregando...</div>
 
 <div id="login" class="tela ativa">
   <div class="login-container">
@@ -107,10 +129,6 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
       </div>
 
       <div id="formEntrar" class="login-form ativo">
-        <div id="googleBtn"></div>
-        
-        <div class="divider">ou</div>
-        
         <input type="email" class="input" id="loginEmail" placeholder="E-mail">
         <input type="password" class="input" id="loginSenha" placeholder="Senha">
         <button class="btn" onclick="fazerLogin()">ENTRAR</button>
@@ -118,13 +136,9 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
       </div>
 
       <div id="formCadastrar" class="login-form">
-        <div id="googleBtn2"></div>
-        
-        <div class="divider">ou</div>
-        
         <input type="text" class="input" id="cadNome" placeholder="Nome completo">
         <input type="email" class="input" id="cadEmail" placeholder="E-mail">
-        <input type="password" class="input" id="cadSenha" placeholder="Senha">
+        <input type="password" class="input" id="cadSenha" placeholder="Senha - mín 6 caracteres">
         <input type="password" class="input" id="cadSenha2" placeholder="Confirmar senha">
         <button class="btn" onclick="fazerCadastro()">CADASTRAR</button>
       </div>
@@ -140,7 +154,7 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
   <div class="sidebar-item" onclick="ir('termos');fecharMenu()">📄 Termos do site</div>
   <div class="sidebar-item" onclick="ir('teste');fecharMenu()">🎁 Teste grátis</div>
   <div class="sidebar-item" onclick="ir('premiacao');fecharMenu()">🏆 Premiação</div>
-  <div class="sidebar-item" onclick="abrirAdmin();fecharMenu()">👤 Adm</div>
+  <div class="sidebar-item" onclick="abrirAdmin();fecharMenu()" id="menuAdmin" style="display:none">👤 Adm</div>
   <div class="sidebar-item" onclick="logout();fecharMenu()">🚪 Sair</div>
 </div>
 
@@ -265,73 +279,39 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 </div>
 
 <script>
-const GOOGLE_CLIENT_ID = '379347082201-svtj52jpctjk8rkaq10opjsk1063a1mi.apps.googleusercontent.com';
-const EMAIL_ADM='nannyvittoriah@gmail.com',SENHA_ADM='Lorrannyh.101225',WHATSAPP='5598984853563';
+const EMAIL_ADM='nannyvittoriah@gmail.com',WHATSAPP='5598984853563';
 
 let db={
   cat:JSON.parse(localStorage.getItem('cat')||'[]'),
   serv:JSON.parse(localStorage.getItem('serv')||'[]'),
-  usuarios:JSON.parse(localStorage.getItem('usuarios')||'[]'),
   config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"Ao utilizar nosso painel, o usuário concorda automaticamente com todos os termos e condições abaixo.\\n\\n• Não garantimos resultados permanentes em serviços de redes sociais.\\n• O cliente é totalmente responsável pelo link enviado no pedido.\\n• Pedidos com links inválidos poderão ser cancelados sem aviso.\\n• Não realizamos reembolso após o início do serviço.\\n• O tempo de entrega pode variar conforme o serviço solicitado.\\n• Não aceitamos conteúdos ilegais, proibidos ou que violem políticas das plataformas.\\n• O uso do painel é de total responsabilidade do usuário.\\n• Alguns serviços podem sofrer quedas naturais após a entrega.\\n• O cliente concorda em utilizar o site de forma correta e sem tentativas de abuso ou spam.\\n• Alterações nos termos podem ocorrer a qualquer momento sem aviso prévio.\\n\\n💜 Ao continuar utilizando o painel, você concorda com todos os termos acima.","teste":{"desc":"Teste de Curtidas: São 10 curtidas grátis\\nTeste de Seguidores: São 30 seguidores grátis"},"premiacao":{"img":"","texto":""}}')
 };
 let logado=false,catSel=null,servSel=null,usuarioAtual=null;
 
-function save(){localStorage.setItem('cat',JSON.stringify(db.cat));localStorage.setItem('serv',JSON.stringify(db.serv));localStorage.setItem('usuarios',JSON.stringify(db.usuarios));localStorage.setItem('config',JSON.stringify(db.config))}
+function save(){localStorage.setItem('cat',JSON.stringify(db.cat));localStorage.setItem('serv',JSON.stringify(db.serv));localStorage.setItem('config',JSON.stringify(db.config))}
+function showLoad(show){document.getElementById('loading').classList.toggle('ativo',show)}
 
-function initGoogle(){
-  google.accounts.id.initialize({
-    client_id: GOOGLE_CLIENT_ID,
-    callback: handleGoogleLogin
+window.addEventListener('load',()=>{
+  const { auth, onAuthStateChanged } = window.firebaseAuth;
+  onAuthStateChanged(auth, (user) => {
+    if(user){
+      usuarioAtual={uid:user.uid,nome:user.displayName||user.email.split('@')[0],email:user.email,admin:user.email===EMAIL_ADM};
+      logado=true;
+      document.getElementById('login').classList.remove('ativa');
+      document.getElementById('home').classList.add('ativa');
+      if(usuarioAtual.admin) document.getElementById('menuAdmin').style.display='flex';
+      atualizarHeaderUsuario();
+      renderHome();
+    }else{
+      document.getElementById('login').classList.add('ativa');
+    }
   });
-  google.accounts.id.renderButton(document.getElementById("googleBtn"),{theme:"outline",size:"large",width:"100%"});
-  google.accounts.id.renderButton(document.getElementById("googleBtn2"),{theme:"outline",size:"large",width:"100%"});
-}
-
-function handleGoogleLogin(response){
-  const token = response.credential;
-  const base64Url = token.split('.')[1];
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  const jsonPayload = decodeURIComponent(atob(base64).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-  const userData = JSON.parse(jsonPayload);
-  
-  let user = db.usuarios.find(u => u.email === userData.email);
-  if(!user){
-    user = {id:Date.now(),nome:userData.name,email:userData.email,foto:userData.picture,senha:'google',admin:userData.email===EMAIL_ADM};
-    db.usuarios.push(user);
-    save();
-  }
-  
-  usuarioAtual = user;
-  localStorage.setItem('usuarioLogado', JSON.stringify(user));
-  logado = true;
-  document.getElementById('login').classList.remove('ativa');
-  document.getElementById('home').classList.add('ativa');
-  atualizarHeaderUsuario();
-  renderHome();
-}
-
-function verificarLogin(){
-  const userSalvo=localStorage.getItem('usuarioLogado');
-  if(userSalvo){
-    usuarioAtual=JSON.parse(userSalvo);
-    logado=true;
-    document.getElementById('login').classList.remove('ativa');
-    document.getElementById('home').classList.add('ativa');
-    atualizarHeaderUsuario();
-    renderHome();
-  }else{
-    document.getElementById('login').classList.add('ativa');
-  }
-}
+});
 
 function atualizarHeaderUsuario(){
   if(usuarioAtual){
     document.getElementById('userNome').textContent=usuarioAtual.nome.split(' ')[0];
-    if(usuarioAtual.foto){
-      document.getElementById('userAvatar').innerHTML=`<img src="${usuarioAtual.foto}">`;
-    }else{
-      document.getElementById('userAvatar').textContent=usuarioAtual.nome.charAt(0).toUpperCase();
-    }
+    document.getElementById('userAvatar').textContent=usuarioAtual.nome.charAt(0).toUpperCase();
   }
 }
 
@@ -342,37 +322,23 @@ function trocarTabLogin(tab){
   document.getElementById(tab==='entrar'?'formEntrar':'formCadastrar').classList.add('ativo');
 }
 
-function fazerLogin(){
+async function fazerLogin(){
+  const { auth, signInWithEmailAndPassword } = window.firebaseAuth;
   const email=document.getElementById('loginEmail').value.trim();
   const senha=document.getElementById('loginSenha').value;
   if(!email||!senha){alert('Preencha todos os campos');return}
   
-  if(email===EMAIL_ADM&&senha===SENHA_ADM){
-    usuarioAtual={nome:'Administrador',email:EMAIL_ADM,admin:true};
-    localStorage.setItem('usuarioLogado',JSON.stringify(usuarioAtual));
-    logado=true;
-    document.getElementById('login').classList.remove('ativa');
-    document.getElementById('home').classList.add('ativa');
-    atualizarHeaderUsuario();
-    renderHome();
-    return;
+  showLoad(true);
+  try{
+    await signInWithEmailAndPassword(auth,email,senha);
+  }catch(e){
+    alert('Erro: '+e.message);
   }
-  
-  const user=db.usuarios.find(u=>u.email===email&&u.senha===senha);
-  if(user){
-    usuarioAtual=user;
-    localStorage.setItem('usuarioLogado',JSON.stringify(user));
-    logado=true;
-    document.getElementById('login').classList.remove('ativa');
-    document.getElementById('home').classList.add('ativa');
-    atualizarHeaderUsuario();
-    renderHome();
-  }else{
-    alert('E-mail ou senha incorretos');
-  }
+  showLoad(false);
 }
 
-function fazerCadastro(){
+async function fazerCadastro(){
+  const { auth, createUserWithEmailAndPassword, updateProfile } = window.firebaseAuth;
   const nome=document.getElementById('cadNome').value.trim();
   const email=document.getElementById('cadEmail').value.trim();
   const senha=document.getElementById('cadSenha').value;
@@ -380,50 +346,28 @@ function fazerCadastro(){
   
   if(!nome||!email||!senha||!senha2){alert('Preencha todos os campos');return}
   if(senha!==senha2){alert('As senhas não coincidem');return}
-  if(db.usuarios.find(u=>u.email===email)){alert('E-mail já cadastrado');return}
+  if(senha.length<6){alert('Senha deve ter no mínimo 6 caracteres');return}
   
-  const novoUser={id:Date.now(),nome,email,senha,admin:email===EMAIL_ADM};
-  db.usuarios.push(novoUser);
-  save();
-  
-  usuarioAtual=novoUser;
-  localStorage.setItem('usuarioLogado',JSON.stringify(novoUser));
-  logado=true;
-  document.getElementById('login').classList.remove('ativa');
-  document.getElementById('home').classList.add('ativa');
-  atualizarHeaderUsuario();
-  renderHome();
-  alert('Cadastro realizado com sucesso!');
+  showLoad(true);
+  try{
+    const cred = await createUserWithEmailAndPassword(auth,email,senha);
+    await updateProfile(cred.user,{displayName:nome});
+    alert('Cadastro realizado com sucesso!');
+  }catch(e){
+    alert('Erro: '+e.message);
+  }
+  showLoad(false);
 }
 
 function abrirEsqueciSenha(){
-  document.getElementById('modalTit').textContent='RECUPERAR SENHA';
-  document.getElementById('modalBody').innerHTML=`
-    <input type="email" class="input" id="recEmail" placeholder="Digite seu e-mail">
-    <button class="btn" onclick="recuperarSenha()">ENVIAR</button>
-    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
-  document.getElementById('modal').classList.add('ativo');
+  alert('Recuperação de senha via Firebase será enviada por e-mail.\n\nFuncionalidade em desenvolvimento.');
 }
 
-function recuperarSenha(){
-  const email=document.getElementById('recEmail').value.trim();
-  if(!email){alert('Digite seu e-mail');return}
-  const user=db.usuarios.find(u=>u.email===email);
-  if(user){
-    alert('Link de recuperação enviado para: '+email+'\n\nVerifique sua caixa de entrada.');
-    fecharModal();
-  }else{
-    alert('E-mail não encontrado');
-  }
-}
-
-function logout(){
+async function logout(){
+  const { auth, signOut } = window.firebaseAuth;
   if(confirm('Deseja sair?')){
-    localStorage.removeItem('usuarioLogado');
-    usuarioAtual=null;
-    logado=false;
-    document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
-    document.getElementById('login').classList.add('ativa');
+    await signOut(auth);
+    location.reload();
   }
 }
 
@@ -580,7 +524,7 @@ function abrirServs(){
         </div>
       </div>
       <div class="lista-info">Cat: ${c?.nome||'-'} | R$ ${s.preco.toFixed(2)} | Estoque: ${s.estoque}</div>
-    </div`}).join('');
+    </div>`}).join('');
   document.getElementById('adminBody').innerHTML=`<div class="titulo">SERVIÇOS</div>${lista||'<div class="empty">Nenhum serviço</div>'}<div class="add" onclick="formServ()">+</div><button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>`;
 }
 
@@ -605,7 +549,7 @@ function formServ(k=null){
     <textarea class="textarea" id="descS" placeholder="Descrição do serviço">${d?.desc||''}</textarea>
     <input type="number" step="0.01" class="input" id="precoS" value="${d?.preco||''}" placeholder="Valor do serviço">
     <input type="number" class="input" id="estS" value="${d?.estoque||''}" placeholder="Estoque">
-    <button class="btn" onclick="salvarServ('${k||''}')">${k?'SALVAR':'CRIAR'}</button>
+        <button class="btn" onclick="salvarServ('${k||''}')">${k?'SALVAR':'CRIAR'}</button>
     <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
   document.getElementById('modal').classList.add('ativo');
 }
@@ -710,11 +654,6 @@ document.addEventListener('click',e=>{
     document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('ativo'));
   }
 });
-
-window.onload = function(){
-  verificarLogin();
-  initGoogle();
-}
 </script>
 
 </body>
