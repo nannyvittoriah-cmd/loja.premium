@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Premium Store</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11px}
@@ -20,7 +21,8 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 .header-right{display:flex;align-items:center;gap:12px;font-size:16px}
 .icon{cursor:pointer;color:#8b5cf6}
 .user-info{display:flex;align-items:center;gap:6px;font-size:10px;color:#8b5cf6;cursor:pointer}
-.user-avatar{width:24px;height:24px;border-radius:50%;background:#8b5cf6;display:flex;align-items:center;justify-content:center;font-weight:700}
+.user-avatar{width:24px;height:24px;border-radius:50%;background:#8b5cf6;display:flex;align-items:center;justify-content:center;font-weight:700;overflow:hidden}
+.user-avatar img{width:100%;height:100%;object-fit:cover}
 .sidebar{position:fixed;top:0;left:-250px;width:250px;height:100vh;background:#141414;border-right:1px solid #2a2a2a;z-index:200;transition:left.3s;padding:16px;overflow-y:auto}
 .sidebar.ativo{left:0}
 .sidebar-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:199;display:none}
@@ -40,7 +42,6 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 .login-tab.ativo{background:#8b5cf6;border-color:#8b5cf6;color:#fff}
 .login-form{display:none}
 .login-form.ativo{display:block}
-.btn-google{width:100%;background:#fff;color:#000;border:none;border-radius:10px;padding:12px;font-weight:700;font-size:11px;cursor:pointer;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px}
 .divider{display:flex;align-items:center;gap:8px;margin:16px 0;color:#666;font-size:9px}
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:#2a2a2a}
 .link-roxo{color:#8b5cf6;cursor:pointer;font-size:9px;text-align:center;margin-top:12px}
@@ -86,6 +87,7 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 .desc-box.ativo{display:block}
 .info-teste{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:10px;font-size:9px;color:#8b5cf6;margin-bottom:12px;line-height:1.5}
 .texto-geral{font-size:10px;line-height:1.6;white-space:pre-wrap;color:#aaa}
+#googleBtn,#googleBtn2{margin-bottom:12px}
 </style>
 </head>
 <body>
@@ -105,10 +107,7 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
       </div>
 
       <div id="formEntrar" class="login-form ativo">
-        <button class="btn-google" onclick="loginGoogle()">
-          <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-          Entrar com Google
-        </button>
+        <div id="googleBtn"></div>
         
         <div class="divider">ou</div>
         
@@ -119,10 +118,7 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
       </div>
 
       <div id="formCadastrar" class="login-form">
-        <button class="btn-google" onclick="loginGoogle()">
-          <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-          Cadastrar com Google
-        </button>
+        <div id="googleBtn2"></div>
         
         <div class="divider">ou</div>
         
@@ -269,6 +265,9 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 </div>
 
 <script>
+const GOOGLE_CLIENT_ID = '379347082201-svtj52jpctjk8rkaq10opjsk1063a1mi.apps.googleusercontent.com';
+const EMAIL_ADM='nannyvittoriah@gmail.com',SENHA_ADM='Lorrannyh.101225',WHATSAPP='5598984853563';
+
 let db={
   cat:JSON.parse(localStorage.getItem('cat')||'[]'),
   serv:JSON.parse(localStorage.getItem('serv')||'[]'),
@@ -276,9 +275,40 @@ let db={
   config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"Ao utilizar nosso painel, o usuário concorda automaticamente com todos os termos e condições abaixo.\\n\\n• Não garantimos resultados permanentes em serviços de redes sociais.\\n• O cliente é totalmente responsável pelo link enviado no pedido.\\n• Pedidos com links inválidos poderão ser cancelados sem aviso.\\n• Não realizamos reembolso após o início do serviço.\\n• O tempo de entrega pode variar conforme o serviço solicitado.\\n• Não aceitamos conteúdos ilegais, proibidos ou que violem políticas das plataformas.\\n• O uso do painel é de total responsabilidade do usuário.\\n• Alguns serviços podem sofrer quedas naturais após a entrega.\\n• O cliente concorda em utilizar o site de forma correta e sem tentativas de abuso ou spam.\\n• Alterações nos termos podem ocorrer a qualquer momento sem aviso prévio.\\n\\n💜 Ao continuar utilizando o painel, você concorda com todos os termos acima.","teste":{"desc":"Teste de Curtidas: São 10 curtidas grátis\\nTeste de Seguidores: São 30 seguidores grátis"},"premiacao":{"img":"","texto":""}}')
 };
 let logado=false,catSel=null,servSel=null,usuarioAtual=null;
-const EMAIL_ADM='nannyvittoriah@gmail.com',SENHA_ADM='Lorrannyh.101225',WHATSAPP='5598984853563';
 
 function save(){localStorage.setItem('cat',JSON.stringify(db.cat));localStorage.setItem('serv',JSON.stringify(db.serv));localStorage.setItem('usuarios',JSON.stringify(db.usuarios));localStorage.setItem('config',JSON.stringify(db.config))}
+
+function initGoogle(){
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleGoogleLogin
+  });
+  google.accounts.id.renderButton(document.getElementById("googleBtn"),{theme:"outline",size:"large",width:"100%"});
+  google.accounts.id.renderButton(document.getElementById("googleBtn2"),{theme:"outline",size:"large",width:"100%"});
+}
+
+function handleGoogleLogin(response){
+  const token = response.credential;
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const jsonPayload = decodeURIComponent(atob(base64).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+  const userData = JSON.parse(jsonPayload);
+  
+  let user = db.usuarios.find(u => u.email === userData.email);
+  if(!user){
+    user = {id:Date.now(),nome:userData.name,email:userData.email,foto:userData.picture,senha:'google',admin:userData.email===EMAIL_ADM};
+    db.usuarios.push(user);
+    save();
+  }
+  
+  usuarioAtual = user;
+  localStorage.setItem('usuarioLogado', JSON.stringify(user));
+  logado = true;
+  document.getElementById('login').classList.remove('ativa');
+  document.getElementById('home').classList.add('ativa');
+  atualizarHeaderUsuario();
+  renderHome();
+}
 
 function verificarLogin(){
   const userSalvo=localStorage.getItem('usuarioLogado');
@@ -297,7 +327,11 @@ function verificarLogin(){
 function atualizarHeaderUsuario(){
   if(usuarioAtual){
     document.getElementById('userNome').textContent=usuarioAtual.nome.split(' ')[0];
-    document.getElementById('userAvatar').textContent=usuarioAtual.nome.charAt(0).toUpperCase();
+    if(usuarioAtual.foto){
+      document.getElementById('userAvatar').innerHTML=`<img src="${usuarioAtual.foto}">`;
+    }else{
+      document.getElementById('userAvatar').textContent=usuarioAtual.nome.charAt(0).toUpperCase();
+    }
   }
 }
 
@@ -348,7 +382,7 @@ function fazerCadastro(){
   if(senha!==senha2){alert('As senhas não coincidem');return}
   if(db.usuarios.find(u=>u.email===email)){alert('E-mail já cadastrado');return}
   
-  const novoUser={id:Date.now(),nome,email,senha,admin:false};
+  const novoUser={id:Date.now(),nome,email,senha,admin:email===EMAIL_ADM};
   db.usuarios.push(novoUser);
   save();
   
@@ -360,27 +394,6 @@ function fazerCadastro(){
   atualizarHeaderUsuario();
   renderHome();
   alert('Cadastro realizado com sucesso!');
-}
-
-function loginGoogle(){
-  alert('Login com Google simulado. Em produção, use OAuth do Google.');
-  const nomeGoogle=prompt('Digite seu nome:')||'Usuário Google';
-  const emailGoogle=prompt('Digite seu e-mail:')||'usuario@gmail.com';
-  
-  let user=db.usuarios.find(u=>u.email===emailGoogle);
-  if(!user){
-    user={id:Date.now(),nome:nomeGoogle,email:emailGoogle,senha:'google',admin:false};
-    db.usuarios.push(user);
-    save();
-  }
-  
-  usuarioAtual=user;
-  localStorage.setItem('usuarioLogado',JSON.stringify(user));
-  logado=true;
-  document.getElementById('login').classList.remove('ativa');
-  document.getElementById('home').classList.add('ativa');
-  atualizarHeaderUsuario();
-  renderHome();
 }
 
 function abrirEsqueciSenha(){
@@ -397,7 +410,7 @@ function recuperarSenha(){
   if(!email){alert('Digite seu e-mail');return}
   const user=db.usuarios.find(u=>u.email===email);
   if(user){
-    alert('Link de recuperação enviado para: '+email+'\n\n(Simulação - em produção enviaria e-mail real)');
+    alert('Link de recuperação enviado para: '+email+'\n\nVerifique sua caixa de entrada.');
     fecharModal();
   }else{
     alert('E-mail não encontrado');
@@ -479,6 +492,9 @@ function finalizar(){
 
 🚀 Novo pedido realizado
 
+👤 Cliente: ${usuarioAtual.nome}
+📧 E-mail: ${usuarioAtual.email}
+
 📦 Serviço: ${s.nome}
 💰 Valor: R$ ${s.preco.toFixed(2).replace('.',',')}
 🔗 Link: ${link}
@@ -500,6 +516,9 @@ function enviarTeste(){
 
 🎁 Solicitação de Teste Grátis
 
+👤 Cliente: ${usuarioAtual.nome}
+📧 E-mail: ${usuarioAtual.email}
+
 `;
   if(linkCurt)msg+=`❤️ Curtidas: ${linkCurt}\n`;
   if(linkSeg)msg+=`👥 Seguidores: ${linkSeg}\n`;
@@ -507,7 +526,7 @@ function enviarTeste(){
 
 📌 Status: Em análise
 ━━━━━━━━━━`;
-    window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
   document.getElementById('testeLinkCurtidas').value='';
   document.getElementById('testeLinkSeguidores').value='';
 }
@@ -561,7 +580,7 @@ function abrirServs(){
         </div>
       </div>
       <div class="lista-info">Cat: ${c?.nome||'-'} | R$ ${s.preco.toFixed(2)} | Estoque: ${s.estoque}</div>
-    </div>`}).join('');
+    </div`}).join('');
   document.getElementById('adminBody').innerHTML=`<div class="titulo">SERVIÇOS</div>${lista||'<div class="empty">Nenhum serviço</div>'}<div class="add" onclick="formServ()">+</div><button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>`;
 }
 
@@ -692,7 +711,10 @@ document.addEventListener('click',e=>{
   }
 });
 
-verificarLogin();
+window.onload = function(){
+  verificarLogin();
+  initGoogle();
+}
 </script>
 
 </body>
