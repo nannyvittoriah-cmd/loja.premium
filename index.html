@@ -7,15 +7,132 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff}
-.banner{width:100%;display:block}
-.banner img{width:100%;height:auto;display:block}
+.header{background:#0a0a0a;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1a1a1a}
+.header-left{display:flex;align-items:center;gap:16px}
+.menu{font-size:24px;cursor:pointer;color:#fff}
+.logo{width:32px;height:32px;background:#fff;border-radius:50%;position:relative}
+.logo::before{content:'';position:absolute;top:0;left:-8px;width:16px;height:16px;background:#0a0a0a;border-radius:50%}
+.logo::after{content:'';position:absolute;top:-6px;left:8px;width:4px;height:4px;background:#fff;border-radius:50%;box-shadow:6px 2px 0 #fff,3px 8px 0 #fff,-2px 6px 0 #fff}
+.header-right{display:flex;align-items:center;gap:16px;font-size:20px}
+.icon{cursor:pointer;color:#8b5cf6}
+.container{padding:16px;max-width:600px;margin:0 auto}
+.label{font-size:15px;font-weight:600;margin:16px 0 8px;display:flex;align-items:center;gap:6px}
+.select-wrap{position:relative;margin-bottom:8px}
+.select{background:#141414;border:1px solid #2a2a2a;border-radius:12px;padding:14px 16px;font-size:14px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
+.select-ativo{border-color:#8b5cf6}
+.select-icon{color:#888}
+.dropdown{position:absolute;top:100%;left:0;right:0;background:#141414;border:1px solid #2a2a2a;border-radius:12px;margin-top:4px;z-index:10;display:none;max-height:200px;overflow-y:auto}
+.dropdown.ativo{display:block}
+.dropdown-item{padding:12px 16px;cursor:pointer;font-size:14px;border-bottom:1px solid #1a1a1a}
+.dropdown-item:hover{background:#1e1e1e}
+.dropdown-item:last-child{border-bottom:none}
+.id-azul{color:#3b82f6;font-weight:700}
+.input{background:#141414;border:1px solid #2a2a2a;border-radius:12px;padding:14px 16px;font-size:14px;color:#fff;width:100%;outline:none;margin-bottom:8px}
+.input:focus{border-color:#8b5cf6}
+.info{font-size:12px;color:#888;margin:4px 0 16px}
+.custo-box{background:#141414;border:1px solid #2a2a2a;border-radius:12px;padding:14px 16px;font-size:16px;font-weight:700;color:#8b5cf6;margin-bottom:16px;min-height:50px;display:flex;align-items:center}
+.btn{width:100%;background:#8b5cf6;color:#fff;border:none;border-radius:12px;padding:16px;font-weight:700;font-size:15px;cursor:pointer;margin-top:8px}
+.btn:active{transform:scale(.98)}
 </style>
 </head>
 <body>
 
-<div class="banner">
-  <img src="https://i.postimg.cc/XNtwmjvC/86f55314-08e9-482b-8d4b-67e2646c6498.jpg" alt="Premium Store">
+<div class="header">
+  <div class="header-left">
+    <div class="menu">☰</div>
+    <div class="logo"></div>
+  </div>
+  <div class="header-right">
+    <div class="icon">☀️</div>
+    <div class="icon">⚙️</div>
+    <div class="icon">⏻</div>
+  </div>
 </div>
+
+<div class="container">
+  <div class="label">👇 Escolha a categoria abaixo</div>
+  <div class="select-wrap">
+    <div class="select" id="catSelect" onclick="toggleDrop('cat')">
+      <span id="catText">⭐ Insta Promoção 🌟</span>
+      <span class="select-icon">▼</span>
+    </div>
+    <div class="dropdown" id="catDrop">
+      <div class="dropdown-item" onclick="setCat('Insta Promoção 🌟')">⭐ Insta Promoção 🌟</div>
+      <div class="dropdown-item" onclick="setCat('TikTok Turbo 🚀')">⭐ TikTok Turbo 🚀</div>
+      <div class="dropdown-item" onclick="setCat('YouTube Boom 💥')">⭐ YouTube Boom 💥</div>
+    </div>
+  </div>
+
+  <div class="label">👇 Escolha o serviço abaixo: <span class="id-azul">1030</span></div>
+  <div class="select-wrap">
+    <div class="select" id="servSelect" onclick="toggleDrop('serv')">
+      <span id="servText">⭐ 🚀🏃 Seguidores 90% Brasileiros ♻️ R3...</span>
+      <span class="select-icon">▼</span>
+    </div>
+    <div class="dropdown" id="servDrop">
+      <div class="dropdown-item" onclick="setServ('Seguidores 90% Brasileiros ♻️ R3,50',50,50000,3.50)">⭐ 🚀🏃 Seguidores 90% Brasileiros ♻️ R3,50</div>
+      <div class="dropdown-item" onclick="setServ('Curtidas Brasileiras ❤️ R1,20',100,10000,1.20)">⭐ ❤️ Curtidas Brasileiras R1,20</div>
+      <div class="dropdown-item" onclick="setServ('Views Reels 👀 R0,80',500,100000,0.80)">⭐ 👀 Views Reels R0,80</div>
+    </div>
+  </div>
+
+  <div class="label">🔗 Link:</div>
+  <input type="text" class="input" id="link" placeholder="Cole o link aqui">
+
+  <div class="label">Quantidade:</div>
+  <input type="number" class="input" id="qtd" placeholder="Digite a quantidade" oninput="calcCusto()">
+  <div class="info" id="minmax">Mínimo: 50 - Max: 50.000</div>
+
+  <div class="label">💵 Custo :</div>
+  <div class="custo-box" id="custo">R$ 0,00</div>
+
+  <button class="btn" onclick="finalizar()">FAZER PEDIDO</button>
+</div>
+
+<script>
+let servAtual={min:50,max:50000,preco:3.50};
+
+function toggleDrop(tipo){
+  document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('ativo'));
+  document.getElementById(tipo+'Drop').classList.toggle('ativo');
+}
+
+function setCat(nome){
+  document.getElementById('catText').textContent='⭐ '+nome;
+  document.getElementById('catDrop').classList.remove('ativo');
+}
+
+function setServ(nome,min,max,preco){
+  document.getElementById('servText').textContent='⭐ '+nome;
+  servAtual={min,max,preco};
+  document.getElementById('minmax').textContent=`Mínimo: ${min} - Max: ${max.toLocaleString('pt-BR')}`;
+  document.getElementById('qtd').value='';
+  document.getElementById('custo').textContent='R$ 0,00';
+  document.getElementById('servDrop').classList.remove('ativo');
+}
+
+function calcCusto(){
+  let qtd=parseInt(document.getElementById('qtd').value)||0;
+  if(qtd<servAtual.min)qtd=servAtual.min;
+  if(qtd>servAtual.max)qtd=servAtual.max;
+  let total=(qtd/1000)*servAtual.preco;
+  document.getElementById('custo').textContent='R$ '+total.toFixed(2).replace('.',',');
+}
+
+function finalizar(){
+  let link=document.getElementById('link').value;
+  let qtd=document.getElementById('qtd').value;
+  if(!link||!qtd){alert('Preencha link e quantidade');return}
+  if(qtd<servAtual.min||qtd>servAtual.max){alert(`Quantidade deve ser entre ${servAtual.min} e ${servAtual.max}`);return}
+  alert('Pedido enviado!');
+}
+
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.select-wrap')){
+    document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('ativo'));
+  }
+});
+</script>
 
 </body>
 </html>
