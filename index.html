@@ -65,6 +65,7 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 .desc-box{background:#141414;border:1px solid #2a2a2a;border-radius:10px;padding:12px;font-size:10px;line-height:1.6;color:#aaa;white-space:pre-wrap;margin-bottom:12px;display:none}
 .desc-box.ativo{display:block}
 .info-teste{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:10px;font-size:9px;color:#8b5cf6;margin-bottom:12px;line-height:1.5}
+.texto-geral{font-size:10px;line-height:1.6;white-space:pre-wrap;color:#aaa}
 </style>
 </head>
 <body>
@@ -166,10 +167,7 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
     <div style="width:28px"></div>
   </div>
   <div class="container">
-    <div class="info-teste">
-      <b>Teste de Curtidas:</b> São 10 curtidas grátis<br>
-      <b>Teste de Seguidores:</b> São 30 seguidores grátis
-    </div>
+    <div id="testeDescBox" class="info-teste"></div>
     
     <div class="label">❤️ Link para Curtidas:</div>
     <input type="text" class="input" id="testeLinkCurtidas" placeholder="Cole o link do post aqui">
@@ -200,14 +198,14 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 </div>
 
 <script>
-let db={cat:JSON.parse(localStorage.getItem('cat')||'[]'),serv:JSON.parse(localStorage.getItem('serv')||'[]'),config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"","teste":{"desc":""},"premiacao":{"img":"","texto":""}}')};
+let db={cat:JSON.parse(localStorage.getItem('cat')||'[]'),serv:JSON.parse(localStorage.getItem('serv')||'[]'),config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"Ao utilizar nosso painel, o usuário concorda automaticamente com todos os termos e condições abaixo.\\n\\n• Não garantimos resultados permanentes em serviços de redes sociais.\\n• O cliente é totalmente responsável pelo link enviado no pedido.\\n• Pedidos com links inválidos poderão ser cancelados sem aviso.\\n• Não realizamos reembolso após o início do serviço.\\n• O tempo de entrega pode variar conforme o serviço solicitado.\\n• Não aceitamos conteúdos ilegais, proibidos ou que violem políticas das plataformas.\\n• O uso do painel é de total responsabilidade do usuário.\\n• Alguns serviços podem sofrer quedas naturais após a entrega.\\n• O cliente concorda em utilizar o site de forma correta e sem tentativas de abuso ou spam.\\n• Alterações nos termos podem ocorrer a qualquer momento sem aviso prévio.\\n\\n💜 Ao continuar utilizando o painel, você concorda com todos os termos acima.","teste":{"desc":"Teste de Curtidas: São 10 curtidas grátis\\nTeste de Seguidores: São 30 seguidores grátis"},"premiacao":{"img":"","texto":""}}')};
 let logado=false,catSel=null,servSel=null;
-const EMAIL='nannyvittoriah@gmail.com',SENHA='Lorrannyh.101225';
+const EMAIL='nannyvittoriah@gmail.com',SENHA='Lorrannyh.101225',WHATSAPP='5511999999999';
 
 function save(){localStorage.setItem('cat',JSON.stringify(db.cat));localStorage.setItem('serv',JSON.stringify(db.serv));localStorage.setItem('config',JSON.stringify(db.config))}
 function abrirMenu(){document.getElementById('sidebar').classList.add('ativo');document.getElementById('overlay').classList.add('ativo')}
 function fecharMenu(){document.getElementById('sidebar').classList.remove('ativo');document.getElementById('overlay').classList.remove('ativo')}
-function ir(t){document.querySelectorAll('.tela').forEach(e=>e.classList.remove('ativa'));document.getElementById(t).classList.add('ativa');if(t==='home')renderHome();if(t==='faq')renderFaq();if(t==='termos')renderTermos();if(t==='premiacao')renderPremiacao()}
+function ir(t){document.querySelectorAll('.tela').forEach(e=>e.classList.remove('ativa'));document.getElementById(t).classList.add('ativa');if(t==='home')renderHome();if(t==='faq')renderFaq();if(t==='termos')renderTermos();if(t==='teste')renderTeste();if(t==='premiacao')renderPremiacao()}
 
 function abrirAdmin(){
   if(!logado){
@@ -264,14 +262,43 @@ function finalizar(){
   if(!servSel){alert('Selecione um serviço');return}
   let link=document.getElementById('link').value;
   if(!link){alert('Cole o link');return}
-  alert('Pedido enviado!');
+  const s=db.serv.find(x=>x.k===servSel);
+  const data=new Date().toLocaleDateString('pt-BR');
+  const msg=`━━━━━━━━━━
+💜 PREMIUM STORE
+━━━━━━━━━━
+
+🚀 Novo pedido realizado
+
+📦 Serviço: ${s.nome}
+💰 Valor: R$ ${s.preco.toFixed(2).replace('.',',')}
+🔗 Link: ${link}
+📆 Data: ${data}
+
+📌 Status: Em análise
+━━━━━━━━━━`;
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
 function enviarTeste(){
   let linkCurt=document.getElementById('testeLinkCurtidas').value;
   let linkSeg=document.getElementById('testeLinkSeguidores').value;
   if(!linkCurt&&!linkSeg){alert('Cole pelo menos um link');return}
-  alert('Teste grátis solicitado! Entraremos em contato.');
+  const data=new Date().toLocaleDateString('pt-BR');
+  let msg=`━━━━━━━━━━
+💜 PREMIUM STORE
+━━━━━━━━━━
+
+🎁 Solicitação de Teste Grátis
+
+`;
+  if(linkCurt)msg+=`❤️ Curtidas: ${linkCurt}\n`;
+  if(linkSeg)msg+=`👥 Seguidores: ${linkSeg}\n`;
+  msg+=`📆 Data: ${data}
+
+📌 Status: Em análise
+━━━━━━━━━━`;
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
   document.getElementById('testeLinkCurtidas').value='';
   document.getElementById('testeLinkSeguidores').value='';
 }
@@ -443,13 +470,13 @@ function salvarConfig(tipo){
   save();fecharModal();abrirAdmin();
 }
 
-function renderFaq(){document.getElementById('faqBody').innerHTML=db.config.faq?`<div style="font-size:10px;line-height:1.6;white-space:pre-wrap">${db.config.faq}</div>`:'<div class="empty">Nenhuma dúvida cadastrada</div>'}
-function renderTermos(){document.getElementById('termosBody').innerHTML=db.config.termos?`<div style="font-size:10px;line-height:1.6;white-space:pre-wrap">${db.config.termos}</div>`:'<div class="empty">Nenhum termo cadastrado</div>'}
-function renderPremiacao(){document.getElementById('premiacaoBody').innerHTML=db.config.premiacao.img||db.config.premiacao.texto?`${db.config.premiacao.img?`<img src="${db.config.premiacao.img}" style="width:100%;border-radius:10px;margin-bottom:12px">`:''}<div style="font-size:10px;line-height:1.6;white-space:pre-wrap">${db.config.premiacao.texto}</div>`:'<div class="empty">Nenhuma premiação cadastrada</div>'}
+function renderFaq(){document.getElementById('faqBody').innerHTML=db.config.faq?`<div class="texto-geral">${db.config.faq}</div>`:'<div class="empty">Nenhuma dúvida cadastrada</div>'}
+function renderTermos(){document.getElementById('termosBody').innerHTML=db.config.termos?`<div class="texto-geral">${db.config.termos}</div>`:'<div class="empty">Nenhum termo cadastrado</div>'}
+function renderTeste(){document.getElementById('testeDescBox').innerHTML=db.config.teste.desc||'Teste de Curtidas: São 10 curtidas grátis<br>Teste de Seguidores: São 30 seguidores grátis'}
+function renderPremiacao(){document.getElementById('premiacaoBody').innerHTML=db.config.premiacao.img||db.config.premiacao.texto?`${db.config.premiacao.img?`<img src="${db.config.premiacao.img}" style="width:100%;border-radius:10px;margin-bottom:12px">`:''}<div class="texto-geral">${db.config.premiacao.texto}</div>`:'<div class="empty">Nenhuma premiação cadastrada</div>'}
 
 function fecharModal(){document.getElementById('modal').classList.remove('ativo')}
 
-// Fecha dropdown ao clicar fora
 document.addEventListener('click',e=>{
   if(!e.target.closest('.select-wrap')){
     document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('ativo'));
@@ -457,6 +484,7 @@ document.addEventListener('click',e=>{
 });
 
 renderHome();
+renderTeste();
 </script>
 
 </body>
