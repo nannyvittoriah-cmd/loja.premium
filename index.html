@@ -7,7 +7,7 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11px}
-.header{background:#0a0a0a;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1a1a1a}
+.header{background:#0a0a0a;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1a1a1a;position:sticky;top:0;z-index:50}
 .header-left{display:flex;align-items:center;gap:12px}
 .menu{font-size:18px;cursor:pointer;color:#fff}
 .logo{width:24px;height:24px;background:#fff;border-radius:50%;position:relative}
@@ -15,6 +15,13 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 .logo::after{content:'';position:absolute;top:-4px;left:6px;width:3px;height:3px;background:#fff;border-radius:50%;box-shadow:4px 1px 0 #fff,2px 6px 0 #fff,-1px 4px 0 #fff}
 .header-right{display:flex;align-items:center;gap:12px;font-size:16px}
 .icon{cursor:pointer;color:#8b5cf6}
+.sidebar{position:fixed;top:0;left:-250px;width:250px;height:100vh;background:#141414;border-right:1px solid #2a2a2a;z-index:200;transition:left .3s;padding:16px}
+.sidebar.ativo{left:0}
+.sidebar-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:199;display:none}
+.sidebar-overlay.ativo{display:block}
+.sidebar-tit{font-size:12px;font-weight:800;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #2a2a2a;color:#8b5cf6}
+.sidebar-item{padding:10px;border-radius:8px;cursor:pointer;font-size:10px;font-weight:600;color:#888;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sidebar-item:hover{background:#1e1e1e;color:#fff}
 .container{padding:12px;max-width:600px;margin:0 auto}
 .label{font-size:10px;font-weight:600;margin:12px 0 6px;display:flex;align-items:center;gap:4px}
 .select-wrap{position:relative;margin-bottom:6px}
@@ -37,9 +44,19 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 </head>
 <body>
 
+<div class="sidebar-overlay" id="overlay" onclick="fecharMenu()"></div>
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-tit">MENU</div>
+  <div class="sidebar-item" onclick="alert('Dúvidas Frequentes');fecharMenu()">❓ Dúvidas frequentes</div>
+  <div class="sidebar-item" onclick="alert('Termos do Site');fecharMenu()">📄 Termos do site</div>
+  <div class="sidebar-item" onclick="alert('Teste Grátis');fecharMenu()">🎁 Teste grátis</div>
+  <div class="sidebar-item" onclick="alert('Premiação');fecharMenu()">🏆 Premiação</div>
+  <div class="sidebar-item" onclick="alert('Admin');fecharMenu()">👤 Adm</div>
+</div>
+
 <div class="header">
   <div class="header-left">
-    <div class="menu">☰</div>
+    <div class="menu" onclick="abrirMenu()">☰</div>
     <div class="logo"></div>
   </div>
   <div class="header-right">
@@ -91,6 +108,9 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 
 <script>
 let servAtual={min:50,max:50000,preco:3.50};
+
+function abrirMenu(){document.getElementById('sidebar').classList.add('ativo');document.getElementById('overlay').classList.add('ativo')}
+function fecharMenu(){document.getElementById('sidebar').classList.remove('ativo');document.getElementById('overlay').classList.remove('ativo')}
 
 function toggleDrop(tipo){
   document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('ativo'));
