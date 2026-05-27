@@ -7,6 +7,8 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11px}
+.tela{display:none;min-height:100vh}
+.tela.ativa{display:block}
 .header{background:#0a0a0a;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1a1a1a;position:sticky;top:0;z-index:50}
 .header-left{display:flex;align-items:center;gap:12px}
 .menu{font-size:18px;cursor:pointer;color:#fff}
@@ -15,7 +17,7 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 .logo::after{content:'';position:absolute;top:-4px;left:6px;width:3px;height:3px;background:#fff;border-radius:50%;box-shadow:4px 1px 0 #fff,2px 6px 0 #fff,-1px 4px 0 #fff}
 .header-right{display:flex;align-items:center;gap:12px;font-size:16px}
 .icon{cursor:pointer;color:#8b5cf6}
-.sidebar{position:fixed;top:0;left:-250px;width:250px;height:100vh;background:#141414;border-right:1px solid #2a2a2a;z-index:200;transition:left .3s;padding:16px}
+.sidebar{position:fixed;top:0;left:-250px;width:250px;height:100vh;background:#141414;border-right:1px solid #2a2a2a;z-index:200;transition:left .3s;padding:16px;overflow-y:auto}
 .sidebar.ativo{left:0}
 .sidebar-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:199;display:none}
 .sidebar-overlay.ativo{display:block}
@@ -26,7 +28,6 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 .label{font-size:10px;font-weight:600;margin:12px 0 6px;display:flex;align-items:center;gap:4px}
 .select-wrap{position:relative;margin-bottom:6px}
 .select{background:#141414;border:1px solid #2a2a2a;border-radius:10px;padding:10px 12px;font-size:10px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
-.select-ativo{border-color:#8b5cf6}
 .select-icon{color:#888;font-size:8px}
 .dropdown{position:absolute;top:100%;left:0;right:0;background:#141414;border:1px solid #2a2a2a;border-radius:10px;margin-top:3px;z-index:10;display:none;max-height:160px;overflow-y:auto}
 .dropdown.ativo{display:block}
@@ -34,12 +35,33 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 .dropdown-item:hover{background:#1e1e1e}
 .dropdown-item:last-child{border-bottom:none}
 .id-azul{color:#3b82f6;font-weight:700}
-.input{background:#141414;border:1px solid #2a2a2a;border-radius:10px;padding:10px 12px;font-size:10px;color:#fff;width:100%;outline:none;margin-bottom:6px}
-.input:focus{border-color:#8b5cf6}
+.input,.textarea{background:#141414;border:1px solid #2a2a2a;border-radius:10px;padding:10px 12px;font-size:10px;color:#fff;width:100%;outline:none;margin-bottom:6px}
+.textarea{min-height:60px;resize:vertical}
+.input:focus,.textarea:focus{border-color:#8b5cf6}
 .info{font-size:9px;color:#888;margin:3px 0 12px}
 .custo-box{background:#141414;border:1px solid #2a2a2a;border-radius:10px;padding:10px 12px;font-size:11px;font-weight:700;color:#8b5cf6;margin-bottom:12px;min-height:36px;display:flex;align-items:center}
 .btn{width:100%;background:#8b5cf6;color:#fff;border:none;border-radius:10px;padding:12px;font-weight:700;font-size:11px;cursor:pointer;margin-top:6px}
 .btn:active{transform:scale(.98)}
+.btn-red{background:#ef4444}
+.btn-sec{background:#1e1e1e}
+.btn-voltar{width:28px;height:28px;background:#141414;border:1px solid #2a2a2a;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px}
+.titulo{font-size:12px;font-weight:800;margin-bottom:12px}
+.lista-item{background:#141414;border:1px solid #2a2a2a;border-radius:10px;padding:10px;margin-bottom:8px}
+.lista-top{display:flex;justify-content:space-between;align-items:start;margin-bottom:6px}
+.lista-nome{font-size:10px;font-weight:700}
+.lista-acoes{display:flex;gap:6px}
+.btn-mini{padding:4px 8px;font-size:9px;border-radius:6px;border:none;cursor:pointer;font-weight:600}
+.btn-edit{background:#8b5cf6;color:#fff}
+.btn-del{background:#ef4444;color:#fff}
+.lista-info{font-size:9px;color:#888;line-height:1.4}
+.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:300;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.ativo{display:flex}
+.modal-box{background:#141414;border:1px solid #2a2a2a;border-radius:14px;padding:16px;width:100%;max-width:400px;max-height:90vh;overflow-y:auto}
+.modal-tit{font-size:12px;font-weight:800;margin-bottom:12px}
+.empty{text-align:center;padding:30px 16px;color:#888;font-size:10px}
+.add{position:fixed;bottom:16px;right:16px;width:44px;height:44px;background:#8b5cf6;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px rgba(139,92,246,.4);z-index:90;font-size:20px;font-weight:700}
+.upload{width:100%;aspect-ratio:16/9;background:#1e1e1e;border:2px dashed #2a2a2a;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;cursor:pointer;overflow:hidden;font-size:9px;color:#888}
+.upload img{width:100%;height:100%;object-fit:cover}
 </style>
 </head>
 <body>
@@ -47,111 +69,383 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 <div class="sidebar-overlay" id="overlay" onclick="fecharMenu()"></div>
 <div class="sidebar" id="sidebar">
   <div class="sidebar-tit">MENU</div>
-  <div class="sidebar-item" onclick="alert('Dúvidas Frequentes');fecharMenu()">❓ Dúvidas frequentes</div>
-  <div class="sidebar-item" onclick="alert('Termos do Site');fecharMenu()">📄 Termos do site</div>
-  <div class="sidebar-item" onclick="alert('Teste Grátis');fecharMenu()">🎁 Teste grátis</div>
-  <div class="sidebar-item" onclick="alert('Premiação');fecharMenu()">🏆 Premiação</div>
-  <div class="sidebar-item" onclick="alert('Admin');fecharMenu()">👤 Adm</div>
+  <div class="sidebar-item" onclick="ir('home');fecharMenu()">🏠 Início</div>
+  <div class="sidebar-item" onclick="ir('faq');fecharMenu()">❓ Dúvidas frequentes</div>
+  <div class="sidebar-item" onclick="ir('termos');fecharMenu()">📄 Termos do site</div>
+  <div class="sidebar-item" onclick="ir('teste');fecharMenu()">🎁 Teste grátis</div>
+  <div class="sidebar-item" onclick="ir('premiacao');fecharMenu()">🏆 Premiação</div>
+  <div class="sidebar-item" onclick="abrirAdmin();fecharMenu()">👤 Adm</div>
 </div>
 
-<div class="header">
-  <div class="header-left">
-    <div class="menu" onclick="abrirMenu()">☰</div>
-    <div class="logo"></div>
+<div id="home" class="tela ativa">
+  <div class="header">
+    <div class="header-left">
+      <div class="menu" onclick="abrirMenu()">☰</div>
+      <div class="logo"></div>
+    </div>
+    <div class="header-right">
+      <div class="icon">☀️</div>
+      <div class="icon">⚙️</div>
+      <div class="icon">⏻</div>
+    </div>
   </div>
-  <div class="header-right">
-    <div class="icon">☀️</div>
-    <div class="icon">⚙️</div>
-    <div class="icon">⏻</div>
+  <div class="container">
+    <div class="label">👇 Escolha a categoria abaixo</div>
+    <div class="select-wrap">
+      <div class="select" onclick="toggleDrop('cat')">
+        <span id="catText">Selecione uma categoria</span>
+        <span class="select-icon">▼</span>
+      </div>
+      <div class="dropdown" id="catDrop"></div>
+    </div>
+
+    <div class="label">👇 Escolha o serviço abaixo: <span class="id-azul" id="servId">---</span></div>
+    <div class="select-wrap">
+      <div class="select" onclick="toggleDrop('serv')">
+        <span id="servText">Selecione um serviço</span>
+        <span class="select-icon">▼</span>
+      </div>
+      <div class="dropdown" id="servDrop"></div>
+    </div>
+
+    <div class="label">🔗 Link:</div>
+    <input type="text" class="input" id="link" placeholder="Cole o link aqui">
+
+    <div class="label">Quantidade:</div>
+    <input type="number" class="input" id="qtd" placeholder="Digite a quantidade" oninput="calcCusto()">
+    <div class="info" id="minmax">Selecione um serviço</div>
+
+    <div class="label">💵 Custo :</div>
+    <div class="custo-box" id="custo">R$ 0,00</div>
+
+    <button class="btn" onclick="finalizar()">FAZER PEDIDO</button>
   </div>
 </div>
 
-<div class="container">
-  <div class="label">👇 Escolha a categoria abaixo</div>
-  <div class="select-wrap">
-    <div class="select" id="catSelect" onclick="toggleDrop('cat')">
-      <span id="catText">⭐ Insta Promoção 🌟</span>
-      <span class="select-icon">▼</span>
+<div id="admin" class="tela">
+  <div class="header">
+    <div class="header-left">
+      <div class="btn-voltar" onclick="ir('home')">←</div>
     </div>
-    <div class="dropdown" id="catDrop">
-      <div class="dropdown-item" onclick="setCat('Insta Promoção 🌟')">⭐ Insta Promoção 🌟</div>
-      <div class="dropdown-item" onclick="setCat('TikTok Turbo 🚀')">⭐ TikTok Turbo 🚀</div>
-      <div class="dropdown-item" onclick="setCat('YouTube Boom 💥')">⭐ YouTube Boom 💥</div>
-    </div>
+    <div style="font-size:12px;font-weight:700">PAINEL ADM</div>
+    <div style="width:28px"></div>
   </div>
+  <div class="container" id="adminBody"></div>
+</div>
 
-  <div class="label">👇 Escolha o serviço abaixo: <span class="id-azul">1030</span></div>
-  <div class="select-wrap">
-    <div class="select" id="servSelect" onclick="toggleDrop('serv')">
-      <span id="servText">⭐ 🚀🏃 Seguidores 90% Brasileiros ♻️ R3...</span>
-      <span class="select-icon">▼</span>
+<div id="faq" class="tela">
+  <div class="header">
+    <div class="header-left">
+      <div class="btn-voltar" onclick="ir('home')">←</div>
     </div>
-    <div class="dropdown" id="servDrop">
-      <div class="dropdown-item" onclick="setServ('Seguidores 90% Brasileiros ♻️ R3,50',50,50000,3.50)">⭐ 🚀🏃 Seguidores 90% Brasileiros ♻️ R3,50</div>
-      <div class="dropdown-item" onclick="setServ('Curtidas Brasileiras ❤️ R1,20',100,10000,1.20)">⭐ ❤️ Curtidas Brasileiras R1,20</div>
-      <div class="dropdown-item" onclick="setServ('Views Reels 👀 R0,80',500,100000,0.80)">⭐ 👀 Views Reels R0,80</div>
-    </div>
+    <div style="font-size:12px;font-weight:700">DÚVIDAS FREQUENTES</div>
+    <div style="width:28px"></div>
   </div>
+  <div class="container" id="faqBody"></div>
+</div>
 
-  <div class="label">🔗 Link:</div>
-  <input type="text" class="input" id="link" placeholder="Cole o link aqui">
+<div id="termos" class="tela">
+  <div class="header">
+    <div class="header-left">
+      <div class="btn-voltar" onclick="ir('home')">←</div>
+    </div>
+    <div style="font-size:12px;font-weight:700">TERMOS DO SITE</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="termosBody"></div>
+</div>
 
-  <div class="label">Quantidade:</div>
-  <input type="number" class="input" id="qtd" placeholder="Digite a quantidade" oninput="calcCusto()">
-  <div class="info" id="minmax">Mínimo: 50 - Max: 50.000</div>
+<div id="teste" class="tela">
+  <div class="header">
+    <div class="header-left">
+      <div class="btn-voltar" onclick="ir('home')">←</div>
+    </div>
+    <div style="font-size:12px;font-weight:700">TESTE GRÁTIS</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="testeBody"></div>
+</div>
 
-  <div class="label">💵 Custo :</div>
-  <div class="custo-box" id="custo">R$ 0,00</div>
+<div id="premiacao" class="tela">
+  <div class="header">
+    <div class="header-left">
+      <div class="btn-voltar" onclick="ir('home')">←</div>
+    </div>
+    <div style="font-size:12px;font-weight:700">PREMIAÇÃO</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="premiacaoBody"></div>
+</div>
 
-  <button class="btn" onclick="finalizar()">FAZER PEDIDO</button>
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <div class="modal-tit" id="modalTit"></div>
+    <div id="modalBody"></div>
+  </div>
 </div>
 
 <script>
-let servAtual={min:50,max:50000,preco:3.50};
+let db={cat:JSON.parse(localStorage.getItem('cat')||'[]'),serv:JSON.parse(localStorage.getItem('serv')||'[]'),config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"","teste":{"link":"","qtd":"","desc":""},"premiacao":{"img":"","texto":""}}')};
+let logado=false,catSel=null,servSel=null;
+const EMAIL='nannyvittoriah@gmail.com',SENHA='Lorrannyh.101225';
 
+function save(){localStorage.setItem('cat',JSON.stringify(db.cat));localStorage.setItem('serv',JSON.stringify(db.serv));localStorage.setItem('config',JSON.stringify(db.config))}
 function abrirMenu(){document.getElementById('sidebar').classList.add('ativo');document.getElementById('overlay').classList.add('ativo')}
 function fecharMenu(){document.getElementById('sidebar').classList.remove('ativo');document.getElementById('overlay').classList.remove('ativo')}
+function ir(t){document.querySelectorAll('.tela').forEach(e=>e.classList.remove('ativa'));document.getElementById(t).classList.add('ativa');if(t==='home')renderHome();if(t==='faq')renderFaq();if(t==='termos')renderTermos();if(t==='teste')renderTeste();if(t==='premiacao')renderPremiacao()}
+
+function abrirAdmin(){
+  if(!logado){
+    document.getElementById('adminBody').innerHTML=`<input type="email" class="input" id="e" placeholder="E-mail"><input type="password" class="input" id="s" placeholder="Senha"><button class="btn" onclick="login()">ENTRAR</button>`
+  }else{
+    document.getElementById('adminBody').innerHTML=`
+    <button class="btn" onclick="abrirCats()">📂 CATEGORIAS</button>
+    <button class="btn" onclick="abrirServs()">📦 SERVIÇOS</button>
+    <button class="btn" onclick="formFaq()">❓ DÚVIDAS FREQUENTES</button>
+    <button class="btn" onclick="formTermos()">📄 TERMOS DO SITE</button>
+    <button class="btn" onclick="formTeste()">🎁 TESTE GRÁTIS</button>
+    <button class="btn" onclick="formPremiacao()">🏆 PREMIAÇÃO</button>
+    <button class="btn btn-red" onclick="sair()">SAIR</button>`
+  }
+  ir('admin')
+}
+
+function login(){if(document.getElementById('e').value===EMAIL&&document.getElementById('s').value===SENHA){logado=true;abrirAdmin()}else{alert('Senha errada')}}
+function sair(){logado=false;ir('home')}
 
 function toggleDrop(tipo){
   document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('ativo'));
   document.getElementById(tipo+'Drop').classList.toggle('ativo');
 }
 
-function setCat(nome){
-  document.getElementById('catText').textContent='⭐ '+nome;
+function setCat(k){
+  catSel=k;servSel=null;
+  const c=db.cat.find(x=>x.k===k);
+  document.getElementById('catText').textContent=c.nome;
   document.getElementById('catDrop').classList.remove('ativo');
+  document.getElementById('servText').textContent='Selecione um serviço';
+  document.getElementById('servId').textContent='---';
+  renderServsDrop();
 }
 
-function setServ(nome,min,max,preco){
-  document.getElementById('servText').textContent='⭐ '+nome;
-  servAtual={min,max,preco};
-  document.getElementById('minmax').textContent=`Mínimo: ${min} - Max: ${max.toLocaleString('pt-BR')}`;
+function setServ(k){
+  servSel=k;
+  const s=db.serv.find(x=>x.k===k);
+  document.getElementById('servText').textContent=s.nome;
+  document.getElementById('servId').textContent=s.k.slice(-4);
+  document.getElementById('minmax').textContent=`Mínimo: ${s.min} - Max: ${s.max.toLocaleString('pt-BR')}`;
   document.getElementById('qtd').value='';
   document.getElementById('custo').textContent='R$ 0,00';
   document.getElementById('servDrop').classList.remove('ativo');
 }
 
 function calcCusto(){
+  if(!servSel)return;
+  const s=db.serv.find(x=>x.k===servSel);
   let qtd=parseInt(document.getElementById('qtd').value)||0;
-  if(qtd<servAtual.min)qtd=servAtual.min;
-  if(qtd>servAtual.max)qtd=servAtual.max;
-  let total=(qtd/1000)*servAtual.preco;
+  if(qtd<s.min)qtd=s.min;
+  if(qtd>s.max)qtd=s.max;
+  let total=(qtd/1000)*s.preco;
   document.getElementById('custo').textContent='R$ '+total.toFixed(2).replace('.',',');
 }
 
 function finalizar(){
+  if(!servSel){alert('Selecione um serviço');return}
   let link=document.getElementById('link').value;
-  let qtd=document.getElementById('qtd').value;
+  let qtd=parseInt(document.getElementById('qtd').value);
+  const s=db.serv.find(x=>x.k===servSel);
   if(!link||!qtd){alert('Preencha link e quantidade');return}
-  if(qtd<servAtual.min||qtd>servAtual.max){alert(`Quantidade deve ser entre ${servAtual.min} e ${servAtual.max}`);return}
+  if(qtd<s.min||qtd>s.max){alert(`Quantidade deve ser entre ${s.min} e ${s.max}`);return}
   alert('Pedido enviado!');
 }
+
+function renderHome(){
+  const catDrop=document.getElementById('catDrop');
+  if(db.cat.length===0){
+    catDrop.innerHTML='<div class="dropdown-item">Nenhuma categoria cadastrada</div>';
+    document.getElementById('catText').textContent='Nenhuma categoria';
+  }else{
+    catDrop.innerHTML=db.cat.map(c=>`<div class="dropdown-item" onclick="setCat('${c.k}')">${c.nome}</div>`).join('');
+  }
+  renderServsDrop();
+}
+
+function renderServsDrop(){
+  const servDrop=document.getElementById('servDrop');
+  let servs=catSel?db.serv.filter(s=>s.cat===catSel):[];
+  if(servs.length===0){
+    servDrop.innerHTML='<div class="dropdown-item">Nenhum serviço</div>';
+  }else{
+    servDrop.innerHTML=servs.map(s=>`<div class="dropdown-item" onclick="setServ('${s.k}')">${s.nome}</div>`).join('');
+  }
+}
+
+function abrirCats(){
+  const lista=db.cat.map(c=>`
+    <div class="lista-item">
+      <div class="lista-top">
+        <div class="lista-nome">${c.nome}</div>
+        <div class="lista-acoes">
+          <button class="btn-mini btn-edit" onclick="formCat('${c.k}')">EDITAR</button>
+          <button class="btn-mini btn-del" onclick="delCat('${c.k}')">EXCLUIR</button>
+        </div>
+      </div>
+      <div class="lista-info">${db.serv.filter(s=>s.cat===c.k).length} serviços</div>
+    </div>`).join('');
+  document.getElementById('adminBody').innerHTML=`<div class="titulo">CATEGORIAS</div>${lista||'<div class="empty">Nenhuma categoria</div>'}<div class="add" onclick="formCat()">+</div><button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>`;
+}
+
+function abrirServs(){
+  const lista=db.serv.map(s=>{
+    const c=db.cat.find(x=>x.k===s.cat);
+    return `
+    <div class="lista-item">
+      <div class="lista-top">
+        <div class="lista-nome">${s.nome}</div>
+        <div class="lista-acoes">
+          <button class="btn-mini btn-edit" onclick="formServ('${s.k}')">EDITAR</button>
+          <button class="btn-mini btn-del" onclick="delServ('${s.k}')">EXCLUIR</button>
+        </div>
+      </div>
+      <div class="lista-info">Cat: ${c?.nome||'-'} | R$ ${s.preco.toFixed(2)} | Min: ${s.min} | Max: ${s.max} | Estoque: ${s.estoque}</div>
+    </div>`}).join('');
+  document.getElementById('adminBody').innerHTML=`<div class="titulo">SERVIÇOS</div>${lista||'<div class="empty">Nenhum serviço</div>'}<div class="add" onclick="formServ()">+</div><button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>`;
+}
+
+function formCat(k=null){
+  const d=db.cat.find(x=>x.k===k);
+  document.getElementById('modalTit').textContent=k?'EDITAR CATEGORIA':'NOVA CATEGORIA';
+  document.getElementById('modalBody').innerHTML=`
+    <input type="text" class="input" id="nomeC" value="${d?.nome||''}" placeholder="Nome da categoria">
+    <button class="btn" onclick="salvarCat('${k||''}')">${k?'SALVAR':'CRIAR'}</button>
+    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
+  document.getElementById('modal').classList.add('ativo');
+}
+
+function formServ(k=null){
+  const d=db.serv.find(x=>x.k===k);
+  let opts=db.cat.map(c=>`<option value="${c.k}" ${d?.cat===c.k?'selected':''}>${c.nome}</option>`).join('');
+  if(!opts)opts='<option value="">Cadastre categoria primeiro</option>';
+  document.getElementById('modalTit').textContent=k?'EDITAR SERVIÇO':'NOVO SERVIÇO';
+  document.getElementById('modalBody').innerHTML=`
+    <select class="input" id="catS">${opts}</select>
+    <input type="text" class="input" id="nomeS" value="${d?.nome||''}" placeholder="Nome do serviço">
+    <textarea class="textarea" id="descS" placeholder="Descrição">${d?.desc||''}</textarea>
+    <input type="number" step="0.01" class="input" id="precoS" value="${d?.preco||''}" placeholder="Valor por 1000">
+    <input type="number" class="input" id="minS" value="${d?.min||''}" placeholder="Quantidade mínima">
+    <input type="number" class="input" id="maxS" value="${d?.max||''}" placeholder="Quantidade máxima">
+    <input type="number" class="input" id="estS" value="${d?.estoque||''}" placeholder="Estoque">
+    <button class="btn" onclick="salvarServ('${k||''}')">${k?'SALVAR':'CRIAR'}</button>
+    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
+  document.getElementById('modal').classList.add('ativo');
+}
+
+function salvarCat(k){
+  const nome=document.getElementById('nomeC').value.trim();
+  if(!nome){alert('Nome obrigatório');return}
+  if(k){db.cat[db.cat.findIndex(x=>x.k===k)]={k,nome}}else{db.cat.push({k:'c'+Date.now(),nome})}
+  save();fecharModal();abrirCats();renderHome();
+}
+
+function delCat(k){
+  if(confirm('Excluir categoria? Vai apagar os serviços juntos.')){
+    db.cat=db.cat.filter(x=>x.k!==k);
+    db.serv=db.serv.filter(x=>x.cat!==k);
+    save();abrirCats();renderHome();
+  }
+}
+
+function salvarServ(k){
+  const cat=document.getElementById('catS').value;
+  const nome=document.getElementById('nomeS').value.trim();
+  const desc=document.getElementById('descS').value.trim();
+  const preco=parseFloat(document.getElementById('precoS').value);
+  const min=parseInt(document.getElementById('minS').value);
+  const max=parseInt(document.getElementById('maxS').value);
+  const estoque=parseInt(document.getElementById('estS').value)||0;
+  if(!cat||!nome||!preco||!min||!max){alert('Preencha todos os campos');return}
+  const dados={k:k||'s'+Date.now(),cat,nome,desc,preco,min,max,estoque};
+  if(k){db.serv[db.serv.findIndex(x=>x.k===k)]=dados}else{db.serv.push(dados)}
+  save();fecharModal();abrirServs();renderHome();
+}
+
+function delServ(k){
+  if(confirm('Excluir serviço?')){
+    db.serv=db.serv.filter(x=>x.k!==k);
+    save();abrirServs();renderHome();
+  }
+}
+
+function formFaq(){
+  document.getElementById('modalTit').textContent='DÚVIDAS FREQUENTES';
+  document.getElementById('modalBody').innerHTML=`
+    <textarea class="textarea" id="faqTxt" placeholder="Digite as dúvidas frequentes">${db.config.faq}</textarea>
+    <button class="btn" onclick="salvarConfig('faq')">SALVAR</button>
+    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
+  document.getElementById('modal').classList.add('ativo');
+}
+
+function formTermos(){
+  document.getElementById('modalTit').textContent='TERMOS DO SITE';
+  document.getElementById('modalBody').innerHTML=`
+    <textarea class="textarea" id="termosTxt" placeholder="Digite os termos">${db.config.termos}</textarea>
+    <button class="btn" onclick="salvarConfig('termos')">SALVAR</button>
+    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
+  document.getElementById('modal').classList.add('ativo');
+}
+
+function formTeste(){
+  document.getElementById('modalTit').textContent='TESTE GRÁTIS';
+  document.getElementById('modalBody').innerHTML=`
+    <input type="text" class="input" id="testeLink" value="${db.config.teste.link}" placeholder="Link">
+    <input type="number" class="input" id="testeQtd" value="${db.config.teste.qtd}" placeholder="Quantidade">
+    <textarea class="textarea" id="testeDesc" placeholder="Descrição do teste">${db.config.teste.desc}</textarea>
+    <button class="btn" onclick="salvarConfig('teste')">SALVAR</button>
+    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
+  document.getElementById('modal').classList.add('ativo');
+}
+
+function formPremiacao(){
+  document.getElementById('modalTit').textContent='PREMIAÇÃO';
+  document.getElementById('modalBody').innerHTML=`
+    <div class="upload" onclick="document.getElementById('imgPrem').click()">
+      <img id="prevPrem" src="${db.config.premiacao.img}" style="display:${db.config.premiacao.img?'block':'none'}">
+      <div id="txtPrem" style="display:${db.config.premiacao.img?'none':'block'}">Escolher imagem</div>
+    </div>
+    <input type="file" id="imgPrem" accept="image/*" style="display:none" onchange="prevImg(event)">
+    <textarea class="textarea" id="premTxt" placeholder="Texto da premiação">${db.config.premiacao.texto}</textarea>
+    <button class="btn" onclick="salvarConfig('premiacao')">SALVAR</button>
+    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
+  document.getElementById('modal').classList.add('ativo');
+}
+
+function prevImg(e){
+  const f=e.target.files[0];
+  if(f){const r=new FileReader();r.onload=ev=>{document.getElementById('prevPrem').src=ev.target.result;document.getElementById('prevPrem').style.display='block';document.getElementById('txtPrem').style.display='none'};r.readAsDataURL(f)}
+}
+
+function salvarConfig(tipo){
+  if(tipo==='faq')db.config.faq=document.getElementById('faqTxt').value;
+  if(tipo==='termos')db.config.termos=document.getElementById('termosTxt').value;
+  if(tipo==='teste')db.config.teste={link:document.getElementById('testeLink').value,qtd:document.getElementById('testeQtd').value,desc:document.getElementById('testeDesc').value};
+  if(tipo==='premiacao')db.config.premiacao={img:document.getElementById('prevPrem').src,texto:document.getElementById('premTxt').value};
+  save();fecharModal();abrirAdmin();
+}
+
+function renderFaq(){document.getElementById('faqBody').innerHTML=db.config.faq?`<div style="font-size:10px;line-height:1.6;white-space:pre-wrap">${db.config.faq}</div>`:'<div class="empty">Nenhuma dúvida cadastrada</div>'}
+function renderTermos(){document.getElementById('termosBody').innerHTML=db.config.termos?`<div style="font-size:10px;line-height:1.6;white-space:pre-wrap">${db.config.termos}</div>`:'<div class="empty">Nenhum termo cadastrado</div>'}
+function renderTeste(){document.getElementById('testeBody').innerHTML=db.config.teste.desc?`<div style="font-size:10px;line-height:1.6;white-space:pre-wrap;margin-bottom:12px">${db.config.teste.desc}</div><input type="text" class="input" placeholder="Link" value="${db.config.teste.link}" readonly><input type="number" class="input" placeholder="Quantidade" value="${db.config.teste.qtd}" readonly>`:'<div class="empty">Nenhum teste cadastrado</div>'}
+function renderPremiacao(){document.getElementById('premiacaoBody').innerHTML=db.config.premiacao.img||db.config.premiacao.texto?`${db.config.premiacao.img?`<img src="${db.config.premiacao.img}" style="width:100%;border-radius:10px;margin-bottom:12px">`:''}<div style="font-size:10px;line-height:1.6;white-space:pre-wrap">${db.config.premiacao.texto}</div>`:'<div class="empty">Nenhuma premiação cadastrada</div>'}
+
+function fecharModal(){document.getElementById('modal').classList.remove('ativo')}
 
 document.addEventListener('click',e=>{
   if(!e.target.closest('.select-wrap')){
     document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('ativo'));
   }
 });
+
+renderHome();
 </script>
 
 </body>
