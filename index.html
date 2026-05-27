@@ -164,7 +164,12 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
     <div style="font-size:12px;font-weight:700">TESTE GRÁTIS</div>
     <div style="width:28px"></div>
   </div>
-  <div class="container" id="testeBody"></div>
+  <div class="container">
+    <div id="testeBody"></div>
+    <div class="label" style="margin-top:16px">🔗 Link para teste:</div>
+    <input type="text" class="input" id="testeLinkCliente" placeholder="Cole seu link aqui">
+    <button class="btn" onclick="enviarTeste()">ENVIAR TESTE GRÁTIS</button>
+  </div>
 </div>
 
 <div id="premiacao" class="tela">
@@ -186,7 +191,7 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 </div>
 
 <script>
-let db={cat:JSON.parse(localStorage.getItem('cat')||'[]'),serv:JSON.parse(localStorage.getItem('serv')||'[]'),config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"","teste":{"link":"","qtd":"","desc":""},"premiacao":{"img":"","texto":""}}')};
+let db={cat:JSON.parse(localStorage.getItem('cat')||'[]'),serv:JSON.parse(localStorage.getItem('serv')||'[]'),config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"","teste":{"desc":""},"premiacao":{"img":"","texto":""}}')};
 let logado=false,catSel=null,servSel=null;
 const EMAIL='nannyvittoriah@gmail.com',SENHA='Lorrannyh.101225';
 
@@ -251,6 +256,13 @@ function finalizar(){
   let link=document.getElementById('link').value;
   if(!link){alert('Cole o link');return}
   alert('Pedido enviado!');
+}
+
+function enviarTeste(){
+  let link=document.getElementById('testeLinkCliente').value;
+  if(!link){alert('Cole seu link para o teste');return}
+  alert('Teste grátis solicitado! Entraremos em contato.');
+  document.getElementById('testeLinkCliente').value='';
 }
 
 function renderHome(){
@@ -387,9 +399,7 @@ function formTermos(){
 function formTeste(){
   document.getElementById('modalTit').textContent='TESTE GRÁTIS';
   document.getElementById('modalBody').innerHTML=`
-    <input type="text" class="input" id="testeLink" value="${db.config.teste.link}" placeholder="Link">
-    <input type="number" class="input" id="testeQtd" value="${db.config.teste.qtd}" placeholder="Quantidade">
-    <textarea class="textarea" id="testeDesc" placeholder="Descrição do teste">${db.config.teste.desc}</textarea>
+    <textarea class="textarea" id="testeDesc" placeholder="Descrição do teste grátis">${db.config.teste.desc}</textarea>
     <button class="btn" onclick="salvarConfig('teste')">SALVAR</button>
     <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
   document.getElementById('modal').classList.add('ativo');
@@ -417,14 +427,14 @@ function prevImg(e){
 function salvarConfig(tipo){
   if(tipo==='faq')db.config.faq=document.getElementById('faqTxt').value;
   if(tipo==='termos')db.config.termos=document.getElementById('termosTxt').value;
-  if(tipo==='teste')db.config.teste={link:document.getElementById('testeLink').value,qtd:document.getElementById('testeQtd').value,desc:document.getElementById('testeDesc').value};
+  if(tipo==='teste')db.config.teste={desc:document.getElementById('testeDesc').value};
   if(tipo==='premiacao')db.config.premiacao={img:document.getElementById('prevPrem').src,texto:document.getElementById('premTxt').value};
   save();fecharModal();abrirAdmin();
 }
 
 function renderFaq(){document.getElementById('faqBody').innerHTML=db.config.faq?`<div style="font-size:10px;line-height:1.6;white-space:pre-wrap">${db.config.faq}</div>`:'<div class="empty">Nenhuma dúvida cadastrada</div>'}
 function renderTermos(){document.getElementById('termosBody').innerHTML=db.config.termos?`<div style="font-size:10px;line-height:1.6;white-space:pre-wrap">${db.config.termos}</div>`:'<div class="empty">Nenhum termo cadastrado</div>'}
-function renderTeste(){document.getElementById('testeBody').innerHTML=db.config.teste.desc?`<div style="font-size:10px;line-height:1.6;white-space:pre-wrap;margin-bottom:12px">${db.config.teste.desc}</div><input type="text" class="input" placeholder="Link" value="${db.config.teste.link}" readonly><input type="number" class="input" placeholder="Quantidade" value="${db.config.teste.qtd}" readonly>`:'<div class="empty">Nenhum teste cadastrado</div>'}
+function renderTeste(){document.getElementById('testeBody').innerHTML=db.config.teste.desc?`<div style="font-size:10px;line-height:1.6;white-space:pre-wrap;margin-bottom:12px">${db.config.teste.desc}</div>`:'<div class="empty">Configure o teste grátis no painel ADM</div>'}
 function renderPremiacao(){document.getElementById('premiacaoBody').innerHTML=db.config.premiacao.img||db.config.premiacao.texto?`${db.config.premiacao.img?`<img src="${db.config.premiacao.img}" style="width:100%;border-radius:10px;margin-bottom:12px">`:''}<div style="font-size:10px;line-height:1.6;white-space:pre-wrap">${db.config.premiacao.texto}</div>`:'<div class="empty">Nenhuma premiação cadastrada</div>'}
 
 function fecharModal(){document.getElementById('modal').classList.remove('ativo')}
