@@ -64,6 +64,7 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
 .upload img{width:100%;height:100%;object-fit:cover}
 .desc-box{background:#141414;border:1px solid #2a2a2a;border-radius:10px;padding:12px;font-size:10px;line-height:1.6;color:#aaa;white-space:pre-wrap;margin-bottom:12px;display:none}
 .desc-box.ativo{display:block}
+.info-teste{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:10px;font-size:9px;color:#8b5cf6;margin-bottom:12px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -165,9 +166,17 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;font-size:11
     <div style="width:28px"></div>
   </div>
   <div class="container">
-    <div id="testeBody"></div>
-    <div class="label" style="margin-top:16px">🔗 Link para teste:</div>
-    <input type="text" class="input" id="testeLinkCliente" placeholder="Cole seu link aqui">
+    <div class="info-teste">
+      <b>Teste de Curtidas:</b> São 10 curtidas grátis<br>
+      <b>Teste de Seguidores:</b> São 30 seguidores grátis
+    </div>
+    
+    <div class="label">❤️ Link para Curtidas:</div>
+    <input type="text" class="input" id="testeLinkCurtidas" placeholder="Cole o link do post aqui">
+    
+    <div class="label">👥 Link para Seguidores:</div>
+    <input type="text" class="input" id="testeLinkSeguidores" placeholder="Cole o link do perfil aqui">
+    
     <button class="btn" onclick="enviarTeste()">ENVIAR TESTE GRÁTIS</button>
   </div>
 </div>
@@ -198,7 +207,7 @@ const EMAIL='nannyvittoriah@gmail.com',SENHA='Lorrannyh.101225';
 function save(){localStorage.setItem('cat',JSON.stringify(db.cat));localStorage.setItem('serv',JSON.stringify(db.serv));localStorage.setItem('config',JSON.stringify(db.config))}
 function abrirMenu(){document.getElementById('sidebar').classList.add('ativo');document.getElementById('overlay').classList.add('ativo')}
 function fecharMenu(){document.getElementById('sidebar').classList.remove('ativo');document.getElementById('overlay').classList.remove('ativo')}
-function ir(t){document.querySelectorAll('.tela').forEach(e=>e.classList.remove('ativa'));document.getElementById(t).classList.add('ativa');if(t==='home')renderHome();if(t==='faq')renderFaq();if(t==='termos')renderTermos();if(t==='teste')renderTeste();if(t==='premiacao')renderPremiacao()}
+function ir(t){document.querySelectorAll('.tela').forEach(e=>e.classList.remove('ativa'));document.getElementById(t).classList.add('ativa');if(t==='home')renderHome();if(t==='faq')renderFaq();if(t==='termos')renderTermos();if(t==='premiacao')renderPremiacao()}
 
 function abrirAdmin(){
   if(!logado){
@@ -259,10 +268,12 @@ function finalizar(){
 }
 
 function enviarTeste(){
-  let link=document.getElementById('testeLinkCliente').value;
-  if(!link){alert('Cole seu link para o teste');return}
+  let linkCurt=document.getElementById('testeLinkCurtidas').value;
+  let linkSeg=document.getElementById('testeLinkSeguidores').value;
+  if(!linkCurt&&!linkSeg){alert('Cole pelo menos um link');return}
   alert('Teste grátis solicitado! Entraremos em contato.');
-  document.getElementById('testeLinkCliente').value='';
+  document.getElementById('testeLinkCurtidas').value='';
+  document.getElementById('testeLinkSeguidores').value='';
 }
 
 function renderHome(){
@@ -434,11 +445,11 @@ function salvarConfig(tipo){
 
 function renderFaq(){document.getElementById('faqBody').innerHTML=db.config.faq?`<div style="font-size:10px;line-height:1.6;white-space:pre-wrap">${db.config.faq}</div>`:'<div class="empty">Nenhuma dúvida cadastrada</div>'}
 function renderTermos(){document.getElementById('termosBody').innerHTML=db.config.termos?`<div style="font-size:10px;line-height:1.6;white-space:pre-wrap">${db.config.termos}</div>`:'<div class="empty">Nenhum termo cadastrado</div>'}
-function renderTeste(){document.getElementById('testeBody').innerHTML=db.config.teste.desc?`<div style="font-size:10px;line-height:1.6;white-space:pre-wrap;margin-bottom:12px">${db.config.teste.desc}</div>`:'<div class="empty">Configure o teste grátis no painel ADM</div>'}
 function renderPremiacao(){document.getElementById('premiacaoBody').innerHTML=db.config.premiacao.img||db.config.premiacao.texto?`${db.config.premiacao.img?`<img src="${db.config.premiacao.img}" style="width:100%;border-radius:10px;margin-bottom:12px">`:''}<div style="font-size:10px;line-height:1.6;white-space:pre-wrap">${db.config.premiacao.texto}</div>`:'<div class="empty">Nenhuma premiação cadastrada</div>'}
 
 function fecharModal(){document.getElementById('modal').classList.remove('ativo')}
 
+// Fecha dropdown ao clicar fora
 document.addEventListener('click',e=>{
   if(!e.target.closest('.select-wrap')){
     document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('ativo'));
