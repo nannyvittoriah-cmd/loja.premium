@@ -7,7 +7,7 @@
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-  import { getDatabase, ref, set, get } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+  import { getDatabase, ref, set, get, push, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
   const firebaseConfig = {
     apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -24,7 +24,7 @@
   const auth = getAuth(app);
   const db = getDatabase(app);
 
-  window.firebaseAuth = { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, db, ref, set, get };
+  window.firebaseAuth = { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, db, ref, set, get, push, update };
 </script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
@@ -37,6 +37,9 @@
   --cinza:#D1D5DB;
   --borda:#1E1E1E;
   --card:#0D0D0D;
+  --verde:#10b981;
+  --amarelo:#f59e0b;
+  --vermelho:#ef4444;
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
@@ -123,7 +126,6 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .loading{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:500;display:none;align-items:center;justify-content:center;font-size:12px}
 .loading.ativo{display:flex}
 
-/* COMO COMPRAR SECTION */
 .como-comprar{padding:20px 12px 40px;max-width:600px;margin:0 auto}
 .como-comprar-tit{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:4px}
 .como-comprar-tit h2{font-size:20px;font-weight:800}
@@ -144,6 +146,36 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .aviso-icon i{width:100%;height:100%;stroke:var(--roxo);fill:none;stroke-width:1.5}
 .aviso-texto{flex:1;font-size:9px;color:var(--cinza);line-height:1.5}
 .aviso-texto b{color:var(--roxo);display:block;margin-bottom:4px}
+
+.indicacao-card{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:0 0 20px rgba(139,92,246,.1)}
+.indicacao-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.indicacao-tit{font-size:12px;font-weight:800;color:var(--roxo);text-shadow:0 0 8px var(--roxo-neon)}
+.codigo-box{background:var(--bg);border:1px solid var(--roxo);border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.codigo-text{font-size:14px;font-weight:800;color:var(--roxo);letter-spacing:1px;text-shadow:0 0 8px var(--roxo-neon)}
+.btn-copiar{background:var(--roxo);border:none;border-radius:8px;padding:6px 12px;color:var(--branco);font-size:9px;font-weight:700;cursor:pointer;box-shadow:0 0 10px rgba(139,92,246,.4)}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.stat-item{background:var(--bg);border:1px solid var(--borda);border-radius:10px;padding:10px;text-align:center}
+.stat-num{font-size:16px;font-weight:800;color:var(--roxo);text-shadow:0 0 8px var(--roxo-neon)}
+.stat-label{font-size:8px;color:var(--cinza);margin-top:4px}
+.progress-bar{background:var(--bg);border:1px solid var(--borda);border-radius:10px;height:8px;overflow:hidden;margin-bottom:8px}
+.progress-fill{background:linear-gradient(90deg,var(--roxo-escuro),var(--roxo-neon));height:100%;box-shadow:0 0 10px var(--roxo-neon);transition:width.3s}
+.recompensa-item{background:var(--bg);border:1px solid var(--borda);border-radius:10px;padding:10px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.recompensa-icon{width:32px;height:32px;background:var(--roxo);border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px var(--roxo-neon)}
+.recompensa-icon i{width:18px;height:18px;stroke:var(--branco);fill:none;stroke-width:2}
+.recompensa-info{flex:1}
+.recompensa-tit{font-size:10px;font-weight:700;color:var(--branco);margin-bottom:2px}
+.recompensa-desc{font-size:8px;color:var(--cinza)}
+.badge{padding:3px 8px;border-radius:6px;font-size:8px;font-weight:700}
+.badge-pendente{background:rgba(245,158,11,.2);color:var(--amarelo)}
+.badge-confirmada{background:rgba(16,185,129,.2);color:var(--verde)}
+.badge-cancelada{background:rgba(239,68,68,.2);color:var(--vermelho)}
+.badge-invalida{background:rgba(107,114,128,.2);color:var(--cinza)}
+.indicacao-historico{max-height:300px;overflow-y:auto}
+.indicacao-item{background:var(--bg);border:1px solid var(--borda);border-radius:10px;padding:10px;margin-bottom:8px}
+.indicacao-item-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.indicacao-codigo{font-size:10px;font-weight:700;color:var(--roxo)}
+.indicacao-valor{font-size:9px;color:var(--cinza)}
+.indicacao-data{font-size:8px;color:var(--cinza)}
 </style>
 </head>
 <body>
@@ -254,11 +286,13 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 <div class="sidebar" id="sidebar">
   <div class="sidebar-tit">MENU</div>
   <div class="sidebar-item" onclick="ir('home');fecharMenu()"><i data-lucide="home"></i>Início</div>
+  <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
   <div class="sidebar-item" onclick="ir('faq');fecharMenu()"><i data-lucide="help-circle"></i>Dúvidas frequentes</div>
   <div class="sidebar-item" onclick="ir('termos');fecharMenu()"><i data-lucide="file-text"></i>Termos do site</div>
   <div class="sidebar-item" onclick="ir('teste');fecharMenu()"><i data-lucide="gift"></i>Teste grátis</div>
   <div class="sidebar-item" onclick="ir('premiacao');fecharMenu()"><i data-lucide="trophy"></i>Premiação</div>
   <div class="sidebar-item" onclick="abrirAdmin();fecharMenu()" id="menuAdmin" style="display:none"><i data-lucide="user-cog"></i>Adm</div>
+  <div class="sidebar-item" onclick="abrirAdminIndicacoes();fecharMenu()" id="menuAdminInd" style="display:none"><i data-lucide="clipboard-check"></i>Indicações Admin</div>
   <div class="sidebar-item" onclick="logout();fecharMenu()"><i data-lucide="log-out"></i>Sair</div>
 </div>
 
@@ -300,6 +334,9 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
     <div class="label">🔗 Link:</div>
     <input type="text" class="input" id="link" placeholder="Cole o link aqui">
 
+    <div class="label">🎁 Código de indicação (opcional):</div>
+    <input type="text" class="input" id="codigoIndicacao" placeholder="Ex: PREMIUM782">
+
     <div class="label">💵 Valor:</div>
     <div class="valor-box" id="valor">R$ 0,00</div>
 
@@ -308,12 +345,22 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
     <button class="btn" onclick="finalizar()">FAZER PEDIDO</button>
     <button class="btn btn-desc" onclick="toggleDesc()">VER DESCRIÇÃO</button>
 
-    <!-- IMAGENS ADICIONADAS -->
     <div style="margin-top:12px">
       <img src="https://i.postimg.cc/mD4vT9Tq/489c9325-7610-49c5-9e44-f2c21af7a9ba.jpg" style="width:100%;border-radius:12px;border:1px solid var(--borda);margin-bottom:8px;box-shadow:0 0 15px rgba(139,92,246,.2)">
       <img src="https://i.postimg.cc/cJRzkJQS/1f46ab4f-664c-489e-8713-57d456c48757.jpg" style="width:100%;border-radius:12px;border:1px solid var(--borda);box-shadow:0 0 15px rgba(139,92,246,.2)">
     </div>
   </div>
+</div>
+
+<div id="indicacoes" class="tela">
+  <div class="header">
+    <div class="header-left">
+      <div class="btn-voltar" onclick="ir('home')">←</div>
+    </div>
+    <div style="font-size:12px;font-weight:700">MINHAS INDICAÇÕES</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="indicacoesBody"></div>
 </div>
 
 <div id="admin" class="tela">
@@ -325,6 +372,17 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
     <div style="width:28px"></div>
   </div>
   <div class="container" id="adminBody"></div>
+</div>
+
+<div id="adminIndicacoes" class="tela">
+  <div class="header">
+    <div class="header-left">
+      <div class="btn-voltar" onclick="ir('home')">←</div>
+    </div>
+    <div style="font-size:12px;font-weight:700">INDICAÇÕES ADMIN</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="adminIndicacoesBody"></div>
 </div>
 
 <div id="faq" class="tela">
@@ -394,23 +452,54 @@ const EMAIL_ADM='nannyvittoriah@gmail.com',WHATSAPP='5598984853563';
 let db={
   cat:JSON.parse(localStorage.getItem('cat')||'[]'),
   serv:JSON.parse(localStorage.getItem('serv')||'[]'),
-  config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"Ao utilizar nosso painel, o usuário concorda automaticamente com todos os termos e condições abaixo.\\n\\n• Não garantimos resultados permanentes em serviços de redes sociais.\\n• O cliente é totalmente responsável pelo link enviado no pedido.\\n• Pedidos com links inválidos poderão ser cancelados sem aviso.\\n• Não realizamos reembolso após o início do serviço.\\n• O tempo de entrega pode variar conforme o serviço solicitado.\\n• Não aceitamos conteúdos ilegais, proibidos ou que violem políticas das plataformas.\\n• O uso do painel é de total responsabilidade do usuário.\\n• Alguns serviços podem sofrer quedas naturais após a entrega.\\n• O cliente concorda em utilizar o site de forma correta e sem tentativas de abuso ou spam.\\n• Alterações nos termos podem ocorrer a qualquer momento sem aviso prévio.\\n\\n💜 Ao continuar utilizando o painel, você concorda com todos os termos acima.","teste":{"desc":"Teste de Curtidas: São 10 curtidas grátis\\nTeste de Seguidores: São 30 seguidores grátis"},"premiacao":{"img":"","texto":""}}')
+  config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"Ao utilizar nosso painel, o usuário concorda automaticamente com todos os termos e condições abaixo.\\n\\n• Não garantimos resultados permanentes em serviços de redes sociais.\\n• O cliente é totalmente responsável pelo link enviado no pedido.\\n• Pedidos com links inválidos poderão ser cancelados sem aviso.\\n• Não realizamos reembolso após o início do serviço.\\n• O tempo de entrega pode variar conforme o serviço solicitado.\\n• Não aceitamos conteúdos ilegais, proibidos ou que violem políticas das plataformas.\\n• O uso do painel é de total responsabilidade do usuário.\\n• Alguns serviços podem sofrer quedas naturais após a entrega.\\n• O cliente concorda em utilizar o site de forma correta e sem tentativas de abuso ou spam.\\n• Alterações nos termos podem ocorrer a qualquer momento sem aviso prévio.\\n\\n💜 Ao continuar utilizando o painel, você concorda com todos os termos acima.","teste":{"desc":"Teste de Curtidas: São 10 curtidas grátis\\nTeste de Seguidores: São 30 seguidores grátis"},"premiacao":{"img":"","texto":""}}'),
+  indicacoes:JSON.parse(localStorage.getItem('indicacoes')||'[]'),
+  usuarios:JSON.parse(localStorage.getItem('usuarios')||'{}')
 };
 let logado=false,catSel=null,servSel=null,usuarioAtual=null;
 
-function save(){localStorage.setItem('cat',JSON.stringify(db.cat));localStorage.setItem('serv',JSON.stringify(db.serv));localStorage.setItem('config',JSON.stringify(db.config))}
+function save(){
+  localStorage.setItem('cat',JSON.stringify(db.cat));
+  localStorage.setItem('serv',JSON.stringify(db.serv));
+    localStorage.setItem('config',JSON.stringify(db.config));
+  localStorage.setItem('indicacoes',JSON.stringify(db.indicacoes));
+  localStorage.setItem('usuarios',JSON.stringify(db.usuarios));
+}
+
 function showLoad(show){document.getElementById('loading').classList.toggle('ativo',show)}
+
+function gerarCodigoIndicacao(nome){
+  const base=nome.toUpperCase().replace(/[^A-Z]/g,'').slice(0,6);
+  const num=Math.floor(Math.random()*900)+100;
+  return `${base||'USER'}${num}`;
+}
 
 window.addEventListener('load',()=>{
   lucide.createIcons();
   const { auth, onAuthStateChanged } = window.firebaseAuth;
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(auth, async(user) => {
     if(user){
       usuarioAtual={uid:user.uid,nome:user.displayName||user.email.split('@')[0],email:user.email,admin:user.email===EMAIL_ADM};
+
+      if(!db.usuarios[user.uid]){
+        db.usuarios[user.uid]={
+          codigo:gerarCodigoIndicacao(usuarioAtual.nome),
+          indicacoesValidas:0,
+          totalIndicacoes:0
+        };
+        save();
+      }
+      usuarioAtual.codigo=db.usuarios[user.uid].codigo;
+
       logado=true;
       document.getElementById('login').classList.remove('ativa');
       document.getElementById('home').classList.add('ativa');
-      if(usuarioAtual.admin) document.getElementById('menuAdmin').style.display='flex';
+
+      if(usuarioAtual.admin){
+        document.getElementById('menuAdmin').style.display='flex';
+        document.getElementById('menuAdminInd').style.display='flex';
+      }
+
       atualizarHeaderUsuario();
       renderHome();
     }else{
@@ -438,7 +527,7 @@ async function fazerLogin(){
   const email=document.getElementById('loginEmail').value.trim();
   const senha=document.getElementById('loginSenha').value;
   if(!email||!senha){alert('Preencha todos os campos');return}
-  
+
   showLoad(true);
   try{
     await signInWithEmailAndPassword(auth,email,senha);
@@ -454,11 +543,11 @@ async function fazerCadastro(){
   const email=document.getElementById('cadEmail').value.trim();
   const senha=document.getElementById('cadSenha').value;
   const senha2=document.getElementById('cadSenha2').value;
-  
+
   if(!nome||!email||!senha||!senha2){alert('Preencha todos os campos');return}
   if(senha!==senha2){alert('As senhas não coincidem');return}
   if(senha.length<6){alert('Senha deve ter no mínimo 6 caracteres');return}
-  
+
   showLoad(true);
   try{
     const cred = await createUserWithEmailAndPassword(auth,email,senha);
@@ -483,13 +572,22 @@ async function logout(){
 }
 
 function abrirPerfil(){
-  alert(`Nome: ${usuarioAtual.nome}\nE-mail: ${usuarioAtual.email}\n\nTipo: ${usuarioAtual.admin?'Administrador':'Cliente'}`);
+  alert(`Nome: ${usuarioAtual.nome}\nE-mail: ${usuarioAtual.email}\nCódigo: ${usuarioAtual.codigo}\n\nTipo: ${usuarioAtual.admin?'Administrador':'Cliente'}`);
 }
 
 function abrirMenu(){document.getElementById('sidebar').classList.add('ativo');document.getElementById('overlay').classList.add('ativo')}
 function fecharMenu(){document.getElementById('sidebar').classList.remove('ativo');document.getElementById('overlay').classList.remove('ativo')}
-function ir(t){document.querySelectorAll('.tela').forEach(e=>e.classList.remove('ativa'));document.getElementById(t).classList.add('ativa');if(t==='home')renderHome();if(t==='faq')
-renderFaq();if(t==='termos')renderTermos();if(t==='teste')renderTeste();if(t==='premiacao')renderPremiacao()}
+function ir(t){
+  document.querySelectorAll('.tela').forEach(e=>e.classList.remove('ativa'));
+  document.getElementById(t).classList.add('ativa');
+  if(t==='home')renderHome();
+  if(t==='faq')renderFaq();
+  if(t==='termos')renderTermos();
+  if(t==='teste')renderTeste();
+  if(t==='premiacao')renderPremiacao();
+  if(t==='indicacoes')renderIndicacoes();
+  if(t==='adminIndicacoes')renderAdminIndicacoes();
+}
 
 function abrirAdmin(){
   if(!usuarioAtual.admin){alert('Acesso negado. Apenas administradores.');return}
@@ -502,6 +600,12 @@ function abrirAdmin(){
   <button class="btn" onclick="formPremiacao()">🏆 PREMIAÇÃO</button>
   <button class="btn btn-red" onclick="ir('home')">VOLTAR</button>`;
   ir('admin');
+}
+
+function abrirAdminIndicacoes(){
+  if(!usuarioAtual.admin){alert('Acesso negado');return}
+  ir('adminIndicacoes');
+  renderAdminIndicacoes();
 }
 
 function toggleDrop(tipo){
@@ -538,27 +642,224 @@ function toggleDesc(){
 
 function finalizar(){
   if(!servSel){alert('Selecione um serviço');return}
-  let link=document.getElementById('link').value;
+  let link=document.getElementById('link').value.trim();
   if(!link){alert('Cole o link');return}
   const s=db.serv.find(x=>x.k===servSel);
+  const codigoInd=document.getElementById('codigoIndicacao').value.trim().toUpperCase();
   const data=new Date().toLocaleDateString('pt-BR');
-  const msg=`━━━━━━━━━━
-💜 PREMIUM STORE
+  const pedidoId='#'+Date.now().toString().slice(-5);
+
+  if(codigoInd){
+    const existe=db.indicacoes.find(i=>i.codigo===codigoInd&&i.pedidoId===pedidoId);
+    if(existe){alert('Este código já foi usado neste pedido');return}
+
+    db.indicacoes.push({
+      id:'i'+Date.now(),
+      codigo:codigoInd,
+      pedidoId,
+      servico:s.nome,
+      valor:s.preco,
+      link,
+      cliente:usuarioAtual.email,
+      data:new Date().toISOString(),
+      status:'pendente'
+    });
+    save();
+  }
+
+  let msg=`━━━━━━━━━━
+🚀 NOVO PEDIDO
 ━━━━━━━━━━
 
-🚀 Novo pedido realizado
-
-👤 Cliente: ${usuarioAtual.nome}
-📧 E-mail: ${usuarioAtual.email}
-
+🆔 Pedido: ${pedidoId}
 📦 Serviço: ${s.nome}
-💰 Valor: R$ ${s.preco.toFixed(2).replace('.',',')}
-🔗 Link: ${link}
-📆 Data: ${data}
+💵 Valor: R$ ${s.preco.toFixed(2).replace('.',',')}
+🔗 Link: ${link}`;
 
-📌 Status: Em análise
-━━━━━━━━━━`;
+  if(codigoInd){
+    msg+=`\n\n🎁 Código de indicação:\n${codigoInd}`;
+  }
+
+  msg+=`\n\n📌 Status:\nAguardando confirmação\n━━━━━━━━━━`;
+
   window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
+  document.getElementById('link').value='';
+  document.getElementById('codigoIndicacao').value='';
+  alert('Pedido enviado! Aguarde confirmação no WhatsApp.');
+}
+
+function renderIndicacoes(){
+  const minhas=db.indicacoes.filter(i=>i.codigo===usuarioAtual.codigo);
+  const validas=minhas.filter(i=>i.status==='confirmada').length;
+  const pendentes=minhas.filter(i=>i.status==='pendente').length;
+  const canceladas=minhas.filter(i=>i.status==='cancelada'||i.status==='invalida').length;
+
+  const proxMeta=validas<5?5:validas<10?10:validas<20?20:20;
+  const progresso=Math.min((validas/proxMeta)*100,100);
+
+  let recompensa='';
+  if(validas>=20)recompensa='🏆 PRÊMIO PREMIUM DESBLOQUEADO';
+  else if(validas>=10)recompensa='🎁 1000 SEGUIDORES DESBLOQUEADO';
+  else if(validas>=5)recompensa='✨ 300 SEGUIDORES DESBLOQUEADO';
+
+  const historico=[...minhas].reverse().map(i=>`
+    <div class="indicacao-item">
+      <div class="indicacao-item-top">
+        <div class="indicacao-codigo">${i.servico}</div>
+        <span class="badge badge-${i.status}">${i.status==='pendente'?'⏳ Pendente':i.status==='confirmada'?'✅ Confirmada':i.status==='cancelada'?'❌ Cancelada':'🚫 Inválida'}</span>
+      </div>
+      <div class="indicacao-valor">R$ ${i.valor.toFixed(2).replace('.',',')} - ${new Date(i.data).toLocaleDateString('pt-BR')}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('indicacoesBody').innerHTML=`
+    <div class="indicacao-card">
+      <div class="indicacao-header">
+        <div class="indicacao-tit">🎁 SEU CÓDIGO</div>
+      </div>
+      <div class="codigo-box">
+        <div class="codigo-text">${usuarioAtual.codigo}</div>
+        <button class="btn-copiar" onclick="copiarCodigo()">COPIAR</button>
+      </div>
+      <button class="btn" onclick="compartilharConvite()">📤 COMPARTILHAR CONVITE</button>
+    </div>
+
+    <div class="indicacao-card">
+      <div class="indicacao-header">
+        <div class="indicacao-tit">📊 ESTATÍSTICAS</div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-num">${validas}</div>
+          <div class="stat-label">Válidas</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">${pendentes}</div>
+          <div class="stat-label">Pendentes</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">${canceladas}</div>
+          <div class="stat-label">Canceladas</div>
+        </div>
+      </div>
+
+      <div style="font-size:9px;color:var(--cinza);margin-bottom:6px">Progresso: ${validas}/${proxMeta}</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${progresso}%"></div></div>
+      ${recompensa?`<div style="font-size:9px;color:var(--verde);text-align:center;margin-top:8px">${recompensa}</div>`:''}
+    </div>
+
+    <div class="indicacao-card">
+      <div class="indicacao-header">
+        <div class="indicacao-tit">🎯 RECOMPENSAS</div>
+      </div>
+      <div class="recompensa-item">
+        <div class="recompensa-icon"><i data-lucide="zap"></i></div>
+        <div class="recompensa-info">
+          <div class="recompensa-tit">5 Compras Válidas</div>
+          <div class="recompensa-desc">Ganhe 300 seguidores grátis</div>
+        </div>
+        ${validas>=5?'<span class="badge badge-confirmada">✅</span>':''}
+      </div>
+      <div class="recompensa-item">
+        <div class="recompensa-icon"><i data-lucide="star"></i></div>
+        <div class="recompensa-info">
+          <div class="recompensa-tit">10 Compras Válidas</div>
+          <div class="recompensa-desc">Ganhe 1000 seguidores grátis</div>
+        </div>
+        ${validas>=10?'<span class="badge badge-confirmada">✅</span>':''}
+      </div>
+      <div class="recompensa-item">
+        <div class="recompensa-icon"><i data-lucide="crown"></i></div>
+        <div class="recompensa-info">
+          <div class="recompensa-tit">20 Compras Válidas</div>
+          <div class="recompensa-desc">Prêmio Premium Exclusivo</div>
+        </div>
+        ${validas>=20?'<span class="badge badge-confirmada">✅</span>':''}
+      </div>
+    </div>
+
+    <div class="indicacao-card">
+      <div class="indicacao-header">
+        <div class="indicacao-tit">📋 HISTÓRICO</div>
+      </div>
+      <div class="indicacao-historico">
+        ${historico||'<div class="empty">Nenhuma indicação ainda</div>'}
+      </div>
+    </div>
+  `;
+  lucide.createIcons();
+}
+
+function copiarCodigo(){
+  navigator.clipboard.writeText(usuarioAtual.codigo);
+  alert('Código copiado: '+usuarioAtual.codigo);
+}
+
+function compartilharConvite(){
+  const msg=`🚀 PREMIUM STORE\n\nUse meu código de indicação: ${usuarioAtual.codigo}\n\nGanhe vantagens exclusivas! 💜`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+function renderAdminIndicacoes(){
+  const lista=[...db.indicacoes].reverse().map(i=>`
+    <div class="indicacao-item">
+      <div class="indicacao-item-top">
+        <div class="indicacao-codigo">🎁 ${i.codigo}</div>
+        <span class="badge badge-${i.status}">${i.status==='pendente'?'⏳ Pendente':i.status==='confirmada'?'✅ Confirmada':i.status==='cancelada'?'❌ Cancelada':'🚫 Inválida'}</span>
+      </div>
+      <div class="lista-info">
+        Pedido: ${i.pedidoId}<br>
+        Serviço: ${i.servico}<br>
+        Valor: R$ ${i.valor.toFixed(2).replace('.',',')}<br>
+        Cliente: ${i.cliente}<br>
+        Data: ${new Date(i.data).toLocaleString('pt-BR')}
+      </div>
+      ${i.status==='pendente'?`
+      <div class="lista-acoes" style="margin-top:8px">
+        <button class="btn-mini btn-edit" onclick="aprovarIndicacao('${i.id}')">✅ APROVAR</button>
+        <button class="btn-mini btn-del" onclick="cancelarIndicacao('${i.id}')">❌ CANCELAR</button>
+        <button class="btn-mini" style="background:var(--cinza)" onclick="invalidarIndicacao('${i.id}')">🚫 INVÁLIDA</button>
+      </div>`:''}
+    </div>
+  `).join('');
+
+  document.getElementById('adminIndicacoesBody').innerHTML=`
+    <div class="titulo">INDICAÇÕES PENDENTES</div>
+    ${lista||'<div class="empty">Nenhuma indicação</div>'}
+  `;
+}
+
+function aprovarIndicacao(id){
+  if(confirm('Aprovar esta indicação?')){
+    const ind=db.indicacoes.find(i=>i.id===id);
+    ind.status='confirmada';
+
+    for(let uid in db.usuarios){
+      if(db.usuarios[uid].codigo===ind.codigo){
+        db.usuarios[uid].indicacoesValidas=(db.usuarios[uid].indicacoesValidas||0)+1;
+        db.usuarios[uid].totalIndicacoes=(db.usuarios[uid].totalIndicacoes||0)+1;
+      }
+    }
+    save();
+    renderAdminIndicacoes();
+    alert('Indicação aprovada!');
+  }
+}
+
+function cancelarIndicacao(id){
+  if(confirm('Cancelar esta indicação?')){
+    db.indicacoes.find(i=>i.id===id).status='cancelada';
+    save();
+    renderAdminIndicacoes();
+  }
+}
+
+function invalidarIndicacao(id){
+  if(confirm('Marcar como inválida?')){
+    db.indicacoes.find(i=>i.id===id).status='invalida';
+    save();
+    renderAdminIndicacoes();
+  }
 }
 
 function enviarTeste(){
@@ -769,4 +1070,4 @@ document.addEventListener('click',e=>{
 </script>
 
 </body>
-</html>
+<html>
