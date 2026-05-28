@@ -126,7 +126,6 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .loading{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:500;display:none;align-items:center;justify-content:center;font-size:12px}
 .loading.ativo{display:flex}
 
-/* COMO COMPRAR SECTION */
 .como-comprar{padding:20px 12px 40px;max-width:600px;margin:0 auto}
 .como-comprar-tit{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:4px}
 .como-comprar-tit h2{font-size:20px;font-weight:800}
@@ -148,7 +147,6 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .aviso-texto{flex:1;font-size:9px;color:var(--cinza);line-height:1.5}
 .aviso-texto b{color:var(--roxo);display:block;margin-bottom:4px}
 
-/* SISTEMA DE INDICAÇÃO */
 .indicacao-card{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:0 0 20px rgba(139,92,246,.1)}
 .indicacao-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .indicacao-tit{font-size:12px;font-weight:800;color:var(--roxo);text-shadow:0 0 8px var(--roxo-neon)}
@@ -449,8 +447,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 </div>
 
 <script>
-const EMAIL_ADM='nannyvittoriah@gmail.com',
-WHATSAPP='5598984853563';
+const EMAIL_ADM='nannyvittoriah@gmail.com',WHATSAPP='5598984853563';
 
 let db={
   cat:JSON.parse(localStorage.getItem('cat')||'[]'),
@@ -464,7 +461,7 @@ let logado=false,catSel=null,servSel=null,usuarioAtual=null;
 function save(){
   localStorage.setItem('cat',JSON.stringify(db.cat));
   localStorage.setItem('serv',JSON.stringify(db.serv));
-  localStorage.setItem('config',JSON.stringify(db.config));
+    localStorage.setItem('config',JSON.stringify(db.config));
   localStorage.setItem('indicacoes',JSON.stringify(db.indicacoes));
   localStorage.setItem('usuarios',JSON.stringify(db.usuarios));
 }
@@ -483,7 +480,7 @@ window.addEventListener('load',()=>{
   onAuthStateChanged(auth, async(user) => {
     if(user){
       usuarioAtual={uid:user.uid,nome:user.displayName||user.email.split('@')[0],email:user.email,admin:user.email===EMAIL_ADM};
-      
+
       if(!db.usuarios[user.uid]){
         db.usuarios[user.uid]={
           codigo:gerarCodigoIndicacao(usuarioAtual.nome),
@@ -493,14 +490,16 @@ window.addEventListener('load',()=>{
         save();
       }
       usuarioAtual.codigo=db.usuarios[user.uid].codigo;
-      
+
       logado=true;
       document.getElementById('login').classList.remove('ativa');
       document.getElementById('home').classList.add('ativa');
+
       if(usuarioAtual.admin){
         document.getElementById('menuAdmin').style.display='flex';
         document.getElementById('menuAdminInd').style.display='flex';
       }
+
       atualizarHeaderUsuario();
       renderHome();
     }else{
@@ -528,7 +527,7 @@ async function fazerLogin(){
   const email=document.getElementById('loginEmail').value.trim();
   const senha=document.getElementById('loginSenha').value;
   if(!email||!senha){alert('Preencha todos os campos');return}
-  
+
   showLoad(true);
   try{
     await signInWithEmailAndPassword(auth,email,senha);
@@ -544,11 +543,11 @@ async function fazerCadastro(){
   const email=document.getElementById('cadEmail').value.trim();
   const senha=document.getElementById('cadSenha').value;
   const senha2=document.getElementById('cadSenha2').value;
-  
+
   if(!nome||!email||!senha||!senha2){alert('Preencha todos os campos');return}
   if(senha!==senha2){alert('As senhas não coincidem');return}
   if(senha.length<6){alert('Senha deve ter no mínimo 6 caracteres');return}
-  
+
   showLoad(true);
   try{
     const cred = await createUserWithEmailAndPassword(auth,email,senha);
@@ -603,6 +602,12 @@ function abrirAdmin(){
   ir('admin');
 }
 
+function abrirAdminIndicacoes(){
+  if(!usuarioAtual.admin){alert('Acesso negado');return}
+  ir('adminIndicacoes');
+  renderAdminIndicacoes();
+}
+
 function toggleDrop(tipo){
   document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('ativo'));
   document.getElementById(tipo+'Drop').classList.toggle('ativo');
@@ -643,11 +648,11 @@ function finalizar(){
   const codigoInd=document.getElementById('codigoIndicacao').value.trim().toUpperCase();
   const data=new Date().toLocaleDateString('pt-BR');
   const pedidoId='#'+Date.now().toString().slice(-5);
-  
+
   if(codigoInd){
     const existe=db.indicacoes.find(i=>i.codigo===codigoInd&&i.pedidoId===pedidoId);
     if(existe){alert('Este código já foi usado neste pedido');return}
-    
+
     db.indicacoes.push({
       id:'i'+Date.now(),
       codigo:codigoInd,
@@ -661,7 +666,7 @@ function finalizar(){
     });
     save();
   }
-  
+
   let msg=`━━━━━━━━━━
 🚀 NOVO PEDIDO
 ━━━━━━━━━━
@@ -670,13 +675,13 @@ function finalizar(){
 📦 Serviço: ${s.nome}
 💵 Valor: R$ ${s.preco.toFixed(2).replace('.',',')}
 🔗 Link: ${link}`;
-  
+
   if(codigoInd){
     msg+=`\n\n🎁 Código de indicação:\n${codigoInd}`;
   }
-  
+
   msg+=`\n\n📌 Status:\nAguardando confirmação\n━━━━━━━━━━`;
-  
+
   window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
   document.getElementById('link').value='';
   document.getElementById('codigoIndicacao').value='';
@@ -688,16 +693,16 @@ function renderIndicacoes(){
   const validas=minhas.filter(i=>i.status==='confirmada').length;
   const pendentes=minhas.filter(i=>i.status==='pendente').length;
   const canceladas=minhas.filter(i=>i.status==='cancelada'||i.status==='invalida').length;
-  
+
   const proxMeta=validas<5?5:validas<10?10:validas<20?20:20;
   const progresso=Math.min((validas/proxMeta)*100,100);
-  
+
   let recompensa='';
   if(validas>=20)recompensa='🏆 PRÊMIO PREMIUM DESBLOQUEADO';
   else if(validas>=10)recompensa='🎁 1000 SEGUIDORES DESBLOQUEADO';
   else if(validas>=5)recompensa='✨ 300 SEGUIDORES DESBLOQUEADO';
-  
-  const historico=minhas.reverse().map(i=>`
+
+  const historico=[...minhas].reverse().map(i=>`
     <div class="indicacao-item">
       <div class="indicacao-item-top">
         <div class="indicacao-codigo">${i.servico}</div>
@@ -706,7 +711,7 @@ function renderIndicacoes(){
       <div class="indicacao-valor">R$ ${i.valor.toFixed(2).replace('.',',')} - ${new Date(i.data).toLocaleDateString('pt-BR')}</div>
     </div>
   `).join('');
-  
+
   document.getElementById('indicacoesBody').innerHTML=`
     <div class="indicacao-card">
       <div class="indicacao-header">
@@ -718,7 +723,7 @@ function renderIndicacoes(){
       </div>
       <button class="btn" onclick="compartilharConvite()">📤 COMPARTILHAR CONVITE</button>
     </div>
-    
+
     <div class="indicacao-card">
       <div class="indicacao-header">
         <div class="indicacao-tit">📊 ESTATÍSTICAS</div>
@@ -737,12 +742,12 @@ function renderIndicacoes(){
           <div class="stat-label">Canceladas</div>
         </div>
       </div>
-      
+
       <div style="font-size:9px;color:var(--cinza);margin-bottom:6px">Progresso: ${validas}/${proxMeta}</div>
       <div class="progress-bar"><div class="progress-fill" style="width:${progresso}%"></div></div>
       ${recompensa?`<div style="font-size:9px;color:var(--verde);text-align:center;margin-top:8px">${recompensa}</div>`:''}
     </div>
-    
+
     <div class="indicacao-card">
       <div class="indicacao-header">
         <div class="indicacao-tit">🎯 RECOMPENSAS</div>
@@ -772,7 +777,7 @@ function renderIndicacoes(){
         ${validas>=20?'<span class="badge badge-confirmada">✅</span>':''}
       </div>
     </div>
-    
+
     <div class="indicacao-card">
       <div class="indicacao-header">
         <div class="indicacao-tit">📋 HISTÓRICO</div>
@@ -795,13 +800,8 @@ function compartilharConvite(){
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
-function abrirAdminIndicacoes(){
-  if(!usuarioAtual.admin){alert('Acesso negado');return}
-  ir('adminIndicacoes');
-}
-
 function renderAdminIndicacoes(){
-  const lista=db.indicacoes.reverse().map(i=>`
+  const lista=[...db.indicacoes].reverse().map(i=>`
     <div class="indicacao-item">
       <div class="indicacao-item-top">
         <div class="indicacao-codigo">🎁 ${i.codigo}</div>
@@ -822,7 +822,7 @@ function renderAdminIndicacoes(){
       </div>`:''}
     </div>
   `).join('');
-  
+
   document.getElementById('adminIndicacoesBody').innerHTML=`
     <div class="titulo">INDICAÇÕES PENDENTES</div>
     ${lista||'<div class="empty">Nenhuma indicação</div>'}
@@ -833,7 +833,7 @@ function aprovarIndicacao(id){
   if(confirm('Aprovar esta indicação?')){
     const ind=db.indicacoes.find(i=>i.id===id);
     ind.status='confirmada';
-    
+
     for(let uid in db.usuarios){
       if(db.usuarios[uid].codigo===ind.codigo){
         db.usuarios[uid].indicacoesValidas=(db.usuarios[uid].indicacoesValidas||0)+1;
