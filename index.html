@@ -695,7 +695,7 @@ function abrirPedidos(){
   renderPedidos();
 }
 
-function renderPedidos(filtro='todos'){
+function renderPedidos(filtro='todos',buscaId=''){
   const hoje=new Date().toLocaleDateString('pt-BR');
   const pedidosHoje=db.pedidos.filter(p=>new Date(p.data).toLocaleDateString('pt-BR')===hoje);
   const pendentes=db.pedidos.filter(p=>p.status==='pendente').length;
@@ -704,7 +704,16 @@ function renderPedidos(filtro='todos'){
   const faturamento=db.pedidos.filter(p=>p.status==='confirmado').reduce((t,p)=>t+p.valor,0);
 
   let pedidosFiltrados=db.pedidos;
-  if(filtro!=='todos')pedidosFiltrados=db.pedidos.filter(p=>p.status===filtro);
+
+  if(filtro!=='todos')pedidosFiltrados=pedidosFiltrados.filter(p=>p.status===filtro);
+
+  if(buscaId){
+    buscaId=buscaId.toLowerCase().trim();
+    pedidosFiltrados=pedidosFiltrados.filter(p=>
+      p.id.toLowerCase().includes(buscaId) ||
+      p.email.toLowerCase().includes(buscaId)
+    );
+  }
 
   const lista=[...pedidosFiltrados].reverse().map(p=>`
     <div class="lista-item">
@@ -748,6 +757,12 @@ function renderPedidos(filtro='todos'){
       </div>
     </div>
 
+    <div class="label">🔍 BUSCAR PEDIDO:</div>
+    <div style="display:flex;gap:6px;margin-bottom:12px">
+      <input type="text" class="input" id="buscaPedidoId" placeholder="Digite ID ou email do cliente" value="${buscaId}" style="margin:0;flex:1">
+      <button class="btn-mini btn-edit" onclick="buscarPedido()" style="width:80px">BUSCAR</button>
+    </div>
+
     <div class="label">🔍 FILTRAR POR:</div>
     <div style="display:flex;gap:6px;margin-bottom:12px">
       <button class="btn-mini ${filtro==='todos'?'btn-edit':''}" onclick="renderPedidos('todos')">TODOS</button>
@@ -756,9 +771,14 @@ function renderPedidos(filtro='todos'){
       <button class="btn-mini ${filtro==='cancelado'?'btn-edit':''}" onclick="renderPedidos('cancelado')">CANCELADOS</button>
     </div>
 
-    <div class="titulo">LISTA DE PEDIDOS</div>
-    ${lista||'<div class="empty">Nenhum pedido ainda</div>'}
+    <div class="titulo">LISTA DE PEDIDOS ${buscaId?`- Busca: "${buscaId}"`:''}</div>
+    ${lista||'<div class="empty">Nenhum pedido encontrado</div>'}
   `;
+}
+
+function buscarPedido(){
+  const busca=document.getElementById('buscaPedidoId').value;
+  renderPedidos('todos',busca);
 }
 
 function aprovarPedido(id){
@@ -1082,7 +1102,7 @@ function renderIndicacoes(){
     </div>
 
     <div class="indicacao-card">
-      <div class="indicacao-header">
+            <div class="indicacao-header">
         <div class="indicacao-tit">🎯 RECOMPENSAS</div>
       </div>
       <div class="recompensa-item">
@@ -1099,7 +1119,7 @@ function renderIndicacoes(){
           <div class="recompensa-tit">10 Compras Válidas</div>
           <div class="recompensa-desc">Ganhe 1000 seguidores grátis</div>
         </div>
-                ${validas>=10?'<span class="badge badge-confirmada">✅</span>':''}
+        ${validas>=10?'<span class="badge badge-confirmada">✅</span>':''}
       </div>
       <div class="recompensa-item">
         <div class="recompensa-icon"><i data-lucide="crown"></i></div>
