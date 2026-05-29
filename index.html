@@ -176,6 +176,21 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .indicacao-codigo{font-size:10px;font-weight:700;color:var(--roxo)}
 .indicacao-valor{font-size:9px;color:var(--cinza)}
 .indicacao-data{font-size:8px;color:var(--cinza)}
+
+.comprovante-item{background:var(--card);border:1px solid var(--borda);border-radius:12px;padding:12px;margin-bottom:10px}
+.comprovante-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.comprovante-id{font-size:10px;font-weight:800;color:var(--roxo)}
+.comprovante-data{font-size:8px;color:var(--cinza)}
+.comprovante-info{font-size:9px;color:var(--cinza);line-height:1.6}
+.comprovante-info b{color:var(--branco)}
+
+.suporte-card{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:16px;margin-bottom:12px;text-align:center}
+.suporte-icon{width:60px;height:60px;margin:0 auto 12px;background:var(--roxo);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px var(--roxo-neon)}
+.suporte-icon i{width:30px;height:30px;stroke:var(--branco);fill:none;stroke-width:2}
+.suporte-tit{font-size:14px;font-weight:800;margin-bottom:8px;color:var(--branco)}
+.suporte-desc{font-size:9px;color:var(--cinza);line-height:1.6;margin-bottom:16px}
+.suporte-horario{background:var(--bg);border:1px solid var(--borda);border-radius:10px;padding:10px;font-size:9px;color:var(--cinza);margin-bottom:12px}
+.suporte-horario b{color:var(--roxo);display:block;margin-bottom:4px}
 </style>
 </head>
 <body>
@@ -287,6 +302,8 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
   <div class="sidebar-tit">MENU</div>
   <div class="sidebar-item" onclick="ir('home');fecharMenu()"><i data-lucide="home"></i>Início</div>
   <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
+  <div class="sidebar-item" onclick="ir('comprovantes');fecharMenu()"><i data-lucide="receipt"></i>Meus comprovantes</div>
+  <div class="sidebar-item" onclick="ir('suporte');fecharMenu()"><i data-lucide="headphones"></i>Suporte</div>
   <div class="sidebar-item" onclick="ir('faq');fecharMenu()"><i data-lucide="help-circle"></i>Dúvidas frequentes</div>
   <div class="sidebar-item" onclick="ir('termos');fecharMenu()"><i data-lucide="file-text"></i>Termos do site</div>
   <div class="sidebar-item" onclick="ir('teste');fecharMenu()"><i data-lucide="gift"></i>Teste grátis</div>
@@ -363,6 +380,28 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
   <div class="container" id="indicacoesBody"></div>
 </div>
 
+<div id="comprovantes" class="tela">
+  <div class="header">
+    <div class="header-left">
+      <div class="btn-voltar" onclick="ir('home')">←</div>
+    </div>
+    <div style="font-size:12px;font-weight:700">MEUS COMPROVANTES</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="comprovantesBody"></div>
+</div>
+
+<div id="suporte" class="tela">
+  <div class="header">
+    <div class="header-left">
+      <div class="btn-voltar" onclick="ir('home')">←</div>
+    </div>
+    <div style="font-size:12px;font-weight:700">SUPORTE</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="suporteBody"></div>
+</div>
+
 <div id="admin" class="tela">
   <div class="header">
     <div class="header-left">
@@ -408,7 +447,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 </div>
 
 <div id="teste" class="tela">
-  <div class="header">
+    <div class="header">
     <div class="header-left">
       <div class="btn-voltar" onclick="ir('home')">←</div>
     </div>
@@ -417,13 +456,13 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
   </div>
   <div class="container">
     <div id="testeDescBox" class="info-teste"></div>
-    
+
     <div class="label">❤️ Link para Curtidas:</div>
     <input type="text" class="input" id="testeLinkCurtidas" placeholder="Cole o link do post aqui">
-    
+
     <div class="label">👥 Link para Seguidores:</div>
     <input type="text" class="input" id="testeLinkSeguidores" placeholder="Cole o link do perfil aqui">
-    
+
     <button class="btn" onclick="enviarTeste()">ENVIAR TESTE GRÁTIS</button>
   </div>
 </div>
@@ -451,10 +490,11 @@ const EMAIL_ADM='nannyvittoriah@gmail.com',WHATSAPP='5598984853563';
 
 let db={
   cat:JSON.parse(localStorage.getItem('cat')||'[]'),
-    serv:JSON.parse(localStorage.getItem('serv')||'[]'),
+  serv:JSON.parse(localStorage.getItem('serv')||'[]'),
   config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"Ao utilizar nosso painel, o usuário concorda automaticamente com todos os termos e condições abaixo.\\n\\n• Não garantimos resultados permanentes em serviços de redes sociais.\\n• O cliente é totalmente responsável pelo link enviado no pedido.\\n• Pedidos com links inválidos poderão ser cancelados sem aviso.\\n• Não realizamos reembolso após o início do serviço.\\n• O tempo de entrega pode variar conforme o serviço solicitado.\\n• Não aceitamos conteúdos ilegais, proibidos ou que violem políticas das plataformas.\\n• O uso do painel é de total responsabilidade do usuário.\\n• Alguns serviços podem sofrer quedas naturais após a entrega.\\n• O cliente concorda em utilizar o site de forma correta e sem tentativas de abuso ou spam.\\n• Alterações nos termos podem ocorrer a qualquer momento sem aviso prévio.\\n\\n💜 Ao continuar utilizando o painel, você concorda com todos os termos acima.","teste":{"desc":"Teste de Curtidas: São 10 curtidas grátis\\nTeste de Seguidores: São 30 seguidores grátis"},"premiacao":{"img":"","texto":""}}'),
   indicacoes:JSON.parse(localStorage.getItem('indicacoes')||'[]'),
-  usuarios:JSON.parse(localStorage.getItem('usuarios')||'{}')
+  usuarios:JSON.parse(localStorage.getItem('usuarios')||'{}'),
+  pedidos:JSON.parse(localStorage.getItem('pedidos')||'[]')
 };
 let logado=false,catSel=null,servSel=null,usuarioAtual=null;
 
@@ -464,6 +504,7 @@ function save(){
   localStorage.setItem('config',JSON.stringify(db.config));
   localStorage.setItem('indicacoes',JSON.stringify(db.indicacoes));
   localStorage.setItem('usuarios',JSON.stringify(db.usuarios));
+  localStorage.setItem('pedidos',JSON.stringify(db.pedidos));
 }
 
 function showLoad(show){document.getElementById('loading').classList.toggle('ativo',show)}
@@ -587,6 +628,8 @@ function ir(t){
   if(t==='premiacao')renderPremiacao();
   if(t==='indicacoes')renderIndicacoes();
   if(t==='adminIndicacoes')renderAdminIndicacoes();
+  if(t==='comprovantes')renderComprovantes();
+  if(t==='suporte')renderSuporte();
 }
 
 function abrirAdmin(){
@@ -649,6 +692,18 @@ function finalizar(){
   const data=new Date().toLocaleDateString('pt-BR');
   const pedidoId='#'+Date.now().toString().slice(-5);
 
+  db.pedidos.push({
+    id:pedidoId,
+    uid:usuarioAtual.uid,
+    email:usuarioAtual.email,
+    servico:s.nome,
+    valor:s.preco,
+    link,
+    codigoIndicacao:codigoInd||null,
+    data:new Date().toISOString(),
+    status:'pendente'
+  });
+
   if(codigoInd){
     const existe=db.indicacoes.find(i=>i.codigo===codigoInd&&i.pedidoId===pedidoId);
     if(existe){alert('Este código já foi usado neste pedido');return}
@@ -664,8 +719,8 @@ function finalizar(){
       data:new Date().toISOString(),
       status:'pendente'
     });
-    save();
   }
+  save();
 
   let msg=`━━━━━━━━━━
 🚀 NOVO PEDIDO
@@ -686,6 +741,62 @@ function finalizar(){
   document.getElementById('link').value='';
   document.getElementById('codigoIndicacao').value='';
   alert('Pedido enviado! Aguarde confirmação no WhatsApp.');
+}
+
+function renderComprovantes(){
+  const meus=db.pedidos.filter(p=>p.uid===usuarioAtual.uid).reverse();
+  const lista=meus.map(p=>`
+    <div class="comprovante-item">
+      <div class="comprovante-top">
+        <div class="comprovante-id">${p.id}</div>
+        <div class="comprovante-data">${new Date(p.data).toLocaleDateString('pt-BR')}</div>
+      </div>
+      <div class="comprovante-info">
+        <b>Serviço:</b> ${p.servico}<br>
+        <b>Valor:</b> R$ ${p.valor.toFixed(2).replace('.',',')}<br>
+        <b>Link:</b> ${p.link}<br>
+        ${p.codigoIndicacao?`<b>Código usado:</b> ${p.codigoIndicacao}<br>`:''}
+        <b>Status:</b> ${p.status==='pendente'?'⏳ Pendente':p.status==='confirmado'?'✅ Confirmado':'❌ Cancelado'}
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('comprovantesBody').innerHTML=lista||'<div class="empty">Nenhum comprovante ainda</div>';
+}
+
+function renderSuporte(){
+  document.getElementById('suporteBody').innerHTML=`
+    <div class="suporte-card">
+      <div class="suporte-icon"><i data-lucide="message-circle"></i></div>
+      <div class="suporte-tit">FALE CONOSCO</div>
+      <div class="suporte-desc">Precisa de ajuda? Nossa equipe está pronta para te atender via WhatsApp.</div>
+      <div class="suporte-horario">
+        <b>⏰ Horário de atendimento:</b>
+        Segunda a Sexta: 09h às 18h<br>
+        Sábado: 09h às 12h<br>
+        Domingo: Fechado
+      </div>
+      <button class="btn" onclick="window.open('https://wa.me/${WHATSAPP}?text=Olá, preciso de suporte!','_blank')">
+        <i data-lucide="send" style="width:14px;height:14px;margin-right:6px"></i>
+        CHAMAR NO WHATSAPP
+      </button>
+    </div>
+
+    <div class="suporte-card">
+      <div class="suporte-icon"><i data-lucide="help-circle"></i></div>
+      <div class="suporte-tit">DÚVIDAS FREQUENTES</div>
+      <div class="suporte-desc">Antes de chamar, veja se sua dúvida já foi respondida na nossa central de ajuda.</div>
+      <button class="btn btn-sec" onclick="ir('faq')">VER DÚVIDAS FREQUENTES</button>
+    </div>
+
+    <div class="suporte-card">
+      <div class="suporte-icon"><i data-lucide="file-text"></i></div>
+      <div class="suporte-tit">TERMOS E CONDIÇÕES</div>
+      <div class="suporte-desc">Leia nossos termos de uso e política de reembolso antes de fazer seu pedido.</div>
+      <button class="btn btn-sec" onclick="ir('termos')">LER TERMOS DO SITE</button>
+    </div>
+  `;
+  lucide.createIcons();
 }
 
 function renderIndicacoes(){
