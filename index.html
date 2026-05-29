@@ -6,7 +6,7 @@
 <title>Premium Store</title>
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
   import { getDatabase, ref, set, get, push, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
   const firebaseConfig = {
@@ -24,7 +24,7 @@
   const auth = getAuth(app);
   const db = getDatabase(app);
 
-  window.firebaseAuth = { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, db, ref, set, get, push, update };
+  window.firebaseAuth = { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail, db, ref, set, get, push, update };
 </script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
@@ -643,8 +643,34 @@ async function fazerCadastro(){
   showLoad(false);
 }
 
-function abrirEsqueciSenha(){
-  alert('Recuperação de senha via Firebase será enviada por e-mail.\n\nFuncionalidade em desenvolvimento.');
+async function abrirEsqueciSenha(){
+  const email = prompt('Digite seu e-mail cadastrado:');
+  
+  if(!email){
+    alert('Cancelado');
+    return;
+  }
+  
+  if(!email.includes('@')){
+    alert('E-mail inválido');
+    return;
+  }
+  
+  showLoad(true);
+  try{
+    const { auth, sendPasswordResetEmail } = window.firebaseAuth;
+    await sendPasswordResetEmail(auth, email);
+    alert('✅ E-mail enviado!\n\nVerifica sua caixa de entrada e spam.\nClica no link pra criar uma nova senha.');
+  }catch(e){
+    if(e.code === 'auth/user-not-found'){
+      alert('❌ E-mail não encontrado no sistema');
+    }else if(e.code === 'auth/invalid-email'){
+      alert('❌ E-mail inválido');
+    }else{
+      alert('Erro: ' + e.message);
+    }
+  }
+  showLoad(false);
 }
 
 async function logout(){
