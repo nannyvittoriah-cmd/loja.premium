@@ -1,271 +1,322 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bonyx Store - Loja de Itens Mobile</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      :root {
-        font-family: 'Inter', sans-serif;
-        background: #0a0a0f;
-        color: #fff;
-      }
-      .loja {
-        max-width: 1300px;
-        margin: 0 auto;
-        padding: 24px;
-      }
-      header {
-        text-align: center;
-        margin-bottom: 50px;
-        padding: 40px 0;
-        background: linear-gradient(180deg, #1a1a22 0%, #0a0a0f 100%);
-        border-radius: 16px;
-      }
-      header h1 {
-        font-size: 3rem;
-        font-weight: 900;
-        letter-spacing: -2px;
-      }
-      header h1 span {
-        color: #00ff88;
-      }
-      header p {
-        color: #888;
-        margin: 12px 0 24px;
-      }
-      .tags {
-        display: flex;
-        gap: 12px;
-        justify-content: center;
-        flex-wrap: wrap;
-      }
-      .tags span {
-        background: #1a1a22;
-        padding: 8px 16px;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        border: 1px solid #2a2a35;
-      }
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 24px;
-      }
-      .card {
-        background: #13131a;
-        border-radius: 16px;
-        overflow: hidden;
-        border: 1px solid #2a2a35;
-        transition: 0.3s;
-        display: flex;
-        flex-direction: column;
-      }
-      .card:hover {
-        transform: translateY(-8px);
-        border-color: #00ff88;
-        box-shadow: 0 10px 30px #00ff8820;
-      }
-      .card.invertido {
-        flex-direction: row-reverse;
-      }
-      .card.invertido .img-box {
-        width: 45%;
-      }
-      .card.invertido .info {
-        width: 55%;
-      }
-      .img-box {
-        position: relative;
-        height: 200px;
-      }
-      .card.invertido .img-box {
-        height: auto;
-      }
-      .img-box img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-      .jogo {
-        position: absolute;
-        top: 12px;
-        left: 12px;
-        font-size: 0.75rem;
-        color: #00ff88;
-        background: #0a0a0fcc;
-        padding: 6px 12px;
-        border-radius: 6px;
-        font-weight: 700;
-        backdrop-filter: blur(10px);
-      }
-      .info {
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-      }
-      .info h3 {
-        font-size: 1.3rem;
-        margin-bottom: 8px;
-      }
-      .desc {
-        color: #888;
-        font-size: 0.9rem;
-        flex: 1;
-        margin-bottom: 16px;
-      }
-      .compra {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .preco {
-        font-size: 1.6rem;
-        font-weight: 900;
-        color: #00ff88;
-      }
-      button {
-        background: #00ff88;
-        color: #0a0a0f;
-        border: none;
-        padding: 12px 24px;
-        border-radius: 10px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: 0.2s;
-      }
-      button:hover {
-        background: #00e67a;
-        transform: scale(1.05);
-      }
-      footer {
-        text-align: center;
-        margin-top: 60px;
-        padding: 30px;
-        color: #555;
-        font-size: 0.8rem;
-        border-top: 1px solid #1a1a22;
-      }
-      @media (max-width: 768px) {
-        .card.invertido {
-          flex-direction: column;
-        }
-        .card.invertido .img-box, .card.invertido .info {
-          width: 100%;
-        }
-        .img-box {
-          height: 180px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module">
-      import React from 'https://esm.sh/react@18.2.0'
-      import ReactDOM from 'https://esm.sh/react-dom@18.2.0/client'
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bonyx Store - Painel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0f;
+      color: #fff;
+      --verde: #00ff88;
+      --bg-card: #13131a;
+      --borda: #2a2a35;
+    }
+    .hidden { display: none !important; }
+    
+    /* LOGIN */
+    .login-box {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #1a1a22 0%, #0a0a0f 100%);
+    }
+    .login-card {
+      background: var(--bg-card);
+      padding: 40px;
+      border-radius: 16px;
+      border: 1px solid var(--borda);
+      width: 100%;
+      max-width: 400px;
+    }
+    .login-card h1 {
+      font-size: 2rem;
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .login-card h1 span { color: var(--verde); }
+    .login-card p { text-align: center; color: #888; margin-bottom: 30px; }
+    .input-group { margin-bottom: 16px; }
+    .input-group label { display: block; font-size: 0.9rem; margin-bottom: 8px; color: #ccc; }
+    .input-group input {
+      width: 100%;
+      background: #0a0a0f;
+      border: 1px solid var(--borda);
+      padding: 12px;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1rem;
+    }
+    .input-group input:focus { outline: none; border-color: var(--verde); }
+    .btn-login {
+      width: 100%;
+      background: var(--verde);
+      color: #0a0a0f;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .erro { color: #ff4757; text-align: center; margin-top: 16px; font-size: 0.9rem; }
 
-      const WHATSAPP = 'https://wa.me/5511999999999?text=Quero%20comprar%20'
+    /* PAINEL */
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 250px;
+      background: var(--bg-card);
+      border-right: 1px solid var(--borda);
+      padding: 24px;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 900;
+      margin-bottom: 40px;
+    }
+    .logo span { color: var(--verde); }
+    .menu-item {
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      color: #888;
+    }
+    .menu-item.active, .menu-item:hover {
+      background: #1a1a22;
+      color: #fff;
+    }
+    .user-box {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      right: 24px;
+      background: #1a1a22;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+    .user-box button {
+      background: none;
+      border: none;
+      color: #ff4757;
+      cursor: pointer;
+      margin-top: 8px;
+      font-size: 0.8rem;
+    }
 
-      const produtos = [
-        {
-          id: 1,
-          nome: "Passe de Batalha",
-          jogo: "Free Fire",
-          preco: "R$ 29,90",
-          img: "https://i.imgur.com/8Q1Z3yL.png",
-          desc: "Entrega via ID em até 10min",
-          invertido: true
-        },
-        {
-          id: 2,
-          nome: "3200 Diamantes",
-          jogo: "Mobile Legends",
-          preco: "R$ 99,90",
-          img: "https://i.imgur.com/k2oWj7P.png",
-          desc: "Top-up oficial Moonton",
-          invertido: false
-        },
-        {
-          id: 3,
-          nome: "Mythic Skin Crate",
-          jogo: "COD Mobile",
-          preco: "R$ 89,90",
-          img: "https://i.imgur.com/Xt7Q2qF.png",
-          desc: "Caixa com skin lendária garantida",
-          invertido: true
-        },
-        {
-          id: 4,
-          nome: "18000 UC",
-          jogo: "PUBG Mobile",
-          preco: "R$ 299,90",
-          img: "https://i.imgur.com/p5b3K8m.png",
-          desc: "Maior pacote com bônus",
-          invertido: false
-        },
-        {
-          id: 5,
-          nome: "5000 Robux",
-          jogo: "Roblox",
-          preco: "R$ 149,90",
-          img: "https://i.imgur.com/3vJ8N9Q.png",
-          desc: "Entrega por gift card",
-          invertido: true
-        },
-        {
-          id: 6,
-          nome: "Conta NV 80 Full",
-          jogo: "Standoff 2",
-          preco: "R$ 79,90",
-          img: "https://i.imgur.com/7xY1Z2A.png",
-          desc: "Com facas e luvas",
-          invertido: false
-        }
-      ]
+    .content {
+      flex: 1;
+      padding: 30px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    .topbar h2 { font-size: 1.8rem; }
+    .saldo {
+      background: #1a1a22;
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: 1px solid var(--borda);
+    }
+    .saldo span { color: var(--verde); font-weight: 700; }
 
-      function App() {
-        return React.createElement('div', { className: 'loja' },
-          React.createElement('header', null,
-            React.createElement('h1', null, 'BONYX ', React.createElement('span', null, 'STORE')),
-            React.createElement('p', null, 'Os melhores itens mobile com entrega instantânea'),
-            React.createElement('div', { className: 'tags' },
-              React.createElement('span', null, '⚡ Entrega em 10min'),
-              React.createElement('span', null, '🔒 100% Seguro'),
-              React.createElement('span', null, '💬 Suporte 24h')
-            )
-          ),
-          React.createElement('div', { className: 'grid' },
-            produtos.map(item => 
-              React.createElement('div', { key: item.id, className: `card ${item.invertido ? 'invertido' : ''}` },
-                React.createElement('div', { className: 'img-box' },
-                  React.createElement('img', { src: item.img, alt: item.nome }),
-                  React.createElement('span', { className: 'jogo' }, item.jogo)
-                ),
-                React.createElement('div', { className: 'info' },
-                  React.createElement('h3', null, item.nome),
-                  React.createElement('p', { className: 'desc' }, item.desc),
-                  React.createElement('div', { className: 'compra' },
-                    React.createElement('p', { className: 'preco' }, item.preco),
-                    React.createElement('button', { 
-                      onClick: () => window.open(`${WHATSAPP}${item.nome}%20-%20${item.jogo}`)
-                    }, 'Comprar')
-                  )
-                )
-              )
-            )
-          ),
-          React.createElement('footer', null,
-            React.createElement('p', null, '© 2026 Bonyx Store - Não afiliada a Garena, Tencent, Moonton ou Activision')
-          )
-        )
+    /* GRID PRODUTOS */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--borda);
+      display: flex;
+      flex-direction: column;
+    }
+    .card.invertido { flex-direction: row-reverse; }
+    .card.invertido .img-box { width: 40%; }
+    .card.invertido .info { width: 60%; }
+    .img-box {
+      position: relative;
+      height: 180px;
+    }
+    .card.invertido .img-box { height: auto; }
+    .img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .jogo {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 0.7rem;
+      color: var(--verde);
+      background: #0a0a0fcc;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-weight: 700;
+    }
+    .info {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .info h3 { font-size: 1.1rem; margin-bottom: 6px; }
+    .desc { color: #888; font-size: 0.85rem; flex: 1; margin-bottom: 12px; }
+    .compra {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .preco { font-size: 1.4rem; font-weight: 900; color: var(--verde); }
+    .btn-comprar {
+      background: var(--verde);
+      color: #0a0a0f;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .card.invertido { flex-direction: column; }
+      .card.invertido .img-box, .card.invertido .info { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <!-- TELA DE LOGIN -->
+  <div id="login" class="login-box">
+    <div class="login-card">
+      <h1>BONYX <span>STORE</span></h1>
+      <p>Acesse seu painel de compras</p>
+      <div class="input-group">
+        <label>Usuário</label>
+        <input type="text" id="usuario" placeholder="admin">
+      </div>
+      <div class="input-group">
+        <label>Senha</label>
+        <input type="password" id="senha" placeholder="123456">
+      </div>
+      <button class="btn-login" onclick="fazerLogin()">Entrar</button>
+      <p class="erro hidden" id="erro-login">Usuário ou senha incorretos</p>
+      <p style="text-align: center; color: #555; font-size: 0.8rem; margin-top: 20px;">
+        Use: admin / 123456
+      </p>
+    </div>
+  </div>
+
+  <!-- PAINEL PRINCIPAL -->
+  <div id="painel" class="app hidden">
+    <div class="sidebar">
+      <div class="logo">BONYX <span>STORE</span></div>
+      <div class="menu-item active">🏠 Loja</div>
+      <div class="menu-item">📦 Meus Pedidos</div>
+      <div class="menu-item">💰 Adicionar Saldo</div>
+      <div class="menu-item">💬 Suporte</div>
+      
+      <div class="user-box">
+        <div>Logado como: <strong id="user-nome">admin</strong></div>
+        <button onclick="sair()">Sair</button>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="topbar">
+        <h2>Loja de Itens</h2>
+        <div class="saldo">Saldo: <span>R$ 0,00</span></div>
+      </div>
+
+      <div class="grid" id="grid-produtos"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import React from 'https://esm.sh/react@18.2.0'
+    import ReactDOM from 'https://esm.sh/react-dom@18.2.0/client'
+
+    const WHATSAPP = 'https://wa.me/5511999999999?text=Quero%20comprar%20'
+
+    const produtos = [
+      { id: 1, nome: "Passe de Batalha", jogo: "Free Fire", preco: "R$ 29,90", img: "https://i.imgur.com/8Q1Z3yL.png", desc: "Entrega via ID em até 10min", invertido: true },
+      { id: 2, nome: "3200 Diamantes", jogo: "Mobile Legends", preco: "R$ 99,90", img: "https://i.imgur.com/k2oWj7P.png", desc: "Top-up oficial Moonton", invertido: false },
+      { id: 3, nome: "Mythic Skin Crate", jogo: "COD Mobile", preco: "R$ 89,90", img: "https://i.imgur.com/Xt7Q2qF.png", desc: "Caixa com skin lendária", invertido: true },
+      { id: 4, nome: "18000 UC", jogo: "PUBG Mobile", preco: "R$ 299,90", img: "https://i.imgur.com/p5b3K8m.png", desc: "Maior pacote com bônus", invertido: false },
+      { id: 5, nome: "5000 Robux", jogo: "Roblox", preco: "R$ 149,90", img: "https://i.imgur.com/3vJ8N9Q.png", desc: "Entrega por gift card", invertido: true },
+      { id: 6, nome: "Conta NV 80", jogo: "Standoff 2", preco: "R$ 79,90", img: "https://i.imgur.com/7xY1Z2A.png", desc: "Com facas e luvas", invertido: false }
+    ]
+
+    // LOGIN SIMPLES
+    window.fazerLogin = () => {
+      const user = document.getElementById('usuario').value
+      const senha = document.getElementById('senha').value
+      if (user === 'admin' && senha === '123456') {
+        localStorage.setItem('bonyx_logado', 'true')
+        localStorage.setItem('bonyx_user', user)
+        mostrarPainel()
+      } else {
+        document.getElementById('erro-login').classList.remove('hidden')
       }
+    }
 
-      ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App))
-    </script>
-  </body>
+    window.sair = () => {
+      localStorage.removeItem('bonyx_logado')
+      location.reload()
+    }
+
+    function mostrarPainel() {
+      document.getElementById('login').classList.add('hidden')
+      document.getElementById('painel').classList.remove('hidden')
+      document.getElementById('user-nome').innerText = localStorage.getItem('bonyx_user')
+      renderProdutos()
+    }
+
+    function renderProdutos() {
+      const grid = document.getElementById('grid-produtos')
+      grid.innerHTML = ''
+      produtos.forEach(item => {
+        const card = document.createElement('div')
+        card.className = `card ${item.invertido ? 'invertido' : ''}`
+        card.innerHTML = `
+          <div class="img-box">
+            <img src="${item.img}" alt="${item.nome}">
+            <span class="jogo">${item.jogo}</span>
+          </div>
+          <div class="info">
+            <h3>${item.nome}</h3>
+            <p class="desc">${item.desc}</p>
+            <div class="compra">
+              <p class="preco">${item.preco}</p>
+              <button class="btn-comprar" onclick="window.open('${WHATSAPP}${item.nome}%20-%20${item.jogo}')">Comprar</button>
+            </div>
+          </div>
+        `
+        grid.appendChild(card)
+      })
+    }
+
+    // CHECA SE JÁ TÁ LOGADO
+    if (localStorage.getItem('bonyx_logado') === 'true') {
+      mostrarPainel()
+    }
+  </script>
+</body>
 </html>
