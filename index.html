@@ -53,7 +53,7 @@
       font-size: 1rem;
     }
     .input-group input:focus { outline: none; border-color: var(--verde); }
-    .btn-login {
+    .btn {
       width: 100%;
       background: var(--verde);
       color: #0a0a0f;
@@ -65,7 +65,14 @@
       cursor: pointer;
       margin-top: 10px;
     }
+    .btn-outline {
+      background: transparent;
+      color: var(--verde);
+      border: 1px solid var(--verde);
+    }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .erro { color: #ff4757; text-align: center; margin-top: 16px; font-size: 0.9rem; }
+    .link { color: var(--verde); text-align: center; margin-top: 20px; cursor: pointer; font-size: 0.9rem; }
 
     /* PAINEL */
     .app {
@@ -77,6 +84,7 @@
       background: var(--bg-card);
       border-right: 1px solid var(--borda);
       padding: 24px;
+      position: relative;
     }
     .logo {
       font-size: 1.5rem;
@@ -117,6 +125,7 @@
     .content {
       flex: 1;
       padding: 30px;
+      overflow-y: auto;
     }
     .topbar {
       display: flex;
@@ -194,6 +203,11 @@
       font-weight: 700;
       cursor: pointer;
     }
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #888;
+    }
 
     @media (max-width: 900px) {
       .sidebar { display: none; }
@@ -207,20 +221,39 @@
   <div id="login" class="login-box">
     <div class="login-card">
       <h1>BONYX <span>STORE</span></h1>
-      <p>Acesse seu painel de compras</p>
-      <div class="input-group">
-        <label>Usuário</label>
-        <input type="text" id="usuario" placeholder="admin">
+      <p id="login-texto">Acesse seu painel</p>
+      
+      <div id="form-login">
+        <div class="input-group">
+          <label>Email</label>
+          <input type="email" id="email" placeholder="seu@email.com">
+        </div>
+        <div class="input-group">
+          <label>Senha</label>
+          <input type="password" id="senha" placeholder="******">
+        </div>
+        <button class="btn" id="btn-entrar">Entrar</button>
+        <p class="link" onclick="trocarTela('cadastro')">Criar conta</p>
       </div>
-      <div class="input-group">
-        <label>Senha</label>
-        <input type="password" id="senha" placeholder="123456">
+
+      <div id="form-cadastro" class="hidden">
+        <div class="input-group">
+          <label>Nome</label>
+          <input type="text" id="nome-cadastro" placeholder="Seu nome">
+        </div>
+        <div class="input-group">
+          <label>Email</label>
+          <input type="email" id="email-cadastro" placeholder="seu@email.com">
+        </div>
+        <div class="input-group">
+          <label>Senha</label>
+          <input type="password" id="senha-cadastro" placeholder="Mínimo 6 caracteres">
+        </div>
+        <button class="btn" id="btn-cadastrar">Criar conta</button>
+        <p class="link" onclick="trocarTela('login')">Já tenho conta</p>
       </div>
-      <button class="btn-login" onclick="fazerLogin()">Entrar</button>
-      <p class="erro hidden" id="erro-login">Usuário ou senha incorretos</p>
-      <p style="text-align: center; color: #555; font-size: 0.8rem; margin-top: 20px;">
-        Use: admin / 123456
-      </p>
+
+      <p class="erro hidden" id="erro-login"></p>
     </div>
   </div>
 
@@ -228,71 +261,166 @@
   <div id="painel" class="app hidden">
     <div class="sidebar">
       <div class="logo">BONYX <span>STORE</span></div>
-      <div class="menu-item active">🏠 Loja</div>
-      <div class="menu-item">📦 Meus Pedidos</div>
-      <div class="menu-item">💰 Adicionar Saldo</div>
-      <div class="menu-item">💬 Suporte</div>
+      <div class="menu-item active" data-page="loja">🏠 Loja</div>
+      <div class="menu-item" data-page="pedidos">📦 Meus Pedidos</div>
+      <div class="menu-item" data-page="saldo">💰 Adicionar Saldo</div>
+      <div class="menu-item" data-page="suporte">💬 Suporte</div>
       
       <div class="user-box">
-        <div>Logado como: <strong id="user-nome">admin</strong></div>
-        <button onclick="sair()">Sair</button>
+        <div>Logado como: <strong id="user-nome">-</strong></div>
+        <button id="btn-sair">Sair</button>
       </div>
     </div>
 
     <div class="content">
       <div class="topbar">
-        <h2>Loja de Itens</h2>
-        <div class="saldo">Saldo: <span>R$ 0,00</span></div>
+        <h2 id="titulo-page">Loja de Itens</h2>
+        <div class="saldo">Saldo: <span id="user-saldo">R$ 0,00</span></div>
       </div>
 
-      <div class="grid" id="grid-produtos"></div>
+      <div id="page-loja">
+        <div class="grid" id="grid-produtos">
+          <div class="loading">Carregando produtos...</div>
+        </div>
+      </div>
+
+      <div id="page-pedidos" class="hidden">
+        <div id="lista-pedidos"><div class="loading">Carregando pedidos...</div></div>
+      </div>
+
+      <div id="page-saldo" class="hidden">
+        <div class="card" style="max-width: 500px; padding: 20px;">
+          <h3>Adicionar Saldo via PIX</h3>
+          <p style="color: #888; margin: 12px 0;">Chave PIX: seuemail@gmail.com</p>
+          <div class="input-group">
+            <label>Valor do comprovante</label>
+            <input type="number" id="valor-pix" placeholder="R$ 50,00">
+          </div>
+          <button class="btn" onclick="enviarComprovante()">Enviar Comprovante</button>
+        </div>
+      </div>
+
+      <div id="page-suporte" class="hidden">
+        <div class="card" style="max-width: 500px; padding: 20px;">
+          <h3>Falar com Suporte</h3>
+          <p style="color: #888; margin: 12px 0;">Atendimento 24h via WhatsApp</p>
+          <button class="btn" onclick="window.open('https://wa.me/5511999999999')">Abrir WhatsApp</button>
+        </div>
+      </div>
     </div>
   </div>
 
   <script type="module">
-    import React from 'https://esm.sh/react@18.2.0'
-    import ReactDOM from 'https://esm.sh/react-dom@18.2.0/client'
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js'
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js'
+    import { getDatabase, ref, set, get, push, onValue, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js'
 
-    const WHATSAPP = 'https://wa.me/5511999999999?text=Quero%20comprar%20'
+    const firebaseConfig = {
+      apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
+      authDomain: "premium-store-aa58b.firebaseapp.com",
+      databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
+      projectId: "premium-store-aa58b",
+      storageBucket: "premium-store-aa58b.firebasestorage.app",
+      messagingSenderId: "462239500057",
+      appId: "1:462239500057:web:f1b7cea162ed308a866788",
+      measurementId: "G-CN88J28WRX"
+    };
 
-    const produtos = [
-      { id: 1, nome: "Passe de Batalha", jogo: "Free Fire", preco: "R$ 29,90", img: "https://i.imgur.com/8Q1Z3yL.png", desc: "Entrega via ID em até 10min", invertido: true },
-      { id: 2, nome: "3200 Diamantes", jogo: "Mobile Legends", preco: "R$ 99,90", img: "https://i.imgur.com/k2oWj7P.png", desc: "Top-up oficial Moonton", invertido: false },
-      { id: 3, nome: "Mythic Skin Crate", jogo: "COD Mobile", preco: "R$ 89,90", img: "https://i.imgur.com/Xt7Q2qF.png", desc: "Caixa com skin lendária", invertido: true },
-      { id: 4, nome: "18000 UC", jogo: "PUBG Mobile", preco: "R$ 299,90", img: "https://i.imgur.com/p5b3K8m.png", desc: "Maior pacote com bônus", invertido: false },
-      { id: 5, nome: "5000 Robux", jogo: "Roblox", preco: "R$ 149,90", img: "https://i.imgur.com/3vJ8N9Q.png", desc: "Entrega por gift card", invertido: true },
-      { id: 6, nome: "Conta NV 80", jogo: "Standoff 2", preco: "R$ 79,90", img: "https://i.imgur.com/7xY1Z2A.png", desc: "Com facas e luvas", invertido: false }
+    const app = initializeApp(firebaseConfig)
+    const auth = getAuth(app)
+    const db = getDatabase(app)
+    let userAtual = null
+
+    // PRODUTOS PADRÃO - VAI PRO FIREBASE SE NÃO EXISTIR
+    const produtosPadrao = [
+      { id: 1, nome: "Passe de Batalha", jogo: "Free Fire", preco: 29.90, img: "https://i.imgur.com/8Q1Z3yL.png", desc: "Entrega via ID em até 10min", invertido: true },
+      { id: 2, nome: "3200 Diamantes", jogo: "Mobile Legends", preco: 99.90, img: "https://i.imgur.com/k2oWj7P.png", desc: "Top-up oficial Moonton", invertido: false },
+      { id: 3, nome: "Mythic Skin Crate", jogo: "COD Mobile", preco: 89.90, img: "https://i.imgur.com/Xt7Q2qF.png", desc: "Caixa com skin lendária", invertido: true },
+      { id: 4, nome: "18000 UC", jogo: "PUBG Mobile", preco: 299.90, img: "https://i.imgur.com/p5b3K8m.png", desc: "Maior pacote com bônus", invertido: false }
     ]
 
-    // LOGIN SIMPLES
-    window.fazerLogin = () => {
-      const user = document.getElementById('usuario').value
+    // LOGIN/CADASTRO
+    window.trocarTela = (tela) => {
+      document.getElementById('form-login').classList.toggle('hidden', tela !== 'login')
+      document.getElementById('form-cadastro').classList.toggle('hidden', tela !== 'cadastro')
+      document.getElementById('login-texto').innerText = tela === 'login' ? 'Acesse seu painel' : 'Criar nova conta'
+      document.getElementById('erro-login').classList.add('hidden')
+    }
+
+    document.getElementById('btn-entrar').onclick = async () => {
+      const email = document.getElementById('email').value
       const senha = document.getElementById('senha').value
-      if (user === 'admin' && senha === '123456') {
-        localStorage.setItem('bonyx_logado', 'true')
-        localStorage.setItem('bonyx_user', user)
-        mostrarPainel()
-      } else {
-        document.getElementById('erro-login').classList.remove('hidden')
+      try {
+        await signInWithEmailAndPassword(auth, email, senha)
+      } catch (e) {
+        mostrarErro(e.message)
       }
     }
 
-    window.sair = () => {
-      localStorage.removeItem('bonyx_logado')
-      location.reload()
+    document.getElementById('btn-cadastrar').onclick = async () => {
+      const nome = document.getElementById('nome-cadastro').value
+      const email = document.getElementById('email-cadastro').value
+      const senha = document.getElementById('senha-cadastro').value
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, senha)
+        await updateProfile(cred.user, { displayName: nome })
+        await set(ref(db, 'users/' + cred.user.uid), {
+          nome: nome,
+          email: email,
+          saldo: 0,
+          criadoEm: Date.now()
+        })
+      } catch (e) {
+        mostrarErro(e.message)
+      }
     }
 
-    function mostrarPainel() {
-      document.getElementById('login').classList.add('hidden')
-      document.getElementById('painel').classList.remove('hidden')
-      document.getElementById('user-nome').innerText = localStorage.getItem('bonyx_user')
-      renderProdutos()
+    document.getElementById('btn-sair').onclick = () => signOut(auth)
+
+    function mostrarErro(msg) {
+      const erro = document.getElementById('erro-login')
+      erro.innerText = msg.includes('auth/') ? 'Email ou senha inválidos' : msg
+      erro.classList.remove('hidden')
     }
 
-    function renderProdutos() {
+    // CHECA LOGIN
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        userAtual = user
+        document.getElementById('login').classList.add('hidden')
+        document.getElementById('painel').classList.remove('hidden')
+        document.getElementById('user-nome').innerText = user.displayName || user.email
+        carregarSaldo()
+        carregarProdutos()
+      } else {
+        document.getElementById('login').classList.remove('hidden')
+        document.getElementById('painel').classList.add('hidden')
+      }
+    })
+
+    // CARREGA SALDO
+    function carregarSaldo() {
+      onValue(ref(db, 'users/' + userAtual.uid + '/saldo'), (snap) => {
+        const saldo = snap.val() || 0
+        document.getElementById('user-saldo').innerText = `R$ ${saldo.toFixed(2).replace('.', ',')}`
+      })
+    }
+
+    // CARREGA PRODUTOS DO FIREBASE
+    async function carregarProdutos() {
+      const snap = await get(ref(db, 'produtos'))
+      let produtos = snap.val()
+      if (!produtos) {
+        await set(ref(db, 'produtos'), produtosPadrao)
+        produtos = produtosPadrao
+      }
+      renderProdutos(Object.values(produtos))
+    }
+
+    function renderProdutos(lista) {
       const grid = document.getElementById('grid-produtos')
       grid.innerHTML = ''
-      produtos.forEach(item => {
+      lista.forEach(item => {
         const card = document.createElement('div')
         card.className = `card ${item.invertido ? 'invertido' : ''}`
         card.innerHTML = `
@@ -304,8 +432,8 @@
             <h3>${item.nome}</h3>
             <p class="desc">${item.desc}</p>
             <div class="compra">
-              <p class="preco">${item.preco}</p>
-              <button class="btn-comprar" onclick="window.open('${WHATSAPP}${item.nome}%20-%20${item.jogo}')">Comprar</button>
+              <p class="preco">R$ ${item.preco.toFixed(2).replace('.', ',')}</p>
+              <button class="btn-comprar" onclick="comprar(${item.id}, '${item.nome}', ${item.preco})">Comprar</button>
             </div>
           </div>
         `
@@ -313,9 +441,67 @@
       })
     }
 
-    // CHECA SE JÁ TÁ LOGADO
-    if (localStorage.getItem('bonyx_logado') === 'true') {
-      mostrarPainel()
+    // COMPRAR
+    window.comprar = async (id, nome, preco) => {
+      const saldoSnap = await get(ref(db, 'users/' + userAtual.uid + '/saldo'))
+      const saldo = saldoSnap.val() || 0
+      if (saldo < preco) {
+        alert('Saldo insuficiente! Adicione saldo na aba "Adicionar Saldo"')
+        return
+      }
+      await update(ref(db, 'users/' + userAtual.uid), { saldo: saldo - preco })
+      await push(ref(db, 'pedidos/' + userAtual.uid), {
+        produto: nome,
+        preco: preco,
+        status: 'Aguardando entrega',
+        data: Date.now()
+      })
+      alert('Compra realizada! Entraremos em contato no WhatsApp.')
+    }
+
+    // MENU
+    document.querySelectorAll('.menu-item').forEach(item => {
+      item.onclick = () => {
+        document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'))
+        item.classList.add('active')
+        const page = item.dataset.page
+        document.querySelectorAll('[id^=page-]').forEach(p => p.classList.add('hidden'))
+        document.getElementById('page-' + page).classList.remove('hidden')
+        document.getElementById('titulo-page').innerText = item.innerText.replace(/[^\w\s]/gi, '').trim()
+        if (page === 'pedidos') carregarPedidos()
+      }
+    })
+
+    // PEDIDOS
+    function carregarPedidos() {
+      const lista = document.getElementById('lista-pedidos')
+      onValue(ref(db, 'pedidos/' + userAtual.uid), (snap) => {
+        const pedidos = snap.val()
+        if (!pedidos) {
+          lista.innerHTML = '<p style="color:#888">Nenhum pedido ainda</p>'
+          return
+        }
+        lista.innerHTML = Object.values(pedidos).map(p => `
+          <div class="card" style="padding: 16px; margin-bottom: 12px;">
+            <h3>${p.produto}</h3>
+            <p style="color:#888">R$ ${p.preco.toFixed(2)} - ${new Date(p.data).toLocaleDateString()}</p>
+            <p style="color: var(--verde); margin-top: 8px;">${p.status}</p>
+          </div>
+        `).join('')
+      })
+    }
+
+    // ADICIONAR SALDO
+    window.enviarComprovante = async () => {
+      const valor = parseFloat(document.getElementById('valor-pix').value)
+      if (!valor || valor <= 0) return alert('Digite um valor válido')
+      await push(ref(db, 'comprovantes/' + userAtual.uid), {
+        valor: valor,
+        status: 'Pendente',
+        data: Date.now()
+      })
+      alert('Comprovante enviado! Aguarde aprovação em até 10min.')
+      document.getElementById('valor-pix').value = ''
     }
   </script>
 </body>
