@@ -36,7 +36,7 @@
   --branco:#FFFFFF;
   --cinza:#D1D5DB;
   --borda:#1E1E1E;
-  --card:#0D0D0D;
+  --card:#0D;
   --verde:#22C55E;
   --amarelo:#F59E0B;
   --vermelho:#EF4444;
@@ -93,7 +93,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 
 /* LOJA */
 .search-bar{position:relative;margin:8px 12px}
-.search-bar input{width:100%;background:rgba(5,5,5,0.6);border:1px solid var(--borda);padding:8px 8px 8px 32px;border-radius:20px;color:var(--branco);font-size:10px;backdrop-filter:blur(5px)}
+.search-bar input{width:100%;background:rgba(5,5,5,0.6);border:1px solid var(--borda);padding:8px 8px 32px;border-radius:20px;color:var(--branco);font-size:10px;backdrop-filter:blur(5px)}
 .search-bar input:focus{outline:none;border-color:var(--roxo);box-shadow:0 0 8px var(--glow)}
 .search-bar .icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;stroke:var(--roxo)}
 .banner-topo{width:calc(100% - 24px);border-radius:20px;overflow:hidden;margin:0 12px 16px;border:1px solid var(--borda);box-shadow:0 0 15px var(--glow)}
@@ -103,10 +103,12 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .section-title i{width:14px;height:14px;stroke:var(--roxo);filter:drop-shadow(0 0 3px var(--roxo))}
 .ver-todos{color:var(--roxo);font-size:9px;cursor:pointer}
 .jogos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 12px 20px}
-.jogo-card{background:var(--card);border:1px solid var(--borda);border-radius:20px;padding:10px 6px;text-align:center;cursor:pointer;box-shadow:0 0 8px var(--glow);transition:all 0.3s}
+.jogo-card{background:var(--card);border:1px solid var(--borda);border-radius:20px;padding:10px 6px;text-align:center;cursor:pointer;box-shadow:0 0 8px var(--glow);transition:all 0.3s;overflow:hidden}
 .jogo-card:hover{transform:translateY(-2px);box-shadow:0 0 12px var(--glow);border-color:var(--roxo)}
 .jogo-card.ativo{border-color:var(--roxo);box-shadow:0 0 15px var(--glow)}
-.jogo-card i{width:24px;height:24px;margin-bottom:4px;stroke:var(--roxo);filter:drop-shadow(0 0 4px var(--roxo))}
+.jogo-card-img{width:100%;height:40px;margin-bottom:4px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:8px}
+.jogo-card-img img{width:100%;height:100%;object-fit:cover}
+.jogo-card-img i{width:24px;height:24px;stroke:var(--roxo);filter:drop-shadow(0 0 4px var(--roxo))}
 .jogo-card span{font-size:8px;font-weight:700;color:var(--cinza)}
 .produtos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:0 12px 20px}
 .produto-card{background:var(--card);border:1px solid var(--borda);border-radius:20px;padding:10px;box-shadow:0 0 10px var(--glow)}
@@ -150,6 +152,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .upload{width:100%;aspect-ratio:16/9;background:var(--bg);border:2px dashed var(--borda);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;cursor:pointer;overflow:hidden;font-size:9px;color:var(--cinza);position:relative}
 .upload img{width:100%;height:100%;object-fit:cover}
 .upload input{display:none}
+.upload-text{position:absolute;text-align:center}
 .loading{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:500;display:none;align-items:center;justify-content:center;font-size:12px}
 .loading.ativo{display:flex}
 
@@ -188,6 +191,38 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .aviso-texto{flex:1;font-size:9px;color:var(--cinza);line-height:1.5}
 .aviso-texto b{color:var(--roxo);display:block;margin-bottom:4px}
 
+/* INDICACOES */
+.indicacao-card{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:0 0 20px rgba(139,92,246,.1)}
+.indicacao-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.indicacao-tit{font-size:12px;font-weight:800;color:var(--roxo);text-shadow:0 0 8px var(--roxo-neon)}
+.codigo-box{background:var(--bg);border:1px solid var(--roxo);border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.codigo-text{font-size:14px;font-weight:800;color:var(--roxo);letter-spacing:1px;text-shadow:0 0 8px var(--roxo-neon)}
+.btn-copiar{background:var(--roxo);border:none;border-radius:8px;padding:6px 12px;color:var(--branco);font-size:9px;font-weight:700;cursor:pointer;box-shadow:0 0 10px rgba(139,92,246,.4)}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.stat-item{background:var(--bg);border:1px solid var(--borda);border-radius:10px;padding:10px;text-align:center}
+.stat-num{font-size:16px;font-weight:800;color:var(--roxo);text-shadow:0 0 8px var(--roxo-neon)}
+.stat-label{font-size:8px;color:var(--cinza);margin-top:4px}
+.progress-bar{background:var(--bg);border:1px solid var(--borda);border-radius:10px;height:8px;overflow:hidden;margin-bottom:8px}
+.progress-fill{background:linear-gradient(90deg,var(--roxo-escuro),var(--roxo-neon));height:100%;box-shadow:0 0 10px var(--roxo-neon);transition:width.3s}
+.recompensa-item{background:var(--bg);border:1px solid var(--borda);border-radius:10px;padding:10px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.recompensa-icon{width:32px;height:32px;background:var(--roxo);border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px var(--roxo-neon)}
+.recompensa-icon i{width:18px;height:18px;stroke:var(--branco);fill:none;stroke-width:2}
+.recompensa-info{flex:1}
+.recompensa-tit{font-size:10px;font-weight:700;color:var(--branco);margin-bottom:2px}
+.recompensa-desc{font-size:8px;color:var(--cinza)}
+.badge{padding:3px 8px;border-radius:6px;font-size:8px;font-weight:700}
+.badge-pendente{background:rgba(245,158,11,.2);color:var(--amarelo)}
+.badge-confirmada{background:rgba(34,197,94,.2);color:var(--verde)}
+.badge-confirmado{background:rgba(34,197,94,.2);color:var(--verde)}
+.badge-cancelada{background:rgba(239,68,.2);color:var(--vermelho)}
+.badge-cancelado{background:rgba(239,68,.2);color:var(--vermelho)}
+.badge-invalida{background:rgba(107,114,128,.2);color:var(--cinza)}
+.indicacao-historico{max-height:300px;overflow-y:auto}
+.indicacao-item{background:var(--bg);border:1px solid var(--borda);border-radius:10px;padding:10px;margin-bottom:8px}
+.indicacao-item-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.indicacao-codigo{font-size:10px;font-weight:700;color:var(--roxo)}
+.indicacao-valor{font-size:9px;color:var(--cinza)}
+
 /* COMPROVANTE */
 .comprovante-card{width:90%;max-width:360px;margin:0 auto 8px;background:linear-gradient(180deg,#0D0D0D 0%,#050505 100%);border:1px solid #8B5CF6;border-radius:8px;padding:6px;box-shadow:0 0 12px rgba(168,85,247,.25);position:relative;line-height:1.1}
 .comprovante-topo{text-align:center;margin-bottom:6px;padding-bottom:4px;position:relative}
@@ -215,9 +250,18 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .comprovante-footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#A855F7,transparent);box-shadow:0 0 8px rgba(168,85,247,.8)}
 .comprovante-footer::after{content:'💎';position:absolute;left:50%;transform:translateX(-50%);top:-6px;color:#A855F7;font-size:10px;text-shadow:0 0 8px rgba(168,85,247,.8);background:linear-gradient(180deg,#0D0D0D 0%,#050505 100%);padding:0 5px}
 .comprovante-footer-logo{font-size:11px;font-weight:800;letter-spacing:0.5px;color:#FFFFFF;display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:1px;text-shadow:0 0 8px rgba(168,85,247,.8)}
-.comprovante-footer-logo i{width:12px;height:12px;stroke:#A855F7;fill:none;stroke-width:2.5;filter:drop-shadow(0 0 8px rgba(168,85,247,.7))}
+.comprovante-footer-logo i{width:12px;height:12px;stroke:#A855F7;fill:none;stroke-width:2.5;filter:drop-shadow(0 8px rgba(168,85,247,.7))}
 .comprovante-footer-texto{font-size:9px;color:#D1D5DB;margin-bottom:1px}
 .comprovante-footer-heart{color:#A855F7;font-size:10px;filter:drop-shadow(0 0 6px rgba(168,85,247,.7))}
+
+/* SUPORTE */
+.suporte-card{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:16px;margin-bottom:12px;text-align:center}
+.suporte-icon{width:60px;height:60px;margin:0 auto 12px;background:var(--roxo);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px var(--roxo-neon)}
+.suporte-icon i{width:30px;height:30px;stroke:var(--branco);fill:none;stroke-width:2}
+.suporte-tit{font-size:14px;font-weight:800;margin-bottom:8px;color:var(--branco)}
+.suporte-desc{font-size:9px;color:var(--cinza);line-height:1.6;margin-bottom:16px}
+.suporte-horario{background:var(--bg);border:1px solid var(--borda);border-radius:10px;padding:10px;font-size:9px;color:var(--cinza);margin-bottom:12px}
+.suporte-horario b{color:var(--roxo);display:block;margin-bottom:4px}
 </style>
 </head>
 <body>
@@ -297,7 +341,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 
       <div class="aviso-box">
         <div class="aviso-icon"><i data-lucide="alert-triangle"></i></div>
-        <div class="aviso-texto">
+                <div class="aviso-texto">
           <b>IMPORTANTE:</b>
           Verifique se o ID/link enviado está correto para evitar falhas na entrega.
         </div>
@@ -317,7 +361,6 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
   <div class="sidebar-item" onclick="ir('suporte');fecharMenu()"><i data-lucide="headphones"></i>Suporte</div>
   <div class="sidebar-item" onclick="ir('faq');fecharMenu()"><i data-lucide="help-circle"></i>Dúvidas frequentes</div>
   <div class="sidebar-item" onclick="ir('termos');fecharMenu()"><i data-lucide="file-text"></i>Termos do site</div>
-  <div class="sidebar-item" onclick="ir('teste');fecharMenu()"><i data-lucide="gift"></i>Teste grátis</div>
   <div class="sidebar-item" onclick="ir('premiacao');fecharMenu()"><i data-lucide="trophy"></i>Premiação</div>
   <div class="sidebar-item" onclick="abrirAdmin();fecharMenu()" id="menuAdmin" style="display:none"><i data-lucide="user-cog"></i>Adm</div>
   <div class="sidebar-item" onclick="abrirAdminIndicacoes();fecharMenu()" id="menuAdminInd" style="display:none"><i data-lucide="clipboard-check"></i>Indicações Admin</div>
@@ -333,7 +376,6 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
         <img src="https://i.postimg.cc/PJ2Vcty8/e1befe8d-0630-444f-aea5-9b0a96d5f84b.jpg" class="logo-img" alt="Logo">
         <div class="logo-text"><span class="premium">PREMIUM</span> <span class="store">STORE</span></div>
       </div>
-    </div>
     <div class="header-right">
       <div class="cart-wrapper" onclick="ir('comprovantes')">
         <i data-lucide="shopping-cart"></i>
@@ -383,7 +425,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
       <div class="label">🔗 Link/ID da conta:</div>
       <input type="text" class="input" id="linkProduto" placeholder="Cole o link ou ID aqui">
       <div class="label">🎁 Código de indicação (opcional):</div>
-            <input type="text" class="input" id="codigoProduto" placeholder="Ex: PREMIUM782">
+      <input type="text" class="input" id="codigoProduto" placeholder="Ex: PREMIUM782">
       <button class="btn" onclick="finalizarPedido()">FAZER PEDIDO</button>
       <button class="btn btn-sec" onclick="fecharModalProduto()">CANCELAR</button>
     </div>
@@ -463,22 +505,6 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
   <div class="container" id="termosBody"></div>
 </div>
 
-<div id="teste" class="tela">
-  <div class="header">
-    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
-    <div style="font-size:12px;font-weight:700">TESTE GRÁTIS</div>
-    <div style="width:28px"></div>
-  </div>
-  <div class="container">
-    <div id="testeDescBox" class="info-teste"></div>
-    <div class="label">❤️ Link para Curtidas:</div>
-    <input type="text" class="input" id="testeLinkCurtidas" placeholder="Cole o link do post aqui">
-    <div class="label">👥 Link para Seguidores:</div>
-    <input type="text" class="input" id="testeLinkSeguidores" placeholder="Cole o link do perfil aqui">
-    <button class="btn" onclick="enviarTeste()">ENVIAR TESTE GRÁTIS</button>
-  </div>
-</div>
-
 <div id="premiacao" class="tela">
   <div class="header">
     <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
@@ -501,7 +527,7 @@ const EMAIL_ADM='nannyvittoriah@gmail.com',WHATSAPP='5598984853563';
 let db={
   cat:JSON.parse(localStorage.getItem('cat')||'[]'),
   serv:JSON.parse(localStorage.getItem('serv')||'[]'),
-  config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"Ao utilizar nosso painel, o usuário concorda automaticamente com todos os termos e condições abaixo.\\n\\n• Não garantimos resultados permanentes em serviços de redes sociais.\\n• O cliente é totalmente responsável pelo link enviado no pedido.\\n• Pedidos com links inválidos poderão ser cancelados sem aviso.\\n• Não realizamos reembolso após o início do serviço.\\n• O tempo de entrega pode variar conforme o serviço solicitado.\\n• Não aceitamos conteúdos ilegais, proibidos ou que violem políticas das plataformas.\\n• O uso do painel é de total responsabilidade do usuário.\\n• Alguns serviços podem sofrer quedas naturais após a entrega.\\n• O cliente concorda em utilizar o site de forma correta e sem tentativas de abuso ou spam.\\n• Alterações nos termos podem ocorrer a qualquer momento sem aviso prévio.\\n\\n💜 Ao continuar utilizando o painel, você concorda com todos os termos acima.","teste":{"desc":"Teste de Curtidas: São 10 curtidas grátis\\nTeste de Seguidores: São 30 seguidores grátis"},"premiacao":{"img":"","texto":""}}'),
+  config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"Ao utilizar nosso painel, o usuário concorda automaticamente com todos os termos e condições abaixo.\\n\\n• Não garantimos resultados permanentes em serviços de redes sociais.\\n• O cliente é totalmente responsável pelo link enviado no pedido.\\n• Pedidos com links inválidos poderão ser cancelados sem aviso.\\n• Não realizamos reembolso após o início do serviço.\\n• O tempo de entrega pode variar conforme o serviço solicitado.\\n• Não aceitamos conteúdos ilegais, proibidos ou que violem políticas das plataformas.\\n• O uso do painel é de total responsabilidade do usuário.\\n• Alguns serviços podem sofrer quedas naturais após a entrega.\\n• O cliente concorda em utilizar o site de forma correta e sem tentativas de abuso ou spam.\\n• Alterações nos termos podem ocorrer a qualquer momento sem aviso prévio.\\n\\n💜 Ao continuar utilizando o painel, você concorda com todos os termos acima.","premiacao":{"img":"","texto":""}}'),
   indicacoes:JSON.parse(localStorage.getItem('indicacoes')||'[]'),
   usuarios:JSON.parse(localStorage.getItem('usuarios')||'{}'),
   pedidos:JSON.parse(localStorage.getItem('pedidos')||'[]')
@@ -630,7 +656,6 @@ function ir(t){
   if(t==='home'){renderJogos();renderProdutosLoja();}
   if(t==='faq')renderFaq();
   if(t==='termos')renderTermos();
-  if(t==='teste')renderTeste();
   if(t==='premiacao')renderPremiacao();
   if(t==='indicacoes')renderIndicacoes();
   if(t==='adminIndicacoes')renderAdminIndicacoes();
@@ -644,9 +669,10 @@ function renderJogos(){
   const cats = db.cat.length?db.cat:[];
   const icones = {'free fire':'flame','roblox':'box','cod mobile':'crosshair','fortnite':'zap','brawl stars':'star','efootball':'football'};
   const html = cats.map(c=>{
-    const key = c.nome.toLowerCase().replace(/\s/g,'');
     return `<div class="jogo-card" onclick="filtrarJogo('${c.k}')">
-      <i data-lucide="${icones[c.nome.toLowerCase()]||'gamepad-2'}"></i>
+      <div class="jogo-card-img">
+        ${c.img?`<img src="${c.img}" alt="${c.nome}">`:`<i data-lucide="${icones[c.nome.toLowerCase()]||'gamepad-2'}"></i>`}
+      </div>
       <span>${c.nome.toUpperCase()}</span>
     </div>`;
   }).join('');
@@ -710,7 +736,6 @@ function atualizarCarrinho(){
 function abrirModalPedido(k){
   produtoSelecionado = db.serv.find(p=>p.k===k);
   if(!produtoSelecionado) return;
-  const cat = db.cat.find(c=>c.k===produtoSelecionado.cat);
 
   document.getElementById('modalProdutoImg').src = produtoSelecionado.img || '';
   document.getElementById('modalProdutoImg').style.display = produtoSelecionado.img? 'block' : 'none';
@@ -827,6 +852,7 @@ function renderComprovantes(){
           <div class="comprovante-label">Serviço:</div>
           <div class="comprovante-valor">${p.servico}</div>
         </div>
+      </div>
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="dollar-sign"></i></div>
         <div class="comprovante-info-wrap">
@@ -847,7 +873,6 @@ function renderComprovantes(){
           <div class="comprovante-label">Data:</div>
           <div class="comprovante-valor">${new Date(p.data).toLocaleDateString('pt-BR')}</div>
         </div>
-      </div>
       ${p.codigoIndicacao?`
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="gift"></i></div>
@@ -865,6 +890,7 @@ function renderComprovantes(){
             ${statusTxt}
           </div>
         </div>
+      </div>
       <div class="comprovante-footer">
         <div class="comprovante-footer-logo">
           <i data-lucide="gem"></i>
@@ -909,37 +935,6 @@ function renderTermos(){
   document.getElementById('termosBody').innerHTML=`<div class="texto-geral">${db.config.termos}</div>`;
 }
 
-function renderTeste(){
-  const desc=db.config.teste?.desc||'Teste grátis disponível!';
-  document.getElementById('testeDescBox').innerHTML=desc;
-}
-
-function enviarTeste(){
-  let linkCurt=document.getElementById('testeLinkCurtidas').value;
-  let linkSeg=document.getElementById('testeLinkSeguidores').value;
-  if(!linkCurt&&!linkSeg){alert('Cole pelo menos um link');return}
-  const data=new Date().toLocaleDateString('pt-BR');
-  let msg=`━━━━━━━━━━
-💜 PREMIUM STORE
-━━━━━━━━━━
-
-🎁 Solicitação de Teste Grátis
-
-👤 Cliente: ${usuarioAtual.nome}
-📧 E-mail: ${usuarioAtual.email}
-
-`;
-  if(linkCurt)msg+=`❤️ Curtidas: ${linkCurt}\n`;
-  if(linkSeg)msg+=`👥 Seguidores: ${linkSeg}\n`;
-  msg+=`📆 Data: ${data}
-
-📌 Status: Em análise
-━━━━━━━━━━`;
-  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
-  document.getElementById('testeLinkCurtidas').value='';
-  document.getElementById('testeLinkSeguidores').value='';
-}
-
 function renderPremiacao(){
   const prem=db.config.premiacao||{img:'',texto:'Nenhuma premiação ativa no momento.'};
   document.getElementById('premiacaoBody').innerHTML=`
@@ -956,7 +951,6 @@ function abrirAdmin(){
   <button class="btn" onclick="ir('pedidos')">📋 PEDIDOS</button>
   <button class="btn" onclick="formFaq()">❓ DÚVIDAS FREQUENTES</button>
   <button class="btn" onclick="formTermos()">📄 TERMOS DO SITE</button>
-  <button class="btn" onclick="formTeste()">🎁 TESTE GRÁTIS</button>
   <button class="btn" onclick="formPremiacao()">🏆 PREMIAÇÃO</button>
   <button class="btn btn-red" onclick="ir('home')">VOLTAR</button>`;
   ir('admin');
@@ -1021,7 +1015,7 @@ function renderPedidos(filtro='todos',buscaId=''){
       <input type="text" class="input" id="buscaPedidoId" placeholder="Digite ID ou email do cliente" value="${buscaId}" style="margin:0;flex:1">
       <button class="btn-mini btn-edit" onclick="buscarPedido()" style="width:80px">BUSCAR</button>
     </div>
-    <div class="label">🔍 FILTRAR POR:</div>
+        <div class="label">🔍 FILTRAR POR:</div>
     <div style="display:flex;gap:6px;margin-bottom:12px">
       <button class="btn-mini ${filtro==='todos'?'btn-edit':''}" onclick="renderPedidos('todos')">TODOS</button>
       <button class="btn-mini ${filtro==='pendente'?'btn-edit':''}" onclick="renderPedidos('pendente')">PENDENTES</button>
@@ -1079,7 +1073,7 @@ function renderAdminIndicacoes(filtro='todos'){
         Indicador: ${indicador?.codigo||'Desconhecido'}<br>
         Indicado: ${i.nomeIndicado}<br>
         Valor: R$ ${i.valor.toFixed(2).replace('.',',')}<br>
-                Data: ${new Date(i.data).toLocaleString('pt-BR')}
+        Data: ${new Date(i.data).toLocaleString('pt-BR')}
       </div>
       ${i.status==='pendente'?`
       <div class="lista-acoes" style="margin-top:8px">
@@ -1107,6 +1101,7 @@ function renderAdminIndicacoes(filtro='todos'){
           <div class="stat-label">Confirmadas</div>
         </div>
       </div>
+    </div>
     <div class="label">🔍 FILTRAR POR:</div>
     <div style="display:flex;gap:6px;margin-bottom:12px">
       <button class="btn-mini ${filtro==='todos'?'btn-edit':''}" onclick="renderAdminIndicacoes('todos')">TODOS</button>
@@ -1191,6 +1186,7 @@ function renderIndicacoes(){
           <div class="stat-num">${canceladas}</div>
           <div class="stat-label">Canceladas</div>
         </div>
+      </div>
       <div style="font-size:9px;color:var(--cinza);margin-bottom:6px">Progresso: ${validas}/${proxMeta}</div>
       <div class="progress-bar"><div class="progress-fill" style="width:${progresso}%"></div></div>
       ${recompensa?`<div style="font-size:9px;color:var(--verde);text-align:center;margin-top:8px">${recompensa}</div>`:''}
@@ -1283,9 +1279,25 @@ function formCat(k=null){
   document.getElementById('modalTit').textContent=k?'EDITAR CATEGORIA':'NOVA CATEGORIA';
   document.getElementById('modalBody').innerHTML=`
     <input type="text" class="input" id="nomeC" value="${d?.nome||''}" placeholder="Nome da categoria">
+    <div class="label">🖼️ Imagem da categoria:</div>
+    <div class="upload" onclick="document.getElementById('imgCatInput').click()">
+      ${d?.img?`<img src="${d.img}" id="imgCatPreview">`:'<div class="upload-text">📷 Clique para escolher<br>da galeria</div>'}
+      <input type="file" id="imgCatInput" accept="image/*" onchange="previewImgCat(event)">
+    </div>
     <button class="btn" onclick="salvarCat('${k||''}')">${k?'SALVAR':'CRIAR'}</button>
     <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
   document.getElementById('modal').classList.add('ativo');
+}
+
+function previewImgCat(e){
+  const file=e.target.files[0];
+  if(file){
+    const reader=new FileReader();
+    reader.onload=function(ev){
+      document.querySelector('.upload').innerHTML=`<img src="${ev.target.result}" id="imgCatPreview"><input type="file" id="imgCatInput" accept="image/*" onchange="previewImgCat(event)">`;
+    };
+    reader.readAsDataURL(file);
+  }
 }
 
 function formServ(k=null){
@@ -1299,17 +1311,32 @@ function formServ(k=null){
     <textarea class="textarea" id="descS" placeholder="Descrição do serviço">${d?.desc||''}</textarea>
     <input type="number" step="0.01" class="input" id="precoS" value="${d?.preco||''}" placeholder="Valor do serviço">
     <input type="number" class="input" id="estS" value="${d?.estoque||''}" placeholder="Estoque">
-    <div class="label">🖼️ Imagem do produto (URL):</div>
-    <input type="text" class="input" id="imgS" value="${d?.img||''}" placeholder="Cole o link da imagem">
+    <div class="label">🖼️ Imagem do produto:</div>
+    <div class="upload" onclick="document.getElementById('imgServInput').click()">
+      ${d?.img?`<img src="${d.img}" id="imgServPreview">`:'<div class="upload-text">📷 Clique para escolher<br>da galeria</div>'}
+      <input type="file" id="imgServInput" accept="image/*" onchange="previewImgServ(event)">
+    </div>
     <button class="btn" onclick="salvarServ('${k||''}')">${k?'SALVAR':'CRIAR'}</button>
     <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
   document.getElementById('modal').classList.add('ativo');
 }
 
+function previewImgServ(e){
+  const file=e.target.files[0];
+  if(file){
+    const reader=new FileReader();
+    reader.onload=function(ev){
+      document.querySelectorAll('.upload')[0].innerHTML=`<img src="${ev.target.result}" id="imgServPreview"><input type="file" id="imgServInput" accept="image/*" onchange="previewImgServ(event)">`;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
 function salvarCat(k){
   const nome=document.getElementById('nomeC').value.trim();
+  const img=document.getElementById('imgCatPreview')?.src||'';
   if(!nome){alert('Nome obrigatório');return}
-  if(k){db.cat[db.cat.findIndex(x=>x.k===k)]={k,nome}}else{db.cat.push({k:'c'+Date.now(),nome})}
+  if(k){db.cat[db.cat.findIndex(x=>x.k===k)]={k,nome,img}}else{db.cat.push({k:'c'+Date.now(),nome,img})}
   save();fecharModal();abrirCats();renderJogos();
 }
 
@@ -1327,7 +1354,7 @@ function salvarServ(k){
   const desc=document.getElementById('descS').value.trim();
   const preco=parseFloat(document.getElementById('precoS').value);
   const estoque=parseInt(document.getElementById('estS').value)||0;
-  const img=document.getElementById('imgS').value.trim();
+  const img=document.getElementById('imgServPreview')?.src||'';
   if(!cat||!nome||!preco){alert('Preencha categoria, nome e valor');return}
   const dados={k:k||'s'+Date.now(),cat,nome,desc,preco,estoque,img};
   if(k){db.serv[db.serv.findIndex(x=>x.k===k)]=dados}else{db.serv.push(dados)}
@@ -1373,37 +1400,35 @@ function salvarTermos(){
   document.getElementById('modal').classList.remove('ativo');
 }
 
-function formTeste(){
-  const teste=db.config.teste||{desc:''};
-  document.getElementById('modalTit').textContent='TESTE GRÁTIS';
-  document.getElementById('modalBody').innerHTML=`
-    <textarea class="textarea" id="testeDesc" placeholder="Descrição do teste grátis" style="min-height:100px">${teste.desc}</textarea>
-    <button class="btn" onclick="salvarTeste()">SALVAR</button>
-  `;
-  document.getElementById('modal').classList.add('ativo');
-}
-
-function salvarTeste(){
-  db.config.teste={desc:document.getElementById('testeDesc').value};
-  save();
-  alert('Salvo!');
-  document.getElementById('modal').classList.remove('ativo');
-}
-
 function formPremiacao(){
   const prem=db.config.premiacao||{img:'',texto:''};
   document.getElementById('modalTit').textContent='PREMIAÇÃO';
   document.getElementById('modalBody').innerHTML=`
-    <input type="text" class="input" id="premImg" placeholder="URL da imagem" value="${prem.img}">
+    <div class="label">🖼️ Imagem da premiação:</div>
+    <div class="upload" onclick="document.getElementById('imgPremInput').click()">
+      ${prem.img?`<img src="${prem.img}" id="imgPremPreview">`:'<div class="upload-text">📷 Clique para escolher<br>da galeria</div>'}
+      <input type="file" id="imgPremInput" accept="image/*" onchange="previewImgPrem(event)">
+    </div>
     <textarea class="textarea" id="premTexto" placeholder="Texto da premiação" style="min-height:150px">${prem.texto}</textarea>
     <button class="btn" onclick="salvarPremiacao()">SALVAR</button>
   `;
   document.getElementById('modal').classList.add('ativo');
 }
 
+function previewImgPrem(e){
+  const file=e.target.files[0];
+  if(file){
+    const reader=new FileReader();
+    reader.onload=function(ev){
+      document.querySelectorAll('.upload')[0].innerHTML=`<img src="${ev.target.result}" id="imgPremPreview"><input type="file" id="imgPremInput" accept="image/*" onchange="previewImgPrem(event)">`;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
 function salvarPremiacao(){
   db.config.premiacao={
-    img:document.getElementById('premImg').value,
+    img:document.getElementById('imgPremPreview')?.src||'',
     texto:document.getElementById('premTexto').value
   };
   save();
