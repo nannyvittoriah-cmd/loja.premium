@@ -91,7 +91,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .link-roxo{color:var(--roxo);cursor:pointer;font-size:9px;text-align:center;margin-top:12px}
 .link-roxo:hover{text-decoration:underline}
 
-/* LOJA NOVA */
+/* LOJA */
 .search-bar{position:relative;margin:8px 12px}
 .search-bar input{width:100%;background:rgba(5,5,5,0.6);border:1px solid var(--borda);padding:8px 8px 8px 32px;border-radius:20px;color:var(--branco);font-size:10px;backdrop-filter:blur(5px)}
 .search-bar input:focus{outline:none;border-color:var(--roxo);box-shadow:0 0 8px var(--glow)}
@@ -111,9 +111,10 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .produtos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:0 12px 20px}
 .produto-card{background:var(--card);border:1px solid var(--borda);border-radius:20px;padding:10px;box-shadow:0 0 10px var(--glow)}
 .produto-card .tag-jogo{font-size:7px;color:var(--roxo);font-weight:800;text-align:center;margin-bottom:4px}
-.produto-img{width:100%;height:60px;background:linear-gradient(135deg, #1a0b2e, #050505);border-radius:15px;margin-bottom:6px;display:flex;align-items:center;justify-content:center;position:relative}
+.produto-img{width:100%;height:60px;background:linear-gradient(135deg, #1a0b2e, #050505);border-radius:15px;margin-bottom:6px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.produto-img img{width:100%;height:100%;object-fit:cover}
 .produto-img i{width:28px;height:28px;stroke:var(--roxo);filter:drop-shadow(0 0 6px var(--roxo))}
-.badge-bonus{position:absolute;top:-2px;right:-2px;background:var(--roxo);color:var(--branco);font-size:6px;font-weight:800;padding:2px 5px;border-radius:20px}
+.badge-bonus{position:absolute;top:-2px;right:-2px;background:var(--roxo);color:var(--branco);font-size:6px;font-weight:800;padding:2px 5px;border-radius:20px;z-index:2}
 .produto-nome{font-size:9px;font-weight:700;text-align:center;margin-bottom:3px}
 .produto-preco{font-size:12px;font-weight:900;color:var(--roxo);text-align:center;margin-bottom:6px;text-shadow:0 0 6px var(--glow)}
 .btn-comprar{width:100%;background:linear-gradient(135deg, var(--roxo), var(--roxo-neon));color:var(--branco);border:none;padding:6px;border-radius:20px;font-weight:800;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:3px;box-shadow:0 0 8px var(--glow)}
@@ -127,7 +128,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .input:focus,.textarea:focus{border-color:var(--roxo);box-shadow:0 0 8px rgba(139,92,246,.3)}
 .btn{width:100%;background:var(--roxo);color:var(--branco);border:none;border-radius:10px;padding:12px;font-weight:700;font-size:11px;cursor:pointer;margin-top:6px;box-shadow:0 0 12px rgba(139,92,246,.4)}
 .btn:active{transform:scale(.98)}
-.btn-red{background:#ef4444;box-shadow:0 0 12px rgba(239,68,68,.4)}
+.btn-red{background:#ef4444;box-shadow:0 0 12px rgba(239,68,.4)}
 .btn-sec{background:var(--borda);box-shadow:none}
 .btn-desc{background:transparent;border:1px solid var(--roxo);color:var(--roxo);box-shadow:none}
 .btn-voltar{width:28px;height:28px;background:var(--card);border:1px solid var(--borda);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px}
@@ -145,8 +146,25 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .modal-box{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:16px;width:100%;max-width:400px;max-height:90vh;overflow-y:auto}
 .modal-tit{font-size:12px;font-weight:800;margin-bottom:12px}
 .empty{text-align:center;padding:30px 16px;color:var(--cinza);font-size:10px}
+.add{position:fixed;bottom:16px;right:16px;width:44px;height:44px;background:var(--roxo);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px rgba(139,92,246,.6);z-index:90;font-size:20px;font-weight:700}
+.upload{width:100%;aspect-ratio:16/9;background:var(--bg);border:2px dashed var(--borda);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;cursor:pointer;overflow:hidden;font-size:9px;color:var(--cinza);position:relative}
+.upload img{width:100%;height:100%;object-fit:cover}
+.upload input{display:none}
 .loading{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:500;display:none;align-items:center;justify-content:center;font-size:12px}
 .loading.ativo{display:flex}
+
+/* MODAL PRODUTO */
+.modal-produto{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.95);z-index:350;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-produto.ativo{display:flex}
+.modal-produto-box{background:var(--card);border:1px solid var(--borda);border-radius:14px;width:100%;max-width:360px;max-height:90vh;overflow-y:auto}
+.modal-produto-img{width:100%;height:180px;position:relative;border-radius:14px 14px 0;overflow:hidden;background:linear-gradient(135deg, #1a0b2e, #050505)}
+.modal-produto-img img{width:100%;height:100%;object-fit:cover}
+.modal-produto-fechar{position:absolute;top:10px;right:10px;width:32px;height:32px;background:rgba(0,0,0,.7);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.modal-produto-body{padding:16px}
+.modal-produto-nome{font-size:16px;font-weight:900;margin-bottom:6px}
+.modal-produto-preco{font-size:20px;font-weight:900;color:var(--verde);margin-bottom:12px}
+.modal-produto-desc{font-size:10px;color:var(--cinza);line-height:1.6;margin-bottom:16px;display:none}
+.modal-produto-desc.ativo{display:block}
 
 /* COMO COMPRAR */
 .como-comprar{padding:20px 12px 40px;max-width:600px;margin:0 auto}
@@ -179,7 +197,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .comprovante-titulo .novo{color:#FFFFFF}
 .comprovante-titulo .pedido{color:#8B5CF6}
 .comprovante-titulo i{width:16px;height:16px;stroke:#A855F7;fill:none;stroke-width:2.5;filter:drop-shadow(0 0 8px rgba(168,85,247,.7))}
-.comprovante-linha{display:flex;align-items:center;gap:6px;margin-bottom:3px;padding:3px 6px;background:rgba(13,13,13,0.6);border-radius:4px;border:1px solid #1E1E1E}
+.comprovante-linha{display:flex;align-items:center;gap:6px;margin-bottom:3px;padding:3px 6px;background:rgba(13,13,0.6);border-radius:4px;border:1px solid #1E1E1E}
 .comprovante-icon{width:24px;height:24px;background:rgba(139,92,246,0.15);border:1px solid #8B5CF6;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 8px rgba(168,85,247,0.2)}
 .comprovante-icon i{width:14px;height:14px;stroke:#A855F7;fill:none;stroke-width:2.5;filter:drop-shadow(0 0 8px rgba(168,85,247,.7))}
 .comprovante-info-wrap{flex:1;display:flex;justify-content:space-between;align-items:center}
@@ -200,15 +218,6 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .comprovante-footer-logo i{width:12px;height:12px;stroke:#A855F7;fill:none;stroke-width:2.5;filter:drop-shadow(0 0 8px rgba(168,85,247,.7))}
 .comprovante-footer-texto{font-size:9px;color:#D1D5DB;margin-bottom:1px}
 .comprovante-footer-heart{color:#A855F7;font-size:10px;filter:drop-shadow(0 0 6px rgba(168,85,247,.7))}
-.comprovante-acoes{display:flex;justify-content:center;gap:12px;margin-top:6px;padding-top:6px;border-top:1px solid #1E1E1E}
-.btn-baixar-comprovante{height:28px;border-radius:6px;background:#111111;border:1px solid #2A2A2A;color:#A855F7;font-size:9px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .3s;text-shadow:0 0 8px rgba(168,85,247,.8)}
-.btn-baixar-comprovante:hover{box-shadow:0 0 12px rgba(168,85,247,.45);border-color:#A855F7}
-.btn-baixar-comprovante i{width:16px;height:16px;stroke:#A855F7;filter:drop-shadow(0 0 6px rgba(168,85,247,.7))}
-
-/* MODAL PEDIDO */
-.modal-pedido{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.95);z-index:400;display:none;align-items:center;justify-content:center;padding:16px}
-.modal-pedido.ativo{display:flex}
-.modal-pedido-box{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:16px;width:100%;max-width:400px;max-height:90vh;overflow-y:auto}
 </style>
 </head>
 <body>
@@ -350,32 +359,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
     <div class="left"><i data-lucide="gamepad-2"></i>ESCOLHA SEU JOGO</div>
     <span class="ver-todos" onclick="renderProdutosLoja()">Ver todos ›</span>
   </div>
-  <div class="jogos-grid">
-    <div class="jogo-card" onclick="filtrarJogo('freefire')">
-      <i data-lucide="flame"></i>
-      <span>FREE FIRE</span>
-    </div>
-    <div class="jogo-card" onclick="filtrarJogo('roblox')">
-      <i data-lucide="box"></i>
-      <span>ROBLOX</span>
-    </div>
-    <div class="jogo-card" onclick="filtrarJogo('codm')">
-      <i data-lucide="crosshair"></i>
-      <span>COD MOBILE</span>
-    </div>
-    <div class="jogo-card" onclick="filtrarJogo('fortnite')">
-      <i data-lucide="zap"></i>
-      <span>FORTNITE</span>
-    </div>
-    <div class="jogo-card" onclick="filtrarJogo('brawl')">
-      <i data-lucide="star"></i>
-      <span>BRAWL STARS</span>
-    </div>
-    <div class="jogo-card" onclick="filtrarJogo('efootball')">
-      <i data-lucide="football"></i>
-      <span>EFOOTBALL</span>
-    </div>
-  </div>
+  <div class="jogos-grid" id="jogosGrid"></div>
 
   <div class="section-title">
     <div class="left"><i data-lucide="flame"></i>MAIS COMPRADOS</div>
@@ -384,7 +368,38 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
   <div class="produtos-grid" id="produtosGrid"></div>
 </div>
 
-<!-- RESTANTE DAS TELAS: indicacoes, comprovantes, suporte, admin, etc -->
+<!-- MODAL PRODUTO -->
+<div class="modal-produto" id="modalProduto">
+  <div class="modal-produto-box">
+    <div class="modal-produto-img">
+      <img id="modalProdutoImg" src="" alt="">
+      <div class="modal-produto-fechar" onclick="fecharModalProduto()"><i data-lucide="x"></i></div>
+    </div>
+    <div class="modal-produto-body">
+      <div class="modal-produto-nome" id="modalProdutoNome"></div>
+      <div class="modal-produto-preco" id="modalProdutoPreco"></div>
+      <div class="modal-produto-desc" id="modalProdutoDesc"></div>
+      <button class="btn btn-desc" onclick="toggleProdutoDesc()">VER DESCRIÇÃO</button>
+      <div class="label">🔗 Link/ID da conta:</div>
+      <input type="text" class="input" id="linkProduto" placeholder="Cole o link ou ID aqui">
+      <div class="label">🎁 Código de indicação (opcional):</div>
+            <input type="text" class="input" id="codigoProduto" placeholder="Ex: PREMIUM782">
+      <button class="btn" onclick="finalizarPedido()">FAZER PEDIDO</button>
+      <button class="btn btn-sec" onclick="fecharModalProduto()">CANCELAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- TELAS ADMIN -->
+<div id="admin" class="tela">
+  <div class="header">
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
+    <div style="font-size:12px;font-weight:700">PAINEL ADM</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="adminBody"></div>
+</div>
+
 <div id="indicacoes" class="tela">
   <div class="header">
     <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
@@ -394,31 +409,22 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
   <div class="container" id="indicacoesBody"></div>
 </div>
 
+<div id="adminIndicacoes" class="tela">
+  <div class="header">
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
+    <div style="font-size:12px;font-weight:700">INDICAÇÕES ADMIN</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="adminIndicacoesBody"></div>
+</div>
+
 <div id="comprovantes" class="tela">
   <div class="header">
-        <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
     <div style="font-size:12px;font-weight:700">MEUS COMPROVANTES</div>
     <div style="width:28px"></div>
   </div>
   <div class="container" id="comprovantesBody"></div>
-</div>
-
-<div id="suporte" class="tela">
-  <div class="header">
-    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
-    <div style="font-size:12px;font-weight:700">SUPORTE</div>
-    <div style="width:28px"></div>
-  </div>
-  <div class="container" id="suporteBody"></div>
-</div>
-
-<div id="admin" class="tela">
-  <div class="header">
-    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
-    <div style="font-size:12px;font-weight:700">PAINEL ADM</div>
-    <div style="width:28px"></div>
-  </div>
-  <div class="container" id="adminBody"></div>
 </div>
 
 <div id="pedidos" class="tela">
@@ -430,13 +436,13 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
   <div class="container" id="pedidosBody"></div>
 </div>
 
-<div id="adminIndicacoes" class="tela">
+<div id="suporte" class="tela">
   <div class="header">
     <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
-    <div style="font-size:12px;font-weight:700">INDICAÇÕES ADMIN</div>
+    <div style="font-size:12px;font-weight:700">SUPORTE</div>
     <div style="width:28px"></div>
   </div>
-  <div class="container" id="adminIndicacoesBody"></div>
+  <div class="container" id="suporteBody"></div>
 </div>
 
 <div id="faq" class="tela">
@@ -489,13 +495,6 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
   </div>
 </div>
 
-<div class="modal-pedido" id="modalPedido">
-  <div class="modal-pedido-box">
-    <div class="modal-tit">FINALIZAR PEDIDO</div>
-    <div id="modalPedidoBody"></div>
-  </div>
-</div>
-
 <script>
 const EMAIL_ADM='nannyvittoriah@gmail.com',WHATSAPP='5598984853563';
 
@@ -508,17 +507,6 @@ let db={
   pedidos:JSON.parse(localStorage.getItem('pedidos')||'[]')
 };
 let usuarioAtual=null,jogoSelecionado=null,produtoSelecionado=null;
-
-const produtosMock = [
-  {id: 1, jogo: 'freefire', nome: '100 DIAMANTES', preco: 4.99, bonus: '+BÔNUS', categoria: 'FREE FIRE'},
-  {id: 2, jogo: 'freefire', nome: '310 DIAMANTES', preco: 13.99, bonus: '+20%', categoria: 'FREE FIRE'},
-  {id: 3, jogo: 'freefire', nome: '520 DIAMANTES', preco: 20.99, bonus: '+25%', categoria: 'FREE FIRE'},
-  {id: 4, jogo: 'freefire', nome: '1060 DIAMANTES', preco: 38.99, bonus: '+30%', categoria: 'FREE FIRE'},
-  {id: 5, jogo: 'roblox', nome: '400 ROBUX', preco: 19.99, bonus: '', categoria: 'ROBLOX'},
-  {id: 6, jogo: 'roblox', nome: '800 ROBUX', preco: 35.99, bonus: '+10%', categoria: 'ROBLOX'},
-  {id: 7, jogo: 'codm', nome: '80 CP', preco: 4.99, bonus: '', categoria: 'COD MOBILE'},
-  {id: 8, jogo: 'fortnite', nome: '1000 V-BUCKS', preco: 29.99, bonus: '+15%', categoria: 'FORTNITE'}
-];
 
 function save(){
   localStorage.setItem('cat',JSON.stringify(db.cat));
@@ -550,6 +538,7 @@ window.addEventListener('load',()=>{
       document.getElementById('login').classList.remove('ativa');
       document.getElementById('home').classList.add('ativa');
       atualizarHeaderUsuario();
+      renderJogos();
       renderProdutosLoja();
       atualizarCarrinho();
       if(usuarioAtual.admin){
@@ -638,7 +627,7 @@ function fecharMenu(){document.getElementById('sidebar').classList.remove('ativo
 function ir(t){
   document.querySelectorAll('.tela').forEach(e=>e.classList.remove('ativa'));
   document.getElementById(t).classList.add('ativa');
-  if(t==='home')renderProdutosLoja();
+  if(t==='home'){renderJogos();renderProdutosLoja();}
   if(t==='faq')renderFaq();
   if(t==='termos')renderTermos();
   if(t==='teste')renderTeste();
@@ -651,29 +640,57 @@ function ir(t){
   lucide.createIcons();
 }
 
+function renderJogos(){
+  const cats = db.cat.length?db.cat:[];
+  const icones = {'free fire':'flame','roblox':'box','cod mobile':'crosshair','fortnite':'zap','brawl stars':'star','efootball':'football'};
+  const html = cats.map(c=>{
+    const key = c.nome.toLowerCase().replace(/\s/g,'');
+    return `<div class="jogo-card" onclick="filtrarJogo('${c.k}')">
+      <i data-lucide="${icones[c.nome.toLowerCase()]||'gamepad-2'}"></i>
+      <span>${c.nome.toUpperCase()}</span>
+    </div>`;
+  }).join('');
+  document.getElementById('jogosGrid').innerHTML = html || '<div class="empty" style="grid-column:1/-1">Cadastre categorias no Admin</div>';
+  lucide.createIcons();
+}
+
 function renderProdutosLoja(filtroJogo=null){
   jogoSelecionado = filtroJogo;
-  let produtos = produtosMock;
-  if(filtroJogo){produtos = produtos.filter(p => p.jogo === filtroJogo);}
+  let produtos = db.serv;
+
+  if(filtroJogo){
+    produtos = produtos.filter(p => p.cat === filtroJogo);
+  }
+
   const busca = document.getElementById('buscaProduto')?.value.toLowerCase();
-  if(busca){produtos = produtos.filter(p =>p.nome.toLowerCase().includes(busca) ||p.categoria.toLowerCase().includes(busca));}
-  const html = produtos.map(p=>`
+  if(busca){
+    produtos = produtos.filter(p => {
+      const cat = db.cat.find(c=>c.k===p.cat);
+      return p.nome.toLowerCase().includes(busca) || cat?.nome.toLowerCase().includes(busca);
+    });
+  }
+
+  const html = produtos.map(p=>{
+    const cat = db.cat.find(c=>c.k===p.cat);
+    return `
     <div class="produto-card">
-      <div class="tag-jogo">${p.categoria}</div>
+      <div class="tag-jogo">${cat?.nome.toUpperCase()||'GERAL'}</div>
       <div class="produto-img">
-        <i data-lucide="gem"></i>
-        ${p.bonus?`<span class="badge-bonus">${p.bonus}</span>`:''}
+        ${p.img?`<img src="${p.img}" alt="${p.nome}">`:`<i data-lucide="gem"></i>`}
+        ${p.estoque>0?`<span class="badge-bonus">${p.estoque} DISP</span>`:''}
       </div>
       <div class="produto-nome">${p.nome}</div>
       <div class="produto-preco">R$ ${p.preco.toFixed(2).replace('.',',')}</div>
-      <button class="btn-comprar" onclick="abrirModalPedido(${p.id})">
+      <button class="btn-comprar" onclick="abrirModalPedido('${p.k}')">
         <i data-lucide="shopping-cart"></i>
         COMPRAR
       </button>
     </div>
-  `).join('');
-  document.getElementById('produtosGrid').innerHTML = html || '<div class="empty">Nenhum produto encontrado</div>';
+  `}).join('');
+
+  document.getElementById('produtosGrid').innerHTML = html || '<div class="empty">Nenhum produto cadastrado<br><br>Cadastre no Painel ADM</div>';
   lucide.createIcons();
+
   document.querySelectorAll('.jogo-card').forEach(card=>{card.classList.remove('ativo');});
   if(filtroJogo){
     const cardAtivo = document.querySelector(`.jogo-card[onclick="filtrarJogo('${filtroJogo}')"]`);
@@ -681,52 +698,62 @@ function renderProdutosLoja(filtroJogo=null){
   }
 }
 
-function filtrarJogo(jogo){renderProdutosLoja(jogo);}
+function filtrarJogo(k){renderProdutosLoja(k);}
 
-function abrirModalPedido(id){
-  produtoSelecionado = produtosMock.find(p=>p.id===id);
+document.getElementById('buscaProduto')?.addEventListener('input', () => {renderProdutosLoja(jogoSelecionado);});
+
+function atualizarCarrinho(){
+  const pendentes = db.pedidos.filter(p=>p.email===usuarioAtual.email && p.status==='pendente').length;
+  document.getElementById('cartCount').textContent = pendentes;
+}
+
+function abrirModalPedido(k){
+  produtoSelecionado = db.serv.find(p=>p.k===k);
   if(!produtoSelecionado) return;
-  document.getElementById('modalPedidoBody').innerHTML=`
-    <div style="text-align:center;margin-bottom:12px">
-      <div style="font-size:12px;font-weight:800;color:var(--roxo);margin-bottom:4px">${produtoSelecionado.categoria}</div>
-      <div style="font-size:16px;font-weight:900;margin-bottom:4px">${produtoSelecionado.nome}</div>
-      <div style="font-size:18px;font-weight:900;color:var(--verde)">R$ ${produtoSelecionado.preco.toFixed(2).replace('.',',')}</div>
-    </div>
-    <div class="label">🔗 Link/ID da conta:</div>
-    <input type="text" class="input" id="linkPedido" placeholder="Cole o link ou ID aqui">
-    <div class="label">🎁 Código de indicação (opcional):</div>
-    <input type="text" class="input" id="codigoPedido" placeholder="Ex: PREMIUM782">
-    <button class="btn" onclick="finalizarPedido()">FAZER PEDIDO</button>
-    <button class="btn btn-sec" onclick="fecharModalPedido()">CANCELAR</button>
-  `;
-  document.getElementById('modalPedido').classList.add('ativo');
+  const cat = db.cat.find(c=>c.k===produtoSelecionado.cat);
+
+  document.getElementById('modalProdutoImg').src = produtoSelecionado.img || '';
+  document.getElementById('modalProdutoImg').style.display = produtoSelecionado.img? 'block' : 'none';
+  document.getElementById('modalProdutoNome').textContent = produtoSelecionado.nome;
+  document.getElementById('modalProdutoPreco').textContent = `R$ ${produtoSelecionado.preco.toFixed(2).replace('.',',')}`;
+  document.getElementById('modalProdutoDesc').textContent = produtoSelecionado.desc || 'Sem descrição';
+  document.getElementById('modalProdutoDesc').classList.remove('ativo');
+  document.getElementById('modalProduto').classList.add('ativo');
   lucide.createIcons();
 }
 
-function fecharModalPedido(){
-  document.getElementById('modalPedido').classList.remove('ativo');
+function fecharModalProduto(){
+  document.getElementById('modalProduto').classList.remove('ativo');
   produtoSelecionado=null;
+}
+
+function toggleProdutoDesc(){
+  document.getElementById('modalProdutoDesc').classList.toggle('ativo');
 }
 
 function finalizarPedido(){
   if(!produtoSelecionado){alert('Erro ao processar pedido');return}
-  let link=document.getElementById('linkPedido').value.trim();
+  let link=document.getElementById('linkProduto').value.trim();
   if(!link){alert('Cole o link/ID');return}
-  const codigoInd=document.getElementById('codigoPedido').value.trim().toUpperCase();
+  const codigoInd=document.getElementById('codigoProduto').value.trim().toUpperCase();
   const pedidoId='#'+Date.now().toString().slice(-5);
+  const cat = db.cat.find(c=>c.k===produtoSelecionado.cat);
+
   const pedido={
     id:pedidoId,
     uid:usuarioAtual.uid,
     email:usuarioAtual.email,
     servico:produtoSelecionado.nome,
-    jogo:produtoSelecionado.categoria,
+    jogo:cat?.nome||'Geral',
     valor:produtoSelecionado.preco,
     link,
     codigoIndicacao:codigoInd||null,
     data:new Date().toISOString(),
     status:'pendente'
   };
+
   db.pedidos.push(pedido);
+
   if(codigoInd){
     const uidIndicador=Object.keys(db.usuarios).find(uid=>db.usuarios[uid].codigo===codigoInd);
     if(uidIndicador && uidIndicador!==usuarioAtual.uid){
@@ -744,8 +771,10 @@ function finalizarPedido(){
       db.usuarios[uidIndicador].totalIndicacoes=(db.usuarios[uidIndicador].totalIndicacoes||0)+1;
     }
   }
+
   save();
   atualizarCarrinho();
+
   let msg=`━━━━━━━━━━
 🚀 NOVO PEDIDO
 ━━━━━━━━━━
@@ -754,22 +783,17 @@ function finalizarPedido(){
 👤 Cliente: ${usuarioAtual.nome}
 📧 Email: ${usuarioAtual.email}
 
-🎮 Jogo: ${produtoSelecionado.categoria}
+🎮 Jogo: ${cat?.nome||'Geral'}
 📦 Produto: ${produtoSelecionado.nome}
 💵 Valor: R$ ${produtoSelecionado.preco.toFixed(2).replace('.',',')}
 🔗 Link/ID: ${link}`;
+
   if(codigoInd){msg+=`\n\n🎁 Código de indicação:\n${codigoInd}`;}
   msg+=`\n\n📌 Status:\nAguardando confirmação\n━━━━━━━━━━`;
+
   window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
-  fecharModalPedido();
+  fecharModalProduto();
   alert('✅ Pedido enviado!\n\nID: '+pedidoId+'\n\nAguarde confirmação no WhatsApp.');
-}
-
-document.getElementById('buscaProduto')?.addEventListener('input', () => {renderProdutosLoja(jogoSelecionado);});
-
-function atualizarCarrinho(){
-  const pendentes = db.pedidos.filter(p=>p.email===usuarioAtual.email && p.status==='pendente').length;
-  document.getElementById('cartCount').textContent = pendentes;
 }
 
 function renderComprovantes(){
@@ -803,7 +827,6 @@ function renderComprovantes(){
           <div class="comprovante-label">Serviço:</div>
           <div class="comprovante-valor">${p.servico}</div>
         </div>
-      </div>
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="dollar-sign"></i></div>
         <div class="comprovante-info-wrap">
@@ -817,6 +840,7 @@ function renderComprovantes(){
           <div class="comprovante-label">Link:</div>
           <div class="comprovante-valor link">${p.link.substring(0,30)}...</div>
         </div>
+      </div>
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="calendar"></i></div>
         <div class="comprovante-info-wrap">
@@ -841,7 +865,6 @@ function renderComprovantes(){
             ${statusTxt}
           </div>
         </div>
-      </div>
       <div class="comprovante-footer">
         <div class="comprovante-footer-logo">
           <i data-lucide="gem"></i>
@@ -940,6 +963,7 @@ function abrirAdmin(){
 }
 
 function abrirPedidos(){ir('pedidos');renderPedidos();}
+
 function renderPedidos(filtro='todos',buscaId=''){
   const hoje=new Date().toLocaleDateString('pt-BR');
   const pedidosHoje=db.pedidos.filter(p=>new Date(p.data).toLocaleDateString('pt-BR')===hoje);
@@ -992,7 +1016,6 @@ function renderPedidos(filtro='todos',buscaId=''){
           <div class="stat-label">Faturamento</div>
         </div>
       </div>
-    </div>
     <div class="label">🔍 BUSCAR PEDIDO:</div>
     <div style="display:flex;gap:6px;margin-bottom:12px">
       <input type="text" class="input" id="buscaPedidoId" placeholder="Digite ID ou email do cliente" value="${buscaId}" style="margin:0;flex:1">
@@ -1053,15 +1076,15 @@ function renderAdminIndicacoes(filtro='todos'){
         <span class="badge badge-${i.status}">${i.status==='pendente'?'⏳ Pendente':i.status==='confirmada'?'✅ Confirmada':'❌ Cancelada'}</span>
       </div>
       <div class="lista-info">
-        Indicador: ${indicador?indicador.codigo:'Desconhecido'}<br>
+        Indicador: ${indicador?.codigo||'Desconhecido'}<br>
         Indicado: ${i.nomeIndicado}<br>
         Valor: R$ ${i.valor.toFixed(2).replace('.',',')}<br>
-        Data: ${new Date(i.data).toLocaleString('pt-BR')}
+                Data: ${new Date(i.data).toLocaleString('pt-BR')}
       </div>
       ${i.status==='pendente'?`
       <div class="lista-acoes" style="margin-top:8px">
         <button class="btn-mini btn-edit" onclick="aprovarIndicacao('${i.id}')">✅ APROVAR</button>
-                <button class="btn-mini btn-del" onclick="invalidarIndicacao('${i.id}')">🚫 INVÁLIDA</button>
+        <button class="btn-mini btn-del" onclick="invalidarIndicacao('${i.id}')">🚫 INVÁLIDA</button>
       </div>`:''}
     </div>
   `}).join('');
@@ -1084,7 +1107,6 @@ function renderAdminIndicacoes(filtro='todos'){
           <div class="stat-label">Confirmadas</div>
         </div>
       </div>
-    </div>
     <div class="label">🔍 FILTRAR POR:</div>
     <div style="display:flex;gap:6px;margin-bottom:12px">
       <button class="btn-mini ${filtro==='todos'?'btn-edit':''}" onclick="renderAdminIndicacoes('todos')">TODOS</button>
@@ -1169,7 +1191,6 @@ function renderIndicacoes(){
           <div class="stat-num">${canceladas}</div>
           <div class="stat-label">Canceladas</div>
         </div>
-      </div>
       <div style="font-size:9px;color:var(--cinza);margin-bottom:6px">Progresso: ${validas}/${proxMeta}</div>
       <div class="progress-bar"><div class="progress-fill" style="width:${progresso}%"></div></div>
       ${recompensa?`<div style="font-size:9px;color:var(--verde);text-align:center;margin-top:8px">${recompensa}</div>`:''}
@@ -1234,6 +1255,7 @@ function abrirCats(){
           <button class="btn-mini btn-edit" onclick="formCat('${c.k}')">EDITAR</button>
           <button class="btn-mini btn-del" onclick="delCat('${c.k}')">EXCLUIR</button>
         </div>
+      </div>
       <div class="lista-info">${db.serv.filter(s=>s.cat===c.k).length} serviços</div>
     </div>`).join('');
   document.getElementById('adminBody').innerHTML=`<div class="titulo">CATEGORIAS</div>${lista||'<div class="empty">Nenhuma categoria</div>'}<div class="add" onclick="formCat()">+</div><button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>`;
@@ -1277,6 +1299,8 @@ function formServ(k=null){
     <textarea class="textarea" id="descS" placeholder="Descrição do serviço">${d?.desc||''}</textarea>
     <input type="number" step="0.01" class="input" id="precoS" value="${d?.preco||''}" placeholder="Valor do serviço">
     <input type="number" class="input" id="estS" value="${d?.estoque||''}" placeholder="Estoque">
+    <div class="label">🖼️ Imagem do produto (URL):</div>
+    <input type="text" class="input" id="imgS" value="${d?.img||''}" placeholder="Cole o link da imagem">
     <button class="btn" onclick="salvarServ('${k||''}')">${k?'SALVAR':'CRIAR'}</button>
     <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
   document.getElementById('modal').classList.add('ativo');
@@ -1286,14 +1310,14 @@ function salvarCat(k){
   const nome=document.getElementById('nomeC').value.trim();
   if(!nome){alert('Nome obrigatório');return}
   if(k){db.cat[db.cat.findIndex(x=>x.k===k)]={k,nome}}else{db.cat.push({k:'c'+Date.now(),nome})}
-  save();fecharModal();abrirCats();
+  save();fecharModal();abrirCats();renderJogos();
 }
 
 function delCat(k){
   if(confirm('Excluir categoria? Vai apagar os serviços juntos.')){
     db.cat=db.cat.filter(x=>x.k!==k);
     db.serv=db.serv.filter(x=>x.cat!==k);
-    save();abrirCats();
+    save();abrirCats();renderJogos();renderProdutosLoja();
   }
 }
 
@@ -1303,16 +1327,17 @@ function salvarServ(k){
   const desc=document.getElementById('descS').value.trim();
   const preco=parseFloat(document.getElementById('precoS').value);
   const estoque=parseInt(document.getElementById('estS').value)||0;
+  const img=document.getElementById('imgS').value.trim();
   if(!cat||!nome||!preco){alert('Preencha categoria, nome e valor');return}
-  const dados={k:k||'s'+Date.now(),cat,nome,desc,preco,estoque};
+  const dados={k:k||'s'+Date.now(),cat,nome,desc,preco,estoque,img};
   if(k){db.serv[db.serv.findIndex(x=>x.k===k)]=dados}else{db.serv.push(dados)}
-  save();fecharModal();abrirServs();
+  save();fecharModal();abrirServs();renderProdutosLoja();
 }
 
 function delServ(k){
   if(confirm('Excluir serviço?')){
     db.serv=db.serv.filter(x=>x.k!==k);
-    save();abrirServs();
+    save();abrirServs();renderProdutosLoja();
   }
 }
 
@@ -1395,15 +1420,8 @@ document.getElementById('modal').addEventListener('click', (e)=>{
   if(e.target.id==='modal') e.target.classList.remove('ativo');
 });
 
-document.getElementById('modalPedido').addEventListener('click', (e)=>{
-  if(e.target.id==='modalPedido') e.target.classList.remove('ativo');
-});
-
-// Fecha dropdown ao clicar fora
-document.addEventListener('click',(e)=>{
-  if(!e.target.closest('.select-wrap')){
-    document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('ativo'));
-  }
+document.getElementById('modalProduto').addEventListener('click', (e)=>{
+  if(e.target.id==='modalProduto') e.target.classList.remove('ativo');
 });
 </script>
 </body>
