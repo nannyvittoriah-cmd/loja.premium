@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Premium Store - Admin</title>
+  <title>Premium Store</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -12,11 +12,13 @@
       background: #0a0a0f;
       color: #fff;
       --roxo: #8b5cf6;
-      --verde: #00ff88;
+      --roxo-dark: #7c3aed;
       --bg-card: #13131a;
       --borda: #2a2a35;
     }
     .hidden { display: none !important; }
+    
+    /* LOGIN */
     .login-box {
       min-height: 100vh;
       display: flex;
@@ -25,34 +27,80 @@
       background: radial-gradient(circle at top, #1a0b2e 0%, #0a0a0f 100%);
       padding: 20px;
     }
+    .login-wrapper {
+      width: 100%;
+      max-width: 420px;
+    }
+    .banner-login {
+      width: 100%;
+      margin-bottom: 24px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--borda);
+    }
+    .banner-login img {
+      width: 100%;
+      display: block;
+    }
     .login-card {
       background: var(--bg-card);
       padding: 32px;
       border-radius: 16px;
       border: 1px solid var(--borda);
-      width: 100%;
-      max-width: 400px;
     }
-    .login-card h1 {
-      font-size: 1.8rem;
-      font-weight: 900;
+    .login-card h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
-    .login-card h1 span { color: var(--roxo); }
-    .input-group { margin-bottom: 16px; }
+    .login-card h2::before, .login-card h2::after {
+      content: '➔';
+      color: var(--roxo);
+      font-size: 0.9rem;
+    }
+    .login-card p { text-align: center; color: #888; margin-bottom: 24px; font-size: 0.9rem; }
+    .input-group { margin-bottom: 16px; position: relative; }
     .input-group input {
       width: 100%;
       background: #0a0a0f;
       border: 1px solid var(--borda);
-      padding: 14px;
+      padding: 14px 14px 14px 45px;
       border-radius: 10px;
       color: #fff;
       font-size: 0.95rem;
     }
+    .input-group input:focus { outline: none; border-color: var(--roxo); }
+    .input-group .icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--roxo);
+      font-size: 1.1rem;
+    }
+    .opcoes {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 16px 0;
+      font-size: 0.85rem;
+    }
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #888;
+    }
+    .checkbox input { accent-color: var(--roxo); }
+    .link-roxo { color: var(--roxo); cursor: pointer; }
     .btn {
       width: 100%;
-      background: linear-gradient(135deg, var(--roxo) 0%, #7c3aed 100%);
+      background: linear-gradient(135deg, var(--roxo) 0%, var(--roxo-dark) 100%);
       color: #fff;
       border: none;
       padding: 16px;
@@ -60,9 +108,38 @@
       font-weight: 700;
       font-size: 1rem;
       cursor: pointer;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
+    .btn:hover { opacity: 0.9; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .erro { color: #ff4757; text-align: center; margin-top: 16px; font-size: 0.9rem; }
-    
+    .cadastro-footer {
+      text-align: center;
+      margin-top: 24px;
+      color: #888;
+      font-size: 0.9rem;
+    }
+    .info-box {
+      background: #1a1a22;
+      border: 1px solid var(--borda);
+      padding: 16px;
+      border-radius: 10px;
+      margin-top: 16px;
+      font-size: 0.85rem;
+    }
+    .info-box h4 {
+      color: var(--roxo);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* PAINEL LOJA */
     .app { display: flex; min-height: 100vh; }
     .sidebar {
       width: 250px;
@@ -100,148 +177,200 @@
       font-size: 0.8rem;
     }
     .content { flex: 1; padding: 30px; overflow-y: auto; }
-    .topbar h2 { font-size: 1.8rem; margin-bottom: 30px; }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    .topbar h2 { font-size: 1.8rem; }
+    .saldo {
+      background: #1a1a22;
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: 1px solid var(--borda);
+    }
+    .saldo span { color: var(--roxo); font-weight: 700; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
     .card {
       background: var(--bg-card);
       border-radius: 12px;
+      overflow: hidden;
       border: 1px solid var(--borda);
-      padding: 20px;
-      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
     }
-    .card h3 { margin-bottom: 16px; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid var(--borda);
-    }
-    th { color: #888; font-size: 0.85rem; }
-    .btn-acao {
-      background: var(--verde);
-      color: #0a0a0f;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
+    .card.invertido { flex-direction: row-reverse; }
+    .card.invertido .img-box { width: 40%; }
+    .card.invertido .info { width: 60%; }
+    .img-box { position: relative; height: 180px; }
+    .card.invertido .img-box { height: auto; }
+    .img-box img { width: 100%; height: 100%; object-fit: cover; }
+    .jogo {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 0.7rem;
+      color: var(--roxo);
+      background: #0a0a0fcc;
+      padding: 5px 10px;
+      border-radius: 5px;
       font-weight: 700;
-      cursor: pointer;
-      margin-right: 8px;
     }
-    .btn-recusar {
-      background: #ff4757;
+    .info { padding: 16px; display: flex; flex-direction: column; flex: 1; }
+    .info h3 { font-size: 1.1rem; margin-bottom: 6px; }
+    .desc { color: #888; font-size: 0.85rem; flex: 1; margin-bottom: 12px; }
+    .compra { display: flex; justify-content: space-between; align-items: center; }
+    .preco { font-size: 1.4rem; font-weight: 900; color: var(--roxo); }
+    .btn-comprar {
+      background: var(--roxo);
       color: #fff;
       border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
+      padding: 10px 18px;
+      border-radius: 8px;
       font-weight: 700;
       cursor: pointer;
     }
-    .status-pendente { color: #feca57; }
-    .status-aprovado { color: var(--verde); }
-    .status-recusado { color: #ff4757; }
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 30px;
+    .loading { text-align: center; padding: 40px; color: #888; }
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .card.invertido { flex-direction: column; }
+      .card.invertido .img-box, .card.invertido .info { width: 100%; }
     }
-    .stat-card {
-      background: var(--bg-card);
-      border: 1px solid var(--borda);
-      padding: 20px;
-      border-radius: 12px;
-    }
-    .stat-card p { color: #888; font-size: 0.9rem; }
-    .stat-card h3 { font-size: 2rem; margin-top: 8px; color: var(--roxo); }
   </style>
 </head>
 <body>
-  <!-- LOGIN ADMIN -->
+  <!-- TELA DE LOGIN/CADASTRO -->
   <div id="login" class="login-box">
-    <div class="login-card">
-      <h1>PREMIUM <span>ADMIN</span></h1>
-      <div class="input-group">
-        <input type="email" id="email" placeholder="Email admin">
+    <div class="login-wrapper">
+      <div class="banner-login">
+        <img src="https://i.postimg.cc/HW54tvz2/c4b93135-a1e9-4246-9138-b2fac3dc79e0.jpg" alt="Premium Store">
       </div>
-      <div class="input-group">
-        <input type="password" id="senha" placeholder="Senha">
+
+      <div class="login-card" id="form-cadastro">
+        <h2>CADASTRO</h2>
+        <p>Crie sua conta e aproveite</p>
+        <div class="input-group">
+          <span class="icon">👤</span>
+          <input type="text" id="nome-cadastro" placeholder="Usuário">
+        </div>
+        <div class="input-group">
+          <span class="icon">✉️</span>
+          <input type="email" id="email-cadastro" placeholder="E-mail">
+        </div>
+        <div class="input-group">
+          <span class="icon">🔒</span>
+          <input type="password" id="senha-cadastro" placeholder="Senha">
+        </div>
+        <div class="input-group">
+          <span class="icon">🔒</span>
+          <input type="password" id="senha-confirm" placeholder="Confirmar senha">
+        </div>
+        <label class="checkbox" style="margin: 16px 0;">
+          <input type="checkbox" id="termos"> Eu concordo com os <span class="link-roxo">Termos de Uso</span>
+        </label>
+        <button class="btn" id="btn-cadastrar">CRIAR CONTA 👤+</button>
+        <div class="cadastro-footer">
+          Já tem uma conta? <span class="link-roxo" onclick="trocarTela('login')">Fazer login ➔</span>
+        </div>
       </div>
-      <button class="btn" id="btn-entrar">ENTRAR NO PAINEL</button>
+
+      <div class="login-card hidden" id="form-login">
+        <h2>LOGIN</h2>
+        <p>Acesse sua conta para continuar</p>
+        <div class="input-group">
+          <span class="icon">✉️</span>
+          <input type="email" id="email" placeholder="E-mail">
+        </div>
+        <div class="input-group">
+          <span class="icon">🔒</span>
+          <input type="password" id="senha" placeholder="Senha">
+        </div>
+        <div class="opcoes">
+          <label class="checkbox">
+            <input type="checkbox" id="lembrar"> Lembrar de mim
+          </label>
+          <span class="link-roxo" onclick="trocarTela('esqueci')">Esqueceu sua senha?</span>
+        </div>
+        <button class="btn" id="btn-entrar">ENTRAR ➔</button>
+        <div class="cadastro-footer">
+          Ainda não tem uma conta? <span class="link-roxo" onclick="trocarTela('cadastro')">Cadastre-se agora ➔</span>
+        </div>
+      </div>
+
+      <div class="login-card hidden" id="form-esqueci">
+        <h2>ESQUECEU SUA SENHA?</h2>
+        <p>Não se preocupe! Informe seu e-mail e enviaremos um link para redefinir sua senha.</p>
+        <div class="input-group">
+          <span class="icon">✉️</span>
+          <input type="email" id="email-recuperar" placeholder="Digite seu e-mail">
+        </div>
+        <button class="btn" id="btn-recuperar">ENVIAR LINK ✈️</button>
+        <div class="info-box">
+          <h4>ℹ️ Como funciona?</h4>
+          <p>Enviaremos um link de redefinição para o seu e-mail. Verifique também sua caixa de spam.</p>
+        </div>
+        <div class="cadastro-footer">
+          <span class="link-roxo" onclick="trocarTela('login')">← Voltar para login</span>
+        </div>
+      </div>
+
       <p class="erro hidden" id="erro-login"></p>
     </div>
   </div>
 
-  <!-- PAINEL ADMIN -->
+  <!-- PAINEL LOJA -->
   <div id="painel" class="app hidden">
     <div class="sidebar">
-      <div class="logo">PREMIUM <span>ADM</span></div>
-      <div class="menu-item active" data-page="dashboard">📊 Dashboard</div>
-      <div class="menu-item" data-page="comprovantes">💰 Comprovantes PIX</div>
-      <div class="menu-item" data-page="pedidos">📦 Todos Pedidos</div>
-      <div class="menu-item" data-page="usuarios">👥 Usuários</div>
-      <div class="menu-item" data-page="produtos">🛍️ Produtos</div>
+      <div class="logo">PREMIUM <span>STORE</span></div>
+      <div class="menu-item active" data-page="loja">🏠 Loja</div>
+      <div class="menu-item" data-page="pedidos">📦 Meus Pedidos</div>
+      <div class="menu-item" data-page="saldo">💰 Adicionar Saldo</div>
+      <div class="menu-item" data-page="suporte">💬 Suporte</div>
       
       <div class="user-box">
-        <div>Admin: <strong id="user-nome">-</strong></div>
+        <div>Logado: <strong id="user-nome">-</strong></div>
         <button id="btn-sair">Sair</button>
       </div>
     </div>
 
     <div class="content">
       <div class="topbar">
-        <h2 id="titulo-page">Dashboard</h2>
+        <h2 id="titulo-page">Loja de Itens</h2>
+        <div class="saldo">Saldo: <span id="user-saldo">R$ 0,00</span></div>
       </div>
 
-      <!-- DASHBOARD -->
-      <div id="page-dashboard">
-        <div class="stats">
-          <div class="stat-card">
-            <p>Total Usuários</p>
-            <h3 id="stat-users">0</h3>
-          </div>
-          <div class="stat-card">
-            <p>Pedidos Hoje</p>
-            <h3 id="stat-pedidos">0</h3>
-          </div>
-          <div class="stat-card">
-            <p>PIX Pendentes</p>
-            <h3 id="stat-pix">0</h3>
-          </div>
-          <div class="stat-card">
-            <p>Faturamento</p>
-            <h3 id="stat-faturamento">R$ 0</h3>
-          </div>
+      <div id="page-loja">
+        <div class="grid" id="grid-produtos">
+          <div class="loading">Carregando produtos...</div>
         </div>
       </div>
 
-      <!-- COMPROVANTES PIX -->
-      <div id="page-comprovantes" class="hidden">
-        <div class="card">
-          <h3>Comprovantes PIX Pendentes</h3>
-          <div id="lista-comprovantes"><p style="color:#888">Carregando...</p></div>
-        </div>
-      </div>
-
-      <!-- PEDIDOS -->
       <div id="page-pedidos" class="hidden">
-        <div class="card">
-          <h3>Todos os Pedidos</h3>
-          <div id="lista-pedidos"><p style="color:#888">Carregando...</p></div>
+        <div id="lista-pedidos"><div class="loading">Carregando pedidos...</div></div>
+      </div>
+
+      <div id="page-saldo" class="hidden">
+        <div class="card" style="max-width: 500px; padding: 20px;">
+          <h3>Adicionar Saldo via PIX</h3>
+          <p style="color: #888; margin: 12px 0;">Chave PIX: seuemail@gmail.com</p>
+          <div class="input-group">
+            <input type="number" id="valor-pix" placeholder="R$ 50,00">
+          </div>
+          <button class="btn" onclick="enviarComprovante()">Enviar Comprovante</button>
+          <p style="color: #888; font-size: 0.85rem; margin-top: 12px;">Após enviar, chama no WhatsApp pra liberar</p>
         </div>
       </div>
 
-      <!-- USUARIOS -->
-      <div id="page-usuarios" class="hidden">
-        <div class="card">
-          <h3>Usuários Cadastrados</h3>
-          <div id="lista-usuarios"><p style="color:#888">Carregando...</p></div>
-        </div>
-      </div>
-
-      <!-- PRODUTOS -->
-      <div id="page-produtos" class="hidden">
-        <div class="card">
-          <h3>Gerenciar Produtos</h3>
-          <div id="lista-produtos"><p style="color:#888">Carregando...</p></div>
+      <div id="page-suporte" class="hidden">
+        <div class="card" style="max-width: 500px; padding: 20px;">
+          <h3>Falar com Suporte</h3>
+          <p style="color: #888; margin: 12px 0;">Atendimento 24h via WhatsApp</p>
+          <button class="btn" onclick="window.open('https://wa.me/5511999999999')">Abrir WhatsApp</button>
         </div>
       </div>
     </div>
@@ -249,8 +378,8 @@
 
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js'
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js'
-    import { getDatabase, ref, get, update, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js'
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js'
+    import { getDatabase, ref, set, get, push, onValue, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js'
 
     const firebaseConfig = {
       apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -268,44 +397,149 @@
     const db = getDatabase(app)
     let userAtual = null
 
-    // LOGIN ADMIN
+    const produtosPadrao = [
+      { id: 1, nome: "Passe de Batalha", jogo: "Free Fire", preco: 29.90, img: "https://i.imgur.com/8Q1Z3yL.png", desc: "Entrega via ID em até 10min", invertido: true },
+      { id: 2, nome: "3200 Diamantes", jogo: "Mobile Legends", preco: 99.90, img: "https://i.imgur.com/k2oWj7P.png", desc: "Top-up oficial Moonton", invertido: false },
+      { id: 3, nome: "Mythic Skin Crate", jogo: "COD Mobile", preco: 89.90, img: "https://i.imgur.com/Xt7Q2qF.png", desc: "Caixa com skin lendária", invertido: true },
+      { id: 4, nome: "18000 UC", jogo: "PUBG Mobile", preco: 299.90, img: "https://i.imgur.com/p5b3K8m.png", desc: "Maior pacote com bônus", invertido: false },
+      { id: 5, nome: "5000 Robux", jogo: "Roblox", preco: 149.90, img: "https://i.imgur.com/3vJ8N9Q.png", desc: "Entrega por gift card", invertido: true },
+      { id: 6, nome: "Conta NV 80", jogo: "Standoff 2", preco: 79.90, img: "https://i.imgur.com/7xY1Z2A.png", desc: "Com facas e luvas", invertido: false }
+    ]
+
+    window.trocarTela = (tela) => {
+      document.getElementById('form-login').classList.toggle('hidden', tela !== 'login')
+      document.getElementById('form-cadastro').classList.toggle('hidden', tela !== 'cadastro')
+      document.getElementById('form-esqueci').classList.toggle('hidden', tela !== 'esqueci')
+      document.getElementById('erro-login').classList.add('hidden')
+    }
+
     document.getElementById('btn-entrar').onclick = async () => {
       const email = document.getElementById('email').value
       const senha = document.getElementById('senha').value
       try {
-        const cred = await signInWithEmailAndPassword(auth, email, senha)
-        const snap = await get(ref(db, 'users/' + cred.user.uid + '/role'))
-        if (snap.val() !== 'admin') {
-          await signOut(auth)
-          throw new Error('Acesso negado. Só admins.')
-        }
+        await signInWithEmailAndPassword(auth, email, senha)
       } catch (e) {
-        document.getElementById('erro-login').innerText = e.message
-        document.getElementById('erro-login').classList.remove('hidden')
+        mostrarErro(e.message)
+      }
+    }
+
+    document.getElementById('btn-cadastrar').onclick = async () => {
+      const nome = document.getElementById('nome-cadastro').value
+      const email = document.getElementById('email-cadastro').value
+      const senha = document.getElementById('senha-cadastro').value
+      const confirma = document.getElementById('senha-confirm').value
+      const termos = document.getElementById('termos').checked
+      
+      if (!termos) return mostrarErro('Aceite os termos de uso')
+      if (senha !== confirma) return mostrarErro('Senhas não coincidem')
+      if (senha.length < 6) return mostrarErro('Senha deve ter no mínimo 6 caracteres')
+      if (!nome) return mostrarErro('Digite um usuário')
+      
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, senha)
+        await updateProfile(cred.user, { displayName: nome })
+        await set(ref(db, 'users/' + cred.user.uid), {
+          nome: nome,
+          email: email,
+          saldo: 0,
+          criadoEm: Date.now()
+        })
+      } catch (e) {
+        mostrarErro(e.message)
+      }
+    }
+
+    document.getElementById('btn-recuperar').onclick = async () => {
+      const email = document.getElementById('email-recuperar').value
+      try {
+        await sendPasswordResetEmail(auth, email)
+        alert('Link enviado! Verifica teu email.')
+        trocarTela('login')
+      } catch (e) {
+        mostrarErro(e.message)
       }
     }
 
     document.getElementById('btn-sair').onclick = () => signOut(auth)
 
+    function mostrarErro(msg) {
+      const erro = document.getElementById('erro-login')
+      erro.innerText = msg.includes('auth/') ? 'Email ou senha inválidos' : msg
+      erro.classList.remove('hidden')
+    }
+
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const snap = await get(ref(db, 'users/' + user.uid + '/role'))
-        if (snap.val() === 'admin') {
-          userAtual = user
-          document.getElementById('login').classList.add('hidden')
-          document.getElementById('painel').classList.remove('hidden')
-          document.getElementById('user-nome').innerText = user.email
-          carregarDashboard()
-        } else {
-          await signOut(auth)
-        }
+        userAtual = user
+        document.getElementById('login').classList.add('hidden')
+        document.getElementById('painel').classList.remove('hidden')
+        document.getElementById('user-nome').innerText = user.displayName || user.email
+        carregarSaldo()
+        carregarProdutos()
       } else {
         document.getElementById('login').classList.remove('hidden')
         document.getElementById('painel').classList.add('hidden')
       }
     })
 
-    // MENU
+    function carregarSaldo() {
+      onValue(ref(db, 'users/' + userAtual.uid + '/saldo'), (snap) => {
+        const saldo = snap.val() || 0
+        document.getElementById('user-saldo').innerText = `R$ ${saldo.toFixed(2).replace('.', ',')}`
+      })
+    }
+
+    async function carregarProdutos() {
+      const snap = await get(ref(db, 'produtos'))
+      let produtos = snap.val()
+      if (!produtos) {
+        await set(ref(db, 'produtos'), produtosPadrao)
+        produtos = produtosPadrao
+      }
+      renderProdutos(Object.values(produtos))
+    }
+
+    function renderProdutos(lista) {
+      const grid = document.getElementById('grid-produtos')
+      grid.innerHTML = ''
+      lista.forEach(item => {
+        const card = document.createElement('div')
+        card.className = `card ${item.invertido ? 'invertido' : ''}`
+        card.innerHTML = `
+          <div class="img-box">
+            <img src="${item.img}" alt="${item.nome}">
+            <span class="jogo">${item.jogo}</span>
+          </div>
+          <div class="info">
+            <h3>${item.nome}</h3>
+            <p class="desc">${item.desc}</p>
+            <div class="compra">
+              <p class="preco">R$ ${item.preco.toFixed(2).replace('.', ',')}</p>
+              <button class="btn-comprar" onclick="comprar('${item.nome}', ${item.preco})">Comprar</button>
+            </div>
+          </div>
+        `
+        grid.appendChild(card)
+      })
+    }
+
+    window.comprar = async (nome, preco) => {
+      const saldoSnap = await get(ref(db, 'users/' + userAtual.uid + '/saldo'))
+      const saldo = saldoSnap.val() || 0
+      if (saldo < preco) {
+        alert('Saldo insuficiente! Adicione saldo na aba "Adicionar Saldo"')
+        return
+      }
+      await update(ref(db, 'users/' + userAtual.uid), { saldo: saldo - preco })
+      await push(ref(db, 'pedidos/' + userAtual.uid), {
+        produto: nome,
+        preco: preco,
+        status: 'Aguardando entrega',
+        data: Date.now()
+      })
+      alert('Compra realizada! Entraremos em contato no WhatsApp.')
+    }
+
     document.querySelectorAll('.menu-item').forEach(item => {
       item.onclick = () => {
         document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'))
@@ -314,161 +548,38 @@
         document.querySelectorAll('[id^=page-]').forEach(p => p.classList.add('hidden'))
         document.getElementById('page-' + page).classList.remove('hidden')
         document.getElementById('titulo-page').innerText = item.innerText.replace(/[^\w\s]/gi, '').trim()
-        
-        if (page === 'comprovantes') carregarComprovantes()
         if (page === 'pedidos') carregarPedidos()
-        if (page === 'usuarios') carregarUsuarios()
-        if (page === 'produtos') carregarProdutos()
       }
     })
 
-    // DASHBOARD
-    async function carregarDashboard() {
-      const users = await get(ref(db, 'users'))
-      const pedidos = await get(ref(db, 'pedidos'))
-      const comprovantes = await get(ref(db, 'comprovantes'))
-      
-      document.getElementById('stat-users').innerText = users.exists() ? Object.keys(users.val()).length : 0
-      
-      let totalPedidos = 0, faturamento = 0, pixPendentes = 0
-      if (pedidos.exists()) {
-        Object.values(pedidos.val()).forEach(userPedidos => {
-          Object.values(userPedidos).forEach(p => {
-            totalPedidos++
-            if (p.status === 'Entregue') faturamento += p.preco
-          })
-        })
-      }
-      if (comprovantes.exists()) {
-        Object.values(comprovantes.val()).forEach(userComp => {
-          Object.values(userComp).forEach(c => {
-            if (c.status === 'Pendente') pixPendentes++
-          })
-        })
-      }
-      
-      document.getElementById('stat-pedidos').innerText = totalPedidos
-      document.getElementById('stat-pix').innerText = pixPendentes
-      document.getElementById('stat-faturamento').innerText = `R$ ${faturamento.toFixed(2)}`
-    }
-
-    // COMPROVANTES
-    function carregarComprovantes() {
-      onValue(ref(db, 'comprovantes'), (snap) => {
-        const div = document.getElementById('lista-comprovantes')
-        if (!snap.exists()) {
-          div.innerHTML = '<p style="color:#888">Nenhum comprovante pendente</p>'
-          return
-        }
-        let html = '<table><tr><th>Usuário</th><th>Valor</th><th>Data</th><th>Status</th><th>Ação</th></tr>'
-        Object.entries(snap.val()).forEach(([uid, comps]) => {
-          Object.entries(comps).forEach(([cid, c]) => {
-            html += `
-              <tr>
-                <td>${uid.substring(0,8)}...</td>
-                <td>R$ ${c.valor.toFixed(2)}</td>
-                <td>${new Date(c.data).toLocaleDateString()}</td>
-                <td class="status-${c.status.toLowerCase()}">${c.status}</td>
-                <td>
-                  ${c.status === 'Pendente' ? `
-                    <button class="btn-acao" onclick="aprovarPix('${uid}','${cid}',${c.valor})">Aprovar</button>
-                    <button class="btn-recusar" onclick="recusarPix('${uid}','${cid}')">Recusar</button>
-                  ` : '-'}
-                </td>
-              </tr>
-            `
-          })
-        })
-        html += '</table>'
-        div.innerHTML = html
-      })
-    }
-
-    window.aprovarPix = async (uid, cid, valor) => {
-      const saldoSnap = await get(ref(db, 'users/' + uid + '/saldo'))
-      const saldoAtual = saldoSnap.val() || 0
-      await update(ref(db, 'users/' + uid), { saldo: saldoAtual + valor })
-      await update(ref(db, 'comprovantes/' + uid + '/' + cid), { status: 'Aprovado' })
-      alert('PIX aprovado! Saldo adicionado.')
-    }
-
-    window.recusarPix = async (uid, cid) => {
-      await update(ref(db, 'comprovantes/' + uid + '/' + cid), { status: 'Recusado' })
-      alert('PIX recusado.')
-    }
-
-    // PEDIDOS
     function carregarPedidos() {
-      onValue(ref(db, 'pedidos'), (snap) => {
-        const div = document.getElementById('lista-pedidos')
-        if (!snap.exists()) {
-          div.innerHTML = '<p style="color:#888">Nenhum pedido</p>'
+      const lista = document.getElementById('lista-pedidos')
+      onValue(ref(db, 'pedidos/' + userAtual.uid), (snap) => {
+        const pedidos = snap.val()
+        if (!pedidos) {
+          lista.innerHTML = '<p style="color:#888">Nenhum pedido ainda</p>'
           return
         }
-        let html = '<table><tr><th>Usuário</th><th>Produto</th><th>Preço</th><th>Data</th><th>Status</th></tr>'
-        Object.entries(snap.val()).forEach(([uid, pedidos]) => {
-          Object.values(pedidos).forEach(p => {
-            html += `
-              <tr>
-                <td>${uid.substring(0,8)}...</td>
-                <td>${p.produto}</td>
-                <td>R$ ${p.preco.toFixed(2)}</td>
-                <td>${new Date(p.data).toLocaleDateString()}</td>
-                <td class="status-${p.status.toLowerCase().replace(' ', '')}">${p.status}</td>
-              </tr>
-            `
-          })
-        })
-        html += '</table>'
-        div.innerHTML = html
+        lista.innerHTML = Object.values(pedidos).map(p => `
+          <div class="card" style="padding: 16px; margin-bottom: 12px;">
+            <h3>${p.produto}</h3>
+            <p style="color:#888">R$ ${p.preco.toFixed(2)} - ${new Date(p.data).toLocaleDateString()}</p>
+            <p style="color: var(--roxo); margin-top: 8px;">${p.status}</p>
+          </div>
+        `).join('')
       })
     }
 
-    // USUARIOS
-    function carregarUsuarios() {
-      onValue(ref(db, 'users'), (snap) => {
-        const div = document.getElementById('lista-usuarios')
-        if (!snap.exists()) {
-          div.innerHTML = '<p style="color:#888">Nenhum usuário</p>'
-          return
-        }
-        let html = '<table><tr><th>Nome</th><th>Email</th><th>Saldo</th><th>Role</th></tr>'
-        Object.values(snap.val()).forEach(u => {
-          html += `
-            <tr>
-              <td>${u.nome || '-'}</td>
-              <td>${u.email}</td>
-              <td>R$ ${(u.saldo || 0).toFixed(2)}</td>
-              <td>${u.role || 'cliente'}</td>
-            </tr>
-          `
-        })
-        html += '</table>'
-        div.innerHTML = html
+    window.enviarComprovante = async () => {
+      const valor = parseFloat(document.getElementById('valor-pix').value)
+      if (!valor || valor <= 0) return alert('Digite um valor válido')
+      await push(ref(db, 'comprovantes/' + userAtual.uid), {
+        valor: valor,
+        status: 'Pendente',
+        data: Date.now()
       })
-    }
-
-    // PRODUTOS
-    function carregarProdutos() {
-      onValue(ref(db, 'produtos'), (snap) => {
-        const div = document.getElementById('lista-produtos')
-        if (!snap.exists()) {
-          div.innerHTML = '<p style="color:#888">Nenhum produto</p>'
-          return
-        }
-        let html = '<table><tr><th>Nome</th><th>Jogo</th><th>Preço</th></tr>'
-        Object.values(snap.val()).forEach(p => {
-          html += `
-            <tr>
-              <td>${p.nome}</td>
-              <td>${p.jogo}</td>
-              <td>R$ ${p.preco.toFixed(2)}</td>
-            </tr>
-          `
-        })
-        html += '</table>'
-        div.innerHTML = html
-      })
+      alert('Comprovante enviado! Chama no WhatsApp pra liberar.')
+      document.getElementById('valor-pix').value = ''
     }
   </script>
 </body>
