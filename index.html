@@ -319,13 +319,13 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 
       <div class="passo-item">
         <div class="passo-num">4</div>
-        <div class="passo-texto">Clique no botão <b>"FAZER PEDIDO"</b>.</div>
+        <div class="passo-texto">Clique no botão <b>"ADICIONAR AO CARRINHO"</b>.</div>
         <div class="passo-icon"><i data-lucide="shopping-cart"></i></div>
       </div>
 
       <div class="passo-item">
         <div class="passo-num">5</div>
-        <div class="passo-texto">Aguarde a <b>confirmação</b> no WhatsApp.</div>
+        <div class="passo-texto">Acesse o <b>carrinho</b> e envie os pedidos no WhatsApp.</div>
         <div class="passo-icon"><i data-lucide="check-circle"></i></div>
       </div>
 
@@ -343,8 +343,8 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 <div class="sidebar-overlay" id="overlay" onclick="fecharMenu()"></div>
 <div class="sidebar" id="sidebar">
   <div class="sidebar-tit">MENU</div>
-    <div class="sidebar-item" onclick="ir('home');fecharMenu()"><i data-lucide="home"></i>Início</div>
-  <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
+    <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
+  <div class="sidebar-item" onclick="ir('carrinho');fecharMenu()"><i data-lucide="shopping-cart"></i>Meu Carrinho</div>
   <div class="sidebar-item" onclick="ir('comprovantes');fecharMenu()"><i data-lucide="receipt"></i>Meus comprovantes</div>
   <div class="sidebar-item" onclick="ir('suporte');fecharMenu()"><i data-lucide="headphones"></i>Suporte</div>
   <div class="sidebar-item" onclick="ir('faq');fecharMenu()"><i data-lucide="help-circle"></i>Dúvidas frequentes</div>
@@ -365,7 +365,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
       </div>
     </div>
     <div class="header-right">
-      <div class="cart-wrapper" onclick="ir('comprovantes')">
+      <div class="cart-wrapper" onclick="ir('carrinho')">
         <i data-lucide="shopping-cart"></i>
         <span class="cart-badge" id="cartCount">0</span>
       </div>
@@ -398,6 +398,15 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
   <div class="produtos-grid" id="produtosGrid"></div>
 </div>
 
+<div id="carrinho" class="tela">
+  <div class="header">
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
+    <div style="font-size:12px;font-weight:700">MEU CARRINHO</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="carrinhoBody"></div>
+</div>
+
 <div class="modal-produto" id="modalProduto">
   <div class="modal-produto-box">
     <div class="modal-produto-img">
@@ -413,7 +422,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
       <input type="text" class="input" id="linkProduto" placeholder="Cole o link ou ID aqui">
       <div class="label">🎁 Código de indicação (opcional):</div>
       <input type="text" class="input" id="codigoProduto" placeholder="Ex: PREMIUM782">
-      <button class="btn" onclick="finalizarPedido()">FAZER PEDIDO</button>
+      <button class="btn" onclick="finalizarPedido()">ADICIONAR AO CARRINHO</button>
       <button class="btn btn-sec" onclick="fecharModalProduto()">CANCELAR</button>
     </div>
   </div>
@@ -636,6 +645,166 @@ function abrirPerfil(){
 
 function abrirMenu(){document.getElementById('sidebar').classList.add('ativo');document.getElementById('overlay').classList.add('ativo')}
 function fecharMenu(){document.getElementById('sidebar').classList.remove('ativo');document.getElementById('overlay').classList.remove('ativo')}
+
+function atualizarCarrinho(){
+  const pendentes = db.pedidos.filter(p=>p.email===usuarioAtual.email && p.status==='pendente').length;
+  document.getElementById('cartCount').textContent = pendentes;
+}
+
+function renderCarrinho(){
+  const meus=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && p.status==='pendente');
+  if(meus.length===0){
+    document.getElementById('carrinhoBody').innerHTML='<div class="empty">Carrinho vazio<br><br>Adicione produtos na loja!</div>';
+    return;
+  }
+  const total = meus.reduce((s,p)=>s+p.valor,0);
+  const lista=meus.map(p=>`
+    <div class="lista-item">
+      <div class="lista-top">
+        <div class="lista-nome">${p.servico}</div>
+        <div style="color:var(--verde);font-weight:800">R$ ${p.valor.toFixed(2).replace('.',',')}</div>
+      </div>
+      <div class="lista-info">
+        Jogo: ${p.jogo}<br>
+        ID: ${p.id}<br>
+        Link: ${p.link.substring(0,40)}...<br>
+        Data: ${new Date(p.data).toLocaleString('pt-BR')}
+      </div>
+      <div class="lista-acoes" style="margin-top:8px">
+        <button class="btn-mini btn-del" onclick="cancelarPedidoCarrinho('${p.id}')">REMOVER</button>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('carrinhoBody').innerHTML=`
+    <div class="indicacao-card">
+      <div class="indicacao-header">
+        <div class="indicacao-tit">🛒 RESUMO</div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-num">${meus.length}</div>
+          <div class="stat-label">Itens</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">R$ ${total.toFixed(2)}</div>
+          <div class="stat-label">Total</div>
+        </div>
+      </div>
+      <button class="btn" onclick="enviarTodosPedidos()">ENVIAR PEDIDOS NO WHATSAPP</button>
+    </div>
+    <div class="titulo">ITENS PENDENTES</div>
+    ${lista}
+  `;
+  lucide.createIcons();
+}
+
+function cancelarPedidoCarrinho(id){
+  if(confirm('Remover este item do carrinho?')){
+    db.pedidos=db.pedidos.filter(p=>p.id!==id);
+    save();
+    atualizarCarrinho();
+    renderCarrinho();
+  }
+}
+
+function enviarTodosPedidos(){
+  const meus=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && p.status==='pendente');
+  if(meus.length===0){alert('Carrinho vazio');return}
+  const total = meus.reduce((s,p)=>s+p.valor,0);
+  let msg=`━━━━━━━━━━
+🛒 PEDIDOS PENDENTES
+━━━━━━━━━━
+
+👤 Cliente: ${usuarioAtual.nome}
+📧 Email: ${usuarioAtual.email}
+
+`;
+  meus.forEach((p,i)=>{
+    msg+=`${i+1}. ${p.servico}\n`;
+    msg+=` 🎮 ${p.jogo}\n`;
+    msg+=` 💵 R$ ${p.valor.toFixed(2).replace('.',',')}\n`;
+    msg+=` 🔗 ${p.link}\n`;
+    msg+=` 🆔 ${p.id}\n\n`;
+  });
+  msg+=`💰 TOTAL: R$ ${total.toFixed(2).replace('.',',')}\n`;
+  msg+=`━━━━━━━━━━`;
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+function renderComprovantes(){
+  const meus=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && (p.status==='confirmado'||p.status==='cancelado')).reverse();
+  if(meus.length===0){
+    document.getElementById('comprovantesBody').innerHTML='<div class="empty">Nenhum comprovante ainda<br><br>Finalize pedidos no carrinho!</div>';
+    return;
+  }
+  const lista=meus.map(p=>{
+    const statusClass=p.status==='confirmado'?'confirmado':'cancelado';
+    const statusIcon=p.status==='confirmado'?'check-circle':'x-circle';
+    const statusTxt=p.status==='confirmado'?'Confirmado':'Cancelado';
+    return `
+    <div class="comprovante-card">
+      <div class="comprovante-topo">
+        <div class="comprovante-titulo">
+          <i data-lucide="file-text"></i>
+          <span class="novo">COMPROVANTE</span>
+        </div>
+      </div>
+      <div class="comprovante-linha">
+        <div class="comprovante-icon"><i data-lucide="tag"></i></div>
+        <div class="comprovante-info-wrap">
+          <div class="comprovante-label">Pedido:</div>
+          <div class="comprovante-valor roxo">${p.id}</div>
+        </div>
+      <div class="comprovante-linha">
+        <div class="comprovante-icon"><i data-lucide="package"></i></div>
+        <div class="comprovante-info-wrap">
+          <div class="comprovante-label">Serviço:</div>
+          <div class="comprovante-valor">${p.servico}</div>
+        </div>
+      </div>
+      <div class="comprovante-linha">
+        <div class="comprovante-icon"><i data-lucide="gamepad-2"></i></div>
+        <div class="comprovante-info-wrap">
+          <div class="comprovante-label">Jogo:</div>
+          <div class="comprovante-valor">${p.jogo}</div>
+        </div>
+      </div>
+      <div class="comprovante-linha">
+        <div class="comprovante-icon"><i data-lucide="dollar-sign"></i></div>
+        <div class="comprovante-info-wrap">
+          <div class="comprovante-label">Valor:</div>
+          <div class="comprovante-valor verde">R$ ${p.valor.toFixed(2).replace('.',',')}</div>
+        </div>
+      </div>
+      <div class="comprovante-linha">
+        <div class="comprovante-icon"><i data-lucide="calendar"></i></div>
+        <div class="comprovante-info-wrap">
+          <div class="comprovante-label">Data:</div>
+          <div class="comprovante-valor">${new Date(p.data).toLocaleDateString('pt-BR')}</div>
+        </div>
+      <div class="comprovante-linha">
+        <div class="comprovante-icon"><i data-lucide="clipboard-list"></i></div>
+        <div class="comprovante-info-wrap">
+          <div class="comprovante-label">Status:</div>
+          <div class="comprovante-status ${statusClass}">
+            <i data-lucide="${statusIcon}"></i>
+            ${statusTxt}
+          </div>
+        </div>
+      <div class="comprovante-footer">
+        <div class="comprovante-footer-logo">
+          <i data-lucide="gem"></i>
+          PREMIUM STORE
+        </div>
+        <div class="comprovante-footer-texto">Obrigado por escolher a melhor!</div>
+        <div class="comprovante-footer-heart">💜</div>
+      </div>
+    </div>
+  `}).join('');
+  document.getElementById('comprovantesBody').innerHTML=lista;
+  lucide.createIcons();
+}
+
 function ir(t){
   document.querySelectorAll('.tela').forEach(e=>e.classList.remove('ativa'));
   document.getElementById(t).classList.add('ativa');
@@ -646,6 +815,7 @@ function ir(t){
   if(t==='indicacoes')renderIndicacoes();
   if(t==='adminIndicacoes')renderAdminIndicacoes();
   if(t==='comprovantes')renderComprovantes();
+  if(t==='carrinho')renderCarrinho();
   if(t==='suporte')renderSuporte();
   if(t==='pedidos')renderPedidos();
   lucide.createIcons();
@@ -714,11 +884,6 @@ function filtrarJogo(k){renderProdutosLoja(k);}
 
 document.getElementById('buscaProduto')?.addEventListener('input', () => {renderProdutosLoja(jogoSelecionado);});
 
-function atualizarCarrinho(){
-  const pendentes = db.pedidos.filter(p=>p.email===usuarioAtual.email && p.status==='pendente').length;
-  document.getElementById('cartCount').textContent = pendentes;
-}
-
 function abrirModalPedido(k){
   produtoSelecionado = db.serv.find(p=>p.k===k);
   if(!produtoSelecionado) return;
@@ -785,110 +950,8 @@ function finalizarPedido(){
 
   save();
   atualizarCarrinho();
-
-  let msg=`━━━━━━━━━━
-🚀 NOVO PEDIDO
-━━━━━━━━━━
-
-🆔 Pedido: ${pedidoId}
-👤 Cliente: ${usuarioAtual.nome}
-📧 Email: ${usuarioAtual.email}
-
-🎮 Jogo: ${cat?.nome||'Geral'}
-📦 Produto: ${produtoSelecionado.nome}
-💵 Valor: R$ ${produtoSelecionado.preco.toFixed(2).replace('.',',')}
-🔗 Link/ID: ${link}`;
-
-  if(codigoInd){msg+=`\n\n🎁 Código de indicação:\n${codigoInd}`;}
-  msg+=`\n\n📌 Status:\nAguardando confirmação\n━━━━━━━━━━`;
-
-  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
   fecharModalProduto();
-  alert('✅ Pedido enviado!\n\nID: '+pedidoId+'\n\nAguarde confirmação no WhatsApp.');
-}
-
-function renderComprovantes(){
-  const meus=db.pedidos.filter(p=>p.uid===usuarioAtual.uid).reverse();
-  if(meus.length===0){
-    document.getElementById('comprovantesBody').innerHTML='<div class="empty">Nenhum comprovante ainda<br><br>Faça seu primeiro pedido!</div>';
-    return;
-  }
-  const lista=meus.map(p=>{
-    const statusClass=p.status==='pendente'?'pendente':p.status==='confirmado'?'confirmado':'cancelado';
-    const statusIcon=p.status==='pendente'?'clock':p.status==='confirmado'?'check-circle':'x-circle';
-    const statusTxt=p.status==='pendente'?'Aguardando confirmação':p.status==='confirmado'?'Confirmado':'Cancelado';
-    return `
-    <div class="comprovante-card">
-      <div class="comprovante-topo">
-        <div class="comprovante-titulo">
-          <i data-lucide="file-text"></i>
-          <span class="novo">NOVO</span> <span class="pedido">PEDIDO</span>
-        </div>
-      </div>
-      <div class="comprovante-linha">
-        <div class="comprovante-icon"><i data-lucide="tag"></i></div>
-        <div class="comprovante-info-wrap">
-          <div class="comprovante-label">Pedido:</div>
-          <div class="comprovante-valor roxo">${p.id}</div>
-        </div>
-      </div>
-      <div class="comprovante-linha">
-        <div class="comprovante-icon"><i data-lucide="package"></i></div>
-        <div class="comprovante-info-wrap">
-          <div class="comprovante-label">Serviço:</div>
-          <div class="comprovante-valor">${p.servico}</div>
-        </div>
-      </div>
-      <div class="comprovante-linha">
-        <div class="comprovante-icon"><i data-lucide="dollar-sign"></i></div>
-        <div class="comprovante-info-wrap">
-          <div class="comprovante-label">Valor:</div>
-          <div class="comprovante-valor verde">R$ ${p.valor.toFixed(2).replace('.',',')}</div>
-        </div>
-      </div>
-      <div class="comprovante-linha">
-        <div class="comprovante-icon"><i data-lucide="link"></i></div>
-        <div class="comprovante-info-wrap">
-          <div class="comprovante-label">Link:</div>
-          <div class="comprovante-valor link">${p.link.substring(0,30)}...</div>
-        </div>
-      <div class="comprovante-linha">
-        <div class="comprovante-icon"><i data-lucide="calendar"></i></div>
-        <div class="comprovante-info-wrap">
-          <div class="comprovante-label">Data:</div>
-          <div class="comprovante-valor">${new Date(p.data).toLocaleDateString('pt-BR')}</div>
-        </div>
-      </div>
-      ${p.codigoIndicacao?`
-      <div class="comprovante-linha">
-        <div class="comprovante-icon"><i data-lucide="gift"></i></div>
-        <div class="comprovante-info-wrap">
-          <div class="comprovante-label">Código de indicação:</div>
-          <div class="comprovante-valor roxo">${p.codigoIndicacao}</div>
-        </div>
-      </div>`:''}
-      <div class="comprovante-linha">
-        <div class="comprovante-icon"><i data-lucide="clipboard-list"></i></div>
-        <div class="comprovante-info-wrap">
-          <div class="comprovante-label">Status:</div>
-          <div class="comprovante-status ${statusClass}">
-            <i data-lucide="${statusIcon}"></i>
-            ${statusTxt}
-          </div>
-        </div>
-      </div>
-      <div class="comprovante-footer">
-        <div class="comprovante-footer-logo">
-          <i data-lucide="gem"></i>
-          PREMIUM STORE
-        </div>
-        <div class="comprovante-footer-texto">Obrigado por escolher a melhor!</div>
-        <div class="comprovante-footer-heart">💜</div>
-      </div>
-    </div>
-  `}).join('');
-  document.getElementById('comprovantesBody').innerHTML=lista;
-  lucide.createIcons();
+  alert('✅ Adicionado ao carrinho!\n\nID: '+pedidoId+'\n\nVá em "Meu Carrinho" pra finalizar.');
 }
 
 function renderSuporte(){
@@ -966,30 +1029,38 @@ function renderPedidos(filtro='todos',buscaId=''){
       <div class="lista-info">
         Cliente: ${p.email}<br>
         Valor: R$ ${p.valor.toFixed(2).replace('.',',')}<br>
-        Link: ${p.link}<br>
-        ${p.codigoIndicacao?`Código: ${p.codigoIndicacao}<br>`:''}
+        Link: ${p.link.substring(0,50)}...<br>
         Data: ${new Date(p.data).toLocaleString('pt-BR')}
+        ${p.codigoIndicacao?`<br>🎁 Código: ${p.codigoIndicacao}`:''}
       </div>
       ${p.status==='pendente'?`
       <div class="lista-acoes" style="margin-top:8px">
         <button class="btn-mini btn-edit" onclick="aprovarPedido('${p.id}')">✅ APROVAR</button>
-        <button class="btn-mini btn-del" onclick="cancelarPedido('${p.id}')">❌ CANCELAR</button>
+        <button class="btn-mini btn-del" onclick="cancelarPedido('${p.id}')">🚫 CANCELAR</button>
       </div>`:''}
     </div>
   `).join('');
   document.getElementById('pedidosBody').innerHTML=`
     <div class="indicacao-card">
       <div class="indicacao-header">
-        <div class="indicacao-tit">📊 ESTATÍSTICAS HOJE</div>
+        <div class="indicacao-tit">📊 ESTATÍSTICAS</div>
       </div>
       <div class="stats-grid">
         <div class="stat-item">
           <div class="stat-num">${pedidosHoje.length}</div>
-          <div class="stat-label">Total Hoje</div>
+          <div class="stat-label">Hoje</div>
         </div>
         <div class="stat-item">
           <div class="stat-num">${pendentes}</div>
           <div class="stat-label">Pendentes</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">${confirmados}</div>
+          <div class="stat-label">Confirmados</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">${cancelados}</div>
+          <div class="stat-label">Cancelados</div>
         </div>
         <div class="stat-item">
           <div class="stat-num">R$ ${faturamento.toFixed(2)}</div>
@@ -998,16 +1069,14 @@ function renderPedidos(filtro='todos',buscaId=''){
       </div>
     </div>
     <div class="label">🔍 BUSCAR PEDIDO:</div>
-    <div style="display:flex;gap:6px;margin-bottom:12px">
-      <input type="text" class="input" id="buscaPedidoId" placeholder="Digite ID ou email do cliente" value="${buscaId}" style="margin:0;flex:1">
-      <button class="btn-mini btn-edit" onclick="buscarPedido()" style="width:80px">BUSCAR</button>
-    </div>
+    <input type="text" class="input" id="buscaPedidoId" placeholder="Digite o ID ou E-mail do cliente" value="${buscaId}" onkeyup="if(event.key==='Enter')buscarPedido()">
+    <button class="btn" onclick="buscarPedido()">BUSCAR</button>
     <div class="label">🔍 FILTRAR POR:</div>
     <div style="display:flex;gap:6px;margin-bottom:12px">
       <button class="btn-mini ${filtro==='todos'?'btn-edit':''}" onclick="renderPedidos('todos')">TODOS</button>
       <button class="btn-mini ${filtro==='pendente'?'btn-edit':''}" onclick="renderPedidos('pendente')">PENDENTES</button>
       <button class="btn-mini ${filtro==='confirmado'?'btn-edit':''}" onclick="renderPedidos('confirmado')">CONFIRMADOS</button>
-            <button class="btn-mini ${filtro==='cancelado'?'btn-edit':''}" onclick="renderPedidos('cancelado')">CANCELADOS</button>
+      <button class="btn-mini ${filtro==='cancelado'?'btn-edit':''}" onclick="renderPedidos('cancelado')">CANCELADOS</button>
     </div>
     <div class="titulo">LISTA DE PEDIDOS ${buscaId?`- Busca: "${buscaId}"`:''}</div>
     ${lista||'<div class="empty">Nenhum pedido encontrado</div>'}
@@ -1206,7 +1275,6 @@ function renderIndicacoes(){
         </div>
         ${validas>=20?'<span class="badge badge-confirmada">✅</span>':''}
       </div>
-    </div>
     <div class="indicacao-card">
       <div class="indicacao-header">
         <div class="indicacao-tit">📜 HISTÓRICO</div>
