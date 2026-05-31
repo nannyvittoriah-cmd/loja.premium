@@ -123,6 +123,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .input,.textarea{background:var(--card);border:1px solid var(--borda);border-radius:10px;padding:12px;font-size:10px;color:var(--branco);width:100%;outline:none;margin-bottom:12px}
 .textarea{min-height:60px;resize:vertical}
 .input:focus,.textarea:focus{border-color:var(--roxo);box-shadow:0 0 8px rgba(139,92,246,.3)}
+.input:read-only{background:var(--bg);color:var(--roxo);font-weight:700}
 .btn{width:100%;background:var(--roxo);color:var(--branco);border:none;border-radius:10px;padding:12px;font-weight:700;font-size:11px;cursor:pointer;margin-top:6px;box-shadow:0 0 12px rgba(139,92,246,.4)}
 .btn:active{transform:scale(.98)}
 .btn-red{background:#ef4444;box-shadow:0 0 12px rgba(239,68,.4)}
@@ -313,8 +314,8 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 
       <div class="passo-item">
         <div class="passo-num">3</div>
-        <div class="passo-texto">Cole o <b>link/ID</b> da conta.</div>
-        <div class="passo-icon"><i data-lucide="link"></i></div>
+        <div class="passo-texto">Digite o <b>ID</b> da conta e confirme o nick.</div>
+        <div class="passo-icon"><i data-lucide="hash"></i></div>
       </div>
 
       <div class="passo-item">
@@ -333,7 +334,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
         <div class="aviso-icon"><i data-lucide="alert-triangle"></i></div>
         <div class="aviso-texto">
           <b>IMPORTANTE:</b>
-          Verifique se o ID/link enviado está correto para evitar falhas na entrega.
+          Verifique se o ID enviado está correto para evitar falhas na entrega.
         </div>
       </div>
     </div>
@@ -343,7 +344,9 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 <div class="sidebar-overlay" id="overlay" onclick="fecharMenu()"></div>
 <div class="sidebar" id="sidebar">
   <div class="sidebar-tit">MENU</div>
-    <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
+  <div class="sidebar-item" onclick="ir('home');fechar
+  </div>
+  <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
   <div class="sidebar-item" onclick="ir('carrinho');fecharMenu()"><i data-lucide="shopping-cart"></i>Meu Carrinho</div>
   <div class="sidebar-item" onclick="ir('comprovantes');fecharMenu()"><i data-lucide="receipt"></i>Meus comprovantes</div>
   <div class="sidebar-item" onclick="ir('suporte');fecharMenu()"><i data-lucide="headphones"></i>Suporte</div>
@@ -418,8 +421,10 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
       <div class="modal-produto-preco" id="modalProdutoPreco"></div>
       <div class="modal-produto-desc" id="modalProdutoDesc"></div>
       <button class="btn btn-desc" onclick="toggleProdutoDesc()">VER DESCRIÇÃO</button>
-      <div class="label">🔗 Link/ID da conta:</div>
-      <input type="text" class="input" id="linkProduto" placeholder="Cole o link ou ID aqui">
+      <div class="label">🆔 ID da conta:</div>
+      <input type="text" class="input" id="linkProduto" placeholder="Digite o ID" onblur="buscarNickAutomatico(this.value)">
+      <div class="label">👤 Nick:</div>
+      <input type="text" class="input" id="nickProduto" placeholder="Nick vai aparecer aqui" readonly>
       <div class="label">🎁 Código de indicação (opcional):</div>
       <input type="text" class="input" id="codigoProduto" placeholder="Ex: PREMIUM782">
       <button class="btn" onclick="finalizarPedido()">ADICIONAR AO CARRINHO</button>
@@ -545,6 +550,30 @@ function gerarCodigoIndicacao(nome){
   return `${base||'USER'}${num}`;
 }
 
+async function buscarNickFF(id){
+  try{
+    const res = await fetch(`https://ffplayer-api.vercel.app/player_info?uid=${id}&region=br`);
+    const data = await res.json();
+    if(data.basicInfo?.nickname){
+      return data.basicInfo.nickname;
+    }
+    return null;
+  }catch(e){
+    return null;
+  }
+}
+
+async function buscarNickAutomatico(id){
+  const nickInput = document.getElementById('nickProduto');
+  if(!id || id.length < 8){
+    nickInput.value = '';
+    return;
+  }
+  nickInput.value = 'Buscando...';
+  const nick = await buscarNickFF(id);
+  nickInput.value = nick || 'ID não encontrado';
+}
+
 window.addEventListener('load',()=>{
   lucide.createIcons();
   const { auth, onAuthStateChanged } = window.firebaseAuth;
@@ -666,8 +695,8 @@ function renderCarrinho(){
       </div>
       <div class="lista-info">
         Jogo: ${p.jogo}<br>
-        ID: ${p.id}<br>
-        Link: ${p.link.substring(0,40)}...<br>
+        ID: ${p.link}<br>
+        Nick: ${p.nick||'-'}<br>
         Data: ${new Date(p.data).toLocaleString('pt-BR')}
       </div>
       <div class="lista-acoes" style="margin-top:8px">
@@ -723,8 +752,8 @@ function enviarTodosPedidos(){
     msg+=`${i+1}. ${p.servico}\n`;
     msg+=` 🎮 ${p.jogo}\n`;
     msg+=` 💵 R$ ${p.valor.toFixed(2).replace('.',',')}\n`;
-    msg+=` 🔗 ${p.link}\n`;
-    msg+=` 🆔 ${p.id}\n\n`;
+    msg+=` 🆔 ${p.link}\n`;
+    msg+=` 👤 ${p.nick||'-'}\n\n`;
   });
   msg+=`💰 TOTAL: R$ ${total.toFixed(2).replace('.',',')}\n`;
   msg+=`━━━━━━━━━━`;
@@ -768,6 +797,20 @@ function renderComprovantes(){
         <div class="comprovante-info-wrap">
           <div class="comprovante-label">Jogo:</div>
           <div class="comprovante-valor">${p.jogo}</div>
+        </div>
+      </div>
+      <div class="comprovante-linha">
+        <div class="comprovante-icon"><i data-lucide="hash"></i></div>
+        <div class="comprovante-info-wrap">
+          <div class="comprovante-label">ID:</div>
+          <div class="comprovante-valor">${p.link}</div>
+        </div>
+      </div>
+      <div class="comprovante-linha">
+        <div class="comprovante-icon"><i data-lucide="user"></i></div>
+        <div class="comprovante-info-wrap">
+          <div class="comprovante-label">Nick:</div>
+          <div class="comprovante-valor">${p.nick||'-'}</div>
         </div>
       </div>
       <div class="comprovante-linha">
@@ -897,6 +940,8 @@ function abrirModalPedido(k){
   document.getElementById('modalProdutoPreco').textContent = `R$ ${produtoSelecionado.preco.toFixed(2).replace('.',',')}`;
   document.getElementById('modalProdutoDesc').textContent = produtoSelecionado.desc || 'Sem descrição';
   document.getElementById('modalProdutoDesc').classList.remove('ativo');
+  document.getElementById('linkProduto').value = '';
+  document.getElementById('nickProduto').value = '';
   document.getElementById('modalProduto').classList.add('ativo');
   lucide.createIcons();
 }
@@ -913,7 +958,9 @@ function toggleProdutoDesc(){
 function finalizarPedido(){
   if(!produtoSelecionado){alert('Erro ao processar pedido');return}
   let link=document.getElementById('linkProduto').value.trim();
-  if(!link){alert('Cole o link/ID');return}
+  let nick=document.getElementById('nickProduto').value.trim();
+  if(!link){alert('Digite o ID');return}
+  if(!nick || nick === 'ID não encontrado' || nick === 'Buscando...'){alert('Aguarde buscar o nick ou verifique o ID');return}
   const codigoInd=document.getElementById('codigoProduto').value.trim().toUpperCase();
   const pedidoId='#'+Date.now().toString().slice(-5);
   const cat = db.cat.find(c=>c.k===produtoSelecionado.cat);
@@ -926,6 +973,7 @@ function finalizarPedido(){
     jogo:cat?.nome||'Geral',
     valor:produtoSelecionado.preco,
     link,
+    nick,
     codigoIndicacao:codigoInd||null,
     data:new Date().toISOString(),
     status:'pendente'
@@ -1002,149 +1050,308 @@ function abrirAdmin(){
   <button class="btn" onclick="abrirServs()">📦 SERVIÇOS</button>
   <button class="btn" onclick="ir('pedidos')">📋 PEDIDOS</button>
   <button class="btn" onclick="formFaq()">❓ DÚVIDAS FREQUENTES</button>
-  <button class="btn" onclick="formTermos()">📄 TERMOS DO SITE</button>
+ <button class="btn" onclick="formTermos()">📄 TERMOS DO SITE</button>
   <button class="btn" onclick="formPremiacao()">🏆 PREMIAÇÃO</button>
-  <button class="btn btn-red" onclick="ir('home')">VOLTAR</button>`;
+  <button class="btn btn-sec" onclick="ir('home')">VOLTAR</button>
+  `;
   ir('admin');
 }
 
-function abrirPedidos(){ir('pedidos');renderPedidos();}
+function abrirCats(){
+  const html=`
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div class="titulo">CATEGORIAS</div>
+    <button class="btn" style="width:auto;padding:6px 12px" onclick="novaCat()">+ NOVA</button>
+  </div>
+  <div id="listaCats"></div>
+  <button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>
+  `;
+  document.getElementById('adminBody').innerHTML=html;
+  renderCats();
+}
 
-function renderPedidos(filtro='todos',buscaId=''){
-  const hoje=new Date().toLocaleDateString('pt-BR');
-  const pedidosHoje=db.pedidos.filter(p=>new Date(p.data).toLocaleDateString('pt-BR')===hoje);
-  const pendentes=db.pedidos.filter(p=>p.status==='pendente').length;
-  const confirmados=db.pedidos.filter(p=>p.status==='confirmado').length;
-  const cancelados=db.pedidos.filter(p=>p.status==='cancelado').length;
-  const faturamento=db.pedidos.filter(p=>p.status==='confirmado').reduce((t,p)=>t+p.valor,0);
-  let pedidosFiltrados=db.pedidos;
-  if(filtro!=='todos')pedidosFiltrados=pedidosFiltrados.filter(p=>p.status===filtro);
-  if(buscaId){
-    buscaId=buscaId.toLowerCase().trim();
-    pedidosFiltrados=pedidosFiltrados.filter(p=>p.id.toLowerCase().includes(buscaId) ||p.email.toLowerCase().includes(buscaId));
-  }
-  const lista=[...pedidosFiltrados].reverse().map(p=>`
+function renderCats(){
+  const cats = db.cat.length?db.cat:[];
+  const lista = cats.map(c=>`
     <div class="lista-item">
       <div class="lista-top">
-        <div class="lista-nome">🆔 ${p.id} - ${p.servico}</div>
-        <span class="badge badge-${p.status}">${p.status==='pendente'?'⏳ Pendente':p.status==='confirmado'?'✅ Confirmado':'❌ Cancelado'}</span>
+        <div class="lista-nome">${c.nome}</div>
+        <div class="lista-acoes">
+          <button class="btn-mini btn-edit" onclick="editCat('${c.k}')">EDITAR</button>
+          <button class="btn-mini btn-del" onclick="delCat('${c.k}')">EXCLUIR</button>
+        </div>
+      </div>
+      <div class="lista-info">Key: ${c.k}</div>
+    </div>
+  `).join('');
+  document.getElementById('listaCats').innerHTML = lista || '<div class="empty">Nenhuma categoria cadastrada</div>';
+}
+
+function novaCat(){
+  abrirModal('NOVA CATEGORIA',`
+  <input type="text" class="input" id="cNome" placeholder="Nome da categoria (ex: Free Fire)">
+  <div class="label">Imagem da categoria:</div>
+  <div class="upload" onclick="document.getElementById('cImg').click()">
+    <div class="upload-text">📷 Clique para enviar<br><span style="font-size:8px">PNG, JPG até 2MB</span></div>
+    <img id="cImgPrev" style="display:none">
+    <input type="file" id="cImg" accept="image/*" onchange="prevImg(this,'cImgPrev')">
+  </div>
+  <button class="btn" onclick="salvarCat()">SALVAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
+  `);
+}
+
+function editCat(k){
+  const c=db.cat.find(x=>x.k===k);
+  abrirModal('EDITAR CATEGORIA',`
+  <input type="text" class="input" id="cNome" placeholder="Nome da categoria" value="${c.nome}">
+  <div class="label">Imagem da categoria:</div>
+  <div class="upload" onclick="document.getElementById('cImg').click()">
+    <div class="upload-text" style="${c.img?'display:none':''}">📷 Clique para enviar</div>
+    <img id="cImgPrev" src="${c.img||''}" style="${c.img?'display:block':'display:none'}">
+    <input type="file" id="cImg" accept="image/*" onchange="prevImg(this,'cImgPrev')">
+  </div>
+  <button class="btn" onclick="salvarCat('${k}')">ATUALIZAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
+  `);
+}
+
+async function salvarCat(k=null){
+  const nome=document.getElementById('cNome').value.trim();
+  if(!nome){alert('Digite o nome');return}
+  showLoad(true);
+  let img=null;
+  const file=document.getElementById('cImg').files[0];
+  if(file)img=await toBase64(file);
+  else if(k)img=db.cat.find(x=>x.k===k)?.img||null;
+  const newK=k||'cat'+Date.now();
+  const cat={k:newK,nome,img};
+  if(k){db.cat[db.cat.findIndex(x=>x.k===k)]=cat;}
+  else{db.cat.push(cat);}
+  save();
+  showLoad(false);
+  fecharModal();
+  abrirCats();
+}
+
+function delCat(k){
+  if(confirm('Excluir categoria? Os serviços vinculados ficarão sem categoria.')){
+    db.cat=db.cat.filter(x=>x.k!==k);
+    save();
+    renderCats();
+  }
+}
+
+function abrirServs(){
+  const html=`
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div class="titulo">SERVIÇOS</div>
+    <button class="btn" style="width:auto;padding:6px 12px" onclick="novoServ()">+ NOVO</button>
+  </div>
+  <div id="listaServs"></div>
+  <button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>
+  `;
+  document.getElementById('adminBody').innerHTML=html;
+  renderServs();
+}
+
+function renderServs(){
+  const servs = db.serv.length?db.serv:[];
+  const lista = servs.map(s=>{
+    const cat = db.cat.find(c=>c.k===s.cat);
+    return `
+    <div class="lista-item">
+      <div class="lista-top">
+        <div class="lista-nome">${s.nome}</div>
+        <div class="lista-acoes">
+          <button class="btn-mini btn-edit" onclick="editServ('${s.k}')">EDITAR</button>
+          <button class="btn-mini btn-del" onclick="delServ('${s.k}')">EXCLUIR</button>
+        </div>
+      </div>
+      <div class="lista-info">
+        Categoria: ${cat?.nome||'-'}<br>
+        Preço: R$ ${s.preco.toFixed(2).replace('.',',')}<br>
+        Estoque: ${s.estoque||0}
+      </div>
+    </div>
+  `}).join('');
+  document.getElementById('listaServs').innerHTML = lista || '<div class="empty">Nenhum serviço cadastrado</div>';
+}
+
+function novoServ(){
+  const cats=db.cat.map(c=>`<option value="${c.k}">${c.nome}</option>`).join('');
+  abrirModal('NOVO SERVIÇO',`
+  <select class="input" id="sCat"><option value="">Selecione a categoria</option>${cats}</select>
+  <input type="text" class="input" id="sNome" placeholder="Nome do serviço (ex: 1000 Diamantes)">
+  <textarea class="textarea" id="sDesc" placeholder="Descrição do produto"></textarea>
+  <input type="number" class="input" id="sPreco" placeholder="Preço (ex: 19.90)" step="0.01">
+  <input type="number" class="input" id="sEstoque" placeholder="Estoque disponível" value="999">
+  <div class="label">Imagem do serviço:</div>
+  <div class="upload" onclick="document.getElementById('sImg').click()">
+    <div class="upload-text">📷 Clique para enviar<br><span style="font-size:8px">PNG, JPG até 2MB</span></div>
+    <img id="sImgPrev" style="display:none">
+    <input type="file" id="sImg" accept="image/*" onchange="prevImg(this,'sImgPrev')">
+  </div>
+  <button class="btn" onclick="salvarServ()">SALVAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
+  `);
+}
+
+function editServ(k){
+  const s=db.serv.find(x=>x.k===k);
+  const cats=db.cat.map(c=>`<option value="${c.k}" ${c.k===s.cat?'selected':''}>${c.nome}</option>`).join('');
+  abrirModal('EDITAR SERVIÇO',`
+  <select class="input" id="sCat">${cats}</select>
+  <input type="text" class="input" id="sNome" placeholder="Nome do serviço" value="${s.nome}">
+  <textarea class="textarea" id="sDesc" placeholder="Descrição">${s.desc||''}</textarea>
+  <input type="number" class="input" id="sPreco" placeholder="Preço" step="0.01" value="${s.preco}">
+  <input type="number" class="input" id="sEstoque" placeholder="Estoque" value="${s.estoque||0}">
+  <div class="label">Imagem do serviço:</div>
+  <div class="upload" onclick="document.getElementById('sImg').click()">
+    <div class="upload-text" style="${s.img?'display:none':''}">📷 Clique para enviar</div>
+    <img id="sImgPrev" src="${s.img||''}" style="${s.img?'display:block':'display:none'}">
+    <input type="file" id="sImg" accept="image/*" onchange="prevImg(this,'sImgPrev')">
+  </div>
+  <button class="btn" onclick="salvarServ('${k}')">ATUALIZAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
+  `);
+}
+
+async function salvarServ(k=null){
+  const cat=document.getElementById('sCat').value;
+  const nome=document.getElementById('sNome').value.trim();
+  const desc=document.getElementById('sDesc').value.trim();
+  const preco=parseFloat(document.getElementById('sPreco').value);
+  const estoque=parseInt(document.getElementById('sEstoque').value)||0;
+  if(!cat||!nome||isNaN(preco)){alert('Preencha categoria, nome e preço');return}
+  showLoad(true);
+  let img=null;
+  const file=document.getElementById('sImg').files[0];
+  if(file)img=await toBase64(file);
+  else if(k)img=db.serv.find(x=>x.k===k)?.img||null;
+  const newK=k||'serv'+Date.now();
+  const serv={k:newK,cat,nome,desc,preco,estoque,img};
+  if(k){db.serv[db.serv.findIndex(x=>x.k===k)]=serv;}
+  else{db.serv.push(serv);}
+  save();
+  showLoad(false);
+  fecharModal();
+  abrirServs();
+}
+
+function delServ(k){
+  if(confirm('Excluir serviço?')){
+    db.serv=db.serv.filter(x=>x.k!==k);
+    save();
+    renderServs();
+  }
+}
+
+function renderPedidos(){
+  const pedidos = db.pedidos.reverse();
+  if(pedidos.length===0){
+    document.getElementById('pedidosBody').innerHTML='<div class="empty">Nenhum pedido ainda</div>';
+    return;
+  }
+  const lista=pedidos.map(p=>{
+    const statusClass=p.status==='pendente'?'badge-pendente':p.status==='confirmado'?'badge-confirmado':'badge-cancelado';
+    const statusTxt=p.status==='pendente'?'PENDENTE':p.status==='confirmado'?'CONFIRMADO':'CANCELADO';
+    return `
+    <div class="lista-item">
+      <div class="lista-top">
+        <div class="lista-nome">${p.id}</div>
+        <span class="badge ${statusClass}">${statusTxt}</span>
       </div>
       <div class="lista-info">
         Cliente: ${p.email}<br>
+        Serviço: ${p.servico}<br>
+        Jogo: ${p.jogo}<br>
         Valor: R$ ${p.valor.toFixed(2).replace('.',',')}<br>
-        Link: ${p.link.substring(0,50)}...<br>
-        Data: ${new Date(p.data).toLocaleString('pt-BR')}
-        ${p.codigoIndicacao?`<br>🎁 Código: ${p.codigoIndicacao}`:''}
+        ID: ${p.link}<br>
+        Nick: ${p.nick||'-'}<br>
+        Data: ${new Date(p.data).toLocaleString('pt-BR')}<br>
+        Indicação: ${p.codigoIndicacao||'-'}
       </div>
       ${p.status==='pendente'?`
       <div class="lista-acoes" style="margin-top:8px">
-        <button class="btn-mini btn-edit" onclick="aprovarPedido('${p.id}')">✅ APROVAR</button>
-        <button class="btn-mini btn-del" onclick="cancelarPedido('${p.id}')">🚫 CANCELAR</button>
+        <button class="btn-mini" style="background:var(--verde);color:var(--branco)" onclick="confirmarPedido('${p.id}')">CONFIRMAR</button>
+        <button class="btn-mini" style="background:var(--vermelho);color:var(--branco)" onclick="cancelarPedido('${p.id}')">CANCELAR</button>
       </div>`:''}
     </div>
-  `).join('');
-  document.getElementById('pedidosBody').innerHTML=`
-    <div class="indicacao-card">
-      <div class="indicacao-header">
-        <div class="indicacao-tit">📊 ESTATÍSTICAS</div>
-      </div>
-      <div class="stats-grid">
-        <div class="stat-item">
-          <div class="stat-num">${pedidosHoje.length}</div>
-          <div class="stat-label">Hoje</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">${pendentes}</div>
-          <div class="stat-label">Pendentes</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">${confirmados}</div>
-          <div class="stat-label">Confirmados</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">${cancelados}</div>
-          <div class="stat-label">Cancelados</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">R$ ${faturamento.toFixed(2)}</div>
-          <div class="stat-label">Faturamento</div>
-        </div>
-      </div>
-    </div>
-    <div class="label">🔍 BUSCAR PEDIDO:</div>
-    <input type="text" class="input" id="buscaPedidoId" placeholder="Digite o ID ou E-mail do cliente" value="${buscaId}" onkeyup="if(event.key==='Enter')buscarPedido()">
-    <button class="btn" onclick="buscarPedido()">BUSCAR</button>
-    <div class="label">🔍 FILTRAR POR:</div>
-    <div style="display:flex;gap:6px;margin-bottom:12px">
-      <button class="btn-mini ${filtro==='todos'?'btn-edit':''}" onclick="renderPedidos('todos')">TODOS</button>
-      <button class="btn-mini ${filtro==='pendente'?'btn-edit':''}" onclick="renderPedidos('pendente')">PENDENTES</button>
-      <button class="btn-mini ${filtro==='confirmado'?'btn-edit':''}" onclick="renderPedidos('confirmado')">CONFIRMADOS</button>
-      <button class="btn-mini ${filtro==='cancelado'?'btn-edit':''}" onclick="renderPedidos('cancelado')">CANCELADOS</button>
-    </div>
-    <div class="titulo">LISTA DE PEDIDOS ${buscaId?`- Busca: "${buscaId}"`:''}</div>
-    ${lista||'<div class="empty">Nenhum pedido encontrado</div>'}
-  `;
+  `}).join('');
+  document.getElementById('pedidosBody').innerHTML=lista;
 }
 
-function buscarPedido(){
-  const busca=document.getElementById('buscaPedidoId').value;
-  renderPedidos('todos',busca);
-}
-
-function aprovarPedido(id){
-  if(confirm('Aprovar este pedido? O cliente vai ver como CONFIRMADO.')){
-    db.pedidos.find(p=>p.id===id).status='confirmado';
-    save();
-    renderPedidos();
-    alert('Pedido aprovado!');
+function confirmarPedido(id){
+  if(confirm('Confirmar este pedido?')){
+    const pedido=db.pedidos.find(p=>p.id===id);
+    if(pedido){
+      pedido.status='confirmado';
+      // Atualiza indicação se existir
+      const indicacao=db.indicacoes.find(i=>i.pedidoId===id);
+      if(indicacao && indicacao.status==='pendente'){
+        indicacao.status='confirmada';
+        if(db.usuarios[indicacao.uidIndicador]){
+          db.usuarios[indicacao.uidIndicador].indicacoesValidas=(db.usuarios[indicacao.uidIndicador].indicacoesValidas||0)+1;
+        }
+      }
+      save();
+      renderPedidos();
+    }
   }
 }
 
 function cancelarPedido(id){
-  if(confirm('Cancelar este pedido? O cliente vai ver como CANCELADO.')){
-    db.pedidos.find(p=>p.id===id).status='cancelado';
-    save();
-    renderPedidos();
-    alert('Pedido cancelado!');
+  if(confirm('Cancelar este pedido?')){
+    const pedido=db.pedidos.find(p=>p.id===id);
+    if(pedido){
+      pedido.status='cancelado';
+      const indicacao=db.indicacoes.find(i=>i.pedidoId===id);
+      if(indicacao && indicacao.status==='pendente'){
+        indicacao.status='invalida';
+      }
+      save();
+      renderPedidos();
+    }
   }
 }
 
-function abrirAdminIndicacoes(){
-  if(!usuarioAtual.admin){alert('Acesso negado');return}
-  ir('adminIndicacoes');
-  renderAdminIndicacoes();
-}
-
-function renderAdminIndicacoes(filtro='todos'){
-  const indicacoes = filtro==='todos'?db.indicacoes:db.indicacoes.filter(i=>i.status===filtro);
-  const total=db.indicacoes.length;
-  const pendentes=db.indicacoes.filter(i=>i.status==='pendente').length;
-  const confirmadas=db.indicacoes.filter(i=>i.status==='confirmada').length;
-  const lista=[...indicacoes].reverse().map(i=>{
-    const indicador=db.usuarios[i.uidIndicador];
+function renderIndicacoes(){
+  if(!usuarioAtual || !usuarioAtual.codigo){
+    document.getElementById('indicacoesBody').innerHTML='<div class="empty">Erro ao carregar dados</div>';
+    return;
+  }
+  const userData=db.usuarios[usuarioAtual.uid]||{indicacoesValidas:0,totalIndicacoes:0};
+  const minhasIndicacoes=db.indicacoes.filter(i=>i.uidIndicador===usuarioAtual.uid);
+  const validas=userData.indicacoesValidas||0;
+  const total=userData.totalIndicacoes||0;
+  const progresso=Math.min((validas/5)*100,100);
+  
+  const historico=minhasIndicacoes.reverse().map(i=>{
+    const statusClass=i.status==='confirmada'?'badge-confirmada':i.status==='pendente'?'badge-pendente':'badge-invalida';
+    const statusTxt=i.status==='confirmada'?'CONFIRMADA':i.status==='pendente'?'PENDENTE':'INVÁLIDA';
     return `
-    <div class="lista-item">
-      <div class="lista-top">
-        <div class="lista-nome">Código: ${i.codigo}</div>
-        <span class="badge badge-${i.status}">${i.status==='pendente'?'⏳ Pendente':i.status==='confirmada'?'✅ Confirmada':'❌ Cancelada'}</span>
+    <div class="indicacao-item">
+      <div class="indicacao-item-top">
+        <div class="indicacao-codigo">Pedido: ${i.pedidoId}</div>
+        <span class="badge ${statusClass}">${statusTxt}</span>
       </div>
-      <div class="lista-info">
-        Indicador: ${indicador?.codigo||'Desconhecido'}<br>
+      <div class="indicacao-valor">
         Indicado: ${i.nomeIndicado}<br>
         Valor: R$ ${i.valor.toFixed(2).replace('.',',')}<br>
-        Data: ${new Date(i.data).toLocaleString('pt-BR')}
+        Data: ${new Date(i.data).toLocaleDateString('pt-BR')}
       </div>
-      ${i.status==='pendente'?`
-      <div class="lista-acoes" style="margin-top:8px">
-        <button class="btn-mini btn-edit" onclick="aprovarIndicacao('${i.id}')">✅ APROVAR</button>
-        <button class="btn-mini btn-del" onclick="invalidarIndicacao('${i.id}')">🚫 INVÁLIDA</button>
-      </div>`:''}
     </div>
   `}).join('');
-  document.getElementById('adminIndicacoesBody').innerHTML=`
+
+  document.getElementById('indicacoesBody').innerHTML=`
     <div class="indicacao-card">
       <div class="indicacao-header">
-        <div class="indicacao-tit">📊 ESTATÍSTICAS</div>
+        <div class="indicacao-tit">💎 SEU CÓDIGO</div>
+      </div>
+      <div class="codigo-box">
+        <div class="codigo-text">${usuarioAtual.codigo}</div>
+        <button class="btn-copiar" onclick="copiarCodigo()">COPIAR</button>
       </div>
       <div class="stats-grid">
         <div class="stat-item">
@@ -1152,139 +1359,31 @@ function renderAdminIndicacoes(filtro='todos'){
           <div class="stat-label">Total</div>
         </div>
         <div class="stat-item">
-          <div class="stat-num">${pendentes}</div>
-          <div class="stat-label">Pendentes</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">${confirmadas}</div>
-          <div class="stat-label">Confirmadas</div>
-        </div>
-      </div>
-    </div>
-    <div class="label">🔍 FILTRAR POR:</div>
-    <div style="display:flex;gap:6px;margin-bottom:12px">
-      <button class="btn-mini ${filtro==='todos'?'btn-edit':''}" onclick="renderAdminIndicacoes('todos')">TODOS</button>
-      <button class="btn-mini ${filtro==='pendente'?'btn-edit':''}" onclick="renderAdminIndicacoes('pendente')">PENDENTES</button>
-      <button class="btn-mini ${filtro==='confirmada'?'btn-edit':''}" onclick="renderAdminIndicacoes('confirmada')">CONFIRMADAS</button>
-      <button class="btn-mini ${filtro==='cancelada'?'btn-edit':''}" onclick="renderAdminIndicacoes('cancelada')">CANCELADAS</button>
-    </div>
-    <div class="titulo">LISTA DE INDICAÇÕES</div>
-    ${lista||'<div class="empty">Nenhuma indicação encontrada</div>'}
-  `;
-}
-
-function aprovarIndicacao(id){
-  const indicacao=db.indicacoes.find(i=>i.id===id);
-  if(!indicacao)return;
-  if(confirm(`Aprovar indicação de ${indicacao.nomeIndicado}?`)){
-    indicacao.status='confirmada';
-    db.usuarios[indicacao.uidIndicador].indicacoesValidas=(db.usuarios[indicacao.uidIndicador].indicacoesValidas||0)+1;
-    save();
-    renderAdminIndicacoes();
-    alert('✅ Indicação aprovada!');
-  }
-}
-
-function invalidarIndicacao(id){
-  const indicacao=db.indicacoes.find(i=>i.id===id);
-  if(!indicacao)return;
-  if(confirm(`Cancelar indicação de ${indicacao.nomeIndicado}?`)){
-    indicacao.status='cancelada';
-    save();
-    renderAdminIndicacoes();
-    alert('❌ Indicação cancelada!');
-  }
-}
-
-function renderIndicacoes(){
-  const user = db.usuarios[usuarioAtual.uid];
-  const minhasIndicacoes = db.indicacoes.filter(i=>i.uidIndicador===usuarioAtual.uid);
-  const validas = minhasIndicacoes.filter(i=>i.status==='confirmada').length;
-  const pendentes = minhasIndicacoes.filter(i=>i.status==='pendente').length;
-  const canceladas = minhasIndicacoes.filter(i=>i.status==='cancelada'||i.status==='invalida').length;
-  const proxMeta=validas<5?5:validas<10?10:validas<20?20:20;
-  const progresso=Math.min((validas/proxMeta)*100,100);
-  let recompensa='';
-  if(validas>=20)recompensa='🏆 PRÊMIO PREMIUM DESBLOQUEADO';
-  else if(validas>=10)recompensa='🎁 500 SEGUIDORES DESBLOQUEADO';
-  else if(validas>=5)recompensa='✨ 300 SEGUIDORES DESBLOQUEADO';
-  const historico=[...minhasIndicacoes].reverse().map(i=>`
-    <div class="indicacao-item">
-      <div class="indicacao-item-top">
-        <div class="indicacao-codigo">${i.nomeIndicado}</div>
-        <span class="badge badge-${i.status}">${i.status==='pendente'?'⏳ Pendente':i.status==='confirmada'?'✅ Confirmada':i.status==='cancelada'?'❌ Cancelada':'🚫 Inválida'}</span>
-      </div>
-      <div class="indicacao-valor">R$ ${i.valor.toFixed(2).replace('.',',')} - ${new Date(i.data).toLocaleDateString('pt-BR')}</div>
-    </div>
-  `).join('');
-  document.getElementById('indicacoesBody').innerHTML=`
-    <div class="indicacao-card">
-      <div class="indicacao-header">
-        <div class="indicacao-tit">🎁 SEU CÓDIGO</div>
-      </div>
-      <div class="codigo-box">
-        <div class="codigo-text">${user.codigo}</div>
-        <button class="btn-copiar" onclick="copiarCodigo()">COPIAR</button>
-      </div>
-      <button class="btn" onclick="compartilharConvite()">📤 COMPARTILHAR CONVITE</button>
-    </div>
-    <div class="indicacao-card">
-      <div class="indicacao-header">
-        <div class="indicacao-tit">📊 ESTATÍSTICAS</div>
-      </div>
-      <div class="stats-grid">
-        <div class="stat-item">
           <div class="stat-num">${validas}</div>
           <div class="stat-label">Válidas</div>
         </div>
         <div class="stat-item">
-          <div class="stat-num">${pendentes}</div>
-          <div class="stat-label">Pendentes</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">${canceladas}</div>
-          <div class="stat-label">Canceladas</div>
+          <div class="stat-num">${5-validas>0?5-validas:0}</div>
+          <div class="stat-label">Faltam</div>
         </div>
       </div>
-      <div style="font-size:9px;color:var(--cinza);margin-bottom:6px">Progresso: ${validas}/${proxMeta}</div>
-      <div class="progress-bar"><div class="progress-fill" style="width:${progresso}%"></div></div>
-      ${recompensa?`<div style="font-size:9px;color:var(--verde);text-align:center;margin-top:8px">${recompensa}</div>`:''}
+      <div class="progress-bar">
+        <div class="progress-fill" style="width:${progresso}%"></div>
+      </div>
+      <div style="font-size:9px;color:var(--cinza);text-align:center;margin-bottom:12px">
+        ${validas>=5?'🎉 Meta atingida! Você ganhou recompensas!':`${5-validas} indicações para próxima recompensa`}
+      </div>
+      <div class="recompensa-item">
+        <div class="recompensa-icon"><i data-lucide="gift"></i></div>
+        <div class="recompensa-info">
+          <div class="recompensa-tit">Recompensa 5 Indicações</div>
+          <div class="recompensa-desc">100 Diamantes FF ou 400 Robux</div>
+        </div>
+      </div>
     </div>
-    <div class="indicacao-card">
-      <div class="indicacao-header">
-        <div class="indicacao-tit">🎯 RECOMPENSAS</div>
-      </div>
-      <div class="recompensa-item">
-        <div class="recompensa-icon"><i data-lucide="zap"></i></div>
-        <div class="recompensa-info">
-          <div class="recompensa-tit">5 Compras Válidas</div>
-          <div class="recompensa-desc">Ganhe 300 seguidores grátis</div>
-        </div>
-        ${validas>=5?'<span class="badge badge-confirmada">✅</span>':''}
-      </div>
-      <div class="recompensa-item">
-        <div class="recompensa-icon"><i data-lucide="star"></i></div>
-        <div class="recompensa-info">
-          <div class="recompensa-tit">10 Compras Válidas</div>
-          <div class="recompensa-desc">Ganhe 500 seguidores grátis</div>
-        </div>
-        ${validas>=10?'<span class="badge badge-confirmada">✅</span>':''}
-      </div>
-      <div class="recompensa-item">
-        <div class="recompensa-icon"><i data-lucide="crown"></i></div>
-        <div class="recompensa-info">
-          <div class="recompensa-tit">20 Compras Válidas</div>
-          <div class="recompensa-desc">Prêmio Premium Surpresa</div>
-        </div>
-        ${validas>=20?'<span class="badge badge-confirmada">✅</span>':''}
-      </div>
-    <div class="indicacao-card">
-      <div class="indicacao-header">
-        <div class="indicacao-tit">📜 HISTÓRICO</div>
-      </div>
-      <div class="indicacao-historico">
-        ${historico||'<div class="empty">Nenhuma indicação ainda</div>'}
-      </div>
+    <div class="titulo">HISTÓRICO DE INDICAÇÕES</div>
+    <div class="indicacao-historico">
+      ${historico||'<div class="empty">Nenhuma indicação ainda<br><br>Compartilhe seu código!</div>'}
     </div>
   `;
   lucide.createIcons();
@@ -1292,219 +1391,123 @@ function renderIndicacoes(){
 
 function copiarCodigo(){
   navigator.clipboard.writeText(usuarioAtual.codigo);
-  alert('Código copiado: '+usuarioAtual.codigo);
+  alert('✅ Código copiado!\n\nCompartilhe com seus amigos.');
 }
 
-function compartilharConvite(){
-  const msg=`🎁 Use meu código ${usuarioAtual.codigo} na Premium Store e ganhe benefícios exclusivos!\n\nCompre seguidores, curtidas e muito mais com qualidade premium 💜`;
-  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
-}
-
-function abrirCats(){
-  const lista=db.cat.map(c=>`
-    <div class="lista-item">
-      <div class="lista-top">
-        <div class="lista-nome">${c.nome}</div>
-        <div class="lista-acoes">
-          <button class="btn-mini btn-edit" onclick="formCat('${c.k}')">EDITAR</button>
-          <button class="btn-mini btn-del" onclick="delCat('${c.k}')">EXCLUIR</button>
-        </div>
-      </div>
-      <div class="lista-info">${db.serv.filter(s=>s.cat===c.k).length} serviços</div>
-    </div>`).join('');
-  document.getElementById('adminBody').innerHTML=`<div class="titulo">CATEGORIAS</div>${lista||'<div class="empty">Nenhuma categoria</div>'}<div class="add" onclick="formCat()">+</div><button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>`;
-}
-
-function abrirServs(){
-  const lista=db.serv.map(s=>{
-    const c=db.cat.find(x=>x.k===s.cat);
+function renderAdminIndicacoes(){
+  if(!usuarioAtual.admin)return;
+  const todas=db.indicacoes.reverse();
+  if(todas.length===0){
+    document.getElementById('adminIndicacoesBody').innerHTML='<div class="empty">Nenhuma indicação ainda</div>';
+    return;
+  }
+  const lista=todas.map(i=>{
+    const statusClass=i.status==='confirmada'?'badge-confirmada':i.status==='pendente'?'badge-pendente':'badge-invalida';
+    const statusTxt=i.status==='confirmada'?'CONFIRMADA':i.status==='pendente'?'PENDENTE':'INVÁLIDA';
     return `
     <div class="lista-item">
       <div class="lista-top">
-        <div class="lista-nome">${s.nome}</div>
-        <div class="lista-acoes">
-          <button class="btn-mini btn-edit" onclick="formServ('${s.k}')">EDITAR</button>
-          <button class="btn-mini btn-del" onclick="delServ('${s.k}')">EXCLUIR</button>
-        </div>
+        <div class="lista-nome">Código: ${i.codigo}</div>
+        <span class="badge ${statusClass}">${statusTxt}</span>
       </div>
-      <div class="lista-info">Cat: ${c?.nome||'-'} | R$ ${s.preco.toFixed(2)} | Estoque: ${s.estoque}</div>
-    </div>`}).join('');
-  document.getElementById('adminBody').innerHTML=`<div class="titulo">SERVIÇOS</div>${lista||'<div class="empty">Nenhum serviço</div>'}<div class="add" onclick="formServ()">+</div><button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>`;
+      <div class="lista-info">
+        Pedido: ${i.pedidoId}<br>
+        Indicado: ${i.nomeIndicado}<br>
+        Valor: R$ ${i.valor.toFixed(2).replace('.',',')}<br>
+        Data: ${new Date(i.data).toLocaleString('pt-BR')}
+      </div>
+      ${i.status==='confirmada'?`
+      <div class="lista-acoes" style="margin-top:8px">
+        <button class="btn-mini btn-edit" onclick="darRecompensa('${i.id}')">DAR RECOMPENSA</button>
+      </div>`:''}
+    </div>
+  `}).join('');
+  document.getElementById('adminIndicacoesBody').innerHTML=lista;
 }
 
-function formCat(k=null){
-  const d=db.cat.find(x=>x.k===k);
-  document.getElementById('modalTit').textContent=k?'EDITAR CATEGORIA':'NOVA CATEGORIA';
-  document.getElementById('modalBody').innerHTML=`
-    <input type="text" class="input" id="nomeC" value="${d?.nome||''}" placeholder="Nome da categoria">
-    <div class="label">🖼️ Imagem da categoria:</div>
-    <label for="imgCatInput" class="upload" id="uploadCat">
-      ${d?.img?`<img src="${d.img}" id="imgCatPreview">`:'<div class="upload-text">📷 Clique para escolher<br>da galeria</div>'}
-      <input type="file" id="imgCatInput" accept="image/*" onchange="previewImgCat(event)">
-    </label>
-    <button class="btn" onclick="salvarCat('${k||''}')">${k?'SALVAR':'CRIAR'}</button>
-    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
-  document.getElementById('modal').classList.add('ativo');
-}
-
-function previewImgCat(e){
-  const file=e.target.files[0];
-  if(file){
-    const reader=new FileReader();
-    reader.onload=function(ev){
-      document.getElementById('uploadCat').innerHTML=`<img src="${ev.target.result}" id="imgCatPreview"><input type="file" id="imgCatInput" accept="image/*" onchange="previewImgCat(event)">`;
-    };
-    reader.readAsDataURL(file);
-  }
-}
-
-function formServ(k=null){
-  const d=db.serv.find(x=>x.k===k);
-  let opts=db.cat.map(c=>`<option value="${c.k}" ${d?.cat===c.k?'selected':''}>${c.nome}</option>`).join('');
-  if(!opts)opts='<option value="">Cadastre categoria primeiro</option>';
-  document.getElementById('modalTit').textContent=k?'EDITAR SERVIÇO':'NOVO SERVIÇO';
-  document.getElementById('modalBody').innerHTML=`
-    <select class="input" id="catS">${opts}</select>
-    <input type="text" class="input" id="nomeS" value="${d?.nome||''}" placeholder="Nome do serviço">
-    <textarea class="textarea" id="descS" placeholder="Descrição do serviço">${d?.desc||''}</textarea>
-    <input type="number" step="0.01" class="input" id="precoS" value="${d?.preco||''}" placeholder="Valor do serviço">
-    <input type="number" class="input" id="estS" value="${d?.estoque||''}" placeholder="Estoque">
-    <div class="label">🖼️ Imagem do produto:</div>
-    <label for="imgServInput" class="upload" id="uploadServ">
-      ${d?.img?`<img src="${d.img}" id="imgServPreview">`:'<div class="upload-text">📷 Clique para escolher<br>da galeria</div>'}
-      <input type="file" id="imgServInput" accept="image/*" onchange="previewImgServ(event)">
-    </label>
-    <button class="btn" onclick="salvarServ('${k||''}')">${k?'SALVAR':'CRIAR'}</button>
-    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
-  document.getElementById('modal').classList.add('ativo');
-}
-
-function previewImgServ(e){
-  const file=e.target.files[0];
-  if(file){
-    const reader=new FileReader();
-    reader.onload=function(ev){
-      document.getElementById('uploadServ').innerHTML=`<img src="${ev.target.result}" id="imgServPreview"><input type="file" id="imgServInput" accept="image/*" onchange="previewImgServ(event)">`;
-    };
-    reader.readAsDataURL(file);
-  }
-}
-
-function salvarCat(k){
-  const nome=document.getElementById('nomeC').value.trim();
-  const img=document.getElementById('imgCatPreview')?.src||'';
-  if(!nome){alert('Nome obrigatório');return}
-  if(k){db.cat[db.cat.findIndex(x=>x.k===k)]={k,nome,img}}else{db.cat.push({k:'c'+Date.now(),nome,img})}
-  save();fecharModal();abrirCats();renderJogos();
-}
-
-function delCat(k){
-  if(confirm('Excluir categoria? Vai apagar os serviços juntos.')){
-    db.cat=db.cat.filter(x=>x.k!==k);
-    db.serv=db.serv.filter(x=>x.cat!==k);
-    save();abrirCats();renderJogos();renderProdutosLoja();
-  }
-}
-
-function salvarServ(k){
-  const cat=document.getElementById('catS').value;
-  const nome=document.getElementById('nomeS').value.trim();
-  const desc=document.getElementById('descS').value.trim();
-  const preco=parseFloat(document.getElementById('precoS').value);
-  const estoque=parseInt(document.getElementById('estS').value)||0;
-  const img=document.getElementById('imgServPreview')?.src||'';
-  if(!cat||!nome||!preco){alert('Preencha categoria, nome e valor');return}
-  const dados={k:k||'s'+Date.now(),cat,nome,desc,preco,estoque,img};
-  if(k){db.serv[db.serv.findIndex(x=>x.k===k)]=dados}else{db.serv.push(dados)}
-  save();fecharModal();abrirServs();renderProdutosLoja();
-}
-
-function delServ(k){
-  if(confirm('Excluir serviço?')){
-    db.serv=db.serv.filter(x=>x.k!==k);
-    save();abrirServs();renderProdutosLoja();
-  }
+function darRecompensa(id){
+  alert('Marque como entregue manualmente após dar a recompensa ao cliente.\n\nRecompensa: 100 Diamantes FF ou 400 Robux');
 }
 
 function formFaq(){
-  document.getElementById('modalTit').textContent='DÚVIDAS FREQUENTES';
-  document.getElementById('modalBody').innerHTML=`
-    <textarea class="textarea" id="faqTexto" style="min-height:200px">${db.config.faq||''}</textarea>
-    <button class="btn" onclick="salvarFaq()">SALVAR</button>
-  `;
-  document.getElementById('modal').classList.add('ativo');
+  abrirModal('EDITAR FAQ',`
+  <textarea class="textarea" id="faqTxt" placeholder="Digite as dúvidas frequentes" style="min-height:200px">${db.config.faq}</textarea>
+  <button class="btn" onclick="salvarFaq()">SALVAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
+  `);
 }
 
 function salvarFaq(){
-  db.config.faq=document.getElementById('faqTexto').value;
+  db.config.faq=document.getElementById('faqTxt').value;
   save();
-  alert('Salvo!');
-  document.getElementById('modal').classList.remove('ativo');
+  fecharModal();
+  alert('FAQ atualizado!');
 }
 
 function formTermos(){
-  document.getElementById('modalTit').textContent='TERMOS DO SITE';
-  document.getElementById('modalBody').innerHTML=`
-    <textarea class="textarea" id="termosTexto" style="min-height:300px">${db.config.termos}</textarea>
-    <button class="btn" onclick="salvarTermos()">SALVAR</button>
-  `;
-  document.getElementById('modal').classList.add('ativo');
+  abrirModal('EDITAR TERMOS',`
+  <textarea class="textarea" id="termosTxt" placeholder="Digite os termos do site" style="min-height:200px">${db.config.termos}</textarea>
+  <button class="btn" onclick="salvarTermos()">SALVAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
+  `);
 }
 
 function salvarTermos(){
-  db.config.termos=document.getElementById('termosTexto').value;
+  db.config.termos=document.getElementById('termosTxt').value;
   save();
-  alert('Salvo!');
-  document.getElementById('modal').classList.remove('ativo');
+  fecharModal();
+  alert('Termos atualizados!');
 }
 
 function formPremiacao(){
-  const prem=db.config.premiacao||{img:'',texto:''};
-  document.getElementById('modalTit').textContent='PREMIAÇÃO';
-  document.getElementById('modalBody').innerHTML=`
-    <div class="label">🖼️ Imagem da premiação:</div>
-    <label for="imgPremInput" class="upload" id="uploadPrem">
-      ${prem.img?`<img src="${prem.img}" id="imgPremPreview">`:'<div class="upload-text">📷 Clique para escolher<br>da galeria</div>'}
-      <input type="file" id="imgPremInput" accept="image/*" onchange="previewImgPrem(event)">
-    </label>
-    <textarea class="textarea" id="premTexto" placeholder="Texto da premiação" style="min-height:150px">${prem.texto}</textarea>
-    <button class="btn" onclick="salvarPremiacao()">SALVAR</button>
-  `;
+  abrirModal('EDITAR PREMIAÇÃO',`
+  <div class="label">Imagem da premiação:</div>
+  <div class="upload" onclick="document.getElementById('premImg').click()">
+    <div class="upload-text" style="${db.config.premiacao.img?'display:none':''}">📷 Clique para enviar</div>
+    <img id="premImgPrev" src="${db.config.premiacao.img||''}" style="${db.config.premiacao.img?'display:block':'display:none'}">
+    <input type="file" id="premImg" accept="image/*" onchange="prevImg(this,'premImgPrev')">
+  </div>
+  <textarea class="textarea" id="premTxt" placeholder="Texto da premiação" style="min-height:150px">${db.config.premiacao.texto}</textarea>
+  <button class="btn" onclick="salvarPremiacao()">SALVAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
+  `);
+}
+
+async function salvarPremiacao(){
+  showLoad(true);
+  let img=db.config.premiacao.img;
+  const file=document.getElementById('premImg').files[0];
+  if(file)img=await toBase64(file);
+  db.config.premiacao={img,texto:document.getElementById('premTxt').value};
+  save();
+  showLoad(false);
+  fecharModal();
+  alert('Premiação atualizada!');
+}
+
+function abrirModal(tit,body){
+  document.getElementById('modalTit').textContent=tit;
+  document.getElementById('modalBody').innerHTML=body;
   document.getElementById('modal').classList.add('ativo');
 }
 
-function previewImgPrem(e){
-  const file=e.target.files[0];
-  if(file){
-    const reader=new FileReader();
-    reader.onload=function(ev){
-      document.getElementById('uploadPrem').innerHTML=`<img src="${ev.target.result}" id="imgPremPreview"><input type="file" id="imgPremInput" accept="image/*" onchange="previewImgPrem(event)">`;
+function fecharModal(){document.getElementById('modal').classList.remove('ativo')}
+
+function prevImg(input,prevId){
+  if(input.files&&input.files[0]){
+    const r=new FileReader();
+    r.onload=e=>{
+      document.getElementById(prevId).src=e.target.result;
+      document.getElementById(prevId).style.display='block';
+      input.parentElement.querySelector('.upload-text').style.display='none';
     };
-    reader.readAsDataURL(file);
+    r.readAsDataURL(input.files[0]);
   }
 }
 
-function salvarPremiacao(){
-  db.config.premiacao={
-    img:document.getElementById('imgPremPreview')?.src||'',
-    texto:document.getElementById('premTexto').value
-  };
-  save();
-  alert('Salvo!');
-  document.getElementById('modal').classList.remove('ativo');
-}
+function toBase64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.readAsDataURL(file);r.onload=()=>resolve(r.result);r.onerror=reject;})}
 
-function fecharModal(){
-  document.getElementById('modal').classList.remove('ativo');
-}
-
-document.getElementById('modal').addEventListener('click', (e)=>{
-  if(e.target.id==='modal') e.target.classList.remove('ativo');
-});
-
-document.getElementById('modalProduto').addEventListener('click', (e)=>{
-  if(e.target.id==='modalProduto') e.target.classList.remove('ativo');
-});
+lucide.createIcons();
 </script>
 </body>
 </html>
