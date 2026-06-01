@@ -1236,11 +1236,60 @@ function delServ(k){
 }
 
 function renderPedidos(){
-  const pedidos = db.pedidos.slice().reverse();
-  if(pedidos.length===0){
-    document.getElementById('pedidosBody').innerHTML='<div class="empty">Nenhum pedido ainda</div>';
-    return;
+  const todosPedidos = db.pedidos.slice().reverse();
+  
+  document.getElementById('pedidosBody').innerHTML=`
+    <div class="search-bar" style="margin:0 0 16px 0">
+      <i class="icon" data-lucide="search"></i>
+      <input type="text" id="buscaPedidoAdmin" placeholder="Buscar por ID do pedido...">
+    </div>
+    <div id="listaPedidosAdmin"></div>
+  `;
+
+  function filtrarPedidosAdmin(){
+    const termo = document.getElementById('buscaPedidoAdmin').value.toLowerCase().trim();
+    const filtrados = termo ? todosPedidos.filter(p=>p.id.toLowerCase().includes(termo)) : todosPedidos;
+    
+    if(filtrados.length===0){
+      document.getElementById('listaPedidosAdmin').innerHTML='<div class="empty">Nenhum pedido encontrado</div>';
+      return;
+    }
+    
+    const lista=filtrados.map(p=>{
+      const statusClass=p.status==='pendente'?'badge-pendente':p.status==='confirmado'?'badge-confirmado':'badge-cancelado';
+      const statusTxt=p.status==='pendente'?'PENDENTE':p.status==='confirmado'?'CONFIRMADO':'CANCELADO';
+      return `
+      <div class="lista-item">
+        <div class="lista-top">
+          <div class="lista-nome">${p.id}</div>
+          <span class="badge ${statusClass}">${statusTxt}</span>
+        </div>
+        <div class="lista-info">
+          Cliente: ${p.email}<br>
+          Serviço: ${p.servico}<br>
+          Jogo: ${p.jogo}<br>
+          Valor: R$ ${p.valor.toFixed(2).replace('.',',')}<br>
+          ID: ${p.id_conta}<br>
+          Data: ${new Date(p.data).toLocaleString('pt-BR')}<br>
+          Indicação: ${p.codigoIndicacao||'-'}
+          ${p.mensagemAdmin ? `<br><b style="color:var(--roxo)">Msg enviada:</b> ${p.mensagemAdmin}` : ''}
+        </div>
+        ${p.status==='pendente'?`
+        <div class="lista-acoes" style="margin-top:8px">
+          <button class="btn-mini" style="background:var(--verde);color:var(--branco)" onclick="confirmarPedido('${p.id}')">CONFIRMAR</button>
+          <button class="btn-mini" style="background:var(--vermelho);color:var(--branco)" onclick="cancelarPedido('${p.id}')">CANCELAR</button>
+        </div>`:''}
+      </div>
+    `}).join('');
+    
+    document.getElementById('listaPedidosAdmin').innerHTML=lista;
+    lucide.createIcons();
   }
+  
+  document.getElementById('buscaPedidoAdmin').addEventListener('input', filtrarPedidosAdmin);
+  filtrarPedidosAdmin();
+  lucide.createIcons();
+}
   const lista=pedidos.map(p=>{
     const statusClass=p.status==='pendente'?'badge-pendente':p.status==='confirmado'?'badge-confirmado':'badge-cancelado';
     const statusTxt=p.status==='pendente'?'PENDENTE':p.status==='confirmado'?'CONFIRMADO':'CANCELADO';
