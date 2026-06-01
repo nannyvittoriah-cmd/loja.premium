@@ -102,8 +102,8 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .jogo-card{background:var(--card);border:1px solid var(--borda);border-radius:20px;padding:10px 6px;text-align:center;cursor:pointer;box-shadow:0 0 8px var(--glow);transition:all 0.3s;overflow:hidden}
 .jogo-card:hover{transform:translateY(-2px);box-shadow:0 0 12px var(--glow);border-color:var(--roxo)}
 .jogo-card.ativo{border-color:var(--roxo);box-shadow:0 0 15px var(--glow)}
-.jogo-card-img{width:100%;height:40px;margin-bottom:4px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:8px}
-.jogo-card-img img{width:100%;height:100%;object-fit:cover}
+.jogo-card-img{width:100%;height:50px;margin-bottom:4px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:8px}
+.jogo-card-img img{width:100%;height:100%;object-fit:contain}
 .jogo-card-img i{width:24px;height:24px;stroke:var(--roxo);filter:drop-shadow(0 0 4px var(--roxo))}
 .jogo-card span{font-size:8px;font-weight:700;color:var(--cinza)}
 .produtos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:0 12px 20px}
@@ -160,7 +160,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .modal-produto-body{padding:16px}
 .modal-produto-nome{font-size:16px;font-weight:900;margin-bottom:6px}
 .modal-produto-preco{font-size:20px;font-weight:900;color:var(--verde);margin-bottom:12px}
-.modal-produto-desc{font-size:10px;color:var(--cinza);line-height:1.6;margin-bottom:16px;display:none}
+.modal-produto-desc{font-size:10px;color:var(--cinza);line-height:1.6;margin-bottom:16px;display:none;white-space:pre-wrap}
 .modal-produto-desc.ativo{display:block}
 
 .como-comprar{padding:20px 12px 40px;max-width:600px;margin:0 auto}
@@ -339,11 +339,10 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
   </div>
 </div>
 
-</div>
+<div class="sidebar-overlay" id="overlay" onclick="fecharMenu()"></div>
 <div class="sidebar" id="sidebar">
   <div class="sidebar-tit">MENU</div>
-  <div class="sidebar-item" onclick="ir('home');fecharMenu()"><i data-lucide="home"></i>Loja</div>
-  <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
+    <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
   <div class="sidebar-item" onclick="ir('carrinho');fecharMenu()"><i data-lucide="shopping-cart"></i>Meu Carrinho</div>
   <div class="sidebar-item" onclick="ir('comprovantes');fecharMenu()"><i data-lucide="receipt"></i>Meus comprovantes</div>
   <div class="sidebar-item" onclick="ir('suporte');fecharMenu()"><i data-lucide="headphones"></i>Suporte</div>
@@ -1027,7 +1026,8 @@ function renderPremiacao(){
   const prem=db.config.premiacao||{img:'',texto:'Nenhuma premiação ativa no momento.'};
   document.getElementById('premiacaoBody').innerHTML=`
     ${prem.img?`<img src="${prem.img}" style="width:100%;border-radius:12px;margin-bottom:12px;border:1px solid var(--borda)">`:''}
-    <div class="texto-geral">${prem.texto}</div>  `;
+    <div class="texto-geral">${prem.texto}</div>
+  `;
 }
 
 function abrirAdmin(){
@@ -1035,8 +1035,7 @@ function abrirAdmin(){
   document.getElementById('adminBody').innerHTML=`
   <button class="btn" onclick="abrirCats()">📂 CATEGORIAS</button>
   <button class="btn" onclick="abrirServs()">📦 SERVIÇOS</button>
-  <button class="btn" onclick="ir('pedidos')">📋 PEDIDOS</button>
-  <button class="btn" onclick="formFaq()">❓ DÚVIDAS FREQUENTES</button>
+    <button class="btn" onclick="formFaq()">❓ DÚVIDAS FREQUENTES</button>
   <button class="btn" onclick="formTermos()">📄 TERMOS DO SITE</button>
   <button class="btn" onclick="formPremiacao()">🏆 PREMIAÇÃO</button>
   <button class="btn btn-sec" onclick="ir('home')">VOLTAR</button>
@@ -1113,8 +1112,12 @@ async function salvarCat(k=null){
   else if(k)img=db.cat.find(x=>x.k===k)?.img||null;
   const newK=k||'cat'+Date.now();
   const cat={k:newK,nome,img};
-  if(k){db.cat[db.cat.findIndex(x=>x.k===k)]=cat;}
-  else{db.cat.push(cat);}
+  if(k){
+    const index=db.cat.findIndex(x=>x.k===k);
+    if(index>=0)db.cat[index]=cat;
+  }else{
+    db.cat.push(cat);
+  }
   save();
   showLoad(false);
   fecharModal();
@@ -1209,7 +1212,7 @@ function editServ(k){
 async function salvarServ(k=null){
   const cat=document.getElementById('sCat').value;
   const nome=document.getElementById('sNome').value.trim();
-  const desc=document.getElementById('sDesc').value.trim();
+  const desc=document.getElementById('sDesc').value;
   const preco=parseFloat(document.getElementById('sPreco').value);
   const estoque=parseInt(document.getElementById('sEstoque').value)||0;
   if(!cat||!nome||isNaN(preco)){alert('Preencha categoria, nome e preço');return}
@@ -1220,8 +1223,12 @@ async function salvarServ(k=null){
   else if(k)img=db.serv.find(x=>x.k===k)?.img||null;
   const newK=k||'serv'+Date.now();
   const serv={k:newK,cat,nome,desc,preco,estoque,img};
-  if(k){db.serv[db.serv.findIndex(x=>x.k===k)]=serv;}
-  else{db.serv.push(serv);}
+  if(k){
+    const index=db.serv.findIndex(x=>x.k===k);
+    if(index>=0)db.serv[index]=serv;
+  }else{
+    db.serv.push(serv);
+  }
   save();
   showLoad(false);
   fecharModal();
@@ -1238,7 +1245,6 @@ function delServ(k){
   }
 }
 
-// ===== AQUI TÁ A BUSCA POR ID NO ADM =====
 function renderPedidos(){
   const todosPedidos = db.pedidos.slice().reverse();
   
@@ -1313,7 +1319,7 @@ function confirmarPedido(id){
 }
 
 function salvarConfirmacao(id){
-  const msgAdmin = document.getElementById('msgAdmin').value.trim();
+  const msgAdmin = document.getElementById('msgAdmin').value;
   const pedido=db.pedidos.find(p=>p.id===id);
   if(pedido){
     pedido.status='confirmado';
@@ -1411,6 +1417,7 @@ function renderIndicacoes(){
           <div class="recompensa-desc">100 Diamantes FF ou 400 Robux</div>
         </div>
       </div>
+    </div>
     <div class="titulo">HISTÓRICO DE INDICAÇÕES</div>
     <div class="indicacao-historico">
       ${historico||'<div class="empty">Nenhuma indicação ainda<br><br>Compartilhe seu código!</div>'}
