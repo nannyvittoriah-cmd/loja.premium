@@ -2,485 +2,730 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>PREMIUM STORE</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Premium Store</title>
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+  import { getDatabase, ref, set, get, push, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
+    authDomain: "premium-store-aa58b.firebaseapp.com",
+    databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
+    projectId: "premium-store-aa58b",
+    storageBucket: "premium-store-aa58b.firebasestorage.app",
+    messagingSenderId: "462239500057",
+    appId: "1:462239500057:web:f1b7cea162ed308a866788",
+    measurementId: "G-CN88J28WRX"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+
+  window.firebaseAuth = { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail, db, ref, set, get, push, update };
+</script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --roxo:#8B5CF6;--roxo2:#7C3AED;--verde:#10B981;--vermelho:#EF4444;--amarelo:#F59E0B;
-  --preto:#0F0F0F;--cinza:#1A1A1A;--cinza2:#2A2A2A;--branco:#FFF;--cinza-txt:#9CA3AF
+  --bg:#050505;
+  --roxo:#8B5CF6;
+  --roxo-neon:#A855F7;
+  --roxo-escuro:#6D28D9;
+  --branco:#FFFFFF;
+  --cinza:#D1D5DB;
+  --borda:#1E1E1E;
+  --card:#0D0D0D;
+  --verde:#22C55E;
+  --amarelo:#F59E0B;
+  --vermelho:#EF4444;
+  --glow:rgba(139, 92, 246, 0.3);
 }
-body{background:var(--preto);color:var(--branco);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:11px;overflow-x:hidden}
-.app{max-width:480px;margin:0 auto;background:var(--preto);min-height:100vh;padding-bottom:70px}
-.topo{background:linear-gradient(135deg,var(--roxo),var(--roxo2));padding:16px;text-align:center;position:sticky;top:0;z-index:100}
-.logo{display:flex;align-items:center;justify-content:center;gap:8px;font-size:16px;font-weight:800;letter-spacing:1px}
-.logo i{width:20px;height:20px}
-.conteudo{padding:16px}
-.tela{display:none}
-.tela.ativa{display:block;animation:fadeIn.3s}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.titulo{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.titulo i{width:18px;height:18px;color:var(--roxo)}
-.input,.textarea,.select{width:100%;background:var(--cinza);border:1px solid var(--cinza2);color:var(--branco);padding:12px;border-radius:8px;font-size:11px;margin-bottom:10px;font-family:inherit}
-.input:focus,.textarea:focus,.select:focus{outline:none;border-color:var(--roxo)}
-.textarea{min-height:80px;resize:vertical}
-.btn{width:100%;background:linear-gradient(135deg,var(--roxo),var(--roxo2));color:var(--branco);border:none;padding:12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;transition:.2s}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);font-size:11px}
+.tela{display:none;min-height:100vh}
+.tela.ativa{display:block}
+.hidden{display:none!important}
+
+.header{background:var(--bg);padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--borda);position:sticky;top:0;z-index:50;box-shadow:0 2px 10px var(--glow)}
+.header-left{display:flex;align-items:center;gap:12px}
+.menu{font-size:18px;cursor:pointer;color:var(--branco);filter:drop-shadow(0 0 4px var(--roxo))}
+.logo-box{display:flex;align-items:center;gap:8px}
+.logo-img{width:28px;height:28px;border-radius:6px;object-fit:cover}
+.logo-text{font-size:14px;font-weight:800;letter-spacing:.5px}
+.logo-text.premium{color:var(--branco)}
+.logo-text.store{color:var(--roxo);text-shadow:0 0 10px var(--roxo-neon)}
+.header-right{display:flex;align-items:center;gap:12px;font-size:16px}
+.cart-wrapper{position:relative;cursor:pointer}
+.cart-badge{position:absolute;top:-4px;right:-4px;background:var(--roxo);color:var(--branco);font-size:7px;font-weight:800;padding:1px 4px;border-radius:20px;box-shadow:0 0 6px var(--glow)}
+.user-info{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--roxo);cursor:pointer}
+.user-avatar{width:24px;height:24px;border-radius:50%;background:var(--roxo);display:flex;align-items:center;justify-content:center;font-weight:700;overflow:hidden;box-shadow:0 0 8px var(--roxo-neon)}
+.user-avatar img{width:100%;height:100%;object-fit:cover}
+
+.sidebar{position:fixed;top:0;left:-250px;width:250px;height:100vh;background:var(--card);border-right:1px solid var(--borda);z-index:200;transition:left.3s;padding:16px;overflow-y:auto}
+.sidebar.ativo{left:0}
+.sidebar-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:199;display:none}
+.sidebar-overlay.ativo{display:block}
+.sidebar-tit{font-size:12px;font-weight:800;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--borda);color:var(--roxo)}
+.sidebar-item{padding:10px;border-radius:8px;cursor:pointer;font-size:10px;font-weight:600;color:var(--cinza);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.sidebar-item:hover{background:var(--borda);color:var(--branco)}
+.sidebar-item i{width:16px;height:16px;stroke:var(--roxo);fill:none;stroke-width:1.5}
+
+.login-wrapper{min-height:100vh}
+.login-container{display:flex;align-items:center;justify-content:center;padding:16px;min-height:60vh}
+.login-box{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:24px;width:100%;max-width:360px;box-shadow:0 0 20px rgba(139,92,246,.1)}
+.login-logo{text-align:center;margin-bottom:24px}
+.login-logo img{width:60px;height:60px;border-radius:12px;margin-bottom:8px}
+.login-logo h1{font-size:16px;font-weight:800}
+.login-logo p{font-size:9px;color:var(--cinza);margin-top:4px}
+.login-tabs{display:flex;gap:6px;margin-bottom:16px}
+.login-tab{flex:1;padding:8px;background:var(--bg);border:1px solid var(--borda);border-radius:8px;font-size:10px;font-weight:600;text-align:center;cursor:pointer;color:var(--cinza)}
+.login-tab.ativo{background:var(--roxo);border-color:var(--roxo);color:var(--branco);box-shadow:0 0 12px var(--roxo-neon)}
+.login-form{display:none}
+.login-form.ativo{display:block}
+.link-roxo{color:var(--roxo);cursor:pointer;font-size:9px;text-align:center;margin-top:12px}
+.link-roxo:hover{text-decoration:underline}
+
+.search-bar{position:relative;margin:8px 12px}
+.search-bar input{width:100%;background:rgba(5,5,5,0.6);border:1px solid var(--borda);padding:8px 8px 8px 32px;border-radius:20px;color:var(--branco);font-size:10px;backdrop-filter:blur(5px)}
+.search-bar input:focus{outline:none;border-color:var(--roxo);box-shadow:0 0 8px var(--glow)}
+.search-bar .icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;stroke:var(--roxo)}
+.banner-topo{width:calc(100% - 24px);border-radius:20px;overflow:hidden;margin:0 12px 16px;border:1px solid var(--borda);box-shadow:0 0 15px var(--glow)}
+.banner-topo img{width:100%;display:block}
+.section-title{display:flex;align-items:center;justify-content:space-between;margin:0 12px 10px;font-size:12px;font-weight:800}
+.section-title .left{display:flex;align-items:center;gap:6px}
+.section-title i{width:14px;height:14px;stroke:var(--roxo);filter:drop-shadow(0 0 3px var(--roxo))}
+.ver-todos{color:var(--roxo);font-size:9px;cursor:pointer}
+.jogos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 12px 20px}
+.jogo-card{background:var(--card);border:1px solid var(--borda);border-radius:20px;padding:10px 6px;text-align:center;cursor:pointer;box-shadow:0 0 8px var(--glow);transition:all 0.3s;overflow:hidden}
+.jogo-card:hover{transform:translateY(-2px);box-shadow:0 0 12px var(--glow);border-color:var(--roxo)}
+.jogo-card.ativo{border-color:var(--roxo);box-shadow:0 0 15px var(--glow)}
+.jogo-card-img{width:100%;height:40px;margin-bottom:4px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:8px}
+.jogo-card-img img{width:100%;height:100%;object-fit:cover}
+.jogo-card-img i{width:24px;height:24px;stroke:var(--roxo);filter:drop-shadow(0 0 4px var(--roxo))}
+.jogo-card span{font-size:8px;font-weight:700;color:var(--cinza)}
+.produtos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:0 12px 20px}
+.produto-card{background:var(--card);border:1px solid var(--borda);border-radius:20px;padding:10px;box-shadow:0 0 10px var(--glow)}
+.produto-card .tag-jogo{font-size:7px;color:var(--roxo);font-weight:800;text-align:center;margin-bottom:4px}
+.produto-img{width:100%;height:60px;background:linear-gradient(135deg, #1a0b2e, #050505);border-radius:15px;margin-bottom:6px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.produto-img img{width:100%;height:100%;object-fit:cover}
+.produto-img i{width:28px;height:28px;stroke:var(--roxo);filter:drop-shadow(0 0 6px var(--roxo))}
+.badge-bonus{position:absolute;top:-2px;right:-2px;background:var(--roxo);color:var(--branco);font-size:6px;font-weight:800;padding:2px 5px;border-radius:20px;z-index:2}
+.produto-nome{font-size:9px;font-weight:700;text-align:center;margin-bottom:3px}
+.produto-preco{font-size:12px;font-weight:900;color:var(--roxo);text-align:center;margin-bottom:6px;text-shadow:0 0 6px var(--glow)}
+.btn-comprar{width:100%;background:linear-gradient(135deg, var(--roxo), var(--roxo-neon));color:var(--branco);border:none;padding:6px;border-radius:20px;font-weight:800;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:3px;box-shadow:0 0 8px var(--glow)}
+.btn-comprar i{width:10px;height:10px}
+
+.container{padding:12px;max-width:600px;margin:0 auto}
+.label{font-size:10px;font-weight:600;margin:20px 0 8px;display:flex;align-items:center;gap:6px;color:var(--cinza);text-transform:uppercase;letter-spacing:.5px}
+.input,.textarea{background:var(--card);border:1px solid var(--borda);border-radius:10px;padding:12px;font-size:10px;color:var(--branco);width:100%;outline:none;margin-bottom:12px}
+.textarea{min-height:60px;resize:vertical}
+.input:focus,.textarea:focus{border-color:var(--roxo);box-shadow:0 0 8px rgba(139,92,246,.3)}
+.btn{width:100%;background:var(--roxo);color:var(--branco);border:none;border-radius:10px;padding:12px;font-weight:700;font-size:11px;cursor:pointer;margin-top:6px;box-shadow:0 0 12px rgba(139,92,246,.4)}
 .btn:active{transform:scale(.98)}
-.btn-sec{background:var(--cinza);border:1px solid var(--cinza2)}
-.btn i{width:16px;height:16px}
-.card{background:var(--cinza);border:1px solid var(--cinza2);border-radius:12px;padding:14px;margin-bottom:12px}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.produto{background:var(--cinza);border:1px solid var(--cinza2);border-radius:12px;overflow:hidden;cursor:pointer;transition:.2s}
-.produto:active{transform:scale(.97)}
-.produto-img{width:100%;height:120px;object-fit:cover;background:var(--cinza2)}
-.produto-info{padding:10px}
-.produto-nome{font-size:11px;font-weight:700;margin-bottom:4px}
-.produto-preco{font-size:14px;font-weight:800;color:var(--roxo)}
-.produto-cat{font-size:9px;color:var(--cinza-txt);margin-top:4px}
-.lista-item{background:var(--cinza);border:1px solid var(--cinza2);border-radius:10px;padding:12px;margin-bottom:10px}
-.lista-top{display:flex;justify-content:space-between;align-items:start;margin-bottom:8px}
-.lista-nome{font-size:12px;font-weight:700}
+.btn-red{background:#ef4444;box-shadow:0 0 12px rgba(239,68,.4)}
+.btn-sec{background:var(--borda);box-shadow:none}
+.btn-desc{background:transparent;border:1px solid var(--roxo);color:var(--roxo);box-shadow:none}
+.btn-voltar{width:28px;height:28px;background:var(--card);border:1px solid var(--borda);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px}
+.titulo{font-size:12px;font-weight:800;margin-bottom:12px;color:var(--branco)}
+.lista-item{background:var(--card);border:1px solid var(--borda);border-radius:10px;padding:10px;margin-bottom:8px}
+.lista-top{display:flex;justify-content:space-between;align-items:start;margin-bottom:6px}
+.lista-nome{font-size:10px;font-weight:700}
 .lista-acoes{display:flex;gap:6px}
-.btn-mini{padding:6px 10px;font-size:9px;border-radius:6px;border:none;font-weight:700;cursor:pointer}
+.btn-mini{padding:4px 8px;font-size:9px;border-radius:6px;border:none;cursor:pointer;font-weight:600}
 .btn-edit{background:var(--roxo);color:var(--branco)}
-.btn-del{background:var(--vermelho);color:var(--branco)}
-.lista-info{font-size:10px;color:var(--cinza-txt);line-height:1.6}
-.badge{padding:4px 8px;border-radius:6px;font-size:9px;font-weight:700}
-.badge-pendente{background:rgba(245,158,11,.2);color:var(--amarelo)}
-.badge-confirmado{background:rgba(16,185,129,.2);color:var(--verde)}
-.badge-cancelado{background:rgba(239,68,68,.2);color:var(--vermelho)}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:999;overflow-y:auto}
-.modal.ativo{display:block}
-.modal-conteudo{background:var(--preto);max-width:480px;margin:0 auto;min-height:100vh;padding:16px}
-.modal-topo{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.modal-titulo{font-size:16px;font-weight:800}
-.modal-fechar{background:var(--cinza);border:none;color:var(--branco);width:32px;height:32px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.nav{position:fixed;bottom:0;left:0;right:0;background:var(--cinza);border-top:1px solid var(--cinza2);display:flex;justify-content:space-around;padding:8px 0;z-index:90;max-width:480px;margin:0 auto}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--cinza-txt);font-size:9px;cursor:pointer;padding:4px 12px;border-radius:8px;transition:.2s}
-.nav-item.ativo{color:var(--roxo)}
-.nav-item i{width:20px;height:20px}
-.empty{text-align:center;padding:40px 20px;color:var(--cinza-txt);font-size:11px}
-.empty i{width:48px;height:48px;margin-bottom:12px;opacity:.3}
-.search-bar{background:var(--cinza);border:1px solid var(--cinza2);border-radius:10px;padding:10px;display:flex;align-items:center;gap:8px;margin-bottom:16px}
-.search-bar input{background:none;border:none;color:var(--branco);flex:1;font-size:11px;outline:none}
-.search-bar i{width:16px;height:16px;color:var(--cinza-txt)}
-.carrinho-item{display:flex;gap:10px;padding:10px;background:var(--cinza2);border-radius:8px;margin-bottom:8px}
-.carrinho-img{width:60px;height:60px;object-fit:cover;border-radius:6px}
-.carrinho-info{flex:1}
-.carrinho-nome{font-size:11px;font-weight:700;margin-bottom:4px}
-.carrinho-preco{font-size:12px;color:var(--roxo);font-weight:800}
-.carrinho-del{background:var(--vermelho);border:none;color:var(--branco);width:28px;height:28px;border-radius:6px;cursor:pointer}
-.total-box{background:var(--cinza);border:2px solid var(--roxo);border-radius:10px;padding:14px;margin:16px 0}
-.total-linha{display:flex;justify-content:space-between;margin-bottom:8px;font-size:11px}
-.total-linha.final{font-size:16px;font-weight:800;color:var(--roxo);border-top:1px solid var(--cinza2);padding-top:8px;margin-top:8px}
-.label{font-size:10px;color:var(--cinza-txt);margin-bottom:6px;display:block}
-.upload{border:2px dashed var(--cinza2);border-radius:10px;padding:20px;text-align:center;cursor:pointer;margin-bottom:10px;position:relative}
+.btn-del{background:#ef4444;color:var(--branco)}
+.lista-info{font-size:9px;color:var(--cinza);line-height:1.4}
+.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:300;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.ativo{display:flex}
+.modal-box{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:16px;width:100%;max-width:400px;max-height:90vh;overflow-y:auto}
+.modal-tit{font-size:12px;font-weight:800;margin-bottom:12px}
+.empty{text-align:center;padding:30px 16px;color:var(--cinza);font-size:10px}
+.add{position:fixed;bottom:16px;right:16px;width:44px;height:44px;background:var(--roxo);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px rgba(139,92,246,.6);z-index:90;font-size:20px;font-weight:700}
+.upload{width:100%;aspect-ratio:16/9;background:var(--bg);border:2px dashed var(--borda);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;cursor:pointer;overflow:hidden;font-size:9px;color:var(--cinza);position:relative}
+.upload img{width:100%;height:100%;object-fit:cover}
 .upload input{display:none}
-.upload-text{font-size:10px;color:var(--cinza-txt)}
-.upload img{max-width:100%;max-height:200px;border-radius:8px;margin-top:10px}
-.indicacao-card{background:linear-gradient(135deg,var(--roxo),var(--roxo2));border-radius:12px;padding:16px;margin-bottom:16px}
-.indicacao-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.indicacao-tit{font-size:14px;font-weight:800}
-.codigo-box{background:rgba(0,0,0,.3);border-radius:8px;padding:12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.codigo-text{font-size:18px;font-weight:900;letter-spacing:2px}
-.btn-copiar{background:var(--branco);color:var(--roxo);border:none;padding:8px 16px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer}
-.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
-.stat-item{background:rgba(0,0,0,.3);border-radius:8px;padding:10px;text-align:center}
-.stat-num{font-size:20px;font-weight:900;margin-bottom:4px}
-.stat-label{font-size:9px;opacity:.8}
-.progress-bar{background:rgba(0,0,0,.3);border-radius:8px;height:8px;overflow:hidden;margin-bottom:12px}
-.progress-fill{background:var(--branco);height:100%;transition:.3s}
-.recompensa-item{background:var(--cinza2);border-radius:8px;padding:10px;display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.recompensa-icon{width:32px;height:32px;background:var(--roxo);border-radius:6px;display:flex;align-items:center;justify-content:center}
-.recompensa-icon i{width:18px;height:18px}
-.recompensa-info{flex:1}
-.recompensa-tit{font-size:11px;font-weight:700;margin-bottom:2px}
-.recompensa-desc{font-size:9px;color:var(--cinza-txt)}
-.indicacao-historico{max-height:300px;overflow-y:auto}
-.indicacao-item{background:var(--cinza2);border-radius:8px;padding:10px;margin-bottom:8px}
-.indicacao-item-top{display:flex;justify-content:space-between;margin-bottom:6px}
-.indicacao-codigo{font-size:11px;font-weight:700}
-.indicacao-status{font-size:9px;padding:3px 8px;border-radius:4px}
-.indicacao-status.confirmada{background:rgba(16,185,129,.2);color:var(--verde)}
-.indicacao-status.pendente{background:rgba(245,158,11,.2);color:var(--amarelo)}
-.indicacao-valor{font-size:10px;color:var(--cinza-txt)}
-.comprovante-card{background:var(--cinza);border:2px solid var(--roxo);border-radius:12px;padding:16px;margin-bottom:16px}
-.comprovante-topo{text-align:center;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--cinza2)}
-.comprovante-titulo{font-size:14px;font-weight:900;color:var(--roxo);display:flex;align-items:center;justify-content:center;gap:8px}
-.comprovante-linha{display:flex;align-items:center;gap:10px;padding:10px;background:var(--cinza2);border-radius:8px;margin-bottom:8px}
-.comprovante-icon{width:32px;height:32px;background:var(--roxo);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.comprovante-icon i{width:18px;height:18px}
-.comprovante-info-wrap{flex:1}
-.comprovante-label{font-size:9px;color:var(--cinza-txt);margin-bottom:2px}
-.comprovante-valor{font-size:11px;font-weight:700}
-.comprovante-valor.roxo{color:var(--roxo)}
-.comprovante-valor.verde{color:var(--verde)}
-.comprovante-status{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:6px;font-size:10px;font-weight:700}
-.comprovante-status.confirmado{background:rgba(16,185,129,.2);color:var(--verde)}
-.comprovante-status.cancelado{background:rgba(239,68,68,.2);color:var(--vermelho)}
-.comprovante-footer{text-align:center;margin-top:16px;padding-top:16px;border-top:1px solid var(--cinza2)}
-.comprovante-footer-logo{display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;font-weight:800;margin-bottom:8px}
-.comprovante-footer-texto{font-size:9px;color:var(--cinza-txt);margin-bottom:8px}
-.comprovante-footer-heart{font-size:20px}
-.loading{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;z-index:9999}
+.upload-text{position:absolute;text-align:center;pointer-events:none}
+.loading{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:500;display:none;align-items:center;justify-content:center;font-size:12px}
 .loading.ativo{display:flex}
-.spinner{width:40px;height:40px;border:3px solid var(--cinza2);border-top-color:var(--roxo);border-radius:50%;animation:spin 1s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+
+.modal-produto{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.95);z-index:350;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-produto.ativo{display:flex}
+.modal-produto-box{background:var(--card);border:1px solid var(--borda);border-radius:14px;width:100%;max-width:360px;max-height:90vh;overflow-y:auto}
+.modal-produto-img{width:100%;height:180px;position:relative;border-radius:14px 14px 0;overflow:hidden;background:linear-gradient(135deg, #1a0b2e, #050505)}
+.modal-produto-img img{width:100%;height:100%;object-fit:cover}
+.modal-produto-fechar{position:absolute;top:10px;right:10px;width:32px;height:32px;background:rgba(0,0,0,.7);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.modal-produto-body{padding:16px}
+.modal-produto-nome{font-size:16px;font-weight:900;margin-bottom:6px}
+.modal-produto-preco{font-size:20px;font-weight:900;color:var(--verde);margin-bottom:12px}
+.modal-produto-desc{font-size:10px;color:var(--cinza);line-height:1.6;margin-bottom:16px;display:none}
+.modal-produto-desc.ativo{display:block}
+
+.como-comprar{padding:20px 12px 40px;max-width:600px;margin:0 auto}
+.como-comprar-tit{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:4px}
+.como-comprar-tit h2{font-size:20px;font-weight:800}
+.como-comprar-tit.como{color:var(--branco)}
+.como-comprar-tit.comprar{color:var(--roxo);text-shadow:0 0 12px var(--roxo-neon)}
+.como-comprar-tit i{width:24px;height:24px;stroke:var(--roxo);fill:none;stroke-width:1.5}
+.como-comprar-sub{font-size:9px;color:var(--cinza);text-align:center;margin-bottom:16px}
+.divider-roxo{height:2px;background:linear-gradient(90deg,transparent,var(--roxo),transparent);margin:12px 0;box-shadow:0 0 8px var(--roxo-neon);position:relative}
+.divider-roxo::after{content:'⌄';position:absolute;left:50%;transform:translateX(-50%);top:-8px;color:var(--roxo);font-size:12px;text-shadow:0 0 8px var(--roxo-neon)}
+.passo-item{background:var(--card);border:1px solid var(--borda);border-radius:12px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:12px;box-shadow:0 0 10px rgba(139,92,246,.05)}
+.passo-num{width:36px;height:36px;background:var(--roxo-escuro);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:var(--branco);flex-shrink:0;box-shadow:0 0 12px var(--roxo-neon)}
+.passo-texto{flex:1;font-size:10px;color:var(--cinza);line-height:1.4}
+.passo-texto b{color:var(--roxo);font-weight:600}
+.passo-icon{width:28px;height:28px;flex-shrink:0}
+.passo-icon i{width:100%;height:100%;stroke:var(--roxo);fill:none;stroke-width:1.5}
+.aviso-box{background:var(--card);border:1px solid var(--borda);border-radius:12px;padding:12px;margin-top:8px;display:flex;gap:12px;align-items:start}
+.aviso-icon{width:32px;height:32px;flex-shrink:0}
+.aviso-icon i{width:100%;height:100%;stroke:var(--roxo);fill:none;stroke-width:1.5}
+.aviso-texto{flex:1;font-size:9px;color:var(--cinza);line-height:1.5}
+.aviso-texto b{color:var(--roxo);display:block;margin-bottom:4px}
+
+.indicacao-card{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:0 0 20px rgba(139,92,246,.1)}
+.indicacao-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.indicacao-tit{font-size:12px;font-weight:800;color:var(--roxo);text-shadow:0 0 8px var(--roxo-neon)}
+.codigo-box{background:var(--bg);border:1px solid var(--roxo);border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.codigo-text{font-size:14px;font-weight:800;color:var(--roxo);letter-spacing:1px;text-shadow:0 0 8px var(--roxo-neon)}
+.btn-copiar{background:var(--roxo);border:none;border-radius:8px;padding:6px 12px;color:var(--branco);font-size:9px;font-weight:700;cursor:pointer;box-shadow:0 0 10px rgba(139,92,246,.4)}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.stat-item{background:var(--bg);border:1px solid var(--borda);border-radius:10px;padding:10px;text-align:center}
+.stat-num{font-size:16px;font-weight:800;color:var(--roxo);text-shadow:0 0 8px var(--roxo-neon)}
+.stat-label{font-size:8px;color:var(--cinza);margin-top:4px}
+.progress-bar{background:var(--bg);border:1px solid var(--borda);border-radius:10px;height:8px;overflow:hidden;margin-bottom:8px}
+.progress-fill{background:linear-gradient(90deg,var(--roxo-escuro),var(--roxo-neon));height:100%;box-shadow:0 0 10px var(--roxo-neon);transition:width.3s}
+.recompensa-item{background:var(--bg);border:1px solid var(--borda);border-radius:10px;padding:10px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.recompensa-icon{width:32px;height:32px;background:var(--roxo);border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px var(--roxo-neon)}
+.recompensa-icon i{width:18px;height:18px;stroke:var(--branco);fill:none;stroke-width:2}
+.recompensa-info{flex:1}
+.recompensa-tit{font-size:10px;font-weight:700;color:var(--branco);margin-bottom:2px}
+.recompensa-desc{font-size:8px;color:var(--cinza)}
+.badge{padding:3px 8px;border-radius:6px;font-size:8px;font-weight:700}
+.badge-pendente{background:rgba(245,158,11,.2);color:var(--amarelo)}
+.badge-confirmada{background:rgba(34,197,94,.2);color:var(--verde)}
+.badge-confirmado{background:rgba(34,197,94,.2);color:var(--verde)}
+.badge-cancelada{background:rgba(239,68,.2);color:var(--vermelho)}
+.badge-cancelado{background:rgba(239,68,.2);color:var(--vermelho)}
+.badge-invalida{background:rgba(107,114,128,.2);color:var(--cinza)}
+.indicacao-historico{max-height:300px;overflow-y:auto}
+.indicacao-item{background:var(--bg);border:1px solid var(--borda);border-radius:10px;padding:10px;margin-bottom:8px}
+.indicacao-item-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.indicacao-codigo{font-size:10px;font-weight:700;color:var(--roxo)}
+.indicacao-valor{font-size:9px;color:var(--cinza)}
+
+.comprovante-card{width:90%;max-width:360px;margin:0 auto 8px;background:linear-gradient(180deg,#0D0D0D 0%,#050505 100%);border:1px solid #8B5CF6;border-radius:8px;padding:6px;box-shadow:0 0 12px rgba(168,85,247,.25);position:relative;line-height:1.1}
+.comprovante-topo{text-align:center;margin-bottom:6px;padding-bottom:4px;position:relative}
+.comprovante-topo::before{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#A855F7,transparent);box-shadow:0 0 8px rgba(168,85,247,.8)}
+.comprovante-topo::after{content:'💎';position:absolute;left:50%;transform:translateX(-50%);bottom:-6px;color:#A855F7;font-size:10px;text-shadow:0 0 8px rgba(168,85,247,.8);background:linear-gradient(180deg,#0D0D0D 0%,#050505 100%);padding:0 5px}
+.comprovante-titulo{font-size:16px;font-weight:800;letter-spacing:0.5px;display:flex;align-items:center;justify-content:center;gap:4px;margin-top:2px;margin-bottom:2px;text-shadow:0 0 8px rgba(168,85,247,.8)}
+.comprovante-titulo .novo{color:#FFFFFF}
+.comprovante-titulo .pedido{color:#8B5CF6}
+.comprovante-titulo i{width:16px;height:16px;stroke:#A855F7;fill:none;stroke-width:2.5;filter:drop-shadow(0 0 8px rgba(168,85,247,.7))}
+.comprovante-linha{display:flex;align-items:center;gap:6px;margin-bottom:3px;padding:3px 6px;background:rgba(13,13,13,0.6);border-radius:4px;border:1px solid #1E1E1E}
+.comprovante-icon{width:24px;height:24px;background:rgba(139,92,246,0.15);border:1px solid #8B5CF6;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 8px rgba(168,85,247,0.2)}
+.comprovante-icon i{width:14px;height:14px;stroke:#A855F7;fill:none;stroke-width:2.5;filter:drop-shadow(0 0 8px rgba(168,85,247,.7))}
+.comprovante-info-wrap{flex:1;display:flex;justify-content:space-between;align-items:center}
+.comprovante-label{font-size:10px;font-weight:500;color:#D1D5DB}
+.comprovante-valor{font-size:10px;font-weight:700;color:#FFFFFF;text-align:right}
+.comprovante-valor.verde{color:#22C55E;font-size:12px}
+.comprovante-valor.roxo{color:#8B5CF6;font-size:12px}
+.comprovante-status{display:inline-flex;align-items:center;gap:3px;border-radius:12px;padding:2px 6px;font-size:10px;font-weight:700}
+.comprovante-status i{width:12px;height:12px}
+.comprovante-status.pendente{background:rgba(245,158,11,.12);border:1px solid #F59E0B;color:#F59E0B}
+.comprovante-status.confirmado{background:rgba(34,197,94,.12);border:1px solid #22C55E;color:#22C55E}
+.comprovante-status.cancelado{background:rgba(239,68,.12);border:1px solid #EF4444;color:#EF4444}
+.comprovante-footer{text-align:center;margin-top:6px;padding-top:4px;position:relative}
+.comprovante-footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#A855F7,transparent);box-shadow:0 0 8px rgba(168,85,247,.8)}
+.comprovante-footer::after{content:'💎';position:absolute;left:50%;transform:translateX(-50%);top:-6px;color:#A855F7;font-size:10px;text-shadow:0 0 8px rgba(168,85,247,.8);background:linear-gradient(180deg,#0D0D0D 0%,#050505 100%);padding:0 5px}
+.comprovante-footer-logo{font-size:11px;font-weight:800;letter-spacing:0.5px;color:#FFFFFF;display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:1px;text-shadow:0 0 8px rgba(168,85,247,.8)}
+.comprovante-footer-logo i{width:12px;height:12px;stroke:#A855F7;fill:none;stroke-width:2.5;filter:drop-shadow(0 0 8px rgba(168,85,247,.7))}
+.comprovante-footer-texto{font-size:9px;color:#D1D5DB;margin-bottom:1px}
+.comprovante-footer-heart{color:#A855F7;font-size:10px;filter:drop-shadow(0 0 6px rgba(168,85,247,.7))}
+
+.suporte-card{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:16px;margin-bottom:12px;text-align:center}
+.suporte-icon{width:60px;height:60px;margin:0 auto 12px;background:var(--roxo);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px var(--roxo-neon)}
+.suporte-icon i{width:30px;height:30px;stroke:var(--branco);fill:none;stroke-width:2}
+.suporte-tit{font-size:14px;font-weight:800;margin-bottom:8px;color:var(--branco)}
+.suporte-desc{font-size:9px;color:var(--cinza);line-height:1.6;margin-bottom:16px}
+.suporte-horario{background:var(--bg);border:1px solid var(--borda);border-radius:10px;padding:10px;font-size:9px;color:var(--cinza);margin-bottom:12px}
+.suporte-horario b{color:var(--roxo);display:block;margin-bottom:4px}
+.texto-geral{font-size:10px;color:var(--cinza);line-height:1.6;white-space:pre-wrap}
 </style>
 </head>
 <body>
-<div class="app">
-  <div class="topo">
-    <div class="logo"><i data-lucide="gem"></i><span>PREMIUM STORE</span></div>
-  </div>
 
-  <div class="conteudo">
-    <div id="home" class="tela ativa">
-      <div class="search-bar">
-        <i data-lucide="search"></i>
-        <input type="text" id="busca" placeholder="Buscar jogos, serviços...">
-      </div>
-      <div class="titulo"><i data-lucide="flame"></i>CATEGORIAS</div>
-      <div id="categorias" class="grid"></div>
-    </div>
+<div class="loading" id="loading">Carregando...</div>
 
-    <div id="servicos" class="tela">
-      <div class="titulo" id="catTit"></div>
-      <div id="listaServicos" class="grid"></div>
-      <button class="btn btn-sec" onclick="ir('home')">VOLTAR</button>
-    </div>
+<div id="login" class="tela ativa">
+  <div class="login-wrapper">
+    <div class="login-container">
+      <div class="login-box">
+        <div class="login-logo">
+          <img src="https://i.postimg.cc/PJ2Vcty8/e1befe8d-0630-444f-aea5-9b0a96d5f84b.jpg" alt="Logo">
+          <h1>PREMIUM STORE</h1>
+          <p>Entre para continuar</p>
+        </div>
+        
+        <div class="login-tabs">
+          <div class="login-tab ativo" onclick="trocarTabLogin('entrar')">Entrar</div>
+          <div class="login-tab" onclick="trocarTabLogin('cadastrar')">Cadastrar</div>
+        </div>
 
-    <div id="produto" class="tela">
-      <img id="prodImg" class="produto-img" style="height:200px;margin-bottom:16px;border-radius:12px">
-      <div class="card">
-        <div id="prodNome" style="font-size:16px;font-weight:800;margin-bottom:8px"></div>
-        <div id="prodDesc" style="font-size:11px;color:var(--cinza-txt);margin-bottom:12px;line-height:1.6"></div>
-        <div id="prodPreco" style="font-size:24px;font-weight:900;color:var(--roxo);margin-bottom:16px"></div>
-        <input type="text" class="input" id="idJogo" placeholder="ID da conta no jogo">
-        <input type="text" class="input" id="codigoInd" placeholder="Código de indicação (opcional)">
-        <button class="btn" onclick="addCarrinho()"><i data-lucide="shopping-cart"></i>ADICIONAR AO CARRINHO</button>
-      </div>
-      <button class="btn btn-sec" onclick="voltarServs()">VOLTAR</button>
-    </div>
+        <div id="formEntrar" class="login-form ativo">
+          <input type="email" class="input" id="loginEmail" placeholder="E-mail">
+          <input type="password" class="input" id="loginSenha" placeholder="Senha">
+          <button class="btn" onclick="fazerLogin()">ENTRAR</button>
+          <div class="link-roxo" onclick="abrirEsqueciSenha()">Esqueci minha senha</div>
+        </div>
 
-    <div id="carrinho" class="tela">
-      <div class="titulo"><i data-lucide="shopping-cart"></i>MEU CARRINHO</div>
-      <div id="itensCarrinho"></div>
-      <div class="total-box">
-        <div class="total-linha"><span>Subtotal</span><span id="subtotal">R$ 0,00</span></div>
-        <div class="total-linha final"><span>TOTAL</span><span id="total">R$ 0,00</span></div>
-      </div>
-      <input type="email" class="input" id="emailCli" placeholder="Seu email">
-      <input type="text" class="input" id="nomeCli" placeholder="Seu nome completo">
-      <button class="btn" onclick="finalizar()"><i data-lucide="check"></i>FINALIZAR COMPRA</button>
-    </div>
-
-    <div id="comprovantes" class="tela">
-      <div class="titulo"><i data-lucide="file-text"></i>MEUS COMPROVANTES</div>
-      <div id="comprovantesBody"></div>
-    </div>
-
-    <div id="indicacoes" class="tela">
-      <div class="titulo"><i data-lucide="users"></i>MINHAS INDICAÇÕES</div>
-      <div id="indicacoesBody"></div>
-    </div>
-
-    <div id="faq" class="tela">
-      <div class="titulo"><i data-lucide="help-circle"></i>DÚVIDAS FREQUENTES</div>
-      <div class="card" id="faqBody" style="white-space:pre-wrap;line-height:1.6"></div>
-    </div>
-
-    <div id="termos" class="tela">
-      <div class="titulo"><i data-lucide="file-text"></i>TERMOS DO SITE</div>
-      <div class="card" id="termosBody" style="white-space:pre-wrap;line-height:1.6"></div>
-    </div>
-
-    <div id="premiacao" class="tela">
-      <div class="titulo"><i data-lucide="trophy"></i>PREMIAÇÃO</div>
-      <div class="card">
-        <img id="premImg" style="width:100%;border-radius:8px;margin-bottom:12px;display:none">
-        <div id="premTxt" style="line-height:1.6"></div>
+        <div id="formCadastrar" class="login-form">
+          <input type="text" class="input" id="cadNome" placeholder="Nome completo">
+          <input type="email" class="input" id="cadEmail" placeholder="E-mail">
+          <input type="password" class="input" id="cadSenha" placeholder="Senha - mín 6 caracteres">
+          <input type="password" class="input" id="cadSenha2" placeholder="Confirmar senha">
+          <button class="btn" onclick="fazerCadastro()">CADASTRAR</button>
+        </div>
       </div>
     </div>
 
-    <div id="admin" class="tela">
-      <div class="titulo"><i data-lucide="shield"></i>PAINEL ADMIN</div>
-      <div id="adminBody"></div>
-    </div>
+    <div class="como-comprar">
+      <div class="como-comprar-tit">
+        <h2><span class="como">COMO</span> <span class="comprar">COMPRAR</span></h2>
+        <i data-lucide="shopping-cart"></i>
+      </div>
+      <p class="como-comprar-sub">Siga o passo a passo para realizar sua compra</p>
+      <div class="divider-roxo"></div>
 
-    <div id="login" class="tela">
-      <div class="card">
-        <div class="titulo"><i data-lucide="log-in"></i>LOGIN</div>
-        <input type="email" class="input" id="loginEmail" placeholder="Email">
-        <input type="password" class="input" id="loginSenha" placeholder="Senha">
-        <button class="btn" onclick="fazerLogin()">ENTRAR</button>
-        <button class="btn btn-sec" onclick="ir('cadastro')">CRIAR CONTA</button>
+      <div class="passo-item">
+        <div class="passo-num">1</div>
+        <div class="passo-texto">Escolha o <b>jogo</b> desejado.</div>
+        <div class="passo-icon"><i data-lucide="gamepad-2"></i></div>
+      </div>
+
+      <div class="passo-item">
+        <div class="passo-num">2</div>
+        <div class="passo-texto">Selecione o <b>produto</b> que deseja comprar.</div>
+        <div class="passo-icon"><i data-lucide="package"></i></div>
+      </div>
+
+      <div class="passo-item">
+        <div class="passo-num">3</div>
+        <div class="passo-texto">Digite o <b>ID</b> da conta.</div>
+        <div class="passo-icon"><i data-lucide="hash"></i></div>
+      </div>
+
+      <div class="passo-item">
+        <div class="passo-num">4</div>
+        <div class="passo-texto">Clique no botão <b>"ADICIONAR AO CARRINHO"</b>.</div>
+        <div class="passo-icon"><i data-lucide="shopping-cart"></i></div>
+      </div>
+
+      <div class="passo-item">
+        <div class="passo-num">5</div>
+        <div class="passo-texto">Acesse o <b>carrinho</b> e envie os pedidos no WhatsApp.</div>
+        <div class="passo-icon"><i data-lucide="check-circle"></i></div>
+      </div>
+
+      <div class="aviso-box">
+        <div class="aviso-icon"><i data-lucide="alert-triangle"></i></div>
+        <div class="aviso-texto">
+          <b>IMPORTANTE:</b>
+          Verifique se o ID enviado está correto para evitar falhas na entrega.
+        </div>
       </div>
     </div>
-
-    <div id="cadastro" class="tela">
-      <div class="card">
-        <div class="titulo"><i data-lucide="user-plus"></i>CADASTRO</div>
-        <input type="text" class="input" id="cadNome" placeholder="Nome completo">
-        <input type="email" class="input" id="cadEmail" placeholder="Email">
-        <input type="password" class="input" id="cadSenha" placeholder="Senha">
-        <button class="btn" onclick="fazerCadastro()">CRIAR CONTA</button>
-        <button class="btn btn-sec" onclick="ir('login')">JÁ TENHO CONTA</button>
-      </div>
-    </div>
-
-    <div id="pedidos" class="tela">
-      <div class="titulo"><i data-lucide="package"></i>GERENCIAR PEDIDOS</div>
-      <div id="pedidosBody"></div>
-    </div>
-
-    <div id="adminIndicacoes" class="tela">
-      <div class="titulo"><i data-lucide="users"></i>INDICAÇÕES</div>
-      <div id="adminIndicacoesBody"></div>
-    </div>
-  </div>
-
-  <div class="nav">
-    <div class="nav-item ativo" onclick="ir('home')"><i data-lucide="home"></i><span>INÍCIO</span></div>
-    <div class="nav-item" onclick="ir('carrinho')"><i data-lucide="shopping-cart"></i><span>CARRINHO</span></div>
-    <div class="nav-item" onclick="ir('comprovantes')"><i data-lucide="file-text"></i><span>COMPRA</span></div>
-    <div class="nav-item" onclick="ir('indicacoes')"><i data-lucide="users"></i><span>INDICAR</span></div>
-    <div class="nav-item" onclick="abrirMenu()"><i data-lucide="menu"></i><span>MENU</span></div>
   </div>
 </div>
 
-<div class="modal" id="modal">
-  <div class="modal-conteudo">
-    <div class="modal-topo">
-      <div class="modal-titulo" id="modalTit"></div>
-      <button class="modal-fechar" onclick="fecharModal()"><i data-lucide="x"></i></button>
+<div class="sidebar-overlay" id="overlay" onclick="fecharMenu()"></div>
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-tit">MENU</div>
+  <div class="sidebar-item" onclick="ir('home');fecharMenu()"><i data-lucide="home"></i>Loja</div>
+  <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
+  <div class="sidebar-item" onclick="ir('carrinho');fecharMenu()"><i data-lucide="shopping-cart"></i>Meu Carrinho</div>
+  <div class="sidebar-item" onclick="ir('comprovantes');fecharMenu()"><i data-lucide="receipt"></i>Meus comprovantes</div>
+  <div class="sidebar-item" onclick="ir('suporte');fecharMenu()"><i data-lucide="headphones"></i>Suporte</div>
+  <div class="sidebar-item" onclick="ir('faq');fecharMenu()"><i data-lucide="help-circle"></i>Dúvidas frequentes</div>
+  <div class="sidebar-item" onclick="ir('termos');fecharMenu()"><i data-lucide="file-text"></i>Termos do site</div>
+  <div class="sidebar-item" onclick="ir('premiacao');fecharMenu()"><i data-lucide="trophy"></i>Premiação</div>
+  <div class="sidebar-item" onclick="abrirAdmin();fecharMenu()" id="menuAdmin" style="display:none"><i data-lucide="user-cog"></i>Adm</div>
+  <div class="sidebar-item" onclick="abrirAdminIndicacoes();fecharMenu()" id="menuAdminInd" style="display:none"><i data-lucide="clipboard-check"></i>Indicações Admin</div>
+  <div class="sidebar-item" onclick="logout();fecharMenu()"><i data-lucide="log-out"></i>Sair</div>
+</div>
+
+<div id="home" class="tela">
+  <div class="header">
+    <div class="header-left">
+      <div class="menu" onclick="abrirMenu()">☰</div>
+      <div class="logo-box">
+        <img src="https://i.postimg.cc/PJ2Vcty8/e1befe8d-0630-444f-aea5-9b0a96d5f84b.jpg" class="logo-img" alt="Logo">
+        <div class="logo-text"><span class="premium">PREMIUM</span> <span class="store">STORE</span></div>
+      </div>
     </div>
+    <div class="header-right">
+      <div class="cart-wrapper" onclick="ir('carrinho')">
+        <i data-lucide="shopping-cart"></i>
+        <span class="cart-badge" id="cartCount">0</span>
+      </div>
+      <div class="user-info" onclick="abrirPerfil()">
+        <div class="user-avatar" id="userAvatar">U</div>
+        <span id="userNome">Usuário</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <i class="icon" data-lucide="search"></i>
+    <input type="text" id="buscaProduto" placeholder="Buscar jogo ou produto...">
+  </div>
+
+  <div class="banner-topo">
+    <img src="https://i.postimg.cc/T3yFxLbM/4cea1152-2d84-449c-857b-f55ef07d582e.jpg" alt="Banner">
+  </div>
+
+  <div class="section-title">
+    <div class="left"><i data-lucide="gamepad-2"></i>ESCOLHA SEU JOGO</div>
+    <span class="ver-todos" onclick="renderProdutosLoja()">Ver todos ›</span>
+  </div>
+  <div class="jogos-grid" id="jogosGrid"></div>
+
+  <div class="section-title">
+    <div class="left"><i data-lucide="flame"></i>MAIS COMPRADOS</div>
+    <span class="ver-todos">Ver todos ›</span>
+  </div>
+  <div class="produtos-grid" id="produtosGrid"></div>
+</div>
+
+<div id="carrinho" class="tela">
+  <div class="header">
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
+    <div style="font-size:12px;font-weight:700">MEU CARRINHO</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="carrinhoBody"></div>
+</div>
+
+<div class="modal-produto" id="modalProduto">
+  <div class="modal-produto-box">
+    <div class="modal-produto-img">
+      <img id="modalProdutoImg" src="" alt="">
+      <div class="modal-produto-fechar" onclick="fecharModalProduto()"><i data-lucide="x"></i></div>
+    </div>
+    <div class="modal-produto-body">
+      <div class="modal-produto-nome" id="modalProdutoNome"></div>
+      <div class="modal-produto-preco" id="modalProdutoPreco"></div>
+      <div class="modal-produto-desc" id="modalProdutoDesc"></div>
+      <button class="btn btn-desc" onclick="toggleProdutoDesc()">VER DESCRIÇÃO</button>
+      <div class="label">🆔 ID da conta: *</div>
+      <input type="text" class="input" id="idProduto" placeholder="Digite o ID da conta">
+      <div class="label">🎁 Código de indicação (opcional):</div>
+      <input type="text" class="input" id="codigoProduto" placeholder="Ex: PREMIUM782">
+      <button class="btn" onclick="finalizarPedido()">ADICIONAR AO CARRINHO</button>
+      <button class="btn btn-sec" onclick="fecharModalProduto()">CANCELAR</button>
+    </div>
+  </div>
+</div>
+
+<div id="admin" class="tela">
+  <div class="header">
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
+    <div style="font-size:12px;font-weight:700">PAINEL ADM</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="adminBody"></div>
+</div>
+
+<div id="indicacoes" class="tela">
+  <div class="header">
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
+    <div style="font-size:12px;font-weight:700">MINHAS INDICAÇÕES</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="indicacoesBody"></div>
+</div>
+
+<div id="adminIndicacoes" class="tela">
+  <div class="header">
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
+    <div style="font-size:12px;font-weight:700">INDICAÇÕES ADMIN</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="adminIndicacoesBody"></div>
+</div>
+
+<div id="comprovantes" class="tela">
+  <div class="header">
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
+    <div style="font-size:12px;font-weight:700">MEUS COMPROVANTES</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="comprovantesBody"></div>
+</div>
+
+<div id="pedidos" class="tela">
+  <div class="header">
+    <div class="header-left"><div class="btn-voltar" onclick="abrirAdmin()">←</div></div>
+    <div style="font-size:12px;font-weight:700">GERENCIAR PEDIDOS</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="pedidosBody"></div>
+</div>
+
+<div id="suporte" class="tela">
+  <div class="header">
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
+    <div style="font-size:12px;font-weight:700">SUPORTE</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="suporteBody"></div>
+</div>
+
+<div id="faq" class="tela">
+  <div class="header">
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
+    <div style="font-size:12px;font-weight:700">DÚVIDAS FREQUENTES</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="faqBody"></div>
+</div>
+
+<div id="termos" class="tela">
+  <div class="header">
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
+    <div style="font-size:12px;font-weight:700">TERMOS DO SITE</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="termosBody"></div>
+</div>
+
+<div id="premiacao" class="tela">
+  <div class="header">
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
+    <div style="font-size:12px;font-weight:700">PREMIAÇÃO</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="premiacaoBody"></div>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <div class="modal-tit" id="modalTit"></div>
     <div id="modalBody"></div>
   </div>
 </div>
 
-<div class="loading" id="loading"><div class="spinner"></div></div>
-
 <script>
-const WPP='5599999999999';
-let db={cat:[],serv:[],carrinho:[],pedidos:[],usuarios:{},indicacoes:[],config:{faq:'Bem-vindo!\\n\\n1. Como comprar?\\nEscolha o serviço, adicione ao carrinho e finalize.\\n\\n2. Quanto tempo demora?\\nAté 24h após confirmação.\\n\\n3. Como indicar?\\nCompartilhe seu código na aba Indicar.',termos:'Termos de uso:\\n\\n1. Entrega em até 24h\\n2. Sem reembolso após entrega\\n3. Dados corretos são responsabilidade do cliente',premiacao:{img:null,texto:'Indique 5 amigos e ganhe:\\n\\n🎁 100 Diamantes Free Fire\\nOU\\n🎁 400 Robux'}}};
-let usuarioAtual=null;
-let catAtual=null;
-let servAtual=null;
+const EMAIL_ADM='nannyvittoriah@gmail.com',WHATSAPP='5598984853563';
 
-function init(){
-  const salvo=localStorage.getItem('premiumstore');
-  if(salvo)db=JSON.parse(salvo);
-  if(!db.usuarios.admin){
-    db.usuarios.admin={nome:'Admin',email:'admin@store.com',senha:'admin123',admin:true,codigo:'ADMIN',indicacoesValidas:0,totalIndicacoes:0};
-  }
-  if(db.cat.length===0){
-    db.cat=[
-      {k:'ff',nome:'Free Fire',img:'https://i.imgur.com/8QZqZ0G.jpg'},
-      {k:'rb',nome:'Roblox',img:'https://i.imgur.com/VqJqZ0G.jpg'},
-      {k:'lol',nome:'League of Legends',img:'https://i.imgur.com/LqJqZ0G.jpg'}
-    ];
-    db.serv=[
-      {k:'ff1',cat:'ff',nome:'1000 Diamantes',desc:'Entrega rápida em até 24h',preco:19.90,estoque:999,img:'https://i.imgur.com/diamantes.jpg'},
-      {k:'rb1',cat:'rb',nome:'400 Robux',desc:'Entrega automática',preco:19.90,estoque:999,img:'https://i.imgur.com/robux.jpg'},
-      {k:'lol1',cat:'lol',nome:'1380 RP',desc:'Riot Points',preco:29.90,estoque:999,img:'https://i.imgur.com/rp.jpg'}
-    ];
-    save();
-  }
-  const userSalvo=localStorage.getItem('usuarioAtual');
-  if(userSalvo){
-    usuarioAtual=JSON.parse(userSalvo);
-    if(usuarioAtual&&!usuarioAtual.codigo){
-      usuarioAtual.codigo=gerarCodigo(usuarioAtual.email);
-      db.usuarios[usuarioAtual.uid]=usuarioAtual;
-      save();
+let db={
+  cat:JSON.parse(localStorage.getItem('cat')||'[]'),
+  serv:JSON.parse(localStorage.getItem('serv')||'[]'),
+  config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"Ao utilizar nosso painel, o usuário concorda automaticamente com todos os termos e condições abaixo.\\n\\n• Não garantimos resultados permanentes em serviços de redes sociais.\\n• O cliente é totalmente responsável pelo link enviado no pedido.\\n• Pedidos com links inválidos poderão ser cancelados sem aviso.\\n• Não realizamos reembolso após o início do serviço.\\n• O tempo de entrega pode variar conforme o serviço solicitado.\\n• Não aceitamos conteúdos ilegais, proibidos ou que violem políticas das plataformas.\\n• O uso do painel é de total responsabilidade do usuário.\\n• Alguns serviços podem sofrer quedas naturais após a entrega.\\n• O cliente concorda em utilizar o site de forma correta e sem tentativas de abuso ou spam.\\n• Alterações nos termos podem ocorrer a qualquer momento sem aviso prévio.\\n\\n💜 Ao continuar utilizando o painel, você concorda com todos os termos acima.","premiacao":{"img":"","texto":""}}'),
+  indicacoes:JSON.parse(localStorage.getItem('indicacoes')||'[]'),
+  usuarios:JSON.parse(localStorage.getItem('usuarios')||'{}'),
+  pedidos:JSON.parse(localStorage.getItem('pedidos')||'[]')
+};
+let usuarioAtual=null,jogoSelecionado=null,produtoSelecionado=null;
+
+function save(){
+  localStorage.setItem('cat',JSON.stringify(db.cat));
+  localStorage.setItem('serv',JSON.stringify(db.serv));
+  localStorage.setItem('config',JSON.stringify(db.config));
+  localStorage.setItem('indicacoes',JSON.stringify(db.indicacoes));
+  localStorage.setItem('usuarios',JSON.stringify(db.usuarios));
+  localStorage.setItem('pedidos',JSON.stringify(db.pedidos));
+}
+
+function showLoad(show){document.getElementById('loading').classList.toggle('ativo',show)}
+function gerarCodigoIndicacao(nome){
+  const base=nome.toUpperCase().replace(/[^A-Z]/g,'').slice(0,6);
+  const num=Math.floor(Math.random()*900)+100;
+  return `${base||'USER'}${num}`;
+}
+
+window.addEventListener('load',()=>{
+  lucide.createIcons();
+  const { auth, onAuthStateChanged } = window.firebaseAuth;
+  onAuthStateChanged(auth, async(user) => {
+    if(user){
+      usuarioAtual={uid:user.uid,nome:user.displayName||user.email.split('@')[0],email:user.email,admin:user.email===EMAIL_ADM};
+      if(!db.usuarios[user.uid]){
+        db.usuarios[user.uid]={codigo:gerarCodigoIndicacao(usuarioAtual.nome),indicacoesValidas:0,totalIndicacoes:0};
+        save();
+      }
+      usuarioAtual.codigo=db.usuarios[user.uid].codigo;
+      document.getElementById('login').classList.remove('ativa');
+      document.getElementById('home').classList.add('ativa');
+      atualizarHeaderUsuario();
+      renderJogos();
+      renderProdutosLoja();
+      atualizarCarrinho();
+      if(usuarioAtual.admin){
+        document.getElementById('menuAdmin').style.display='flex';
+        document.getElementById('menuAdminInd').style.display='flex';
+      }
+    }else{
+      document.getElementById('login').classList.add('ativa');
     }
-  }
-  renderCategorias();
-  renderCarrinho();
-  lucide.createIcons();
-}
-
-function save(){localStorage.setItem('premiumstore',JSON.stringify(db))}
-function showLoad(s){document.getElementById('loading').classList[s?'add':'remove']('ativo')}
-
-function gerarCodigo(email){
-  const hash=email.split('').reduce((a,b)=>{a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
-  return 'PS'+Math.abs(hash).toString(36).toUpperCase().slice(0,6);
-}
-
-function ir(tela){
-  document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
-  document.getElementById(tela).classList.add('ativa');
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('ativo'));
-  const navs=['home','carrinho','comprovantes','indicacoes'];
-  const idx=navs.indexOf(tela);
-  if(idx>=0)document.querySelectorAll('.nav-item')[idx].classList.add('ativo');
-  if(tela==='comprovantes')renderComprovantes();
-  if(tela==='indicacoes')renderIndicacoes();
-  if(tela==='faq')document.getElementById('faqBody').textContent=db.config.faq;
-  if(tela==='termos')document.getElementById('termosBody').textContent=db.config.termos;
-  if(tela==='premiacao'){
-    if(db.config.premiacao.img){
-      document.getElementById('premImg').src=db.config.premiacao.img;
-      document.getElementById('premImg').style.display='block';
-    }
-    document.getElementById('premTxt').textContent=db.config.premiacao.texto;
-  }
-  if(tela==='pedidos')renderPedidos();
-  if(tela==='adminIndicacoes')renderAdminIndicacoes();
-  lucide.createIcons();
-}
-
-function renderCategorias(){
-  const cats=db.cat.map(c=>`
-    <div class="produto" onclick="abrirCat('${c.k}')">
-      <img src="${c.img||'https://via.placeholder.com/200x120/1A1A1A/8B5CF6?text='+c.nome}" class="produto-img">
-      <div class="produto-info">
-        <div class="produto-nome">${c.nome}</div>
-        <div class="produto-cat">${db.serv.filter(s=>s.cat===c.k).length} serviços</div>
-      </div>
-    </div>
-  `).join('');
-  document.getElementById('categorias').innerHTML=cats||'<div class="empty">Nenhuma categoria</div>';
-}
-
-function abrirCat(k){
-  catAtual=k;
-  const cat=db.cat.find(c=>c.k===k);
-  document.getElementById('catTit').innerHTML=`<i data-lucide="package"></i>${cat.nome}`;
-  const servs=db.serv.filter(s=>s.cat===k).map(s=>`
-    <div class="produto" onclick="abrirProd('${s.k}')">
-      <img src="${s.img||'https://via.placeholder.com/200x120/1A1A1A/8B5CF6?text=Produto'}" class="produto-img">
-      <div class="produto-info">
-        <div class="produto-nome">${s.nome}</div>
-        <div class="produto-preco">R$ ${s.preco.toFixed(2).replace('.',',')}</div>
-        <div class="produto-cat">Estoque: ${s.estoque||0}</div>
-      </div>
-    </div>
-  `).join('');
-  document.getElementById('listaServicos').innerHTML=servs||'<div class="empty">Nenhum serviço</div>';
-  ir('servicos');
-  lucide.createIcons();
-}
-
-function abrirProd(k){
-  servAtual=db.serv.find(s=>s.k===k);
-  document.getElementById('prodImg').src=servAtual.img||'https://via.placeholder.com/400x200/1A1A1A/8B5CF6?text=Produto';
-  document.getElementById('prodNome').textContent=servAtual.nome;
-  document.getElementById('prodDesc').textContent=servAtual.desc||'Sem descrição';
-  document.getElementById('prodPreco').textContent=`R$ ${servAtual.preco.toFixed(2).replace('.',',')}`;
-  document.getElementById('idJogo').value='';
-  document.getElementById('codigoInd').value='';
-  ir('produto');
-}
-
-function voltarServs(){abrirCat(catAtual)}
-
-function addCarrinho(){
-  if(!usuarioAtual){alert('Faça login primeiro');ir('login');return}
-  const idJogo=document.getElementById('idJogo').value.trim();
-  if(!idJogo){alert('Digite o ID da conta');return}
-  const codigoInd=document.getElementById('codigoInd').value.trim().toUpperCase();
-  if(codigoInd&&codigoInd===usuarioAtual.codigo){alert('Você não pode usar seu próprio código');return}
-  db.carrinho.push({
-    servK:servAtual.k,
-    nome:servAtual.nome,
-    preco:servAtual.preco,
-    img:servAtual.img,
-    idJogo,
-    codigoInd:codigoInd||null
   });
-  save();
-  renderCarrinho();
-  alert('Adicionado ao carrinho!');
-  ir('carrinho');
+});
+
+function atualizarHeaderUsuario(){
+  if(usuarioAtual){
+    document.getElementById('userNome').textContent=usuarioAtual.nome.split(' ')[0];
+    document.getElementById('userAvatar').textContent=usuarioAtual.nome.charAt(0).toUpperCase();
+  }
+}
+
+function trocarTabLogin(tab){
+  document.querySelectorAll('.login-tab').forEach(t=>t.classList.remove('ativo'));
+  document.querySelectorAll('.login-form').forEach(f=>f.classList.remove('ativo'));
+  event.target.classList.add('ativo');
+  document.getElementById(tab==='entrar'?'formEntrar':'formCadastrar').classList.add('ativo');
+}
+
+async function fazerLogin(){
+  const { auth, signInWithEmailAndPassword } = window.firebaseAuth;
+  const email=document.getElementById('loginEmail').value.trim();
+  const senha=document.getElementById('loginSenha').value;
+  if(!email||!senha){alert('Preencha todos os campos');return}
+  showLoad(true);
+  try{await signInWithEmailAndPassword(auth,email,senha);}catch(e){alert('Erro: '+e.message);}
+  showLoad(false);
+}
+
+async function fazerCadastro(){
+  const { auth, createUserWithEmailAndPassword, updateProfile } = window.firebaseAuth;
+  const nome=document.getElementById('cadNome').value.trim();
+  const email=document.getElementById('cadEmail').value.trim();
+  const senha=document.getElementById('cadSenha').value;
+  const senha2=document.getElementById('cadSenha2').value;
+  if(!nome||!email||!senha||!senha2){alert('Preencha todos os campos');return}
+  if(senha!==senha2){alert('As senhas não coincidem');return}
+  if(senha.length<6){alert('Senha deve ter no mínimo 6 caracteres');return}
+  showLoad(true);
+  try{
+    const cred = await createUserWithEmailAndPassword(auth,email,senha);
+    await updateProfile(cred.user,{displayName:nome});
+    alert('Cadastro realizado com sucesso!');
+  }catch(e){alert('Erro: '+e.message);}
+  showLoad(false);
+}
+
+async function abrirEsqueciSenha(){
+  const email = prompt('Digite seu e-mail cadastrado:');
+  if(!email){alert('Cancelado');return}
+  if(!email.includes('@')){alert('E-mail inválido');return}
+  showLoad(true);
+  try{
+    const { auth, sendPasswordResetEmail } = window.firebaseAuth;
+    await sendPasswordResetEmail(auth, email);
+    alert('✅ E-mail enviado!\n\nVerifica sua caixa de entrada e spam.\nClica no link pra criar uma nova senha.');
+  }catch(e){
+    if(e.code === 'auth/user-not-found'){alert('❌ E-mail não encontrado no sistema');}
+    else if(e.code === 'auth/invalid-email'){alert('❌ E-mail inválido');}
+    else{alert('Erro: ' + e.message);}
+  }
+  showLoad(false);
+}
+
+async function logout(){
+  const { auth, signOut } = window.firebaseAuth;
+  if(confirm('Deseja sair?')){
+    await signOut(auth);
+    location.reload();
+  }
+}
+
+function abrirPerfil(){
+  alert(`Nome: ${usuarioAtual.nome}\nE-mail: ${usuarioAtual.email}\nCódigo: ${usuarioAtual.codigo}\n\nTipo: ${usuarioAtual.admin?'Administrador':'Cliente'}`);
+}
+
+function abrirMenu(){document.getElementById('sidebar').classList.add('ativo');document.getElementById('overlay').classList.add('ativo')}
+function fecharMenu(){document.getElementById('sidebar').classList.remove('ativo');document.getElementById('overlay').classList.remove('ativo')}
+
+function atualizarCarrinho(){
+  const pendentes = db.pedidos.filter(p=>p.email===usuarioAtual.email && p.status==='pendente').length;
+  document.getElementById('cartCount').textContent = pendentes;
 }
 
 function renderCarrinho(){
-  if(db.carrinho.length===0){
-    document.getElementById('itensCarrinho').innerHTML='<div class="empty"><i data-lucide="shopping-cart"></i><br>Carrinho vazio</div>';
-    document.getElementById('subtotal').textContent='R$ 0,00';
-    document.getElementById('total').textContent='R$ 0,00';
-    lucide.createIcons();
+  const meus=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && p.status==='pendente');
+  if(meus.length===0){
+    document.getElementById('carrinhoBody').innerHTML='<div class="empty">Carrinho vazio<br><br>Adicione produtos na loja!</div>';
     return;
   }
-  const itens=db.carrinho.map((i,idx)=>`
-    <div class="carrinho-item">
-      <img src="${i.img||'https://via.placeholder.com/60/1A1A1A/8B5CF6?text=P'}" class="carrinho-img">
-      <div class="carrinho-info">
-        <div class="carrinho-nome">${i.nome}</div>
-        <div class="carrinho-preco">R$ ${i.preco.toFixed(2).replace('.',',')}</div>
-        <div style="font-size:9px;color:var(--cinza-txt)">ID: ${i.idJogo}</div>
+  const total = meus.reduce((s,p)=>s+p.valor,0);
+  const lista=meus.map(p=>`
+    <div class="lista-item">
+      <div class="lista-top">
+        <div class="lista-nome">${p.servico}</div>
+        <div style="color:var(--verde);font-weight:800">R$ ${p.valor.toFixed(2).replace('.',',')}</div>
       </div>
-      <button class="carrinho-del" onclick="removerCarrinho(${idx})"><i data-lucide="trash-2"></i></button>
+      <div class="lista-info">
+        Jogo: ${p.jogo}<br>
+        ID: ${p.id_conta}<br>
+        Data: ${new Date(p.data).toLocaleString('pt-BR')}
+      </div>
+      <div class="lista-acoes" style="margin-top:8px">
+        <button class="btn-mini btn-del" onclick="cancelarPedidoCarrinho('${p.id}')">REMOVER</button>
+      </div>
     </div>
   `).join('');
-  document.getElementById('itensCarrinho').innerHTML=itens;
-  const total=db.carrinho.reduce((s,i)=>s+i.preco,0);
-  document.getElementById('subtotal').textContent=`R$ ${total.toFixed(2).replace('.',',')}`;
-  document.getElementById('total').textContent=`R$ ${total.toFixed(2).replace('.',',')}`;
+  document.getElementById('carrinhoBody').innerHTML=`
+    <div class="indicacao-card">
+      <div class="indicacao-header">
+        <div class="indicacao-tit">🛒 RESUMO</div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-num">${meus.length}</div>
+          <div class="stat-label">Itens</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">R$ ${total.toFixed(2)}</div>
+          <div class="stat-label">Total</div>
+        </div>
+      <button class="btn" onclick="enviarTodosPedidos()">ENVIAR PEDIDOS NO WHATSAPP</button>
+    </div>
+    <div class="titulo">ITENS PENDENTES</div>
+    ${lista}
+  `;
   lucide.createIcons();
 }
 
-function removerCarrinho(idx){
-  db.carrinho.splice(idx,1);
-  save();
-  renderCarrinho();
+function cancelarPedidoCarrinho(id){
+  if(confirm('Remover este item do carrinho?')){
+    db.pedidos=db.pedidos.filter(p=>p.id!==id);
+    save();
+    atualizarCarrinho();
+    renderCarrinho();
+  }
 }
 
-function finalizar(){
-  if(!usuarioAtual){alert('Faça login');ir('login');return}
-  if(db.carrinho.length===0){alert('Carrinho vazio');return}
-  const email=document.getElementById('emailCli').value.trim();
-  const nome=document.getElementById('nomeCli').value.trim();
-  if(!email||!nome){alert('Preencha email e nome');return}
-  showLoad(true);
-  setTimeout(()=>{
-    const pedidoId='#'+Math.floor(Math.random()*90000+10000);
-    const cat=db.cat.find(c=>c.k===db.serv.find(s=>s.k===db.carrinho[0].servK).cat);
-    db.carrinho.forEach(item=>{
-      const pedido={
-        id:pedidoId+'-'+Math.random().toString(36).substr(2,4),
-        uid:usuarioAtual.uid,
-        email,
-        nome,
-        servico:item.nome,
-        jogo:cat.nome,
-        valor:item.preco,
-        id_conta:item.idJogo,
-        codigoIndicacao:item.codigoInd,
-        status:'pendente',
-        data:new Date().toISOString(),
-        mensagemAdmin:null
-      };
-      db.pedidos.push(pedido);
-      if(item.codigoInd){
-        const indicador=Object.values(db.usuarios).find(u=>u.codigo===item.codigoInd);
-        if(indicador){
-          db.indicacoes.push({
-            id:'ind'+Date.now()+Math.random(),
-            uidIndicador:indicador.uid||indicador.email,
-            codigo:item.codigoInd,
-            pedidoId:pedido.id,
-            nomeIndicado:nome,
-            valor:item.preco,
-            status:'pendente',
-            data:new Date().toISOString()
-          });
-          indicador.totalIndicacoes=(indicador.totalIndicacoes||0)+1;
-        }
-      }
-    });
-    db.carrinho=[];
-    save();
-    showLoad(false);
-    alert(`Pedido ${pedidoId} criado!\\n\\nEnvie no WhatsApp para confirmar.`);
-    window.open(`https://wa.me/${WPP}?text=Olá! Fiz o pedido ${pedidoId}`);
-    renderCarrinho();
-    ir('comprovantes');
-  },1000);
+function enviarTodosPedidos(){
+  const meus=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && p.status==='pendente');
+  if(meus.length===0){alert('Carrinho vazio');return}
+  const total = meus.reduce((s,p)=>s+p.valor,0);
+  let msg=`━━━━━━━━━━
+🛒 PEDIDOS PENDENTES
+━━━━━━━━━━
+
+👤 Cliente: ${usuarioAtual.nome}
+📧 Email: ${usuarioAtual.email}
+
+`;
+  meus.forEach((p,i)=>{
+    msg+=`${i+1}. ${p.servico}\n`;
+    msg+=` 🎮 ${p.jogo}\n`;
+    msg+=` 💵 R$ ${p.valor.toFixed(2).replace('.',',')}\n`;
+    msg+=` 🆔 ${p.id_conta}\n\n`;
+  });
+  msg+=`💰 TOTAL: R$ ${total.toFixed(2).replace('.',',')}\n`;
+  msg+=`━━━━━━━━━━`;
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
 function renderComprovantes(){
@@ -512,7 +757,7 @@ function renderComprovantes(){
         <div class="comprovante-topo">
           <div class="comprovante-titulo">
             <i data-lucide="file-text"></i>
-            <span>COMPROVANTE</span>
+            <span class="novo">COMPROVANTE</span>
           </div>
         </div>
         <div class="comprovante-linha">
@@ -521,8 +766,14 @@ function renderComprovantes(){
             <div class="comprovante-label">Pedido:</div>
             <div class="comprovante-valor roxo">${p.id}</div>
           </div>
+        <div class="comprovante-linha">
+          <div class="comprovante-icon"><i data-lucide="package"></i></div>
+          <div class="comprovante-info-wrap">
+            <div class="comprovante-label">Serviço:</div>
+            <div class="comprovante-valor">${p.servico}</div>
+          </div>
         </div>
-                <div class="comprovante-linha">
+        <div class="comprovante-linha">
           <div class="comprovante-icon"><i data-lucide="gamepad-2"></i></div>
           <div class="comprovante-info-wrap">
             <div class="comprovante-label">Jogo:</div>
@@ -549,7 +800,6 @@ function renderComprovantes(){
             <div class="comprovante-label">Data:</div>
             <div class="comprovante-valor">${new Date(p.data).toLocaleDateString('pt-BR')}</div>
           </div>
-        </div>
         <div class="comprovante-linha">
           <div class="comprovante-icon"><i data-lucide="clipboard-list"></i></div>
           <div class="comprovante-info-wrap">
@@ -560,7 +810,7 @@ function renderComprovantes(){
             </div>
           </div>
         </div>
-        ${p.mensagemAdmin ? `
+        ${p.mensagemAdmin? `
         <div class="comprovante-linha" style="background:rgba(139,92,246,0.1);border-color:var(--roxo)">
           <div class="comprovante-icon"><i data-lucide="message-square"></i></div>
           <div class="comprovante-info-wrap" style="flex-direction:column;align-items:flex-start">
@@ -588,60 +838,433 @@ function renderComprovantes(){
   lucide.createIcons();
 }
 
-function renderPedidos(){
-  const todosPedidos = db.pedidos.slice().reverse();
-  
-  document.getElementById('pedidosBody').innerHTML=`
-    <div class="search-bar" style="margin:0 0 16px 0">
-      <i class="icon" data-lucide="search"></i>
-      <input type="text" id="buscaPedidoAdmin" placeholder="Buscar por ID do pedido...">
-    </div>
-    <div id="listaPedidosAdmin"></div>
-  `;
-
-  function filtrarPedidosAdmin(){
-    const termo = document.getElementById('buscaPedidoAdmin').value.toLowerCase().trim();
-    const filtrados = termo ? todosPedidos.filter(p=>p.id.toLowerCase().includes(termo)) : todosPedidos;
-    
-    if(filtrados.length===0){
-      document.getElementById('listaPedidosAdmin').innerHTML='<div class="empty">Nenhum pedido encontrado</div>';
-      return;
-    }
-    
-    const lista=filtrados.map(p=>{
-      const statusClass=p.status==='pendente'?'badge-pendente':p.status==='confirmado'?'badge-confirmado':'badge-cancelado';
-      const statusTxt=p.status==='pendente'?'PENDENTE':p.status==='confirmado'?'CONFIRMADO':'CANCELADO';
-      return `
-      <div class="lista-item">
-        <div class="lista-top">
-          <div class="lista-nome">${p.id}</div>
-          <span class="badge ${statusClass}">${statusTxt}</span>
-        </div>
-        <div class="lista-info">
-          Cliente: ${p.email}<br>
-          Serviço: ${p.servico}<br>
-          Jogo: ${p.jogo}<br>
-          Valor: R$ ${p.valor.toFixed(2).replace('.',',')}<br>
-          ID: ${p.id_conta}<br>
-          Data: ${new Date(p.data).toLocaleString('pt-BR')}<br>
-          Indicação: ${p.codigoIndicacao||'-'}
-          ${p.mensagemAdmin ? `<br><b style="color:var(--roxo)">Msg enviada:</b> ${p.mensagemAdmin}` : ''}
-        </div>
-        ${p.status==='pendente'?`
-        <div class="lista-acoes" style="margin-top:8px">
-          <button class="btn-mini" style="background:var(--verde);color:var(--branco)" onclick="confirmarPedido('${p.id}')">CONFIRMAR</button>
-          <button class="btn-mini" style="background:var(--vermelho);color:var(--branco)" onclick="cancelarPedido('${p.id}')">CANCELAR</button>
-        </div>`:''}
-      </div>
-    `}).join('');
-    
-    document.getElementById('listaPedidosAdmin').innerHTML=lista;
-    lucide.createIcons();
-  }
-  
-  document.getElementById('buscaPedidoAdmin').addEventListener('input', filtrarPedidosAdmin);
-  filtrarPedidosAdmin();
+function ir(t){
+  document.querySelectorAll('.tela').forEach(e=>e.classList.remove('ativa'));
+  document.getElementById(t).classList.add('ativa');
+  if(t==='home'){renderJogos();renderProdutosLoja();}
+  if(t==='faq')renderFaq();
+  if(t==='termos')renderTermos();
+  if(t==='premiacao')renderPremiacao();
+  if(t==='indicacoes')renderIndicacoes();
+  if(t==='adminIndicacoes')renderAdminIndicacoes();
+  if(t==='comprovantes')renderComprovantes();
+  if(t==='carrinho')renderCarrinho();
+  if(t==='suporte')renderSuporte();
+  if(t==='pedidos')renderPedidos();
   lucide.createIcons();
+}
+
+function renderJogos(){
+  const cats = db.cat.length?db.cat:[];
+  const icones = {'free fire':'flame','roblox':'box','cod mobile':'crosshair','fortnite':'zap','brawl stars':'star','efootball':'football'};
+  const html = cats.map(c=>{
+    return `<div class="jogo-card" onclick="filtrarJogo('${c.k}')">
+      <div class="jogo-card-img">
+        ${c.img?`<img src="${c.img}" alt="${c.nome}">`:`<i data-lucide="${icones[c.nome.toLowerCase()]||'gamepad-2'}"></i>`}
+      </div>
+      <span>${c.nome.toUpperCase()}</span>
+    </div>`;
+  }).join('');
+  document.getElementById('jogosGrid').innerHTML = html || '<div class="empty" style="grid-column:1/-1">Cadastre categorias no Admin</div>';
+  lucide.createIcons();
+}
+
+function renderProdutosLoja(filtroJogo=null){
+  jogoSelecionado = filtroJogo;
+  let produtos = db.serv;
+
+  if(filtroJogo){
+    produtos = produtos.filter(p => p.cat === filtroJogo);
+  }
+
+  const busca = document.getElementById('buscaProduto')?.value.toLowerCase();
+  if(busca){
+    produtos = produtos.filter(p => {
+      const cat = db.cat.find(c=>c.k===p.cat);
+      return p.nome.toLowerCase().includes(busca) || cat?.nome.toLowerCase().includes(busca);
+    });
+  }
+
+  const html = produtos.map(p=>{
+    const cat = db.cat.find(c=>c.k===p.cat);
+    return `
+    <div class="produto-card">
+      <div class="tag-jogo">${cat?.nome.toUpperCase()||'GERAL'}</div>
+      <div class="produto-img">
+        ${p.img?`<img src="${p.img}" alt="${p.nome}">`:`<i data-lucide="gem"></i>`}
+        ${p.estoque>0?`<span class="badge-bonus">${p.estoque} DISP</span>`:''}
+      </div>
+      <div class="produto-nome">${p.nome}</div>
+      <div class="produto-preco">R$ ${p.preco.toFixed(2).replace('.',',')}</div>
+      <button class="btn-comprar" onclick="abrirModalPedido('${p.k}')">
+        <i data-lucide="shopping-cart"></i>
+        COMPRAR
+      </button>
+    </div>
+  `}).join('');
+
+  document.getElementById('produtosGrid').innerHTML = html || '<div class="empty">Nenhum produto cadastrado<br><br>Cadastre no Painel ADM</div>';
+  lucide.createIcons();
+
+  document.querySelectorAll('.jogo-card').forEach(card=>{card.classList.remove('ativo');});
+  if(filtroJogo){
+    const cardAtivo = document.querySelector(`.jogo-card[onclick="filtrarJogo('${filtroJogo}')"]`);
+    if(cardAtivo) cardAtivo.classList.add('ativo');
+  }
+}
+
+function filtrarJogo(k){renderProdutosLoja(k);}
+
+document.getElementById('buscaProduto')?.addEventListener('input', () => {renderProdutosLoja(jogoSelecionado);});
+
+function abrirModalPedido(k){
+  produtoSelecionado = db.serv.find(p=>p.k===k);
+  if(!produtoSelecionado) return;
+
+  document.getElementById('modalProdutoImg').src = produtoSelecionado.img || '';
+  document.getElementById('modalProdutoImg').style.display = produtoSelecionado.img? 'block' : 'none';
+  document.getElementById('modalProdutoNome').textContent = produtoSelecionado.nome;
+  document.getElementById('modalProdutoPreco').textContent = `R$ ${produtoSelecionado.preco.toFixed(2).replace('.',',')}`;
+  document.getElementById('modalProdutoDesc').textContent = produtoSelecionado.desc || 'Sem descrição';
+  document.getElementById('modalProdutoDesc').classList.remove('ativo');
+  document.getElementById('idProduto').value = '';
+  document.getElementById('codigoProduto').value = '';
+  document.getElementById('modalProduto').classList.add('ativo');
+  lucide.createIcons();
+}
+
+function fecharModalProduto(){
+  document.getElementById('modalProduto').classList.remove('ativo');
+  produtoSelecionado=null;
+}
+
+function toggleProdutoDesc(){
+  document.getElementById('modalProdutoDesc').classList.toggle('ativo');
+}
+
+function finalizarPedido(){
+  if(!produtoSelecionado){alert('Erro ao processar pedido');return}
+  let id=document.getElementById('idProduto').value.trim();
+  if(!id){alert('Digite o ID da conta');return}
+  if(id.length < 6){alert('ID muito curto. Confere aí');return}
+
+  const codigoInd=document.getElementById('codigoProduto').value.trim().toUpperCase();
+  const pedidoId='#'+Date.now().toString().slice(-5);
+  const cat = db.cat.find(c=>c.k===produtoSelecionado.cat);
+
+  const pedido={
+    id:pedidoId,
+    uid:usuarioAtual.uid,
+    email:usuarioAtual.email,
+    servico:produtoSelecionado.nome,
+    jogo:cat?.nome||'Geral',
+    valor:produtoSelecionado.preco,
+    id_conta: id,
+    codigoIndicacao:codigoInd||null,
+    data:new Date().toISOString(),
+    status:'pendente'
+  };
+
+  db.pedidos.push(pedido);
+
+  if(codigoInd){
+    const uidIndicador=Object.keys(db.usuarios).find(uid=>db.usuarios[uid].codigo===codigoInd);
+    if(uidIndicador && uidIndicador!==usuarioAtual.uid){
+      db.indicacoes.push({
+        id:'i'+Date.now(),
+        codigo:codigoInd,
+        pedidoId,
+        uidIndicador,
+        uidIndicado:usuarioAtual.uid,
+        nomeIndicado:usuarioAtual.nome,
+        valor:produtoSelecionado.preco,
+        status:'pendente',
+        data:pedido.data
+      });
+      db.usuarios[uidIndicador].totalIndicacoes=(db.usuarios[uidIndicador].totalIndicacoes||0)+1;
+    }
+  }
+
+  save();
+  atualizarCarrinho();
+  fecharModalProduto();
+  alert('✅ Adicionado ao carrinho!\n\nID: '+pedidoId+'\n\nVá em "Meu Carrinho" pra finalizar.');
+}
+
+function renderSuporte(){
+  document.getElementById('suporteBody').innerHTML=`
+    <div class="suporte-card">
+      <div class="suporte-icon"><i data-lucide="message-circle"></i></div>
+      <div class="suporte-tit">FALE CONOSCO</div>
+      <div class="suporte-desc">Precisa de ajuda? Nossa equipe está pronta para te atender via WhatsApp.</div>
+      <div class="suporte-horario">
+        <b>⏰ Horário de atendimento:</b>
+        Segunda a Sexta: 09h às 18h<br>
+        Sábado: 09h às 12h<br>
+        Domingo: Fechado
+      </div>
+      <button class="btn" onclick="window.open('https://wa.me/${WHATSAPP}?text=Olá, preciso de suporte!','_blank')">
+        <i data-lucide="send" style="width:14px;height:14px;margin-right:6px"></i>
+        CHAMAR NO WHATSAPP
+      </button>
+    </div>
+  `;
+  lucide.createIcons();
+}
+
+function renderFaq(){
+  const faq=db.config.faq||'Nenhuma dúvida cadastrada ainda.';
+  document.getElementById('faqBody').innerHTML=`<div class="texto-geral">${faq}</div>`;
+}
+
+function renderTermos(){
+  document.getElementById('termosBody').innerHTML=`<div class="texto-geral">${db.config.termos}</div>`;
+}
+
+function renderPremiacao(){
+  const prem=db.config.premiacao||{img:'',texto:'Nenhuma premiação ativa no momento.'};
+  document.getElementById('premiacaoBody').innerHTML=`
+    ${prem.img?`<img src="${prem.img}" style="width:100%;border-radius:12px;margin-bottom:12px;border:1px solid var(--borda)">`:''}
+    <div class="texto-geral">${prem.texto}</div>
+  `;
+}
+
+function abrirAdmin(){
+  if(!usuarioAtual.admin){alert('Acesso negado. Apenas administradores.');return}
+  document.getElementById('adminBody').innerHTML=`
+  <button class="btn" onclick="abrirCats()">📂 CATEGORIAS</button>
+  <button class="btn" onclick="abrirServs()">📦 SERVIÇOS</button>
+  <button class="btn" onclick="ir('pedidos')">📋 PEDIDOS</button>
+  <button class="btn" onclick="formFaq()">❓ DÚVIDAS FREQUENTES</button>
+  <button class="btn" onclick="formTermos()">📄 TERMOS DO SITE</button>
+  <button class="btn" onclick="formPremiacao()">🏆 PREMIAÇÃO</button>
+  <button class="btn btn-sec" onclick="ir('home')">VOLTAR</button>
+  `;
+  ir('admin');
+}
+
+function abrirCats(){
+  const html=`
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div class="titulo">CATEGORIAS</div>
+    <button class="btn" style="width:auto;padding:6px 12px" onclick="novaCat()">+ NOVA</button>
+  </div>
+  <div id="listaCats"></div>
+  <button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>
+  `;
+  document.getElementById('adminBody').innerHTML=html;
+  renderCats();
+}
+
+function renderCats(){
+  const cats = db.cat.length?db.cat:[];
+  const lista = cats.map(c=>`
+    <div class="lista-item">
+      <div class="lista-top">
+        <div class="lista-nome">${c.nome}</div>
+        <div class="lista-acoes">
+          <button class="btn-mini btn-edit" onclick="editCat('${c.k}')">EDITAR</button>
+          <button class="btn-mini btn-del" onclick="delCat('${c.k}')">EXCLUIR</button>
+        </div>
+      </div>
+      <div class="lista-info">Key: ${c.k}</div>
+    </div>
+  `).join('');
+  document.getElementById('listaCats').innerHTML = lista || '<div class="empty">Nenhuma categoria cadastrada</div>';
+}
+
+function novaCat(){
+  abrirModal('NOVA CATEGORIA',`
+  <input type="text" class="input" id="cNome" placeholder="Nome da categoria (ex: Free Fire)">
+  <div class="label">Imagem da categoria:</div>
+  <div class="upload" onclick="document.getElementById('cImg').click()">
+    <div class="upload-text">📷 Clique para enviar<br><span style="font-size:8px">PNG, JPG até 2MB</span></div>
+    <img id="cImgPrev" style="display:none">
+    <input type="file" id="cImg" accept="image/*" onchange="prevImg(this,'cImgPrev')">
+  </div>
+  <button class="btn" onclick="salvarCat()">SALVAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
+  `);
+}
+
+function editCat(k){
+  const c=db.cat.find(x=>x.k===k);
+  abrirModal('EDITAR CATEGORIA',`
+  <input type="text" class="input" id="cNome" placeholder="Nome da categoria" value="${c.nome}">
+  <div class="label">Imagem da categoria:</div>
+  <div class="upload" onclick="document.getElementById('cImg').click()">
+    <div class="upload-text" style="${c.img?'display:none':''}">📷 Clique para enviar</div>
+    <img id="cImgPrev" src="${c.img||''}" style="${c.img?'display:block':'display:none'}">
+    <input type="file" id="cImg" accept="image/*" onchange="prevImg(this,'cImgPrev')">
+  </div>
+  <button class="btn" onclick="salvarCat('${k}')">ATUALIZAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
+  `);
+}
+
+async function salvarCat(k=null){
+  const nome=document.getElementById('cNome').value.trim();
+  if(!nome){alert('Digite o nome');return}
+  showLoad(true);
+  let img=null;
+  const file=document.getElementById('cImg').files[0];
+  if(file)img=await toBase64(file);
+  else if(k)img=db.cat.find(x=>x.k===k)?.img||null;
+  const newK=k||'cat'+Date.now();
+  const cat={k:newK,nome,img};
+  if(k){db.cat[db.cat.findIndex(x=>x.k===k)]=cat;}
+  else{db.cat.push(cat);}
+  save();
+  showLoad(false);
+  fecharModal();
+  abrirCats();
+}
+
+function delCat(k){
+  if(confirm('Excluir categoria? Os serviços vinculados ficarão sem categoria.')){
+    db.cat=db.cat.filter(x=>x.k!==k);
+    save();
+    renderCats();
+  }
+}
+
+function abrirServs(){
+  const html=`
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div class="titulo">SERVIÇOS</div>
+    <button class="btn" style="width:auto;padding:6px 12px" onclick="novoServ()">+ NOVO</button>
+  </div>
+  <div id="listaServs"></div>
+  <button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>
+  `;
+  document.getElementById('adminBody').innerHTML=html;
+  renderServs();
+}
+
+function renderServs(){
+  const servs = db.serv.length?db.serv:[];
+  const lista = servs.map(s=>{
+    const cat = db.cat.find(c=>c.k===s.cat);
+    return `
+    <div class="lista-item">
+      <div class="lista-top">
+        <div class="lista-nome">${s.nome}</div>
+        <div class="lista-acoes">
+          <button class="btn-mini btn-edit" onclick="editServ('${s.k}')">EDITAR</button>
+          <button class="btn-mini btn-del" onclick="delServ('${s.k}')">EXCLUIR</button>
+        </div>
+      </div>
+      <div class="lista-info">
+        Categoria: ${cat?.nome||'-'}<br>
+        Preço: R$ ${s.preco.toFixed(2).replace('.',',')}<br>
+        Estoque: ${s.estoque||0}
+      </div>
+    </div>
+  `}).join('');
+  document.getElementById('listaServs').innerHTML = lista || '<div class="empty">Nenhum serviço cadastrado</div>';
+}
+
+function novoServ(){
+  const cats=db.cat.map(c=>`<option value="${c.k}">${c.nome}</option>`).join('');
+  abrirModal('NOVO SERVIÇO',`
+  <select class="input" id="sCat"><option value="">Selecione a categoria</option>${cats}</select>
+  <input type="text" class="input" id="sNome" placeholder="Nome do serviço (ex: 1000 Diamantes)">
+  <textarea class="textarea" id="sDesc" placeholder="Descrição do produto"></textarea>
+  <input type="number" class="input" id="sPreco" placeholder="Preço (ex: 19.90)" step="0.01">
+  <input type="number" class="input" id="sEstoque" placeholder="Estoque disponível" value="999">
+  <div class="label">Imagem do serviço:</div>
+  <div class="upload" onclick="document.getElementById('sImg').click()">
+    <div class="upload-text">📷 Clique para enviar<br><span style="font-size:8px">PNG, JPG até 2MB</span></div>
+    <img id="sImgPrev" style="display:none">
+    <input type="file" id="sImg" accept="image/*" onchange="prevImg(this,'sImgPrev')">
+  </div>
+  <button class="btn" onclick="salvarServ()">SALVAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
+  `);
+}
+
+function editServ(k){
+  const s=db.serv.find(x=>x.k===k);
+  const cats=db.cat.map(c=>`<option value="${c.k}" ${c.k===s.cat?'selected':''}>${c.nome}</option>`).join('');
+  abrirModal('EDITAR SERVIÇO',`
+  <select class="input" id="sCat">${cats}</select>
+  <input type="text" class="input" id="sNome" placeholder="Nome do serviço" value="${s.nome}">
+  <textarea class="textarea" id="sDesc" placeholder="Descrição">${s.desc||''}</textarea>
+  <input type="number" class="input" id="sPreco" placeholder="Preço" step="0.01" value="${s.preco}">
+  <input type="number" class="input" id="sEstoque" placeholder="Estoque" value="${s.estoque||0}">
+  <div class="label">Imagem do serviço:</div>
+  <div class="upload" onclick="document.getElementById('sImg').click()">
+    <div class="upload-text" style="${s.img?'display:none':''}">📷 Clique para enviar</div>
+    <img id="sImgPrev" src="${s.img||''}" style="${s.img?'display:block':'display:none'}">
+    <input type="file" id="sImg" accept="image/*" onchange="prevImg(this,'sImgPrev')">
+  </div>
+  <button class="btn" onclick="salvarServ('${k}')">ATUALIZAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
+  `);
+}
+
+async function salvarServ(k=null){
+  const cat=document.getElementById('sCat').value;
+  const nome=document.getElementById('sNome').value.trim();
+  const desc=document.getElementById('sDesc').value.trim();
+  const preco=parseFloat(document.getElementById('sPreco').value);
+  const estoque=parseInt(document.getElementById('sEstoque').value)||0;
+  if(!cat||!nome||isNaN(preco)){alert('Preencha categoria, nome e preço');return}
+  showLoad(true);
+  let img=null;
+  const file=document.getElementById('sImg').files[0];
+  if(file)img=await toBase64(file);
+  else if(k)img=db.serv.find(x=>x.k===k)?.img||null;
+  const newK=k||'serv'+Date.now();
+  const serv={k:newK,cat,nome,desc,preco,estoque,img};
+  if(k){db.serv[db.serv.findIndex(x=>x.k===k)]=serv;}
+  else{db.serv.push(serv);}
+  save();
+  showLoad(false);
+  fecharModal();
+  abrirServs();
+}
+
+function delServ(k){
+  if(confirm('Excluir serviço?')){
+    db.serv=db.serv.filter(x=>x.k!==k);
+    save();
+    renderServs();
+  }
+}
+
+function renderPedidos(){
+  const pedidos = db.pedidos.slice().reverse();
+  if(pedidos.length===0){
+    document.getElementById('pedidosBody').innerHTML='<div class="empty">Nenhum pedido ainda</div>';
+    return;
+  }
+  const lista=pedidos.map(p=>{
+    const statusClass=p.status==='pendente'?'badge-pendente':p.status==='confirmado'?'badge-confirmado':'badge-cancelado';
+    const statusTxt=p.status==='pendente'?'PENDENTE':p.status==='confirmado'?'CONFIRMADO':'CANCELADO';
+    return `
+    <div class="lista-item">
+      <div class="lista-top">
+        <div class="lista-nome">${p.id}</div>
+        <span class="badge ${statusClass}">${statusTxt}</span>
+      </div>
+      <div class="lista-info">
+        Cliente: ${p.email}<br>
+        Serviço: ${p.servico}<br>
+        Jogo: ${p.jogo}<br>
+        Valor: R$ ${p.valor.toFixed(2).replace('.',',')}<br>
+        ID: ${p.id_conta}<br>
+        Data: ${new Date(p.data).toLocaleString('pt-BR')}<br>
+        Indicação: ${p.codigoIndicacao||'-'}
+      </div>
+      ${p.status==='pendente'?`
+      <div class="lista-acoes" style="margin-top:8px">
+        <button class="btn-mini" style="background:var(--verde);color:var(--branco)" onclick="confirmarPedido('${p.id}')">CONFIRMAR</button>
+        <button class="btn-mini" style="background:var(--vermelho);color:var(--branco)" onclick="cancelarPedido('${p.id}')">CANCELAR</button>
+      </div>`:''}
+    </div>
+  `}).join('');
+  document.getElementById('pedidosBody').innerHTML=lista;
 }
 
 function confirmarPedido(id){
@@ -649,7 +1272,7 @@ function confirmarPedido(id){
   if(!pedido)return;
   
   abrirModal('CONFIRMAR PEDIDO',`
-    <div style="font-size:10px;margin-bottom:12px;color:var(--cinza-txt)">
+    <div style="font-size:10px;margin-bottom:12px;color:var(--cinza)">
       <b>Pedido:</b> ${pedido.id}<br>
       <b>Cliente:</b> ${pedido.email}<br>
       <b>Serviço:</b> ${pedido.servico}<br>
@@ -698,246 +1321,9 @@ function cancelarPedido(id){
   }
 }
 
-function fazerLogin(){
-  const email=document.getElementById('loginEmail').value.trim();
-  const senha=document.getElementById('loginSenha').value;
-  const user=Object.values(db.usuarios).find(u=>u.email===email&&u.senha===senha);
-  if(user){
-    usuarioAtual={...user,uid:user.email};
-    localStorage.setItem('usuarioAtual',JSON.stringify(usuarioAtual));
-    alert('Login feito!');
-    if(user.admin)ir('admin');
-    else ir('home');
-  }else alert('Email ou senha inválidos');
-}
-
-function fazerCadastro(){
-  const nome=document.getElementById('cadNome').value.trim();
-  const email=document.getElementById('cadEmail').value.trim();
-  const senha=document.getElementById('cadSenha').value;
-  if(!nome||!email||!senha){alert('Preencha tudo');return}
-  if(db.usuarios[email]){alert('Email já cadastrado');return}
-  const codigo=gerarCodigo(email);
-  db.usuarios[email]={uid:email,nome,email,senha,admin:false,codigo,indicacoesValidas:0,totalIndicacoes:0};
-  save();
-  usuarioAtual={...db.usuarios[email]};
-  localStorage.setItem('usuarioAtual',JSON.stringify(usuarioAtual));
-  alert('Conta criada!\n\nSeu código de indicação: '+codigo);
-  ir('home');
-}
-
-function abrirMenu(){
-  if(!usuarioAtual){ir('login');return}
-  const menu=`
-    <button class="btn" onclick="ir('faq')">❓ DÚVIDAS FREQUENTES</button>
-    <button class="btn" onclick="ir('termos')">📄 TERMOS DO SITE</button>
-    <button class="btn" onclick="ir('premiacao')">🏆 PREMIAÇÃO</button>
-    ${usuarioAtual.admin?'<button class="btn" onclick="abrirAdmin()">⚙️ PAINEL ADMIN</button>':''}
-    <button class="btn btn-sec" onclick="logout()">🚪 SAIR</button>
-  `;
-  abrirModal('MENU',menu);
-}
-
-function abrirAdmin(){
-  if(!usuarioAtual?.admin){alert('Acesso negado');return}
-  document.getElementById('adminBody').innerHTML=`
-    <button class="btn" onclick="abrirCats()">📁 CATEGORIAS</button>
-    <button class="btn" onclick="abrirServs()">📦 SERVIÇOS</button>
-    <button class="btn" onclick="ir('pedidos')">📋 PEDIDOS</button>
-    <button class="btn" onclick="ir('adminIndicacoes')">👥 INDICAÇÕES</button>
-    <button class="btn" onclick="formFaq()">❓ EDITAR FAQ</button>
-    <button class="btn" onclick="formTermos()">📄 EDITAR TERMOS</button>
-    <button class="btn" onclick="formPremiacao()">🏆 EDITAR PREMIAÇÃO</button>
-  `;
-  ir('admin');
-}
-
-function abrirCats(){
-  const html=`
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-    <div class="titulo">CATEGORIAS</div>
-    <button class="btn" style="width:auto;padding:6px 12px" onclick="novaCat()">+ NOVA</button>
-  </div>
-  <div id="listaCats"></div>
-  <button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>
-  `;
-  document.getElementById('adminBody').innerHTML=html;
-  renderCats();
-}
-
-function renderCats(){
-  const lista = db.cat.map(c=>`
-    <div class="lista-item">
-      <div class="lista-top">
-        <div class="lista-nome">${c.nome}</div>
-        <div class="lista-acoes">
-          <button class="btn-mini btn-edit" onclick="editCat('${c.k}')">EDITAR</button>
-          <button class="btn-mini btn-del" onclick="delCat('${c.k}')">EXCLUIR</button>
-        </div>
-      </div>
-    </div>
-  `).join('');
-  document.getElementById('listaCats').innerHTML = lista || '<div class="empty">Nenhuma categoria</div>';
-}
-
-function novaCat(){
-  abrirModal('NOVA CATEGORIA',`
-  <input type="text" class="input" id="cNome" placeholder="Nome da categoria">
-  <div class="label">Imagem:</div>
-  <div class="upload" onclick="document.getElementById('cImg').click()">
-    <div class="upload-text">📷 Clique para enviar</div>
-    <img id="cImgPrev" style="display:none">
-    <input type="file" id="cImg" accept="image/*" onchange="prevImg(this,'cImgPrev')">
-  </div>
-  <button class="btn" onclick="salvarCat()">SALVAR</button>
-  `);
-}
-
-function editCat(k){
-  const c=db.cat.find(x=>x.k===k);
-  abrirModal('EDITAR CATEGORIA',`
-  <input type="text" class="input" id="cNome" value="${c.nome}">
-  <div class="label">Imagem:</div>
-  <div class="upload" onclick="document.getElementById('cImg').click()">
-    <img id="cImgPrev" src="${c.img||''}" style="${c.img?'display:block':'display:none'}">
-    <input type="file" id="cImg" accept="image/*" onchange="prevImg(this,'cImgPrev')">
-  </div>
-  <button class="btn" onclick="salvarCat('${k}')">ATUALIZAR</button>
-  `);
-}
-
-async function salvarCat(k=null){
-  const nome=document.getElementById('cNome').value.trim();
-  if(!nome){alert('Digite o nome');return}
-  showLoad(true);
-  let img=null;
-  const file=document.getElementById('cImg').files[0];
-  if(file)img=await toBase64(file);
-  else if(k)img=db.cat.find(x=>x.k===k)?.img||null;
-  const newK=k||'cat'+Date.now();
-  const cat={k:newK,nome,img};
-  if(k){db.cat[db.cat.findIndex(x=>x.k===k)]=cat;}
-  else{db.cat.push(cat);}
-  save();
-  showLoad(false);
-  fecharModal();
-  abrirCats();
-  renderCategorias();
-}
-
-function delCat(k){
-  if(confirm('Excluir categoria?')){
-    db.cat=db.cat.filter(x=>x.k!==k);
-    save();
-    renderCats();
-    renderCategorias();
-  }
-}
-
-function abrirServs(){
-  const html=`
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-    <div class="titulo">SERVIÇOS</div>
-    <button class="btn" style="width:auto;padding:6px 12px" onclick="novoServ()">+ NOVO</button>
-  </div>
-  <div id="listaServs"></div>
-  <button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>
-  `;
-  document.getElementById('adminBody').innerHTML=html;
-  renderServs();
-}
-
-function renderServs(){
-  const lista = db.serv.map(s=>{
-    const cat = db.cat.find(c=>c.k===s.cat);
-    return `
-    <div class="lista-item">
-      <div class="lista-top">
-        <div class="lista-nome">${s.nome}</div>
-        <div class="lista-acoes">
-          <button class="btn-mini btn-edit" onclick="editServ('${s.k}')">EDITAR</button>
-          <button class="btn-mini btn-del" onclick="delServ('${s.k}')">EXCLUIR</button>
-        </div>
-      </div>
-      <div class="lista-info">
-        Categoria: ${cat?.nome||'-'}<br>
-        Preço: R$ ${s.preco.toFixed(2).replace('.',',')}<br>
-        Estoque: ${s.estoque||0}
-      </div>
-    </div>
-  `}).join('');
-  document.getElementById('listaServs').innerHTML = lista || '<div class="empty">Nenhum serviço</div>';
-}
-
-function novoServ(){
-  const cats=db.cat.map(c=>`<option value="${c.k}">${c.nome}</option>`).join('');
-  abrirModal('NOVO SERVIÇO',`
-  <select class="select" id="sCat"><option value="">Categoria</option>${cats}</select>
-  <input type="text" class="input" id="sNome" placeholder="Nome do serviço">
-  <textarea class="textarea" id="sDesc" placeholder="Descrição"></textarea>
-  <input type="number" class="input" id="sPreco" placeholder="Preço" step="0.01">
-  <input type="number" class="input" id="sEstoque" placeholder="Estoque" value="999">
-  <div class="label">Imagem:</div>
-  <div class="upload" onclick="document.getElementById('sImg').click()">
-    <div class="upload-text">📷 Clique para enviar</div>
-    <img id="sImgPrev" style="display:none">
-    <input type="file" id="sImg" accept="image/*" onchange="prevImg(this,'sImgPrev')">
-  </div>
-  <button class="btn" onclick="salvarServ()">SALVAR</button>
-  `);
-}
-
-function editServ(k){
-  const s=db.serv.find(x=>x.k===k);
-  const cats=db.cat.map(c=>`<option value="${c.k}" ${c.k===s.cat?'selected':''}>${c.nome}</option>`).join('');
-  abrirModal('EDITAR SERVIÇO',`
-  <select class="select" id="sCat">${cats}</select>
-  <input type="text" class="input" id="sNome" value="${s.nome}">
-  <textarea class="textarea" id="sDesc">${s.desc||''}</textarea>
-  <input type="number" class="input" id="sPreco" value="${s.preco}" step="0.01">
-  <input type="number" class="input" id="sEstoque" value="${s.estoque||0}">
-  <div class="label">Imagem:</div>
-  <div class="upload" onclick="document.getElementById('sImg').click()">
-    <img id="sImgPrev" src="${s.img||''}" style="${s.img?'display:block':'display:none'}">
-    <input type="file" id="sImg" accept="image/*" onchange="prevImg(this,'sImgPrev')">
-  </div>
-  <button class="btn" onclick="salvarServ('${k}')">ATUALIZAR</button>
-  `);
-}
-
-async function salvarServ(k=null){
-  const cat=document.getElementById('sCat').value;
-  const nome=document.getElementById('sNome').value.trim();
-  const desc=document.getElementById('sDesc').value.trim();
-  const preco=parseFloat(document.getElementById('sPreco').value);
-  const estoque=parseInt(document.getElementById('sEstoque').value)||0;
-  if(!cat||!nome||isNaN(preco)){alert('Preencha tudo');return}
-  showLoad(true);
-  let img=null;
-  const file=document.getElementById('sImg').files[0];
-  if(file)img=await toBase64(file);
-  else if(k)img=db.serv.find(x=>x.k===k)?.img||null;
-  const newK=k||'serv'+Date.now();
-  const serv={k:newK,cat,nome,desc,preco,estoque,img};
-  if(k){db.serv[db.serv.findIndex(x=>x.k===k)]=serv;}
-  else{db.serv.push(serv);}
-  save();
-  showLoad(false);
-  fecharModal();
-  abrirServs();
-}
-
-function delServ(k){
-  if(confirm('Excluir serviço?')){
-    db.serv=db.serv.filter(x=>x.k!==k);
-    save();
-    renderServs();
-  }
-}
-
 function renderIndicacoes(){
   if(!usuarioAtual || !usuarioAtual.codigo){
-    document.getElementById('indicacoesBody').innerHTML='<div class="empty">Faça login</div>';
+    document.getElementById('indicacoesBody').innerHTML='<div class="empty">Erro ao carregar dados</div>';
     return;
   }
   const userData=db.usuarios[usuarioAtual.uid]||{indicacoesValidas:0,totalIndicacoes:0};
@@ -947,13 +1333,13 @@ function renderIndicacoes(){
   const progresso=Math.min((validas/5)*100,100);
   
   const historico=minhasIndicacoes.slice().reverse().map(i=>{
-    const statusClass=i.status==='confirmada'?'confirmada':i.status==='pendente'?'pendente':'cancelado';
+    const statusClass=i.status==='confirmada'?'badge-confirmada':i.status==='pendente'?'badge-pendente':'badge-invalida';
     const statusTxt=i.status==='confirmada'?'CONFIRMADA':i.status==='pendente'?'PENDENTE':'INVÁLIDA';
     return `
     <div class="indicacao-item">
       <div class="indicacao-item-top">
         <div class="indicacao-codigo">Pedido: ${i.pedidoId}</div>
-        <span class="indicacao-status ${statusClass}">${statusTxt}</span>
+        <span class="badge ${statusClass}">${statusTxt}</span>
       </div>
       <div class="indicacao-valor">
         Indicado: ${i.nomeIndicado}<br>
@@ -985,12 +1371,11 @@ function renderIndicacoes(){
           <div class="stat-num">${5-validas>0?5-validas:0}</div>
           <div class="stat-label">Faltam</div>
         </div>
-      </div>
       <div class="progress-bar">
         <div class="progress-fill" style="width:${progresso}%"></div>
       </div>
-      <div style="font-size:9px;color:var(--cinza-txt);text-align:center;margin-bottom:12px">
-        ${validas>=5?'🎉 Meta atingida!':'${5-validas} indicações para próxima recompensa'}
+      <div style="font-size:9px;color:var(--cinza);text-align:center;margin-bottom:12px">
+        ${validas>=5?'🎉 Meta atingida! Você ganhou recompensas!':`${5-validas} indicações para próxima recompensa`}
       </div>
       <div class="recompensa-item">
         <div class="recompensa-icon"><i data-lucide="gift"></i></div>
@@ -1000,9 +1385,9 @@ function renderIndicacoes(){
         </div>
       </div>
     </div>
-    <div class="titulo">HISTÓRICO</div>
+    <div class="titulo">HISTÓRICO DE INDICAÇÕES</div>
     <div class="indicacao-historico">
-      ${historico||'<div class="empty">Nenhuma indicação ainda</div>'}
+      ${historico||'<div class="empty">Nenhuma indicação ainda<br><br>Compartilhe seu código!</div>'}
     </div>
   `;
   lucide.createIcons();
@@ -1010,18 +1395,18 @@ function renderIndicacoes(){
 
 function copiarCodigo(){
   navigator.clipboard.writeText(usuarioAtual.codigo);
-  alert('✅ Código copiado!');
+  alert('✅ Código copiado!\n\nCompartilhe com seus amigos.');
 }
 
 function renderAdminIndicacoes(){
   if(!usuarioAtual.admin)return;
   const todas=db.indicacoes.slice().reverse();
   if(todas.length===0){
-    document.getElementById('adminIndicacoesBody').innerHTML='<div class="empty">Nenhuma indicação</div>';
+    document.getElementById('adminIndicacoesBody').innerHTML='<div class="empty">Nenhuma indicação ainda</div>';
     return;
   }
   const lista=todas.map(i=>{
-    const statusClass=i.status==='confirmada'?'badge-confirmado':i.status==='pendente'?'badge-pendente':'badge-cancelado';
+    const statusClass=i.status==='confirmada'?'badge-confirmada':i.status==='pendente'?'badge-pendente':'badge-invalida';
     const statusTxt=i.status==='confirmada'?'CONFIRMADA':i.status==='pendente'?'PENDENTE':'INVÁLIDA';
     return `
     <div class="lista-item">
@@ -1035,15 +1420,24 @@ function renderAdminIndicacoes(){
         Valor: R$ ${i.valor.toFixed(2).replace('.',',')}<br>
         Data: ${new Date(i.data).toLocaleString('pt-BR')}
       </div>
+      ${i.status==='confirmada'?`
+      <div class="lista-acoes" style="margin-top:8px">
+        <button class="btn-mini btn-edit" onclick="darRecompensa('${i.id}')">DAR RECOMPENSA</button>
+      </div>`:''}
     </div>
   `}).join('');
   document.getElementById('adminIndicacoesBody').innerHTML=lista;
 }
 
+function darRecompensa(id){
+  alert('Marque como entregue manualmente após dar a recompensa ao cliente.\n\nRecompensa: 100 Diamantes FF ou 400 Robux');
+}
+
 function formFaq(){
   abrirModal('EDITAR FAQ',`
-  <textarea class="textarea" id="faqTxt" style="min-height:200px">${db.config.faq}</textarea>
+  <textarea class="textarea" id="faqTxt" placeholder="Digite as dúvidas frequentes" style="min-height:200px">${db.config.faq}</textarea>
   <button class="btn" onclick="salvarFaq()">SALVAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
   `);
 }
 
@@ -1056,8 +1450,9 @@ function salvarFaq(){
 
 function formTermos(){
   abrirModal('EDITAR TERMOS',`
-  <textarea class="textarea" id="termosTxt" style="min-height:200px">${db.config.termos}</textarea>
+  <textarea class="textarea" id="termosTxt" placeholder="Digite os termos do site" style="min-height:200px">${db.config.termos}</textarea>
   <button class="btn" onclick="salvarTermos()">SALVAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
   `);
 }
 
@@ -1070,13 +1465,15 @@ function salvarTermos(){
 
 function formPremiacao(){
   abrirModal('EDITAR PREMIAÇÃO',`
-  <div class="label">Imagem:</div>
+  <div class="label">Imagem da premiação:</div>
   <div class="upload" onclick="document.getElementById('premImg').click()">
+    <div class="upload-text" style="${db.config.premiacao.img?'display:none':''}">📷 Clique para enviar</div>
     <img id="premImgPrev" src="${db.config.premiacao.img||''}" style="${db.config.premiacao.img?'display:block':'display:none'}">
     <input type="file" id="premImg" accept="image/*" onchange="prevImg(this,'premImgPrev')">
   </div>
-  <textarea class="textarea" id="premTxt" style="min-height:150px">${db.config.premiacao.texto}</textarea>
+  <textarea class="textarea" id="premTxt" placeholder="Texto da premiação" style="min-height:150px">${db.config.premiacao.texto}</textarea>
   <button class="btn" onclick="salvarPremiacao()">SALVAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
   `);
 }
 
@@ -1096,7 +1493,6 @@ function abrirModal(tit,body){
   document.getElementById('modalTit').textContent=tit;
   document.getElementById('modalBody').innerHTML=body;
   document.getElementById('modal').classList.add('ativo');
-  lucide.createIcons();
 }
 
 function fecharModal(){document.getElementById('modal').classList.remove('ativo')}
@@ -1107,7 +1503,7 @@ function prevImg(input,prevId){
     r.onload=e=>{
       document.getElementById(prevId).src=e.target.result;
       document.getElementById(prevId).style.display='block';
-      input.parentElement.querySelector('.upload-text')?.remove();
+      input.parentElement.querySelector('.upload-text').style.display='none';
     };
     r.readAsDataURL(input.files[0]);
   }
@@ -1115,14 +1511,6 @@ function prevImg(input,prevId){
 
 function toBase64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.readAsDataURL(file);r.onload=()=>resolve(r.result);r.onerror=reject;})}
 
-function logout(){
-  localStorage.removeItem('usuarioAtual');
-  usuarioAtual=null;
-  alert('Saiu da conta');
-  ir('home');
-}
-
-init();
 lucide.createIcons();
 </script>
 </body>
