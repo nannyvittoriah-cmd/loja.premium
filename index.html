@@ -222,7 +222,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .comprovante-titulo .novo{color:#FFFFFF}
 .comprovante-titulo .pedido{color:#8B5CF6}
 .comprovante-titulo i{width:16px;height:16px;stroke:#A855F7;fill:none;stroke-width:2.5;filter:drop-shadow(0 0 8px rgba(168,85,247,.7))}
-.comprovante-linha{display:flex;align-items:center;gap:6px;margin-bottom:3px;padding:3px 6px;background:rgba(13,13,0.6);border-radius:4px;border:1px solid #1E1E1E}
+.comprovante-linha{display:flex;align-items:center;gap:6px;margin-bottom:3px;padding:3px 6px;background:rgba(13,13,13,0.6);border-radius:4px;border:1px solid #1E1E1E}
 .comprovante-icon{width:24px;height:24px;background:rgba(139,92,246,0.15);border:1px solid #8B5CF6;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 8px rgba(168,85,247,0.2)}
 .comprovante-icon i{width:14px;height:14px;stroke:#A855F7;fill:none;stroke-width:2.5;filter:drop-shadow(0 0 8px rgba(168,85,247,.7))}
 .comprovante-info-wrap{flex:1;display:flex;justify-content:space-between;align-items:center}
@@ -341,7 +341,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 <div class="sidebar-overlay" id="overlay" onclick="fecharMenu()"></div>
 <div class="sidebar" id="sidebar">
   <div class="sidebar-tit">MENU</div>
-    <div class="sidebar-item" onclick="ir('home');fecharMenu()"><i data-lucide="home"></i>Loja</div>
+  <div class="sidebar-item" onclick="ir('home');fecharMenu()"><i data-lucide="home"></i>Loja</div>
   <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
   <div class="sidebar-item" onclick="ir('carrinho');fecharMenu()"><i data-lucide="shopping-cart"></i>Meu Carrinho</div>
   <div class="sidebar-item" onclick="ir('comprovantes');fecharMenu()"><i data-lucide="receipt"></i>Meus comprovantes</div>
@@ -544,10 +544,17 @@ function gerarCodigoIndicacao(nome){
   return `${base||'USER'}${num}`;
 }
 
+// CORREÇÃO DO CARREGANDO INFINITO
+let authTimeout = setTimeout(()=>{
+  showLoad(false);
+  document.getElementById('login').classList.add('ativa');
+}, 3000);
+
 window.addEventListener('load',()=>{
   lucide.createIcons();
   const { auth, onAuthStateChanged } = window.firebaseAuth;
   onAuthStateChanged(auth, async(user) => {
+    clearTimeout(authTimeout);
     showLoad(false);
     if(user){
       usuarioAtual={uid:user.uid,nome:user.displayName||user.email.split('@')[0],email:user.email,admin:user.email===EMAIL_ADM};
@@ -658,6 +665,7 @@ function atualizarCarrinho(){
   document.getElementById('cartCount').textContent = pendentes;
 }
 
+// CORREÇÃO DO CARRINHO
 function renderCarrinho(){
   if(!usuarioAtual){return}
   const meus=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && p.status==='pendente');
@@ -696,6 +704,7 @@ function renderCarrinho(){
           <div class="stat-num">R$ ${total.toFixed(2)}</div>
           <div class="stat-label">Total</div>
         </div>
+      </div>
       <button class="btn" onclick="enviarTodosPedidos()">ENVIAR PEDIDOS NO WHATSAPP</button>
     </div>
     <div class="titulo">ITENS PENDENTES</div>
@@ -736,6 +745,7 @@ function enviarTodosPedidos(){
   window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
+// CORREÇÃO DO COMPROVANTE
 function renderComprovantes(){
   if(!usuarioAtual){return}
   const todosComprovantes=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && (p.status==='confirmado'||p.status==='cancelado')).reverse();
@@ -768,6 +778,7 @@ function renderComprovantes(){
             <i data-lucide="file-text"></i>
             <span class="novo">COMPROVANTE</span>
           </div>
+        </div>
         <div class="comprovante-linha">
           <div class="comprovante-icon"><i data-lucide="tag"></i></div>
           <div class="comprovante-info-wrap">
@@ -787,7 +798,6 @@ function renderComprovantes(){
             <div class="comprovante-label">Jogo:</div>
             <div class="comprovante-valor">${p.jogo}</div>
           </div>
-        </div>
         <div class="comprovante-linha">
           <div class="comprovante-icon"><i data-lucide="hash"></i></div>
           <div class="comprovante-info-wrap">
@@ -818,7 +828,6 @@ function renderComprovantes(){
               ${statusTxt}
             </div>
           </div>
-        </div>
         ${p.mensagemAdmin? `
         <div class="comprovante-linha" style="background:rgba(139,92,246,0.1);border-color:var(--roxo)">
           <div class="comprovante-icon"><i data-lucide="message-square"></i></div>
@@ -1033,14 +1042,14 @@ function renderTermos(){
 function renderPremiacao(){
   const prem=db.config.premiacao||{img:'',texto:'Nenhuma premiação ativa no momento.'};
   document.getElementById('premiacaoBody').innerHTML=`
-    ${prem.img?`<img src="${prem.img}" style="width:100%;border-radius:12px;margin-bottom:12px;border:1px solid var(--borda)">`:''}
+        ${prem.img?`<img src="${prem.img}" style="width:100%;border-radius:12px;margin-bottom:12px">`:''}
     <div class="texto-geral">${prem.texto}</div>
   `;
 }
 
 function abrirAdmin(){
-  if(!usuarioAtual.admin){alert('Acesso negado. Apenas administradores.');return}
-    document.getElementById('adminBody').innerHTML=`
+  if(!usuarioAtual.admin){alert('Acesso negado');return}
+  document.getElementById('adminBody').innerHTML=`
   <button class="btn" onclick="abrirCats()">📂 CATEGORIAS</button>
   <button class="btn" onclick="abrirServs()">📦 SERVIÇOS</button>
   <button class="btn" onclick="ir('pedidos')">📋 PEDIDOS</button>
@@ -1111,6 +1120,7 @@ function editCat(k){
   `);
 }
 
+// CORREÇÃO DO SALVAR CATEGORIA
 async function salvarCat(k=null){
   const nome=document.getElementById('cNome').value.trim();
   if(!nome){alert('Digite o nome');return}
@@ -1127,10 +1137,8 @@ async function salvarCat(k=null){
     }
   }
   else if(k)img=db.cat.find(x=>x.k===k)?.img||null;
-
   const newK=k||'cat'+Date.now();
   const cat={k:newK,nome,img};
-
   if(k){
     const index=db.cat.findIndex(x=>x.k===k);
     if(index>=0)db.cat[index]=cat;
@@ -1228,6 +1236,7 @@ function editServ(k){
   `);
 }
 
+// CORREÇÃO DO SALVAR SERVIÇO
 async function salvarServ(k=null){
   const cat=document.getElementById('sCat').value;
   const nome=document.getElementById('sNome').value.trim();
@@ -1235,7 +1244,6 @@ async function salvarServ(k=null){
   const preco=parseFloat(document.getElementById('sPreco').value);
   const estoque=parseInt(document.getElementById('sEstoque').value)||0;
   if(!cat||!nome||isNaN(preco)){alert('Preencha categoria, nome e preço');return}
-
   showLoad(true);
   let img=null;
   const file=document.getElementById('sImg').files[0];
@@ -1249,10 +1257,8 @@ async function salvarServ(k=null){
     }
   }
   else if(k)img=db.serv.find(x=>x.k===k)?.img||null;
-
   const newK=k||'serv'+Date.now();
   const serv={k:newK,cat,nome,desc,preco,estoque,img};
-
   if(k){
     const index=db.serv.findIndex(x=>x.k===k);
     if(index>=0)db.serv[index]=serv;
@@ -1551,6 +1557,11 @@ async function salvarPremiacao(){
   showLoad(false);
   fecharModal();
   alert('Premiação atualizada!');
+}
+
+function abrirAdminIndicacoes(){
+  if(!usuarioAtual.admin){alert('Acesso negado');return}
+  ir('adminIndicacoes');
 }
 
 function abrirModal(tit,body){
