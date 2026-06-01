@@ -767,6 +767,8 @@ function renderComprovantes(){
       const statusClass=p.status==='confirmado'?'confirmado':'cancelado';
       const statusIcon=p.status==='confirmado'?'check-circle':'x-circle';
       const statusTxt=p.status==='confirmado'?'Confirmado':'Cancelado';
+      const idConta = p.id_conta || p.idConta || '-';
+      
       return `
       <div class="comprovante-card">
         <div class="comprovante-topo">
@@ -800,7 +802,7 @@ function renderComprovantes(){
           <div class="comprovante-icon"><i data-lucide="hash"></i></div>
           <div class="comprovante-info-wrap">
             <div class="comprovante-label">ID:</div>
-            <div class="comprovante-valor">${p.id_conta}</div>
+            <div class="comprovante-valor">${idConta}</div>
           </div>
         </div>
         <div class="comprovante-linha">
@@ -826,12 +828,13 @@ function renderComprovantes(){
               ${statusTxt}
             </div>
           </div>
+        </div>
         ${p.mensagemAdmin? `
         <div class="comprovante-linha" style="background:rgba(139,92,246,0.1);border-color:var(--roxo)">
           <div class="comprovante-icon"><i data-lucide="message-square"></i></div>
           <div class="comprovante-info-wrap" style="flex-direction:column;align-items:flex-start">
             <div class="comprovante-label" style="margin-bottom:4px">Mensagem do Admin:</div>
-            <div class="comprovante-valor" style="text-align:left;white-space:pre-wrap;font-size:9px">${p.mensagemAdmin}</div>
+            <div class="comprovante-valor" style="text-align:left;white-space:pre-wrap;font-size:9px;width:100%">${p.mensagemAdmin}</div>
           </div>
         </div>` : ''}
         <div class="comprovante-footer">
