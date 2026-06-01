@@ -20,11 +20,15 @@
     measurementId: "G-CN88J28WRX"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getDatabase(app);
-
-  window.firebaseAuth = { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail, db, ref, set, get, push, update };
+  try {
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
+    window.firebaseAuth = { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail, db, ref, set, get, push, update };
+  } catch(e) {
+    console.error('Erro Firebase:', e);
+    setTimeout(()=>{showLoad(false)},100);
+  }
 </script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
@@ -328,7 +332,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
         <div class="passo-icon"><i data-lucide="check-circle"></i></div>
       </div>
 
-      <div class="aviso-box">
+            <div class="aviso-box">
         <div class="aviso-icon"><i data-lucide="alert-triangle"></i></div>
         <div class="aviso-texto">
           <b>IMPORTANTE:</b>
@@ -342,7 +346,8 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 <div class="sidebar-overlay" id="overlay" onclick="fecharMenu()"></div>
 <div class="sidebar" id="sidebar">
   <div class="sidebar-tit">MENU</div>
-    <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
+  <div class="sidebar-item" onclick="ir('home');fecharMenu()"><i data-lucide="home"></i>Loja</div>
+  <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
   <div class="sidebar-item" onclick="ir('carrinho');fecharMenu()"><i data-lucide="shopping-cart"></i>Meu Carrinho</div>
   <div class="sidebar-item" onclick="ir('comprovantes');fecharMenu()"><i data-lucide="receipt"></i>Meus comprovantes</div>
   <div class="sidebar-item" onclick="ir('suporte');fecharMenu()"><i data-lucide="headphones"></i>Suporte</div>
@@ -544,10 +549,18 @@ function gerarCodigoIndicacao(nome){
   return `${base||'USER'}${num}`;
 }
 
+// FORÇA SAIR DO CARREGANDO EM 2 SEGUNDOS SE TRAVAR
+setTimeout(()=>{showLoad(false)},2000);
+
 window.addEventListener('load',()=>{
   lucide.createIcons();
+  if(!window.firebaseAuth){
+    showLoad(false);
+    return;
+  }
   const { auth, onAuthStateChanged } = window.firebaseAuth;
   onAuthStateChanged(auth, async(user) => {
+    showLoad(false);
     if(user){
       usuarioAtual={uid:user.uid,nome:user.displayName||user.email.split('@')[0],email:user.email,admin:user.email===EMAIL_ADM};
       if(!db.usuarios[user.uid]){
@@ -568,6 +581,9 @@ window.addEventListener('load',()=>{
     }else{
       document.getElementById('login').classList.add('ativa');
     }
+  },(error)=>{
+    showLoad(false);
+    console.error('Erro auth:',error);
   });
 });
 
@@ -591,8 +607,12 @@ async function fazerLogin(){
   const senha=document.getElementById('loginSenha').value;
   if(!email||!senha){alert('Preencha todos os campos');return}
   showLoad(true);
-  try{await signInWithEmailAndPassword(auth,email,senha);}catch(e){alert('Erro: '+e.message);}
-  showLoad(false);
+  try{
+    await signInWithEmailAndPassword(auth,email,senha);
+  }catch(e){
+    showLoad(false);
+    alert('Erro: '+e.message);
+  }
 }
 
 async function fazerCadastro(){
@@ -609,8 +629,10 @@ async function fazerCadastro(){
     const cred = await createUserWithEmailAndPassword(auth,email,senha);
     await updateProfile(cred.user,{displayName:nome});
     alert('Cadastro realizado com sucesso!');
-  }catch(e){alert('Erro: '+e.message);}
-  showLoad(false);
+  }catch(e){
+    showLoad(false);
+    alert('Erro: '+e.message);
+  }
 }
 
 async function abrirEsqueciSenha(){
@@ -621,13 +643,14 @@ async function abrirEsqueciSenha(){
   try{
     const { auth, sendPasswordResetEmail } = window.firebaseAuth;
     await sendPasswordResetEmail(auth, email);
+    showLoad(false);
     alert('✅ E-mail enviado!\n\nVerifica sua caixa de entrada e spam.\nClica no link pra criar uma nova senha.');
   }catch(e){
+    showLoad(false);
     if(e.code === 'auth/user-not-found'){alert('❌ E-mail não encontrado no sistema');}
     else if(e.code === 'auth/invalid-email'){alert('❌ E-mail inválido');}
     else{alert('Erro: ' + e.message);}
   }
-  showLoad(false);
 }
 
 async function logout(){
@@ -646,11 +669,12 @@ function abrirMenu(){document.getElementById('sidebar').classList.add('ativo');d
 function fecharMenu(){document.getElementById('sidebar').classList.remove('ativo');document.getElementById('overlay').classList.remove('ativo')}
 
 function atualizarCarrinho(){
-  const pendentes = db.pedidos.filter(p=>p.email===usuarioAtual.email && p.status==='pendente').length;
+  const pendentes = db.pedidos.filter(p=>usuarioAtual && p.email===usuarioAtual.email && p.status==='pendente').length;
   document.getElementById('cartCount').textContent = pendentes;
 }
 
 function renderCarrinho(){
+  if(!usuarioAtual){return}
   const meus=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && p.status==='pendente');
   if(meus.length===0){
     document.getElementById('carrinhoBody').innerHTML='<div class="empty">Carrinho vazio<br><br>Adicione produtos na loja!</div>';
@@ -687,6 +711,7 @@ function renderCarrinho(){
           <div class="stat-num">R$ ${total.toFixed(2)}</div>
           <div class="stat-label">Total</div>
         </div>
+      </div>
       <button class="btn" onclick="enviarTodosPedidos()">ENVIAR PEDIDOS NO WHATSAPP</button>
     </div>
     <div class="titulo">ITENS PENDENTES</div>
@@ -728,6 +753,7 @@ function enviarTodosPedidos(){
 }
 
 function renderComprovantes(){
+  if(!usuarioAtual){return}
   const todosComprovantes=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && (p.status==='confirmado'||p.status==='cancelado')).reverse();
 
   document.getElementById('comprovantesBody').innerHTML=`
@@ -758,14 +784,12 @@ function renderComprovantes(){
             <i data-lucide="file-text"></i>
             <span class="novo">COMPROVANTE</span>
           </div>
-        </div>
         <div class="comprovante-linha">
           <div class="comprovante-icon"><i data-lucide="tag"></i></div>
           <div class="comprovante-info-wrap">
             <div class="comprovante-label">Pedido:</div>
             <div class="comprovante-valor roxo">${p.id}</div>
           </div>
-        </div>
         <div class="comprovante-linha">
           <div class="comprovante-icon"><i data-lucide="package"></i></div>
           <div class="comprovante-info-wrap">
@@ -786,21 +810,18 @@ function renderComprovantes(){
             <div class="comprovante-label">ID:</div>
             <div class="comprovante-valor">${p.id_conta}</div>
           </div>
-        </div>
         <div class="comprovante-linha">
           <div class="comprovante-icon"><i data-lucide="dollar-sign"></i></div>
           <div class="comprovante-info-wrap">
             <div class="comprovante-label">Valor:</div>
             <div class="comprovante-valor verde">R$ ${p.valor.toFixed(2).replace('.',',')}</div>
           </div>
-        </div>
         <div class="comprovante-linha">
           <div class="comprovante-icon"><i data-lucide="calendar"></i></div>
           <div class="comprovante-info-wrap">
             <div class="comprovante-label">Data:</div>
             <div class="comprovante-valor">${new Date(p.data).toLocaleDateString('pt-BR')}</div>
           </div>
-        </div>
         <div class="comprovante-linha">
           <div class="comprovante-icon"><i data-lucide="clipboard-list"></i></div>
           <div class="comprovante-info-wrap">
@@ -1035,7 +1056,8 @@ function abrirAdmin(){
   document.getElementById('adminBody').innerHTML=`
   <button class="btn" onclick="abrirCats()">📂 CATEGORIAS</button>
   <button class="btn" onclick="abrirServs()">📦 SERVIÇOS</button>
-    <button class="btn" onclick="formFaq()">❓ DÚVIDAS FREQUENTES</button>
+  <button class="btn" onclick="ir('pedidos')">📋 PEDIDOS</button>
+  <button class="btn" onclick="formFaq()">❓ DÚVIDAS FREQUENTES</button>
   <button class="btn" onclick="formTermos()">📄 TERMOS DO SITE</button>
   <button class="btn" onclick="formPremiacao()">🏆 PREMIAÇÃO</button>
   <button class="btn btn-sec" onclick="ir('home')">VOLTAR</button>
@@ -1247,7 +1269,7 @@ function delServ(k){
 
 function renderPedidos(){
   const todosPedidos = db.pedidos.slice().reverse();
-  
+
   document.getElementById('pedidosBody').innerHTML=`
     <div class="search-bar" style="margin:0 0 16px 0">
       <i class="icon" data-lucide="search"></i>
@@ -1258,13 +1280,13 @@ function renderPedidos(){
 
   function filtrarPedidosAdm(){
     const termo = document.getElementById('buscaPedidoAdm').value.toLowerCase().trim();
-    const filtrados = termo ? todosPedidos.filter(p=>p.id.toLowerCase().includes(termo)) : todosPedidos;
-    
+    const filtrados = termo? todosPedidos.filter(p=>p.id.toLowerCase().includes(termo)) : todosPedidos;
+
     if(filtrados.length===0){
       document.getElementById('listaPedidosAdm').innerHTML='<div class="empty">Nenhum pedido encontrado</div>';
       return;
     }
-    
+
     const lista=filtrados.map(p=>{
       const statusClass=p.status==='pendente'?'badge-pendente':p.status==='confirmado'?'badge-confirmado':'badge-cancelado';
       const statusTxt=p.status==='pendente'?'PENDENTE':p.status==='confirmado'?'CONFIRMADO':'CANCELADO';
@@ -1290,7 +1312,7 @@ function renderPedidos(){
         </div>`:''}
       </div>
     `}).join('');
-    
+
     document.getElementById('listaPedidosAdm').innerHTML=lista;
     lucide.createIcons();
   }
@@ -1303,7 +1325,7 @@ function renderPedidos(){
 function confirmarPedido(id){
   const pedido=db.pedidos.find(p=>p.id===id);
   if(!pedido)return;
-  
+
   abrirModal('CONFIRMAR PEDIDO',`
     <div style="font-size:10px;margin-bottom:12px;color:var(--cinza)">
       <b>Pedido:</b> ${pedido.id}<br>
@@ -1324,7 +1346,7 @@ function salvarConfirmacao(id){
   if(pedido){
     pedido.status='confirmado';
     pedido.mensagemAdmin = msgAdmin || null;
-    
+
     const indicacao=db.indicacoes.find(i=>i.pedidoId===id);
     if(indicacao && indicacao.status==='pendente'){
       indicacao.status='confirmada';
@@ -1355,7 +1377,7 @@ function cancelarPedido(id){
 }
 
 function renderIndicacoes(){
-  if(!usuarioAtual || !usuarioAtual.codigo){
+  if(!usuarioAtual ||!usuarioAtual.codigo){
     document.getElementById('indicacoesBody').innerHTML='<div class="empty">Erro ao carregar dados</div>';
     return;
   }
@@ -1364,7 +1386,7 @@ function renderIndicacoes(){
   const validas=userData.indicacoesValidas||0;
   const total=userData.totalIndicacoes||0;
   const progresso=Math.min((validas/5)*100,100);
-  
+
   const historico=minhasIndicacoes.slice().reverse().map(i=>{
     const statusClass=i.status==='confirmada'?'badge-confirmada':i.status==='pendente'?'badge-pendente':'badge-invalida';
     const statusTxt=i.status==='confirmada'?'CONFIRMADA':i.status==='pendente'?'PENDENTE':'INVÁLIDA';
