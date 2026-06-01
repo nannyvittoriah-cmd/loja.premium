@@ -768,14 +768,12 @@ function renderComprovantes(){
             <i data-lucide="file-text"></i>
             <span class="novo">COMPROVANTE</span>
           </div>
-        </div>
         <div class="comprovante-linha">
           <div class="comprovante-icon"><i data-lucide="tag"></i></div>
           <div class="comprovante-info-wrap">
             <div class="comprovante-label">Pedido:</div>
             <div class="comprovante-valor roxo">${p.id}</div>
           </div>
-        </div>
         <div class="comprovante-linha">
           <div class="comprovante-icon"><i data-lucide="package"></i></div>
           <div class="comprovante-info-wrap">
@@ -803,12 +801,14 @@ function renderComprovantes(){
             <div class="comprovante-label">Valor:</div>
             <div class="comprovante-valor verde">R$ ${p.valor.toFixed(2).replace('.',',')}</div>
           </div>
+        </div>
         <div class="comprovante-linha">
           <div class="comprovante-icon"><i data-lucide="calendar"></i></div>
           <div class="comprovante-info-wrap">
             <div class="comprovante-label">Data:</div>
             <div class="comprovante-valor">${new Date(p.data).toLocaleDateString('pt-BR')}</div>
           </div>
+        </div>
         <div class="comprovante-linha">
           <div class="comprovante-icon"><i data-lucide="clipboard-list"></i></div>
           <div class="comprovante-info-wrap">
@@ -818,6 +818,7 @@ function renderComprovantes(){
               ${statusTxt}
             </div>
           </div>
+        </div>
         ${p.mensagemAdmin? `
         <div class="comprovante-linha" style="background:rgba(139,92,246,0.1);border-color:var(--roxo)">
           <div class="comprovante-icon"><i data-lucide="message-square"></i></div>
@@ -1116,10 +1117,20 @@ async function salvarCat(k=null){
   showLoad(true);
   let img=null;
   const file=document.getElementById('cImg').files[0];
-  if(file)img=await toBase64(file);
+  if(file){
+    try{
+      img=await toBase64(file);
+    }catch(e){
+      alert('Erro na imagem');
+      showLoad(false);
+      return;
+    }
+  }
   else if(k)img=db.cat.find(x=>x.k===k)?.img||null;
+
   const newK=k||'cat'+Date.now();
   const cat={k:newK,nome,img};
+
   if(k){
     const index=db.cat.findIndex(x=>x.k===k);
     if(index>=0)db.cat[index]=cat;
@@ -1224,13 +1235,24 @@ async function salvarServ(k=null){
   const preco=parseFloat(document.getElementById('sPreco').value);
   const estoque=parseInt(document.getElementById('sEstoque').value)||0;
   if(!cat||!nome||isNaN(preco)){alert('Preencha categoria, nome e preço');return}
+
   showLoad(true);
   let img=null;
   const file=document.getElementById('sImg').files[0];
-  if(file)img=await toBase64(file);
+  if(file){
+    try{
+      img=await toBase64(file);
+    }catch(e){
+      alert('Erro na imagem');
+      showLoad(false);
+      return;
+    }
+  }
   else if(k)img=db.serv.find(x=>x.k===k)?.img||null;
+
   const newK=k||'serv'+Date.now();
   const serv={k:newK,cat,nome,desc,preco,estoque,img};
+
   if(k){
     const index=db.serv.findIndex(x=>x.k===k);
     if(index>=0)db.serv[index]=serv;
