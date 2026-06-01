@@ -123,7 +123,6 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .input,.textarea{background:var(--card);border:1px solid var(--borda);border-radius:10px;padding:12px;font-size:10px;color:var(--branco);width:100%;outline:none;margin-bottom:12px}
 .textarea{min-height:60px;resize:vertical}
 .input:focus,.textarea:focus{border-color:var(--roxo);box-shadow:0 0 8px rgba(139,92,246,.3)}
-.input:read-only{background:var(--bg);color:var(--roxo);font-weight:700}
 .btn{width:100%;background:var(--roxo);color:var(--branco);border:none;border-radius:10px;padding:12px;font-weight:700;font-size:11px;cursor:pointer;margin-top:6px;box-shadow:0 0 12px rgba(139,92,246,.4)}
 .btn:active{transform:scale(.98)}
 .btn-red{background:#ef4444;box-shadow:0 0 12px rgba(239,68,.4)}
@@ -232,7 +231,6 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .comprovante-valor{font-size:10px;font-weight:700;color:#FFFFFF;text-align:right}
 .comprovante-valor.verde{color:#22C55E;font-size:12px}
 .comprovante-valor.roxo{color:#8B5CF6;font-size:12px}
-.comprovante-valor.link{color:#3b82f6;font-size:9px;word-break:break-all}
 .comprovante-status{display:inline-flex;align-items:center;gap:3px;border-radius:12px;padding:2px 6px;font-size:10px;font-weight:700}
 .comprovante-status i{width:12px;height:12px}
 .comprovante-status.pendente{background:rgba(245,158,11,.12);border:1px solid #F59E0B;color:#F59E0B}
@@ -314,7 +312,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 
       <div class="passo-item">
         <div class="passo-num">3</div>
-        <div class="passo-texto">Digite o <b>ID</b> da conta e confirme o nick.</div>
+        <div class="passo-texto">Digite o <b>ID</b> da conta.</div>
         <div class="passo-icon"><i data-lucide="hash"></i></div>
       </div>
 
@@ -340,12 +338,6 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
     </div>
   </div>
 </div>
-
-<div class="sidebar-overlay" id="overlay" onclick="fecharMenu()"></div>
-<div class="sidebar" id="sidebar">
-  <div class="sidebar-tit">MENU</div>
-  <div class="sidebar-item" onclick="ir('home');fechar
-  </div>
   <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
   <div class="sidebar-item" onclick="ir('carrinho');fecharMenu()"><i data-lucide="shopping-cart"></i>Meu Carrinho</div>
   <div class="sidebar-item" onclick="ir('comprovantes');fecharMenu()"><i data-lucide="receipt"></i>Meus comprovantes</div>
@@ -421,10 +413,8 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
       <div class="modal-produto-preco" id="modalProdutoPreco"></div>
       <div class="modal-produto-desc" id="modalProdutoDesc"></div>
       <button class="btn btn-desc" onclick="toggleProdutoDesc()">VER DESCRIÇÃO</button>
-      <div class="label">🆔 ID da conta:</div>
-      <input type="text" class="input" id="linkProduto" placeholder="Digite o ID" onblur="buscarNickAutomatico(this.value)">
-      <div class="label">👤 Nick:</div>
-      <input type="text" class="input" id="nickProduto" placeholder="Nick vai aparecer aqui" readonly>
+      <div class="label">🆔 ID da conta: *</div>
+      <input type="text" class="input" id="idProduto" placeholder="Digite o ID da conta">
       <div class="label">🎁 Código de indicação (opcional):</div>
       <input type="text" class="input" id="codigoProduto" placeholder="Ex: PREMIUM782">
       <button class="btn" onclick="finalizarPedido()">ADICIONAR AO CARRINHO</button>
@@ -550,30 +540,6 @@ function gerarCodigoIndicacao(nome){
   return `${base||'USER'}${num}`;
 }
 
-async function buscarNickFF(id){
-  try{
-    const res = await fetch(`https://ffplayer-api.vercel.app/player_info?uid=${id}&region=br`);
-    const data = await res.json();
-    if(data.basicInfo?.nickname){
-      return data.basicInfo.nickname;
-    }
-    return null;
-  }catch(e){
-    return null;
-  }
-}
-
-async function buscarNickAutomatico(id){
-  const nickInput = document.getElementById('nickProduto');
-  if(!id || id.length < 8){
-    nickInput.value = '';
-    return;
-  }
-  nickInput.value = 'Buscando...';
-  const nick = await buscarNickFF(id);
-  nickInput.value = nick || 'ID não encontrado';
-}
-
 window.addEventListener('load',()=>{
   lucide.createIcons();
   const { auth, onAuthStateChanged } = window.firebaseAuth;
@@ -695,8 +661,7 @@ function renderCarrinho(){
       </div>
       <div class="lista-info">
         Jogo: ${p.jogo}<br>
-        ID: ${p.link}<br>
-        Nick: ${p.nick||'-'}<br>
+        ID: ${p.id_conta}<br>
         Data: ${new Date(p.data).toLocaleString('pt-BR')}
       </div>
       <div class="lista-acoes" style="margin-top:8px">
@@ -718,7 +683,6 @@ function renderCarrinho(){
           <div class="stat-num">R$ ${total.toFixed(2)}</div>
           <div class="stat-label">Total</div>
         </div>
-      </div>
       <button class="btn" onclick="enviarTodosPedidos()">ENVIAR PEDIDOS NO WHATSAPP</button>
     </div>
     <div class="titulo">ITENS PENDENTES</div>
@@ -752,8 +716,7 @@ function enviarTodosPedidos(){
     msg+=`${i+1}. ${p.servico}\n`;
     msg+=` 🎮 ${p.jogo}\n`;
     msg+=` 💵 R$ ${p.valor.toFixed(2).replace('.',',')}\n`;
-    msg+=` 🆔 ${p.link}\n`;
-    msg+=` 👤 ${p.nick||'-'}\n\n`;
+    msg+=` 🆔 ${p.id_conta}\n\n`;
   });
   msg+=`💰 TOTAL: R$ ${total.toFixed(2).replace('.',',')}\n`;
   msg+=`━━━━━━━━━━`;
@@ -777,7 +740,6 @@ function renderComprovantes(){
           <i data-lucide="file-text"></i>
           <span class="novo">COMPROVANTE</span>
         </div>
-      </div>
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="tag"></i></div>
         <div class="comprovante-info-wrap">
@@ -803,14 +765,7 @@ function renderComprovantes(){
         <div class="comprovante-icon"><i data-lucide="hash"></i></div>
         <div class="comprovante-info-wrap">
           <div class="comprovante-label">ID:</div>
-          <div class="comprovante-valor">${p.link}</div>
-        </div>
-      </div>
-      <div class="comprovante-linha">
-        <div class="comprovante-icon"><i data-lucide="user"></i></div>
-        <div class="comprovante-info-wrap">
-          <div class="comprovante-label">Nick:</div>
-          <div class="comprovante-valor">${p.nick||'-'}</div>
+          <div class="comprovante-valor">${p.id_conta}</div>
         </div>
       </div>
       <div class="comprovante-linha">
@@ -940,8 +895,8 @@ function abrirModalPedido(k){
   document.getElementById('modalProdutoPreco').textContent = `R$ ${produtoSelecionado.preco.toFixed(2).replace('.',',')}`;
   document.getElementById('modalProdutoDesc').textContent = produtoSelecionado.desc || 'Sem descrição';
   document.getElementById('modalProdutoDesc').classList.remove('ativo');
-  document.getElementById('linkProduto').value = '';
-  document.getElementById('nickProduto').value = '';
+  document.getElementById('idProduto').value = '';
+  document.getElementById('codigoProduto').value = '';
   document.getElementById('modalProduto').classList.add('ativo');
   lucide.createIcons();
 }
@@ -957,10 +912,10 @@ function toggleProdutoDesc(){
 
 function finalizarPedido(){
   if(!produtoSelecionado){alert('Erro ao processar pedido');return}
-  let link=document.getElementById('linkProduto').value.trim();
-  let nick=document.getElementById('nickProduto').value.trim();
-  if(!link){alert('Digite o ID');return}
-  if(!nick || nick === 'ID não encontrado' || nick === 'Buscando...'){alert('Aguarde buscar o nick ou verifique o ID');return}
+  let id=document.getElementById('idProduto').value.trim();
+  if(!id){alert('Digite o ID da conta');return}
+  if(id.length < 6){alert('ID muito curto. Confere aí');return}
+
   const codigoInd=document.getElementById('codigoProduto').value.trim().toUpperCase();
   const pedidoId='#'+Date.now().toString().slice(-5);
   const cat = db.cat.find(c=>c.k===produtoSelecionado.cat);
@@ -972,8 +927,7 @@ function finalizarPedido(){
     servico:produtoSelecionado.nome,
     jogo:cat?.nome||'Geral',
     valor:produtoSelecionado.preco,
-    link,
-    nick,
+    id_conta: id,
     codigoIndicacao:codigoInd||null,
     data:new Date().toISOString(),
     status:'pendente'
@@ -1050,7 +1004,7 @@ function abrirAdmin(){
   <button class="btn" onclick="abrirServs()">📦 SERVIÇOS</button>
   <button class="btn" onclick="ir('pedidos')">📋 PEDIDOS</button>
   <button class="btn" onclick="formFaq()">❓ DÚVIDAS FREQUENTES</button>
- <button class="btn" onclick="formTermos()">📄 TERMOS DO SITE</button>
+  <button class="btn" onclick="formTermos()">📄 TERMOS DO SITE</button>
   <button class="btn" onclick="formPremiacao()">🏆 PREMIAÇÃO</button>
   <button class="btn btn-sec" onclick="ir('home')">VOLTAR</button>
   `;
@@ -1080,7 +1034,7 @@ function renderCats(){
           <button class="btn-mini btn-edit" onclick="editCat('${c.k}')">EDITAR</button>
           <button class="btn-mini btn-del" onclick="delCat('${c.k}')">EXCLUIR</button>
         </div>
-      </div>
+    </div>
       <div class="lista-info">Key: ${c.k}</div>
     </div>
   `).join('');
@@ -1248,7 +1202,7 @@ function delServ(k){
 }
 
 function renderPedidos(){
-  const pedidos = db.pedidos.reverse();
+  const pedidos = db.pedidos.slice().reverse();
   if(pedidos.length===0){
     document.getElementById('pedidosBody').innerHTML='<div class="empty">Nenhum pedido ainda</div>';
     return;
@@ -1267,8 +1221,7 @@ function renderPedidos(){
         Serviço: ${p.servico}<br>
         Jogo: ${p.jogo}<br>
         Valor: R$ ${p.valor.toFixed(2).replace('.',',')}<br>
-        ID: ${p.link}<br>
-        Nick: ${p.nick||'-'}<br>
+        ID: ${p.id_conta}<br>
         Data: ${new Date(p.data).toLocaleString('pt-BR')}<br>
         Indicação: ${p.codigoIndicacao||'-'}
       </div>
@@ -1287,7 +1240,6 @@ function confirmarPedido(id){
     const pedido=db.pedidos.find(p=>p.id===id);
     if(pedido){
       pedido.status='confirmado';
-      // Atualiza indicação se existir
       const indicacao=db.indicacoes.find(i=>i.pedidoId===id);
       if(indicacao && indicacao.status==='pendente'){
         indicacao.status='confirmada';
@@ -1327,7 +1279,7 @@ function renderIndicacoes(){
   const total=userData.totalIndicacoes||0;
   const progresso=Math.min((validas/5)*100,100);
   
-  const historico=minhasIndicacoes.reverse().map(i=>{
+  const historico=minhasIndicacoes.slice().reverse().map(i=>{
     const statusClass=i.status==='confirmada'?'badge-confirmada':i.status==='pendente'?'badge-pendente':'badge-invalida';
     const statusTxt=i.status==='confirmada'?'CONFIRMADA':i.status==='pendente'?'PENDENTE':'INVÁLIDA';
     return `
@@ -1396,7 +1348,7 @@ function copiarCodigo(){
 
 function renderAdminIndicacoes(){
   if(!usuarioAtual.admin)return;
-  const todas=db.indicacoes.reverse();
+  const todas=db.indicacoes.slice().reverse();
   if(todas.length===0){
     document.getElementById('adminIndicacoesBody').innerHTML='<div class="empty">Nenhuma indicação ainda</div>';
     return;
