@@ -339,7 +339,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
   </div>
 </div>
 
-<div class="sidebar-overlay" id="overlay" onclick="fecharMenu()"></div>
+</div>
 <div class="sidebar" id="sidebar">
   <div class="sidebar-tit">MENU</div>
   <div class="sidebar-item" onclick="ir('home');fecharMenu()"><i data-lucide="home"></i>Loja</div>
@@ -759,13 +759,13 @@ function renderComprovantes(){
             <i data-lucide="file-text"></i>
             <span class="novo">COMPROVANTE</span>
           </div>
-        </div>
         <div class="comprovante-linha">
           <div class="comprovante-icon"><i data-lucide="tag"></i></div>
           <div class="comprovante-info-wrap">
             <div class="comprovante-label">Pedido:</div>
             <div class="comprovante-valor roxo">${p.id}</div>
           </div>
+        </div>
         <div class="comprovante-linha">
           <div class="comprovante-icon"><i data-lucide="package"></i></div>
           <div class="comprovante-info-wrap">
@@ -793,7 +793,6 @@ function renderComprovantes(){
             <div class="comprovante-label">Valor:</div>
             <div class="comprovante-valor verde">R$ ${p.valor.toFixed(2).replace('.',',')}</div>
           </div>
-        </div>
         <div class="comprovante-linha">
           <div class="comprovante-icon"><i data-lucide="calendar"></i></div>
           <div class="comprovante-info-wrap">
@@ -1025,8 +1024,7 @@ function renderPremiacao(){
   const prem=db.config.premiacao||{img:'',texto:'Nenhuma premiação ativa no momento.'};
   document.getElementById('premiacaoBody').innerHTML=`
     ${prem.img?`<img src="${prem.img}" style="width:100%;border-radius:12px;margin-bottom:12px;border:1px solid var(--borda)">`:''}
-    <div class="texto-geral">${prem.texto}</div>
-  `;
+    <div class="texto-geral">${prem.texto}</div>  `;
 }
 
 function abrirAdmin(){
@@ -1118,6 +1116,7 @@ async function salvarCat(k=null){
   showLoad(false);
   fecharModal();
   abrirCats();
+  renderJogos();
 }
 
 function delCat(k){
@@ -1125,6 +1124,7 @@ function delCat(k){
     db.cat=db.cat.filter(x=>x.k!==k);
     save();
     renderCats();
+    renderJogos();
   }
 }
 
@@ -1223,6 +1223,7 @@ async function salvarServ(k=null){
   showLoad(false);
   fecharModal();
   abrirServs();
+  renderProdutosLoja();
 }
 
 function delServ(k){
@@ -1230,41 +1231,64 @@ function delServ(k){
     db.serv=db.serv.filter(x=>x.k!==k);
     save();
     renderServs();
+    renderProdutosLoja();
   }
 }
 
+// ===== AQUI TÁ A BUSCA POR ID NO ADM =====
 function renderPedidos(){
-  const pedidos = db.pedidos.slice().reverse();
-  if(pedidos.length===0){
-    document.getElementById('pedidosBody').innerHTML='<div class="empty">Nenhum pedido ainda</div>';
-    return;
-  }
-  const lista=pedidos.map(p=>{
-    const statusClass=p.status==='pendente'?'badge-pendente':p.status==='confirmado'?'badge-confirmado':'badge-cancelado';
-    const statusTxt=p.status==='pendente'?'PENDENTE':p.status==='confirmado'?'CONFIRMADO':'CANCELADO';
-    return `
-    <div class="lista-item">
-      <div class="lista-top">
-        <div class="lista-nome">${p.id}</div>
-        <span class="badge ${statusClass}">${statusTxt}</span>
-      </div>
-      <div class="lista-info">
-        Cliente: ${p.email}<br>
-        Serviço: ${p.servico}<br>
-        Jogo: ${p.jogo}<br>
-        Valor: R$ ${p.valor.toFixed(2).replace('.',',')}<br>
-        ID: ${p.id_conta}<br>
-        Data: ${new Date(p.data).toLocaleString('pt-BR')}<br>
-        Indicação: ${p.codigoIndicacao||'-'}
-      </div>
-      ${p.status==='pendente'?`
-      <div class="lista-acoes" style="margin-top:8px">
-        <button class="btn-mini" style="background:var(--verde);color:var(--branco)" onclick="confirmarPedido('${p.id}')">CONFIRMAR</button>
-        <button class="btn-mini" style="background:var(--vermelho);color:var(--branco)" onclick="cancelarPedido('${p.id}')">CANCELAR</button>
-      </div>`:''}
+  const todosPedidos = db.pedidos.slice().reverse();
+  
+  document.getElementById('pedidosBody').innerHTML=`
+    <div class="search-bar" style="margin:0 0 16px 0">
+      <i class="icon" data-lucide="search"></i>
+      <input type="text" id="buscaPedidoAdm" placeholder="Buscar por ID do pedido...">
     </div>
-  `}).join('');
-  document.getElementById('pedidosBody').innerHTML=lista;
+    <div id="listaPedidosAdm"></div>
+  `;
+
+  function filtrarPedidosAdm(){
+    const termo = document.getElementById('buscaPedidoAdm').value.toLowerCase().trim();
+    const filtrados = termo ? todosPedidos.filter(p=>p.id.toLowerCase().includes(termo)) : todosPedidos;
+    
+    if(filtrados.length===0){
+      document.getElementById('listaPedidosAdm').innerHTML='<div class="empty">Nenhum pedido encontrado</div>';
+      return;
+    }
+    
+    const lista=filtrados.map(p=>{
+      const statusClass=p.status==='pendente'?'badge-pendente':p.status==='confirmado'?'badge-confirmado':'badge-cancelado';
+      const statusTxt=p.status==='pendente'?'PENDENTE':p.status==='confirmado'?'CONFIRMADO':'CANCELADO';
+      return `
+      <div class="lista-item">
+        <div class="lista-top">
+          <div class="lista-nome">${p.id}</div>
+          <span class="badge ${statusClass}">${statusTxt}</span>
+        </div>
+        <div class="lista-info">
+          Cliente: ${p.email}<br>
+          Serviço: ${p.servico}<br>
+          Jogo: ${p.jogo}<br>
+          Valor: R$ ${p.valor.toFixed(2).replace('.',',')}<br>
+          ID: ${p.id_conta}<br>
+          Data: ${new Date(p.data).toLocaleString('pt-BR')}<br>
+          Indicação: ${p.codigoIndicacao||'-'}
+        </div>
+        ${p.status==='pendente'?`
+        <div class="lista-acoes" style="margin-top:8px">
+          <button class="btn-mini" style="background:var(--verde);color:var(--branco)" onclick="confirmarPedido('${p.id}')">CONFIRMAR</button>
+          <button class="btn-mini" style="background:var(--vermelho);color:var(--branco)" onclick="cancelarPedido('${p.id}')">CANCELAR</button>
+        </div>`:''}
+      </div>
+    `}).join('');
+    
+    document.getElementById('listaPedidosAdm').innerHTML=lista;
+    lucide.createIcons();
+  }
+
+  document.getElementById('buscaPedidoAdm').addEventListener('input', filtrarPedidosAdm);
+  filtrarPedidosAdm();
+  lucide.createIcons();
 }
 
 function confirmarPedido(id){
@@ -1384,7 +1408,6 @@ function renderIndicacoes(){
           <div class="recompensa-desc">100 Diamantes FF ou 400 Robux</div>
         </div>
       </div>
-    </div>
     <div class="titulo">HISTÓRICO DE INDICAÇÕES</div>
     <div class="indicacao-historico">
       ${historico||'<div class="empty">Nenhuma indicação ainda<br><br>Compartilhe seu código!</div>'}
