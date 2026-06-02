@@ -534,7 +534,6 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 <textarea id="area-backup" readonly></textarea>
 </div>
 </div>
-<button onclick="abrirBackup()" class="btn-float">💾</button>
 
 <script>
 const EMAIL_ADM='nannyvittoriah@gmail.com',WHATSAPP='5598984853563';
@@ -548,7 +547,20 @@ let db={
   pedidos:JSON.parse(localStorage.getItem('pedidos')||'[]')
 };
 let usuarioAtual=null,jogoSelecionado=null,produtoSelecionado=null;
-
+function verificarAdmin(){
+  const btn = document.querySelector('.btn-float');
+  if(usuarioAtual?.admin){
+    if(!btn){
+      const b = document.createElement('button');
+      b.onclick = abrirBackup;
+      b.className = 'btn-float';
+      b.innerHTML = '💾';
+      document.body.appendChild(b);
+    }
+  } else {
+    if(btn) btn.remove();
+  }
+}
 function save(){
   localStorage.setItem('cat',JSON.stringify(db.cat));
   localStorage.setItem('serv',JSON.stringify(db.serv));
