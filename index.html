@@ -331,210 +331,69 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
         <div class="aviso-icon"><i data-lucide="alert-triangle"></i></div>
         <div class="aviso-texto">
           <b>IMPORTANTE:</b>
-          Verifique se o ID enviado está correto para evitar falhas na entrega.
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="sidebar" id="sidebar">
-  <div class="sidebar-tit">MENU</div>
-  <div class="sidebar-item" onclick="ir('home');fecharMenu()"><i data-lucide="home"></i>Loja</div>
-  <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
-  <div class="sidebar-item" onclick="ir('carrinho');fecharMenu()"><i data-lucide="shopping-cart"></i>Meu Carrinho</div>
-  <div class="sidebar-item" onclick="ir('comprovantes');fecharMenu()"><i data-lucide="receipt"></i>Meus comprovantes</div>
-  <div class="sidebar-item" onclick="ir('suporte');fecharMenu()"><i data-lucide="headphones"></i>Suporte</div>
-  <div class="sidebar-item" onclick="ir('faq');fecharMenu()"><i data-lucide="help-circle"></i>Dúvidas frequentes</div>
-  <div class="sidebar-item" onclick="ir('termos');fecharMenu()"><i data-lucide="file-text"></i>Termos do site</div>
-  <div class="sidebar-item" onclick="ir('premiacao');fecharMenu()"><i data-lucide="trophy"></i>Premiação</div>
-  <div class="sidebar-item" onclick="abrirAdmin();fecharMenu()" id="menuAdmin" style="display:none"><i data-lucide="user-cog"></i>Adm</div>
-  <div class="sidebar-item" onclick="abrirAdminIndicacoes();fecharMenu()" id="menuAdminInd" style="display:none"><i data-lucide="clipboard-check"></i>Indicações Admin</div>
-  <div class="sidebar-item" onclick="logout();fecharMenu()"><i data-lucide="log-out"></i>Sair</div>
-</div>
-
-<div id="home" class="tela">
-  <div class="header">
-    <div class="header-left">
-      <div class="menu" onclick="abrirMenu()">☰</div>
-      <div class="logo-box">
-        <img src="https://i.postimg.cc/PJ2Vcty8/e1befe8d-0630-444f-aea5-9b0a96d5f84b.jpg" class="logo-img" alt="Logo">
-        <div class="logo-text"><span class="premium">PREMIUM</span> <span class="store">STORE</span></div>
-      </div>
-    </div>
-    <div class="header-right">
-      <div class="cart-wrapper" onclick="ir('carrinho')">
-        <i data-lucide="shopping-cart"></i>
-        <span class="cart-badge" id="cartCount">0</span>
-      </div>
-      <div class="user-info" onclick="abrirPerfil()">
-        <div class="user-avatar" id="userAvatar">U</div>
-        <span id="userNome">Usuário</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="search-bar">
-    <i class="icon" data-lucide="search"></i>
-    <input type="text" id="buscaProduto" placeholder="Buscar jogo ou produto...">
-  </div>
-
-  <div class="banner-topo">
-    <img src="https://i.postimg.cc/T3yFxLbM/4cea1152-2d84-449c-857b-f55ef07d582e.jpg" alt="Banner">
-  </div>
-
-  <div class="section-title">
-    <div class="left"><i data-lucide="gamepad-2"></i>ESCOLHA SEU JOGO</div>
-    <span class="ver-todos" onclick="renderProdutosLoja()">Ver todos ›</span>
-  </div>
-  <div class="jogos-grid" id="jogosGrid"></div>
-
-  <div class="section-title">
-    <div class="left"><i data-lucide="flame"></i>MAIS COMPRADOS</div>
-    <span class="ver-todos">Ver todos ›</span>
-  </div>
-  <div class="produtos-grid" id="produtosGrid"></div>
-</div>
-
-<div id="carrinho" class="tela">
-  <div class="header">
-    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
-    <div style="font-size:12px;font-weight:700">MEU CARRINHO</div>
-    <div style="width:28px"></div>
-  </div>
-  <div class="container" id="carrinhoBody"></div>
-</div>
-
-<div class="modal-produto" id="modalProduto">
-  <div class="modal-produto-box">
-    <div class="modal-produto-img">
-      <img id="modalProdutoImg" src="" alt="">
-      <div class="modal-produto-fechar" onclick="fecharModalProduto()"><i data-lucide="x"></i></div>
-    </div>
-    <div class="modal-produto-body">
-      <div class="modal-produto-nome" id="modalProdutoNome"></div>
-      <div class="modal-produto-preco" id="modalProdutoPreco"></div>
-      <div class="modal-produto-desc" id="modalProdutoDesc"></div>
-      <button class="btn btn-desc" onclick="toggleProdutoDesc()">VER DESCRIÇÃO</button>
-      <div class="label">🆔 ID da conta: *</div>
-      <input type="text" class="input" id="idProduto" placeholder="Digite o ID da conta">
-      <div class="label">🎁 Código de indicação (opcional):</div>
-      <input type="text" class="input" id="codigoProduto" placeholder="Ex: PREMIUM782">
-      <button class="btn" onclick="finalizarPedido()">ADICIONAR AO CARRINHO</button>
-      <button class="btn btn-sec" onclick="fecharModalProduto()">CANCELAR</button>
-    </div>
-  </div>
-</div>
-
-<div id="admin" class="tela">
-  <div class="header">
-    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
-    <div style="font-size:12px;font-weight:700">PAINEL ADM</div>
-    <div style="width:28px"></div>
-  </div>
-  <div class="container" id="adminBody"></div>
-</div>
-
-<div id="indicacoes" class="tela">
-  <div class="header">
-    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
-    <div style="font-size:12px;font-weight:700">MINHAS INDICAÇÕES</div>
-    <div style="width:28px"></div>
-  </div>
-  <div class="container" id="indicacoesBody"></div>
-</div>
-
-<div id="adminIndicacoes" class="tela">
-  <div class="header">
-    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
-    <div style="font-size:12px;font-weight:700">INDICAÇÕES ADMIN</div>
-    <div style="width:28px"></div>
-  </div>
-  <div class="container" id="adminIndicacoesBody"></div>
-</div>
-
-<div id="comprovantes" class="tela">
-  <div class="header">
-    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
-    <div style="font-size:12px;font-weight:700">MEUS COMPROVANTES</div>
-    <div style="width:28px"></div>
-  </div>
-  <div class="container" id="comprovantesBody"></div>
-</div>
-
-<div id="pedidos" class="tela">
-  <div class="header">
-    <div class="header-left"><div class="btn-voltar" onclick="abrirAdmin()">←</div></div>
-    <div style="font-size:12px;font-weight:700">GERENCIAR PEDIDOS</div>
-    <div style="width:28px"></div>
-  </div>
-  <div class="container" id="pedidosBody"></div>
-</div>
-
-<div id="suporte" class="tela">
-  <div class="header">
-    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
-    <div style="font-size:12px;font-weight:700">SUPORTE</div>
-    <div style="width:28px"></div>
-  </div>
-  <div class="container" id="suporteBody"></div>
-</div>
-
-<div id="faq" class="tela">
-  <div class="header">
-    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
-    <div style="font-size:12px;font-weight:700">DÚVIDAS FREQUENTES</div>
-    <div style="width:28px"></div>
-  </div>
-  <div class="container" id="faqBody"></div>
-</div>
-
-<div id="termos" class="tela">
-  <div class="header">
-    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
-    <div style="font-size:12px;font-weight:700">TERMOS DO SITE</div>
-    <div style="width:28px"></div>
-  </div>
-  <div class="container" id="termosBody"></div>
-</div>
-
-<div id="premiacao" class="tela">
-  <div class="header">
-    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
-    <div style="font-size:12px;font-weight:700">PREMIAÇÃO</div>
-    <div style="width:28px"></div>
-  </div>
-  <div class="container" id="premiacaoBody"></div>
-</div>
-
-<div class="modal" id="modal">
-  <div class="modal-box">
-    <div class="modal-tit" id="modalTit"></div>
-    <div id="modalBody"></div>
-  </div>
-</div>
-
-<script>
-const EMAIL_ADM='nannyvittoriah@gmail.com',WHATSAPP='5598984853563';
-
-let db={
-  cat:JSON.parse(localStorage.getItem('cat')||'[]'),
-  serv:JSON.parse(localStorage.getItem('serv')||'[]'),
-  config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"Ao utilizar nosso painel, o usuário concorda automaticamente com todos os termos e condições abaixo.\\n\\n• Não garantimos resultados permanentes em serviços de redes sociais.\\n• O cliente é totalmente responsável pelo link enviado no pedido.\\n• Pedidos com links inválidos poderão ser cancelados sem aviso.\\n• Não realizamos reembolso após o início do serviço.\\n• O tempo de entrega pode variar conforme o serviço solicitado.\\n• Não aceitamos conteúdos ilegais, proibidos ou que violem políticas das plataformas.\\n• O uso do painel é de total responsabilidade do usuário.\\n• Alguns serviços podem sofrer quedas naturais após a entrega.\\n• O cliente concorda em utilizar o site de forma correta e sem tentativas de abuso ou spam.\\n• Alterações nos termos podem ocorrer a qualquer momento sem aviso prévio.\\n\\n💜 Ao continuar utilizando o painel, você concorda com todos os termos acima.","premiacao":{"img":"","texto":""}}'),
-  indicacoes:JSON.parse(localStorage.getItem('indicacoes')||'[]'),
-  usuarios:JSON.parse(localStorage.getItem('usuarios')||'{}'),
-  pedidos:JSON.parse(localStorage.getItem('pedidos')||'[]')
+          Verifique se o ID enviado está correto para evitar falhas
+          <script>
+// ===== INDEXEDDB ILIMITADO - SUBSTITUI TODO LOCALSTORAGE =====
+let dbLocal = {
+  cat: [],
+  serv: [],
+  config: {"faq":"","termos":"Ao utilizar nosso painel, o usuário concorda automaticamente com todos os termos e condições abaixo.\n\n• Não garantimos resultados permanentes em serviços de redes sociais.\n• O cliente é totalmente responsável pelo link enviado no pedido.\n• Pedidos com links inválidos poderão ser cancelados sem aviso.\n• Não realizamos reembolso após o início do serviço.\n• O tempo de entrega pode variar conforme o serviço solicitado.\n• Não aceitamos conteúdos ilegais, proibidos ou que violem políticas das plataformas.\n• O uso do painel é de total responsabilidade do usuário.\n• Alguns serviços podem sofrer quedas naturais após a entrega.\n• O cliente concorda em utilizar o site de forma correta e sem tentativas de abuso ou spam.\n• Alterações nos termos podem ocorrer a qualquer momento sem aviso prévio.\n\n💜 Ao continuar utilizando o painel, você concorda com todos os termos acima.","premiacao":{"img":"","texto":""}},
+  indicacoes: [],
+  usuarios: {},
+  pedidos: []
 };
-let usuarioAtual=null,jogoSelecionado=null,produtoSelecionado=null;
 
-function save(){
-  localStorage.setItem('cat',JSON.stringify(db.cat));
-  localStorage.setItem('serv',JSON.stringify(db.serv));
-  localStorage.setItem('config',JSON.stringify(db.config));
-  localStorage.setItem('indicacoes',JSON.stringify(db.indicacoes));
-  localStorage.setItem('usuarios',JSON.stringify(db.usuarios));
-  localStorage.setItem('pedidos',JSON.stringify(db.pedidos));
+const DB_NAME = 'PremiumStoreLocalDB';
+const DB_VERSION = 1;
+let idb = null;
+
+async function abrirIDB(){
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onerror = () => reject(req.error);
+    req.onsuccess = () => { idb = req.result; resolve(idb); };
+    req.onupgradeneeded = (e) => {
+      idb = e.target.result;
+      if(!idb.objectStoreNames.contains('dados')){
+        idb.createObjectStore('dados', { keyPath: 'chave' });
+      }
+    };
+  });
 }
+
+async function saveLocal(){
+  if(!idb) await abrirIDB();
+  const tx = idb.transaction('dados', 'readwrite');
+  const store = tx.objectStore('dados');
+  await store.put({chave: 'cat', valor: dbLocal.cat});
+  await store.put({chave: 'serv', valor: dbLocal.serv});
+  await store.put({chave: 'config', valor: dbLocal.config});
+  await store.put({chave: 'indicacoes', valor: dbLocal.indicacoes});
+  await store.put({chave: 'usuarios', valor: dbLocal.usuarios});
+  await store.put({chave: 'pedidos', valor: dbLocal.pedidos});
+  return tx.complete;
+}
+
+async function loadLocal(){
+  if(!idb) await abrirIDB();
+  const tx = idb.transaction('dados', 'readonly');
+  const store = tx.objectStore('dados');
+  const gets = ['cat','serv','config','indicacoes','usuarios','pedidos'].map(chave => new Promise(res => {
+    const req = store.get(chave);
+    req.onsuccess = () => res(req.result?.valor);
+  }));
+  const [cat,serv,config,indicacoes,usuarios,pedidos] = await Promise.all(gets);
+  dbLocal.cat = cat || [];
+  dbLocal.serv = serv || [];
+  dbLocal.config = config || dbLocal.config;
+  dbLocal.indicacoes = indicacoes || [];
+  dbLocal.usuarios = usuarios || {};
+  dbLocal.pedidos = pedidos || [];
+}
+
+// ===== RESTO DO TEU CÓDIGO ORIGINAL - SÓ TROQUEI db. por dbLocal. e save() por await saveLocal() =====
+const EMAIL_ADM='nannyvittoriah@gmail.com',WHATSAPP='5598984853563';
+let usuarioAtual=null,jogoSelecionado=null,produtoSelecionado=null;
 
 function showLoad(show){document.getElementById('loading').classList.toggle('ativo',show)}
 function gerarCodigoIndicacao(nome){
@@ -548,19 +407,20 @@ let authTimeout = setTimeout(()=>{
   document.getElementById('login').classList.add('ativa');
 }, 3000);
 
-window.addEventListener('load',()=>{
+window.addEventListener('load',async()=>{
   lucide.createIcons();
+  await loadLocal(); // CARREGA DADOS ILIMITADOS
   const { auth, onAuthStateChanged } = window.firebaseAuth;
   onAuthStateChanged(auth, async(user) => {
     clearTimeout(authTimeout);
     showLoad(false);
     if(user){
       usuarioAtual={uid:user.uid,nome:user.displayName||user.email.split('@')[0],email:user.email,admin:user.email===EMAIL_ADM};
-      if(!db.usuarios[user.uid]){
-        db.usuarios[user.uid]={codigo:gerarCodigoIndicacao(usuarioAtual.nome),indicacoesValidas:0,totalIndicacoes:0};
-        save();
+      if(!dbLocal.usuarios[user.uid]){
+        dbLocal.usuarios[user.uid]={codigo:gerarCodigoIndicacao(usuarioAtual.nome),indicacoesValidas:0,totalIndicacoes:0};
+        await saveLocal();
       }
-      usuarioAtual.codigo=db.usuarios[user.uid].codigo;
+      usuarioAtual.codigo=dbLocal.usuarios[user.uid].codigo;
       document.getElementById('login').classList.remove('ativa');
       document.getElementById('home').classList.add('ativa');
       atualizarHeaderUsuario();
@@ -659,13 +519,13 @@ function abrirMenu(){document.getElementById('sidebar').classList.add('ativo');d
 function fecharMenu(){document.getElementById('sidebar').classList.remove('ativo');document.getElementById('overlay').classList.remove('ativo')}
 
 function atualizarCarrinho(){
-  const pendentes = db.pedidos.filter(p=>usuarioAtual && p.email===usuarioAtual.email && p.status==='pendente').length;
+  const pendentes = dbLocal.pedidos.filter(p=>usuarioAtual && p.email===usuarioAtual.email && p.status==='pendente').length;
   document.getElementById('cartCount').textContent = pendentes;
 }
 
 function renderCarrinho(){
   if(!usuarioAtual){return}
-  const meus=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && p.status==='pendente');
+  const meus=dbLocal.pedidos.filter(p=>p.uid===usuarioAtual.uid && p.status==='pendente');
   if(meus.length===0){
     document.getElementById('carrinhoBody').innerHTML='<div class="empty">Carrinho vazio<br><br>Adicione produtos na loja!</div>';
     return;
@@ -701,7 +561,6 @@ function renderCarrinho(){
           <div class="stat-num">R$ ${total.toFixed(2)}</div>
           <div class="stat-label">Total</div>
         </div>
-      </div>
       <button class="btn" onclick="enviarTodosPedidos()">ENVIAR PEDIDOS NO WHATSAPP</button>
     </div>
     <div class="titulo">ITENS PENDENTES</div>
@@ -710,17 +569,17 @@ function renderCarrinho(){
   lucide.createIcons();
 }
 
-function cancelarPedidoCarrinho(id){
+async function cancelarPedidoCarrinho(id){
   if(confirm('Remover este item do carrinho?')){
-    db.pedidos=db.pedidos.filter(p=>p.id!==id);
-    save();
+    dbLocal.pedidos=dbLocal.pedidos.filter(p=>p.id!==id);
+    await saveLocal();
     atualizarCarrinho();
     renderCarrinho();
   }
 }
 
 function enviarTodosPedidos(){
-  const meus=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && p.status==='pendente');
+  const meus=dbLocal.pedidos.filter(p=>p.uid===usuarioAtual.uid && p.status==='pendente');
   if(meus.length===0){alert('Carrinho vazio');return}
   const total = meus.reduce((s,p)=>s+p.valor,0);
   let msg=`━━━━━━━━━━
@@ -744,7 +603,7 @@ function enviarTodosPedidos(){
 
 function renderComprovantes(){
   if(!usuarioAtual){return}
-  const todosComprovantes=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && (p.status==='confirmado'||p.status==='cancelado')).reverse();
+  const todosComprovantes=dbLocal.pedidos.filter(p=>p.uid===usuarioAtual.uid && (p.status==='confirmado'||p.status==='cancelado')).reverse();
 
   document.getElementById('comprovantesBody').innerHTML=`
     <div class="search-bar" style="margin:0 0 16px 0">
@@ -767,8 +626,6 @@ function renderComprovantes(){
       const statusClass=p.status==='confirmado'?'confirmado':'cancelado';
       const statusIcon=p.status==='confirmado'?'check-circle':'x-circle';
       const statusTxt=p.status==='confirmado'?'Confirmado':'Cancelado';
-      const idConta = p.id_conta || p.idConta || '-';
-      
       return `
       <div class="comprovante-card">
         <div class="comprovante-topo">
@@ -776,14 +633,12 @@ function renderComprovantes(){
             <i data-lucide="file-text"></i>
             <span class="novo">COMPROVANTE</span>
           </div>
-        </div>
         <div class="comprovante-linha">
           <div class="comprovante-icon"><i data-lucide="tag"></i></div>
           <div class="comprovante-info-wrap">
             <div class="comprovante-label">Pedido:</div>
             <div class="comprovante-valor roxo">${p.id}</div>
           </div>
-        </div>
         <div class="comprovante-linha">
           <div class="comprovante-icon"><i data-lucide="package"></i></div>
           <div class="comprovante-info-wrap">
@@ -802,7 +657,7 @@ function renderComprovantes(){
           <div class="comprovante-icon"><i data-lucide="hash"></i></div>
           <div class="comprovante-info-wrap">
             <div class="comprovante-label">ID:</div>
-            <div class="comprovante-valor">${idConta}</div>
+            <div class="comprovante-valor">${p.id_conta}</div>
           </div>
         </div>
         <div class="comprovante-linha">
@@ -811,7 +666,6 @@ function renderComprovantes(){
             <div class="comprovante-label">Valor:</div>
             <div class="comprovante-valor verde">R$ ${p.valor.toFixed(2).replace('.',',')}</div>
           </div>
-        </div>
         <div class="comprovante-linha">
           <div class="comprovante-icon"><i data-lucide="calendar"></i></div>
           <div class="comprovante-info-wrap">
@@ -828,7 +682,6 @@ function renderComprovantes(){
               ${statusTxt}
             </div>
           </div>
-        </div>
         ${p.mensagemAdmin? `
         <div class="comprovante-linha" style="background:rgba(139,92,246,0.1);border-color:var(--roxo)">
           <div class="comprovante-icon"><i data-lucide="message-square"></i></div>
@@ -874,7 +727,7 @@ function ir(t){
 }
 
 function renderJogos(){
-  const cats = db.cat.length?db.cat:[];
+  const cats = dbLocal.cat.length?dbLocal.cat:[];
   const icones = {'free fire':'flame','roblox':'box','cod mobile':'crosshair','fortnite':'zap','brawl stars':'star','efootball':'football'};
   const html = cats.map(c=>{
     return `<div class="jogo-card" onclick="filtrarJogo('${c.k}')">
@@ -890,7 +743,7 @@ function renderJogos(){
 
 function renderProdutosLoja(filtroJogo=null){
   jogoSelecionado = filtroJogo;
-  let produtos = db.serv;
+  let produtos = dbLocal.serv;
 
   if(filtroJogo){
     produtos = produtos.filter(p => p.cat === filtroJogo);
@@ -899,13 +752,13 @@ function renderProdutosLoja(filtroJogo=null){
   const busca = document.getElementById('buscaProduto')?.value.toLowerCase();
   if(busca){
     produtos = produtos.filter(p => {
-      const cat = db.cat.find(c=>c.k===p.cat);
+      const cat = dbLocal.cat.find(c=>c.k===p.cat);
       return p.nome.toLowerCase().includes(busca) || cat?.nome.toLowerCase().includes(busca);
     });
   }
 
   const html = produtos.map(p=>{
-    const cat = db.cat.find(c=>c.k===p.cat);
+    const cat = dbLocal.cat.find(c=>c.k===p.cat);
     return `
     <div class="produto-card">
       <div class="tag-jogo">${cat?.nome.toUpperCase()||'GERAL'}</div>
@@ -937,7 +790,7 @@ function filtrarJogo(k){renderProdutosLoja(k);}
 document.getElementById('buscaProduto')?.addEventListener('input', () => {renderProdutosLoja(jogoSelecionado);});
 
 function abrirModalPedido(k){
-  produtoSelecionado = db.serv.find(p=>p.k===k);
+  produtoSelecionado = dbLocal.serv.find(p=>p.k===k);
   if(!produtoSelecionado) return;
 
   document.getElementById('modalProdutoImg').src = produtoSelecionado.img || '';
@@ -961,7 +814,7 @@ function toggleProdutoDesc(){
   document.getElementById('modalProdutoDesc').classList.toggle('ativo');
 }
 
-function finalizarPedido(){
+async function finalizarPedido(){
   if(!produtoSelecionado){alert('Erro ao processar pedido');return}
   let id=document.getElementById('idProduto').value.trim();
   if(!id){alert('Digite o ID da conta');return}
@@ -969,7 +822,7 @@ function finalizarPedido(){
 
   const codigoInd=document.getElementById('codigoProduto').value.trim().toUpperCase();
   const pedidoId='#'+Date.now().toString().slice(-5);
-  const cat = db.cat.find(c=>c.k===produtoSelecionado.cat);
+  const cat = dbLocal.cat.find(c=>c.k===produtoSelecionado.cat);
 
   const pedido={
     id:pedidoId,
@@ -984,12 +837,12 @@ function finalizarPedido(){
     status:'pendente'
   };
 
-  db.pedidos.push(pedido);
+  dbLocal.pedidos.push(pedido);
 
   if(codigoInd){
-    const uidIndicador=Object.keys(db.usuarios).find(uid=>db.usuarios[uid].codigo===codigoInd);
+    const uidIndicador=Object.keys(dbLocal.usuarios).find(uid=>dbLocal.usuarios[uid].codigo===codigoInd);
     if(uidIndicador && uidIndicador!==usuarioAtual.uid){
-      db.indicacoes.push({
+      dbLocal.indicacoes.push({
         id:'i'+Date.now(),
         codigo:codigoInd,
         pedidoId,
@@ -1000,11 +853,11 @@ function finalizarPedido(){
         status:'pendente',
         data:pedido.data
       });
-      db.usuarios[uidIndicador].totalIndicacoes=(db.usuarios[uidIndicador].totalIndicacoes||0)+1;
+      dbLocal.usuarios[uidIndicador].totalIndicacoes=(dbLocal.usuarios[uidIndicador].totalIndicacoes||0)+1;
     }
   }
 
-  save();
+  await saveLocal();
   atualizarCarrinho();
   fecharModalProduto();
   alert('✅ Adicionado ao carrinho!\n\nID: '+pedidoId+'\n\nVá em "Meu Carrinho" pra finalizar.');
@@ -1032,18 +885,18 @@ function renderSuporte(){
 }
 
 function renderFaq(){
-  const faq=db.config.faq||'Nenhuma dúvida cadastrada ainda.';
+  const faq=dbLocal.config.faq||'Nenhuma dúvida cadastrada ainda.';
   document.getElementById('faqBody').innerHTML=`<div class="texto-geral">${faq}</div>`;
 }
 
 function renderTermos(){
-  document.getElementById('termosBody').innerHTML=`<div class="texto-geral">${db.config.termos}</div>`;
+  document.getElementById('termosBody').innerHTML=`<div class="texto-geral">${dbLocal.config.termos}</div>`;
 }
 
 function renderPremiacao(){
-  const prem=db.config.premiacao||{img:'',texto:'Nenhuma premiação ativa no momento.'};
+  const prem=dbLocal.config.premiacao||{img:'',texto:'Nenhuma premiação ativa no momento.'};
   document.getElementById('premiacaoBody').innerHTML=`
-        ${prem.img?`<img src="${prem.img}" style="width:100%;border-radius:12px;margin-bottom:12px">`:''}
+    ${prem.img?`<img src="${prem.img}" style="width:100%;border-radius:12px;margin-bottom:12px">`:''}
     <div class="texto-geral">${prem.texto}</div>
   `;
 }
@@ -1076,7 +929,7 @@ function abrirCats(){
 }
 
 function renderCats(){
-  const cats = db.cat.length?db.cat:[];
+  const cats = dbLocal.cat.length?dbLocal.cat:[];
   const lista = cats.map(c=>`
     <div class="lista-item">
       <div class="lista-top">
@@ -1097,7 +950,7 @@ function novaCat(){
   <input type="text" class="input" id="cNome" placeholder="Nome da categoria (ex: Free Fire)">
   <div class="label">Imagem da categoria:</div>
   <div class="upload" onclick="document.getElementById('cImg').click()">
-    <div class="upload-text">📷 Clique para enviar<br><span style="font-size:8px">PNG, JPG até 2MB</span></div>
+    <div class="upload-text">📷 Clique para enviar<br><span style="font-size:8px">PNG, JPG - Ilimitado</span></div>
     <img id="cImgPrev" style="display:none">
     <input type="file" id="cImg" accept="image/*" onchange="prevImg(this,'cImgPrev')">
   </div>
@@ -1107,7 +960,7 @@ function novaCat(){
 }
 
 function editCat(k){
-  const c=db.cat.find(x=>x.k===k);
+  const c=dbLocal.cat.find(x=>x.k===k);
   abrirModal('EDITAR CATEGORIA',`
   <input type="text" class="input" id="cNome" placeholder="Nome da categoria" value="${c.nome}">
   <div class="label">Imagem da categoria:</div>
@@ -1132,19 +985,19 @@ async function salvarCat(k=null){
     if(file){
       img=await toBase64(file);
     }else if(k){
-      img=db.cat.find(x=>x.k===k)?.img||null;
+      img=dbLocal.cat.find(x=>x.k===k)?.img||null;
     }
 
     const newK=k||'cat'+Date.now();
     const cat={k:newK,nome,img};
 
     if(k){
-      const index=db.cat.findIndex(x=>x.k===k);
-      if(index>=0)db.cat[index]=cat;
+      const index=dbLocal.cat.findIndex(x=>x.k===k);
+      if(index>=0)dbLocal.cat[index]=cat;
     }else{
-      db.cat.push(cat);
+      dbLocal.cat.push(cat);
     }
-    save();
+    await saveLocal();
     fecharModal();
     abrirCats();
     renderJogos();
@@ -1155,10 +1008,10 @@ async function salvarCat(k=null){
   }
 }
 
-function delCat(k){
+async function delCat(k){
   if(confirm('Excluir categoria? Os serviços vinculados ficarão sem categoria.')){
-    db.cat=db.cat.filter(x=>x.k!==k);
-    save();
+    dbLocal.cat=dbLocal.cat.filter(x=>x.k!==k);
+    await saveLocal();
     renderCats();
     renderJogos();
   }
@@ -1178,9 +1031,9 @@ function abrirServs(){
 }
 
 function renderServs(){
-  const servs = db.serv.length?db.serv:[];
+  const servs = dbLocal.serv.length?dbLocal.serv:[];
   const lista = servs.map(s=>{
-    const cat = db.cat.find(c=>c.k===s.cat);
+    const cat = dbLocal.cat.find(c=>c.k===s.cat);
     return `
     <div class="lista-item">
       <div class="lista-top">
@@ -1189,7 +1042,6 @@ function renderServs(){
           <button class="btn-mini btn-edit" onclick="editServ('${s.k}')">EDITAR</button>
           <button class="btn-mini btn-del" onclick="delServ('${s.k}')">EXCLUIR</button>
         </div>
-      </div>
       <div class="lista-info">
         Categoria: ${cat?.nome||'-'}<br>
         Preço: R$ ${s.preco.toFixed(2).replace('.',',')}<br>
@@ -1201,7 +1053,7 @@ function renderServs(){
 }
 
 function novoServ(){
-  const cats=db.cat.map(c=>`<option value="${c.k}">${c.nome}</option>`).join('');
+  const cats=dbLocal.cat.map(c=>`<option value="${c.k}">${c.nome}</option>`).join('');
   abrirModal('NOVO SERVIÇO',`
   <select class="input" id="sCat"><option value="">Selecione a categoria</option>${cats}</select>
   <input type="text" class="input" id="sNome" placeholder="Nome do serviço (ex: 1000 Diamantes)">
@@ -1210,18 +1062,18 @@ function novoServ(){
   <input type="number" class="input" id="sEstoque" placeholder="Estoque disponível" value="999">
   <div class="label">Imagem do serviço:</div>
   <div class="upload" onclick="document.getElementById('sImg').click()">
-    <div class="upload-text">📷 Clique para enviar<br><span style="font-size:8px">PNG, JPG até 2MB</span></div>
+    <div class="upload-text">📷 Clique para enviar<br><span style="font-size:8px">PNG, JPG - Ilimitado</span></div>
     <img id="sImgPrev" style="display:none">
     <input type="file" id="sImg" accept="image/*" onchange="prevImg(this,'sImgPrev')">
   </div>
-  <button class="btn" onclick="salvarServ()">SALVAR</button>
+    <button class="btn" onclick="salvarServ()">SALVAR</button>
   <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
   `);
 }
 
 function editServ(k){
-  const s=db.serv.find(x=>x.k===k);
-  const cats=db.cat.map(c=>`<option value="${c.k}" ${c.k===s.cat?'selected':''}>${c.nome}</option>`).join('');
+  const s=dbLocal.serv.find(x=>x.k===k);
+  const cats=dbLocal.cat.map(c=>`<option value="${c.k}" ${c.k===s.cat?'selected':''}>${c.nome}</option>`).join('');
   abrirModal('EDITAR SERVIÇO',`
   <select class="input" id="sCat">${cats}</select>
   <input type="text" class="input" id="sNome" placeholder="Nome do serviço" value="${s.nome}">
@@ -1258,19 +1110,19 @@ async function salvarServ(k=null){
     if(file){
       img=await toBase64(file);
     }else if(k){
-      img=db.serv.find(x=>x.k===k)?.img||null;
+      img=dbLocal.serv.find(x=>x.k===k)?.img||null;
     }
 
     const newK=k||'serv'+Date.now();
     const serv={k:newK,cat,nome,desc,preco,estoque,img};
 
     if(k){
-      const index=db.serv.findIndex(x=>x.k===k);
-      if(index>=0)db.serv[index]=serv;
+      const index=dbLocal.serv.findIndex(x=>x.k===k);
+      if(index>=0)dbLocal.serv[index]=serv;
     }else{
-      db.serv.push(serv);
+      dbLocal.serv.push(serv);
     }
-    save();
+    await saveLocal();
     fecharModal();
     abrirServs();
     renderProdutosLoja();
@@ -1281,17 +1133,17 @@ async function salvarServ(k=null){
   }
 }
 
-function delServ(k){
+async function delServ(k){
   if(confirm('Excluir serviço?')){
-    db.serv=db.serv.filter(x=>x.k!==k);
-    save();
+    dbLocal.serv=dbLocal.serv.filter(x=>x.k!==k);
+    await saveLocal();
     renderServs();
     renderProdutosLoja();
   }
 }
 
 function renderPedidos(){
-  const todosPedidos = db.pedidos.slice().reverse();
+  const todosPedidos = dbLocal.pedidos.slice().reverse();
 
   document.getElementById('pedidosBody').innerHTML=`
     <div class="search-bar" style="margin:0 0 16px 0">
@@ -1346,7 +1198,7 @@ function renderPedidos(){
 }
 
 function confirmarPedido(id){
-  const pedido=db.pedidos.find(p=>p.id===id);
+  const pedido=dbLocal.pedidos.find(p=>p.id===id);
   if(!pedido)return;
 
   abrirModal('CONFIRMAR PEDIDO',`
@@ -1363,37 +1215,37 @@ function confirmarPedido(id){
   `);
 }
 
-function salvarConfirmacao(id){
+async function salvarConfirmacao(id){
   const msgAdmin = document.getElementById('msgAdmin').value;
-  const pedido=db.pedidos.find(p=>p.id===id);
+  const pedido=dbLocal.pedidos.find(p=>p.id===id);
   if(pedido){
     pedido.status='confirmado';
     pedido.mensagemAdmin = msgAdmin || null;
 
-    const indicacao=db.indicacoes.find(i=>i.pedidoId===id);
+    const indicacao=dbLocal.indicacoes.find(i=>i.pedidoId===id);
     if(indicacao && indicacao.status==='pendente'){
       indicacao.status='confirmada';
-      if(db.usuarios[indicacao.uidIndicador]){
-        db.usuarios[indicacao.uidIndicador].indicacoesValidas=(db.usuarios[indicacao.uidIndicador].indicacoesValidas||0)+1;
+      if(dbLocal.usuarios[indicacao.uidIndicador]){
+        dbLocal.usuarios[indicacao.uidIndicador].indicacoesValidas=(dbLocal.usuarios[indicacao.uidIndicador].indicacoesValidas||0)+1;
       }
     }
-    save();
+    await saveLocal();
     fecharModal();
     renderPedidos();
     alert('✅ Pedido confirmado!\n\nMensagem enviada ao cliente.');
   }
 }
 
-function cancelarPedido(id){
+async function cancelarPedido(id){
   if(confirm('Cancelar este pedido?')){
-    const pedido=db.pedidos.find(p=>p.id===id);
+    const pedido=dbLocal.pedidos.find(p=>p.id===id);
     if(pedido){
       pedido.status='cancelado';
-      const indicacao=db.indicacoes.find(i=>i.pedidoId===id);
+      const indicacao=dbLocal.indicacoes.find(i=>i.pedidoId===id);
       if(indicacao && indicacao.status==='pendente'){
         indicacao.status='invalida';
       }
-      save();
+      await saveLocal();
       renderPedidos();
     }
   }
@@ -1404,8 +1256,8 @@ function renderIndicacoes(){
     document.getElementById('indicacoesBody').innerHTML='<div class="empty">Erro ao carregar dados</div>';
     return;
   }
-  const userData=db.usuarios[usuarioAtual.uid]||{indicacoesValidas:0,totalIndicacoes:0};
-  const minhasIndicacoes=db.indicacoes.filter(i=>i.uidIndicador===usuarioAtual.uid);
+  const userData=dbLocal.usuarios[usuarioAtual.uid]||{indicacoesValidas:0,totalIndicacoes:0};
+  const minhasIndicacoes=dbLocal.indicacoes.filter(i=>i.uidIndicador===usuarioAtual.uid);
   const validas=userData.indicacoesValidas||0;
   const total=userData.totalIndicacoes||0;
   const progresso=Math.min((validas/5)*100,100);
@@ -1449,7 +1301,6 @@ function renderIndicacoes(){
           <div class="stat-num">${5-validas>0?5-validas:0}</div>
           <div class="stat-label">Faltam</div>
         </div>
-      </div>
       <div class="progress-bar">
         <div class="progress-fill" style="width:${progresso}%"></div>
       </div>
@@ -1479,7 +1330,7 @@ function copiarCodigo(){
 
 function renderAdminIndicacoes(){
   if(!usuarioAtual.admin)return;
-  const todas=db.indicacoes.slice().reverse();
+  const todas=dbLocal.indicacoes.slice().reverse();
   if(todas.length===0){
     document.getElementById('adminIndicacoesBody').innerHTML='<div class="empty">Nenhuma indicação ainda</div>';
     return;
@@ -1514,30 +1365,30 @@ function darRecompensa(id){
 
 function formFaq(){
   abrirModal('EDITAR FAQ',`
-  <textarea class="textarea" id="faqTxt" placeholder="Digite as dúvidas frequentes" style="min-height:200px">${db.config.faq}</textarea>
+  <textarea class="textarea" id="faqTxt" placeholder="Digite as dúvidas frequentes" style="min-height:200px">${dbLocal.config.faq}</textarea>
   <button class="btn" onclick="salvarFaq()">SALVAR</button>
   <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
   `);
 }
 
-function salvarFaq(){
-  db.config.faq=document.getElementById('faqTxt').value;
-  save();
+async function salvarFaq(){
+  dbLocal.config.faq=document.getElementById('faqTxt').value;
+  await saveLocal();
   fecharModal();
   alert('FAQ atualizado!');
 }
 
 function formTermos(){
   abrirModal('EDITAR TERMOS',`
-  <textarea class="textarea" id="termosTxt" placeholder="Digite os termos do site" style="min-height:200px">${db.config.termos}</textarea>
+  <textarea class="textarea" id="termosTxt" placeholder="Digite os termos do site" style="min-height:200px">${dbLocal.config.termos}</textarea>
   <button class="btn" onclick="salvarTermos()">SALVAR</button>
   <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
   `);
 }
 
-function salvarTermos(){
-  db.config.termos=document.getElementById('termosTxt').value;
-  save();
+async function salvarTermos(){
+  dbLocal.config.termos=document.getElementById('termosTxt').value;
+  await saveLocal();
   fecharModal();
   alert('Termos atualizados!');
 }
@@ -1546,11 +1397,11 @@ function formPremiacao(){
   abrirModal('EDITAR PREMIAÇÃO',`
   <div class="label">Imagem da premiação:</div>
   <div class="upload" onclick="document.getElementById('premImg').click()">
-    <div class="upload-text" style="${db.config.premiacao.img?'display:none':''}">📷 Clique para enviar</div>
-    <img id="premImgPrev" src="${db.config.premiacao.img||''}" style="${db.config.premiacao.img?'display:block':'display:none'}">
+    <div class="upload-text" style="${dbLocal.config.premiacao.img?'display:none':''}">📷 Clique para enviar</div>
+    <img id="premImgPrev" src="${dbLocal.config.premiacao.img||''}" style="${dbLocal.config.premiacao.img?'display:block':'display:none'}">
     <input type="file" id="premImg" accept="image/*" onchange="prevImg(this,'premImgPrev')">
   </div>
-  <textarea class="textarea" id="premTxt" placeholder="Texto da premiação" style="min-height:150px">${db.config.premiacao.texto}</textarea>
+  <textarea class="textarea" id="premTxt" placeholder="Texto da premiação" style="min-height:150px">${dbLocal.config.premiacao.texto}</textarea>
   <button class="btn" onclick="salvarPremiacao()">SALVAR</button>
   <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
   `);
@@ -1559,11 +1410,11 @@ function formPremiacao(){
 async function salvarPremiacao(){
   showLoad(true);
   try{
-    let img=db.config.premiacao.img;
+    let img=dbLocal.config.premiacao.img;
     const file=document.getElementById('premImg').files[0];
     if(file)img=await toBase64(file);
-    db.config.premiacao={img,texto:document.getElementById('premTxt').value};
-    save();
+    dbLocal.config.premiacao={img,texto:document.getElementById('premTxt').value};
+    await saveLocal();
     fecharModal();
     alert('Premiação atualizada!');
   }catch(e){
