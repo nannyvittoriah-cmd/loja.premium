@@ -23,7 +23,6 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getDatabase(app);
-
   window.firebaseAuth = { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail, db, ref, set, get, push, update };
 </script>
 <script src="https://unpkg.com/lucide@latest"></script>
@@ -40,24 +39,30 @@
   --verde:#22C55E;
   --amarelo:#F59E0B;
   --vermelho:#EF4444;
+  --glow:rgba(139, 92, 246, 0.3);
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);font-size:11px}
 .tela{display:none;min-height:100vh}
 .tela.ativa{display:block}
-.header{background:var(--bg);padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--borda);position:sticky;top:0;z-index:50}
+.hidden{display:none!important}
+
+.header{background:var(--bg);padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--borda);position:sticky;top:0;z-index:50;box-shadow:0 2px 10px var(--glow)}
 .header-left{display:flex;align-items:center;gap:12px}
-.menu{font-size:18px;cursor:pointer;color:var(--branco)}
+.menu{font-size:18px;cursor:pointer;color:var(--branco);filter:drop-shadow(0 0 4px var(--roxo))}
 .logo-box{display:flex;align-items:center;gap:8px}
 .logo-img{width:28px;height:28px;border-radius:6px;object-fit:cover}
 .logo-text{font-size:14px;font-weight:800;letter-spacing:.5px}
 .logo-text.premium{color:var(--branco)}
 .logo-text.store{color:var(--roxo);text-shadow:0 0 10px var(--roxo-neon)}
 .header-right{display:flex;align-items:center;gap:12px;font-size:16px}
+.cart-wrapper{position:relative;cursor:pointer}
+.cart-badge{position:absolute;top:-4px;right:-4px;background:var(--roxo);color:var(--branco);font-size:7px;font-weight:800;padding:1px 4px;border-radius:20px;box-shadow:0 0 6px var(--glow)}
 .user-info{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--roxo);cursor:pointer}
 .user-avatar{width:24px;height:24px;border-radius:50%;background:var(--roxo);display:flex;align-items:center;justify-content:center;font-weight:700;overflow:hidden;box-shadow:0 0 8px var(--roxo-neon)}
 .user-avatar img{width:100%;height:100%;object-fit:cover}
+
 .sidebar{position:fixed;top:0;left:-250px;width:250px;height:100vh;background:var(--card);border-right:1px solid var(--borda);z-index:200;transition:left.3s;padding:16px;overflow-y:auto}
 .sidebar.ativo{left:0}
 .sidebar-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:199;display:none}
@@ -66,7 +71,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .sidebar-item{padding:10px;border-radius:8px;cursor:pointer;font-size:10px;font-weight:600;color:var(--cinza);margin-bottom:4px;display:flex;align-items:center;gap:8px}
 .sidebar-item:hover{background:var(--borda);color:var(--branco)}
 .sidebar-item i{width:16px;height:16px;stroke:var(--roxo);fill:none;stroke-width:1.5}
-.container{padding:12px;max-width:600px;margin:0 auto}
+
 .login-wrapper{min-height:100vh}
 .login-container{display:flex;align-items:center;justify-content:center;padding:16px;min-height:60vh}
 .login-box{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:24px;width:100%;max-width:360px;box-shadow:0 0 20px rgba(139,92,246,.1)}
@@ -81,24 +86,45 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .login-form.ativo{display:block}
 .link-roxo{color:var(--roxo);cursor:pointer;font-size:9px;text-align:center;margin-top:12px}
 .link-roxo:hover{text-decoration:underline}
+
+.search-bar{position:relative;margin:8px 12px}
+.search-bar input{width:100%;background:rgba(5,5,5,0.6);border:1px solid var(--borda);padding:8px 8px 8px 32px;border-radius:20px;color:var(--branco);font-size:10px;backdrop-filter:blur(5px)}
+.search-bar input:focus{outline:none;border-color:var(--roxo);box-shadow:0 0 8px var(--glow)}
+.search-bar .icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;stroke:var(--roxo)}
+.banner-topo{width:calc(100% - 24px);border-radius:20px;overflow:hidden;margin:0 12px 16px;border:1px solid var(--borda);box-shadow:0 0 15px var(--glow)}
+.banner-topo img{width:100%;display:block}
+.section-title{display:flex;align-items:center;justify-content:space-between;margin:0 12px 10px;font-size:12px;font-weight:800}
+.section-title .left{display:flex;align-items:center;gap:6px}
+.section-title i{width:14px;height:14px;stroke:var(--roxo);filter:drop-shadow(0 0 3px var(--roxo))}
+.ver-todos{color:var(--roxo);font-size:9px;cursor:pointer}
+.jogos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 12px 20px}
+.jogo-card{background:var(--card);border:1px solid var(--borda);border-radius:20px;padding:10px 6px;text-align:center;cursor:pointer;box-shadow:0 0 8px var(--glow);transition:all 0.3s;overflow:hidden}
+.jogo-card:hover{transform:translateY(-2px);box-shadow:0 0 12px var(--glow);border-color:var(--roxo)}
+.jogo-card.ativo{border-color:var(--roxo);box-shadow:0 0 15px var(--glow)}
+.jogo-card-img{width:100%;height:50px;margin-bottom:4px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:8px}
+.jogo-card-img img{width:100%;height:100%;object-fit:contain}
+.jogo-card-img i{width:24px;height:24px;stroke:var(--roxo);filter:drop-shadow(0 0 4px var(--roxo))}
+.jogo-card span{font-size:8px;font-weight:700;color:var(--cinza)}
+.produtos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:0 12px 20px}
+.produto-card{background:var(--card);border:1px solid var(--borda);border-radius:20px;padding:10px;box-shadow:0 0 10px var(--glow)}
+.produto-card .tag-jogo{font-size:7px;color:var(--roxo);font-weight:800;text-align:center;margin-bottom:4px}
+.produto-img{width:100%;height:60px;background:linear-gradient(135deg, #1a0b2e, #050505);border-radius:15px;margin-bottom:6px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.produto-img img{width:100%;height:100%;object-fit:cover}
+.produto-img i{width:28px;height:28px;stroke:var(--roxo);filter:drop-shadow(0 0 6px var(--roxo))}
+.badge-bonus{position:absolute;top:-2px;right:-2px;background:var(--roxo);color:var(--branco);font-size:6px;font-weight:800;padding:2px 5px;border-radius:20px;z-index:2}
+.produto-nome{font-size:9px;font-weight:700;text-align:center;margin-bottom:3px}
+.produto-preco{font-size:12px;font-weight:900;color:var(--roxo);text-align:center;margin-bottom:6px;text-shadow:0 0 6px var(--glow)}
+.btn-comprar{width:100%;background:linear-gradient(135deg, var(--roxo), var(--roxo-neon));color:var(--branco);border:none;padding:6px;border-radius:20px;font-weight:800;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:3px;box-shadow:0 0 8px var(--glow)}
+.btn-comprar i{width:10px;height:10px}
+
+.container{padding:12px;max-width:600px;margin:0 auto}
 .label{font-size:10px;font-weight:600;margin:20px 0 8px;display:flex;align-items:center;gap:6px;color:var(--cinza);text-transform:uppercase;letter-spacing:.5px}
-.select-wrap{position:relative;margin-bottom:12px}
-.select{background:var(--card);border:1px solid var(--borda);border-radius:10px;padding:12px;font-size:10px;color:var(--branco);cursor:pointer;display:flex;align-items:center;justify-content:space-between}
-.select:hover{border-color:var(--roxo);box-shadow:0 0 8px rgba(139,92,246,.2)}
-.select-icon{color:var(--cinza);font-size:8px}
-.dropdown{position:absolute;top:100%;left:0;right:0;background:var(--card);border:1px solid var(--borda);border-radius:10px;margin-top:3px;z-index:10;display:none;max-height:160px;overflow-y:auto}
-.dropdown.ativo{display:block}
-.dropdown-item{padding:10px 12px;cursor:pointer;font-size:10px;border-bottom:1px solid var(--borda)}
-.dropdown-item:hover{background:var(--borda)}
-.dropdown-item:last-child{border-bottom:none}
-.id-azul{color:#3b82f6;font-weight:700}
 .input,.textarea{background:var(--card);border:1px solid var(--borda);border-radius:10px;padding:12px;font-size:10px;color:var(--branco);width:100%;outline:none;margin-bottom:12px}
 .textarea{min-height:60px;resize:vertical}
 .input:focus,.textarea:focus{border-color:var(--roxo);box-shadow:0 0 8px rgba(139,92,246,.3)}
-.valor-box{background:var(--card);border:1px solid var(--borda);border-radius:10px;padding:12px;font-size:14px;font-weight:800;color:var(--roxo);margin-bottom:16px;min-height:44px;display:flex;align-items:center;text-shadow:0 0 8px var(--roxo-neon)}
 .btn{width:100%;background:var(--roxo);color:var(--branco);border:none;border-radius:10px;padding:12px;font-weight:700;font-size:11px;cursor:pointer;margin-top:6px;box-shadow:0 0 12px rgba(139,92,246,.4)}
 .btn:active{transform:scale(.98)}
-.btn-red{background:#ef4444;box-shadow:0 0 12px rgba(239,68,68,.4)}
+.btn-red{background:#ef4444;box-shadow:0 0 12px rgba(239,68,.4)}
 .btn-sec{background:var(--borda);box-shadow:none}
 .btn-desc{background:transparent;border:1px solid var(--roxo);color:var(--roxo);box-shadow:none}
 .btn-voltar{width:28px;height:28px;background:var(--card);border:1px solid var(--borda);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px}
@@ -117,14 +143,24 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .modal-tit{font-size:12px;font-weight:800;margin-bottom:12px}
 .empty{text-align:center;padding:30px 16px;color:var(--cinza);font-size:10px}
 .add{position:fixed;bottom:16px;right:16px;width:44px;height:44px;background:var(--roxo);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px rgba(139,92,246,.6);z-index:90;font-size:20px;font-weight:700}
-.upload{width:100%;aspect-ratio:16/9;background:var(--bg);border:2px dashed var(--borda);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;cursor:pointer;overflow:hidden;font-size:9px;color:var(--cinza)}
+.upload{width:100%;aspect-ratio:16/9;background:var(--bg);border:2px dashed var(--borda);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;cursor:pointer;overflow:hidden;font-size:9px;color:var(--cinza);position:relative}
 .upload img{width:100%;height:100%;object-fit:cover}
-.desc-box{background:var(--card);border:1px solid var(--borda);border-radius:10px;padding:12px;font-size:10px;line-height:1.6;color:var(--cinza);white-space:pre-wrap;margin-bottom:12px;display:none}
-.desc-box.ativo{display:block}
-.info-teste{background:var(--card);border:1px solid var(--borda);border-radius:10px;padding:10px;font-size:9px;color:var(--roxo);margin-bottom:12px;line-height:1.5}
-.texto-geral{font-size:10px;line-height:1.6;white-space:pre-wrap;color:var(--cinza)}
+.upload input{display:none}
+.upload-text{position:absolute;text-align:center;pointer-events:none}
 .loading{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:500;display:none;align-items:center;justify-content:center;font-size:12px}
 .loading.ativo{display:flex}
+
+.modal-produto{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.95);z-index:350;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-produto.ativo{display:flex}
+.modal-produto-box{background:var(--card);border:1px solid var(--borda);border-radius:14px;width:100%;max-width:360px;max-height:90vh;overflow-y:auto}
+.modal-produto-img{width:100%;height:180px;position:relative;border-radius:14px 14px 0;overflow:hidden;background:linear-gradient(135deg, #1a0b2e, #050505)}
+.modal-produto-img img{width:100%;height:100%;object-fit:cover}
+.modal-produto-fechar{position:absolute;top:10px;right:10px;width:32px;height:32px;background:rgba(0,0,0,.7);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.modal-produto-body{padding:16px}
+.modal-produto-nome{font-size:16px;font-weight:900;margin-bottom:6px}
+.modal-produto-preco{font-size:20px;font-weight:900;color:var(--verde);margin-bottom:12px}
+.modal-produto-desc{font-size:10px;color:var(--cinza);line-height:1.6;margin-bottom:16px;display:none;white-space:pre-wrap}
+.modal-produto-desc.ativo{display:block}
 
 .como-comprar{padding:20px 12px 40px;max-width:600px;margin:0 auto}
 .como-comprar-tit{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:4px}
@@ -169,15 +205,14 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .badge-pendente{background:rgba(245,158,11,.2);color:var(--amarelo)}
 .badge-confirmada{background:rgba(34,197,94,.2);color:var(--verde)}
 .badge-confirmado{background:rgba(34,197,94,.2);color:var(--verde)}
-.badge-cancelada{background:rgba(239,68,68,.2);color:var(--vermelho)}
-.badge-cancelado{background:rgba(239,68,68,.2);color:var(--vermelho)}
+.badge-cancelada{background:rgba(239,68,.2);color:var(--vermelho)}
+.badge-cancelado{background:rgba(239,68,.2);color:var(--vermelho)}
 .badge-invalida{background:rgba(107,114,128,.2);color:var(--cinza)}
 .indicacao-historico{max-height:300px;overflow-y:auto}
 .indicacao-item{background:var(--bg);border:1px solid var(--borda);border-radius:10px;padding:10px;margin-bottom:8px}
 .indicacao-item-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .indicacao-codigo{font-size:10px;font-weight:700;color:var(--roxo)}
 .indicacao-valor{font-size:9px;color:var(--cinza)}
-.indicacao-data{font-size:8px;color:var(--cinza)}
 
 .comprovante-card{width:90%;max-width:360px;margin:0 auto 8px;background:linear-gradient(180deg,#0D0D0D 0%,#050505 100%);border:1px solid #8B5CF6;border-radius:8px;padding:6px;box-shadow:0 0 12px rgba(168,85,247,.25);position:relative;line-height:1.1}
 .comprovante-topo{text-align:center;margin-bottom:6px;padding-bottom:4px;position:relative}
@@ -195,12 +230,11 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .comprovante-valor{font-size:10px;font-weight:700;color:#FFFFFF;text-align:right}
 .comprovante-valor.verde{color:#22C55E;font-size:12px}
 .comprovante-valor.roxo{color:#8B5CF6;font-size:12px}
-.comprovante-valor.link{color:#3b82f6;font-size:9px;word-break:break-all}
 .comprovante-status{display:inline-flex;align-items:center;gap:3px;border-radius:12px;padding:2px 6px;font-size:10px;font-weight:700}
 .comprovante-status i{width:12px;height:12px}
 .comprovante-status.pendente{background:rgba(245,158,11,.12);border:1px solid #F59E0B;color:#F59E0B}
 .comprovante-status.confirmado{background:rgba(34,197,94,.12);border:1px solid #22C55E;color:#22C55E}
-.comprovante-status.cancelado{background:rgba(239,68,68,.12);border:1px solid #EF4444;color:#EF4444}
+.comprovante-status.cancelado{background:rgba(239,68,.12);border:1px solid #EF4444;color:#EF4444}
 .comprovante-footer{text-align:center;margin-top:6px;padding-top:4px;position:relative}
 .comprovante-footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#A855F7,transparent);box-shadow:0 0 8px rgba(168,85,247,.8)}
 .comprovante-footer::after{content:'💎';position:absolute;left:50%;transform:translateX(-50%);top:-6px;color:#A855F7;font-size:10px;text-shadow:0 0 8px rgba(168,85,247,.8);background:linear-gradient(180deg,#0D0D0D 0%,#050505 100%);padding:0 5px}
@@ -208,13 +242,6 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .comprovante-footer-logo i{width:12px;height:12px;stroke:#A855F7;fill:none;stroke-width:2.5;filter:drop-shadow(0 0 8px rgba(168,85,247,.7))}
 .comprovante-footer-texto{font-size:9px;color:#D1D5DB;margin-bottom:1px}
 .comprovante-footer-heart{color:#A855F7;font-size:10px;filter:drop-shadow(0 0 6px rgba(168,85,247,.7))}
-.comprovante-acoes{display:flex;justify-content:center;gap:12px;margin-top:6px;padding-top:6px;border-top:1px solid #1E1E1E}
-.comprovante-btn-acao{background:transparent;border:none;color:#8B5CF6;font-size:9px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;transition:all .2s}
-.comprovante-btn-acao:hover{color:#A855F7;text-shadow:0 0 6px rgba(168,85,247,.8)}
-.comprovante-btn-acao i{width:14px;height:14px;stroke:#8B5CF6}
-.btn-baixar-comprovante{height:28px;border-radius:6px;background:#111111;border:1px solid #2A2A2A;color:#A855F7;font-size:9px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .3s;text-shadow:0 0 8px rgba(168,85,247,.8)}
-.btn-baixar-comprovante:hover{box-shadow:0 0 12px rgba(168,85,247,.45);border-color:#A855F7}
-.btn-baixar-comprovante i{width:16px;height:16px;stroke:#A855F7;filter:drop-shadow(0 0 6px rgba(168,85,247,.7))}
 
 .suporte-card{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:16px;margin-bottom:12px;text-align:center}
 .suporte-icon{width:60px;height:60px;margin:0 auto 12px;background:var(--roxo);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px var(--roxo-neon)}
@@ -223,6 +250,18 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .suporte-desc{font-size:9px;color:var(--cinza);line-height:1.6;margin-bottom:16px}
 .suporte-horario{background:var(--bg);border:1px solid var(--borda);border-radius:10px;padding:10px;font-size:9px;color:var(--cinza);margin-bottom:12px}
 .suporte-horario b{color:var(--roxo);display:block;margin-bottom:4px}
+.texto-geral{font-size:10px;color:var(--cinza);line-height:1.6;white-space:pre-wrap}
+
+/* BACKUP + FIREBASE */
+.btn-float{position:fixed;bottom:20px;right:20px;background:#dc2626;color:#fff;border:none;width:60px;height:60px;border-radius:50%;font-size:24px;cursor:pointer;z-index:9998;box-shadow:0 4px 12px #000}
+#admin-backup{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000f2;z-index:99999;overflow-y:auto}
+.backup-modal{max-width:500px;margin:50px auto;background:#1a1a1a;padding:30px;border-radius:12px;border:1px solid #333}
+.backup-btn{width:100%;border:none;padding:15px;border-radius:8px;margin-bottom:10px;cursor:pointer;font-size:16px;font-weight:bold}
+.btn-export{background:#7c3aed;color:#fff}
+.btn-import{background:#059669;color:#fff}
+.btn-migrate{background:#f59e0b;color:#fff}
+.btn-close{background:#444;color:#fff;padding:12px;margin-top:20px}
+#area-backup{display:none;width:100%;height:200px;margin-top:15px;background:#111;color:#0f0;border:1px solid #333;padding:10px;font-size:12px}
 </style>
 </head>
 <body>
@@ -271,59 +310,34 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 
       <div class="passo-item">
         <div class="passo-num">1</div>
-        <div class="passo-texto">Escolha a <b>categoria</b> desejada.</div>
-        <div class="passo-icon"><i data-lucide="grid-3x3"></i></div>
+        <div class="passo-texto">Escolha o <b>jogo</b> desejado.</div>
+        <div class="passo-icon"><i data-lucide="gamepad-2"></i></div>
       </div>
 
       <div class="passo-item">
         <div class="passo-num">2</div>
-        <div class="passo-texto">Selecione o <b>serviço</b> que deseja comprar.</div>
-        <div class="passo-icon"><i data-lucide="list"></i></div>
+        <div class="passo-texto">Selecione o <b>produto</b> que deseja comprar.</div>
+        <div class="passo-icon"><i data-lucide="package"></i></div>
       </div>
 
       <div class="passo-item">
         <div class="passo-num">3</div>
-        <div class="passo-texto">Cole o <b>link</b> do perfil, vídeo ou publicação.</div>
-        <div class="passo-icon"><i data-lucide="link"></i></div>
+        <div class="passo-texto">Digite o <b>ID</b> da conta.</div>
+        <div class="passo-icon"><i data-lucide="hash"></i></div>
       </div>
 
-      <div class="passo-item">
-        <div class="passo-num">4</div>
-        <div class="passo-texto">Confira o <b>valor</b> do serviço selecionado.</div>
-        <div class="passo-icon"><i data-lucide="dollar-sign"></i></div>
-      </div>
-
-      <div class="passo-item">
+      <      <div class="passo-item">
         <div class="passo-num">5</div>
-        <div class="passo-texto">Clique no botão <b>"FAZER PEDIDO"</b>.</div>
-        <div class="passo-icon"><i data-lucide="shopping-cart"></i></div>
-      </div>
-
-      <div class="passo-item">
-        <div class="passo-num">6</div>
-        <div class="passo-texto">Aguarde a <b>confirmação</b> do pedido.</div>
+        <div class="passo-texto">Acesse o <b>carrinho</b> e envie os pedidos no WhatsApp.</div>
         <div class="passo-icon"><i data-lucide="check-circle"></i></div>
-      </div>
-
-      <div class="passo-item">
-        <div class="passo-num">7</div>
-        <div class="passo-texto">Seu pedido será enviado para <b>processamento</b>.</div>
-        <div class="passo-icon"><i data-lucide="send"></i></div>
-      </div>
-
-      <div class="passo-item">
-        <div class="passo-num">8</div>
-        <div class="passo-texto">Aguarde a <b>entrega</b> do serviço solicitado.</div>
-        <div class="passo-icon"><i data-lucide="clock"></i></div>
       </div>
 
       <div class="aviso-box">
         <div class="aviso-icon"><i data-lucide="alert-triangle"></i></div>
         <div class="aviso-texto">
           <b>IMPORTANTE:</b>
-          Verifique se o link enviado está correto e se o perfil está público para evitar falhas na entrega.
+          Verifique se o ID enviado está correto para evitar falhas na entrega.
         </div>
-        <div class="aviso-icon"><i data-lucide="shield-check"></i></div>
       </div>
     </div>
   </div>
@@ -332,13 +346,13 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 <div class="sidebar-overlay" id="overlay" onclick="fecharMenu()"></div>
 <div class="sidebar" id="sidebar">
   <div class="sidebar-tit">MENU</div>
-  <div class="sidebar-item" onclick="ir('home');fecharMenu()"><i data-lucide="home"></i>Início</div>
+  <div class="sidebar-item" onclick="ir('home');fecharMenu()"><i data-lucide="home"></i>Loja</div>
   <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
+  <div class="sidebar-item" onclick="ir('carrinho');fecharMenu()"><i data-lucide="shopping-cart"></i>Meu Carrinho</div>
   <div class="sidebar-item" onclick="ir('comprovantes');fecharMenu()"><i data-lucide="receipt"></i>Meus comprovantes</div>
   <div class="sidebar-item" onclick="ir('suporte');fecharMenu()"><i data-lucide="headphones"></i>Suporte</div>
   <div class="sidebar-item" onclick="ir('faq');fecharMenu()"><i data-lucide="help-circle"></i>Dúvidas frequentes</div>
   <div class="sidebar-item" onclick="ir('termos');fecharMenu()"><i data-lucide="file-text"></i>Termos do site</div>
-  <div class="sidebar-item" onclick="ir('teste');fecharMenu()"><i data-lucide="gift"></i>Teste grátis</div>
   <div class="sidebar-item" onclick="ir('premiacao');fecharMenu()"><i data-lucide="trophy"></i>Premiação</div>
   <div class="sidebar-item" onclick="abrirAdmin();fecharMenu()" id="menuAdmin" style="display:none"><i data-lucide="user-cog"></i>Adm</div>
   <div class="sidebar-item" onclick="abrirAdminIndicacoes();fecharMenu()" id="menuAdminInd" style="display:none"><i data-lucide="clipboard-check"></i>Indicações Admin</div>
@@ -355,123 +369,126 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
       </div>
     </div>
     <div class="header-right">
-            <div class="user-info" onclick="abrirPerfil()">
+      <div class="cart-wrapper" onclick="ir('carrinho')">
+        <i data-lucide="shopping-cart"></i>
+        <span class="cart-badge" id="cartCount">0</span>
+      </div>
+      <div class="user-info" onclick="abrirPerfil()">
         <div class="user-avatar" id="userAvatar">U</div>
         <span id="userNome">Usuário</span>
       </div>
     </div>
   </div>
-  <div class="container">
-    <div class="label">👇 Escolha a categoria abaixo</div>
-    <div class="select-wrap">
-      <div class="select" onclick="toggleDrop('cat')">
-        <span id="catText">Selecione uma categoria</span>
-        <span class="select-icon">▼</span>
-      </div>
-      <div class="dropdown" id="catDrop"></div>
-    </div>
 
-    <div class="label">👇 Escolha o serviço abaixo: <span class="id-azul" id="servId">---</span></div>
-    <div class="select-wrap">
-      <div class="select" onclick="toggleDrop('serv')">
-        <span id="servText">Selecione um serviço</span>
-        <span class="select-icon">▼</span>
-      </div>
-      <div class="dropdown" id="servDrop"></div>
-    </div>
-
-    <div class="label">🔗 Link:</div>
-    <input type="text" class="input" id="link" placeholder="Cole o link aqui">
-
-    <div class="label">🎁 Código de indicação (opcional):</div>
-    <input type="text" class="input" id="codigoIndicacao" placeholder="Ex: PREMIUM782">
-
-    <div class="label">💵 Valor:</div>
-    <div class="valor-box" id="valor">R$ 0,00</div>
-
-    <div class="desc-box" id="descBox"></div>
-
-    <button class="btn" onclick="finalizar()">FAZER PEDIDO</button>
-    <button class="btn btn-desc" onclick="toggleDesc()">VER DESCRIÇÃO</button>
-
-    <div style="margin-top:12px">
-      <img src="https://i.postimg.cc/mD4vT9Tq/489c9325-7610-49c5-9e44-f2c21af7a9ba.jpg" style="width:100%;border-radius:12px;border:1px solid var(--borda);margin-bottom:8px;box-shadow:0 0 15px rgba(139,92,246,.2)">
-      <img src="https://i.postimg.cc/cJRzkJQS/1f46ab4f-664c-489e-8713-57d456c48757.jpg" style="width:100%;border-radius:12px;border:1px solid var(--borda);box-shadow:0 0 15px rgba(139,92,246,.2)">
-    </div>
+  <div class="search-bar">
+    <i class="icon" data-lucide="search"></i>
+    <input type="text" id="buscaProduto" placeholder="Buscar jogo ou produto...">
   </div>
+
+  <div class="banner-topo">
+    <img src="https://i.postimg.cc/T3yFxLbM/4cea1152-2d84-449c-857b-f55ef07d582e.jpg" alt="Banner">
+  </div>
+
+  <div class="section-title">
+    <div class="left"><i data-lucide="gamepad-2"></i>ESCOLHA SEU JOGO</div>
+    <span class="ver-todos" onclick="renderProdutosLoja()">Ver todos ›</span>
+  </div>
+  <div class="jogos-grid" id="jogosGrid"></div>
+
+  <div class="section-title">
+    <div class="left"><i data-lucide="flame"></i>MAIS COMPRADOS</div>
+    <span class="ver-todos">Ver todos ›</span>
+  </div>
+  <div class="produtos-grid" id="produtosGrid"></div>
 </div>
 
-<div id="indicacoes" class="tela">
+<div id="carrinho" class="tela">
   <div class="header">
-    <div class="header-left">
-      <div class="btn-voltar" onclick="ir('home')">←</div>
-    </div>
-    <div style="font-size:12px;font-weight:700">MINHAS INDICAÇÕES</div>
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
+    <div style="font-size:12px;font-weight:700">MEU CARRINHO</div>
     <div style="width:28px"></div>
   </div>
-  <div class="container" id="indicacoesBody"></div>
+  <div class="container" id="carrinhoBody"></div>
 </div>
 
-<div id="comprovantes" class="tela">
-  <div class="header">
-    <div class="header-left">
-      <div class="btn-voltar" onclick="ir('home')">←</div>
+<div class="modal-produto" id="modalProduto">
+  <div class="modal-produto-box">
+    <div class="modal-produto-img">
+      <img id="modalProdutoImg" src="" alt="">
+      <div class="modal-produto-fechar" onclick="fecharModalProduto()"><i data-lucide="x"></i></div>
     </div>
-    <div style="font-size:12px;font-weight:700">MEUS COMPROVANTES</div>
-    <div style="width:28px"></div>
-  </div>
-  <div class="container" id="comprovantesBody"></div>
-</div>
-
-<div id="suporte" class="tela">
-  <div class="header">
-    <div class="header-left">
-      <div class="btn-voltar" onclick="ir('home')">←</div>
+    <div class="modal-produto-body">
+      <div class="modal-produto-nome" id="modalProdutoNome"></div>
+      <div class="modal-produto-preco" id="modalProdutoPreco"></div>
+      <div class="modal-produto-desc" id="modalProdutoDesc"></div>
+      <button class="btn btn-desc" onclick="toggleProdutoDesc()">VER DESCRIÇÃO</button>
+      <div class="label">🆔 ID da conta: *</div>
+      <input type="text" class="input" id="idProduto" placeholder="Digite o ID da conta">
+      <div class="label">🎁 Código de indicação (opcional):</div>
+      <input type="text" class="input" id="codigoProduto" placeholder="Ex: PREMIUM782">
+      <button class="btn" onclick="finalizarPedido()">ADICIONAR AO CARRINHO</button>
+      <button class="btn btn-sec" onclick="fecharModalProduto()">CANCELAR</button>
     </div>
-    <div style="font-size:12px;font-weight:700">SUPORTE</div>
-    <div style="width:28px"></div>
   </div>
-  <div class="container" id="suporteBody"></div>
 </div>
 
 <div id="admin" class="tela">
   <div class="header">
-    <div class="header-left">
-      <div class="btn-voltar" onclick="ir('home')">←</div>
-    </div>
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
     <div style="font-size:12px;font-weight:700">PAINEL ADM</div>
     <div style="width:28px"></div>
   </div>
   <div class="container" id="adminBody"></div>
 </div>
 
-<div id="pedidos" class="tela">
+<div id="indicacoes" class="tela">
   <div class="header">
-    <div class="header-left">
-      <div class="btn-voltar" onclick="abrirAdmin()">←</div>
-    </div>
-    <div style="font-size:12px;font-weight:700">GERENCIAR PEDIDOS</div>
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
+    <div style="font-size:12px;font-weight:700">MINHAS INDICAÇÕES</div>
     <div style="width:28px"></div>
   </div>
-  <div class="container" id="pedidosBody"></div>
+  <div class="container" id="indicacoesBody"></div>
 </div>
 
 <div id="adminIndicacoes" class="tela">
   <div class="header">
-    <div class="header-left">
-      <div class="btn-voltar" onclick="ir('home')">←</div>
-    </div>
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
     <div style="font-size:12px;font-weight:700">INDICAÇÕES ADMIN</div>
     <div style="width:28px"></div>
   </div>
   <div class="container" id="adminIndicacoesBody"></div>
 </div>
 
+<div id="comprovantes" class="tela">
+  <div class="header">
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
+    <div style="font-size:12px;font-weight:700">MEUS COMPROVANTES</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="comprovantesBody"></div>
+</div>
+
+<div id="pedidos" class="tela">
+  <div class="header">
+    <div class="header-left"><div class="btn-voltar" onclick="abrirAdmin()">←</div></div>
+    <div style="font-size:12px;font-weight:700">GERENCIAR PEDIDOS</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="pedidosBody"></div>
+</div>
+
+<div id="suporte" class="tela">
+  <div class="header">
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
+    <div style="font-size:12px;font-weight:700">SUPORTE</div>
+    <div style="width:28px"></div>
+  </div>
+  <div class="container" id="suporteBody"></div>
+</div>
+
 <div id="faq" class="tela">
   <div class="header">
-    <div class="header-left">
-      <div class="btn-voltar" onclick="ir('home')">←</div>
-    </div>
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
     <div style="font-size:12px;font-weight:700">DÚVIDAS FREQUENTES</div>
     <div style="width:28px"></div>
   </div>
@@ -480,41 +497,16 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 
 <div id="termos" class="tela">
   <div class="header">
-    <div class="header-left">
-      <div class="btn-voltar" onclick="ir('home')">←</div>
-    </div>
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
     <div style="font-size:12px;font-weight:700">TERMOS DO SITE</div>
     <div style="width:28px"></div>
   </div>
   <div class="container" id="termosBody"></div>
 </div>
 
-<div id="teste" class="tela">
-  <div class="header">
-    <div class="header-left">
-      <div class="btn-voltar" onclick="ir('home')">←</div>
-    </div>
-    <div style="font-size:12px;font-weight:700">TESTE GRÁTIS</div>
-    <div style="width:28px"></div>
-  </div>
-  <div class="container">
-    <div id="testeDescBox" class="info-teste"></div>
-
-    <div class="label">❤️ Link para Curtidas:</div>
-    <input type="text" class="input" id="testeLinkCurtidas" placeholder="Cole o link do post aqui">
-
-    <div class="label">👥 Link para Seguidores:</div>
-    <input type="text" class="input" id="testeLinkSeguidores" placeholder="Cole o link do perfil aqui">
-
-    <button class="btn" onclick="enviarTeste()">ENVIAR TESTE GRÁTIS</button>
-  </div>
-</div>
-
 <div id="premiacao" class="tela">
   <div class="header">
-    <div class="header-left">
-      <div class="btn-voltar" onclick="ir('home')">←</div>
-    </div>
+    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
     <div style="font-size:12px;font-weight:700">PREMIAÇÃO</div>
     <div style="width:28px"></div>
   </div>
@@ -528,18 +520,34 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
   </div>
 </div>
 
+<!-- BACKUP + FIREBASE SYNC -->
+<div id="admin-backup">
+<div class="backup-modal">
+<h2 style="color:#fff;margin-bottom:20px">📦 Backup + Firebase</h2>
+<div style="background:#2a2a2a;padding:15px;border-radius:8px;margin-bottom:20px">
+<p style="color:#fbbf24;font-size:14px;margin:0">⚠️ MIGRAR = Produtos em todos os celulares pra sempre</p>
+</div>
+<button onclick="migrarFirebase()" class="backup-btn btn-migrate">🔥 MIGRAR PRO FIREBASE</button>
+<button onclick="exportarBackupCompleto()" class="backup-btn btn-export">📤 EXPORTAR BACKUP</button>
+<button onclick="importarBackupCompleto()" class="backup-btn btn-import">📥 IMPORTAR BACKUP</button>
+<button onclick="fecharBackup()" class="backup-btn btn-close">Fechar</button>
+<textarea id="area-backup" readonly></textarea>
+</div>
+</div>
+<button onclick="abrirBackup()" class="btn-float">💾</button>
+
 <script>
 const EMAIL_ADM='nannyvittoriah@gmail.com',WHATSAPP='5598984853563';
 
 let db={
   cat:JSON.parse(localStorage.getItem('cat')||'[]'),
   serv:JSON.parse(localStorage.getItem('serv')||'[]'),
-  config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"Ao utilizar nosso painel, o usuário concorda automaticamente com todos os termos e condições abaixo.\\n\\n• Não garantimos resultados permanentes em serviços de redes sociais.\\n• O cliente é totalmente responsável pelo link enviado no pedido.\\n• Pedidos com links inválidos poderão ser cancelados sem aviso.\\n• Não realizamos reembolso após o início do serviço.\\n• O tempo de entrega pode variar conforme o serviço solicitado.\\n• Não aceitamos conteúdos ilegais, proibidos ou que violem políticas das plataformas.\\n• O uso do painel é de total responsabilidade do usuário.\\n• Alguns serviços podem sofrer quedas naturais após a entrega.\\n• O cliente concorda em utilizar o site de forma correta e sem tentativas de abuso ou spam.\\n• Alterações nos termos podem ocorrer a qualquer momento sem aviso prévio.\\n\\n💜 Ao continuar utilizando o painel, você concorda com todos os termos acima.","teste":{"desc":"Teste de Curtidas: São 10 curtidas grátis\\nTeste de Seguidores: São 30 seguidores grátis"},"premiacao":{"img":"","texto":""}}'),
+  config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"Ao utilizar nosso painel, o usuário concorda automaticamente com todos os termos e condições abaixo.\\n\\n• Não garantimos resultados permanentes em serviços de redes sociais.\\n• O cliente é totalmente responsável pelo link enviado no pedido.\\n• Pedidos com links inválidos poderão ser cancelados sem aviso.\\n• Não realizamos reembolso após o início do serviço.\\n• O tempo de entrega pode variar conforme o serviço solicitado.\\n• Não aceitamos conteúdos ilegais, proibidos ou que violem políticas das plataformas.\\n• O uso do painel é de total responsabilidade do usuário.\\n• Alguns serviços podem sofrer quedas naturais após a entrega.\\n• O cliente concorda em utilizar o site de forma correta e sem tentativas de abuso ou spam.\\n• Alterações nos termos podem ocorrer a qualquer momento sem aviso prévio.\\n\\n💜 Ao continuar utilizando o painel, você concorda com todos os termos acima.","premiacao":{"img":"","texto":""}}'),
   indicacoes:JSON.parse(localStorage.getItem('indicacoes')||'[]'),
   usuarios:JSON.parse(localStorage.getItem('usuarios')||'{}'),
   pedidos:JSON.parse(localStorage.getItem('pedidos')||'[]')
 };
-let logado=false,catSel=null,servSel=null,usuarioAtual=null;
+let usuarioAtual=null,jogoSelecionado=null,produtoSelecionado=null;
 
 function save(){
   localStorage.setItem('cat',JSON.stringify(db.cat));
@@ -550,42 +558,92 @@ function save(){
   localStorage.setItem('pedidos',JSON.stringify(db.pedidos));
 }
 
-function showLoad(show){document.getElementById('loading').classList.toggle('ativo',show)}
+// FIREBASE SYNC
+async function carregarDoFirebase(){
+  const fb = window.firebaseAuth;
+  try {
+    const snapCat = await fb.get(fb.ref(fb.db, 'loja/cat'));
+    const snapServ = await fb.get(fb.ref(fb.db, 'loja/serv'));
+    const snapConfig = await fb.get(fb.ref(fb.db, 'loja/config'));
+    if(snapCat.exists()) db.cat = snapCat.val();
+    if(snapServ.exists()) db.serv = snapServ.val();
+    if(snapConfig.exists()) db.config = snapConfig.val();
+    save();
+    renderJogos();
+    renderProdutosLoja();
+    console.log('✅ Dados carregados do Firebase');
+  } catch(e) {
+    console.log('Firebase vazio ainda, usando localStorage');
+  }
+}
 
+const saveOriginal = save;
+save = function(){
+  saveOriginal();
+  if(window.firebaseAuth && usuarioAtual?.admin){
+    const fb = window.firebaseAuth;
+    fb.set(fb.ref(fb.db, 'loja/cat'), db.cat);
+    fb.set(fb.ref(fb.db, 'loja/serv'), db.serv);
+    fb.set(fb.ref(fb.db, 'loja/config'), db.config);
+  }
+}
+
+function abrirBackup(){document.getElementById('admin-backup').style.display='block'}
+function fecharBackup(){document.getElementById('admin-backup').style.display='none';document.getElementById('area-backup').style.display='none'}
+async function migrarFirebase(){
+  if(!confirm('⚠️ Isso vai copiar TODOS os produtos/categorias pro Firebase.\n\nDepois disso qualquer celular vai ver os mesmos dados.\n\nContinuar?')) return;
+  const fb = window.firebaseAuth;
+  showLoad(true);
+  try {
+    await fb.set(fb.ref(fb.db, 'loja/cat'), db.cat);
+    await fb.set(fb.ref(fb.db, 'loja/serv'), db.serv);
+    await fb.set(fb.ref(fb.db, 'loja/config'), db.config);
+    showLoad(false);
+    alert('✅ MIGRADO COM SUCESSO!\n\nAgora loga no outro celular que vai aparecer tudo.');
+  } catch(e) {
+    showLoad(false);
+    alert('❌ Erro ao migrar: ' + e.message);
+  }
+}
+function exportarBackupCompleto(){const d=JSON.stringify(localStorage);const a=document.getElementById('area-backup');a.value=d;a.style.display='block';navigator.clipboard.writeText(d).then(()=>alert('✅ Copiado!')).catch(()=>alert('✅ Copia o texto verde abaixo'))}
+function importarBackupCompleto(){const d=prompt('Cola os dados aqui:');if(!d)return;try{const o=JSON.parse(d);if(confirm('⚠️ Vai substituir tudo. Confirma?')){localStorage.clear();Object.keys(o).forEach(k=>localStorage.setItem(k,o[k]));alert('✅ Importado! Vai recarregar.');location.reload()}}catch(e){alert('❌ Dados inválidos')}}
+
+function showLoad(show){document.getElementById('loading').classList.toggle('ativo',show)}
 function gerarCodigoIndicacao(nome){
   const base=nome.toUpperCase().replace(/[^A-Z]/g,'').slice(0,6);
   const num=Math.floor(Math.random()*900)+100;
   return `${base||'USER'}${num}`;
 }
 
+let authTimeout = setTimeout(()=>{
+  showLoad(false);
+  document.getElementById('login').classList.add('ativa');
+}, 3000);
+
 window.addEventListener('load',()=>{
   lucide.createIcons();
   const { auth, onAuthStateChanged } = window.firebaseAuth;
   onAuthStateChanged(auth, async(user) => {
+    clearTimeout(authTimeout);
+    showLoad(false);
     if(user){
       usuarioAtual={uid:user.uid,nome:user.displayName||user.email.split('@')[0],email:user.email,admin:user.email===EMAIL_ADM};
-
+      await carregarDoFirebase();
       if(!db.usuarios[user.uid]){
-        db.usuarios[user.uid]={
-          codigo:gerarCodigoIndicacao(usuarioAtual.nome),
-          indicacoesValidas:0,
-          totalIndicacoes:0
-        };
+        db.usuarios[user.uid]={codigo:gerarCodigoIndicacao(usuarioAtual.nome),indicacoesValidas:0,totalIndicacoes:0};
         save();
       }
       usuarioAtual.codigo=db.usuarios[user.uid].codigo;
-
-      logado=true;
       document.getElementById('login').classList.remove('ativa');
       document.getElementById('home').classList.add('ativa');
-
+      atualizarHeaderUsuario();
+      renderJogos();
+      renderProdutosLoja();
+      atualizarCarrinho();
       if(usuarioAtual.admin){
         document.getElementById('menuAdmin').style.display='flex';
         document.getElementById('menuAdminInd').style.display='flex';
       }
-
-      atualizarHeaderUsuario();
-      renderHome();
     }else{
       document.getElementById('login').classList.add('ativa');
     }
@@ -611,14 +669,13 @@ async function fazerLogin(){
   const email=document.getElementById('loginEmail').value.trim();
   const senha=document.getElementById('loginSenha').value;
   if(!email||!senha){alert('Preencha todos os campos');return}
-
   showLoad(true);
   try{
     await signInWithEmailAndPassword(auth,email,senha);
   }catch(e){
+    showLoad(false);
     alert('Erro: '+e.message);
   }
-  showLoad(false);
 }
 
 async function fazerCadastro(){
@@ -627,50 +684,36 @@ async function fazerCadastro(){
   const email=document.getElementById('cadEmail').value.trim();
   const senha=document.getElementById('cadSenha').value;
   const senha2=document.getElementById('cadSenha2').value;
-
   if(!nome||!email||!senha||!senha2){alert('Preencha todos os campos');return}
   if(senha!==senha2){alert('As senhas não coincidem');return}
   if(senha.length<6){alert('Senha deve ter no mínimo 6 caracteres');return}
-
   showLoad(true);
   try{
     const cred = await createUserWithEmailAndPassword(auth,email,senha);
     await updateProfile(cred.user,{displayName:nome});
     alert('Cadastro realizado com sucesso!');
   }catch(e){
+    showLoad(false);
     alert('Erro: '+e.message);
   }
-  showLoad(false);
 }
 
 async function abrirEsqueciSenha(){
   const email = prompt('Digite seu e-mail cadastrado:');
-  
-  if(!email){
-    alert('Cancelado');
-    return;
-  }
-  
-  if(!email.includes('@')){
-    alert('E-mail inválido');
-    return;
-  }
-  
+  if(!email){alert('Cancelado');return}
+  if(!email.includes('@')){alert('E-mail inválido');return}
   showLoad(true);
   try{
     const { auth, sendPasswordResetEmail } = window.firebaseAuth;
     await sendPasswordResetEmail(auth, email);
+    showLoad(false);
     alert('✅ E-mail enviado!\n\nVerifica sua caixa de entrada e spam.\nClica no link pra criar uma nova senha.');
   }catch(e){
-    if(e.code === 'auth/user-not-found'){
-      alert('❌ E-mail não encontrado no sistema');
-    }else if(e.code === 'auth/invalid-email'){
-      alert('❌ E-mail inválido');
-    }else{
-      alert('Erro: ' + e.message);
-    }
+    showLoad(false);
+    if(e.code === 'auth/user-not-found'){alert('❌ E-mail não encontrado no sistema');}
+    else if(e.code === 'auth/invalid-email'){alert('❌ E-mail inválido');}
+    else{alert('Erro: ' + e.message);}
   }
-  showLoad(false);
 }
 
 async function logout(){
@@ -687,357 +730,354 @@ function abrirPerfil(){
 
 function abrirMenu(){document.getElementById('sidebar').classList.add('ativo');document.getElementById('overlay').classList.add('ativo')}
 function fecharMenu(){document.getElementById('sidebar').classList.remove('ativo');document.getElementById('overlay').classList.remove('ativo')}
+
+function atualizarCarrinho(){
+  const pendentes = db.pedidos.filter(p=>usuarioAtual && p.email===usuarioAtual.email && p.status==='pendente').length;
+  document.getElementById('cartCount').textContent = pendentes;
+}
+
+function renderCarrinho(){
+  if(!usuarioAtual){return}
+  const meus=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && p.status==='pendente');
+  if(meus.length===0){
+    document.getElementById('carrinhoBody').innerHTML='<div class="empty">Carrinho vazio<br><br>Adicione produtos na loja!</div>';
+    return;
+  }
+  const total = meus.reduce((s,p)=>s+p.valor,0);
+  const lista=meus.map(p=>`
+    <div class="lista-item">
+      <div class="lista-top">
+        <div class="lista-nome">${p.servico}</div>
+        <div style="color:var(--verde);font-weight:800">R$ ${p.valor.toFixed(2).replace('.',',')}</div>
+      </div>
+      <div class="lista-info">
+        Jogo: ${p.jogo}<br>
+        ID: ${p.id_conta}<br>
+        Data: ${new Date(p.data).toLocaleString('pt-BR')}
+      </div>
+      <div class="lista-acoes" style="margin-top:8px">
+        <button class="btn-mini btn-del" onclick="cancelarPedidoCarrinho('${p.id}')">REMOVER</button>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('carrinhoBody').innerHTML=`
+    <div class="indicacao-card">
+      <div class="indicacao-header">
+        <div class="indicacao-tit">🛒 RESUMO</div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-num">${meus.length}</div>
+          <div class="stat-label">Itens</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">R$ ${total.toFixed(2)}</div>
+          <div class="stat-label">Total</div>
+        </div>
+      </div>
+      <button class="btn" onclick="enviarTodosPedidos()">ENVIAR PEDIDOS NO WHATSAPP</button>
+    </div>
+    <div class="titulo">ITENS PENDENTES</div>
+    ${lista}
+  `;
+  lucide.createIcons();
+}
+
+function cancelarPedidoCarrinho(id){
+  if(confirm('Remover este item do carrinho?')){
+    db.pedidos=db.pedidos.filter(p=>p.id!==id);
+    save();
+    atualizarCarrinho();
+    renderCarrinho();
+  }
+}
+
+function enviarTodosPedidos(){
+  const meus=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && p.status==='pendente');
+  if(meus.length===0){alert('Carrinho vazio');return}
+  const total = meus.reduce((s,p)=>s+p.valor,0);
+  let msg=`━━━━━━━━━━
+🛒 PEDIDOS PENDENTES
+━━━━━━━━━━
+
+👤 Cliente: ${usuarioAtual.nome}
+📧 Email: ${usuarioAtual.email}
+
+`;
+  meus.forEach((p,i)=>{
+    msg+=`${i+1}. ${p.servico}\n`;
+    msg+=` 🎮 ${p.jogo}\n`;
+    msg+=` 💵 R$ ${p.valor.toFixed(2).replace('.',',')}\n`;
+    msg+=` 🆔 ${p.id_conta}\n\n`;
+  });
+  msg+=`💰 TOTAL: R$ ${total.toFixed(2).replace('.',',')}\n`;
+  msg+=`━━━━━━━━━━`;
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+function renderComprovantes(){
+  if(!usuarioAtual){return}
+  const todosComprovantes=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && (p.status==='confirmado'||p.status==='cancelado')).reverse();
+
+  document.getElementById('comprovantesBody').innerHTML=`
+    <div class="search-bar" style="margin:0 0 16px 0">
+      <i class="icon" data-lucide="search"></i>
+      <input type="text" id="buscaComprovante" placeholder="Buscar por ID do pedido...">
+    </div>
+    <div id="listaComprovantes"></div>
+  `;
+
+  function filtrarComprovantes(){
+    const termo = document.getElementById('buscaComprovante').value.toLowerCase().trim();
+    const filtrados = termo? todosComprovantes.filter(p=>p.id.toLowerCase().includes(termo)) : todosComprovantes;
+
+    if(filtrados.length===0){
+      document.getElementById('listaComprovantes').innerHTML='<div class="empty">Nenhum comprovante encontrado<br><br>Finalize pedidos no carrinho!</div>';
+      return;
+    }
+
+    const lista=filtrados.map(p=>{
+      const statusClass=p.status==='confirmado'?'confirmado':'cancelado';
+      const statusIcon=p.status==='confirmado'?'check-circle':'x-circle';
+      const statusTxt=p.status==='confirmado'?'Confirmado':'Cancelado';
+      return `
+      <div class="comprovante-card">
+        <div class="comprovante-topo">
+          <div class="comprovante-titulo">
+            <i data-lucide="file-text"></i>
+            <span class="novo">COMPROVANTE</span>
+          </div>
+        </div>
+        <div class="comprovante-linha">
+          <div class="comprovante-icon"><i data-lucide="tag"></i></div>
+          <div class="comprovante-info-wrap">
+            <div class="comprovante-label">Pedido:</div>
+            <div class="comprovante-valor roxo">${p.id}</div>
+          </div>
+        </div>
+        <div class="comprovante-linha">
+          <div class="comprovante-icon"><i data-lucide="package"></i></div>
+          <div class="comprovante-info-wrap">
+            <div class="comprovante-label">Serviço:</div>
+            <div class="comprovante-valor">${p.servico}</div>
+          </div>
+        </div>
+        <div class="comprovante-linha">
+          <div class="comprovante-icon"><i data-lucide="gamepad-2"></i></div>
+          <div class="comprovante-info-wrap">
+            <div class="comprovante-label">Jogo:</div>
+            <div class="comprovante-valor">${p.jogo}</div>
+          </div>
+        </div>
+        <div class="comprovante-linha">
+          <div class="comprovante-icon"><i data-lucide="hash"></i></div>
+          <div class="comprovante-info-wrap">
+            <div class="comprovante-label">ID:</div>
+            <div class="comprovante-valor">${p.id_conta}</div>
+          </div>
+        </div>
+        <div class="comprovante-linha">
+          <div class="comprovante-icon"><i data-lucide="dollar-sign"></i></div>
+          <div class="comprovante-info-wrap">
+            <div class="comprovante-label">Valor:</div>
+            <div class="comprovante-valor verde">R$ ${p.valor.toFixed(2).replace('.',',')}</div>
+          </div>
+        </div>
+        <div class="comprovante-linha">
+          <div class="comprovante-icon"><i data-lucide="calendar"></i></div>
+          <div class="comprovante-info-wrap">
+            <div class="comprovante-label">Data:</div>
+            <div class="comprovante-valor">${new Date(p.data).toLocaleDateString('pt-BR')}</div>
+          </div>
+        </div>
+        <div class="comprovante-linha">
+          <div class="comprovante-icon"><i data-lucide="clipboard-list"></i></div>
+          <div class="comprovante-info-wrap">
+            <div class="comprovante-label">Status:</div>
+            <div class="comprovante-status ${statusClass}">
+              <i data-lucide="${statusIcon}"></i>
+              ${statusTxt}
+            </div>
+          </div>
+        ${p.mensagemAdmin? `
+        <div class="comprovante-linha" style="background:rgba(139,92,246,0.1);border-color:var(--roxo)">
+          <div class="comprovante-icon"><i data-lucide="message-square"></i></div>
+          <div class="comprovante-info-wrap" style="flex-direction:column;align-items:flex-start">
+            <div class="comprovante-label" style="margin-bottom:4px">Mensagem do Admin:</div>
+            <div class="comprovante-valor" style="text-align:left;white-space:pre-wrap;font-size:9px">${p.mensagemAdmin}</div>
+          </div>
+        </div>` : ''}
+        <div class="comprovante-footer">
+          <div class="comprovante-footer-logo">
+            <i data-lucide="gem"></i>
+            PREMIUM STORE
+          </div>
+          <div class="comprovante-footer-texto">Obrigado por escolher a melhor!</div>
+          <div class="comprovante-footer-heart">💜</div>
+        </div>
+      </div>
+    `}).join('');
+
+    document.getElementById('listaComprovantes').innerHTML=lista;
+    lucide.createIcons();
+  }
+
+  document.getElementById('buscaComprovante').addEventListener('input', filtrarComprovantes);
+  filtrarComprovantes();
+  lucide.createIcons();
+}
+
 function ir(t){
   document.querySelectorAll('.tela').forEach(e=>e.classList.remove('ativa'));
   document.getElementById(t).classList.add('ativa');
-  if(t==='home')renderHome();
+  if(t==='home'){renderJogos();renderProdutosLoja();}
   if(t==='faq')renderFaq();
   if(t==='termos')renderTermos();
-  if(t==='teste')renderTeste();
   if(t==='premiacao')renderPremiacao();
   if(t==='indicacoes')renderIndicacoes();
   if(t==='adminIndicacoes')renderAdminIndicacoes();
   if(t==='comprovantes')renderComprovantes();
+  if(t==='carrinho')renderCarrinho();
   if(t==='suporte')renderSuporte();
   if(t==='pedidos')renderPedidos();
-}
-
-function abrirAdmin(){
-  if(!usuarioAtual.admin){alert('Acesso negado. Apenas administradores.');return}
-  document.getElementById('adminBody').innerHTML=`
-  <button class="btn" onclick="abrirCats()">📂 CATEGORIAS</button>
-  <button class="btn" onclick="abrirServs()">📦 SERVIÇOS</button>
-  <button class="btn" onclick="abrirPedidos()">📋 PEDIDOS</button>
-  <button class="btn" onclick="formFaq()">❓ DÚVIDAS FREQUENTES</button>
-  <button class="btn" onclick="formTermos()">📄 TERMOS DO SITE</button>
-  <button class="btn" onclick="formTeste()">🎁 TESTE GRÁTIS</button>
-  <button class="btn" onclick="formPremiacao()">🏆 PREMIAÇÃO</button>
-  <button class="btn btn-red" onclick="ir('home')">VOLTAR</button>`;
-  ir('admin');
-}
-
-function abrirPedidos(){
-  ir('pedidos');
-  renderPedidos();
-}
-
-function renderPedidos(filtro='todos',buscaId=''){
-  const hoje=new Date().toLocaleDateString('pt-BR');
-  const pedidosHoje=db.pedidos.filter(p=>new Date(p.data).toLocaleDateString('pt-BR')===hoje);
-  const pendentes=db.pedidos.filter(p=>p.status==='pendente').length;
-  const confirmados=db.pedidos.filter(p=>p.status==='confirmado').length;
-  const cancelados=db.pedidos.filter(p=>p.status==='cancelado').length;
-  const faturamento=db.pedidos.filter(p=>p.status==='confirmado').reduce((t,p)=>t+p.valor,0);
-
-  let pedidosFiltrados=db.pedidos;
-
-  if(filtro!=='todos')pedidosFiltrados=pedidosFiltrados.filter(p=>p.status===filtro);
-
-  if(buscaId){
-    buscaId=buscaId.toLowerCase().trim();
-    pedidosFiltrados=pedidosFiltrados.filter(p=>
-      p.id.toLowerCase().includes(buscaId) ||
-      p.email.toLowerCase().includes(buscaId)
-    );
-  }
-
-  const lista=[...pedidosFiltrados].reverse().map(p=>`
-    <div class="lista-item">
-      <div class="lista-top">
-        <div class="lista-nome">🆔 ${p.id} - ${p.servico}</div>
-        <span class="badge badge-${p.status}">${p.status==='pendente'?'⏳ Pendente':p.status==='confirmado'?'✅ Confirmado':'❌ Cancelado'}</span>
-      </div>
-      <div class="lista-info">
-        Cliente: ${p.email}<br>
-        Valor: R$ ${p.valor.toFixed(2).replace('.',',')}<br>
-        Link: ${p.link}<br>
-        ${p.codigoIndicacao?`Código: ${p.codigoIndicacao}<br>`:''}
-        Data: ${new Date(p.data).toLocaleString('pt-BR')}
-      </div>
-      ${p.status==='pendente'?`
-      <div class="lista-acoes" style="margin-top:8px">
-        <button class="btn-mini btn-edit" onclick="aprovarPedido('${p.id}')">✅ APROVAR</button>
-        <button class="btn-mini btn-del" onclick="cancelarPedido('${p.id}')">❌ CANCELAR</button>
-      </div>`:''}
-    </div>
-  `).join('');
-
-  document.getElementById('pedidosBody').innerHTML=`
-    <div class="indicacao-card">
-      <div class="indicacao-header">
-        <div class="indicacao-tit">📊 ESTATÍSTICAS HOJE</div>
-      </div>
-      <div class="stats-grid">
-        <div class="stat-item">
-          <div class="stat-num">${pedidosHoje.length}</div>
-          <div class="stat-label">Total Hoje</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">${pendentes}</div>
-          <div class="stat-label">Pendentes</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">R$ ${faturamento.toFixed(2)}</div>
-          <div class="stat-label">Faturamento</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="label">🔍 BUSCAR PEDIDO:</div>
-    <div style="display:flex;gap:6px;margin-bottom:12px">
-      <input type="text" class="input" id="buscaPedidoId" placeholder="Digite ID ou email do cliente" value="${buscaId}" style="margin:0;flex:1">
-      <button class="btn-mini btn-edit" onclick="buscarPedido()" style="width:80px">BUSCAR</button>
-    </div>
-
-    <div class="label">🔍 FILTRAR POR:</div>
-    <div style="display:flex;gap:6px;margin-bottom:12px">
-      <button class="btn-mini ${filtro==='todos'?'btn-edit':''}" onclick="renderPedidos('todos')">TODOS</button>
-      <button class="btn-mini ${filtro==='pendente'?'btn-edit':''}" onclick="renderPedidos('pendente')">PENDENTES</button>
-      <button class="btn-mini ${filtro==='confirmado'?'btn-edit':''}" onclick="renderPedidos('confirmado')">CONFIRMADOS</button>
-      <button class="btn-mini ${filtro==='cancelado'?'btn-edit':''}" onclick="renderPedidos('cancelado')">CANCELADOS</button>
-    </div>
-
-    <div class="titulo">LISTA DE PEDIDOS ${buscaId?`- Busca: "${buscaId}"`:''}</div>
-    ${lista||'<div class="empty">Nenhum pedido encontrado</div>'}
-  `;
-}
-
-function buscarPedido(){
-  const busca=document.getElementById('buscaPedidoId').value;
-  renderPedidos('todos',busca);
-}
-
-function aprovarPedido(id){
-  if(confirm('Aprovar este pedido? O cliente vai ver como CONFIRMADO.')){
-    db.pedidos.find(p=>p.id===id).status='confirmado';
-    save();
-    renderPedidos();
-    alert('Pedido aprovado!');
-  }
-}
-
-function cancelarPedido(id){
-  if(confirm('Cancelar este pedido? O cliente vai ver como CANCELADO.')){
-    db.pedidos.find(p=>p.id===id).status='cancelado';
-    save();
-    renderPedidos();
-    alert('Pedido cancelado!');
-  }
-}
-
-function abrirAdminIndicacoes(){
-  if(!usuarioAtual.admin){alert('Acesso negado');return}
-  ir('adminIndicacoes');
-  renderAdminIndicacoes();
-}
-
-function toggleDrop(tipo){
-  document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('ativo'));
-  document.getElementById(tipo+'Drop').classList.toggle('ativo');
-}
-
-function setCat(k){
-  catSel=k;servSel=null;
-  const c=db.cat.find(x=>x.k===k);
-  document.getElementById('catText').textContent=c.nome;
-  document.getElementById('catDrop').classList.remove('ativo');
-  document.getElementById('servText').textContent='Selecione um serviço';
-  document.getElementById('servId').textContent='---';
-  document.getElementById('valor').textContent='R$ 0,00';
-  document.getElementById('descBox').classList.remove('ativo');
-  renderServsDrop();
-}
-
-function setServ(k){
-  servSel=k;
-  const s=db.serv.find(x=>x.k===k);
-  document.getElementById('servText').textContent=s.nome;
-  document.getElementById('servId').textContent=s.k.slice(-4);
-  document.getElementById('valor').textContent='R$ '+s.preco.toFixed(2).replace('.',',');
-  document.getElementById('descBox').textContent=s.desc||'Sem descrição';
-  document.getElementById('servDrop').classList.remove('ativo');
-}
-
-function toggleDesc(){
-  if(!servSel){alert('Selecione um serviço primeiro');return}
-  document.getElementById('descBox').classList.toggle('ativo');
-}
-
-function finalizar(){
-  if(!servSel){alert('Selecione um serviço');return}
-  let link=document.getElementById('link').value.trim();
-  if(!link){alert('Cole o link');return}
-  const s=db.serv.find(x=>x.k===servSel);
-  const codigoInd=document.getElementById('codigoIndicacao').value.trim().toUpperCase();
-  const data=new Date().toLocaleDateString('pt-BR');
-  const pedidoId='#'+Date.now().toString().slice(-5);
-
-  db.pedidos.push({
-    id:pedidoId,
-    uid:usuarioAtual.uid,
-    email:usuarioAtual.email,
-    servico:s.nome,
-    valor:s.preco,
-    link,
-    codigoIndicacao:codigoInd||null,
-    data:new Date().toISOString(),
-    status:'pendente'
-  });
-
-  if(codigoInd){
-    const existe=db.indicacoes.find(i=>i.codigo===codigoInd&&i.pedidoId===pedidoId);
-    if(existe){alert('Este código já foi usado neste pedido');return}
-
-    db.indicacoes.push({
-      id:'i'+Date.now(),
-      codigo:codigoInd,
-      pedidoId,
-      servico:s.nome,
-      valor:s.preco,
-      link,
-      cliente:usuarioAtual.email,
-      data:new Date().toISOString(),
-      status:'pendente'
-    });
-  }
-  save();
-
-  let msg=`━━━━━━━━━━
-🚀 NOVO PEDIDO
-━━━━━━━━━━
-
-🆔 Pedido: ${pedidoId}
-📦 Serviço: ${s.nome}
-💵 Valor: R$ ${s.preco.toFixed(2).replace('.',',')}
-🔗 Link: ${link}`;
-
-  if(codigoInd){
-    msg+=`\n\n🎁 Código de indicação:\n${codigoInd}`;
-  }
-
-  msg+=`\n\n📌 Status:\nAguardando confirmação\n━━━━━━━━━━`;
-
-  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
-  document.getElementById('link').value='';
-  document.getElementById('codigoIndicacao').value='';
-  alert('Pedido enviado! Aguarde confirmação no WhatsApp.');
-}
-
-function renderComprovantes(){
-  const meus=db.pedidos.filter(p=>p.uid===usuarioAtual.uid).reverse();
-
-  if(meus.length===0){
-    document.getElementById('comprovantesBody').innerHTML='<div class="empty">Nenhum comprovante ainda<br><br>Faça seu primeiro pedido!</div>';
-    return;
-  }
-
-  const lista=meus.map(p=>{
-    const statusClass=p.status==='pendente'?'pendente':p.status==='confirmado'?'confirmado':'cancelado';
-    const statusIcon=p.status==='pendente'?'clock':p.status==='confirmado'?'check-circle':'x-circle';
-    const statusTxt=p.status==='pendente'?'Aguardando confirmação':p.status==='confirmado'?'Confirmado':'Cancelado';
-
-    return `
-    <div class="comprovante-card">
-      <div class="comprovante-topo">
-        <div class="comprovante-titulo">
-          <i data-lucide="rocket"></i>
-          <span class="novo">NOVO</span> <span class="pedido">PEDIDO</span>
-        </div>
-      </div>
-
-      <div class="comprovante-linha">
-        <div class="comprovante-icon"><i data-lucide="tag"></i></div>
-        <div class="comprovante-info-wrap">
-          <div class="comprovante-label">Pedido:</div>
-          <div class="comprovante-valor roxo">${p.id}</div>
-        </div>
-      </div>
-
-      <div class="comprovante-linha">
-        <div class="comprovante-icon"><i data-lucide="package"></i></div>
-        <div class="comprovante-info-wrap">
-          <div class="comprovante-label">Serviço:</div>
-          <div class="comprovante-valor">${p.servico}</div>
-        </div>
-      </div>
-
-      <div class="comprovante-linha">
-        <div class="comprovante-icon"><i data-lucide="dollar-sign"></i></div>
-        <div class="comprovante-info-wrap">
-          <div class="comprovante-label">Valor:</div>
-          <div class="comprovante-valor verde">R$ ${p.valor.toFixed(2).replace('.',',')}</div>
-        </div>
-      </div>
-
-     <div class="comprovante-linha">
-  <div class="comprovante-icon"><i data-lucide="link"></i></div>
-  <div class="comprovante-info-wrap">
-    <div class="comprovante-label">Link:</div>
-    <div class="comprovante-valor link">${p.link}</div>
-  </div>
-</div>
-
-<div class="comprovante-linha">
-  <div class="comprovante-icon"><i data-lucide="calendar"></i></div>
-  <div class="comprovante-info-wrap">
-    <div class="comprovante-label">Data:</div>
-    <div class="comprovante-valor">${new Date(p.data).toLocaleDateString('pt-BR')}</div>
-  </div>
-</div>
-
-${p.codigoIndicacao?`
-<div class="comprovante-linha">
-  <div class="comprovante-icon"><i data-lucide="gift"></i></div>
-  <div class="comprovante-info-wrap">
-    <div class="comprovante-label">Código de indicação:</div>
-    <div class="comprovante-valor roxo">${p.codigoIndicacao}</div>
-  </div>
-</div>`:''}
-
-      <div class="comprovante-linha">
-        <div class="comprovante-icon"><i data-lucide="clipboard-list"></i></div>
-        <div class="comprovante-info-wrap">
-          <div class="comprovante-label">Status:</div>
-          <div class="comprovante-status ${statusClass}">
-            <i data-lucide="${statusIcon}"></i>
-            ${statusTxt}
-          </div>
-        </div>
-      </div>
-
-      <div class="comprovante-footer">
-        <div class="comprovante-footer-logo">
-          <i data-lucide="gem"></i>
-          PREMIUM STORE
-        </div>
-        <div class="comprovante-footer-texto">Obrigado por escolher a melhor!</div>
-        <div class="comprovante-footer-heart">💜</div>
-      </div>
-
-      <div class="comprovante-acoes">
-        <button class="btn-baixar-comprovante" onclick="baixarComprovante('${p.id}')">
-          <i data-lucide="download"></i>
-          Baixar comprovante
-        </button>
-        <button class="comprovante-btn-acao" onclick="compartilharComprovante('${p.id}')">
-          <i data-lucide="upload"></i>
-        </button>
-      </div>
-    </div>
-  `}).join('');
-
-  document.getElementById('comprovantesBody').innerHTML=lista;
   lucide.createIcons();
 }
 
-function baixarComprovante(id){
-  alert('Função de download em desenvolvimento!\n\nComprovante: '+id);
+function renderJogos(){
+  const cats = db.cat.length?db.cat:[];
+  const icones = {'free fire':'flame','roblox':'box','cod mobile':'crosshair','fortnite':'zap','brawl stars':'star','efootball':'football'};
+  const html = cats.map(c=>{
+    return `<div class="jogo-card" onclick="filtrarJogo('${c.k}')">
+      <div class="jogo-card-img">
+        ${c.img?`<img src="${c.img}" alt="${c.nome}">`:`<i data-lucide="${icones[c.nome.toLowerCase()]||'gamepad-2'}"></i>`}
+      </div>
+      <span>${c.nome.toUpperCase()}</span>
+    </div>`;
+  }).join('');
+  document.getElementById('jogosGrid').innerHTML = html || '<div class="empty" style="grid-column:1/-1">Cadastre categorias no Admin</div>';
+  lucide.createIcons();
 }
 
-function compartilharComprovante(id){
-  const p=db.pedidos.find(x=>x.id===id);
-  const msg=`💜 PREMIUM STORE\n\nComprovante do pedido ${id}\nServiço: ${p.servico}\nValor: R$ ${p.valor.toFixed(2).replace('.',',')}\nStatus: ${p.status}`;
-  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
+function renderProdutosLoja(filtroJogo=null){
+  jogoSelecionado = filtroJogo;
+  let produtos = db.serv;
+
+  if(filtroJogo){
+    produtos = produtos.filter(p => p.cat === filtroJogo);
+  }
+
+  const busca = document.getElementById('buscaProduto')?.value.toLowerCase();
+  if(busca){
+    produtos = produtos.filter(p => {
+      const cat = db.cat.find(c=>c.k===p.cat);
+      return p.nome.toLowerCase().includes(busca) || cat?.nome.toLowerCase().includes(busca);
+    });
+  }
+
+  const html = produtos.map(p=>{
+    const cat = db.cat.find(c=>c.k===p.cat);
+    return `
+    <div class="produto-card">
+      <div class="tag-jogo">${cat?.nome.toUpperCase()||'GERAL'}</div>
+      <div class="produto-img">
+        ${p.img?`<img src="${p.img}" alt="${p.nome}">`:`<i data-lucide="gem"></i>`}
+        ${p.estoque>0?`<span class="badge-bonus">${p.estoque} DISP</span>`:''}
+      </div>
+      <div class="produto-nome">${p.nome}</div>
+      <div class="produto-preco">R$ ${p.preco.toFixed(2).replace('.',',')}</div>
+      <button class="btn-comprar" onclick="abrirModalPedido('${p.k}')">
+        <i data-lucide="shopping-cart"></i>
+        COMPRAR
+      </button>
+    </div>
+  `}).join('');
+
+  document.getElementById('produtosGrid').innerHTML = html || '<div class="empty">Nenhum produto cadastrado<br><br>Cadastre no Painel ADM</div>';
+  lucide.createIcons();
+
+  document.querySelectorAll('.jogo-card').forEach(card=>{card.classList.remove('ativo');});
+  if(filtroJogo){
+    const cardAtivo = document.querySelector(`.jogo-card[onclick="filtrarJogo('${filtroJogo}')"]`);
+    if(cardAtivo) cardAtivo.classList.add('ativo');
+  }
+}
+
+function filtrarJogo(k){renderProdutosLoja(k);}
+
+document.getElementById('buscaProduto')?.addEventListener('input', () => {renderProdutosLoja(jogoSelecionado);});
+
+function abrirModalPedido(k){
+  produtoSelecionado = db.serv.find(p=>p.k===k);
+  if(!produtoSelecionado) return;
+
+  document.getElementById('modalProdutoImg').src = produtoSelecionado.img || '';
+  document.getElementById('modalProdutoImg').style.display = produtoSelecionado.img? 'block' : 'none';
+  document.getElementById('modalProdutoNome').textContent = produtoSelecionado.nome;
+  document.getElementById('modalProdutoPreco').textContent = `R$ ${produtoSelecionado.preco.toFixed(2).replace('.',',')}`;
+  document.getElementById('modalProdutoDesc').textContent = produtoSelecionado.desc || 'Sem descrição';
+  document.getElementById('modalProdutoDesc').classList.remove('ativo');
+  document.getElementById('idProduto').value = '';
+  document.getElementById('codigoProduto').value = '';
+  document.getElementById('modalProduto').classList.add('ativo');
+  lucide.createIcons();
+}
+
+function fecharModalProduto(){
+  document.getElementById('modalProduto').classList.remove('ativo');
+  produtoSelecionado=null;
+}
+
+function toggleProdutoDesc(){
+  document.getElementById('modalProdutoDesc').classList.toggle('ativo');
+}
+
+function finalizarPedido(){
+  if(!produtoSelecionado){alert('Erro ao processar pedido');return}
+  let id=document.getElementById('idProduto').value.trim();
+  if(!id){alert('Digite o ID da conta');return}
+  if(id.length < 6){alert('ID muito curto. Confere aí');return}
+
+  const codigoInd=document.getElementById('codigoProduto').value.trim().toUpperCase();
+  const pedidoId='#'+Date.now().toString().slice(-5);
+  const cat = db.cat.find(c=>c.k===produtoSelecionado.cat);
+
+  const pedido={
+    id:pedidoId,
+    uid:usuarioAtual.uid,
+    email:usuarioAtual.email,
+    servico:produtoSelecionado.nome,
+    jogo:cat?.nome||'Geral',
+    valor:produtoSelecionado.preco,
+    id_conta: id,
+    codigoIndicacao:codigoInd||null,
+    data:new Date().toISOString(),
+    status:'pendente'
+  };
+
+  db.pedidos.push(pedido);
+
+  if(codigoInd){
+    const uidIndicador=Object.keys(db.usuarios).find(uid=>db.usuarios[uid].codigo===codigoInd);
+    if(uidIndicador && uidIndicador!==usuarioAtual.uid){
+      db.indicacoes.push({
+        id:'i'+Date.now(),
+        codigo:codigoInd,
+        pedidoId,
+        uidIndicador,
+        uidIndicado:usuarioAtual.uid,
+        nomeIndicado:usuarioAtual.nome,
+        valor:produtoSelecionado.preco,
+        status:'pendente',
+        data:pedido.data
+      });
+      db.usuarios[uidIndicador].totalIndicacoes=(db.usuarios[uidIndicador].totalIndicacoes||0)+1;
+    }
+  }
+
+  save();
+  atualizarCarrinho();
+  fecharModalProduto();
+  alert('✅ Adicionado ao carrinho!\n\nID: '+pedidoId+'\n\nVá em "Meu Carrinho" pra finalizar.');
 }
 
 function renderSuporte(){
@@ -1057,121 +1097,446 @@ function renderSuporte(){
         CHAMAR NO WHATSAPP
       </button>
     </div>
-
-    <div class="suporte-card">
-      <div class="suporte-icon"><i data-lucide="help-circle"></i></div>
-      <div class="suporte-tit">DÚVIDAS FREQUENTES</div>
-      <div class="suporte-desc">Antes de chamar, veja se sua dúvida já foi respondida na nossa central de ajuda.</div>
-      <button class="btn btn-sec" onclick="ir('faq')">VER DÚVIDAS FREQUENTES</button>
-    </div>
-
-    <div class="suporte-card">
-      <div class="suporte-icon"><i data-lucide="file-text"></i></div>
-      <div class="suporte-tit">TERMOS E CONDIÇÕES</div>
-      <div class="suporte-desc">Leia nossos termos de uso e política de reembolso antes de fazer seu pedido.</div>
-      <button class="btn btn-sec" onclick="ir('termos')">LER TERMOS DO SITE</button>
-    </div>
   `;
   lucide.createIcons();
 }
 
-function renderIndicacoes(){
-  const minhas=db.indicacoes.filter(i=>i.codigo===usuarioAtual.codigo);
-  const validas=minhas.filter(i=>i.status==='confirmada').length;
-  const pendentes=minhas.filter(i=>i.status==='pendente').length;
-  const canceladas=minhas.filter(i=>i.status==='cancelada'||i.status==='invalida').length;
+function renderFaq(){
+  const faq=db.config.faq||'Nenhuma dúvida cadastrada ainda.';
+  document.getElementById('faqBody').innerHTML=`<div class="texto-geral">${faq}</div>`;
+}
 
-  const proxMeta=validas<5?5:validas<10?10:validas<20?20:20;
-  const progresso=Math.min((validas/proxMeta)*100,100);
+function renderTermos(){
+  document.getElementById('termosBody').innerHTML=`<div class="texto-geral">${db.config.termos}</div>`;
+}
 
-  let recompensa='';
-  if(validas>=20)recompensa='🏆 PRÊMIO PREMIUM DESBLOQUEADO';
-  else if(validas>=10)recompensa='🎁 500 SEGUIDORES DESBLOQUEADO';
-  else if(validas>=5)recompensa='✨ 300 SEGUIDORES DESBLOQUEADO';
+function renderPremiacao(){
+  const prem=db.config.premiacao||{img:'',texto:'Nenhuma premiação ativa no momento.'};
+  document.getElementById('premiacaoBody').innerHTML=`
+    ${prem.img?`<img src="${prem.img}" style="width:100%;border-radius:12px;margin-bottom:12px">`:''}
+    <div class="texto-geral">${prem.texto}</div>
+  `;
+}
 
-  const historico=[...minhas].reverse().map(i=>`
-    <div class="indicacao-item">
-      <div class="indicacao-item-top">
-        <div class="indicacao-codigo">${i.servico}</div>
-        <span class="badge badge-${i.status}">${i.status==='pendente'?'⏳ Pendente':i.status==='confirmada'?'✅ Confirmada':i.status==='cancelada'?'❌ Cancelada':'🚫 Inválida'}</span>
+function abrirAdmin(){
+  if(!usuarioAtual.admin){alert('Acesso negado');return}
+  document.getElementById('adminBody').innerHTML=`
+  <button class="btn" onclick="abrirCats()">📂 CATEGORIAS</button>
+  <button class="btn" onclick="abrirServs()">📦 SERVIÇOS</button>
+  <button class="btn" onclick="ir('pedidos')">📋 PEDIDOS</button>
+  <button class="btn" onclick="formFaq()">❓ DÚVIDAS FREQUENTES</button>
+  <button class="btn" onclick="formTermos()">📄 TERMOS DO SITE</button>
+  <button class="btn" onclick="formPremiacao()">🏆 PREMIAÇÃO</button>
+  <button class="btn btn-sec" onclick="ir('home')">VOLTAR</button>
+  `;
+  ir('admin');
+}
+
+function abrirCats(){
+  const html=`
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div class="titulo">CATEGORIAS</div>
+    <button class="btn" style="width:auto;padding:6px 12px" onclick="novaCat()">+ NOVA</button>
+  </div>
+  <div id="listaCats"></div>
+  <button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>
+  `;
+  document.getElementById('adminBody').innerHTML=html;
+  renderCats();
+}
+
+function renderCats(){
+  const cats = db.cat.length?db.cat:[];
+  const lista = cats.map(c=>`
+    <div class="lista-item">
+      <div class="lista-top">
+        <div class="lista-nome">${c.nome}</div>
+        <div class="lista-acoes">
+          <button class="btn-mini btn-edit" onclick="editCat('${c.k}')">EDITAR</button>
+          <button class="btn-mini btn-del" onclick="delCat('${c.k}')">EXCLUIR</button>
+        </div>
       </div>
-      <div class="indicacao-valor">R$ ${i.valor.toFixed(2).replace('.',',')} - ${new Date(i.data).toLocaleDateString('pt-BR')}</div>
+      <div class="lista-info">Key: ${c.k}</div>
     </div>
   `).join('');
+  document.getElementById('listaCats').innerHTML = lista || '<div class="empty">Nenhuma categoria cadastrada</div>';
+}
+
+function novaCat(){
+  abrirModal('NOVA CATEGORIA',`
+  <input type="text" class="input" id="cNome" placeholder="Nome da categoria (ex: Free Fire)">
+  <div class="label">Imagem da categoria:</div>
+  <div class="upload" onclick="document.getElementById('cImg').click()">
+    <div class="upload-text">📷 Clique para enviar<br><span style="font-size:8px">PNG, JPG até 2MB</span></div>
+    <img id="cImgPrev" style="display:none">
+    <input type="file" id="cImg" accept="image/*" onchange="prevImg(this,'cImgPrev')">
+  </div>
+  <button class="btn" onclick="salvarCat()">SALVAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
+  `);
+}
+
+function editCat(k){
+  const c=db.cat.find(x=>x.k===k);
+  abrirModal('EDITAR CATEGORIA',`
+  <input type="text" class="input" id="cNome" placeholder="Nome da categoria" value="${c.nome}">
+  <div class="label">Imagem da categoria:</div>
+  <div class="upload" onclick="document.getElementById('cImg').click()">
+    <div class="upload-text" style="${c.img?'display:none':''}">📷 Clique para enviar</div>
+    <img id="cImgPrev" src="${c.img||''}" style="${c.img?'display:block':'display:none'}">
+    <input type="file" id="cImg" accept="image/*" onchange="prevImg(this,'cImgPrev')">
+  </div>
+  <button class="btn" onclick="salvarCat('${k}')">ATUALIZAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
+  `);
+}
+
+async function salvarCat(k=null){
+  const nome=document.getElementById('cNome').value.trim();
+  if(!nome){alert('Digite o nome');return}
+
+  showLoad(true);
+  try{
+    let img=null;
+    const file=document.getElementById('cImg').files[0];
+    if(file){
+      img=await toBase64(file);
+    }else if(k){
+      img=db.cat.find(x=>x.k===k)?.img||null;
+    }
+
+    const newK=k||'cat'+Date.now();
+    const cat={k:newK,nome,img};
+
+    if(k){
+      const index=db.cat.findIndex(x=>x.k===k);
+      if(index>=0)db.cat[index]=cat;
+    }else{
+      db.cat.push(cat);
+    }
+    save();
+    fecharModal();
+    abrirCats();
+    renderJogos();
+  }catch(e){
+    alert('Erro ao salvar: '+e.message);
+  }finally{
+    showLoad(false);
+  }
+}
+
+function delCat(k){
+  if(confirm('Excluir categoria? Os serviços vinculados ficarão sem categoria.')){
+    db.cat=db.cat.filter(x=>x.k!==k);
+    save();
+    renderCats();
+    renderJogos();
+  }
+}
+
+function abrirServs(){
+  const html=`
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div class="titulo">SERVIÇOS</div>
+    <button class="btn" style="width:auto;padding:6px 12px" onclick="novoServ()">+ NOVO</button>
+  </div>
+  <div id="listaServs"></div>
+  <button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>
+  `;
+  document.getElementById('adminBody').innerHTML=html;
+  renderServs();
+}
+
+function renderServs(){
+  const servs = db.serv.length?db.serv:[];
+  const lista = servs.map(s=>{
+    const cat = db.cat.find(c=>c.k===s.cat);
+    return `
+    <div class="lista-item">
+      <div class="lista-top">
+        <div class="lista-nome">${s.nome}</div>
+        <div class="lista-acoes">
+          <button class="btn-mini btn-edit" onclick="editServ('${s.k}')">EDITAR</button>
+          <button class="btn-mini btn-del" onclick="delServ('${s.k}')">EXCLUIR</button>
+        </div>
+      </div>
+      <div class="lista-info">
+        Categoria: ${cat?.nome||'-'}<br>
+        Preço: R$ ${s.preco.toFixed(2).replace('.',',')}<br>
+        Estoque: ${s.estoque||0}
+      </div>
+    </div>
+  `}).join('');
+  document.getElementById('listaServs').innerHTML = lista || '<div class="empty">Nenhum serviço cadastrado</div>';
+}
+
+function novoServ(){
+  const cats=db.cat.map(c=>`<option value="${c.k}">${c.nome}</option>`).join('');
+  abrirModal('NOVO SERVIÇO',`
+  <select class="input" id="sCat"><option value="">Selecione a categoria</option>${cats}</select>
+  <input type="text" class="input" id="sNome" placeholder="Nome do serviço (ex: 1000 Diamantes)">
+  <textarea class="textarea" id="sDesc" placeholder="Descrição do produto"></textarea>
+  <input type="number" class="input" id="sPreco" placeholder="Preço (ex: 19.90)" step="0.01">
+  <input type="number" class="input" id="sEstoque" placeholder="Estoque disponível" value="999">
+  <div class="label">Imagem do serviço:</div>
+  <div class="upload" onclick="document.getElementById('sImg').click()">
+    <div class="upload-text">📷 Clique para enviar<br><span style="font-size:8px">PNG, JPG até 2MB</span></div>
+    <img id="sImgPrev" style="display:none">
+    <input type="file" id="sImg" accept="image/*" onchange="prevImg(this,'sImgPrev')">
+  </div>
+  <button class="btn" onclick="salvarServ()">SALVAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
+  `);
+}
+
+function editServ(k){
+  const s=db.serv.find(x=>x.k===k);
+  const cats=db.cat.map(c=>`<option value="${c.k}" ${c.k===s.cat?'selected':''}>${c.nome}</option>`).join('');
+  abrirModal('EDITAR SERVIÇO',`
+  <select class="input" id="sCat">${cats}</select>
+  <input type="text" class="input" id="sNome" placeholder="Nome do serviço" value="${s.nome}">
+  <textarea class="textarea" id="sDesc" placeholder="Descrição">${s.desc||''}</textarea>
+  <input type="number" class="input" id="sPreco" placeholder="Preço" step="0.01" value="${s.preco}">
+  <input type="number" class="input" id="sEstoque" placeholder="Estoque" value="${s.estoque||0}">
+  <div class="label">Imagem do serviço:</div>
+  <div class="upload" onclick="document.getElementById('sImg').click()">
+    <div class="upload-text" style="${s.img?'display:none':''}">📷 Clique para enviar</div>
+    <img id="sImgPrev" src="${s.img||''}" style="${s.img?'display:block':'display:none'}">
+    <input type="file" id="sImg" accept="image/*" onchange="prevImg(this,'sImgPrev')">
+  </div>
+  <button class="btn" onclick="salvarServ('${k}')">ATUALIZAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
+  `);
+}
+
+async function salvarServ(k=null){
+  const cat=document.getElementById('sCat').value;
+  const nome=document.getElementById('sNome').value.trim();
+  const desc=document.getElementById('sDesc').value;
+  const preco=parseFloat(document.getElementById('sPreco').value);
+  const estoque=parseInt(document.getElementById('sEstoque').value)||0;
+
+  if(!cat||!nome||isNaN(preco)){
+    alert('Preencha categoria, nome e preço');
+    return;
+  }
+
+  showLoad(true);
+  try{
+    let img=null;
+    const file=document.getElementById('sImg').files[0];
+    if(file){
+      img=await toBase64(file);
+    }else if(k){
+      img=db.serv.find(x=>x.k===k)?.img||null;
+    }
+
+    const newK=k||'serv'+Date.now();
+    const serv={k:newK,cat,nome,desc,preco,estoque,img};
+
+    if(k){
+      const index=db.serv.findIndex(x=>x.k===k);
+      if(index>=0)db.serv[index]=serv;
+    }else{
+      db.serv.push(serv);
+    }
+    save();
+    fecharModal();
+    abrirServs();
+    renderProdutosLoja();
+  }catch(e){
+    alert('Erro ao salvar: '+e.message);
+  }finally{
+    showLoad(false);
+  }
+}
+
+function delServ(k){
+  if(confirm('Excluir serviço?')){
+    db.serv=db.serv.filter(x=>x.k!==k);
+    save();
+    renderServs();
+    renderProdutosLoja();
+  }
+}
+
+function renderPedidos(){
+  const todosPedidos = db.pedidos.slice().reverse();
+
+  document.getElementById('pedidosBody').innerHTML=`
+    <div class="search-bar" style="margin:0 0 16px 0">
+      <i class="icon" data-lucide="search"></i>
+      <input type="text" id="buscaPedidoAdm" placeholder="Buscar por ID do pedido...">
+    </div>
+    <div id="listaPedidosAdm"></div>
+  `;
+
+  function filtrarPedidosAdm(){
+    const termo = document.getElementById('buscaPedidoAdm').value.toLowerCase().trim();
+    const filtrados = termo? todosPedidos.filter(p=>p.id.toLowerCase().includes(termo)) : todosPedidos;
+
+    if(filtrados.length===0){
+      document.getElementById('listaPedidosAdm').innerHTML='<div class="empty">Nenhum pedido encontrado</div>';
+      return;
+    }
+
+    const lista=filtrados.map(p=>{
+      const statusClass=p.status==='pendente'?'badge-pendente':p.status==='confirmado'?'badge-confirmado':'badge-cancelado';
+      const statusTxt=p.status==='pendente'?'PENDENTE':p.status==='confirmado'?'CONFIRMADO':'CANCELADO';
+      return `
+      <div class="lista-item">
+        <div class="lista-top">
+          <div class="lista-nome">${p.id}</div>
+          <span class="badge ${statusClass}">${statusTxt}</span>
+        </div>
+        <div class="lista-info">
+          Cliente: ${p.email}<br>
+          Serviço: ${p.servico}<br>
+          Jogo: ${p.jogo}<br>
+          Valor: R$ ${p.valor.toFixed(2).replace('.',',')}<br>
+          ID: ${p.id_conta}<br>
+          Data: ${new Date(p.data).toLocaleString('pt-BR')}<br>
+          Indicação: ${p.codigoIndicacao||'-'}
+        </div>
+        ${p.status==='pendente'?`
+        <div class="lista-acoes" style="margin-top:8px">
+          <button class="btn-mini" style="background:var(--verde);color:var(--branco)" onclick="confirmarPedido('${p.id}')">CONFIRMAR</button>
+          <button class="btn-mini" style="background:var(--vermelho);color:var(--branco)" onclick="cancelarPedido('${p.id}')">CANCELAR</button>
+        </div>`:''}
+      </div>
+    `}).join('');
+
+    document.getElementById('listaPedidosAdm').innerHTML=lista;
+    lucide.createIcons();
+  }
+
+  document.getElementById('buscaPedidoAdm').addEventListener('input', filtrarPedidosAdm);
+  filtrarPedidosAdm();
+  lucide.createIcons();
+}
+
+function confirmarPedido(id){
+  const pedido=db.pedidos.find(p=>p.id===id);
+  if(!pedido)return;
+
+  abrirModal('CONFIRMAR PEDIDO',`
+    <div style="font-size:10px;margin-bottom:12px;color:var(--cinza)">
+      <b>Pedido:</b> ${pedido.id}<br>
+      <b>Cliente:</b> ${pedido.email}<br>
+      <b>Serviço:</b> ${pedido.servico}<br>
+      <b>ID:</b> ${pedido.id_conta}
+    </div>
+    <div class="label">💬 Mensagem para o cliente:</div>
+    <textarea class="textarea" id="msgAdmin" placeholder="Ex: Obrigado pela compra! Aqui está seu acesso:\nLogin: exemplo@email.com\nSenha: 123456" style="min-height:100px"></textarea>
+    <button class="btn" onclick="salvarConfirmacao('${id}')">CONFIRMAR E ENVIAR</button>
+    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
+  `);
+}
+
+function salvarConfirmacao(id){
+  const msgAdmin = document.getElementById('msgAdmin').value;
+  const pedido=db.pedidos.find(p=>p.id===id);
+  if(pedido){
+    pedido.status='confirmado';
+    pedido.mensagemAdmin = msgAdmin || null;
+
+    const indicacao=db.indicacoes.find(i=>i.pedidoId===id);
+    if(indicacao && indicacao.status==='pendente'){
+      indicacao.status='confirmada';
+      if(db.usuarios[indicacao.uidIndicador]){
+        db.usuarios[indicacao.uidIndicador].indicacoesValidas=(db.usuarios[indicacao.uidIndicador].indicacoesValidas||0)+1;
+      }
+    }
+    save();
+    fecharModal();
+    renderPedidos();
+    alert('✅ Pedido confirmado!\n\nMensagem enviada ao cliente.');
+  }
+}
+
+function cancelarPedido(id){
+  if(confirm('Cancelar este pedido?')){
+    const pedido=db.pedidos.find(p=>p.id===id);
+    if(pedido){
+      pedido.status='cancelado';
+      const indicacao=db.indicacoes.find(i=>i.pedidoId===id);
+      if(indicacao && indicacao.status==='pendente'){
+        indicacao.status='invalida';
+      }
+      save();
+      renderPedidos();
+    }
+  }
+}
+
+function renderIndicacoes(){
+  if(!usuarioAtual ||!usuarioAtual.codigo){
+    document.getElementById('indicacoesBody').innerHTML='<div class="empty">Erro ao carregar dados</div>';
+    return;
+  }
+  const userData=db.usuarios[usuarioAtual.uid]||{indicacoesValidas:0,totalIndicacoes:0};
+  const minhasIndicacoes=db.indicacoes.filter(i=>i.uidIndicador===usuarioAtual.uid);
+  const validas=userData.indicacoesValidas||0;
+  const total=userData.totalIndicacoes||0;
+  const progresso=Math.min((validas/5)*100,100);
+
+  const historico=minhasIndicacoes.slice().reverse().map(i=>{
+    const statusClass=i.status==='confirmada'?'badge-confirmada':i.status==='pendente'?'badge-pendente':'badge-invalida';
+    const statusTxt=i.status==='confirmada'?'CONFIRMADA':i.status==='pendente'?'PENDENTE':'INVÁLIDA';
+    return `
+    <div class="indicacao-item">
+      <div class="indicacao-item-top">
+        <div class="indicacao-codigo">Pedido: ${i.pedidoId}</div>
+        <span class="badge ${statusClass}">${statusTxt}</span>
+      </div>
+      <div class="indicacao-valor">
+        Indicado: ${i.nomeIndicado}<br>
+        Valor: R$ ${i.valor.toFixed(2).replace('.',',')}<br>
+        Data: ${new Date(i.data).toLocaleDateString('pt-BR')}
+      </div>
+    </div>
+  `}).join('');
 
   document.getElementById('indicacoesBody').innerHTML=`
     <div class="indicacao-card">
       <div class="indicacao-header">
-        <div class="indicacao-tit">🎁 SEU CÓDIGO</div>
+        <div class="indicacao-tit">💎 SEU CÓDIGO</div>
       </div>
       <div class="codigo-box">
         <div class="codigo-text">${usuarioAtual.codigo}</div>
         <button class="btn-copiar" onclick="copiarCodigo()">COPIAR</button>
       </div>
-      <button class="btn" onclick="compartilharConvite()">📤 COMPARTILHAR CONVITE</button>
-    </div>
-
-    <div class="indicacao-card">
-      <div class="indicacao-header">
-        <div class="indicacao-tit">📊 ESTATÍSTICAS</div>
-      </div>
       <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-num">${total}</div>
+          <div class="stat-label">Total</div>
+        </div>
         <div class="stat-item">
           <div class="stat-num">${validas}</div>
           <div class="stat-label">Válidas</div>
         </div>
         <div class="stat-item">
-          <div class="stat-num">${pendentes}</div>
-          <div class="stat-label">Pendentes</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">${canceladas}</div>
-          <div class="stat-label">Canceladas</div>
+          <div class="stat-num">${5-validas>0?5-validas:0}</div>
+          <div class="stat-label">Faltam</div>
         </div>
       </div>
-
-      <div style="font-size:9px;color:var(--cinza);margin-bottom:6px">Progresso: ${validas}/${proxMeta}</div>
-      <div class="progress-bar"><div class="progress-fill" style="width:${progresso}%"></div></div>
-      ${recompensa?`<div style="font-size:9px;color:var(--verde);text-align:center;margin-top:8px">${recompensa}</div>`:''}
-    </div>
-
-    <div class="indicacao-card">
-            <div class="indicacao-header">
-        <div class="indicacao-tit">🎯 RECOMPENSAS</div>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width:${progresso}%"></div>
+      </div>
+      <div style="font-size:9px;color:var(--cinza);text-align:center;margin-bottom:12px">
+        ${validas>=5?'🎉 Meta atingida! Você ganhou recompensas!':`${5-validas} indicações para próxima recompensa`}
       </div>
       <div class="recompensa-item">
-        <div class="recompensa-icon"><i data-lucide="zap"></i></div>
+        <div class="recompensa-icon"><i data-lucide="gift"></i></div>
         <div class="recompensa-info">
-          <div class="recompensa-tit">5 Compras Válidas</div>
-          <div class="recompensa-desc">Ganhe 300 seguidores grátis</div>
+          <div class="recompensa-tit">Recompensa 5 Indicações</div>
+          <div class="recompensa-desc">100 Diamantes FF ou 400 Robux</div>
         </div>
-        ${validas>=5?'<span class="badge badge-confirmada">✅</span>':''}
-      </div>
-      <div class="recompensa-item">
-        <div class="recompensa-icon"><i data-lucide="star"></i></div>
-        <div class="recompensa-info">
-          <div class="recompensa-tit">10 Compras Válidas</div>
-          <div class="recompensa-desc">Ganhe 500 seguidores grátis</div>
-        </div>
-        ${validas>=10?'<span class="badge badge-confirmada">✅</span>':''}
-      </div>
-      <div class="recompensa-item">
-        <div class="recompensa-icon"><i data-lucide="crown"></i></div>
-        <div class="recompensa-info">
-          <div class="recompensa-tit">20 Compras Válidas</div>
-          <div class="recompensa-desc">Prêmio Premium Surpresa</div>
-        </div>
-        ${validas>=20?'<span class="badge badge-confirmada">✅</span>':''}
       </div>
     </div>
-
-    <div class="indicacao-card">
-      <div class="indicacao-header">
-        <div class="indicacao-tit">📜 HISTÓRICO</div>
-      </div>
-      <div class="indicacao-historico">
-        ${historico||'<div class="empty">Nenhuma indicação ainda</div>'}
-      </div>
+    <div class="titulo">HISTÓRICO DE INDICAÇÕES</div>
+    <div class="indicacao-historico">
+      ${historico||'<div class="empty">Nenhuma indicação ainda<br><br>Compartilhe seu código!</div>'}
     </div>
   `;
   lucide.createIcons();
@@ -1179,270 +1544,133 @@ function renderIndicacoes(){
 
 function copiarCodigo(){
   navigator.clipboard.writeText(usuarioAtual.codigo);
-  alert('Código copiado: '+usuarioAtual.codigo);
-}
-
-function compartilharConvite(){
-  const msg=`🎁 Use meu código ${usuarioAtual.codigo} na Premium Store e ganhe benefícios exclusivos!\n\nCompre seguidores, curtidas e muito mais com qualidade premium 💜`;
-  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
+  alert('✅ Código copiado!\n\nCompartilhe com seus amigos.');
 }
 
 function renderAdminIndicacoes(){
-  const pendentes=db.indicacoes.filter(i=>i.status==='pendente');
-  const lista=pendentes.map(i=>`
-    <div class="lista-item">
-      <div class="lista-top">
-        <div class="lista-nome">Código: ${i.codigo}</div>
-        <span class="badge badge-pendente">⏳ Pendente</span>
-      </div>
-      <div class="lista-info">
-        Pedido: ${i.pedidoId}<br>
-        Serviço: ${i.servico}<br>
-        Valor: R$ ${i.valor.toFixed(2).replace('.',',')}<br>
-        Cliente: ${i.cliente}<br>
-        Data: ${new Date(i.data).toLocaleString('pt-BR')}
-      </div>
-      <div class="lista-acoes" style="margin-top:8px">
-        <button class="btn-mini btn-edit" onclick="aprovarIndicacao('${i.id}')">✅ APROVAR</button>
-        <button class="btn-mini btn-del" onclick="invalidarIndicacao('${i.id}')">🚫 INVÁLIDA</button>
-      </div>
-    </div>
-  `).join('');
-
-  document.getElementById('adminIndicacoesBody').innerHTML=`
-    <div class="titulo">INDICAÇÕES PENDENTES</div>
-    ${lista||'<div class="empty">Nenhuma indicação pendente</div>'}
-    <button class="btn btn-sec" onclick="ir('home')">VOLTAR</button>
-  `;
-}
-
-function aprovarIndicacao(id){
-  if(confirm('Aprovar esta indicação?')){
-    const ind=db.indicacoes.find(i=>i.id===id);
-    ind.status='confirmada';
-
-    const uid=Object.keys(db.usuarios).find(k=>db.usuarios[k].codigo===ind.codigo);
-    if(uid){
-      db.usuarios[uid].indicacoesValidas=(db.usuarios[uid].indicacoesValidas||0)+1;
-    }
-    save();
-    renderAdminIndicacoes();
+  if(!usuarioAtual.admin)return;
+  const todas=db.indicacoes.slice().reverse();
+  if(todas.length===0){
+    document.getElementById('adminIndicacoesBody').innerHTML='<div class="empty">Nenhuma indicação ainda</div>';
+    return;
   }
-}
-
-function invalidarIndicacao(id){
-  if(confirm('Marcar como inválida?')){
-    db.indicacoes.find(i=>i.id===id).status='invalida';
-    save();
-    renderAdminIndicacoes();
-  }
-}
-
-function enviarTeste(){
-  let linkCurt=document.getElementById('testeLinkCurtidas').value;
-  let linkSeg=document.getElementById('testeLinkSeguidores').value;
-  if(!linkCurt&&!linkSeg){alert('Cole pelo menos um link');return}
-  const data=new Date().toLocaleDateString('pt-BR');
-  let msg=`━━━━━━━━━━
-💜 PREMIUM STORE
-━━━━━━━━━━
-
-🎁 Solicitação de Teste Grátis
-
-👤 Cliente: ${usuarioAtual.nome}
-📧 E-mail: ${usuarioAtual.email}
-
-`;
-  if(linkCurt)msg+=`❤️ Curtidas: ${linkCurt}\n`;
-  if(linkSeg)msg+=`👥 Seguidores: ${linkSeg}\n`;
-  msg+=`📆 Data: ${data}
-
-📌 Status: Em análise
-━━━━━━━━━━`;
-  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
-  document.getElementById('testeLinkCurtidas').value='';
-  document.getElementById('testeLinkSeguidores').value='';
-}
-
-function renderHome(){
-  const catDrop=document.getElementById('catDrop');
-  if(db.cat.length===0){
-    catDrop.innerHTML='<div class="dropdown-item">Nenhuma categoria cadastrada</div>';
-    document.getElementById('catText').textContent='Nenhuma categoria';
-  }else{
-    catDrop.innerHTML=db.cat.map(c=>`<div class="dropdown-item" onclick="setCat('${c.k}')">${c.nome}</div>`).join('');
-  }
-  renderServsDrop();
-}
-
-function renderServsDrop(){
-  const servDrop=document.getElementById('servDrop');
-  let servs=catSel?db.serv.filter(s=>s.cat===catSel):[];
-  if(servs.length===0){
-    servDrop.innerHTML='<div class="dropdown-item">Nenhum serviço</div>';
-  }else{
-    servDrop.innerHTML=servs.map(s=>`<div class="dropdown-item" onclick="setServ('${s.k}')">${s.nome} - R$ ${s.preco.toFixed(2)}</div>`).join('');
-  }
-}
-
-function abrirCats(){
-  const lista=db.cat.map(c=>`
-    <div class="lista-item">
-      <div class="lista-top">
-        <div class="lista-nome">${c.nome}</div>
-        <div class="lista-acoes">
-          <button class="btn-mini btn-edit" onclick="formCat('${c.k}')">EDITAR</button>
-          <button class="btn-mini btn-del" onclick="delCat('${c.k}')">EXCLUIR</button>
-        </div>
-      </div>
-      <div class="lista-info">${db.serv.filter(s=>s.cat===c.k).length} serviços</div>
-    </div>`).join('');
-  document.getElementById('adminBody').innerHTML=`<div class="titulo">CATEGORIAS</div>${lista||'<div class="empty">Nenhuma categoria</div>'}<div class="add" onclick="formCat()">+</div><button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>`;
-}
-
-function abrirServs(){
-  const lista=db.serv.map(s=>{
-    const c=db.cat.find(x=>x.k===s.cat);
+  const lista=todas.map(i=>{
+    const statusClass=i.status==='confirmada'?'badge-confirmada':i.status==='pendente'?'badge-pendente':'badge-invalida';
+    const statusTxt=i.status==='confirmada'?'CONFIRMADA':i.status==='pendente'?'PENDENTE':'INVÁLIDA';
     return `
     <div class="lista-item">
       <div class="lista-top">
-        <div class="lista-nome">${s.nome}</div>
-        <div class="lista-acoes">
-          <button class="btn-mini btn-edit" onclick="formServ('${s.k}')">EDITAR</button>
-          <button class="btn-mini btn-del" onclick="delServ('${s.k}')">EXCLUIR</button>
-        </div>
+        <div class="lista-nome">Código: ${i.codigo}</div>
+        <span class="badge ${statusClass}">${statusTxt}</span>
       </div>
-      <div class="lista-info">Cat: ${c?.nome||'-'} | R$ ${s.preco.toFixed(2)} | Estoque: ${s.estoque}</div>
-    </div>`}).join('');
-  document.getElementById('adminBody').innerHTML=`<div class="titulo">SERVIÇOS</div>${lista||'<div class="empty">Nenhum serviço</div>'}<div class="add" onclick="formServ()">+</div><button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>`;
+      <div class="lista-info">
+        Pedido: ${i.pedidoId}<br>
+        Indicado: ${i.nomeIndicado}<br>
+        Valor: R$ ${i.valor.toFixed(2).replace('.',',')}<br>
+        Data: ${new Date(i.data).toLocaleString('pt-BR')}
+      </div>
+      ${i.status==='confirmada'?`
+      <div class="lista-acoes" style="margin-top:8px">
+        <button class="btn-mini btn-edit" onclick="darRecompensa('${i.id}')">DAR RECOMPENSA</button>
+      </div>`:''}
+    </div>
+  `}).join('');
+  document.getElementById('adminIndicacoesBody').innerHTML=lista;
 }
 
-function formCat(k=null){
-  const d=db.cat.find(x=>x.k===k);
-  document.getElementById('modalTit').textContent=k?'EDITAR CATEGORIA':'NOVA CATEGORIA';
-  document.getElementById('modalBody').innerHTML=`
-    <input type="text" class="input" id="nomeC" value="${d?.nome||''}" placeholder="Nome da categoria">
-    <button class="btn" onclick="salvarCat('${k||''}')">${k?'SALVAR':'CRIAR'}</button>
-    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
-  document.getElementById('modal').classList.add('ativo');
-}
-
-function formServ(k=null){
-  const d=db.serv.find(x=>x.k===k);
-  let opts=db.cat.map(c=>`<option value="${c.k}" ${d?.cat===c.k?'selected':''}>${c.nome}</option>`).join('');
-  if(!opts)opts='<option value="">Cadastre categoria primeiro</option>';
-  document.getElementById('modalTit').textContent=k?'EDITAR SERVIÇO':'NOVO SERVIÇO';
-  document.getElementById('modalBody').innerHTML=`
-    <select class="input" id="catS">${opts}</select>
-    <input type="text" class="input" id="nomeS" value="${d?.nome||''}" placeholder="Nome do serviço">
-    <textarea class="textarea" id="descS" placeholder="Descrição do serviço">${d?.desc||''}</textarea>
-    <input type="number" step="0.01" class="input" id="precoS" value="${d?.preco||''}" placeholder="Valor do serviço">
-    <input type="number" class="input" id="estS" value="${d?.estoque||''}" placeholder="Estoque">
-    <button class="btn" onclick="salvarServ('${k||''}')">${k?'SALVAR':'CRIAR'}</button>
-    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
-  document.getElementById('modal').classList.add('ativo');
-}
-
-function salvarCat(k){
-  const nome=document.getElementById('nomeC').value.trim();
-  if(!nome){alert('Nome obrigatório');return}
-  if(k){db.cat[db.cat.findIndex(x=>x.k===k)]={k,nome}}else{db.cat.push({k:'c'+Date.now(),nome})}
-  save();fecharModal();abrirCats();renderHome();
-}
-
-function delCat(k){
-  if(confirm('Excluir categoria? Vai apagar os serviços juntos.')){
-    db.cat=db.cat.filter(x=>x.k!==k);
-    db.serv=db.serv.filter(x=>x.cat!==k);
-    save();abrirCats();renderHome();
-  }
-}
-
-function salvarServ(k){
-  const cat=document.getElementById('catS').value;
-  const nome=document.getElementById('nomeS').value.trim();
-  const desc=document.getElementById('descS').value.trim();
-  const preco=parseFloat(document.getElementById('precoS').value);
-  const estoque=parseInt(document.getElementById('estS').value)||0;
-  if(!cat||!nome||!preco){alert('Preencha categoria, nome e valor');return}
-  const dados={k:k||'s'+Date.now(),cat,nome,desc,preco,estoque};
-  if(k){db.serv[db.serv.findIndex(x=>x.k===k)]=dados}else{db.serv.push(dados)}
-  save();fecharModal();abrirServs();renderHome();
-}
-
-function delServ(k){
-  if(confirm('Excluir serviço?')){
-    db.serv=db.serv.filter(x=>x.k!==k);
-    save();abrirServs();renderHome();
-  }
+function darRecompensa(id){
+  alert('Marque como entregue manualmente após dar a recompensa ao cliente.\n\nRecompensa: 100 Diamantes FF ou 400 Robux');
 }
 
 function formFaq(){
-  document.getElementById('modalTit').textContent='DÚVIDAS FREQUENTES';
-  document.getElementById('modalBody').innerHTML=`
-    <textarea class="textarea" id="faqTxt" placeholder="Digite as dúvidas frequentes">${db.config.faq}</textarea>
-    <button class="btn" onclick="salvarConfig('faq')">SALVAR</button>
-    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
-  document.getElementById('modal').classList.add('ativo');
+  abrirModal('EDITAR FAQ',`
+  <textarea class="textarea" id="faqTxt" placeholder="Digite as dúvidas frequentes" style="min-height:200px">${db.config.faq}</textarea>
+  <button class="btn" onclick="salvarFaq()">SALVAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
+  `);
+}
+
+function salvarFaq(){
+  db.config.faq=document.getElementById('faqTxt').value;
+  save();
+  fecharModal();
+  alert('FAQ atualizado!');
 }
 
 function formTermos(){
-  document.getElementById('modalTit').textContent='TERMOS DO SITE';
-  document.getElementById('modalBody').innerHTML=`
-    <textarea class="textarea" id="termosTxt" placeholder="Digite os termos">${db.config.termos}</textarea>
-    <button class="btn" onclick="salvarConfig('termos')">SALVAR</button>
-    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
-  document.getElementById('modal').classList.add('ativo');
+  abrirModal('EDITAR TERMOS',`
+  <textarea class="textarea" id="termosTxt" placeholder="Digite os termos do site" style="min-height:200px">${db.config.termos}</textarea>
+  <button class="btn" onclick="salvarTermos()">SALVAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
+  `);
 }
 
-function formTeste(){
-  document.getElementById('modalTit').textContent='TESTE GRÁTIS';
-  document.getElementById('modalBody').innerHTML=`
-    <textarea class="textarea" id="testeDesc" placeholder="Descrição do teste grátis">${db.config.teste.desc}</textarea>
-    <button class="btn" onclick="salvarConfig('teste')">SALVAR</button>
-    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
-  document.getElementById('modal').classList.add('ativo');
+function salvarTermos(){
+  db.config.termos=document.getElementById('termosTxt').value;
+  save();
+  fecharModal();
+  alert('Termos atualizados!');
 }
 
 function formPremiacao(){
-  document.getElementById('modalTit').textContent='PREMIAÇÃO';
-  document.getElementById('modalBody').innerHTML=`
-    <div class="upload" onclick="document.getElementById('imgPrem').click()">
-      <img id="prevPrem" src="${db.config.premiacao.img}" style="display:${db.config.premiacao.img?'block':'none'}">
-      <div id="txtPrem" style="display:${db.config.premiacao.img?'none':'block'}">Escolher imagem</div>
-    </div>
-    <input type="file" id="imgPrem" accept="image/*" style="display:none" onchange="prevImg(event)">
-    <textarea class="textarea" id="premTxt" placeholder="Texto da premiação">${db.config.premiacao.texto}</textarea>
-    <button class="btn" onclick="salvarConfig('premiacao')">SALVAR</button>
-    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
+  abrirModal('EDITAR PREMIAÇÃO',`
+  <div class="label">Imagem da premiação:</div>
+  <div class="upload" onclick="document.getElementById('premImg').click()">
+    <div class="upload-text" style="${db.config.premiacao.img?'display:none':''}">📷 Clique para enviar</div>
+    <img id="premImgPrev" src="${db.config.premiacao.img||''}" style="${db.config.premiacao.img?'display:block':'display:none'}">
+    <input type="file" id="premImg" accept="image/*" onchange="prevImg(this,'premImgPrev')">
+  </div>
+  <textarea class="textarea" id="premTxt" placeholder="Texto da premiação" style="min-height:150px">${db.config.premiacao.texto}</textarea>
+  <button class="btn" onclick="salvarPremiacao()">SALVAR</button>
+  <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
+  `);
+}
+
+async function salvarPremiacao(){
+  showLoad(true);
+  try{
+    let img=db.config.premiacao.img;
+    const file=document.getElementById('premImg').files[0];
+    if(file)img=await toBase64(file);
+    db.config.premiacao={img,texto:document.getElementById('premTxt').value};
+    save();
+    fecharModal();
+    alert('Premiação atualizada!');
+  }catch(e){
+    alert('Erro: '+e.message);
+  }finally{
+    showLoad(false);
+  }
+}
+
+function abrirAdminIndicacoes(){
+  if(!usuarioAtual.admin){alert('Acesso negado');return}
+  ir('adminIndicacoes');
+}
+
+function abrirModal(tit,body){
+  document.getElementById('modalTit').textContent=tit;
+  document.getElementById('modalBody').innerHTML=body;
   document.getElementById('modal').classList.add('ativo');
 }
 
-function prevImg(e){
-  const f=e.target.files[0];
-  if(f){const r=new FileReader();r.onload=ev=>{document.getElementById('prevPrem').src=ev.target.result;document.getElementById('prevPrem').style.display='block';document.getElementById('txtPrem').style.display='none'};r.readAsDataURL(f)}
-}
-
-function salvarConfig(tipo){
-  if(tipo==='faq')db.config.faq=document.getElementById('faqTxt').value;
-  if(tipo==='termos')db.config.termos=document.getElementById('termosTxt').value;
-  if(tipo==='teste')db.config.teste={desc:document.getElementById('testeDesc').value};
-  if(tipo==='premiacao')db.config.premiacao={img:document.getElementById('prevPrem').src,texto:document.getElementById('premTxt').value};
-  save();fecharModal();abrirAdmin();
-}
-
-function renderFaq(){document.getElementById('faqBody').innerHTML=db.config.faq?`<div class="texto-geral">${db.config.faq}</div>`:'<div class="empty">Nenhuma dúvida cadastrada</div>'}
-function renderTermos(){document.getElementById('termosBody').innerHTML=db.config.termos?`<div class="texto-geral">${db.config.termos}</div>`:'<div class="empty">Nenhum termo cadastrado</div>'}
-function renderTeste(){document.getElementById('testeDescBox').innerHTML=db.config.teste.desc||'Teste de Curtidas: São 10 curtidas grátis<br>Teste de Seguidores: São 30 seguidores grátis'}
-function renderPremiacao(){document.getElementById('premiacaoBody').innerHTML=db.config.premiacao.img||db.config.premiacao.texto?`${db.config.premiacao.img?`<img src="${db.config.premiacao.img}" style="width:100%;border-radius:10px;margin-bottom:12px">`:''}<div class="texto-geral">${db.config.premiacao.texto}</div>`:'<div class="empty">Nenhuma premiação cadastrada</div>'}
-
 function fecharModal(){document.getElementById('modal').classList.remove('ativo')}
 
-document.addEventListener('click',e=>{
-  if(!e.target.closest('.select-wrap')){
-    document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('ativo'));
+function prevImg(input,prevId){
+  if(input.files&&input.files[0]){
+    const r=new FileReader();
+    r.onload=e=>{
+      document.getElementById(prevId).src=e.target.result;
+      document.getElementById(prevId).style.display='block';
+      input.parentElement.querySelector('.upload-text').style.display='none';
+    };
+    r.readAsDataURL(input.files[0]);
   }
-});
-</script>
+}
 
+function toBase64(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.readAsDataURL(file);r.onload=()=>resolve(r.result);r.onerror=reject;})}
+
+lucide.createIcons();
+</script>
 </body>
+</html>
