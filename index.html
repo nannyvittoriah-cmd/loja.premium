@@ -38,20 +38,17 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .logo-img{width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,var(--roxo),var(--rosa));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:14px}
 .logo-text{font-size:16px;font-weight:900;letter-spacing:1px;background:linear-gradient(90deg,var(--roxo),var(--rosa));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .menu-btn{font-size:18px;cursor:pointer;color:var(--branco)}
-.hero{padding:32px 16px;text-align:left}
+.hero{padding:28px 16px 20px;text-align:left}
 .hero h1{font-size:24px;font-weight:900;margin-bottom:10px}
 .hero-bar{width:50px;height:3px;background:linear-gradient(90deg,var(--roxo),var(--rosa));margin:10px 0;border-radius:10px;box-shadow:0 0 10px var(--glow)}
-.hero p{font-size:11px;color:var(--cinza);line-height:1.6;margin-bottom:20px}
-.btns-hero{display:flex;gap:10px}
-.btn-hero{flex:1;padding:10px 8px;border-radius:10px;font-weight:800;font-size:9px;cursor:pointer;border:2px solid;display:flex;flex-direction:column;align-items:center;gap:4px;transition:.3s;background:transparent}
-.btn-hero i{width:16px;height:16px}
-.btn-prim{border-color:transparent;background:transparent;position:relative;color:#fff}
-.btn-prim::before{content:'';position:absolute;inset:0;border-radius:10px;padding:2px;background:linear-gradient(135deg,var(--roxo),var(--rosa));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
-.btn-sec{border-color:var(--roxo);color:var(--roxo);box-shadow:0 0 10px var(--glow)}
-.btn-hero:active{transform:scale(.95)}
-.section{padding:0 16px 32px}
-.section-title{font-size:14px;font-weight:800;margin-bottom:3px}
-.section-bar{width:40px;height:2px;background:linear-gradient(90deg,var(--roxo),var(--rosa));margin-bottom:16px;border-radius:10px}
+.hero p{font-size:11px;color:var(--cinza);line-height:1.6;margin-bottom:16px}
+.barra-busca{position:relative;margin-bottom:10px}
+.input-busca{width:100%;background:var(--bg);border:2px solid var(--borda);color:#fff;padding:11px 40px 11px 14px;border-radius:10px;font-size:11px;transition:.3s}
+.input-busca:focus{outline:none;border-color:var(--roxo);box-shadow:0 0 10px var(--glow)}
+.icon-busca{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--cinza)}
+.btn-cat-barra{width:100%;background:transparent;border:2px solid var(--roxo);color:var(--roxo);padding:10px;border-radius:10px;font-weight:800;font-size:10px;cursor:pointer;box-shadow:0 0 10px var(--glow);display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-cat-barra:active{transform:scale(.98)}
+.section{padding:0 16px 28px}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .cat-card{background:transparent;border:2px solid var(--borda);border-radius:14px;padding:12px;text-align:center;cursor:pointer;transition:.3s}
 .cat-card:hover{transform:translateY(-3px);border-color:var(--roxo);box-shadow:0 0 15px var(--glow)}
@@ -144,27 +141,23 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
     <h1>Store VZ</h1>
     <div class="hero-bar"></div>
     <p>O melhor marketplace para comprar produtos de games. Encontre ofertas incríveis de jogos, contas e muito mais!</p>
-    <div class="btns-hero">
-      <button class="btn-hero btn-prim" onclick="scrollTo('#cats')">
-        <i data-lucide="grid-3x3"></i>
-        VER<br>CATEGORIAS
-      </button>
-      <button class="btn-hero btn-sec" onclick="scrollTo('#prods')">
-        <i data-lucide="search"></i>
-        BUSCAR<br>PRODUTOS
-      </button>
+    
+    <div class="barra-busca">
+      <input class="input-busca" id="buscaInput" placeholder="Buscar produtos..." onkeyup="buscarProd(this.value)">
+      <i data-lucide="search" class="icon-busca"></i>
     </div>
+    
+    <button class="btn-cat-barra" onclick="scrollTo('#cats')">
+      <i data-lucide="grid-3x3"></i>
+      VER CATEGORIAS
+    </button>
   </div>
 
   <div class="section" id="cats">
-    <div class="section-title">Categorias Populares</div>
-    <div class="section-bar"></div>
     <div class="grid" id="gridCats"></div>
   </div>
 
   <div class="section" id="prods">
-    <div class="section-title">Produtos em Destaque</div>
-    <div class="section-bar"></div>
     <div class="produtos-grid" id="gridProds"></div>
   </div>
 </div>
@@ -318,8 +311,10 @@ function renderCats(){
   document.getElementById('gridCats').innerHTML = html || '<p style="color:var(--cinza);grid-column:1/-1;text-align:center">Nenhuma categoria</p>';
 }
 
-function renderProds(filtro=null){
-  const lista = filtro? db.prods.filter(p=>p.cat===filtro) : db.prods;
+function renderProds(filtro=null,termoBusca=''){
+  let lista = filtro? db.prods.filter(p=>p.cat===filtro) : db.prods;
+  if(termoBusca) lista = lista.filter(p=>p.nome.toLowerCase().includes(termoBusca.toLowerCase())||p.desc.toLowerCase().includes(termoBusca.toLowerCase()));
+  
   const html = lista.map(p=>{
     const semEstoque = p.estoque===0;
     return `
@@ -335,10 +330,15 @@ function renderProds(filtro=null){
       <button class="btn-comprar" ${semEstoque?'disabled':''}>${semEstoque?'ESGOTADO':'VER DETALHES'}</button>
     </div>
   `}).join('');
-  document.getElementById('gridProds').innerHTML = html || '<p style="color:var(--cinza);grid-column:1/-1;text-align:center">Nenhum produto</p>';
+  document.getElementById('gridProds').innerHTML = html || '<p style="color:var(--cinza);grid-column:1/-1;text-align:center">Nenhum produto encontrado</p>';
+}
+
+function buscarProd(termo){
+  renderProds(null,termo);
 }
 
 function filtrarCat(id){
+  document.getElementById('buscaInput').value='';
   renderProds(id);
   scrollTo('#prods');
 }
@@ -349,7 +349,7 @@ function abrirProduto(id){
   document.getElementById('modalProdDesc').textContent = p.desc;
   document.getElementById('modalProdPreco').textContent = 'R$ ' + p.preco.toFixed(2).replace('.',',');
   document.getElementById('modalProdEstoque').innerHTML = p.estoque>0 
-   ? `<span style="color:var(--verde)">✓ ${p.estoque} unidades em estoque</span>` 
+  ? `<span style="color:var(--verde)">✓ ${p.estoque} unidades em estoque</span>` 
     : `<span style="color:var(--vermelho)">✗ Produto esgotado</span>`;
   document.getElementById('btnComprarModal').disabled = p.estoque===0;
   
