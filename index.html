@@ -7,7 +7,7 @@
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
   import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-  import { getDatabase, ref, set, get, push } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+  import { getDatabase, ref, set, get, push, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
   const firebaseConfig = {
     apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -23,12 +23,12 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getDatabase(app);
-  window.app = { auth, db, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, ref, set, get, push };
+  window.app = { auth, db, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, ref, set, get, push, onValue };
 </script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
 :root{
-  --bg:#0A0A0F;--roxo:#8B5CF6;--azul:#06B6D4;--rosa:#EC4899;--branco:#FFFFFF;--cinza:#94A3B8;--borda:#1E293B;--card:#0F172A;--glow:rgba(139, 92, 246,.4);--verde:#22C55E;--vermelho:#EF4444;
+  --bg:#0A0A0F;--roxo:#8B5CF6;--rosa:#EC4899;--branco:#FFFFFF;--cinza:#94A3B8;--borda:#1E293B;--card:#0F172A;--glow:rgba(139,92,246,.4);--verde:#22C55E;--vermelho:#EF4444;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);font-size:11px}
@@ -46,8 +46,9 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .input-busca{width:100%;background:var(--bg);border:2px solid var(--borda);color:#fff;padding:11px 40px 11px 14px;border-radius:10px;font-size:11px;transition:.3s}
 .input-busca:focus{outline:none;border-color:var(--roxo);box-shadow:0 0 10px var(--glow)}
 .icon-busca{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--cinza)}
-.btn-cat-barra{width:100%;background:transparent;border:2px solid var(--roxo);color:var(--roxo);padding:10px;border-radius:10px;font-weight:800;font-size:10px;cursor:pointer;box-shadow:0 0 10px var(--glow);display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-cat-barra{display:inline-flex;background:transparent;border:2px solid var(--roxo);color:var(--roxo);padding:8px 16px;border-radius:10px;font-weight:800;font-size:10px;cursor:pointer;box-shadow:0 0 10px var(--glow);align-items:center;gap:6px}
 .btn-cat-barra:active{transform:scale(.98)}
+.btn-cat-barra i{width:14px;height:14px}
 .section{padding:0 16px 28px}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .cat-card{background:transparent;border:2px solid var(--borda);border-radius:14px;padding:12px;text-align:center;cursor:pointer;transition:.3s}
@@ -57,6 +58,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .cat-nome{font-size:10px;font-weight:700;color:#fff}
 .produtos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
 .prod-card{background:transparent;border:2px solid var(--borda);border-radius:14px;padding:12px}
+.prod-card:hover{border-color:var(--roxo);box-shadow:0 0 15px var(--glow)}
 .prod-img{width:100%;aspect-ratio:1;background:var(--bg);border:1px solid var(--borda);border-radius:10px;margin-bottom:8px;overflow:hidden;position:relative}
 .prod-img img{width:100%;height:100%;object-fit:cover}
 .prod-badge{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.7);color:var(--roxo);padding:3px 6px;border-radius:6px;font-size:8px;font-weight:800}
@@ -102,6 +104,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .galeria img.ativo{border-color:var(--roxo);box-shadow:0 0 10px var(--glow)}
 .galeria-principal{width:100%;aspect-ratio:1;background:var(--bg);border-radius:10px;margin-bottom:12px;overflow:hidden}
 .galeria-principal img{width:100%;height:100%;object-fit:cover}
+.loading{text-align:center;padding:40px;color:var(--cinza)}
 </style>
 </head>
 <body>
@@ -154,11 +157,11 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
   </div>
 
   <div class="section" id="cats">
-    <div class="grid" id="gridCats"></div>
+    <div class="grid" id="gridCats"><div class="loading">Carregando categorias...</div></div>
   </div>
 
   <div class="section" id="prods">
-    <div class="produtos-grid" id="gridProds"></div>
+    <div class="produtos-grid" id="gridProds"><div class="loading">Carregando produtos...</div></div>
   </div>
 </div>
 
@@ -242,7 +245,7 @@ let fotoCatTemp = '';
 window.addEventListener('load',()=>{
   lucide.createIcons();
   const { auth, onAuthStateChanged } = window.app;
-  carregarDados();
+  
   onAuthStateChanged(auth, (user) => {
     if(user){
       document.getElementById('login').classList.remove('ativa');
@@ -250,6 +253,7 @@ window.addEventListener('load',()=>{
       if(user.email.toLowerCase() === EMAIL_ADM.toLowerCase()){
         document.getElementById('menuAdmin').style.display='flex';
       }
+      iniciarDados(); // AGORA CARREGA DEPOIS DO LOGIN
     }else{
       document.getElementById('login').classList.add('ativa');
       document.getElementById('loja').classList.remove('ativa');
@@ -257,6 +261,22 @@ window.addEventListener('load',()=>{
     }
   });
 });
+
+function iniciarDados(){
+  const { db: fdb, ref, onValue } = window.app;
+  // USA onValue PRA ATUALIZAR EM TEMPO REAL E NÃO SUMIR
+  onValue(ref(fdb, 'primevzdados'), (snap) => {
+    if(snap.exists()){
+      const dados = snap.val();
+      db.cats = dados.cats || [];
+      db.prods = dados.prods || [];
+    }
+    renderCats();
+    renderProds();
+    renderAdmin();
+    lucide.createIcons();
+  });
+}
 
 async function login(){
   const { auth, signInWithEmailAndPassword } = window.app;
@@ -286,21 +306,6 @@ function fecharMenu(){document.getElementById('sidebar').classList.remove('ativo
 function ir(t){document.querySelectorAll('.tela').forEach(e=>e.classList.remove('ativa'));document.getElementById(t).classList.add('ativa')}
 function scrollTo(id){document.querySelector(id).scrollIntoView({behavior:'smooth'})}
 
-async function carregarDados(){
-  const { db: fdb, ref, get } = window.app;
-  try{
-    const snap = await get(ref(fdb, 'primevzdados'));
-    if(snap.exists()){
-      const dados = snap.val();
-      db.cats = dados.cats || [];
-      db.prods = dados.prods || [];
-    }
-    renderCats();
-    renderProds();
-    renderAdmin();
-  }catch(e){console.log(e)}
-}
-
 function renderCats(){
   const html = db.cats.map(c=>`
     <div class="cat-card" onclick="filtrarCat('${c.id}')">
@@ -308,7 +313,7 @@ function renderCats(){
       <div class="cat-nome">${c.nome}</div>
     </div>
   `).join('');
-  document.getElementById('gridCats').innerHTML = html || '<p style="color:var(--cinza);grid-column:1/-1;text-align:center">Nenhuma categoria</p>';
+  document.getElementById('gridCats').innerHTML = html || '<p style="color:var(--cinza);grid-column:1/-1;text-align:center;padding:20px">Nenhuma categoria</p>';
 }
 
 function renderProds(filtro=null,termoBusca=''){
@@ -330,7 +335,7 @@ function renderProds(filtro=null,termoBusca=''){
       <button class="btn-comprar" ${semEstoque?'disabled':''}>${semEstoque?'ESGOTADO':'VER DETALHES'}</button>
     </div>
   `}).join('');
-  document.getElementById('gridProds').innerHTML = html || '<p style="color:var(--cinza);grid-column:1/-1;text-align:center">Nenhum produto encontrado</p>';
+  document.getElementById('gridProds').innerHTML = html || '<p style="color:var(--cinza);grid-column:1/-1;text-align:center;padding:20px">Nenhum produto encontrado</p>';
 }
 
 function buscarProd(termo){
@@ -404,6 +409,7 @@ function renderAdmin(){
       <button class="btn" style="width:auto;padding:6px 12px;font-size:10px" onclick="delProd('${p.id}')">EXCLUIR</button>
     </div>
   `).join('') || '<p style="color:var(--cinza)">Nenhum produto</p>';
+  lucide.createIcons();
 }
 
 function previewCat(input){
@@ -433,8 +439,6 @@ async function salvarCategoria(){
   document.getElementById('fotoCat').value='';
   document.getElementById('previewCat').innerHTML='';
   fotoCatTemp = '';
-  renderCats();
-  renderAdmin();
   alert('Categoria criada!');
 }
 
@@ -496,8 +500,6 @@ async function salvarProduto(){
   document.getElementById('previewFotos').innerHTML='';
   fotosTemp = [];
   
-  renderProds();
-  renderAdmin();
   alert('Produto criado!');
 }
 
@@ -507,9 +509,6 @@ async function delCat(id){
   db.cats = db.cats.filter(c=>c.id!==id);
   db.prods = db.prods.filter(p=>p.cat!==id);
   await set(ref(fdb, 'primevzdados'), db);
-  renderCats();
-  renderProds();
-  renderAdmin();
 }
 
 async function delProd(id){
@@ -517,8 +516,6 @@ async function delProd(id){
   const { db: fdb, ref, set } = window.app;
   db.prods = db.prods.filter(p=>p.id!==id);
   await set(ref(fdb, 'primevzdados/prods'), db.prods);
-  renderProds();
-  renderAdmin();
 }
 
 lucide.createIcons();
