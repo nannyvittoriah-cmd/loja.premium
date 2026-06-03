@@ -10,13 +10,14 @@
   import { getDatabase, ref, set, get, push } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
   const firebaseConfig = {
-    apiKey: "SUA_KEY",
-    authDomain: "SEU_PROJETO.firebaseapp.com",
-    databaseURL: "https://SEU_PROJETO-default-rtdb.firebaseio.com",
-    projectId: "SEU_PROJETO",
-    storageBucket: "SEU_PROJETO.firebasestorage.app",
-    messagingSenderId: "SEU_ID",
-    appId: "SEU_APP_ID"
+    apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
+    authDomain: "premium-store-aa58b.firebaseapp.com",
+    databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
+    projectId: "premium-store-aa58b",
+    storageBucket: "premium-store-aa58b.firebasestorage.app",
+    messagingSenderId: "462239500057",
+    appId: "1:462239500057:web:f1b7cea162ed308a866788",
+    measurementId: "G-CN88J28WRX"
   };
 
   const app = initializeApp(firebaseConfig);
@@ -27,15 +28,7 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
 :root{
-  --bg:#0A0A0F;
-  --roxo:#8B5CF6;
-  --azul:#06B6D4;
-  --rosa:#EC4899;
-  --branco:#FFFFFF;
-  --cinza:#94A3B8;
-  --borda:#1E293B;
-  --card:#0F172A;
-  --glow:rgba(139, 92, 246, 0.4);
+  --bg:#0A0A0F;--roxo:#8B5CF6;--azul:#06B6D4;--rosa:#EC4899;--branco:#FFFFFF;--cinza:#94A3B8;--borda:#1E293B;--card:#0F172A;--glow:rgba(139, 92, 246, 0.4);
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);font-size:12px}
@@ -75,6 +68,8 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .input{width:100%;background:var(--bg);border:1px solid var(--borda);color:#fff;padding:14px;border-radius:10px;margin:10px 0;font-size:13px}
 .input:focus{outline:none;border-color:var(--roxo);box-shadow:0 0 12px var(--glow)}
 .btn{width:100%;background:linear-gradient(135deg,var(--azul),var(--rosa));color:#fff;border:none;padding:14px;border-radius:10px;cursor:pointer;margin:10px 0;font-weight:800;font-size:13px;box-shadow:0 0 20px var(--glow)}
+.btn:active{transform:scale(.98)}
+.btn-sec{background:var(--borda);box-shadow:none}
 .sidebar{position:fixed;top:0;left:-280px;width:280px;height:100vh;background:var(--card);border-right:1px solid var(--borda);z-index:200;transition:left.3s;padding:20px}
 .sidebar.ativo{left:0}
 .sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:199;display:none}
@@ -82,6 +77,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .sidebar-item{padding:14px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;color:var(--cinza);margin-bottom:6px;display:flex;align-items:center;gap:10px}
 .sidebar-item:hover{background:var(--borda);color:#fff}
 .hidden{display:none!important}
+.card{background:var(--card);border:1px solid var(--borda);padding:20px;border-radius:16px;margin:16px 0}
 </style>
 </head>
 <body>
@@ -104,7 +100,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
     <input class="input" id="email" placeholder="Email" type="email">
     <input class="input" id="senha" placeholder="Senha" type="password">
     <button class="btn" onclick="login()">ENTRAR</button>
-    <button class="btn" style="background:var(--borda);box-shadow:none" onclick="cadastro()">CRIAR CONTA</button>
+    <button class="btn btn-sec" onclick="cadastro()">CRIAR CONTA</button>
   </div>
 </div>
 
@@ -153,9 +149,10 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
   </header>
   <div style="padding:20px">
     <div class="card">
-      <h3 style="margin-bottom:16px">Adicionar Produto Teste</h3>
-      <button class="btn" onclick="addProdutoTeste()">CRIAR PRODUTO TESTE</button>
-      <button class="btn" onclick="addCatTeste()" style="background:var(--borda)">CRIAR CATEGORIA TESTE</button>
+      <h3 style="margin-bottom:16px">Teste Rápido</h3>
+      <button class="btn" onclick="addCatTeste()">CRIAR CATEGORIA: APEX LEGENDS</button>
+      <button class="btn" onclick="addProdutoTeste()">CRIAR PRODUTO: 1000 APEX COINS</button>
+      <button class="btn btn-sec" onclick="limparTudo()">LIMPAR TUDO</button>
     </div>
   </div>
 </div>
@@ -167,10 +164,7 @@ let db = {cats:[],prods:[]};
 window.addEventListener('load',()=>{
   lucide.createIcons();
   const { auth, onAuthStateChanged, db: fdb, ref, get } = window.app;
-
-  // Carrega dados do Firebase
   carregarDados();
-
   onAuthStateChanged(auth, (user) => {
     if(user){
       document.getElementById('login').classList.remove('ativa');
@@ -190,9 +184,7 @@ async function login(){
   const { auth, signInWithEmailAndPassword } = window.app;
   const email = document.getElementById('email').value.trim();
   const senha = document.getElementById('senha').value;
-  try{
-    await signInWithEmailAndPassword(auth, email, senha);
-  }catch(e){alert('Erro: ' + e.message)}
+  try{await signInWithEmailAndPassword(auth, email, senha)}catch(e){alert('Erro: ' + e.message)}
 }
 
 async function cadastro(){
@@ -232,12 +224,12 @@ async function carregarDados(){
 
 function renderCats(){
   const html = db.cats.map(c=>`
-    <div class="cat-card" onclick="alert('Categoria: ${c.nome}')">
+    <div class="cat-card">
       <div class="cat-img"><img src="${c.img}" alt="${c.nome}"></div>
       <div class="cat-nome">${c.nome}</div>
     </div>
   `).join('');
-  document.getElementById('gridCats').innerHTML = html || '<p style="color:var(--cinza)">Nenhuma categoria</p>';
+  document.getElementById('gridCats').innerHTML = html || '<p style="color:var(--cinza)">Loga como admin e cria uma categoria</p>';
 }
 
 function renderProds(){
@@ -249,7 +241,7 @@ function renderProds(){
       <button class="btn-comprar" onclick="alert('Comprar: ${p.nome}')">COMPRAR</button>
     </div>
   `).join('');
-  document.getElementById('gridProds').innerHTML = html || '<p style="color:var(--cinza)">Nenhum produto</p>';
+  document.getElementById('gridProds').innerHTML = html || '<p style="color:var(--cinza)">Loga como admin e cria um produto</p>';
 }
 
 function abrirAdmin(){
@@ -267,12 +259,12 @@ async function addCatTeste(){
   const catTeste = {
     id: 'cat1',
     nome: 'Apex Legends',
-    img: 'https://i.postimg.cc/8z0J3QYj/apex.jpg'
+    img: 'https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt8a1a5e2b64f50f12/5eb7cdc1b8d0c80c4e7481df/apex-featured-image.jpg'
   };
   db.cats = [catTeste];
   await set(ref(fdb, 'primevzdados/cats'), db.cats);
   renderCats();
-  alert('Categoria teste criada!');
+  alert('Categoria criada! Volta pra loja e vê');
 }
 
 async function addProdutoTeste(){
@@ -281,13 +273,24 @@ async function addProdutoTeste(){
     id: 'prod1',
     nome: '1000 Apex Coins',
     preco: 49.90,
-    img: 'https://i.postimg.cc/8z0J3QYj/apex.jpg',
+    img: 'https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/blt8a1a5e2b64f50f12/5eb7cdc1b8d0c80c4e7481df/apex-featured-image.jpg',
     cat: 'cat1'
   };
   db.prods = [prodTeste];
   await set(ref(fdb, 'primevzdados/prods'), db.prods);
   renderProds();
-  alert('Produto teste criado!');
+  alert('Produto criado! Volta pra loja e vê');
+}
+
+async function limparTudo(){
+  if(!confirm('Apagar tudo?'))return;
+  const { db: fdb, ref, set } = window.app;
+  db.cats = [];
+  db.prods = [];
+  await set(ref(fdb, 'primevzdados'), {cats:[],prods:[]});
+  renderCats();
+  renderProds();
+  alert('Limpo!');
 }
 
 lucide.createIcons();
