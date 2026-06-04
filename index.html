@@ -725,7 +725,7 @@ function enviarTodosPedidos(){
     msg+=` 💵 R$ ${p.valor.toFixed(2).replace('.',',')}\n`;
     msg+=` 🔗 ${p.link}\n`;
     msg+=` 🆔 ${p.id}\n\n`;
-    msg+=msgAdmin || 'Nenhuma mensagem'}
+  });
   msg+=`💰 TOTAL: R$ ${total.toFixed(2).replace('.',',')}\n`;
   msg+=`━━━━━━━━━━`;
   window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
@@ -794,6 +794,17 @@ function renderComprovantes(){
           </div>
         </div>
       </div>
+      ${p.msgAdmin ? `
+<div class="comprovante-linha">
+  <div class="comprovante-icon">
+    <i data-lucide="message-square"></i>
+  </div>
+  <div class="comprovante-info-wrap">
+    <div class="comprovante-label">Mensagem do ADM:</div>
+    <div class="comprovante-valor">${p.msgAdmin}</div>
+  </div>
+</div>
+` : ''}
       <div class="comprovante-footer">
         <div class="comprovante-footer-logo">
           <i data-lucide="gem"></i>
@@ -1092,13 +1103,8 @@ function buscarPedido(){
 }
 
 function aprovarPedido(id){
-  if(confirm('Aprovar este pedido?')){
-    const pedido = db.pedidos.find(p=>p.id===id);
-
-    pedido.status = 'confirmado';
-
-    pedido.msgAdmin = '✅ Seu pedido foi aprovado e está em processamento. Obrigado pela preferência!';
-
+  if(confirm('Aprovar este pedido? O cliente vai ver como CONFIRMADO.')){
+    db.pedidos.find(p=>p.id===id).status='confirmado';
     save();
     renderPedidos();
     alert('Pedido aprovado!');
