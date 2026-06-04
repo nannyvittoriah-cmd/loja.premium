@@ -112,7 +112,6 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--b
 .config-item-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .config-item-header i{width:16px;height:16px;color:var(--roxo)}
 
-/* COMPROVANTE ESTILO DO PRINT */
 .comprovante-card{
   background:var(--card);
   border:2px solid var(--roxo);
@@ -358,10 +357,63 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--b
 <div id="adminPedidos" class="tela">
   <header class="header">
     <div class="btn-voltar" onclick="ir('admin')"><i data-lucide="arrow-left"></i></div>
-    <div class="header-title">PEDIDOS</div>
+    <div class="header-title">GERENCIAR PEDIDOS</div>
     <div style="width:20px"></div>
   </header>
   <div style="padding:16px">
+    
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+        <i data-lucide="bar-chart-3" style="color:var(--roxo);width:18px;height:18px"></i>
+        <b style="color:var(--roxo);font-size:12px">ESTATÍSTICAS</b>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
+        <div style="background:var(--bg);border:1px solid var(--borda);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:16px;font-weight:900;color:var(--roxo)" id="statHoje">0</div>
+          <div style="font-size:9px;color:var(--cinza);margin-top:4px">Hoje</div>
+        </div>
+        <div style="background:var(--bg);border:1px solid var(--borda);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:16px;font-weight:900;color:var(--roxo)" id="statPendentes">0</div>
+          <div style="font-size:9px;color:var(--cinza);margin-top:4px">Pendentes</div>
+        </div>
+        <div style="background:var(--bg);border:1px solid var(--borda);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:16px;font-weight:900;color:var(--verde)" id="statConfirmados">0</div>
+          <div style="font-size:9px;color:var(--cinza);margin-top:4px">Confirmados</div>
+        </div>
+        <div style="background:var(--bg);border:1px solid var(--borda);border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:16px;font-weight:900;color:var(--vermelho)" id="statCancelados">0</div>
+          <div style="font-size:9px;color:var(--cinza);margin-top:4px">Cancelados</div>
+        </div>
+        <div style="background:var(--bg);border:1px solid var(--borda);border-radius:10px;padding:12px;text-align:center;grid-column:1/-1">
+          <div style="font-size:16px;font-weight:900;color:var(--roxo)" id="statFaturamento">R$ 0,00</div>
+          <div style="font-size:9px;color:var(--cinza);margin-top:4px">Faturamento</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+        <i data-lucide="search" style="width:14px;height:14px;color:var(--cinza)"></i>
+        <b style="font-size:11px">BUSCAR PEDIDO:</b>
+      </div>
+      <input class="input" id="buscarPedido" placeholder="Digite o ID ou E-mail do cliente" onkeyup="filtrarPedidos()">
+      <button class="btn" onclick="filtrarPedidos()">BUSCAR</button>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:12px">
+      <i data-lucide="filter" style="width:14px;height:14px;color:var(--cinza)"></i>
+      <b style="font-size:11px">FILTRAR POR:</b>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+      <button class="btn" id="filtroTodos" style="width:auto;padding:8px 14px;font-size:10px;background:var(--roxo)" onclick="setFiltroPedidos('todos')">TODOS</button>
+      <button class="btn" id="filtroPendentes" style="width:auto;padding:8px 14px;font-size:10px;background:var(--bg);border:2px solid var(--borda);color:var(--cinza)" onclick="setFiltroPedidos('Pendente')">PENDENTES</button>
+      <button class="btn" id="filtroConfirmados" style="width:auto;padding:8px 14px;font-size:10px;background:var(--bg);border:2px solid var(--borda);color:var(--cinza)" onclick="setFiltroPedidos('Confirmado')">CONFIRMADOS</button>
+      <button class="btn" id="filtroCancelados" style="width:auto;padding:8px 14px;font-size:10px;background:var(--bg);border:2px solid var(--borda);color:var(--cinza)" onclick="setFiltroPedidos('Cancelado')">CANCELADOS</button>
+    </div>
+
+    <div style="margin-bottom:12px">
+      <b style="font-size:11px">LISTA DE PEDIDOS</b>
+    </div>
     <div id="listaPedidos"><div class="loading">Carregando pedidos...</div></div>
   </div>
 </div>
@@ -405,6 +457,8 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--b
     <div class="btn-voltar" onclick="ir('admin')"><i data-lucide="arrow-left"></i></div>
     <div class="header-title">PREMIAÇÃO</div>
     <div style="width:20px"></div>
+    <div class="header-title">PREMIAÇÃO</div>
+    <div style="width:20px"></div>
   </header>
   <div style="padding:16px">
     <div class="card">
@@ -446,6 +500,7 @@ let fotosTemp = [];
 let fotoCatTemp = '';
 let userAtual = null;
 let prodComprando = null;
+let filtroPedidosAtual = 'todos';
 
 const menuPadrao = [
   {id:'indicacoes',icon:'users',nome:'Minhas Indicações',link:'',ativo:true,admin:false},
@@ -492,7 +547,7 @@ function iniciarDados(){
       db.premiacao = dados.premiacao || {};
       document.getElementById('termosTexto').value = db.termos;
       if(db.premiacao.titulo){
-               document.getElementById('premioTitulo').value = db.premiacao.titulo;
+        document.getElementById('premioTitulo').value = db.premiacao.titulo;
         document.getElementById('premioDesc').value = db.premiacao.desc;
         document.getElementById('premioValor').value = db.premiacao.valor;
       }
@@ -555,7 +610,7 @@ function renderConfigMenu(){
 async function salvarConfigMenu(){
   const { db: fdb, ref, set } = window.app;
   const novoMenu = db.menu.map((m,i)=>({
-   ...m,
+  ...m,
     nome: document.getElementById(`menuNome_${i}`).value,
     link: document.getElementById(`menuLink_${i}`).value,
     ativo: document.getElementById(`menuAtivo_${i}`).checked,
@@ -568,7 +623,7 @@ async function salvarConfigMenu(){
 function renderComprovantes(){
   if(!userAtual) return;
   const minhasCompras = db.compras.filter(c=>c.userId===userAtual.uid);
-  const html = minhasCompras.length ? minhasCompras.reverse().map(c=>`
+  const html = minhasCompras.length? minhasCompras.reverse().map(c=>`
     <div class="comprovante-mini" onclick="verComprovante('${c.id}')">
       <div class="comprovante-mini-header">
         <div class="comprovante-mini-id">#${c.numero}</div>
@@ -649,7 +704,7 @@ function verComprovante(id){
       
       <div class="comprovante-item">
         <div class="comprovante-item-left"><i data-lucide="clipboard-check"></i><span>Status:</span></div>
-        <div class="status-badge"><i data-lucide="check-circle"></i>Confirmado</div>
+        <div class="status-badge"><i data-lucide="check-circle"></i>${c.status}</div>
       </div>
 
       <div class="comprovante-footer">
@@ -805,7 +860,7 @@ async function finalizarCompra(){
     senhaConta: prodComprando.tipo==='conta'?'pass'+Math.floor(Math.random()*9999):'',
     codigoGift: prodComprando.tipo==='giftcard'?'XXXX-XXXX-XXXX':'',
     data: Date.now(),
-    status: 'Confirmado'
+    status: 'Pendente'
   };
 
   db.compras.push(compra);
@@ -818,7 +873,7 @@ async function finalizarCompra(){
   }
 
   fecharModal();
-  alert('Compra confirmada! Verifique seus comprovantes.');
+  alert('Pedido enviado! Aguarde aprovação do administrador.');
   ir('comprovantes');
 }
 
@@ -859,22 +914,115 @@ function renderAdmin(){
   lucide.createIcons();
 }
 
+function setFiltroPedidos(status){
+  filtroPedidosAtual = status;
+  document.querySelectorAll('[id^=filtro]').forEach(btn=>{
+    btn.style.background = 'var(--bg)';
+    btn.style.border = '2px solid var(--borda)';
+    btn.style.color = 'var(--cinza)';
+  });
+  const btnAtivo = status==='todos'?'filtroTodos':`filtro${status}s`;
+  const btn = document.getElementById(btnAtivo);
+  if(btn){
+    btn.style.background = 'var(--roxo)';
+    btn.style.border = 'none';
+    btn.style.color = '#fff';
+  }
+  renderPedidos();
+}
+
+function filtrarPedidos(){
+  renderPedidos();
+}
+
 function renderPedidos(){
-  const html = db.compras.length ? db.compras.reverse().map(c=>`
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-        <b style="color:var(--roxo)">#${c.numero}</b>
-        <span style="font-size:9px;color:var(--cinza)">${new Date(c.data).toLocaleString('pt-BR')}</span>
+  const busca = document.getElementById('buscarPedido')?.value.toLowerCase() || '';
+  
+  const hoje = new Date().setHours(0,0,0,0);
+  const pedidosHoje = db.compras.filter(c=>new Date(c.data).setHours(0,0,0,0)===hoje).length;
+  const pendentes = db.compras.filter(c=>c.status==='Pendente').length;
+  const confirmados = db.compras.filter(c=>c.status==='Confirmado').length;
+  const cancelados = db.compras.filter(c=>c.status==='Cancelado').length;
+  const faturamento = db.compras.filter(c=>c.status==='Confirmado').reduce((sum,c)=>sum+c.valor,0);
+  
+  document.getElementById('statHoje').textContent = pedidosHoje;
+  document.getElementById('statPendentes').textContent = pendentes;
+  document.getElementById('statConfirmados').textContent = confirmados;
+  document.getElementById('statCancelados').textContent = cancelados;
+  document.getElementById('statFaturamento').textContent = 'R$ ' + faturamento.toFixed(2).replace('.',',');
+
+  let lista = db.compras;
+  if(filtroPedidosAtual!=='todos') lista = lista.filter(c=>c.status===filtroPedidosAtual);
+  if(busca) lista = lista.filter(c=> 
+    c.numero.toString().includes(busca) || 
+    c.userEmail.toLowerCase().includes(busca) ||
+    c.prodNome.toLowerCase().includes(busca)
+  );
+
+  const html = lista.length? lista.reverse().map(c=>{
+    const statusCor = c.status==='Confirmado'?'var(--verde)':c.status==='Cancelado'?'var(--vermelho)':'var(--roxo)';
+    const statusIcon = c.status==='Confirmado'?'check-circle':c.status==='Cancelado'?'x-circle':'hourglass';
+    
+    return `
+    <div class="card" style="border:1px solid ${statusCor}">
+      <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px">
+        <div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+            <span style="background:var(--bg);border:1px solid var(--borda);padding:3px 6px;border-radius:6px;font-size:9px;font-weight:800;color:var(--roxo)">ID</span>
+            <b style="font-size:11px">#${c.numero} - ${c.prodNome}</b>
+            ${c.tipo==='freefire'?'<i data-lucide="gem" style="width:12px;height:12px;color:#38BDF8"></i>':''}
+          </div>
+        </div>
+        <div style="background:rgba(139,92,246,.15);border:1px solid ${statusCor};padding:4px 8px;border-radius:20px;font-size:9px;font-weight:800;color:${statusCor};display:flex;align-items:center;gap:4px">
+          <i data-lucide="${statusIcon}" style="width:10px;height:10px"></i>${c.status}
+        </div>
       </div>
-      <div style="font-size:11px;margin-bottom:4px"><b>Cliente:</b> ${c.userEmail}</div>
-      <div style="font-size:11px;margin-bottom:4px"><b>Produto:</b> ${c.prodNome}</div>
-      <div style="font-size:11px;margin-bottom:8px"><b>Valor:</b> <span style="color:var(--verde);font-weight:800">R$ ${c.valor.toFixed(2)}</span></div>
-      ${c.tipo==='freefire'?`<div style="font-size:10px;color:var(--cinza)"><b>ID:</b> ${c.idJogo}</div>`:''}
-      <div class="status-badge" style="margin-top:8px"><i data-lucide="check-circle"></i>${c.status}</div>
+      
+      <div style="font-size:10px;color:var(--cinza);margin-bottom:3px"><b style="color:#fff">Cliente:</b> ${c.userEmail}</div>
+      <div style="font-size:10px;color:var(--cinza);margin-bottom:3px"><b style="color:#fff">Valor:</b> R$ ${c.valor.toFixed(2).replace('.',',')}</div>
+      ${c.tipo==='freefire'?`<div style="font-size:10px;color:var(--cinza);margin-bottom:3px"><b style="color:#fff">ID Jogo:</b> ${c.idJogo}</div>`:''}
+      ${c.tipo==='conta'?`<div style="font-size:10px;color:var(--cinza);margin-bottom:3px"><b style="color:#fff">Login:</b> ${c.loginConta}</div>`:''}
+      <div style="font-size:10px;color:var(--cinza);margin-bottom:12px"><b style="color:#fff">Data:</b> ${new Date(c.data).toLocaleString('pt-BR')}</div>
+      
+      ${c.status==='Pendente'?`
+      <div style="display:flex;gap:8px">
+        <button class="btn" style="width:auto;padding:8px 16px;font-size:10px;background:var(--verde);margin:0" onclick="aprovarPedido('${c.id}')">
+          <i data-lucide="check" style="width:12px;height:12px"></i> APROVAR
+        </button>
+        <button class="btn" style="width:auto;padding:8px 16px;font-size:10px;background:var(--vermelho);margin:0" onclick="cancelarPedido('${c.id}')">
+          <i data-lucide="x" style="width:12px;height:12px"></i> CANCELAR
+        </button>
+      </div>
+      `:''}
     </div>
-  `).join('') : '<p style="color:var(--cinza);text-align:center;padding:40px">Nenhum pedido ainda</p>';
+  `}).join('') : '<p style="color:var(--cinza);text-align:center;padding:40px">Nenhum pedido encontrado</p>';
+  
   document.getElementById('listaPedidos').innerHTML = html;
   lucide.createIcons();
+}
+
+async function aprovarPedido(id){
+  if(!confirm('Aprovar este pedido?'))return;
+  const { db: fdb, ref, set } = window.app;
+  const idx = db.compras.findIndex(c=>c.id===id);
+  if(idx>=0){
+    db.compras[idx].status = 'Confirmado';
+    await set(ref(fdb,'primevzdados/compras'),db.compras);
+    alert('Pedido aprovado!');
+  }
+}
+
+async function cancelarPedido(id){
+  if(!confirm('Cancelar este pedido? O estoque será devolvido.'))return;
+  const { db: fdb, ref, set } = window.app;
+  const idx = db.compras.findIndex(c=>c.id===id);
+  if(idx>=0){
+    db.compras[idx].status = 'Cancelado';
+    const prodIdx = db.prods.findIndex(p=>p.id===db.compras[idx].prodId);
+    if(prodIdx>=0) db.prods[prodIdx].estoque++;
+    await set(ref(fdb,'primevzdados'),db);
+    alert('Pedido cancelado e estoque devolvido!');
+  }
 }
 
 function renderDuvidas(){
@@ -922,7 +1070,7 @@ async function salvarCategoria(){
   document.getElementById('nomeCat').value='';
   document.getElementById('fotoCat').value='';
   document.getElementById('previewCat').innerHTML='';
-  fotoCatTemp = '';
+    fotoCatTemp = '';
   alert('Categoria criada!');
 }
 
