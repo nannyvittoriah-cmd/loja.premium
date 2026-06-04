@@ -726,6 +726,9 @@ function enviarTodosPedidos(){
     msg+=` 🔗 ${p.link}\n`;
     msg+=` 🆔 ${p.id}\n\n`;
   });
+  <br>
+💬 Mensagem do Administrador:<br>
+${p.msgAdmin || 'Nenhuma mensagem'}
   msg+=`💰 TOTAL: R$ ${total.toFixed(2).replace('.',',')}\n`;
   msg+=`━━━━━━━━━━`;
   window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
@@ -1092,8 +1095,13 @@ function buscarPedido(){
 }
 
 function aprovarPedido(id){
-  if(confirm('Aprovar este pedido? O cliente vai ver como CONFIRMADO.')){
-    db.pedidos.find(p=>p.id===id).status='confirmado';
+  if(confirm('Aprovar este pedido?')){
+    const pedido = db.pedidos.find(p=>p.id===id);
+
+    pedido.status = 'confirmado';
+
+    pedido.msgAdmin = '✅ Seu pedido foi aprovado e está em processamento. Obrigado pela preferência!';
+
     save();
     renderPedidos();
     alert('Pedido aprovado!');
