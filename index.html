@@ -784,7 +784,7 @@ function renderComprovantes(){
           <div class="comprovante-valor">${new Date(p.data).toLocaleDateString('pt-BR')}</div>
         </div>
       </div>
-      <div class="comprovante-linha">
+           <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="clipboard-list"></i></div>
         <div class="comprovante-info-wrap">
           <div class="comprovante-label">Status:</div>
@@ -794,22 +794,18 @@ function renderComprovantes(){
           </div>
         </div>
       </div>
+
       ${p.msgAdmin ? `
-<div class="comprovante-linha">
-  <div class="comprovante-icon">
-    <i data-lucide="message-square"></i>
-  </div>
-  <div class="comprovante-info-wrap">
-    <div class="comprovante-label">Mensagem do ADM:</div>
-    <div class="comprovante-valor">${p.msgAdmin}</div>
-  </div>
-</div>
-` : ''}
-      <div class="comprovante-footer">
-        <div class="comprovante-footer-logo">
-          <i data-lucide="gem"></i>
-          PREMIUM STORE
+      <div class="comprovante-linha">
+        <div class="comprovante-icon"><i data-lucide="message-square"></i></div>
+        <div class="comprovante-info-wrap">
+          <div class="comprovante-label">Mensagem do ADM:</div>
+          <div class="comprovante-valor">${p.msgAdmin}</div>
         </div>
+      </div>
+      ` : ''}
+
+      <div class="comprovante-footer">
         <div class="comprovante-footer-texto">Obrigado por escolher a melhor!</div>
         <div class="comprovante-footer-heart">💜</div>
       </div>
@@ -1103,10 +1099,18 @@ function buscarPedido(){
 }
 
 function aprovarPedido(id){
+  function aprovarPedido(id){
+  const msg = prompt('Digite uma mensagem para o comprovante do cliente:');
+
   if(confirm('Aprovar este pedido? O cliente vai ver como CONFIRMADO.')){
-    db.pedidos.find(p=>p.id===id).status='confirmado';
+    const pedido = db.pedidos.find(p=>p.id===id);
+
+    pedido.status = 'confirmado';
+    pedido.msgAdmin = msg || '';
+
     save();
     renderPedidos();
+
     alert('Pedido aprovado!');
   }
 }
