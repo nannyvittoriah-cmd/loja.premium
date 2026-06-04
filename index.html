@@ -789,7 +789,7 @@ function filtrarCat(id){
   scrollTo('#prods');
 }
 
-function abrirProduto(id){
+function function abrirProduto(id){
   const p = db.prods.find(x=>x.id===id);
   prodComprando = p;
   document.getElementById('modalProdNome').textContent = p.nome;
@@ -803,8 +803,10 @@ function abrirProduto(id){
   let camposHtml = '';
   if(p.tipo==='freefire'){
     camposHtml = `
-      <label class="label">ID do Jogador Free Fire</label>
+      <label class="label">ID do Jogador Free Fire *</label>
       <input class="input" id="inputIdJogo" placeholder="Digite seu ID" type="number">
+      <label class="label">Link do perfil (opcional)</label>
+      <input class="input" id="inputLinkJogo" placeholder="Cole o link do seu perfil">
     `;
   } else if(p.tipo==='conta'){
     camposHtml = `<p style="font-size:10px;color:var(--cinza);margin-bottom:12px">Após a compra você receberá login e senha da conta</p>`;
@@ -837,8 +839,10 @@ async function finalizarCompra(){
   const { db: fdb, ref, set, push } = window.app;
 
   let idJogo = '';
+  let linkJogo = '';
   if(prodComprando.tipo==='freefire'){
     idJogo = document.getElementById('inputIdJogo')?.value;
+    linkJogo = document.getElementById('inputLinkJogo')?.value || '';
     if(!idJogo){alert('Digite o ID do jogador');return}
   }
 
@@ -854,6 +858,7 @@ async function finalizarCompra(){
     tipo: prodComprando.tipo || 'normal',
     jogo: prodComprando.tipo==='freefire'?'Free Fire':'Geral',
     idJogo: idJogo,
+    linkJogo: linkJogo,
     loginConta: prodComprando.tipo==='conta'?'user'+Math.floor(Math.random()*9999):'',
     senhaConta: prodComprando.tipo==='conta'?'pass'+Math.floor(Math.random()*9999):'',
     codigoGift: prodComprando.tipo==='giftcard'?'XXXX-XXXX-XXXX':'',
@@ -876,9 +881,12 @@ async function finalizarCompra(){
   msg += `👤 *Cliente:* ${compra.userEmail}%0A`;
   msg += `📱 *Produto:* ${compra.prodNome}%0A`;
   msg += `🎮 *Jogo:* ${compra.jogo}%0A`;
+  
   if(compra.tipo==='freefire'){
     msg += `🆔 *ID Free Fire:* ${compra.idJogo}%0A`;
+    if(compra.linkJogo) msg += `🔗 *Link Perfil:* ${compra.linkJogo}%0A`;
   }
+  
   msg += `💰 *Valor:* R$ ${compra.valor.toFixed(2).replace('.',',')}%0A`;
   msg += `📅 *Data:* ${dataCompra}%0A`;
   msg += `📊 *Status:* Pendente%0A%0A`;
