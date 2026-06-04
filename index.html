@@ -457,8 +457,6 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--b
     <div class="btn-voltar" onclick="ir('admin')"><i data-lucide="arrow-left"></i></div>
     <div class="header-title">PREMIAÇÃO</div>
     <div style="width:20px"></div>
-    <div class="header-title">PREMIAÇÃO</div>
-    <div style="width:20px"></div>
   </header>
   <div style="padding:16px">
     <div class="card">
@@ -484,7 +482,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--b
     <div class="modal-body">
       <div class="galeria-principal" id="galeriaPrincipal"></div>
       <div class="galeria" id="modalGaleria"></div>
-      <div style="font-size:11px;color:var(--cinza);margin-bottom:12px" id="modalProdDesc"></div>
+            <div style="font-size:11px;color:var(--cinza);margin-bottom:12px" id="modalProdDesc"></div>
       <div style="font-size:18px;font-weight:900;color:var(--roxo);margin-bottom:8px" id="modalProdPreco"></div>
       <div style="font-size:10px;margin-bottom:16px" id="modalProdEstoque"></div>
       <div id="camposCompra"></div>
@@ -518,7 +516,7 @@ const menuPadrao = [
 window.addEventListener('load',()=>{
   lucide.createIcons();
   const { auth, onAuthStateChanged } = window.app;
-  
+
   onAuthStateChanged(auth, (user) => {
     userAtual = user;
     if(user){
@@ -610,7 +608,7 @@ function renderConfigMenu(){
 async function salvarConfigMenu(){
   const { db: fdb, ref, set } = window.app;
   const novoMenu = db.menu.map((m,i)=>({
-  ...m,
+...m,
     nome: document.getElementById(`menuNome_${i}`).value,
     link: document.getElementById(`menuLink_${i}`).value,
     ativo: document.getElementById(`menuAtivo_${i}`).checked,
@@ -639,7 +637,7 @@ function renderComprovantes(){
 function verComprovante(id){
   const c = db.compras.find(x=>x.id===id);
   if(!c) return;
-  
+
   let camposExtras = '';
   if(c.tipo==='freefire'){
     camposExtras = `
@@ -667,41 +665,41 @@ function verComprovante(id){
       </div>
     `;
   }
-  
+
   const html = `
     <div class="comprovante-card">
       <div class="comprovante-header">
         <i data-lucide="receipt"></i>
         <h2>COMPROVANTE <i data-lucide="gem" class="diamante"></i></h2>
       </div>
-      
+
       <div class="comprovante-item">
         <div class="comprovante-item-left"><i data-lucide="tag"></i><span>Pedido:</span></div>
         <div class="comprovante-item-right roxo">#${c.numero}</div>
       </div>
-      
+
       <div class="comprovante-item">
         <div class="comprovante-item-left"><i data-lucide="package"></i><span>Serviço:</span></div>
         <div class="comprovante-item-right">${c.prodNome}</div>
       </div>
-      
+
       <div class="comprovante-item">
         <div class="comprovante-item-left"><i data-lucide="gamepad-2"></i><span>Jogo:</span></div>
         <div class="comprovante-item-right">${c.jogo||'Geral'}</div>
       </div>
-      
+
       ${camposExtras}
-      
+
       <div class="comprovante-item">
         <div class="comprovante-item-left"><i data-lucide="dollar-sign"></i><span>Valor:</span></div>
         <div class="comprovante-item-right verde">R$ ${c.valor.toFixed(2).replace('.',',')}</div>
       </div>
-      
+
       <div class="comprovante-item">
         <div class="comprovante-item-left"><i data-lucide="calendar"></i><span>Data:</span></div>
         <div class="comprovante-item-right">${new Date(c.data).toLocaleDateString('pt-BR')}</div>
       </div>
-      
+
       <div class="comprovante-item">
         <div class="comprovante-item-left"><i data-lucide="clipboard-check"></i><span>Status:</span></div>
         <div class="status-badge"><i data-lucide="check-circle"></i>${c.status}</div>
@@ -872,8 +870,25 @@ async function finalizarCompra(){
     await set(ref(fdb, 'primevzdados/prods'), db.prods);
   }
 
+  const dataCompra = new Date(compra.data).toLocaleString('pt-BR');
+  let msg = `🔥 *NOVO PEDIDO - PRIME STORE* 🔥%0A%0A`;
+  msg += `📦 *Pedido:* #${compra.numero}%0A`;
+  msg += `👤 *Cliente:* ${compra.userEmail}%0A`;
+  msg += `📱 *Produto:* ${compra.prodNome}%0A`;
+  msg += `🎮 *Jogo:* ${compra.jogo}%0A`;
+  if(compra.tipo==='freefire'){
+    msg += `🆔 *ID Free Fire:* ${compra.idJogo}%0A`;
+  }
+  msg += `💰 *Valor:* R$ ${compra.valor.toFixed(2).replace('.',',')}%0A`;
+  msg += `📅 *Data:* ${dataCompra}%0A`;
+  msg += `📊 *Status:* Pendente%0A%0A`;
+  msg += `Aguardo confirmação do pagamento! 🙏`;
+
   fecharModal();
-  alert('Pedido enviado! Aguarde aprovação do administrador.');
+
+  const numeroZap = '5598984853563';
+  window.open(`https://wa.me/${numeroZap}?text=${msg}`, '_blank');
+
   ir('comprovantes');
 }
 
@@ -937,14 +952,14 @@ function filtrarPedidos(){
 
 function renderPedidos(){
   const busca = document.getElementById('buscarPedido')?.value.toLowerCase() || '';
-  
+
   const hoje = new Date().setHours(0,0,0,0);
   const pedidosHoje = db.compras.filter(c=>new Date(c.data).setHours(0,0,0,0)===hoje).length;
   const pendentes = db.compras.filter(c=>c.status==='Pendente').length;
   const confirmados = db.compras.filter(c=>c.status==='Confirmado').length;
   const cancelados = db.compras.filter(c=>c.status==='Cancelado').length;
   const faturamento = db.compras.filter(c=>c.status==='Confirmado').reduce((sum,c)=>sum+c.valor,0);
-  
+
   document.getElementById('statHoje').textContent = pedidosHoje;
   document.getElementById('statPendentes').textContent = pendentes;
   document.getElementById('statConfirmados').textContent = confirmados;
@@ -953,8 +968,8 @@ function renderPedidos(){
 
   let lista = db.compras;
   if(filtroPedidosAtual!=='todos') lista = lista.filter(c=>c.status===filtroPedidosAtual);
-  if(busca) lista = lista.filter(c=> 
-    c.numero.toString().includes(busca) || 
+  if(busca) lista = lista.filter(c=>
+    c.numero.toString().includes(busca) ||
     c.userEmail.toLowerCase().includes(busca) ||
     c.prodNome.toLowerCase().includes(busca)
   );
@@ -962,41 +977,40 @@ function renderPedidos(){
   const html = lista.length? lista.reverse().map(c=>{
     const statusCor = c.status==='Confirmado'?'var(--verde)':c.status==='Cancelado'?'var(--vermelho)':'var(--roxo)';
     const statusIcon = c.status==='Confirmado'?'check-circle':c.status==='Cancelado'?'x-circle':'hourglass';
-    
+    const statusBg = c.status==='Confirmado'?'rgba(34,197,94,.15)':c.status==='Cancelado'?'rgba(239,68,68,.15)':'rgba(139,92,246,.15)';
+
     return `
-    <div class="card" style="border:1px solid ${statusCor}">
-      <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px">
-        <div>
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
-            <span style="background:var(--bg);border:1px solid var(--borda);padding:3px 6px;border-radius:6px;font-size:9px;font-weight:800;color:var(--roxo)">ID</span>
-            <b style="font-size:11px">#${c.numero} - ${c.prodNome}</b>
-            ${c.tipo==='freefire'?'<i data-lucide="gem" style="width:12px;height:12px;color:#38BDF8"></i>':''}
-          </div>
+    <div class="card" style="border:1px solid ${statusCor};padding:14px">
+      <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <span style="background:var(--bg);border:1px solid var(--borda);padding:3px 6px;border-radius:6px;font-size:9px;font-weight:800;color:var(--roxo);display:flex;align-items:center;gap:3px">
+            <i data-lucide="tag" style="width:10px;height:10px"></i>ID
+          </span>
+          <b style="font-size:11px">#${c.numero} - ${c.prodNome} ${c.tipo==='freefire'?'💎':''}</b>
         </div>
-        <div style="background:rgba(139,92,246,.15);border:1px solid ${statusCor};padding:4px 8px;border-radius:20px;font-size:9px;font-weight:800;color:${statusCor};display:flex;align-items:center;gap:4px">
+        <div style="background:${statusBg};border:1px solid ${statusCor};padding:4px 8px;border-radius:20px;font-size:9px;font-weight:800;color:${statusCor};display:flex;align-items:center;gap:4px;white-space:nowrap">
           <i data-lucide="${statusIcon}" style="width:10px;height:10px"></i>${c.status}
         </div>
       </div>
-      
-      <div style="font-size:10px;color:var(--cinza);margin-bottom:3px"><b style="color:#fff">Cliente:</b> ${c.userEmail}</div>
-      <div style="font-size:10px;color:var(--cinza);margin-bottom:3px"><b style="color:#fff">Valor:</b> R$ ${c.valor.toFixed(2).replace('.',',')}</div>
-      ${c.tipo==='freefire'?`<div style="font-size:10px;color:var(--cinza);margin-bottom:3px"><b style="color:#fff">ID Jogo:</b> ${c.idJogo}</div>`:''}
-      ${c.tipo==='conta'?`<div style="font-size:10px;color:var(--cinza);margin-bottom:3px"><b style="color:#fff">Login:</b> ${c.loginConta}</div>`:''}
+
+      <div style="font-size:10px;color:var(--cinza);margin-bottom:4px"><b style="color:#fff">Cliente:</b> ${c.userEmail}</div>
+      <div style="font-size:10px;color:var(--cinza);margin-bottom:4px"><b style="color:#fff">Valor:</b> R$ ${c.valor.toFixed(2).replace('.',',')}</div>
+      ${c.tipo==='freefire'?`<div style="font-size:10px;color:var(--cinza);margin-bottom:4px"><b style="color:#fff">Link:</b> ${c.idJogo}...</div>`:''}
       <div style="font-size:10px;color:var(--cinza);margin-bottom:12px"><b style="color:#fff">Data:</b> ${new Date(c.data).toLocaleString('pt-BR')}</div>
-      
+
       ${c.status==='Pendente'?`
       <div style="display:flex;gap:8px">
-        <button class="btn" style="width:auto;padding:8px 16px;font-size:10px;background:var(--verde);margin:0" onclick="aprovarPedido('${c.id}')">
-          <i data-lucide="check" style="width:12px;height:12px"></i> APROVAR
+        <button class="btn" style="width:auto;padding:8px 16px;font-size:10px;background:var(--verde);margin:0;display:flex;align-items:center;gap:4px" onclick="aprovarPedido('${c.id}')">
+          <i data-lucide="check" style="width:12px;height:12px"></i>APROVAR
         </button>
-        <button class="btn" style="width:auto;padding:8px 16px;font-size:10px;background:var(--vermelho);margin:0" onclick="cancelarPedido('${c.id}')">
-          <i data-lucide="x" style="width:12px;height:12px"></i> CANCELAR
+        <button class="btn" style="width:auto;padding:8px 16px;font-size:10px;background:var(--vermelho);margin:0;display:flex;align-items:center;gap:4px" onclick="cancelarPedido('${c.id}')">
+          <i data-lucide="x" style="width:12px;height:12px"></i>CANCELAR
         </button>
       </div>
       `:''}
     </div>
   `}).join('') : '<p style="color:var(--cinza);text-align:center;padding:40px">Nenhum pedido encontrado</p>';
-  
+
   document.getElementById('listaPedidos').innerHTML = html;
   lucide.createIcons();
 }
@@ -1070,7 +1084,7 @@ async function salvarCategoria(){
   document.getElementById('nomeCat').value='';
   document.getElementById('fotoCat').value='';
   document.getElementById('previewCat').innerHTML='';
-    fotoCatTemp = '';
+  fotoCatTemp = '';
   alert('Categoria criada!');
 }
 
@@ -1141,7 +1155,7 @@ async function delCat(id){
   if(!confirm('Excluir categoria? Os produtos dela também serão apagados'))return;
   const { db: fdb, ref, set } = window.app;
   db.cats = db.cats.filter(c=>c.id!==id);
-  db.prods = db.prods.filter(p=>p.cat!==id);
+    db.prods = db.prods.filter(p=>p.cat!==id);
   await set(ref(fdb, 'primevzdados'), db);
 }
 
