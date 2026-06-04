@@ -7,7 +7,7 @@
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-  import { getDatabase, ref, set, get, push, update, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+  import { getDatabase, ref, set, get, push, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
   const firebaseConfig = {
     apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -24,26 +24,9 @@
   const auth = getAuth(app);
   const db = getDatabase(app);
 
-  const configPadrao={
-    cores:{bg:'#050505',roxo:'#8B5CF6',roxoNeon:'#A855F7',roxoEscuro:'#6D28D9',branco:'#FFFFFF',cinza:'#D1D5DB',borda:'#1E1E',card:'#0D0D0D',verde:'#22C55E',amarelo:'#F59E0B',vermelho:'#EF4444'},
-    loja:{nome1:'PREMIUM',nome2:'STORE',logo:'https://i.postimg.cc/PJ2Vcty8/e1befe8d-0630-444f-aea5-9b0a96d5f84b.jpg',banner:'https://i.postimg.cc/T3yFxLbM/4cea1152-2d84-449c-857b-f55ef07d582e.jpg',whatsapp:'5598984853563',msgWhatsapp:'Olá, gostaria de finalizar minha compra!'},
-    secoes:{carrinho:true,indicacoes:true,premiacao:true,suporte:true,faq:true,termos:true},
-    comoComprar:{tituloComo:'COMO',tituloComprar:'COMPRAR',subtitulo:'Siga o passo a passo para realizar sua compra',passos:[{num:1,texto:'Escolha o <b>jogo</b> desejado.',icon:'gamepad-2'},{num:2,texto:'Selecione o <b>produto</b> que deseja comprar.',icon:'package'},{num:3,texto:'Cole o <b>link/ID</b> da conta.',icon:'link'},{num:4,texto:'Clique no botão <b>"ADICIONAR AO CARRINHO"</b>.',icon:'shopping-cart'},{num:5,texto:'Acesse o <b>carrinho</b> e envie os pedidos no WhatsApp.',icon:'check-circle'}],aviso:'Verifique se o ID/link enviado está correto para evitar falhas na entrega.'},
-    tiposProduto:[{id:'freefire',nome:'Free Fire',campos:[{label:'ID do Jogador',tipo:'text',obrigatorio:true},{label:'Link do perfil (opcional)',tipo:'text',obrigatorio:false}]},{id:'roblox',nome:'Roblox',campos:[{label:'Usuário Roblox',tipo:'text',obrigatorio:true}]},{id:'normal',nome:'Produto Normal',campos:[{label:'Link/ID da conta',tipo:'text',obrigatorio:true}]}],
-    faq:'',termos:'Ao utilizar nosso painel, o usuário concorda automaticamente com todos os termos e condições abaixo.\n\n• Não garantimos resultados permanentes em serviços de redes sociais.\n• O cliente é totalmente responsável pelo link enviado no pedido.\n• Pedidos com links inválidos poderão ser cancelados sem aviso.\n• Não realizamos reembolso após o início do serviço.\n• O tempo de entrega pode variar conforme o serviço solicitado.\n• Não aceitamos conteúdos ilegais, proibidos ou que violem políticas das plataformas.\n• O uso do painel é de total responsabilidade do usuário.\n• Alguns serviços podem sofrer quedas naturais após a entrega.\n• O cliente concorda em utilizar o site de forma correta e sem tentativas de abuso ou spam.\n• Alterações nos termos podem ocorrer a qualquer momento sem aviso prévio.\n\n💜 Ao continuar utilizando o painel, você concorda com todos os termos acima.',
-    premiacao:{img:'',texto:'Nenhuma premiação ativa no momento.'}
-  };
-
-  get(ref(db, 'primevzdados')).then((snap)=>{
-    if(!snap.exists()){
-      set(ref(db, 'primevzdados'), {cat:[],serv:[],pedidos:[],indicacoes:[],usuarios:{},config:configPadrao});
-    }
-  });
-
-  window.firebaseAuth = { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail, db, ref, set, get, push, update, onValue };
+  window.firebaseAuth = { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail, db, ref, set, get, push, update };
 </script>
 <script src="https://unpkg.com/lucide@latest"></script>
-<style id="dynamicStyles"></style>
 <style>
 :root{
   --bg:#050505;
@@ -59,11 +42,13 @@
   --vermelho:#EF4444;
   --glow:rgba(139, 92, 246, 0.3);
 }
+
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);font-size:11px}
 .tela{display:none;min-height:100vh}
 .tela.ativa{display:block}
 .hidden{display:none!important}
+
 .header{background:var(--bg);padding:10px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--borda);position:sticky;top:0;z-index:50;box-shadow:0 2px 10px var(--glow)}
 .header-left{display:flex;align-items:center;gap:12px}
 .menu{font-size:18px;cursor:pointer;color:var(--branco);filter:drop-shadow(0 0 4px var(--roxo))}
@@ -78,6 +63,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .user-info{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--roxo);cursor:pointer}
 .user-avatar{width:24px;height:24px;border-radius:50%;background:var(--roxo);display:flex;align-items:center;justify-content:center;font-weight:700;overflow:hidden;box-shadow:0 0 8px var(--roxo-neon)}
 .user-avatar img{width:100%;height:100%;object-fit:cover}
+
 .sidebar{position:fixed;top:0;left:-250px;width:250px;height:100vh;background:var(--card);border-right:1px solid var(--borda);z-index:200;transition:left.3s;padding:16px;overflow-y:auto}
 .sidebar.ativo{left:0}
 .sidebar-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:199;display:none}
@@ -86,6 +72,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .sidebar-item{padding:10px;border-radius:8px;cursor:pointer;font-size:10px;font-weight:600;color:var(--cinza);margin-bottom:4px;display:flex;align-items:center;gap:8px}
 .sidebar-item:hover{background:var(--borda);color:var(--branco)}
 .sidebar-item i{width:16px;height:16px;stroke:var(--roxo);fill:none;stroke-width:1.5}
+
 .login-wrapper{min-height:100vh}
 .login-container{display:flex;align-items:center;justify-content:center;padding:16px;min-height:60vh}
 .login-box{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:24px;width:100%;max-width:360px;box-shadow:0 0 20px rgba(139,92,246,.1)}
@@ -100,6 +87,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .login-form.ativo{display:block}
 .link-roxo{color:var(--roxo);cursor:pointer;font-size:9px;text-align:center;margin-top:12px}
 .link-roxo:hover{text-decoration:underline}
+
 .search-bar{position:relative;margin:8px 12px}
 .search-bar input{width:100%;background:rgba(5,5,5,0.6);border:1px solid var(--borda);padding:8px 8px 8px 32px;border-radius:20px;color:var(--branco);font-size:10px;backdrop-filter:blur(5px)}
 .search-bar input:focus{outline:none;border-color:var(--roxo);box-shadow:0 0 8px var(--glow)}
@@ -129,6 +117,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .produto-preco{font-size:12px;font-weight:900;color:var(--roxo);text-align:center;margin-bottom:6px;text-shadow:0 0 6px var(--glow)}
 .btn-comprar{width:100%;background:linear-gradient(135deg, var(--roxo), var(--roxo-neon));color:var(--branco);border:none;padding:6px;border-radius:20px;font-weight:800;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:3px;box-shadow:0 0 8px var(--glow)}
 .btn-comprar i{width:10px;height:10px}
+
 .container{padding:12px;max-width:600px;margin:0 auto}
 .label{font-size:10px;font-weight:600;margin:20px 0 8px;display:flex;align-items:center;gap:6px;color:var(--cinza);text-transform:uppercase;letter-spacing:.5px}
 .input,.textarea{background:var(--card);border:1px solid var(--borda);border-radius:10px;padding:12px;font-size:10px;color:var(--branco);width:100%;outline:none;margin-bottom:12px}
@@ -161,6 +150,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .upload-text{position:absolute;text-align:center;pointer-events:none}
 .loading{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:500;display:none;align-items:center;justify-content:center;font-size:12px}
 .loading.ativo{display:flex}
+
 .modal-produto{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.95);z-index:350;display:none;align-items:center;justify-content:center;padding:16px}
 .modal-produto.ativo{display:flex}
 .modal-produto-box{background:var(--card);border:1px solid var(--borda);border-radius:14px;width:100%;max-width:360px;max-height:90vh;overflow-y:auto}
@@ -172,6 +162,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .modal-produto-preco{font-size:20px;font-weight:900;color:var(--verde);margin-bottom:12px}
 .modal-produto-desc{font-size:10px;color:var(--cinza);line-height:1.6;margin-bottom:16px;display:none}
 .modal-produto-desc.ativo{display:block}
+
 .como-comprar{padding:20px 12px 40px;max-width:600px;margin:0 auto}
 .como-comprar-tit{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:4px}
 .como-comprar-tit h2{font-size:20px;font-weight:800}
@@ -192,6 +183,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .aviso-icon i{width:100%;height:100%;stroke:var(--roxo);fill:none;stroke-width:1.5}
 .aviso-texto{flex:1;font-size:9px;color:var(--cinza);line-height:1.5}
 .aviso-texto b{color:var(--roxo);display:block;margin-bottom:4px}
+
 .indicacao-card{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:0 0 20px rgba(139,92,246,.1)}
 .indicacao-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .indicacao-tit{font-size:12px;font-weight:800;color:var(--roxo);text-shadow:0 0 8px var(--roxo-neon)}
@@ -222,6 +214,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .indicacao-item-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .indicacao-codigo{font-size:10px;font-weight:700;color:var(--roxo)}
 .indicacao-valor{font-size:9px;color:var(--cinza)}
+
 .comprovante-card{width:90%;max-width:360px;margin:0 auto 8px;background:linear-gradient(180deg,#0D0D0D 0%,#050505 100%);border:1px solid #8B5CF6;border-radius:8px;padding:6px;box-shadow:0 0 12px rgba(168,85,247,.25);position:relative;line-height:1.1}
 .comprovante-topo{text-align:center;margin-bottom:6px;padding-bottom:4px;position:relative}
 .comprovante-topo::before{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#A855F7,transparent);box-shadow:0 0 8px rgba(168,85,247,.8)}
@@ -251,6 +244,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .comprovante-footer-logo i{width:12px;height:12px;stroke:#A855F7;fill:none;stroke-width:2.5;filter:drop-shadow(0 0 8px rgba(168,85,247,.7))}
 .comprovante-footer-texto{font-size:9px;color:#D1D5DB;margin-bottom:1px}
 .comprovante-footer-heart{color:#A855F7;font-size:10px;filter:drop-shadow(0 0 6px rgba(168,85,247,.7))}
+
 .suporte-card{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:16px;margin-bottom:12px;text-align:center}
 .suporte-icon{width:60px;height:60px;margin:0 auto 12px;background:var(--roxo);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px var(--roxo-neon)}
 .suporte-icon i{width:30px;height:30px;stroke:var(--branco);fill:none;stroke-width:2}
@@ -281,7 +275,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
         </div>
 
         <div id="formEntrar" class="login-form ativo">
-                    <input type="email" class="input" id="loginEmail" placeholder="E-mail">
+          <input type="email" class="input" id="loginEmail" placeholder="E-mail">
           <input type="password" class="input" id="loginSenha" placeholder="Senha">
           <button class="btn" onclick="fazerLogin()">ENTRAR</button>
           <div class="link-roxo" onclick="abrirEsqueciSenha()">Esqueci minha senha</div>
@@ -297,14 +291,68 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
       </div>
     </div>
 
-    <div class="como-comprar" id="comoComprarPreview"></div>
+    <div class="como-comprar">
+      <div class="como-comprar-tit">
+        <h2><span class="como">COMO</span> <span class="comprar">COMPRAR</span></h2>
+        <i data-lucide="shopping-cart"></i>
+      </div>
+      <p class="como-comprar-sub">Siga o passo a passo para realizar sua compra</p>
+      <div class="divider-roxo"></div>
+
+      <div class="passo-item">
+        <div class="passo-num">1</div>
+        <div class="passo-texto">Escolha o <b>jogo</b> desejado.</div>
+        <div class="passo-icon"><i data-lucide="gamepad-2"></i></div>
+      </div>
+
+      <div class="passo-item">
+        <div class="passo-num">2</div>
+        <div class="passo-texto">Selecione o <b>produto</b> que deseja comprar.</div>
+        <div class="passo-icon"><i data-lucide="package"></i></div>
+      </div>
+
+      <div class="passo-item">
+        <div class="passo-num">3</div>
+        <div class="passo-texto">Cole o <b>link/ID</b> da conta.</div>
+        <div class="passo-icon"><i data-lucide="link"></i></div>
+      </div>
+
+      <div class="passo-item">
+        <div class="passo-num">4</div>
+        <div class="passo-texto">Clique no botão <b>"ADICIONAR AO CARRINHO"</b>.</div>
+        <div class="passo-icon"><i data-lucide="shopping-cart"></i></div>
+      </div>
+
+      <div class="passo-item">
+        <div class="passo-num">5</div>
+        <div class="passo-texto">Acesse o <b>carrinho</b> e envie os pedidos no WhatsApp.</div>
+        <div class="passo-icon"><i data-lucide="check-circle"></i></div>
+      </div>
+
+      <div class="aviso-box">
+        <div class="aviso-icon"><i data-lucide="alert-triangle"></i></div>
+        <div class="aviso-texto">
+          <b>IMPORTANTE:</b>
+          Verifique se o ID/link enviado está correto para evitar falhas na entrega.
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class="sidebar-overlay" id="overlay" onclick="fecharMenu()"></div>
 <div class="sidebar" id="sidebar">
   <div class="sidebar-tit">MENU</div>
-  <div id="menuItens"></div>
+    <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
+  <div class="sidebar-item" onclick="ir('carrinho');fecharMenu()"><i data-lucide="shopping-cart"></i>Meu Carrinho</div>
+  <div class="sidebar-item" onclick="ir('comprovantes');fecharMenu()"><i data-lucide="receipt"></i>Meus comprovantes</div>
+  <div class="sidebar-item" onclick="ir('suporte');fecharMenu()"><i data-lucide="headphones"></i>Suporte</div>
+  <div class="sidebar-item" onclick="ir('faq');fecharMenu()"><i data-lucide="help-circle"></i>Dúvidas frequentes</div>
+  <div class="sidebar-item" onclick="ir('termos');fecharMenu()"><i data-lucide="file-text"></i>Termos do site</div>
+  <div class="sidebar-item" onclick="ir('premiacao');fecharMenu()"><i data-lucide="trophy"></i>Premiação</div>
+  <div class="sidebar-item" onclick="abrirAdmin();fecharMenu()" id="menuAdmin" style="display:none"><i data-lucide="user-cog"></i>Adm</div>
+  <div class="sidebar-item" onclick="abrirAdminIndicacoes();fecharMenu()" id="menuAdminInd" style="display:none"><i data-lucide="clipboard-check"></i>Indicações Admin</div>
+  <div class="sidebar-item" onclick="logout();fecharMenu()"><i data-lucide="log-out"></i>Sair</div>
 </div>
 
 <div id="home" class="tela">
@@ -312,8 +360,8 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
     <div class="header-left">
       <div class="menu" onclick="abrirMenu()">☰</div>
       <div class="logo-box">
-        <img src="" class="logo-img" alt="Logo" id="logoHeader">
-        <div class="logo-text"><span class="premium" id="lojaNome1">PREMIUM</span> <span class="store" id="lojaNome2">STORE</span></div>
+        <img src="https://i.postimg.cc/PJ2Vcty8/e1befe8d-0630-444f-aea5-9b0a96d5f84b.jpg" class="logo-img" alt="Logo">
+        <div class="logo-text"><span class="premium">PREMIUM</span> <span class="store">STORE</span></div>
       </div>
     </div>
     <div class="header-right">
@@ -333,8 +381,8 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
     <input type="text" id="buscaProduto" placeholder="Buscar jogo ou produto...">
   </div>
 
-  <div class="banner-topo" id="bannerTopo">
-    <img src="" alt="Banner" id="imgBanner">
+  <div class="banner-topo">
+    <img src="https://i.postimg.cc/T3yFxLbM/4cea1152-2d84-449c-857b-f55ef07d582e.jpg" alt="Banner">
   </div>
 
   <div class="section-title">
@@ -370,7 +418,8 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
       <div class="modal-produto-preco" id="modalProdutoPreco"></div>
       <div class="modal-produto-desc" id="modalProdutoDesc"></div>
       <button class="btn btn-desc" onclick="toggleProdutoDesc()">VER DESCRIÇÃO</button>
-      <div id="camposCustomProduto"></div>
+      <div class="label">🔗 Link/ID da conta:</div>
+      <input type="text" class="input" id="linkProduto" placeholder="Cole o link ou ID aqui">
       <div class="label">🎁 Código de indicação (opcional):</div>
       <input type="text" class="input" id="codigoProduto" placeholder="Ex: PREMIUM782">
       <button class="btn" onclick="finalizarPedido()">ADICIONAR AO CARRINHO</button>
@@ -413,15 +462,6 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
     <div style="width:28px"></div>
   </div>
   <div class="container" id="comprovantesBody"></div>
-</div>
-
-<div id="acessos" class="tela">
-  <div class="header">
-    <div class="header-left"><div class="btn-voltar" onclick="ir('home')">←</div></div>
-    <div style="font-size:12px;font-weight:700">MEUS ACESSOS</div>
-    <div style="width:28px"></div>
-  </div>
-  <div class="container" id="acessosBody"></div>
 </div>
 
 <div id="pedidos" class="tela">
@@ -477,9 +517,26 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 </div>
 
 <script>
-const EMAIL_ADM='nannyvittoriah@gmail.com';
-let db={cat:[],serv:[],pedidos:[],indicacoes:[],usuarios:{},config:{}};
+const EMAIL_ADM='nannyvittoriah@gmail.com',WHATSAPP='5598984853563';
+
+let db={
+  cat:JSON.parse(localStorage.getItem('cat')||'[]'),
+  serv:JSON.parse(localStorage.getItem('serv')||'[]'),
+  config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"Ao utilizar nosso painel, o usuário concorda automaticamente com todos os termos e condições abaixo.\\n\\n• Não garantimos resultados permanentes em serviços de redes sociais.\\n• O cliente é totalmente responsável pelo link enviado no pedido.\\n• Pedidos com links inválidos poderão ser cancelados sem aviso.\\n• Não realizamos reembolso após o início do serviço.\\n• O tempo de entrega pode variar conforme o serviço solicitado.\\n• Não aceitamos conteúdos ilegais, proibidos ou que violem políticas das plataformas.\\n• O uso do painel é de total responsabilidade do usuário.\\n• Alguns serviços podem sofrer quedas naturais após a entrega.\\n• O cliente concorda em utilizar o site de forma correta e sem tentativas de abuso ou spam.\\n• Alterações nos termos podem ocorrer a qualquer momento sem aviso prévio.\\n\\n💜 Ao continuar utilizando o painel, você concorda com todos os termos acima.","premiacao":{"img":"","texto":""}}'),
+  indicacoes:JSON.parse(localStorage.getItem('indicacoes')||'[]'),
+  usuarios:JSON.parse(localStorage.getItem('usuarios')||'{}'),
+  pedidos:JSON.parse(localStorage.getItem('pedidos')||'[]')
+};
 let usuarioAtual=null,jogoSelecionado=null,produtoSelecionado=null;
+
+function save(){
+  localStorage.setItem('cat',JSON.stringify(db.cat));
+  localStorage.setItem('serv',JSON.stringify(db.serv));
+  localStorage.setItem('config',JSON.stringify(db.config));
+  localStorage.setItem('indicacoes',JSON.stringify(db.indicacoes));
+  localStorage.setItem('usuarios',JSON.stringify(db.usuarios));
+  localStorage.setItem('pedidos',JSON.stringify(db.pedidos));
+}
 
 function showLoad(show){document.getElementById('loading').classList.toggle('ativo',show)}
 function gerarCodigoIndicacao(nome){
@@ -490,79 +547,36 @@ function gerarCodigoIndicacao(nome){
 
 window.addEventListener('load',()=>{
   lucide.createIcons();
-  const { auth, onAuthStateChanged, db: fdb, ref, onValue } = window.firebaseAuth;
-
-  onValue(ref(fdb, 'primevzdados'), (snap)=>{
-    if(snap.exists()){
-      db = snap.val();
-      if(usuarioAtual) atualizarTudo();
-    }
-  });
-
+  const { auth, onAuthStateChanged } = window.firebaseAuth;
   onAuthStateChanged(auth, async(user) => {
     if(user){
       usuarioAtual={uid:user.uid,nome:user.displayName||user.email.split('@')[0],email:user.email,admin:user.email===EMAIL_ADM};
       if(!db.usuarios[user.uid]){
-        const { db: fdb, ref, set } = window.firebaseAuth;
         db.usuarios[user.uid]={codigo:gerarCodigoIndicacao(usuarioAtual.nome),indicacoesValidas:0,totalIndicacoes:0};
-        await set(ref(fdb, `primevzdados/usuarios/${user.uid}`), db.usuarios[user.uid]);
+        save();
       }
       usuarioAtual.codigo=db.usuarios[user.uid].codigo;
       document.getElementById('login').classList.remove('ativa');
       document.getElementById('home').classList.add('ativa');
-      aplicarConfigSite();
-      atualizarTudo();
-      renderMenu();
+      atualizarHeaderUsuario();
+      renderJogos();
+      renderProdutosLoja();
+      atualizarCarrinho();
+      if(usuarioAtual.admin){
+        document.getElementById('menuAdmin').style.display='flex';
+        document.getElementById('menuAdminInd').style.display='flex';
+      }
     }else{
       document.getElementById('login').classList.add('ativa');
-      renderComoComprarLogin();
     }
   });
 });
-
-function aplicarConfigSite(){
-  if(!db.config) return;
-  const c = db.config.cores;
-  const css = `:root{--bg:${c.bg};--roxo:${c.roxo};--roxo-neon:${c.roxoNeon};--roxo-escuro:${c.roxoEscuro};--branco:${c.branco};--cinza:${c.cinza};--borda:${c.borda};--card:${c.card};--verde:${c.verde};--amarelo:${c.amarelo};--vermelho:${c.vermelho};--glow:${c.roxo}4D}`;
-  document.getElementById('dynamicStyles').textContent = css;
-  document.getElementById('logoHeader').src = db.config.loja.logo;
-  document.getElementById('imgBanner').src = db.config.loja.banner;
-  document.getElementById('lojaNome1').textContent = db.config.loja.nome1;
-  document.getElementById('lojaNome2').textContent = db.config.loja.nome2;
-}
-
-function atualizarTudo(){
-  atualizarHeaderUsuario();
-  renderJogos();
-  renderProdutosLoja();
-  atualizarCarrinho();
-  renderMenu();
-}
 
 function atualizarHeaderUsuario(){
   if(usuarioAtual){
     document.getElementById('userNome').textContent=usuarioAtual.nome.split(' ')[0];
     document.getElementById('userAvatar').textContent=usuarioAtual.nome.charAt(0).toUpperCase();
   }
-}
-
-function renderMenu(){
-  let html='';
-  if(db.config.secoes.indicacoes) html+=`<div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>`;
-  if(db.config.secoes.carrinho) html+=`<div class="sidebar-item" onclick="ir('carrinho');fecharMenu()"><i data-lucide="shopping-cart"></i>Meu Carrinho</div>`;
-  html+=`<div class="sidebar-item" onclick="ir('comprovantes');fecharMenu()"><i data-lucide="receipt"></i>Meus Comprovantes</div>`;
-  html+=`<div class="sidebar-item" onclick="ir('acessos');fecharMenu()"><i data-lucide="key"></i>Meus Acessos</div>`;
-  if(db.config.secoes.suporte) html+=`<div class="sidebar-item" onclick="ir('suporte');fecharMenu()"><i data-lucide="headphones"></i>Suporte</div>`;
-  if(db.config.secoes.faq) html+=`<div class="sidebar-item" onclick="ir('faq');fecharMenu()"><i data-lucide="help-circle"></i>Dúvidas frequentes</div>`;
-  if(db.config.secoes.termos) html+=`<div class="sidebar-item" onclick="ir('termos');fecharMenu()"><i data-lucide="file-text"></i>Termos do site</div>`;
-  if(db.config.secoes.premiacao) html+=`<div class="sidebar-item" onclick="ir('premiacao');fecharMenu()"><i data-lucide="trophy"></i>Premiação</div>`;
-  if(usuarioAtual?.admin){
-    html+=`<div class="sidebar-item" onclick="abrirAdmin();fecharMenu()"><i data-lucide="user-cog"></i>Adm</div>`;
-    html+=`<div class="sidebar-item" onclick="abrirAdminIndicacoes();fecharMenu()"><i data-lucide="clipboard-check"></i>Indicações Admin</div>`;
-  }
-  html+=`<div class="sidebar-item" onclick="logout();fecharMenu()"><i data-lucide="log-out"></i>Sair</div>`;
-  document.getElementById('menuItens').innerHTML=html;
-  lucide.createIcons();
 }
 
 function trocarTabLogin(tab){
@@ -633,13 +647,11 @@ function abrirMenu(){document.getElementById('sidebar').classList.add('ativo');d
 function fecharMenu(){document.getElementById('sidebar').classList.remove('ativo');document.getElementById('overlay').classList.remove('ativo')}
 
 function atualizarCarrinho(){
-  if(!usuarioAtual) return;
   const pendentes = db.pedidos.filter(p=>p.email===usuarioAtual.email && p.status==='pendente').length;
   document.getElementById('cartCount').textContent = pendentes;
 }
 
 function renderCarrinho(){
-  if(!usuarioAtual) return;
   const meus=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && p.status==='pendente');
   if(meus.length===0){
     document.getElementById('carrinhoBody').innerHTML='<div class="empty">Carrinho vazio<br><br>Adicione produtos na loja!</div>';
@@ -655,7 +667,7 @@ function renderCarrinho(){
       <div class="lista-info">
         Jogo: ${p.jogo}<br>
         ID: ${p.id}<br>
-        ${p.campos.map(c=>`${c.label}: ${c.valor}`).join('<br>')}<br>
+        Link: ${p.link.substring(0,40)}...<br>
         Data: ${new Date(p.data).toLocaleString('pt-BR')}
       </div>
       <div class="lista-acoes" style="margin-top:8px">
@@ -686,35 +698,41 @@ function renderCarrinho(){
   lucide.createIcons();
 }
 
-async function cancelarPedidoCarrinho(id){
+function cancelarPedidoCarrinho(id){
   if(confirm('Remover este item do carrinho?')){
-    const { db: fdb, ref, set } = window.firebaseAuth;
     db.pedidos=db.pedidos.filter(p=>p.id!==id);
-    await set(ref(fdb, 'primevzdados/pedidos'), db.pedidos);
+    save();
     atualizarCarrinho();
     renderCarrinho();
   }
 }
 
 function enviarTodosPedidos(){
-  if(!usuarioAtual) return;
   const meus=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && p.status==='pendente');
   if(meus.length===0){alert('Carrinho vazio');return}
   const total = meus.reduce((s,p)=>s+p.valor,0);
-  let msg=`━━━━━━━━━━\n🛒 PEDIDOS PENDENTES\n━━━━━━━━━━\n\n👤 Cliente: ${usuarioAtual.nome}\n📧 Email: ${usuarioAtual.email}\n\n`;
+  let msg=`━━━━━━━━━━
+🛒 PEDIDOS PENDENTES
+━━━━━━━━━━
+
+👤 Cliente: ${usuarioAtual.nome}
+📧 Email: ${usuarioAtual.email}
+
+`;
   meus.forEach((p,i)=>{
     msg+=`${i+1}. ${p.servico}\n`;
     msg+=` 🎮 ${p.jogo}\n`;
     msg+=` 💵 R$ ${p.valor.toFixed(2).replace('.',',')}\n`;
-    msg+=p.campos.map(c=>` ${c.label}: ${c.valor}`).join('\n')+'\n';
+    msg+=` 🔗 ${p.link}\n`;
     msg+=` 🆔 ${p.id}\n\n`;
+    msg+=` 📱 ${p.mensagemAdm}\n\n\`;
   });
-  msg+=`💰 TOTAL: R$ ${total.toFixed(2).replace('.',',')}\n━━━━━━━━━━`;
-  window.open(`https://wa.me/${db.config.loja.whatsapp}?text=${encodeURIComponent(msg)}`,'_blank');
+  msg+=`💰 TOTAL: R$ ${total.toFixed(2).replace('.',',')}\n`;
+  msg+=`━━━━━━━━━━`;
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
 function renderComprovantes(){
-  if(!usuarioAtual) return;
   const meus=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && (p.status==='confirmado'||p.status==='cancelado')).reverse();
   if(meus.length===0){
     document.getElementById('comprovantesBody').innerHTML='<div class="empty">Nenhum comprovante ainda<br><br>Finalize pedidos no carrinho!</div>';
@@ -738,6 +756,7 @@ function renderComprovantes(){
           <div class="comprovante-label">Pedido:</div>
           <div class="comprovante-valor roxo">${p.id}</div>
         </div>
+      </div>
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="package"></i></div>
         <div class="comprovante-info-wrap">
@@ -759,14 +778,6 @@ function renderComprovantes(){
           <div class="comprovante-valor verde">R$ ${p.valor.toFixed(2).replace('.',',')}</div>
         </div>
       </div>
-      ${p.msgAdm?`
-      <div class="comprovante-linha" style="background:rgba(139,92,246,.1);border-color:var(--roxo)">
-        <div class="comprovante-icon"><i data-lucide="message-circle"></i></div>
-        <div class="comprovante-info-wrap" style="flex-direction:column;align-items:start">
-          <div class="comprovante-label">💬 Mensagem do ADM:</div>
-          <div class="comprovante-valor" style="text-align:left;color:var(--roxo);font-size:9px;margin-top:2px">${p.msgAdm}</div>
-        </div>
-      </div>`:''}
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="calendar"></i></div>
         <div class="comprovante-info-wrap">
@@ -787,7 +798,7 @@ function renderComprovantes(){
       <div class="comprovante-footer">
         <div class="comprovante-footer-logo">
           <i data-lucide="gem"></i>
-          ${db.config.loja.nome1} ${db.config.loja.nome2}
+          PREMIUM STORE
         </div>
         <div class="comprovante-footer-texto">Obrigado por escolher a melhor!</div>
         <div class="comprovante-footer-heart">💜</div>
@@ -795,50 +806,6 @@ function renderComprovantes(){
     </div>
   `}).join('');
   document.getElementById('comprovantesBody').innerHTML=lista;
-  lucide.createIcons();
-}
-
-function renderAcessos(){
-  if(!usuarioAtual) return;
-  const meusAcessos=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && p.status==='confirmado' && (p.loginConta||p.senhaConta)).reverse();
-  if(meusAcessos.length===0){
-    document.getElementById('acessosBody').innerHTML='<div class="empty">Nenhum acesso liberado ainda<br><br>Aguarde o ADM aprovar seus pedidos!</div>';
-    return;
-  }
-  const lista=meusAcessos.map(p=>`
-    <div class="indicacao-card" style="border-color:var(--verde);box-shadow:0 0 20px rgba(34,197,94,.2)">
-      <div class="indicacao-header">
-        <div class="indicacao-tit" style="color:var(--verde);text-shadow:0 0 8px var(--verde)">🔓 ${p.servico}</div>
-        <span class="badge badge-confirmada">LIBERADO</span>
-      </div>
-      <div class="lista-info" style="margin-bottom:12px">
-        Pedido: ${p.id}<br>
-        Data: ${new Date(p.data).toLocaleDateString('pt-BR')}
-      </div>
-      ${p.loginConta?`
-      <div class="codigo-box" style="border-color:var(--verde);margin-bottom:8px">
-        <div style="flex:1">
-          <div style="font-size:8px;color:var(--cinza);margin-bottom:4px">🔐 LOGIN</div>
-          <div class="codigo-text" style="color:var(--verde);font-size:12px">${p.loginConta}</div>
-        </div>
-        <button class="btn-copiar" style="background:var(--verde)" onclick="navigator.clipboard.writeText('${p.loginConta}');alert('Login copiado!')">COPIAR</button>
-      </div>`:''}
-      ${p.senhaConta?`
-      <div class="codigo-box" style="border-color:var(--verde)">
-        <div style="flex:1">
-          <div style="font-size:8px;color:var(--cinza);margin-bottom:4px">🔑 SENHA</div>
-          <div class="codigo-text" style="color:var(--verde);font-size:12px">${p.senhaConta}</div>
-        </div>
-        <button class="btn-copiar" style="background:var(--verde)" onclick="navigator.clipboard.writeText('${p.senhaConta}');alert('Senha copiada!')">COPIAR</button>
-      </div>`:''}
-      ${p.msgAdm?`
-      <div style="background:rgba(139,92,246,.1);border:1px solid var(--roxo);border-radius:10px;padding:10px;margin-top:12px">
-        <div style="font-size:9px;color:var(--roxo);font-weight:700;margin-bottom:4px">💬 Mensagem do ADM:</div>
-        <div style="font-size:9px;color:var(--cinza);line-height:1.5">${p.msgAdm}</div>
-      </div>`:''}
-    </div>
-  `).join('');
-  document.getElementById('acessosBody').innerHTML=lista;
   lucide.createIcons();
 }
 
@@ -852,7 +819,6 @@ function ir(t){
   if(t==='indicacoes')renderIndicacoes();
   if(t==='adminIndicacoes')renderAdminIndicacoes();
   if(t==='comprovantes')renderComprovantes();
-  if(t==='acessos')renderAcessos();
   if(t==='carrinho')renderCarrinho();
   if(t==='suporte')renderSuporte();
   if(t==='pedidos')renderPedidos();
@@ -860,7 +826,7 @@ function ir(t){
 }
 
 function renderJogos(){
-  const cats = db.cat||[];
+  const cats = db.cat.length?db.cat:[];
   const icones = {'free fire':'flame','roblox':'box','cod mobile':'crosshair','fortnite':'zap','brawl stars':'star','efootball':'football'};
   const html = cats.map(c=>{
     return `<div class="jogo-card" onclick="filtrarJogo('${c.k}')">
@@ -876,8 +842,12 @@ function renderJogos(){
 
 function renderProdutosLoja(filtroJogo=null){
   jogoSelecionado = filtroJogo;
-  let produtos = db.serv||[];
-  if(filtroJogo) produtos = produtos.filter(p => p.cat === filtroJogo);
+  let produtos = db.serv;
+
+  if(filtroJogo){
+    produtos = produtos.filter(p => p.cat === filtroJogo);
+  }
+
   const busca = document.getElementById('buscaProduto')?.value.toLowerCase();
   if(busca){
     produtos = produtos.filter(p => {
@@ -885,6 +855,7 @@ function renderProdutosLoja(filtroJogo=null){
       return p.nome.toLowerCase().includes(busca) || cat?.nome.toLowerCase().includes(busca);
     });
   }
+
   const html = produtos.map(p=>{
     const cat = db.cat.find(c=>c.k===p.cat);
     return `
@@ -902,8 +873,10 @@ function renderProdutosLoja(filtroJogo=null){
       </button>
     </div>
   `}).join('');
+
   document.getElementById('produtosGrid').innerHTML = html || '<div class="empty">Nenhum produto cadastrado<br><br>Cadastre no Painel ADM</div>';
   lucide.createIcons();
+
   document.querySelectorAll('.jogo-card').forEach(card=>{card.classList.remove('ativo');});
   if(filtroJogo){
     const cardAtivo = document.querySelector(`.jogo-card[onclick="filtrarJogo('${filtroJogo}')"]`);
@@ -912,25 +885,19 @@ function renderProdutosLoja(filtroJogo=null){
 }
 
 function filtrarJogo(k){renderProdutosLoja(k);}
+
 document.getElementById('buscaProduto')?.addEventListener('input', () => {renderProdutosLoja(jogoSelecionado);});
 
 function abrirModalPedido(k){
   produtoSelecionado = db.serv.find(p=>p.k===k);
   if(!produtoSelecionado) return;
-  const tipo = db.config.tiposProduto.find(t=>t.id===produtoSelecionado.cat) || db.config.tiposProduto.find(t=>t.id==='normal');
+
   document.getElementById('modalProdutoImg').src = produtoSelecionado.img || '';
   document.getElementById('modalProdutoImg').style.display = produtoSelecionado.img? 'block' : 'none';
   document.getElementById('modalProdutoNome').textContent = produtoSelecionado.nome;
-    document.getElementById('modalProdutoPreco').textContent = `R$ ${produtoSelecionado.preco.toFixed(2).replace('.',',')}`;
+  document.getElementById('modalProdutoPreco').textContent = `R$ ${produtoSelecionado.preco.toFixed(2).replace('.',',')}`;
   document.getElementById('modalProdutoDesc').textContent = produtoSelecionado.desc || 'Sem descrição';
   document.getElementById('modalProdutoDesc').classList.remove('ativo');
-
-  const camposHtml = tipo.campos.map((c,i)=>`
-    <div class="label">${c.label}${c.obrigatorio?' *':''}:</div>
-    <input type="${c.tipo}" class="input" id="campoCustom_${i}" placeholder="${c.label}" ${c.obrigatorio?'required':''}>
-  `).join('');
-  document.getElementById('camposCustomProduto').innerHTML = camposHtml;
-
   document.getElementById('modalProduto').classList.add('ativo');
   lucide.createIcons();
 }
@@ -944,19 +911,10 @@ function toggleProdutoDesc(){
   document.getElementById('modalProdutoDesc').classList.toggle('ativo');
 }
 
-async function finalizarPedido(){
-  if(!produtoSelecionado ||!usuarioAtual){alert('Erro ao processar pedido');return}
-
-  const tipo = db.config.tiposProduto.find(t=>t.id===produtoSelecionado.cat) || db.config.tiposProduto.find(t=>t.id==='normal');
-  const campos = tipo.campos.map((c,i)=>{
-    const val = document.getElementById(`campoCustom_${i}`).value.trim();
-    if(c.obrigatorio &&!val){
-      alert(`Preencha: ${c.label}`);
-      throw new Error('Campo obrigatório');
-    }
-    return {label:c.label,valor:val};
-  });
-
+function finalizarPedido(){
+  if(!produtoSelecionado){alert('Erro ao processar pedido');return}
+  let link=document.getElementById('linkProduto').value.trim();
+  if(!link){alert('Cole o link/ID');return}
   const codigoInd=document.getElementById('codigoProduto').value.trim().toUpperCase();
   const pedidoId='#'+Date.now().toString().slice(-5);
   const cat = db.cat.find(c=>c.k===produtoSelecionado.cat);
@@ -968,22 +926,18 @@ async function finalizarPedido(){
     servico:produtoSelecionado.nome,
     jogo:cat?.nome||'Geral',
     valor:produtoSelecionado.preco,
-    campos,
+    link,
     codigoIndicacao:codigoInd||null,
     data:new Date().toISOString(),
-    status:'pendente',
-    loginConta:'',
-    senhaConta:'',
-    msgAdm:''
+    status:'pendente'
   };
 
-  const { db: fdb, ref, set, push } = window.firebaseAuth;
-  await push(ref(fdb, 'primevzdados/pedidos'), pedido);
+  db.pedidos.push(pedido);
 
   if(codigoInd){
     const uidIndicador=Object.keys(db.usuarios).find(uid=>db.usuarios[uid].codigo===codigoInd);
     if(uidIndicador && uidIndicador!==usuarioAtual.uid){
-      const indicacao={
+      db.indicacoes.push({
         id:'i'+Date.now(),
         codigo:codigoInd,
         pedidoId,
@@ -993,15 +947,14 @@ async function finalizarPedido(){
         valor:produtoSelecionado.preco,
         status:'pendente',
         data:pedido.data
-      };
-      await push(ref(fdb, 'primevzdados/indicacoes'), indicacao);
+      });
       db.usuarios[uidIndicador].totalIndicacoes=(db.usuarios[uidIndicador].totalIndicacoes||0)+1;
-      await set(ref(fdb, `primevzdados/usuarios/${uidIndicador}`), db.usuarios[uidIndicador]);
     }
   }
 
-  fecharModalProduto();
+  save();
   atualizarCarrinho();
+  fecharModalProduto();
   alert('✅ Adicionado ao carrinho!\n\nID: '+pedidoId+'\n\nVá em "Meu Carrinho" pra finalizar.');
 }
 
@@ -1017,7 +970,7 @@ function renderSuporte(){
         Sábado: 09h às 12h<br>
         Domingo: Fechado
       </div>
-      <button class="btn" onclick="window.open('https://wa.me/${db.config.loja.whatsapp}?text=Olá, preciso de suporte!','_blank')">
+      <button class="btn" onclick="window.open('https://wa.me/${WHATSAPP}?text=Olá, preciso de suporte!','_blank')">
         <i data-lucide="send" style="width:14px;height:14px;margin-right:6px"></i>
         CHAMAR NO WHATSAPP
       </button>
@@ -1043,10 +996,210 @@ function renderPremiacao(){
   `;
 }
 
+function abrirAdmin(){
+  if(!usuarioAtual.admin){alert('Acesso negado. Apenas administradores.');return}
+  document.getElementById('adminBody').innerHTML=`
+  <button class="btn" onclick="abrirCats()">📂 CATEGORIAS</button>
+  <button class="btn" onclick="abrirServs()">📦 SERVIÇOS</button>
+  <button class="btn" onclick="ir('pedidos')">📋 PEDIDOS</button>
+  <button class="btn" onclick="formFaq()">❓ DÚVIDAS FREQUENTES</button>
+  <button class="btn" onclick="formTermos()">📄 TERMOS DO SITE</button>
+  <button class="btn" onclick="formPremiacao()">🏆 PREMIAÇÃO</button>
+  <button class="btn btn-red" onclick="ir('home')">VOLTAR</button>`;
+  ir('admin');
+}
+
+function abrirPedidos(){ir('pedidos');renderPedidos();}
+
+function renderPedidos(filtro='todos',buscaId=''){
+  const hoje=new Date().toLocaleDateString('pt-BR');
+  const pedidosHoje=db.pedidos.filter(p=>new Date(p.data).toLocaleDateString('pt-BR')===hoje);
+  const pendentes=db.pedidos.filter(p=>p.status==='pendente').length;
+  const confirmados=db.pedidos.filter(p=>p.status==='confirmado').length;
+  const cancelados=db.pedidos.filter(p=>p.status==='cancelado').length;
+  const faturamento=db.pedidos.filter(p=>p.status==='confirmado').reduce((t,p)=>t+p.valor,0);
+  let pedidosFiltrados=db.pedidos;
+  if(filtro!=='todos')pedidosFiltrados=pedidosFiltrados.filter(p=>p.status===filtro);
+  if(buscaId){
+    buscaId=buscaId.toLowerCase().trim();
+    pedidosFiltrados=pedidosFiltrados.filter(p=>p.id.toLowerCase().includes(buscaId) ||p.email.toLowerCase().includes(buscaId));
+  }
+  const lista=[...pedidosFiltrados].reverse().map(p=>`
+    <div class="lista-item">
+      <div class="lista-top">
+        <div class="lista-nome">🆔 ${p.id} - ${p.servico}</div>
+        <span class="badge badge-${p.status}">${p.status==='pendente'?'⏳ Pendente':p.status==='confirmado'?'✅ Confirmado':'❌ Cancelado'}</span>
+      </div>
+      <div class="lista-info">
+        Cliente: ${p.email}<br>
+        Valor: R$ ${p.valor.toFixed(2).replace('.',',')}<br>
+        Link: ${p.link.substring(0,50)}...<br>
+        Data: ${new Date(p.data).toLocaleString('pt-BR')}
+        ${p.codigoIndicacao?`<br>🎁 Código: ${p.codigoIndicacao}`:''}
+      </div>
+      ${p.status==='pendente'?`
+      <div class="lista-acoes" style="margin-top:8px">
+        <button class="btn-mini btn-edit" onclick="aprovarPedido('${p.id}')">✅ APROVAR</button>
+        <button class="btn-mini btn-del" onclick="cancelarPedido('${p.id}')">🚫 CANCELAR</button>
+      </div>`:''}
+    </div>
+  `).join('');
+  document.getElementById('pedidosBody').innerHTML=`
+    <div class="indicacao-card">
+      <div class="indicacao-header">
+        <div class="indicacao-tit">📊 ESTATÍSTICAS</div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-num">${pedidosHoje.length}</div>
+          <div class="stat-label">Hoje</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">${pendentes}</div>
+          <div class="stat-label">Pendentes</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">${confirmados}</div>
+          <div class="stat-label">Confirmados</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">${cancelados}</div>
+          <div class="stat-label">Cancelados</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">R$ ${faturamento.toFixed(2)}</div>
+          <div class="stat-label">Faturamento</div>
+        </div>
+      </div>
+    </div>
+    <div class="label">🔍 BUSCAR PEDIDO:</div>
+    <input type="text" class="input" id="buscaPedidoId" placeholder="Digite o ID ou E-mail do cliente" value="${buscaId}" onkeyup="if(event.key==='Enter')buscarPedido()">
+    <button class="btn" onclick="buscarPedido()">BUSCAR</button>
+    <div class="label">🔍 FILTRAR POR:</div>
+    <div style="display:flex;gap:6px;margin-bottom:12px">
+      <button class="btn-mini ${filtro==='todos'?'btn-edit':''}" onclick="renderPedidos('todos')">TODOS</button>
+      <button class="btn-mini ${filtro==='pendente'?'btn-edit':''}" onclick="renderPedidos('pendente')">PENDENTES</button>
+      <button class="btn-mini ${filtro==='confirmado'?'btn-edit':''}" onclick="renderPedidos('confirmado')">CONFIRMADOS</button>
+      <button class="btn-mini ${filtro==='cancelado'?'btn-edit':''}" onclick="renderPedidos('cancelado')">CANCELADOS</button>
+    </div>
+    <div class="titulo">LISTA DE PEDIDOS ${buscaId?`- Busca: "${buscaId}"`:''}</div>
+    ${lista||'<div class="empty">Nenhum pedido encontrado</div>'}
+  `;
+}
+
+function buscarPedido(){
+  const busca=document.getElementById('buscaPedidoId').value;
+  renderPedidos('todos',busca);
+}
+
+function aprovarPedido(id){
+  if(confirm('Aprovar este pedido? O cliente vai ver como CONFIRMADO.')){
+    db.pedidos.find(p=>p.id===id).status='confirmado';
+    save();
+    renderPedidos();
+    alert('Pedido aprovado!');
+  }
+}
+
+function cancelarPedido(id){
+  if(confirm('Cancelar este pedido? O cliente vai ver como CANCELADO.')){
+    db.pedidos.find(p=>p.id===id).status='cancelado';
+    save();
+    renderPedidos();
+    alert('Pedido cancelado!');
+  }
+}
+
+function abrirAdminIndicacoes(){
+  if(!usuarioAtual.admin){alert('Acesso negado');return}
+  ir('adminIndicacoes');
+  renderAdminIndicacoes();
+}
+
+function renderAdminIndicacoes(filtro='todos'){
+  const indicacoes = filtro==='todos'?db.indicacoes:db.indicacoes.filter(i=>i.status===filtro);
+  const total=db.indicacoes.length;
+  const pendentes=db.indicacoes.filter(i=>i.status==='pendente').length;
+  const confirmadas=db.indicacoes.filter(i=>i.status==='confirmada').length;
+  const lista=[...indicacoes].reverse().map(i=>{
+    const indicador=db.usuarios[i.uidIndicador];
+    return `
+    <div class="lista-item">
+      <div class="lista-top">
+        <div class="lista-nome">Código: ${i.codigo}</div>
+        <span class="badge badge-${i.status}">${i.status==='pendente'?'⏳ Pendente':i.status==='confirmada'?'✅ Confirmada':'❌ Cancelada'}</span>
+      </div>
+      <div class="lista-info">
+        Indicador: ${indicador?.codigo||'Desconhecido'}<br>
+        Indicado: ${i.nomeIndicado}<br>
+        Valor: R$ ${i.valor.toFixed(2).replace('.',',')}<br>
+        Data: ${new Date(i.data).toLocaleString('pt-BR')}
+      </div>
+      ${i.status==='pendente'?`
+      <div class="lista-acoes" style="margin-top:8px">
+        <button class="btn-mini btn-edit" onclick="aprovarIndicacao('${i.id}')">✅ APROVAR</button>
+        <button class="btn-mini btn-del" onclick="invalidarIndicacao('${i.id}')">🚫 INVÁLIDA</button>
+      </div>`:''}
+    </div>
+  `}).join('');
+  document.getElementById('adminIndicacoesBody').innerHTML=`
+    <div class="indicacao-card">
+      <div class="indicacao-header">
+        <div class="indicacao-tit">📊 ESTATÍSTICAS</div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-num">${total}</div>
+          <div class="stat-label">Total</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">${pendentes}</div>
+          <div class="stat-label">Pendentes</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">${confirmadas}</div>
+          <div class="stat-label">Confirmadas</div>
+        </div>
+      </div>
+    </div>
+    <div class="label">🔍 FILTRAR POR:</div>
+    <div style="display:flex;gap:6px;margin-bottom:12px">
+      <button class="btn-mini ${filtro==='todos'?'btn-edit':''}" onclick="renderAdminIndicacoes('todos')">TODOS</button>
+      <button class="btn-mini ${filtro==='pendente'?'btn-edit':''}" onclick="renderAdminIndicacoes('pendente')">PENDENTES</button>
+      <button class="btn-mini ${filtro==='confirmada'?'btn-edit':''}" onclick="renderAdminIndicacoes('confirmada')">CONFIRMADAS</button>
+      <button class="btn-mini ${filtro==='cancelada'?'btn-edit':''}" onclick="renderAdminIndicacoes('cancelada')">CANCELADAS</button>
+    </div>
+    <div class="titulo">LISTA DE INDICAÇÕES</div>
+    ${lista||'<div class="empty">Nenhuma indicação encontrada</div>'}
+  `;
+}
+
+function aprovarIndicacao(id){
+  const indicacao=db.indicacoes.find(i=>i.id===id);
+  if(!indicacao)return;
+  if(confirm(`Aprovar indicação de ${indicacao.nomeIndicado}?`)){
+    indicacao.status='confirmada';
+    db.usuarios[indicacao.uidIndicador].indicacoesValidas=(db.usuarios[indicacao.uidIndicador].indicacoesValidas||0)+1;
+    save();
+    renderAdminIndicacoes();
+    alert('✅ Indicação aprovada!');
+  }
+}
+
+function invalidarIndicacao(id){
+  const indicacao=db.indicacoes.find(i=>i.id===id);
+  if(!indicacao)return;
+  if(confirm(`Cancelar indicação de ${indicacao.nomeIndicado}?`)){
+    indicacao.status='cancelada';
+    save();
+    renderAdminIndicacoes();
+    alert('❌ Indicação cancelada!');
+  }
+}
+
 function renderIndicacoes(){
-  if(!usuarioAtual) return;
   const user = db.usuarios[usuarioAtual.uid];
-  const minhasIndicacoes = (db.indicacoes||[]).filter(i=>i.uidIndicador===usuarioAtual.uid);
+  const minhasIndicacoes = db.indicacoes.filter(i=>i.uidIndicador===usuarioAtual.uid);
   const validas = minhasIndicacoes.filter(i=>i.status==='confirmada').length;
   const pendentes = minhasIndicacoes.filter(i=>i.status==='pendente').length;
   const canceladas = minhasIndicacoes.filter(i=>i.status==='cancelada'||i.status==='invalida').length;
@@ -1126,7 +1279,6 @@ function renderIndicacoes(){
         </div>
         ${validas>=20?'<span class="badge badge-confirmada">✅</span>':''}
       </div>
-    </div>
     <div class="indicacao-card">
       <div class="indicacao-header">
         <div class="indicacao-tit">📜 HISTÓRICO</div>
@@ -1140,243 +1292,17 @@ function renderIndicacoes(){
 }
 
 function copiarCodigo(){
-  if(!usuarioAtual) return;
-  navigator.clipboard.writeText(db.usuarios[usuarioAtual.uid].codigo);
-  alert('Código copiado: '+db.usuarios[usuarioAtual.uid].codigo);
+  navigator.clipboard.writeText(usuarioAtual.codigo);
+  alert('Código copiado: '+usuarioAtual.codigo);
 }
 
 function compartilharConvite(){
-  if(!usuarioAtual) return;
-  const c = db.config.loja;
-  const msg=`🎁 Use meu código ${db.usuarios[usuarioAtual.uid].codigo} na ${c.nome1} ${c.nome2} e ganhe benefícios exclusivos!\n\nCompre seguidores, curtidas e muito mais com qualidade premium 💜`;
+  const msg=`🎁 Use meu código ${usuarioAtual.codigo} na Premium Store e ganhe benefícios exclusivos!\n\nCompre seguidores, curtidas e muito mais com qualidade premium 💜`;
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
-function renderAdminIndicacoes(filtro='todos'){
-  const indicacoes = filtro==='todos'?db.indicacoes:(db.indicacoes||[]).filter(i=>i.status===filtro);
-  const total=(db.indicacoes||[]).length;
-  const pendentes=(db.indicacoes||[]).filter(i=>i.status==='pendente').length;
-  const confirmadas=(db.indicacoes||[]).filter(i=>i.status==='confirmada').length;
-  const lista=[...indicacoes].reverse().map(i=>{
-    const indicador=db.usuarios[i.uidIndicador];
-    return `
-    <div class="lista-item">
-      <div class="lista-top">
-        <div class="lista-nome">Código: ${i.codigo}</div>
-        <span class="badge badge-${i.status}">${i.status==='pendente'?'⏳ Pendente':i.status==='confirmada'?'✅ Confirmada':'❌ Cancelada'}</span>
-      </div>
-      <div class="lista-info">
-        Indicador: ${indicador?.codigo||'Desconhecido'}<br>
-        Indicado: ${i.nomeIndicado}<br>
-        Valor: R$ ${i.valor.toFixed(2).replace('.',',')}<br>
-        Data: ${new Date(i.data).toLocaleString('pt-BR')}
-      </div>
-      ${i.status==='pendente'?`
-      <div class="lista-acoes" style="margin-top:8px">
-        <button class="btn-mini btn-edit" onclick="aprovarIndicacao('${i.id}')">✅ APROVAR</button>
-        <button class="btn-mini btn-del" onclick="invalidarIndicacao('${i.id}')">🚫 INVÁLIDA</button>
-      </div>`:''}
-    </div>
-  `}).join('');
-  document.getElementById('adminIndicacoesBody').innerHTML=`
-    <div class="indicacao-card">
-      <div class="indicacao-header">
-        <div class="indicacao-tit">📊 ESTATÍSTICAS</div>
-      </div>
-      <div class="stats-grid">
-        <div class="stat-item">
-          <div class="stat-num">${total}</div>
-          <div class="stat-label">Total</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">${pendentes}</div>
-          <div class="stat-label">Pendentes</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">${confirmadas}</div>
-          <div class="stat-label">Confirmadas</div>
-        </div>
-      </div>
-    </div>
-    <div class="label">🔍 FILTRAR POR:</div>
-    <div style="display:flex;gap:6px;margin-bottom:12px">
-      <button class="btn-mini ${filtro==='todos'?'btn-edit':''}" onclick="renderAdminIndicacoes('todos')">TODOS</button>
-      <button class="btn-mini ${filtro==='pendente'?'btn-edit':''}" onclick="renderAdminIndicacoes('pendente')">PENDENTES</button>
-      <button class="btn-mini ${filtro==='confirmada'?'btn-edit':''}" onclick="renderAdminIndicacoes('confirmada')">CONFIRMADAS</button>
-      <button class="btn-mini ${filtro==='cancelada'?'btn-edit':''}" onclick="renderAdminIndicacoes('cancelada')">CANCELADAS</button>
-    </div>
-    <div class="titulo">LISTA DE INDICAÇÕES</div>
-    ${lista||'<div class="empty">Nenhuma indicação encontrada</div>'}
-  `;
-}
-
-async function aprovarIndicacao(id){
-  const indicacao=(db.indicacoes||[]).find(i=>i.id===id);
-  if(!indicacao)return;
-  if(confirm(`Aprovar indicação de ${indicacao.nomeIndicado}?`)){
-    const { db: fdb, ref, set } = window.firebaseAuth;
-    indicacao.status='confirmada';
-    db.usuarios[indicacao.uidIndicador].indicacoesValidas=(db.usuarios[indicacao.uidIndicador].indicacoesValidas||0)+1;
-    await set(ref(fdb, 'primevzdados/indicacoes'), db.indicacoes);
-    await set(ref(fdb, `primevzdados/usuarios/${indicacao.uidIndicador}`), db.usuarios[indicacao.uidIndicador]);
-    renderAdminIndicacoes();
-    alert('✅ Indicação aprovada!');
-  }
-}
-
-async function invalidarIndicacao(id){
-  const indicacao=(db.indicacoes||[]).find(i=>i.id===id);
-  if(!indicacao)return;
-  if(confirm(`Cancelar indicação de ${indicacao.nomeIndicado}?`)){
-    const { db: fdb, ref, set } = window.firebaseAuth;
-    indicacao.status='cancelada';
-    await set(ref(fdb, 'primevzdados/indicacoes'), db.indicacoes);
-    renderAdminIndicacoes();
-    alert('❌ Indicação cancelada!');
-  }
-}
-
-function renderPedidos(filtro='todos',buscaId=''){
-  const hoje=new Date().toLocaleDateString('pt-BR');
-  const pedidosHoje=(db.pedidos||[]).filter(p=>new Date(p.data).toLocaleDateString('pt-BR')===hoje);
-  const pendentes=(db.pedidos||[]).filter(p=>p.status==='pendente').length;
-  const confirmados=(db.pedidos||[]).filter(p=>p.status==='confirmado').length;
-  const cancelados=(db.pedidos||[]).filter(p=>p.status==='cancelado').length;
-  const faturamento=(db.pedidos||[]).filter(p=>p.status==='confirmado').reduce((t,p)=>t+p.valor,0);
-  let pedidosFiltrados=db.pedidos||[];
-  if(filtro!=='todos')pedidosFiltrados=pedidosFiltrados.filter(p=>p.status===filtro);
-  if(buscaId){
-    buscaId=buscaId.toLowerCase().trim();
-    pedidosFiltrados=pedidosFiltrados.filter(p=>p.id.toLowerCase().includes(buscaId) ||p.email.toLowerCase().includes(buscaId));
-  }
-  const lista=[...pedidosFiltrados].reverse().map(p=>`
-    <div class="lista-item">
-      <div class="lista-top">
-        <div class="lista-nome">🆔 ${p.id} - ${p.servico}</div>
-        <span class="badge badge-${p.status}">${p.status==='pendente'?'⏳ Pendente':p.status==='confirmado'?'✅ Confirmado':'❌ Cancelado'}</span>
-      </div>
-      <div class="lista-info">
-        Cliente: ${p.email}<br>
-        Valor: R$ ${p.valor.toFixed(2).replace('.',',')}<br>
-        ${p.campos.map(c=>`${c.label}: ${c.valor}`).join('<br>')}<br>
-        Data: ${new Date(p.data).toLocaleString('pt-BR')}
-        ${p.codigoIndicacao?`<br>🎁 Código: ${p.codigoIndicacao}`:''}
-      </div>
-      ${p.status==='pendente'?`
-      <div class="lista-acoes" style="margin-top:8px">
-        <button class="btn-mini btn-edit" onclick="aprovarPedido('${p.id}')">✅ APROVAR</button>
-        <button class="btn-mini btn-del" onclick="cancelarPedido('${p.id}')">🚫 CANCELAR</button>
-      </div>`:''}
-    </div>
-  `).join('');
-  document.getElementById('pedidosBody').innerHTML=`
-    <div class="indicacao-card">
-      <div class="indicacao-header">
-        <div class="indicacao-tit">📊 ESTATÍSTICAS</div>
-      </div>
-      <div class="stats-grid">
-        <div class="stat-item">
-          <div class="stat-num">${pedidosHoje.length}</div>
-          <div class="stat-label">Hoje</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">${pendentes}</div>
-          <div class="stat-label">Pendentes</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">${confirmados}</div>
-          <div class="stat-label">Confirmados</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">${cancelados}</div>
-          <div class="stat-label">Cancelados</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">R$ ${faturamento.toFixed(2)}</div>
-          <div class="stat-label">Faturamento</div>
-        </div>
-      </div>
-    </div>
-    <div class="label">🔍 BUSCAR PEDIDO:</div>
-    <input type="text" class="input" id="buscaPedidoId" placeholder="Digite o ID ou E-mail do cliente" value="${buscaId}" onkeyup="if(event.key==='Enter')buscarPedido()">
-    <button class="btn" onclick="buscarPedido()">BUSCAR</button>
-    <div class="label">🔍 FILTRAR POR:</div>
-    <div style="display:flex;gap:6px;margin-bottom:12px">
-      <button class="btn-mini ${filtro==='todos'?'btn-edit':''}" onclick="renderPedidos('todos')">TODOS</button>
-      <button class="btn-mini ${filtro==='pendente'?'btn-edit':''}" onclick="renderPedidos('pendente')">PENDENTES</button>
-      <button class="btn-mini ${filtro==='confirmado'?'btn-edit':''}" onclick="renderPedidos('confirmado')">CONFIRMADOS</button>
-      <button class="btn-mini ${filtro==='cancelado'?'btn-edit':''}" onclick="renderPedidos('cancelado')">CANCELADOS</button>
-    </div>
-    <div class="titulo">LISTA DE PEDIDOS ${buscaId?`- Busca: "${buscaId}"`:''}</div>
-    ${lista||'<div class="empty">Nenhum pedido encontrado</div>'}
-  `;
-}
-
-function buscarPedido(){
-  const busca=document.getElementById('buscaPedidoId').value;
-  renderPedidos('todos',busca);
-}
-
-function aprovarPedido(id){
-  const pedido=db.pedidos.find(p=>p.id===id);
-  if(!pedido)return;
-  document.getElementById('modalTit').textContent='APROVAR PEDIDO '+id;
-  document.getElementById('modalBody').innerHTML=`
-    <div class="label">🔐 Login/Usuário da Conta (opcional):</div>
-    <input type="text" class="input" id="aprovarLogin" placeholder="Ex: conta@gmail.com" value="${pedido.loginConta||''}">
-    <div class="label">🔑 Senha da Conta (opcional):</div>
-    <input type="text" class="input" id="aprovarSenha" placeholder="Ex: senha123" value="${pedido.senhaConta||''}">
-    <div class="label">💬 Mensagem pro Cliente (opcional):</div>
-    <textarea class="textarea" id="aprovarMsg" placeholder="Ex: Conta entregue! Troque a senha em 24h">${pedido.msgAdm||''}</textarea>
-    <button class="btn" onclick="confirmarAprovacao('${id}')">CONFIRMAR APROVAÇÃO</button>
-    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
-  `;
-  document.getElementById('modal').classList.add('ativo');
-}
-
-async function confirmarAprovacao(id){
-  const { db: fdb, ref, set } = window.firebaseAuth;
-  const pedido=db.pedidos.find(p=>p.id===id);
-  pedido.status='confirmado';
-  pedido.loginConta=document.getElementById('aprovarLogin').value.trim();
-  pedido.senhaConta=document.getElementById('aprovarSenha').value.trim();
-  pedido.msgAdm=document.getElementById('aprovarMsg').value.trim();
-  await set(ref(fdb, 'primevzdados/pedidos'), db.pedidos);
-  fecharModal();
-  renderPedidos();
-  alert('✅ Pedido aprovado! Cliente já consegue ver os dados em "Meus Acessos".');
-}
-
-async function cancelarPedido(id){
-  if(confirm('Cancelar este pedido? O cliente vai ver como CANCELADO.')){
-    const { db: fdb, ref, set } = window.firebaseAuth;
-    db.pedidos.find(p=>p.id===id).status='cancelado';
-    await set(ref(fdb, 'primevzdados/pedidos'), db.pedidos);
-    renderPedidos();
-    alert('Pedido cancelado!');
-  }
-}
-
-function abrirAdmin(){
-  if(!usuarioAtual.admin){alert('Acesso negado. Apenas administradores.');return}
-  document.getElementById('adminBody').innerHTML=`
-  <button class="btn" onclick="abrirCats()">📂 CATEGORIAS</button>
-  <button class="btn" onclick="abrirServs()">📦 SERVIÇOS</button>
-  <button class="btn" onclick="ir('pedidos')">📋 PEDIDOS</button>
-  <button class="btn" onclick="abrirConfigCores()">🎨 CORES DO SITE</button>
-  <button class="btn" onclick="abrirConfigLoja()">🏪 IDENTIDADE DA LOJA</button>
-  <button class="btn" onclick="abrirConfigSecoes()">📑 SEÇÕES DO SITE</button>
-  <button class="btn" onclick="abrirConfigComoComprar()">🛒 COMO COMPRAR</button>
-  <button class="btn" onclick="abrirConfigTipos()">📝 TIPOS DE PRODUTO</button>
-  <button class="btn" onclick="formFaq()">❓ DÚVIDAS FREQUENTES</button>
-  <button class="btn" onclick="formTermos()">📄 TERMOS DO SITE</button>
-  <button class="btn" onclick="formPremiacao()">🏆 PREMIAÇÃO</button>
-  <button class="btn btn-red" onclick="ir('home')">VOLTAR</button>`;
-  ir('admin');
-}
-
 function abrirCats(){
-  const lista=(db.cat||[]).map(c=>`
+  const lista=db.cat.map(c=>`
     <div class="lista-item">
       <div class="lista-top">
         <div class="lista-nome">${c.nome}</div>
@@ -1385,15 +1311,14 @@ function abrirCats(){
           <button class="btn-mini btn-del" onclick="delCat('${c.k}')">EXCLUIR</button>
         </div>
       </div>
-      <div class="lista-info">${(db.serv||[]).filter(s=>s.cat===c.k).length} serviços</div>
-    </div>
-  `).join('');
+      <div class="lista-info">${db.serv.filter(s=>s.cat===c.k).length} serviços</div>
+    </div>`).join('');
   document.getElementById('adminBody').innerHTML=`<div class="titulo">CATEGORIAS</div>${lista||'<div class="empty">Nenhuma categoria</div>'}<div class="add" onclick="formCat()">+</div><button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>`;
 }
 
 function abrirServs(){
-  const lista=(db.serv||[]).map(s=>{
-    const c=(db.cat||[]).find(x=>x.k===s.cat);
+  const lista=db.serv.map(s=>{
+    const c=db.cat.find(x=>x.k===s.cat);
     return `
     <div class="lista-item">
       <div class="lista-top">
@@ -1404,13 +1329,12 @@ function abrirServs(){
         </div>
       </div>
       <div class="lista-info">Cat: ${c?.nome||'-'} | R$ ${s.preco.toFixed(2)} | Estoque: ${s.estoque}</div>
-    </div>
-  `}).join('');
+    </div>`}).join('');
   document.getElementById('adminBody').innerHTML=`<div class="titulo">SERVIÇOS</div>${lista||'<div class="empty">Nenhum serviço</div>'}<div class="add" onclick="formServ()">+</div><button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>`;
 }
 
 function formCat(k=null){
-  const d=(db.cat||[]).find(x=>x.k===k);
+  const d=db.cat.find(x=>x.k===k);
   document.getElementById('modalTit').textContent=k?'EDITAR CATEGORIA':'NOVA CATEGORIA';
   document.getElementById('modalBody').innerHTML=`
     <input type="text" class="input" id="nomeC" value="${d?.nome||''}" placeholder="Nome da categoria">
@@ -1420,8 +1344,7 @@ function formCat(k=null){
       <input type="file" id="imgCatInput" accept="image/*" onchange="previewImgCat(event)">
     </label>
     <button class="btn" onclick="salvarCat('${k||''}')">${k?'SALVAR':'CRIAR'}</button>
-    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
-  `;
+    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
   document.getElementById('modal').classList.add('ativo');
 }
 
@@ -1437,8 +1360,8 @@ function previewImgCat(e){
 }
 
 function formServ(k=null){
-  const d=(db.serv||[]).find(x=>x.k===k);
-  let opts=(db.cat||[]).map(c=>`<option value="${c.k}" ${d?.cat===c.k?'selected':''}>${c.nome}</option>`).join('');
+  const d=db.serv.find(x=>x.k===k);
+  let opts=db.cat.map(c=>`<option value="${c.k}" ${d?.cat===c.k?'selected':''}>${c.nome}</option>`).join('');
   if(!opts)opts='<option value="">Cadastre categoria primeiro</option>';
   document.getElementById('modalTit').textContent=k?'EDITAR SERVIÇO':'NOVO SERVIÇO';
   document.getElementById('modalBody').innerHTML=`
@@ -1453,8 +1376,7 @@ function formServ(k=null){
       <input type="file" id="imgServInput" accept="image/*" onchange="previewImgServ(event)">
     </label>
     <button class="btn" onclick="salvarServ('${k||''}')">${k?'SALVAR':'CRIAR'}</button>
-    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
-  `;
+    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>`;
   document.getElementById('modal').classList.add('ativo');
 }
 
@@ -1469,33 +1391,23 @@ function previewImgServ(e){
   }
 }
 
-async function salvarCat(k){
+function salvarCat(k){
   const nome=document.getElementById('nomeC').value.trim();
   const img=document.getElementById('imgCatPreview')?.src||'';
   if(!nome){alert('Nome obrigatório');return}
-  const { db: fdb, ref, set } = window.firebaseAuth;
-  if(k){
-    const i=db.cat.findIndex(x=>x.k===k);
-    db.cat[i]={k,nome,img};
-  }else{
-    db.cat.push({k:'c'+Date.now(),nome,img});
-  }
-  await set(ref(fdb, 'primevzdados/cat'), db.cat);
-  fecharModal();abrirCats();renderJogos();
+  if(k){db.cat[db.cat.findIndex(x=>x.k===k)]={k,nome,img}}else{db.cat.push({k:'c'+Date.now(),nome,img})}
+  save();fecharModal();abrirCats();renderJogos();
 }
 
-async function delCat(k){
+function delCat(k){
   if(confirm('Excluir categoria? Vai apagar os serviços juntos.')){
-    const { db: fdb, ref, set } = window.firebaseAuth;
     db.cat=db.cat.filter(x=>x.k!==k);
     db.serv=db.serv.filter(x=>x.cat!==k);
-    await set(ref(fdb, 'primevzdados/cat'), db.cat);
-    await set(ref(fdb, 'primevzdados/serv'), db.serv);
-    abrirCats();renderJogos();renderProdutosLoja();
+    save();abrirCats();renderJogos();renderProdutosLoja();
   }
 }
 
-async function salvarServ(k){
+function salvarServ(k){
   const cat=document.getElementById('catS').value;
   const nome=document.getElementById('nomeS').value.trim();
   const desc=document.getElementById('descS').value.trim();
@@ -1503,364 +1415,15 @@ async function salvarServ(k){
   const estoque=parseInt(document.getElementById('estS').value)||0;
   const img=document.getElementById('imgServPreview')?.src||'';
   if(!cat||!nome||!preco){alert('Preencha categoria, nome e valor');return}
-  const { db: fdb, ref, set } = window.firebaseAuth;
   const dados={k:k||'s'+Date.now(),cat,nome,desc,preco,estoque,img};
-  if(k){
-    const i=db.serv.findIndex(x=>x.k===k);
-    db.serv[i]=dados;
-  }else{
-    db.serv.push(dados);
-  }
-  await set(ref(fdb, 'primevzdados/serv'), db.serv);
-  fecharModal();abrirServs();renderProdutosLoja();
+  if(k){db.serv[db.serv.findIndex(x=>x.k===k)]=dados}else{db.serv.push(dados)}
+  save();fecharModal();abrirServs();renderProdutosLoja();
 }
 
-async function delServ(k){
+function delServ(k){
   if(confirm('Excluir serviço?')){
-    const { db: fdb, ref, set } = window.firebaseAuth;
     db.serv=db.serv.filter(x=>x.k!==k);
-    await set(ref(fdb, 'primevzdados/serv'), db.serv);
-    abrirServs();renderProdutosLoja();
-  }
-}
-
-function abrirConfigCores(){
-  const c=db.config.cores;
-  document.getElementById('adminBody').innerHTML=`
-    <div class="titulo">🎨 CORES DO SITE</div>
-    <div class="label">Fundo Principal</div>
-    <input type="color" class="input" id="corBg" value="${c.bg}">
-    <div class="label">Roxo Principal</div>
-    <input type="color" class="input" id="corRoxo" value="${c.roxo}">
-    <div class="label">Roxo Neon</div>
-    <input type="color" class="input" id="corRoxoNeon" value="${c.roxoNeon}">
-    <div class="label">Verde (Confirmado)</div>
-    <input type="color" class="input" id="corVerde" value="${c.verde}">
-    <div class="label">Vermelho (Cancelado)</div>
-    <input type="color" class="input" id="corVermelho" value="${c.vermelho}">
-      <button class="btn" onclick="salvarConfigCores()">SALVAR CORES</button>
-    <button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>
-  `;
-}
-
-async function salvarConfigCores(){
-  const { db: fdb, ref, set } = window.firebaseAuth;
-  db.config.cores = {
-    bg:document.getElementById('corBg').value,
-    roxo:document.getElementById('corRoxo').value,
-    roxoNeon:document.getElementById('corRoxoNeon').value,
-    roxoEscuro:db.config.cores.roxoEscuro,
-    branco:db.config.cores.branco,
-    cinza:db.config.cores.cinza,
-    borda:db.config.cores.borda,
-    card:db.config.cores.card,
-    verde:document.getElementById('corVerde').value,
-    amarelo:db.config.cores.amarelo,
-    vermelho:document.getElementById('corVermelho').value
-  };
-  await set(ref(fdb, 'primevzdados/config'), db.config);
-  aplicarConfigSite();
-  alert('✅ Cores atualizadas!');
-}
-
-function abrirConfigLoja(){
-  const l = db.config.loja;
-  document.getElementById('adminBody').innerHTML=`
-    <div class="titulo">🏪 IDENTIDADE DA LOJA</div>
-    <div class="label">Nome 1 (PREMIUM)</div>
-    <input type="text" class="input" id="lojaNome1" value="${l.nome1}">
-    <div class="label">Nome 2 (STORE)</div>
-    <input type="text" class="input" id="lojaNome2" value="${l.nome2}">
-    <div class="label">🖼️ Logo:</div>
-    <label for="imgLogoInput" class="upload" id="uploadLogo">
-      ${l.logo?`<img src="${l.logo}" id="imgLogoPreview">`:'<div class="upload-text">📷 Clique para escolher</div>'}
-      <input type="file" id="imgLogoInput" accept="image/*" onchange="previewImgLogo(event)">
-    </label>
-    <div class="label">🖼️ Banner:</div>
-    <label for="imgBannerInput" class="upload" id="uploadBanner">
-      ${l.banner?`<img src="${l.banner}" id="imgBannerPreview">`:'<div class="upload-text">📷 Clique para escolher</div>'}
-      <input type="file" id="imgBannerInput" accept="image/*" onchange="previewImgBanner(event)">
-    </label>
-    <div class="label">WhatsApp (só números)</div>
-    <input type="text" class="input" id="lojaWhats" value="${l.whatsapp}">
-    <div class="label">Mensagem padrão WhatsApp</div>
-    <textarea class="textarea" id="lojaMsgWhats">${l.msgWhatsapp}</textarea>
-    <button class="btn" onclick="salvarConfigLoja()">SALVAR</button>
-    <button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>
-  `;
-}
-
-function previewImgLogo(e){
-  const file=e.target.files[0];
-  if(file){
-    const reader=new FileReader();
-    reader.onload=function(ev){
-      document.getElementById('uploadLogo').innerHTML=`<img src="${ev.target.result}" id="imgLogoPreview"><input type="file" id="imgLogoInput" accept="image/*" onchange="previewImgLogo(event)">`;
-    };
-    reader.readAsDataURL(file);
-  }
-}
-
-function previewImgBanner(e){
-  const file=e.target.files[0];
-  if(file){
-    const reader=new FileReader();
-    reader.onload=function(ev){
-      document.getElementById('uploadBanner').innerHTML=`<img src="${ev.target.result}" id="imgBannerPreview"><input type="file" id="imgBannerInput" accept="image/*" onchange="previewImgBanner(event)">`;
-    };
-    reader.readAsDataURL(file);
-  }
-}
-
-async function salvarConfigLoja(){
-  const { db: fdb, ref, set } = window.firebaseAuth;
-  db.config.loja.nome1 = document.getElementById('lojaNome1').value.trim();
-  db.config.loja.nome2 = document.getElementById('lojaNome2').value.trim();
-  db.config.loja.logo = document.getElementById('imgLogoPreview')?.src || db.config.loja.logo;
-  db.config.loja.banner = document.getElementById('imgBannerPreview')?.src || db.config.loja.banner;
-  db.config.loja.whatsapp = document.getElementById('lojaWhats').value.trim();
-  db.config.loja.msgWhatsapp = document.getElementById('lojaMsgWhats').value.trim();
-  await set(ref(fdb, 'primevzdados/config'), db.config);
-  aplicarConfigSite();
-  alert('✅ Identidade da loja atualizada!');
-}
-
-function abrirConfigSecoes(){
-  const s = db.config.secoes;
-  document.getElementById('adminBody').innerHTML=`
-    <div class="titulo">📑 SEÇÕES DO SITE</div>
-    <div class="lista-item">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <span>Carrinho</span>
-        <input type="checkbox" id="secaoCarrinho" ${s.carrinho?'checked':''} style="width:20px;height:20px">
-      </div>
-    </div>
-    <div class="lista-item">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <span>Indicações</span>
-        <input type="checkbox" id="secaoIndicacoes" ${s.indicacoes?'checked':''} style="width:20px;height:20px">
-      </div>
-    </div>
-    <div class="lista-item">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <span>Premiação</span>
-        <input type="checkbox" id="secaoPremiacao" ${s.premiacao?'checked':''} style="width:20px;height:20px">
-      </div>
-    </div>
-    <div class="lista-item">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <span>Suporte</span>
-        <input type="checkbox" id="secaoSuporte" ${s.suporte?'checked':''} style="width:20px;height:20px">
-      </div>
-    </div>
-    <div class="lista-item">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <span>FAQ</span>
-        <input type="checkbox" id="secaoFaq" ${s.faq?'checked':''} style="width:20px;height:20px">
-      </div>
-    </div>
-    <div class="lista-item">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <span>Termos</span>
-        <input type="checkbox" id="secaoTermos" ${s.termos?'checked':''} style="width:20px;height:20px">
-      </div>
-    </div>
-    <button class="btn" onclick="salvarSecoes()">SALVAR</button>
-    <button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>
-  `;
-}
-
-async function salvarSecoes(){
-  const { db: fdb, ref, set } = window.firebaseAuth;
-  db.config.secoes = {
-    carrinho:document.getElementById('secaoCarrinho').checked,
-    indicacoes:document.getElementById('secaoIndicacoes').checked,
-    premiacao:document.getElementById('secaoPremiacao').checked,
-    suporte:document.getElementById('secaoSuporte').checked,
-    faq:document.getElementById('secaoFaq').checked,
-    termos:document.getElementById('secaoTermos').checked
-  };
-  await set(ref(fdb, 'primevzdados/config'), db.config);
-  renderMenu();
-  alert('✅ Seções atualizadas!');
-}
-
-function abrirConfigComoComprar(){
-  const c = db.config.comoComprar;
-  const passosHtml = c.passos.map((p,i)=>`
-    <div class="lista-item">
-      <div class="label">Passo ${p.num}</div>
-      <input type="text" class="input" id="passoTexto_${i}" value="${p.texto}" placeholder="Texto do passo">
-      <input type="text" class="input" id="passoIcon_${i}" value="${p.icon}" placeholder="Ícone Lucide">
-    </div>
-  `).join('');
-  document.getElementById('adminBody').innerHTML=`
-    <div class="titulo">🛒 COMO COMPRAR</div>
-    <div class="label">Título Parte 1 (COMO)</div>
-    <input type="text" class="input" id="comoComprarComo" value="${c.tituloComo}">
-    <div class="label">Título Parte 2 (COMPRAR)</div>
-    <input type="text" class="input" id="comoComprarComprar" value="${c.tituloComprar}">
-    <div class="label">Subtítulo</div>
-    <input type="text" class="input" id="comoComprarSub" value="${c.subtitulo}">
-    <div class="label">Aviso</div>
-    <textarea class="textarea" id="comoComprarAviso">${c.aviso}</textarea>
-    <div class="titulo">PASSOS</div>
-    ${passosHtml}
-    <button class="btn" onclick="salvarComoComprar()">SALVAR</button>
-    <button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>
-  `;
-}
-
-async function salvarComoComprar(){
-  const { db: fdb, ref, set } = window.firebaseAuth;
-  db.config.comoComprar.tituloComo = document.getElementById('comoComprarComo').value;
-  db.config.comoComprar.tituloComprar = document.getElementById('comoComprarComprar').value;
-  db.config.comoComprar.subtitulo = document.getElementById('comoComprarSub').value;
-  db.config.comoComprar.aviso = document.getElementById('comoComprarAviso').value;
-  db.config.comoComprar.passos = db.config.comoComprar.passos.map((p,i)=>({
-    num:p.num,
-    texto:document.getElementById(`passoTexto_${i}`).value,
-    icon:document.getElementById(`passoIcon_${i}`).value
-  }));
-  await set(ref(fdb, 'primevzdados/config'), db.config);
-  renderComoComprarLogin();
-  alert('✅ Como Comprar atualizado!');
-}
-
-function renderComoComprarLogin(){
-  const c = db.config.comoComprar;
-  const passos = c.passos.map(p=>`
-    <div class="passo-item">
-      <div class="passo-num">${p.num}</div>
-      <div class="passo-texto">${p.texto}</div>
-      <div class="passo-icon"><i data-lucide="${p.icon}"></i></div>
-    </div>
-  `).join('');
-  document.getElementById('comoComprarPreview').innerHTML=`
-    <div class="como-comprar-tit">
-      <h2><span class="como">${c.tituloComo}</span> <span class="comprar">${c.tituloComprar}</span></h2>
-      <i data-lucide="shopping-cart"></i>
-    </div>
-    <p class="como-comprar-sub">${c.subtitulo}</p>
-    <div class="divider-roxo"></div>
-    ${passos}
-    <div class="aviso-box">
-      <div class="aviso-icon"><i data-lucide="alert-triangle"></i></div>
-      <div class="aviso-texto">
-        <b>IMPORTANTE:</b>
-        ${c.aviso}
-      </div>
-    </div>
-  `;
-  lucide.createIcons();
-}
-
-function abrirConfigTipos(){
-  const tipos = db.config.tiposProduto||[];
-  const lista = tipos.map(t=>`
-    <div class="lista-item">
-      <div class="lista-top">
-        <div class="lista-nome">${t.nome}</div>
-        <div class="lista-acoes">
-          <button class="btn-mini btn-edit" onclick="formTipoProduto('${t.id}')">EDITAR</button>
-          <button class="btn-mini btn-del" onclick="delTipoProduto('${t.id}')">EXCLUIR</button>
-        </div>
-      <div class="lista-info">${t.campos.length} campos</div>
-    </div>
-  `).join('');
-  document.getElementById('adminBody').innerHTML=`
-    <div class="titulo">📝 TIPOS DE PRODUTO</div>
-    ${lista||'<div class="empty">Nenhum tipo cadastrado</div>'}
-    <div class="add" onclick="formTipoProduto()">+</div>
-    <button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>
-  `;
-}
-
-function formTipoProduto(id=null){
-  const t = id ? (db.config.tiposProduto||[]).find(x=>x.id===id) : null;
-  const camposHtml = (t?.campos||[{label:'',tipo:'text',obrigatorio:true}]).map((c,i)=>`
-    <div class="lista-item" id="campoItem_${i}">
-      <input type="text" class="input" id="campoLabel_${i}" value="${c.label}" placeholder="Nome do campo">
-      <select class="input" id="campoTipo_${i}">
-        <option value="text" ${c.tipo==='text'?'selected':''}>Texto</option>
-        <option value="number" ${c.tipo==='number'?'selected':''}>Número</option>
-      </select>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
-        <span style="font-size:9px">Obrigatório</span>
-        <input type="checkbox" id="campoObrig_${i}" ${c.obrigatorio?'checked':''} style="width:18px;height:18px">
-      </div>
-      <button class="btn-mini btn-del" style="width:100%;margin-top:8px" onclick="removerCampoTipo(${i})">REMOVER CAMPO</button>
-    </div>
-  `).join('');
-  document.getElementById('modalTit').textContent=id?'EDITAR TIPO':'NOVO TIPO';
-  document.getElementById('modalBody').innerHTML=`
-    <input type="text" class="input" id="tipoNome" value="${t?.nome||''}" placeholder="Nome do tipo (Ex: TikTok)">
-    <div class="titulo">CAMPOS</div>
-    <div id="camposTipoLista">${camposHtml}</div>
-    <button class="btn btn-sec" onclick="addCampoTipo()">+ ADICIONAR CAMPO</button>
-    <button class="btn" onclick="salvarTipoProduto('${id||''}')">${id?'SALVAR':'CRIAR'}</button>
-    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
-  `;
-  document.getElementById('modal').classList.add('ativo');
-}
-
-function addCampoTipo(){
-  const lista = document.getElementById('camposTipoLista');
-  const i = lista.children.length;
-  lista.insertAdjacentHTML('beforeend',`
-    <div class="lista-item" id="campoItem_${i}">
-      <input type="text" class="input" id="campoLabel_${i}" placeholder="Nome do campo">
-      <select class="input" id="campoTipo_${i}">
-        <option value="text">Texto</option>
-        <option value="number">Número</option>
-      </select>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
-        <span style="font-size:9px">Obrigatório</span>
-        <input type="checkbox" id="campoObrig_${i}" checked style="width:18px;height:18px">
-      </div>
-      <button class="btn-mini btn-del" style="width:100%;margin-top:8px" onclick="removerCampoTipo(${i})">REMOVER CAMPO</button>
-    </div>
-  `);
-}
-
-function removerCampoTipo(i){
-  document.getElementById(`campoItem_${i}`).remove();
-}
-
-async function salvarTipoProduto(id){
-  const nome = document.getElementById('tipoNome').value.trim();
-  if(!nome){alert('Nome obrigatório');return}
-  const campos = [];
-  document.querySelectorAll('#camposTipoLista .lista-item').forEach((item,i)=>{
-    const label = item.querySelector(`#campoLabel_${i}`)?.value.trim();
-    if(label){
-      campos.push({
-        label,
-        tipo:item.querySelector(`#campoTipo_${i}`).value,
-        obrigatorio:item.querySelector(`#campoObrig_${i}`).checked
-      });
-    }
-  });
-  if(campos.length===0){alert('Adicione pelo menos 1 campo');return}
-  const { db: fdb, ref, set } = window.firebaseAuth;
-  if(!db.config.tiposProduto) db.config.tiposProduto=[];
-  if(id){
-    const i = db.config.tiposProduto.findIndex(x=>x.id===id);
-    db.config.tiposProduto[i]={id,nome,campos};
-  }else{
-    db.config.tiposProduto.push({id:'tipo'+Date.now(),nome,campos});
-  }
-  await set(ref(fdb, 'primevzdados/config'), db.config);
-  fecharModal();
-  abrirConfigTipos();
-}
-
-async function delTipoProduto(id){
-  if(confirm('Excluir este tipo?')){
-    const { db: fdb, ref, set } = window.firebaseAuth;
-    db.config.tiposProduto = db.config.tiposProduto.filter(x=>x.id!==id);
-    await set(ref(fdb, 'primevzdados/config'), db.config);
-    abrirConfigTipos();
+    save();abrirServs();renderProdutosLoja();
   }
 }
 
@@ -1873,10 +1436,9 @@ function formFaq(){
   document.getElementById('modal').classList.add('ativo');
 }
 
-async function salvarFaq(){
-  const { db: fdb, ref, set } = window.firebaseAuth;
+function salvarFaq(){
   db.config.faq=document.getElementById('faqTexto').value;
-  await set(ref(fdb, 'primevzdados/config'), db.config);
+  save();
   alert('Salvo!');
   document.getElementById('modal').classList.remove('ativo');
 }
@@ -1890,10 +1452,9 @@ function formTermos(){
   document.getElementById('modal').classList.add('ativo');
 }
 
-async function salvarTermos(){
-  const { db: fdb, ref, set } = window.firebaseAuth;
+function salvarTermos(){
   db.config.termos=document.getElementById('termosTexto').value;
-  await set(ref(fdb, 'primevzdados/config'), db.config);
+  save();
   alert('Salvo!');
   document.getElementById('modal').classList.remove('ativo');
 }
@@ -1924,13 +1485,12 @@ function previewImgPrem(e){
   }
 }
 
-async function salvarPremiacao(){
-  const { db: fdb, ref, set } = window.firebaseAuth;
+function salvarPremiacao(){
   db.config.premiacao={
     img:document.getElementById('imgPremPreview')?.src||'',
     texto:document.getElementById('premTexto').value
   };
-  await set(ref(fdb, 'primevzdados/config'), db.config);
+  save();
   alert('Salvo!');
   document.getElementById('modal').classList.remove('ativo');
 }
@@ -1948,4 +1508,4 @@ document.getElementById('modalProduto').addEventListener('click', (e)=>{
 });
 </script>
 </body>
-</html>
+<html>
