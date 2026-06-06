@@ -3,505 +3,328 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Serviços Premium</title>
-<script type="module">
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-  import { getDatabase, ref, set, get, push, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
-    authDomain: "premium-store-aa58b.firebaseapp.com",
-    databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
-    projectId: "premium-store-aa58b",
-    storageBucket: "premium-store-aa58b.firebasestorage.app",
-    messagingSenderId: "462239500057",
-    appId: "1:462239500057:web:f1b7cea162ed308a866788"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getDatabase(app);
-  window.fb = { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, db, ref, set, get, push, onValue };
-</script>
+<title>Prime Store Vz</title>
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
 :root{
-  --bg:#0A0A0A;
-  --vermelho:#DC2626;
-  --vermelho-neon:#EF4444;
-  --vermelho-escuro:#991B1B;
+  --bg:#000000;
+  --roxo:#A855F7;
+  --roxo-neon:#C084FC;
+  --roxo-escuro:#7E22CE;
+  --roxo-glow:rgba(168,85,247,.5);
   --branco:#FFFFFF;
   --cinza:#9CA3AF;
-  --borda:#1A1A1A;
-  --card:#111111;
-  --verde:#22C55E;
-  --amarelo:#F59E0B;
-  --glow:rgba(220,38,38,.3);
+  --card:rgba(17,17,17,.5);
+  --borda:rgba(168,85,247,.4);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);font-size:11px;touch-action:manipulation;position:relative;overflow-x:hidden}
-body::before{content:'';position:fixed;top:-50%;right:-50%;width:100%;height:100%;background:radial-gradient(circle,var(--vermelho-escuro) 0%,transparent 70%);opacity:.15;z-index:0;pointer-events:none}
-body::after{content:'';position:fixed;top:0;right:0;width:200px;height:100%;background:linear-gradient(135deg,transparent 0%,var(--vermelho-escuro) 100%);clip-path:polygon(100% 0,0 0,100% 100%);opacity:.3;z-index:0;pointer-events:none}
-.tela{display:none;min-height:100vh;position:relative;z-index:1}
-.tela.ativa{display:block}
-.header{background:var(--bg);padding:12px;border-bottom:1px solid var(--borda);position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between}
-.header-left{display:flex;align-items:center;gap:10px}
-.menu{font-size:18px;cursor:pointer;padding:8px;color:var(--branco)}
-.logo{font-size:16px;font-weight:900;letter-spacing:1px}
-.logo span{color:var(--vermelho);text-shadow:0 0 12px var(--vermelho-neon)}
-.header-right{display:flex;align-items:center;gap:12px}
-.cart{position:relative;padding:8px;cursor:pointer}
-.cart-badge{position:absolute;top:2px;right:2px;background:var(--vermelho);color:var(--branco);font-size:7px;font-weight:800;padding:1px 4px;border-radius:20px;box-shadow:0 0 6px var(--glow)}
-.user-avatar{width:28px;height:28px;border-radius:50%;background:var(--vermelho);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:10px;cursor:pointer}
-.sidebar{position:fixed;top:0;left:-260px;width:260px;height:100vh;background:var(--card);border-right:1px solid var(--borda);z-index:200;transition:left.3s;padding:16px;overflow-y:auto}
-.sidebar.ativo{left:0}
-.sidebar-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:199;display:none}
-.sidebar-overlay.ativo{display:block}
-.sidebar-tit{font-size:12px;font-weight:800;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--borda);color:var(--vermelho)}
-.sidebar-item{padding:12px;border-radius:8px;cursor:pointer;font-size:10px;font-weight:600;color:var(--cinza);margin-bottom:4px;display:flex;align-items:center;gap:8px}
-.sidebar-item:active{background:var(--borda);color:var(--branco)}
-.sidebar-item i{width:16px;height:16px;stroke:var(--vermelho)}
-.container{padding:16px;max-width:600px;margin:0 auto}
-.page-title{font-size:28px;font-weight:900;margin-bottom:4px}
-.page-subtitle{font-size:10px;color:var(--cinza);margin-bottom:20px}
-.servicos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px}
-.servico-card{background:var(--card);border:1px solid var(--borda);border-radius:12px;padding:14px;box-shadow:0 0 15px rgba(220,38,38,.1);position:relative;overflow:hidden}
-.servico-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--vermelho),transparent);box-shadow:0 0 8px var(--glow)}
-.servico-card:active{transform:scale(.98)}
-.servico-icon{width:36px;height:36px;background:rgba(220,38,38,.15);border:1px solid var(--vermelho);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
-.servico-icon i{width:18px;height:18px;stroke:var(--vermelho-neon);fill:none;stroke-width:2}
-.servico-tit{font-size:11px;font-weight:800;margin-bottom:8px}
-.servico-lista{font-size:8px;color:var(--cinza);line-height:1.8;margin-bottom:10px;min-height:80px}
-.servico-lista div{display:flex;align-items:center;gap:4px}
-.servico-lista div::before{content:'✓';color:var(--vermelho);font-weight:900}
-.btn-servico{width:100%;background:var(--vermelho);color:var(--branco);border:none;padding:10px;border-radius:8px;font-weight:700;font-size:9px;cursor:pointer;box-shadow:0 0 12px var(--glow)}
-.btn-servico:active{transform:scale(.96)}
-.btn-add{position:fixed;bottom:20px;right:20px;width:50px;height:50px;background:var(--vermelho);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px var(--glow);z-index:90;font-size:24px;font-weight:700}
-.input{background:var(--card);border:1px solid var(--borda);border-radius:10px;padding:14px;font-size:16px;color:var(--branco);width:100%;outline:none;margin-bottom:12px}
-.input:focus{border-color:var(--vermelho);box-shadow:0 0 8px var(--glow)}
-.btn{width:100%;background:var(--vermelho);color:var(--branco);border:none;border-radius:10px;padding:14px;font-weight:700;font-size:11px;cursor:pointer;margin-top:6px;box-shadow:0 0 12px var(--glow)}
-.btn:active{transform:scale(.96)}
-.btn-sec{background:var(--borda);box-shadow:none}
-.login-box{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:24px;width:100%;max-width:360px;margin:40px auto;box-shadow:0 0 20px rgba(220,38,38,.1)}
-.login-logo{text-align:center;margin-bottom:24px}
-.login-logo h1{font-size:18px;font-weight:900}
-.login-logo h1 span{color:var(--vermelho);text-shadow:0 0 12px var(--vermelho-neon)}
-.modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:300;display:none;align-items:center;justify-content:center;padding:16px}
-.modal.ativo{display:flex}
-.modal-box{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:16px;width:100%;max-width:400px;max-height:90vh;overflow-y:auto}
-.modal-tit{font-size:12px;font-weight:800;margin-bottom:12px}
-.label{font-size:10px;font-weight:600;margin:16px 0 8px;color:var(--cinza);text-transform:uppercase}
-.textarea{background:var(--card);border:1px solid var(--borda);border-radius:10px;padding:14px;font-size:16px;color:var(--branco);width:100%;outline:none;margin-bottom:12px;min-height:80px;resize:vertical}
-.empty{text-align:center;padding:30px 16px;color:var(--cinza);font-size:10px}
-.lista-item{background:var(--card);border:1px solid var(--borda);border-radius:10px;padding:10px;margin-bottom:8px}
-.lista-top{display:flex;justify-content:space-between;align-items:start;margin-bottom:6px}
-.lista-nome{font-size:10px;font-weight:700}
-.lista-acoes{display:flex;gap:6px}
-.btn-mini{padding:6px 10px;font-size:9px;border-radius:6px;border:none;cursor:pointer;font-weight:600}
-.btn-edit{background:var(--vermelho);color:var(--branco)}
-.btn-del{background:#6B7280;color:var(--branco)}
+body{
+  font-family:system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--branco);
+  font-size:11px;
+  touch-action:manipulation;
+  position:relative;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+body::before{
+  content:'';
+  position:fixed;
+  top:-20%;
+  right:-10%;
+  width:400px;
+  height:400px;
+  background:radial-gradient(circle,var(--roxo-escuro) 0%,transparent 70%);
+  opacity:.3;
+  z-index:0;
+  pointer-events:none;
+  filter:blur(80px);
+}
+body::after{
+  content:'';
+  position:fixed;
+  top:0;
+  right:0;
+  width:200px;
+  height:100vh;
+  background:linear-gradient(135deg,transparent 0%,var(--roxo-escuro) 100%);
+  clip-path:polygon(100% 0,30% 0,100% 100%);
+  opacity:.5;
+  z-index:0;
+  pointer-events:none;
+}
+.container{padding:14px 10px;max-width:600px;margin:0 auto;position:relative;z-index:1}
+.logo{
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:.5px;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  margin-bottom:20px;
+  justify-content:center;
+}
+.logo i{width:16px;height:16px;stroke:var(--roxo-neon);fill:var(--roxo-neon);filter:drop-shadow(0 0 10px var(--roxo-glow))}
+.page-title{
+  font-size:30px;
+  font-weight:900;
+  margin-bottom:2px;
+  text-shadow:0 0 25px var(--roxo-glow);
+  letter-spacing:-1px;
+  text-align:center;
+}
+.page-subtitle{
+  font-size:9px;
+  color:var(--cinza);
+  margin-bottom:16px;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  justify-content:center;
+}
+.page-subtitle i{width:13px;height:13px;stroke:var(--roxo-neon);fill:var(--roxo-neon);filter:drop-shadow(0 0 8px var(--roxo-glow))}
+.servicos-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  margin-bottom:20px;
+}
+.servico-card{
+  background:var(--card);
+  backdrop-filter:blur(25px);
+  border:1.5px solid var(--borda);
+  border-radius:14px;
+  padding:8px 6px;
+  box-shadow:0 0 20px rgba(168,85,247,.2),inset 0 0 25px rgba(168,85,247,.08);
+  position:relative;
+  overflow:hidden;
+  transition:all.2s;
+}
+.servico-card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--roxo-neon),transparent);
+  box-shadow:0 0 15px var(--roxo-glow);
+}
+.servico-card::after{
+  content:'';
+  position:absolute;
+  top:0;
+  right:0;
+  width:35px;
+  height:35px;
+  background:linear-gradient(135deg,var(--roxo-escuro),transparent);
+  opacity:.4;
+  border-radius:0 14px 0 100%;
+}
+.servico-card:active{
+  transform:scale(.96);
+  box-shadow:0 0 35px rgba(168,85,247,.4);
+}
+.servico-icon{
+  width:28px;
+  height:28px;
+  background:rgba(168,85,247,.25);
+  border:1.5px solid var(--roxo);
+  border-radius:7px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 6px;
+  box-shadow:0 0 15px var(--roxo-glow),inset 0 0 10px rgba(168,85,247,.2);
+}
+.servico-icon i{width:14px;height:14px;stroke:var(--roxo-neon);fill:none;stroke-width:2}
+.servico-tit{font-size:9px;font-weight:800;margin-bottom:5px;text-align:center;line-height:1.1}
+.servico-tit span{color:var(--roxo-neon);display:block}
+.servico-lista{font-size:6.5px;color:var(--cinza);line-height:1.5;margin-bottom:6px;min-height:58px}
+.servico-lista div{display:flex;align-items:center;gap:2px}
+.servico-lista div::before{content:'✓';color:var(--roxo-neon);font-weight:900;font-size:7px}
+.btn-servico{
+  width:100%;
+  background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
+  color:var(--branco);
+  border:none;
+  padding:6px;
+  border-radius:7px;
+  font-weight:700;
+  font-size:7px;
+  cursor:pointer;
+  box-shadow:0 0 18px var(--roxo-glow);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+}
+.btn-servico:active{transform:scale(.95)}
+.btn-servico i{width:9px;height:9px}
+.cadastro-box{
+  background:var(--card);
+  backdrop-filter:blur(25px);
+  border:1.5px solid var(--borda);
+  border-radius:14px;
+  padding:16px;
+  margin-top:20px;
+  box-shadow:0 0 30px rgba(168,85,247,.2);
+}
+.cadastro-tit{font-size:12px;font-weight:800;margin-bottom:12px;text-align:center;color:var(--roxo-neon)}
+.input{
+  background:rgba(0,0,0,.4);
+  backdrop-filter:blur(10px);
+  border:1px solid var(--borda);
+  border-radius:10px;
+  padding:12px;
+  font-size:16px;
+  color:var(--branco);
+  width:100%;
+  outline:none;
+  margin-bottom:10px;
+}
+.input:focus{border-color:var(--roxo);box-shadow:0 0 15px var(--roxo-glow)}
+.btn-cadastro{
+  width:100%;
+  background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
+  color:var(--branco);
+  border:none;
+  border-radius:10px;
+  padding:12px;
+  font-weight:700;
+  font-size:10px;
+  cursor:pointer;
+  box-shadow:0 0 20px var(--roxo-glow);
+}
+.btn-cadastro:active{transform:scale(.96)}
+@media(max-width:380px){
+ .servicos-grid{grid-template-columns:repeat(2,1fr)}
+ .page-title{font-size:28px}
+}
 </style>
 </head>
 <body>
-<div id="home" class="tela ativa">
-  <div class="header">
-    <div class="header-left">
-      <div class="menu" onclick="abrirMenu()">☰</div>
-      <div class="logo">SERVIÇOS <span>PREMIUM</span></div>
-    </div>
-    <div class="header-right">
-      <div class="cart" onclick="verificarLogin('carrinho')">
-        <i data-lucide="shopping-cart"></i>
-        <span class="cart-badge" id="cartCount">0</span>
+<div class="container">
+  <div class="logo"><i data-lucide="crown"></i> Prime Store <span style="color:var(--roxo-neon)">Vz</span></div>
+  
+  <h1 class="page-title">Serviços</h1>
+  <p class="page-subtitle"><i data-lucide="crown"></i> Prime Store Vz</p>
+  
+  <div class="servicos-grid">
+    <div class="servico-card">
+      <div class="servico-icon"><i data-lucide="users"></i></div>
+      <div class="servico-tit">Painel <span>Smm</span></div>
+      <div class="servico-lista">
+        <div>Seguidores</div>
+        <div>Curtidas</div>
+        <div>Comentários</div>
+        <div>Visualizações</div>
+        <div>Alcance</div>
+        <div>E muito mais</div>
       </div>
-      <div class="user-avatar" id="userAvatar" onclick="verificarLogin('perfil')">U</div>
+      <button class="btn-servico" onclick="solicitar('Painel Smm')">Serviços <i data-lucide="chevron-right"></i></button>
     </div>
-  </div>
-  <div class="container">
-    <h1 class="page-title">Serviços</h1>
-    <p class="page-subtitle">Todos os serviços são 100% gratuitos.</p>
-    <div class="servicos-grid" id="servicosGrid"></div>
-  </div>
-  <div class="btn-add" onclick="verificarAdmin()" id="btnAddAdmin" style="display:none">+</div>
-</div>
 
-<div class="sidebar-overlay" id="overlay" onclick="fecharMenu()"></div>
-<div class="sidebar" id="sidebar">
-  <div class="sidebar-tit">MENU</div>
-  <div class="sidebar-item" onclick="ir('home');fecharMenu()"><i data-lucide="home"></i>Início</div>
-  <div class="sidebar-item" onclick="verificarLogin('carrinho');fecharMenu()"><i data-lucide="shopping-cart"></i>Carrinho</div>
-  <div class="sidebar-item" onclick="verificarLogin('pedidos');fecharMenu()"><i data-lucide="package"></i>Meus Pedidos</div>
-  <div class="sidebar-item" onclick="abrirAdmin();fecharMenu()" id="menuAdmin" style="display:none"><i data-lucide="settings"></i>Painel Admin</div>
-  <div class="sidebar-item" onclick="fazerLogout();fecharMenu()" id="menuSair" style="display:none"><i data-lucide="log-out"></i>Sair</div>
-  <div class="sidebar-item" onclick="ir('login');fecharMenu()" id="menuEntrar"><i data-lucide="log-in"></i>Entrar</div>
-</div>
-
-<div id="login" class="tela">
-  <div class="container">
-    <div class="login-box">
-      <div class="login-logo">
-        <h1>ENTRAR <span>AGORA</span></h1>
-        <p style="font-size:9px;color:var(--cinza);margin-top:6px">Faça login pra solicitar serviços</p>
+    <div class="servico-card">
+      <div class="servico-icon"><i data-lucide="crown"></i></div>
+      <div class="servico-tit">Assinaturas <span>Premium</span></div>
+      <div class="servico-lista">
+        <div>Netflix</div>
+        <div>Spotify</div>
+        <div>Disney+</div>
+        <div>Crunchyroll</div>
+        <div>Globoplay</div>
+        <div>E muito mais</div>
       </div>
-      <input type="email" class="input" id="loginEmail" placeholder="E-mail">
-      <input type="password" class="input" id="loginSenha" placeholder="Senha">
-      <button class="btn" onclick="fazerLogin()">ENTRAR</button>
-      <button class="btn btn-sec" onclick="ir('cadastro')">CRIAR CONTA</button>
-      <button class="btn btn-sec" onclick="ir('home')">VOLTAR</button>
+      <button class="btn-servico" onclick="solicitar('Assinaturas Premium')">Serviços <i data-lucide="chevron-right"></i></button>
     </div>
-  </div>
-</div>
 
-<div id="cadastro" class="tela">
-  <div class="container">
-    <div class="login-box">
-      <div class="login-logo">
-        <h1>CRIAR <span>CONTA</span></h1>
+    <div class="servico-card">
+      <div class="servico-icon"><i data-lucide="shopping-cart"></i></div>
+      <div class="servico-tit">Lojinha <span>Free Fire</span></div>
+      <div class="servico-lista">
+        <div>Diamantes grátis</div>
+        <div>Skins exclusivas</div>
+        <div>Passes de Elite</div>
+        <div>Personagens</div>
+        <div>Armas e mais</div>
+        <div>100% seguro</div>
       </div>
-      <input type="text" class="input" id="cadNome" placeholder="Nome completo">
-      <input type="email" class="input" id="cadEmail" placeholder="E-mail">
-      <input type="password" class="input" id="cadSenha" placeholder="Senha - mín 6 caracteres">
-      <button class="btn" onclick="fazerCadastro()">CADASTRAR</button>
-      <button class="btn btn-sec" onclick="ir('login')">VOLTAR</button>
+      <button class="btn-servico" onclick="solicitar('Lojinha Free Fire')">Serviços <i data-lucide="chevron-right"></i></button>
+    </div>
+
+    <div class="servico-card">
+      <div class="servico-icon"><i data-lucide="graduation-cap"></i></div>
+      <div class="servico-tit">Cursos <span>Digitais</span></div>
+      <div class="servico-lista">
+        <div>Marketing Digital</div>
+        <div>Design Gráfico</div>
+        <div>Social Media</div>
+        <div>Programação</div>
+        <div>Tráfego Pago</div>
+        <div>E muito mais</div>
+      </div>
+      <button class="btn-servico" onclick="solicitar('Cursos Digitais')">Serviços <i data-lucide="chevron-right"></i></button>
+    </div>
+
+    <div class="servico-card">
+      <div class="servico-icon"><i data-lucide="smartphone"></i></div>
+      <div class="servico-tit">Número <span>Virtual</span></div>
+      <div class="servico-lista">
+        <div>Receba SMS</div>
+        <div>WhatsApp</div>
+        <div>Telegram</div>
+        <div>Instagram</div>
+        <div>Facebook</div>
+        <div>E muito mais</div>
+      </div>
+      <button class="btn-servico" onclick="solicitar('Número Virtual')">Serviços <i data-lucide="chevron-right"></i></button>
+    </div>
+
+    <div class="servico-card">
+      <div class="servico-icon"><i data-lucide="gamepad-2"></i></div>
+      <div class="servico-tit">Contas <span>Premium</span></div>
+      <div class="servico-lista">
+        <div>Armazenamento</div>
+        <div>VPN Premium</div>
+        <div>Gift Cards</div>
+        <div>Nacionais e Int.</div>
+        <div>100% seguro</div>
+        <div>E muito mais</div>
+      </div>
+      <button class="btn-servico" onclick="solicitar('Contas Premium')">Serviços <i data-lucide="chevron-right"></i></button>
     </div>
   </div>
-</div>
 
-<div id="carrinho" class="tela">
-  <div class="header">
-    <div class="header-left"><div class="menu" onclick="ir('home')">←</div></div>
-    <div class="logo">MEU <span>CARRINHO</span></div>
-    <div style="width:32px"></div>
-  </div>
-  <div class="container" id="carrinhoBody"></div>
-</div>
-
-<div id="pedidos" class="tela">
-  <div class="header">
-    <div class="header-left"><div class="menu" onclick="ir('home')">←</div></div>
-    <div class="logo">MEUS <span>PEDIDOS</span></div>
-    <div style="width:32px"></div>
-  </div>
-  <div class="container" id="pedidosBody"></div>
-</div>
-
-<div id="admin" class="tela">
-  <div class="header">
-    <div class="header-left"><div class="menu" onclick="ir('home')">←</div></div>
-    <div class="logo">PAINEL <span>ADMIN</span></div>
-    <div style="width:32px"></div>
-  </div>
-  <div class="container" id="adminBody"></div>
-</div>
-
-<div class="modal" id="modal">
-  <div class="modal-box">
-    <div class="modal-tit" id="modalTit"></div>
-    <div id="modalBody"></div>
+  <div class="cadastro-box">
+    <div class="cadastro-tit">CADASTRO RÁPIDO</div>
+    <input type="text" class="input" id="nome" placeholder="Seu nome">
+    <input type="tel" class="input" id="whatsapp" placeholder="Seu WhatsApp">
+    <button class="btn-cadastro" onclick="cadastrar()">QUERO ME CADASTRAR</button>
   </div>
 </div>
 
 <script>
 const WHATSAPP='5598984853563';
-let db={servicos:[],pedidos:[]};
-let usuarioAtual=null;
 
-window.addEventListener('load',()=>{
-  lucide.createIcons();
-  const { auth, onAuthStateChanged, db: fbdb, ref, onValue } = window.fb;
-
-  onValue(ref(fbdb, 'servicos'), (snap)=>{
-    db.servicos = snap.exists()?snap.val():[];
-    renderServicos();
-  });
-
-  onValue(ref(fbdb, 'pedidos'), (snap)=>{
-    db.pedidos = snap.exists()?snap.val():[];
-    atualizarCarrinho();
-  });
-
-  onAuthStateChanged(auth, (user) => {
-    if(user){
-      usuarioAtual={uid:user.uid,email:user.email,admin:user.email==='nannyvittoriah@gmail.com'};
-      document.getElementById('menuAdmin').style.display=usuarioAtual.admin?'flex':'none';
-      document.getElementById('btnAddAdmin').style.display=usuarioAtual.admin?'flex':'none';
-      document.getElementById('menuSair').style.display='flex';
-      document.getElementById('menuEntrar').style.display='none';
-      document.getElementById('userAvatar').textContent=user.email.charAt(0).toUpperCase();
-    }else{
-      usuarioAtual=null;
-      document.getElementById('menuAdmin').style.display='none';
-      document.getElementById('btnAddAdmin').style.display='none';
-      document.getElementById('menuSair').style.display='none';
-      document.getElementById('menuEntrar').style.display='flex';
-      document.getElementById('userAvatar').textContent='U';
-    }
-  });
-});
-
-function ir(t){
-  document.querySelectorAll('.tela').forEach(e=>e.classList.remove('ativa'));
-  document.getElementById(t).classList.add('ativa');
-  if(t==='home')renderServicos();
-  if(t==='carrinho')renderCarrinho();
-  if(t==='pedidos')renderPedidos();
-  lucide.createIcons();
-}
-
-function abrirMenu(){
-  document.getElementById('sidebar').classList.add('ativo');
-  document.getElementById('overlay').classList.add('ativo');
-}
-function fecharMenu(){
-  document.getElementById('sidebar').classList.remove('ativo');
-  document.getElementById('overlay').classList.remove('ativo');
-}
-
-function verificarLogin(tela){
-  if(!usuarioAtual){alert('Faça login primeiro pra acessar');ir('login');return}
-  ir(tela);
-}
-
-function verificarAdmin(){
-  if(!usuarioAtual || !usuarioAtual.admin){alert('Acesso negado');return}
-  abrirAdmin();
-}
-
-async function fazerLogin(){
-  const { auth, signInWithEmailAndPassword } = window.fb;
-  const email=document.getElementById('loginEmail').value.trim();
-  const senha=document.getElementById('loginSenha').value;
-  if(!email||!senha){alert('Preencha todos os campos');return}
-  try{
-    await signInWithEmailAndPassword(auth,email,senha);
-    ir('home');
-  }catch(e){alert('Erro: '+e.message);}
-}
-
-async function fazerCadastro(){
-  const { auth, createUserWithEmailAndPassword } = window.fb;
-  const nome=document.getElementById('cadNome').value.trim();
-  const email=document.getElementById('cadEmail').value.trim();
-  const senha=document.getElementById('cadSenha').value;
-  if(!nome||!email||!senha){alert('Preencha todos os campos');return}
-  if(senha.length<6){alert('Senha deve ter no mínimo 6 caracteres');return}
-  try{
-    await createUserWithEmailAndPassword(auth,email,senha);
-    alert('Conta criada!');
-    ir('home');
-  }catch(e){alert('Erro: '+e.message);}
-}
-
-async function fazerLogout(){
-  const { auth, signOut } = window.fb;
-  if(confirm('Deseja sair?')){
-    await signOut(auth);
-    ir('home');
-  }
-}
-
-function renderServicos(){
-  const icones={'painel smm':'users','assinaturas premium':'crown','lojinha free fire':'shopping-bag','cursos digitais':'graduation-cap','número virtual':'smartphone','numero virtual':'smartphone'};
-  const html = db.servicos.map(s=>{
-    const lista = s.itens? s.itens.split('\n').map(i=>`<div>${i}</div>`).join('') : '';
-    return `
-    <div class="servico-card">
-      <div class="servico-icon"><i data-lucide="${icones[s.nome.toLowerCase()]||'package'}"></i></div>
-      <div class="servico-tit">${s.nome}</div>
-      <div class="servico-lista">${lista}</div>
-      <button class="btn-servico" onclick="solicitarServico('${s.id}')">Serviços</button>
-    </div>
-  `}).join('');
-  document.getElementById('servicosGrid').innerHTML = html || '<div class="empty">Nenhum serviço cadastrado<br><br>Admin: clica no + pra adicionar</div>';
-  lucide.createIcons();
-}
-
-function solicitarServico(id){
-  if(!usuarioAtual){alert('Faça login primeiro');ir('login');return}
-  const serv = db.servicos.find(s=>s.id===id);
-  if(!serv) return;
-  const pedidoId='#'+Date.now().toString().slice(-5);
-  const pedido={id:pedidoId,uid:usuarioAtual.uid,email:usuarioAtual.email,servico:serv.nome,data:new Date().toISOString(),status:'pendente'};
-  db.pedidos.push(pedido);
-  const { db: fbdb, ref, set } = window.fb;
-  set(ref(fbdb, 'pedidos'), db.pedidos);
-  alert('✅ Serviço adicionado ao carrinho!\n\nID: '+pedidoId);
-  atualizarCarrinho();
-}
-
-function atualizarCarrinho(){
-  const meus = db.pedidos.filter(p=>p.uid===usuarioAtual?.uid && p.status==='pendente').length;
-  document.getElementById('cartCount').textContent = meus;
-}
-
-function renderCarrinho(){
-  if(!usuarioAtual){ir('login');return}
-  const meus=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && p.status==='pendente');
-  if(meus.length===0){
-    document.getElementById('carrinhoBody').innerHTML='<div class="empty">Carrinho vazio<br><br>Adicione serviços!</div>';
-    return;
-  }
-  const lista=meus.map(p=>`
-    <div class="lista-item">
-      <div class="lista-top">
-        <div class="lista-nome">${p.servico}</div>
-        <button class="btn-mini btn-del" onclick="removerCarrinho('${p.id}')">REMOVER</button>
-      </div>
-      <div style="font-size:9px;color:var(--cinza)">ID: ${p.id} | ${new Date(p.data).toLocaleString('pt-BR')}</div>
-    </div>
-  `).join('');
-  document.getElementById('carrinhoBody').innerHTML=`
-    ${lista}
-    <button class="btn" onclick="finalizarPedidos()">FINALIZAR NO WHATSAPP</button>
-  `;
-}
-
-async function removerCarrinho(id){
-  db.pedidos=db.pedidos.filter(p=>p.id!==id);
-  const { db: fbdb, ref, set } = window.fb;
-  await set(ref(fbdb, 'pedidos'), db.pedidos);
-  renderCarrinho();
-}
-
-function finalizarPedidos(){
-  const meus=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && p.status==='pendente');
-  if(meus.length===0){alert('Carrinho vazio');return}
-  let msg=`Olá! Quero solicitar os seguintes serviços:\n\n`;
-  meus.forEach((p,i)=>{msg+=`${i+1}. ${p.servico} - ${p.id}\n`;});
-  msg+=`\nMeu e-mail: ${usuarioAtual.email}`;
+function solicitar(servico){
+  const msg = `Olá! Quero solicitar: ${servico}`;
   window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
-function renderPedidos(){
-  if(!usuarioAtual){ir('login');return}
-  const meus=db.pedidos.filter(p=>p.uid===usuarioAtual.uid && p.status!=='pendente').reverse();
-  if(meus.length===0){
-    document.getElementById('pedidosBody').innerHTML='<div class="empty">Nenhum pedido finalizado</div>';
-    return;
-  }
-  const lista=meus.map(p=>`
-    <div class="lista-item">
-      <div class="lista-top">
-        <div class="lista-nome">${p.servico}</div>
-        <span style="font-size:9px;color:${p.status==='confirmado'?'var(--verde)':'var(--vermelho)'}">${p.status==='confirmado'?'✅ Confirmado':'❌ Cancelado'}</span>
-      </div>
-      <div style="font-size:9px;color:var(--cinza)">ID: ${p.id} | ${new Date(p.data).toLocaleDateString('pt-BR')}</div>
-    </div>
-  `).join('');
-  document.getElementById('pedidosBody').innerHTML=lista;
+function cadastrar(){
+  const nome = document.getElementById('nome').value.trim();
+  const whats = document.getElementById('whatsapp').value.trim();
+  if(!nome||!whats){alert('Preencha nome e WhatsApp');return}
+  const msg = `Olá! Quero me cadastrar na Prime Store Vz\n\nNome: ${nome}\nWhatsApp: ${whats}`;
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
+  document.getElementById('nome').value='';
+  document.getElementById('whatsapp').value='';
+  alert('Cadastro enviado! Te chamo no WhatsApp 💜');
 }
 
-function abrirAdmin(){
-  if(!usuarioAtual.admin){alert('Acesso negado');return}
-  document.getElementById('adminBody').innerHTML=`
-    <button class="btn" onclick="formServico()">➕ NOVO SERVIÇO</button>
-    <button class="btn" onclick="listarServicos()">📋 GERENCIAR SERVIÇOS</button>
-    <button class="btn" onclick="listarPedidosAdmin()">📦 PEDIDOS CLIENTES</button>
-    <button class="btn btn-sec" onclick="ir('home')">VOLTAR</button>
-  `;
-  ir('admin');
-}
-
-function formServico(id=null){
-  const s=db.servicos.find(x=>x.id===id);
-  document.getElementById('modalTit').textContent=id?'EDITAR SERVIÇO':'NOVO SERVIÇO';
-  document.getElementById('modalBody').innerHTML=`
-    <input type="text" class="input" id="nomeS" value="${s?.nome||''}" placeholder="Nome do serviço">
-    <textarea class="textarea" id="itensS" placeholder="Itens - um por linha\nEx:\nSeguidores\nCurtidas\nVisualizações">${s?.itens||''}</textarea>
-    <button class="btn" onclick="salvarServico('${id||''}')">${id?'SALVAR':'CRIAR'}</button>
-    <button class="btn btn-sec" onclick="fecharModal()">CANCELAR</button>
-  `;
-  document.getElementById('modal').classList.add('ativo');
-}
-
-async function salvarServico(id){
-  const nome=document.getElementById('nomeS').value.trim();
-  const itens=document.getElementById('itensS').value.trim();
-  if(!nome){alert('Nome obrigatório');return}
-  if(id && id!==''){
-    const index = db.servicos.findIndex(x=>x.id===id);
-    if(index!==-1) db.servicos[index]={id,nome,itens};
-  }else{
-    db.servicos.push({id:'s'+Date.now(),nome,itens});
-  }
-  const { db: fbdb, ref, set } = window.fb;
-  await set(ref(fbdb, 'servicos'), db.servicos);
-  fecharModal();
-  listarServicos();
-}
-
-function listarServicos(){
-  const lista=db.servicos.map(s=>`
-    <div class="lista-item">
-      <div class="lista-top">
-        <div class="lista-nome">${s.nome}</div>
-        <div class="lista-acoes">
-          <button class="btn-mini btn-edit" onclick="formServico('${s.id}')">EDITAR</button>
-          <button class="btn-mini btn-del" onclick="delServico('${s.id}')">EXCLUIR</button>
-        </div>
-      </div>
-    </div>
-  `).join('');
-  document.getElementById('adminBody').innerHTML=`
-    <div style="font-size:12px;font-weight:800;margin-bottom:12px">SERVIÇOS</div>
-    ${lista||'<div class="empty">Nenhum serviço</div>'}
-    <button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>
-  `;
-}
-
-async function delServico(id){
-  if(confirm('Excluir serviço?')){
-    db.servicos=db.servicos.filter(x=>x.id!==id);
-    const { db: fbdb, ref, set } = window.fb;
-    await set(ref(fbdb, 'servicos'), db.servicos);
-    listarServicos();
-  }
-}
-
-function listarPedidosAdmin(){
-  const lista=[...db.pedidos].reverse().map(p=>`
-    <div class="lista-item">
-      <div class="lista-top">
-        <div class="lista-nome">${p.servico}</div>
-        <span style="font-size:9px;color:${p.status==='pendente'?'var(--amarelo)':p.status==='confirmado'?'var(--verde)':'var(--vermelho)'}">${p.status}</span>
-      </div>
-      <div style="font-size:9px;color:var(--cinza)">Cliente: ${p.email}<br>ID: ${p.id} | ${new Date(p.data).toLocaleString('pt-BR')}</div>
-      ${p.status==='pendente'?`
-      <div class="lista-acoes" style="margin-top:8px">
-        <button class="btn-mini btn-edit" onclick="aprovarPedido('${p.id}')">✅ APROVAR</button>
-        <button class="btn-mini btn-del" onclick="cancelarPedido('${p.id}')">🚫 CANCELAR</button>
-      </div>`:''}
-    </div>
-  `).join('');
-  document.getElementById('adminBody').innerHTML=`
-    <div style="font-size:12px;font-weight:800;margin-bottom:12px">PEDIDOS</div>
-    ${lista||'<div class="empty">Nenhum pedido</div>'}
-    <button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>
-  `;
-}
-
-async function aprovarPedido(id){
-  db.pedidos.find(p=>p.id===id).status='confirmado';
-  const { db: fbdb, ref, set } = window.fb;
-  await set(ref(fbdb, 'pedidos'), db.pedidos);
-  listarPedidosAdmin();
-}
-
-async function cancelarPedido(id){
-  db.pedidos.find(p=>p.id===id).status='cancelado';
-  const { db: fbdb, ref, set } = window.fb;
-  await set(ref(fbdb, 'pedidos'), db.pedidos);
-  listarPedidosAdmin();
-}
-
-function fecharModal(){
-  document.getElementById('modal').classList.remove('ativo');
-}
-
-document.getElementById('modal').addEventListener('click', (e)=>{
-  if(e.target.id==='modal') e.target.classList.remove('ativo');
-});
+lucide.createIcons();
 </script>
 </body>
 </html>
