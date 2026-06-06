@@ -6,7 +6,8 @@
 <title>Prime Store Vz</title>
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+  import { getDatabase, ref, set, get, push, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
   const firebaseConfig = {
     apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -21,7 +22,8 @@
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  window.fb = { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged };
+  const db = getDatabase(app);
+  window.fb = { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile, ref, set, get, push, onValue };
 </script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
@@ -211,8 +213,8 @@ body::after{
   font-weight:600;
 }
 
-/* SERVIÇOS */
-.header-servicos{
+/* DASHBOARD PAINEL SMM */
+.header-painel{
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -232,133 +234,207 @@ body::after{
   gap:5px;
 }
 .user-menu i{width:12px;height:12px}
-.page-title{
-  font-size:30px;
-  font-weight:900;
-  margin-bottom:2px;
-  text-shadow:0 0 30px var(--roxo-glow);
-  letter-spacing:-1px;
-  text-align:center;
-}
-.page-subtitle{
-  font-size:9px;
-  color:var(--cinza);
-  margin-bottom:16px;
-  display:flex;
-  align-items:center;
-  gap:5px;
-  justify-content:center;
-}
-.page-subtitle i{width:13px;height:13px;stroke:var(--roxo-neon);fill:var(--roxo-neon);filter:drop-shadow(0 0 10px var(--roxo-glow))}
-.servicos-grid{
+.dashboard-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:6px;
-  margin-bottom:20px;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-bottom:16px;
 }
-.servico-card{
-  background:var(--card);
+.dash-card{
+  background:var(--card-escuro);
   backdrop-filter:blur(30px);
   border:1.5px solid var(--borda);
-  border-radius:14px;
-  padding:8px 6px;
-  box-shadow:0 8px 32px rgba(168,85,247,.25),inset 0 1px 0 rgba(255,255,255,.1),inset 0 0 30px rgba(168,85,247,.1);
+  border-radius:12px;
+  padding:12px;
+  box-shadow:0 8px 32px rgba(168,85,247,.2),inset 0 1px 0 rgba(255,255,255,.08);
   position:relative;
   overflow:hidden;
-  transition:all.2s;
 }
-.servico-card::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:-100%;
-  width:100%;
-  height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
-  animation:reflexo 3s infinite;
-}
-@keyframes reflexo{
-  0%{left:-100%}
-  100%{left:100%}
-}
-.servico-card::after{
-  content:'';
-  position:absolute;
-  top:-50%;
-  right:-50%;
-  width:100%;
-  height:100%;
-  background:radial-gradient(circle,rgba(255,255,255,.12) 0%,transparent 70%);
-  transform:rotate(45deg);
-  pointer-events:none;
-}
-.servico-card:active{
-  transform:scale(.96);
-  box-shadow:0 0 40px rgba(168,85,247,.5),inset 0 1px 0 rgba(255,255,255,.2);
-}
-.servico-icon{
-  width:28px;
-  height:28px;
-  background:rgba(168,85,247,.3);
-  border:1.5px solid var(--roxo);
-  border-radius:7px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin:0 auto 6px;
-  box-shadow:0 0 20px var(--roxo-glow),inset 0 0 15px rgba(168,85,247,.3);
-  position:relative;
-}
-.servico-icon::before{
+.dash-card::before{
   content:'';
   position:absolute;
   top:0;
   left:0;
   right:0;
-  height:50%;
-  background:linear-gradient(180deg,rgba(255,255,255,.25),transparent);
-  border-radius:7px 0 0;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--roxo-neon),transparent);
+  box-shadow:0 0 15px var(--roxo-glow);
 }
-.servico-icon i{width:14px;height:14px;stroke:var(--roxo-neon);fill:none;stroke-width:2;z-index:1}
-.servico-tit{font-size:9px;font-weight:800;margin-bottom:5px;text-align:center;line-height:1.1}
-.servico-tit span{color:var(--roxo-neon);display:block;text-shadow:0 0 10px var(--roxo-glow)}
-.servico-lista{font-size:6.5px;color:var(--cinza);line-height:1.5;margin-bottom:6px;min-height:58px}
-.servico-lista div{display:flex;align-items:center;gap:2px}
-.servico-lista div::before{content:'✓';color:var(--roxo-neon);font-weight:900;font-size:7px}
-.btn-servico{
+.dash-card-header{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.dash-avatar{
+  width:32px;
+  height:32px;
+  background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 0 20px var(--roxo-glow);
+  flex-shrink:0;
+}
+.dash-avatar i{width:16px;height:16px;fill:var(--branco)}
+.dash-info{flex:1;min-width:0}
+.dash-welcome{font-size:8px;color:var(--cinza);margin-bottom:2px}
+.dash-name{
+  font-size:11px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.dash-name i{width:10px;height:10px;fill:var(--roxo-neon);flex-shrink:0}
+.dash-sub{font-size:7px;color:var(--cinza)}
+.dash-stats{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.dash-stat-icon{
+  width:28px;
+  height:28px;
+  background:rgba(168,85,247,.2);
+  border:1px solid var(--borda);
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.dash-stat-icon i{width:14px;height:14px;stroke:var(--roxo-neon)}
+.dash-stat-info{flex:1}
+.dash-stat-label{font-size:7px;color:var(--cinza);margin-bottom:2px}
+.dash-stat-value{font-size:14px;font-weight:900;color:var(--branco)}
+.pedido-card{
+  background:var(--card-escuro);
+  backdrop-filter:blur(30px);
+  border:1.5px solid var(--borda);
+  border-radius:12px;
+  padding:14px;
+  box-shadow:0 8px 32px rgba(168,85,247,.2),inset 0 1px 0 rgba(255,255,255,.08);
+  margin-bottom:16px;
+  position:relative;
+  overflow:hidden;
+}
+.pedido-card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--roxo-neon),transparent);
+  box-shadow:0 0 15px var(--roxo-glow);
+}
+.pedido-tit{
+  font-size:13px;
+  font-weight:800;
+  margin-bottom:12px;
+  padding-bottom:8px;
+  border-bottom:1px solid rgba(168,85,247,.3);
+}
+.select-group{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:12px;
+}
+.select-box label{
+  font-size:8px;
+  color:var(--cinza);
+  display:block;
+  margin-bottom:6px;
+  font-weight:600;
+}
+.select-input{
+  width:100%;
+  background:rgba(0,0,0,.4);
+  backdrop-filter:blur(15px);
+  border:1px solid var(--borda);
+  border-radius:8px;
+  padding:10px;
+  font-size:9px;
+  color:var(--cinza);
+  outline:none;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.select-input:active{border-color:var(--roxo)}
+.select-input i{width:12px;height:12px}
+.btn-pedido{
   width:100%;
   background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
   color:var(--branco);
   border:none;
-  padding:6px;
-  border-radius:7px;
+  border-radius:10px;
+  padding:12px;
   font-weight:700;
-  font-size:7px;
+  font-size:10px;
   cursor:pointer;
-  box-shadow:0 4px 20px var(--roxo-glow),inset 0 1px 0 rgba(255,255,255,.3);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:3px;
+  box-shadow:0 4px 25px var(--roxo-glow),inset 0 1px 0 rgba(255,255,255,.3);
   position:relative;
   overflow:hidden;
 }
-.btn-servico::before{
+.btn-pedido::before{
   content:'';
   position:absolute;
   top:-50%;
   left:-50%;
   width:200%;
   height:200%;
-  background:linear-gradient(45deg,transparent,rgba(255,255,255,.35),transparent);
+  background:linear-gradient(45deg,transparent,rgba(255,255,255,.3),transparent);
   transform:rotate(45deg);
   animation:brilho 2s infinite;
 }
-.btn-servico:active{transform:scale(.95)}
-.btn-servico i{width:9px;height:9px;z-index:1}
+.btn-pedido:active{transform:scale(.96)}
+.nossos-servicos{
+  background:var(--card-escuro);
+  backdrop-filter:blur(30px);
+  border:1.5px solid var(--borda);
+  border-radius:12px;
+  padding:14px;
+  box-shadow:0 8px 32px rgba(168,85,247,.2),inset 0 1px 0 rgba(255,255,255,.08);
+  position:relative;
+  overflow:hidden;
+}
+.nossos-servicos::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--roxo-neon),transparent);
+  box-shadow:0 0 15px var(--roxo-glow);
+}
+.nossos-servicos-tit{
+  font-size:13px;
+  font-weight:800;
+  margin-bottom:12px;
+  padding-bottom:8px;
+  border-bottom:1px solid rgba(168,85,247,.3);
+}
+.servico-item{
+  background:rgba(0,0,0,.3);
+  border:1px solid var(--borda);
+  border-radius:8px;
+  padding:10px;
+  margin-bottom:8px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.servico-item-nome{font-size:9px;font-weight:700}
+.servico-item-preco{font-size:9px;color:var(--roxo-neon);font-weight:800}
 @media(max-width:380px){
-.servicos-grid{grid-template-columns:repeat(2,1fr)}
-.page-title{font-size:28px}
+.select-group{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -400,120 +476,95 @@ body::after{
   </div>
 </div>
 
-<!-- TELA SERVIÇOS -->
-<div id="servicos" class="tela">
+<!-- TELA PAINEL SMM DASHBOARD -->
+<div id="dashboard" class="tela">
   <div class="container">
-    <div class="header-servicos">
+    <div class="header-painel">
       <div class="logo" style="margin:0;font-size:12px"><i data-lucide="crown"></i> Prime Store <span style="color:var(--roxo-neon)">Vz</span></div>
       <div class="user-menu" onclick="fazerLogout()">
         <i data-lucide="log-out"></i> Sair
       </div>
     </div>
-    
-    <h1 class="page-title">Serviços</h1>
-    <p class="page-subtitle"><i data-lucide="crown"></i> Prime Store Vz</p>
-    
-    <div class="servicos-grid">
-      <div class="servico-card">
-        <div class="servico-icon"><i data-lucide="users"></i></div>
-        <div class="servico-tit">Painel <span>Smm</span></div>
-        <div class="servico-lista">
-          <div>Seguidores</div>
-          <div>Curtidas</div>
-          <div>Comentários</div>
-          <div>Visualizações</div>
-          <div>Alcance</div>
-          <div>E muito mais</div>
+
+    <div class="dashboard-grid">
+      <div class="dash-card">
+        <div class="dash-card-header">
+          <div class="dash-avatar"><i data-lucide="users"></i></div>
+          <div class="dash-info">
+            <div class="dash-welcome">Bem-vindo(a),</div>
+            <div class="dash-name" id="nomeUsuario">Carregando... <i data-lucide="badge-check"></i></div>
+            <div class="dash-sub">Painel de Controle</div>
+          </div>
         </div>
-        <button class="btn-servico" onclick="abrirDashboard()">Acessar <i data-lucide="chevron-right"></i></button>
       </div>
 
-      <div class="servico-card">
-        <div class="servico-icon"><i data-lucide="crown"></i></div>
-        <div class="servico-tit">Assinaturas <span>Premium</span></div>
-        <div class="servico-lista">
-          <div>Netflix</div>
-          <div>Spotify</div>
-          <div>Disney+</div>
-          <div>Crunchyroll</div>
-          <div>Globoplay</div>
-          <div>E muito mais</div>
+      <div class="dash-card">
+        <div class="dash-stats">
+          <div class="dash-stat-icon"><i data-lucide="shopping-cart"></i></div>
+          <div class="dash-stat-info">
+            <div class="dash-stat-label">Total de Pedidos</div>
+            <div class="dash-stat-value" id="totalPedidos">0</div>
+          </div>
         </div>
-        <button class="btn-servico" onclick="solicitar('Assinaturas Premium')">Acessar <i data-lucide="chevron-right"></i></button>
       </div>
+    </div>
 
-      <div class="servico-card">
-        <div class="servico-icon"><i data-lucide="shopping-cart"></i></div>
-        <div class="servico-tit">Lojinha <span>Free Fire</span></div>
-        <div class="servico-lista">
-          <div>Diamantes grátis</div>
-          <div>Skins exclusivas</div>
-          <div>Passes de Elite</div>
-          <div>Personagens</div>
-          <div>Armas e mais</div>
-          <div>100% seguro</div>
+    <div class="pedido-card">
+      <div class="pedido-tit">Novo Pedido</div>
+      <div class="select-group">
+        <div class="select-box">
+          <label>Categoria</label>
+          <div class="select-input" onclick="selecionarCat()">
+            <span id="catSelecionada">Selecione uma categoria</span> <i data-lucide="chevron-down"></i>
+          </div>
         </div>
-        <button class="btn-servico" onclick="solicitar('Lojinha Free Fire')">Acessar <i data-lucide="chevron-right"></i></button>
+        <div class="select-box">
+          <label>Serviço</label>
+          <div class="select-input" onclick="selecionarServ()">
+            <span id="servSelecionado">Selecione um serviço</span> <i data-lucide="chevron-down"></i>
+          </div>
+        </div>
       </div>
+      <button class="btn-pedido" onclick="fazerPedido()">FAZER PEDIDO</button>
+    </div>
 
-      <div class="servico-card">
-        <div class="servico-icon"><i data-lucide="graduation-cap"></i></div>
-        <div class="servico-tit">Cursos <span>Digitais</span></div>
-        <div class="servico-lista">
-          <div>Marketing Digital</div>
-          <div>Design Gráfico</div>
-          <div>Social Media</div>
-          <div>Programação</div>
-          <div>Tráfego Pago</div>
-          <div>E muito mais</div>
+    <div class="nossos-servicos">
+      <div class="nossos-servicos-tit">Nossos Serviços</div>
+      <div id="listaServicos">
+        <div style="font-size:8px;color:var(--cinza);text-align:center;padding:20px 0">
+          Selecione uma categoria acima para ver os serviços disponíveis
         </div>
-        <button class="btn-servico" onclick="solicitar('Cursos Digitais')">Acessar <i data-lucide="chevron-right"></i></button>
-      </div>
-
-      <div class="servico-card">
-        <div class="servico-icon"><i data-lucide="smartphone"></i></div>
-        <div class="servico-tit">Número <span>Virtual</span></div>
-        <div class="servico-lista">
-          <div>Receba SMS</div>
-          <div>WhatsApp</div>
-          <div>Telegram</div>
-          <div>Instagram</div>
-          <div>Facebook</div>
-          <div>E muito mais</div>
-        </div>
-        <button class="btn-servico" onclick="solicitar('Número Virtual')">Acessar <i data-lucide="chevron-right"></i></button>
-      </div>
-
-      <div class="servico-card">
-        <div class="servico-icon"><i data-lucide="gamepad-2"></i></div>
-        <div class="servico-tit">Contas <span>Premium</span></div>
-        <div class="servico-lista">
-          <div>Armazenamento</div>
-          <div>VPN Premium</div>
-          <div>Gift Cards</div>
-          <div>Nacionais e Int.</div>
-          <div>100% seguro</div>
-          <div>E muito mais</div>
-        </div>
-        <button class="btn-servico" onclick="solicitar('Contas Premium')">Acessar <i data-lucide="chevron-right"></i></button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-const WHATSAPP='5598984853563';
+let userId = null;
+let totalPedidos = 0;
 
 window.addEventListener('load',()=>{
   lucide.createIcons();
-  const { auth, onAuthStateChanged } = window.fb;
+  const { auth, db, onAuthStateChanged, ref, onValue } = window.fb;
   
   onAuthStateChanged(auth, (user) => {
     if(user){
-      ir('servicos');
+      userId = user.uid;
+      const nome = user.displayName || user.email.split('@')[0];
+      document.getElementById('nomeUsuario').innerHTML = nome + ' <i data-lucide="badge-check"></i>';
+      
+      // Buscar total de pedidos do cliente
+      const pedidosRef = ref(db, `usuarios/${userId}/totalPedidos`);
+      onValue(pedidosRef, (snapshot) => {
+        totalPedidos = snapshot.val() || 0;
+        document.getElementById('totalPedidos').textContent = totalPedidos;
+      });
+      
+      ir('dashboard');
     }else{
       ir('login');
     }
+    lucide.createIcons();
   });
 });
 
@@ -521,15 +572,6 @@ function ir(t){
   document.querySelectorAll('.tela').forEach(e=>e.classList.remove('ativa'));
   document.getElementById(t).classList.add('ativa');
   lucide.createIcons();
-}
-
-function solicitar(servico){
-  const msg = `Olá! Quero solicitar: ${servico}`;
-  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
-}
-
-function abrirDashboard(){
-  alert('Dashboard do Painel Smm em desenvolvimento');
 }
 
 function mudarTab(tab){
@@ -556,21 +598,26 @@ async function fazerLogin(){
   if(!email||!senha){alert('Preencha todos os campos');return}
   try{
     await signInWithEmailAndPassword(auth,email,senha);
-    ir('servicos');
   }catch(e){alert('Erro: '+e.message);}
 }
 
 async function fazerCadastro(){
-  const { auth, createUserWithEmailAndPassword } = window.fb;
+  const { auth, db, createUserWithEmailAndPassword, updateProfile, ref, set } = window.fb;
   const nome=document.getElementById('cadNome').value.trim();
   const email=document.getElementById('cadEmail').value.trim();
   const senha=document.getElementById('cadSenha').value;
   if(!nome||!email||!senha){alert('Preencha todos os campos');return}
   if(senha.length<6){alert('Senha deve ter no mínimo 6 caracteres');return}
   try{
-    await createUserWithEmailAndPassword(auth,email,senha);
+    const cred = await createUserWithEmailAndPassword(auth,email,senha);
+    await updateProfile(cred.user,{displayName:nome});
+    await set(ref(db, `usuarios/${cred.user.uid}`), {
+      nome:nome,
+      email:email,
+      totalPedidos:0,
+      criadoEm:Date.now()
+    });
     alert('Exclusivo criado com sucesso!');
-    ir('servicos');
   }catch(e){alert('Erro: '+e.message);}
 }
 
@@ -589,8 +636,57 @@ async function fazerLogout(){
   const { auth, signOut } = window.fb;
   if(confirm('Deseja sair do Exclusivo?')){
     await signOut(auth);
-    ir('login');
   }
+}
+
+function selecionarCat(){
+  const cat = prompt('Escolha a categoria:\n1 - Instagram\n2 - TikTok\n3 - YouTube\n4 - Facebook');
+  const cats = ['Instagram','TikTok','YouTube','Facebook'];
+  if(cat && cat>0 && cat<5){
+    document.getElementById('catSelecionada').textContent = cats[cat-1];
+    carregarServicos(cats[cat-1]);
+  }
+}
+
+function selecionarServ(){
+  alert('Selecione uma categoria primeiro');
+}
+
+function carregarServicos(cat){
+  const lista = document.getElementById('listaServicos');
+  const servicos = {
+    'Instagram':[
+      {nome:'Seguidores Brasileiros',preco:'R$ 15,00 / 1000'},
+      {nome:'Curtidas Reais',preco:'R$ 8,00 / 1000'},
+      {nome:'Visualizações Stories',preco:'R$ 5,00 / 1000'}
+    ],
+    'TikTok':[
+      {nome:'Seguidores TikTok',preco:'R$ 12,00 / 1000'},
+      {nome:'Curtidas TikTok',preco:'R$ 6,00 / 1000'},
+      {nome:'Views TikTok',preco:'R$ 4,00 / 1000'}
+    ],
+    'YouTube':[
+      {nome:'Inscritos YouTube',preco:'R$ 20,00 / 1000'},
+      {nome:'Views YouTube',preco:'R$ 10,00 / 1000'}
+    ],
+    'Facebook':[
+      {nome:'Seguidores Página',preco:'R$ 18,00 / 1000'},
+      {nome:'Curtidas Post',preco:'R$ 7,00 / 1000'}
+    ]
+  };
+  lista.innerHTML = '';
+  servicos[cat].forEach(s=>{
+    lista.innerHTML += `<div class="servico-item"><div class="servico-item-nome">${s.nome}</div><div class="servico-item-preco">${s.preco}</div></div>`;
+  });
+}
+
+async function fazerPedido(){
+  const { db, ref, set, get } = window.fb;
+  const cat = document.getElementById('catSelecionada').textContent;
+  if(cat==='Selecione uma categoria'){alert('Selecione categoria e serviço');return}
+  totalPedidos++;
+  await set(ref(db, `usuarios/${userId}/totalPedidos`), totalPedidos);
+  alert('Pedido realizado com sucesso! Total: '+totalPedidos);
 }
 
 lucide.createIcons();
