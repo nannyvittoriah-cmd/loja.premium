@@ -35,7 +35,7 @@
   --roxo-escuro:#6D28D9;
   --branco:#FFFFFF;
   --cinza:#D1D5DB;
-  --borda:#1E1E;
+  --borda:#1E1E1E;
   --card:#0D0D0D;
   --verde:#22C55E;
   --amarelo:#F59E0B;
@@ -315,7 +315,13 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
       <div class="passo-item">
         <div class="passo-num">3</div>
         <div class="passo-texto">Cole o <b>link/ID</b> da conta.</div>
-     <div class="passo-icon"><i data-lucide="shopping-cart"></i></div>
+        <div class="passo-icon"><i data-lucide="link"></i></div>
+      </div>
+
+      <div class="passo-item">
+        <div class="passo-num">4</div>
+        <div class="passo-texto">Clique no botão <b>"ADICIONAR AO CARRINHO"</b>.</div>
+        <div class="passo-icon"><i data-lucide="shopping-cart"></i></div>
       </div>
 
       <div class="passo-item">
@@ -552,7 +558,17 @@ window.addEventListener('load',()=>{
   lucide.createIcons();
   const { auth, onAuthStateChanged, db: fbdb, ref, onValue } = window.firebaseAuth;
 
-  let carregouDados = false;
+  let dadosCarregados = 0;
+  const totalDados = 4;
+
+  function checkLoading(){
+    dadosCarregados++;
+    if(dadosCarregados >= totalDados){
+      setTimeout(()=>showLoad(false),300);
+      renderJogos();
+      renderProdutosLoja();
+    }
+  }
 
   onValue(ref(fbdb, 'primevzdados'), (snap)=>{
     if(snap.exists()){
@@ -561,28 +577,31 @@ window.addEventListener('load',()=>{
       db.serv = dados.serv||[];
       db.config = dados.config||{faq:"",termos:"",premiacao:{img:"",texto:""},msgComprovante:"Obrigado por escolher a melhor!"};
       if(!db.config.msgComprovante) db.config.msgComprovante = "Obrigado por escolher a melhor!";
+    }else{
+      // Cria estrutura inicial se não existir
+      db.config = {faq:"",termos:"",premiacao:{img:"",texto:""},msgComprovante:"Obrigado por escolher a melhor!"};
     }
-    carregouDados = true;
-    showLoad(false);
-    renderJogos();
-    renderProdutosLoja();
+    checkLoading();
   });
 
   onValue(ref(fbdb, 'pedidos'), (snap)=>{
     db.pedidos = snap.exists()?snap.val():[];
     atualizarCarrinho();
+    checkLoading();
   });
 
   onValue(ref(fbdb, 'indicacoes'), (snap)=>{
     db.indicacoes = snap.exists()?snap.val():[];
+    checkLoading();
   });
 
   onValue(ref(fbdb, 'usuarios'), (snap)=>{
     db.usuarios = snap.exists()?snap.val():{};
+    checkLoading();
   });
 
-  // Se não carregar em 3s, tira o loading mesmo assim
-  setTimeout(()=>{if(!carregouDados)showLoad(false)},3000);
+  // Força sair do loading após 4s mesmo se algo der errado
+  setTimeout(()=>showLoad(false),4000);
 
   onAuthStateChanged(auth, async(user) => {
     if(user){
@@ -780,6 +799,7 @@ function renderComprovantes(){
           <i data-lucide="file-text"></i>
           <span class="novo">COMPROVANTE</span>
         </div>
+      </div>
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="tag"></i></div>
         <div class="comprovante-info-wrap">
@@ -806,7 +826,6 @@ function renderComprovantes(){
           <div class="comprovante-label">Valor:</div>
           <div class="comprovante-valor verde">R$ ${p.valor.toFixed(2).replace('.',',')}</div>
         </div>
-      </div>
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="calendar"></i></div>
         <div class="comprovante-info-wrap">
@@ -1279,6 +1298,7 @@ function renderIndicacoes(){
           <div class="stat-num">${canceladas}</div>
           <div class="stat-label">Canceladas</div>
         </div>
+      </div>
       <div style="font-size:9px;color:var(--cinza);margin-bottom:6px">Progresso: ${validas}/${proxMeta}</div>
       <div class="progress-bar"><div class="progress-fill" style="width:${progresso}%"></div></div>
       ${recompensa?`<div style="font-size:9px;color:var(--verde);text-align:center;margin-top:8px">${recompensa}</div>`:''}
@@ -1311,6 +1331,7 @@ function renderIndicacoes(){
         </div>
         ${validas>=20?'<span class="badge badge-confirmada">✅</span>':''}
       </div>
+    </div>
     <div class="indicacao-card">
       <div class="indicacao-header">
         <div class="indicacao-tit">📜 HISTÓRICO</div>
@@ -1342,7 +1363,6 @@ function abrirCats(){
           <button class="btn-mini btn-edit" onclick="formCat('${c.k}')">EDITAR</button>
           <button class="btn-mini btn-del" onclick="delCat('${c.k}')">EXCLUIR</button>
         </div>
-      </div>
       <div class="lista-info">${db.serv.filter(s=>s.cat===c.k).length} serviços</div>
     </div>`).join('');
   document.getElementById('adminBody').innerHTML=`<div class="titulo">CATEGORIAS</div>${lista||'<div class="empty">Nenhuma categoria</div>'}<div class="add" onclick="formCat()">+</div><button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>`;
