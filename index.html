@@ -148,8 +148,6 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .upload img{width:100%;height:100%;object-fit:cover}
 .upload input{display:none}
 .upload-text{position:absolute;text-align:center;pointer-events:none}
-.loading{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:500;display:none;align-items:center;justify-content:center;font-size:12px}
-.loading.ativo{display:flex}
 
 .modal-produto{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.95);z-index:350;display:none;align-items:center;justify-content:center;padding:16px}
 .modal-produto.ativo{display:flex}
@@ -223,7 +221,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .comprovante-titulo .novo{color:#FFFFFF}
 .comprovante-titulo .pedido{color:#8B5CF6}
 .comprovante-titulo i{width:16px;height:16px;stroke:#A855F7;fill:none;stroke-width:2.5;filter:drop-shadow(0 0 8px rgba(168,85,247,.7))}
-.comprovante-linha{display:flex;align-items:center;gap:6px;margin-bottom:3px;padding:3px 6px;background:rgba(13,13,13,0.6);border-radius:4px;border:1px solid #1E1E1E}
+.comprovante-linha{display:flex;align-items:center;gap:6px;margin-bottom:3px;padding:3px 6px;background:rgba(13,13,0.6);border-radius:4px;border:1px solid #1E1E1E}
 .comprovante-icon{width:24px;height:24px;background:rgba(139,92,246,0.15);border:1px solid #8B5CF6;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 8px rgba(168,85,247,0.2)}
 .comprovante-icon i{width:14px;height:14px;stroke:#A855F7;fill:none;stroke-width:2.5;filter:drop-shadow(0 8px rgba(168,85,247,.7))}
 .comprovante-info-wrap{flex:1;display:flex;justify-content:space-between;align-items:center}
@@ -257,8 +255,6 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 </style>
 </head>
 <body>
-
-<div class="loading ativo" id="loading">Carregando...</div>
 
 <div id="login" class="tela ativa">
   <div class="login-wrapper">
@@ -343,7 +339,6 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 
 <div class="sidebar-overlay" id="overlay" onclick="fecharMenu()"></div>
 <div class="sidebar" id="sidebar">
-  <div class="sidebar-tit">MENU</div>
   <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
   <div class="sidebar-item" onclick="ir('carrinho');fecharMenu()"><i data-lucide="shopping-cart"></i>Meu Carrinho</div>
   <div class="sidebar-item" onclick="ir('comprovantes');fecharMenu()"><i data-lucide="receipt"></i>Meus comprovantes</div>
@@ -523,7 +518,6 @@ const EMAIL_ADM='nannyvittoriah@gmail.com',WHATSAPP='5598984853563';
 let db={cat:[],serv:[],config:{faq:"",termos:"",premiacao:{img:"",texto:""},msgComprovante:"Obrigado por escolher a melhor!"},indicacoes:[],usuarios:{},pedidos:[]};
 let usuarioAtual=null,jogoSelecionado=null,produtoSelecionado=null;
 
-function showLoad(show){document.getElementById('loading').classList.toggle('ativo',show)}
 function gerarCodigoIndicacao(nome){
   const base=nome.toUpperCase().replace(/[^A-Z]/g,'').slice(0,6);
   const num=Math.floor(Math.random()*900)+100;
@@ -558,18 +552,6 @@ window.addEventListener('load',()=>{
   lucide.createIcons();
   const { auth, onAuthStateChanged, db: fbdb, ref, onValue } = window.firebaseAuth;
 
-  let dadosCarregados = 0;
-  const totalDados = 4;
-
-  function checkLoading(){
-    dadosCarregados++;
-    if(dadosCarregados >= totalDados){
-      setTimeout(()=>showLoad(false),300);
-      renderJogos();
-      renderProdutosLoja();
-    }
-  }
-
   onValue(ref(fbdb, 'primevzdados'), (snap)=>{
     if(snap.exists()){
       const dados = snap.val();
@@ -578,30 +560,24 @@ window.addEventListener('load',()=>{
       db.config = dados.config||{faq:"",termos:"",premiacao:{img:"",texto:""},msgComprovante:"Obrigado por escolher a melhor!"};
       if(!db.config.msgComprovante) db.config.msgComprovante = "Obrigado por escolher a melhor!";
     }else{
-      // Cria estrutura inicial se não existir
       db.config = {faq:"",termos:"",premiacao:{img:"",texto:""},msgComprovante:"Obrigado por escolher a melhor!"};
     }
-    checkLoading();
+    renderJogos();
+    renderProdutosLoja();
   });
 
   onValue(ref(fbdb, 'pedidos'), (snap)=>{
     db.pedidos = snap.exists()?snap.val():[];
     atualizarCarrinho();
-    checkLoading();
   });
 
   onValue(ref(fbdb, 'indicacoes'), (snap)=>{
     db.indicacoes = snap.exists()?snap.val():[];
-    checkLoading();
   });
 
   onValue(ref(fbdb, 'usuarios'), (snap)=>{
     db.usuarios = snap.exists()?snap.val():{};
-    checkLoading();
   });
-
-  // Força sair do loading após 4s mesmo se algo der errado
-  setTimeout(()=>showLoad(false),4000);
 
   onAuthStateChanged(auth, async(user) => {
     if(user){
@@ -643,9 +619,7 @@ async function fazerLogin(){
   const email=document.getElementById('loginEmail').value.trim();
   const senha=document.getElementById('loginSenha').value;
   if(!email||!senha){alert('Preencha todos os campos');return}
-  showLoad(true);
   try{await signInWithEmailAndPassword(auth,email,senha);}catch(e){alert('Erro: '+e.message);}
-  showLoad(false);
 }
 
 async function fazerCadastro(){
@@ -657,20 +631,17 @@ async function fazerCadastro(){
   if(!nome||!email||!senha||!senha2){alert('Preencha todos os campos');return}
   if(senha!==senha2){alert('As senhas não coincidem');return}
   if(senha.length<6){alert('Senha deve ter no mínimo 6 caracteres');return}
-  showLoad(true);
   try{
     const cred = await createUserWithEmailAndPassword(auth,email,senha);
     await updateProfile(cred.user,{displayName:nome});
     alert('Cadastro realizado com sucesso!');
   }catch(e){alert('Erro: '+e.message);}
-  showLoad(false);
 }
 
 async function abrirEsqueciSenha(){
   const email = prompt('Digite seu e-mail cadastrado:');
   if(!email){alert('Cancelado');return}
   if(!email.includes('@')){alert('E-mail inválido');return}
-  showLoad(true);
   try{
     const { auth, sendPasswordResetEmail } = window.firebaseAuth;
     await sendPasswordResetEmail(auth, email);
@@ -680,7 +651,6 @@ async function abrirEsqueciSenha(){
     else if(e.code === 'auth/invalid-email'){alert('❌ E-mail inválido');}
     else{alert('Erro: ' + e.message);}
   }
-  showLoad(false);
 }
 
 async function logout(){
@@ -799,13 +769,13 @@ function renderComprovantes(){
           <i data-lucide="file-text"></i>
           <span class="novo">COMPROVANTE</span>
         </div>
-      </div>
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="tag"></i></div>
         <div class="comprovante-info-wrap">
           <div class="comprovante-label">Pedido:</div>
           <div class="comprovante-valor roxo">${p.id}</div>
         </div>
+      </div>
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="package"></i></div>
         <div class="comprovante-info-wrap">
@@ -832,7 +802,6 @@ function renderComprovantes(){
           <div class="comprovante-label">Data:</div>
           <div class="comprovante-valor">${new Date(p.data).toLocaleDateString('pt-BR')}</div>
         </div>
-      </div>
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="clipboard-list"></i></div>
         <div class="comprovante-info-wrap">
@@ -1078,7 +1047,7 @@ function renderPedidos(filtro='todos',buscaId=''){
   const lista=[...pedidosFiltrados].reverse().map(p=>`
     <div class="lista-item">
       <div class="lista-top">
-        <div class="lista-nome">🆔 ${p.id} - ${p.servico}</div>
+       <div class="lista-nome">🆔 ${p.id} - ${p.servico}</div>
         <span class="badge badge-${p.status}">${p.status==='pendente'?'⏳ Pendente':p.status==='confirmado'?'✅ Confirmado':'❌ Cancelado'}</span>
       </div>
       <div class="lista-info">
@@ -1331,7 +1300,6 @@ function renderIndicacoes(){
         </div>
         ${validas>=20?'<span class="badge badge-confirmada">✅</span>':''}
       </div>
-    </div>
     <div class="indicacao-card">
       <div class="indicacao-header">
         <div class="indicacao-tit">📜 HISTÓRICO</div>
@@ -1363,6 +1331,7 @@ function abrirCats(){
           <button class="btn-mini btn-edit" onclick="formCat('${c.k}')">EDITAR</button>
           <button class="btn-mini btn-del" onclick="delCat('${c.k}')">EXCLUIR</button>
         </div>
+      </div>
       <div class="lista-info">${db.serv.filter(s=>s.cat===c.k).length} serviços</div>
     </div>`).join('');
   document.getElementById('adminBody').innerHTML=`<div class="titulo">CATEGORIAS</div>${lista||'<div class="empty">Nenhuma categoria</div>'}<div class="add" onclick="formCat()">+</div><button class="btn btn-sec" onclick="abrirAdmin()">VOLTAR</button>`;
@@ -1447,7 +1416,6 @@ async function salvarCat(k){
   const nome=document.getElementById('nomeC').value.trim();
   const img=document.getElementById('imgCatPreview')?.src||'';
   if(!nome){alert('Nome obrigatório');return}
-  showLoad(true);
   if(k && k!==''){
     const index = db.cat.findIndex(x=>x.k===k);
     if(index!==-1) db.cat[index]={k,nome,img};
@@ -1455,18 +1423,15 @@ async function salvarCat(k){
     db.cat.push({k:'c'+Date.now(),nome,img});
   }
   await salvarFirebase();
-  showLoad(false);
   fecharModal();
   abrirCats();
 }
 
 async function delCat(k){
   if(confirm('Excluir categoria? Vai apagar os serviços juntos.')){
-    showLoad(true);
     db.cat=db.cat.filter(x=>x.k!==k);
     db.serv=db.serv.filter(x=>x.cat!==k);
     await salvarFirebase();
-    showLoad(false);
     abrirCats();
   }
 }
@@ -1479,7 +1444,6 @@ async function salvarServ(k){
   const estoque=parseInt(document.getElementById('estS').value)||0;
   const img=document.getElementById('imgServPreview')?.src||'';
   if(!cat||!nome||!preco){alert('Preencha categoria, nome e valor');return}
-  showLoad(true);
   if(k && k!==''){
     const index = db.serv.findIndex(x=>x.k===k);
     if(index!==-1) db.serv[index]={k,cat,nome,desc,preco,estoque,img};
@@ -1487,17 +1451,14 @@ async function salvarServ(k){
     db.serv.push({k:'s'+Date.now(),cat,nome,desc,preco,estoque,img});
   }
   await salvarFirebase();
-  showLoad(false);
   fecharModal();
   abrirServs();
 }
 
 async function delServ(k){
   if(confirm('Excluir serviço?')){
-    showLoad(true);
     db.serv=db.serv.filter(x=>x.k!==k);
     await salvarFirebase();
-    showLoad(false);
     abrirServs();
   }
 }
@@ -1512,10 +1473,8 @@ function formFaq(){
 }
 
 async function salvarFaq(){
-  showLoad(true);
   db.config.faq=document.getElementById('faqTexto').value;
   await salvarFirebase();
-  showLoad(false);
   alert('Salvo!');
   document.getElementById('modal').classList.remove('ativo');
 }
@@ -1530,10 +1489,8 @@ function formTermos(){
 }
 
 async function salvarTermos(){
-  showLoad(true);
   db.config.termos=document.getElementById('termosTexto').value;
   await salvarFirebase();
-  showLoad(false);
   alert('Salvo!');
   document.getElementById('modal').classList.remove('ativo');
 }
@@ -1565,13 +1522,11 @@ function previewImgPrem(e){
 }
 
 async function salvarPremiacao(){
-  showLoad(true);
   db.config.premiacao={
     img:document.getElementById('imgPremPreview')?.src||'',
     texto:document.getElementById('premTexto').value
   };
   await salvarFirebase();
-  showLoad(false);
   alert('Salvo!');
   document.getElementById('modal').classList.remove('ativo');
 }
@@ -1586,10 +1541,8 @@ function formMsgComprovante(){
 }
 
 async function salvarMsgComprovante(){
-  showLoad(true);
   db.config.msgComprovante=document.getElementById('msgCompTexto').value;
   await salvarFirebase();
-  showLoad(false);
   alert('Mensagem salva! Vai aparecer em todos os comprovantes.');
   document.getElementById('modal').classList.remove('ativo');
 }
