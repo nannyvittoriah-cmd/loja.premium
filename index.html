@@ -25,19 +25,6 @@
   const db = getDatabase(app);
 
   window.firebaseAuth = { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile, sendPasswordResetEmail, db, ref, set, get, push, update };
-
-  // SINCRONIZA COM FIREBASE EM TEMPO REAL
-  onValue(ref(db, 'primevzdados'), (snap)=>{
-    if(snap.exists()){
-      const dados = snap.val();
-      if(dados.cat) db.cat = dados.cat;
-      if(dados.serv) db.serv = dados.serv;
-      if(dados.config) db.config = dados.config;
-      save();
-      renderJogos();
-      renderProdutosLoja();
-    }
-  });
 </script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
@@ -357,7 +344,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 <div class="sidebar" id="sidebar">
   <div class="sidebar-tit">MENU</div>
     <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
-  <div class="sidebar-item" onclick="ir('carrinho');fecharMenu()"><i data-lucide="shopping-cart"></i>Meu Carrinho</div>
+ <div class="sidebar-item" onclick="ir('carrinho');fecharMenu()"><i data-lucide="shopping-cart"></i>Meu Carrinho</div>
   <div class="sidebar-item" onclick="ir('comprovantes');fecharMenu()"><i data-lucide="receipt"></i>Meus comprovantes</div>
   <div class="sidebar-item" onclick="ir('suporte');fecharMenu()"><i data-lucide="headphones"></i>Suporte</div>
   <div class="sidebar-item" onclick="ir('faq');fecharMenu()"><i data-lucide="help-circle"></i>Dúvidas frequentes</div>
@@ -532,23 +519,14 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 <script>
 const EMAIL_ADM='nannyvittoriah@gmail.com',WHATSAPP='5598984853563';
 
-let db={
-  cat:JSON.parse(localStorage.getItem('cat')||'[]'),
-  serv:JSON.parse(localStorage.getItem('serv')||'[]'),
-  config:JSON.parse(localStorage.getItem('config')||'{"faq":"","termos":"Ao utilizar nosso painel, o usuário concorda automaticamente com todos os termos e condições abaixo.\\n\\n• Não garantimos resultados permanentes em serviços de redes sociais.\\n• O cliente é totalmente responsável pelo link enviado no pedido.\\n• Pedidos com links inválidos poderão ser cancelados sem aviso.\\n• Não realizamos reembolso após o início do serviço.\\n• O tempo de entrega pode variar conforme o serviço solicitado.\\n• Não aceitamos conteúdos ilegais, proibidos ou que violem políticas das plataformas.\\n• O uso do painel é de total responsabilidade do usuário.\\n• Alguns serviços podem sofrer quedas naturais após a entrega.\\n• O cliente concorda em utilizar o site de forma correta e sem tentativas de abuso ou spam.\\n• Alterações nos termos podem ocorrer a qualquer momento sem aviso prévio.\\n\\n💜 Ao continuar utilizando o painel, você concorda com todos os termos acima.","premiacao":{"img":"","texto":""}}'),
-  indicacoes:JSON.parse(localStorage.getItem('indicacoes')||'[]'),
-  usuarios:JSON.parse(localStorage.getItem('usuarios')||'{}'),
-  pedidos:JSON.parse(localStorage.getItem('pedidos')||'[]')
-};
+let db={cat:[],serv:[],config:{faq:"",termos:"",premiacao:{img:"",texto:""}},indicacoes:[],usuarios:{},pedidos:[]};
 let usuarioAtual=null,jogoSelecionado=null,produtoSelecionado=null;
 
-function save(){
-  localStorage.setItem('cat',JSON.stringify(db.cat));
-  localStorage.setItem('serv',JSON.stringify(db.serv));
-  localStorage.setItem('config',JSON.stringify(db.config));
-  localStorage.setItem('indicacoes',JSON.stringify(db.indicacoes));
-  localStorage.setItem('usuarios',JSON.stringify(db.usuarios));
-  localStorage.setItem('pedidos',JSON.stringify(db.pedidos));
+function showLoad(show){document.getElementById('loading').classList.toggle('ativo',show)}
+function gerarCodigoIndicacao(nome){
+  const base=nome.toUpperCase().replace(/[^A-Z]/g,'').slice(0,6);
+  const num=Math.floor(Math.random()*900)+100;
+  return `${base||'USER'}${num}`;
 }
 
 async function salvarFirebase(){
@@ -560,30 +538,60 @@ async function salvarFirebase(){
   });
 }
 
-function showLoad(show){document.getElementById('loading').classList.toggle('ativo',show)}
-function gerarCodigoIndicacao(nome){
-  const base=nome.toUpperCase().replace(/[^A-Z]/g,'').slice(0,6);
-  const num=Math.floor(Math.random()*900)+100;
-  return `${base||'USER'}${num}`;
+async function salvarPedidos(){
+  const { db: fbdb, ref, set } = window.firebaseAuth;
+  await set(ref(fbdb, 'pedidos'), db.pedidos);
+}
+
+async function salvarIndicacoes(){
+  const { db: fbdb, ref, set } = window.firebaseAuth;
+  await set(ref(fbdb, 'indicacoes'), db.indicacoes);
+}
+
+async function salvarUsuarios(){
+  const { db: fbdb, ref, set } = window.firebaseAuth;
+  await set(ref(fbdb, 'usuarios'), db.usuarios);
 }
 
 window.addEventListener('load',()=>{
   lucide.createIcons();
-  const { auth, onAuthStateChanged } = window.firebaseAuth;
+  const { auth, onAuthStateChanged, db: fbdb, ref, onValue } = window.firebaseAuth;
+
+  onValue(ref(fbdb, 'primevzdados'), (snap)=>{
+    if(snap.exists()){
+      const dados = snap.val();
+      db.cat = dados.cat||[];
+      db.serv = dados.serv||[];
+      db.config = dados.config||{faq:"",termos:"",premiacao:{img:"",texto:""}};
+      renderJogos();
+      renderProdutosLoja();
+    }
+  });
+
+  onValue(ref(fbdb, 'pedidos'), (snap)=>{
+    db.pedidos = snap.exists()?snap.val():[];
+    atualizarCarrinho();
+  });
+
+  onValue(ref(fbdb, 'indicacoes'), (snap)=>{
+    db.indicacoes = snap.exists()?snap.val():[];
+  });
+
+  onValue(ref(fbdb, 'usuarios'), (snap)=>{
+    db.usuarios = snap.exists()?snap.val():{};
+  });
+
   onAuthStateChanged(auth, async(user) => {
     if(user){
       usuarioAtual={uid:user.uid,nome:user.displayName||user.email.split('@')[0],email:user.email,admin:user.email===EMAIL_ADM};
       if(!db.usuarios[user.uid]){
         db.usuarios[user.uid]={codigo:gerarCodigoIndicacao(usuarioAtual.nome),indicacoesValidas:0,totalIndicacoes:0};
-        save();
+        await salvarUsuarios();
       }
       usuarioAtual.codigo=db.usuarios[user.uid].codigo;
       document.getElementById('login').classList.remove('ativa');
       document.getElementById('home').classList.add('ativa');
       atualizarHeaderUsuario();
-      renderJogos();
-      renderProdutosLoja();
-      atualizarCarrinho();
       if(usuarioAtual.admin){
         document.getElementById('menuAdmin').style.display='flex';
         document.getElementById('menuAdminInd').style.display='flex';
@@ -669,7 +677,7 @@ function abrirMenu(){document.getElementById('sidebar').classList.add('ativo');d
 function fecharMenu(){document.getElementById('sidebar').classList.remove('ativo');document.getElementById('overlay').classList.remove('ativo')}
 
 function atualizarCarrinho(){
-  const pendentes = db.pedidos.filter(p=>p.email===usuarioAtual.email && p.status==='pendente').length;
+  const pendentes = db.pedidos.filter(p=>p.email===usuarioAtual?.email && p.status==='pendente').length;
   document.getElementById('cartCount').textContent = pendentes;
 }
 
@@ -711,7 +719,6 @@ function renderCarrinho(){
           <div class="stat-num">R$ ${total.toFixed(2)}</div>
           <div class="stat-label">Total</div>
         </div>
-      </div>
       <button class="btn" onclick="enviarTodosPedidos()">ENVIAR PEDIDOS NO WHATSAPP</button>
     </div>
     <div class="titulo">ITENS PENDENTES</div>
@@ -720,11 +727,10 @@ function renderCarrinho(){
   lucide.createIcons();
 }
 
-function cancelarPedidoCarrinho(id){
+async function cancelarPedidoCarrinho(id){
   if(confirm('Remover este item do carrinho?')){
     db.pedidos=db.pedidos.filter(p=>p.id!==id);
-    save();
-    atualizarCarrinho();
+    await salvarPedidos();
     renderCarrinho();
   }
 }
@@ -797,13 +803,13 @@ function renderComprovantes(){
           <div class="comprovante-label">Valor:</div>
           <div class="comprovante-valor verde">R$ ${p.valor.toFixed(2).replace('.',',')}</div>
         </div>
-      </div>
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="calendar"></i></div>
         <div class="comprovante-info-wrap">
           <div class="comprovante-label">Data:</div>
           <div class="comprovante-valor">${new Date(p.data).toLocaleDateString('pt-BR')}</div>
         </div>
+      </div>
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="clipboard-list"></i></div>
         <div class="comprovante-info-wrap">
@@ -845,7 +851,7 @@ function ir(t){
 }
 
 function renderJogos(){
-  const cats = db.cat.length?db.cat:[];
+  const cats = db.cat||[];
   const icones = {'free fire':'flame','roblox':'box','cod mobile':'crosshair','fortnite':'zap','brawl stars':'star','efootball':'football'};
   const html = cats.map(c=>{
     return `<div class="jogo-card" onclick="filtrarJogo('${c.k}')">
@@ -861,7 +867,7 @@ function renderJogos(){
 
 function renderProdutosLoja(filtroJogo=null){
   jogoSelecionado = filtroJogo;
-  let produtos = db.serv;
+  let produtos = db.serv||[];
 
   if(filtroJogo){
     produtos = produtos.filter(p => p.cat === filtroJogo);
@@ -930,7 +936,7 @@ function toggleProdutoDesc(){
   document.getElementById('modalProdutoDesc').classList.toggle('ativo');
 }
 
-function finalizarPedido(){
+async function finalizarPedido(){
   if(!produtoSelecionado){alert('Erro ao processar pedido');return}
   let link=document.getElementById('linkProduto').value.trim();
   if(!link){alert('Cole o link/ID');return}
@@ -952,6 +958,7 @@ function finalizarPedido(){
   };
 
   db.pedidos.push(pedido);
+  await salvarPedidos();
 
   if(codigoInd){
     const uidIndicador=Object.keys(db.usuarios).find(uid=>db.usuarios[uid].codigo===codigoInd);
@@ -968,10 +975,11 @@ function finalizarPedido(){
         data:pedido.data
       });
       db.usuarios[uidIndicador].totalIndicacoes=(db.usuarios[uidIndicador].totalIndicacoes||0)+1;
+      await salvarIndicacoes();
+      await salvarUsuarios();
     }
   }
 
-  save();
   atualizarCarrinho();
   fecharModalProduto();
   alert('✅ Adicionado ao carrinho!\n\nID: '+pedidoId+'\n\nVá em "Meu Carrinho" pra finalizar.');
@@ -1038,8 +1046,7 @@ function renderPedidos(filtro='todos',buscaId=''){
   const cancelados=db.pedidos.filter(p=>p.status==='cancelado').length;
   const faturamento=db.pedidos.filter(p=>p.status==='confirmado').reduce((t,p)=>t+p.valor,0);
   let pedidosFiltrados=db.pedidos;
-  if(filtro!=='todos')pedidosFiltr
-  =pedidosFiltrados.filter(p=>p.status===filtro);
+  if(filtro!=='todos')pedidosFiltrados=pedidosFiltrados.filter(p=>p.status===filtro);
   if(buscaId){
     buscaId=buscaId.toLowerCase().trim();
     pedidosFiltrados=pedidosFiltrados.filter(p=>p.id.toLowerCase().includes(buscaId) ||p.email.toLowerCase().includes(buscaId));
@@ -1053,7 +1060,7 @@ function renderPedidos(filtro='todos',buscaId=''){
       <div class="lista-info">
         Cliente: ${p.email}<br>
         Valor: R$ ${p.valor.toFixed(2).replace('.',',')}<br>
-        Link: ${p.link.substring(0,50)}...<br>
+                Link: ${p.link.substring(0,50)}...<br>
         Data: ${new Date(p.data).toLocaleString('pt-BR')}
         ${p.codigoIndicacao?`<br>🎁 Código: ${p.codigoIndicacao}`:''}
       </div>
@@ -1112,19 +1119,19 @@ function buscarPedido(){
   renderPedidos('todos',busca);
 }
 
-function aprovarPedido(id){
+async function aprovarPedido(id){
   if(confirm('Aprovar este pedido? O cliente vai ver como CONFIRMADO.')){
     db.pedidos.find(p=>p.id===id).status='confirmado';
-    save();
+    await salvarPedidos();
     renderPedidos();
     alert('Pedido aprovado!');
   }
 }
 
-function cancelarPedido(id){
+async function cancelarPedido(id){
   if(confirm('Cancelar este pedido? O cliente vai ver como CANCELADO.')){
     db.pedidos.find(p=>p.id===id).status='cancelado';
-    save();
+    await salvarPedidos();
     renderPedidos();
     alert('Pedido cancelado!');
   }
@@ -1194,24 +1201,25 @@ function renderAdminIndicacoes(filtro='todos'){
   `;
 }
 
-function aprovarIndicacao(id){
+async function aprovarIndicacao(id){
   const indicacao=db.indicacoes.find(i=>i.id===id);
   if(!indicacao)return;
   if(confirm(`Aprovar indicação de ${indicacao.nomeIndicado}?`)){
     indicacao.status='confirmada';
     db.usuarios[indicacao.uidIndicador].indicacoesValidas=(db.usuarios[indicacao.uidIndicador].indicacoesValidas||0)+1;
-    save();
+    await salvarIndicacoes();
+    await salvarUsuarios();
     renderAdminIndicacoes();
     alert('✅ Indicação aprovada!');
   }
 }
 
-function invalidarIndicacao(id){
+async function invalidarIndicacao(id){
   const indicacao=db.indicacoes.find(i=>i.id===id);
   if(!indicacao)return;
   if(confirm(`Cancelar indicação de ${indicacao.nomeIndicado}?`)){
     indicacao.status='cancelada';
-    save();
+    await salvarIndicacoes();
     renderAdminIndicacoes();
     alert('❌ Indicação cancelada!');
   }
@@ -1266,7 +1274,6 @@ function renderIndicacoes(){
           <div class="stat-num">${canceladas}</div>
           <div class="stat-label">Canceladas</div>
         </div>
-      </div>
       <div style="font-size:9px;color:var(--cinza);margin-bottom:6px">Progresso: ${validas}/${proxMeta}</div>
       <div class="progress-bar"><div class="progress-fill" style="width:${progresso}%"></div></div>
       ${recompensa?`<div style="font-size:9px;color:var(--verde);text-align:center;margin-top:8px">${recompensa}</div>`:''}
@@ -1299,6 +1306,7 @@ function renderIndicacoes(){
         </div>
         ${validas>=20?'<span class="badge badge-confirmada">✅</span>':''}
       </div>
+    </div>
     <div class="indicacao-card">
       <div class="indicacao-header">
         <div class="indicacao-tit">📜 HISTÓRICO</div>
@@ -1415,19 +1423,27 @@ async function salvarCat(k){
   const nome=document.getElementById('nomeC').value.trim();
   const img=document.getElementById('imgCatPreview')?.src||'';
   if(!nome){alert('Nome obrigatório');return}
-  if(k){db.cat[db.cat.findIndex(x=>x.k===k)]={k,nome,img}}else{db.cat.push({k:'c'+Date.now(),nome,img})}
-  save();
+  showLoad(true);
+  if(k && k!==''){
+    const index = db.cat.findIndex(x=>x.k===k);
+    if(index!==-1) db.cat[index]={k,nome,img};
+  }else{
+    db.cat.push({k:'c'+Date.now(),nome,img});
+  }
   await salvarFirebase();
-  fecharModal();abrirCats();renderJogos();
+  showLoad(false);
+  fecharModal();
+  abrirCats();
 }
 
 async function delCat(k){
   if(confirm('Excluir categoria? Vai apagar os serviços juntos.')){
+    showLoad(true);
     db.cat=db.cat.filter(x=>x.k!==k);
     db.serv=db.serv.filter(x=>x.cat!==k);
-    save();
     await salvarFirebase();
-    abrirCats();renderJogos();renderProdutosLoja();
+    showLoad(false);
+    abrirCats();
   }
 }
 
@@ -1439,19 +1455,26 @@ async function salvarServ(k){
   const estoque=parseInt(document.getElementById('estS').value)||0;
   const img=document.getElementById('imgServPreview')?.src||'';
   if(!cat||!nome||!preco){alert('Preencha categoria, nome e valor');return}
-  const dados={k:k||'s'+Date.now(),cat,nome,desc,preco,estoque,img};
-  if(k){db.serv[db.serv.findIndex(x=>x.k===k)]=dados}else{db.serv.push(dados)}
-  save();
+  showLoad(true);
+  if(k && k!==''){
+    const index = db.serv.findIndex(x=>x.k===k);
+    if(index!==-1) db.serv[index]={k,cat,nome,desc,preco,estoque,img};
+  }else{
+    db.serv.push({k:'s'+Date.now(),cat,nome,desc,preco,estoque,img});
+  }
   await salvarFirebase();
-  fecharModal();abrirServs();renderProdutosLoja();
+  showLoad(false);
+  fecharModal();
+  abrirServs();
 }
 
 async function delServ(k){
   if(confirm('Excluir serviço?')){
+    showLoad(true);
     db.serv=db.serv.filter(x=>x.k!==k);
-    save();
     await salvarFirebase();
-    abrirServs();renderProdutosLoja();
+    showLoad(false);
+    abrirServs();
   }
 }
 
@@ -1465,9 +1488,10 @@ function formFaq(){
 }
 
 async function salvarFaq(){
+  showLoad(true);
   db.config.faq=document.getElementById('faqTexto').value;
-  save();
   await salvarFirebase();
+  showLoad(false);
   alert('Salvo!');
   document.getElementById('modal').classList.remove('ativo');
 }
@@ -1482,9 +1506,10 @@ function formTermos(){
 }
 
 async function salvarTermos(){
+  showLoad(true);
   db.config.termos=document.getElementById('termosTexto').value;
-  save();
   await salvarFirebase();
+  showLoad(false);
   alert('Salvo!');
   document.getElementById('modal').classList.remove('ativo');
 }
@@ -1516,12 +1541,13 @@ function previewImgPrem(e){
 }
 
 async function salvarPremiacao(){
+  showLoad(true);
   db.config.premiacao={
     img:document.getElementById('imgPremPreview')?.src||'',
     texto:document.getElementById('premTexto').value
   };
-  save();
   await salvarFirebase();
+  showLoad(false);
   alert('Salvo!');
   document.getElementById('modal').classList.remove('ativo');
 }
