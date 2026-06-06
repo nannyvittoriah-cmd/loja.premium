@@ -11,11 +11,11 @@
   --roxo:#A855F7;
   --roxo-neon:#C084FC;
   --roxo-escuro:#7E22CE;
-  --roxo-glow:rgba(168,85,247,.5);
+  --roxo-glow:rgba(168,85,247,.6);
   --branco:#FFFFFF;
   --cinza:#9CA3AF;
-  --card:rgba(17,17,17,.5);
-  --borda:rgba(168,85,247,.4);
+  --card:rgba(17,17,17,.4);
+  --borda:rgba(168,85,247,.5);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{
@@ -33,24 +33,24 @@ body::before{
   position:fixed;
   top:-20%;
   right:-10%;
-  width:400px;
-  height:400px;
+  width:450px;
+  height:450px;
   background:radial-gradient(circle,var(--roxo-escuro) 0%,transparent 70%);
-  opacity:.3;
+  opacity:.35;
   z-index:0;
   pointer-events:none;
-  filter:blur(80px);
+  filter:blur(90px);
 }
 body::after{
   content:'';
   position:fixed;
   top:0;
   right:0;
-  width:200px;
+  width:220px;
   height:100vh;
   background:linear-gradient(135deg,transparent 0%,var(--roxo-escuro) 100%);
-  clip-path:polygon(100% 0,30% 0,100% 100%);
-  opacity:.5;
+  clip-path:polygon(100% 0,25% 0,100% 100%);
+  opacity:.6;
   z-index:0;
   pointer-events:none;
 }
@@ -65,12 +65,12 @@ body::after{
   margin-bottom:20px;
   justify-content:center;
 }
-.logo i{width:16px;height:16px;stroke:var(--roxo-neon);fill:var(--roxo-neon);filter:drop-shadow(0 0 10px var(--roxo-glow))}
+.logo i{width:16px;height:16px;stroke:var(--roxo-neon);fill:var(--roxo-neon);filter:drop-shadow(0 0 12px var(--roxo-glow))}
 .page-title{
   font-size:30px;
   font-weight:900;
   margin-bottom:2px;
-  text-shadow:0 0 25px var(--roxo-glow);
+  text-shadow:0 0 30px var(--roxo-glow);
   letter-spacing:-1px;
   text-align:center;
 }
@@ -83,7 +83,7 @@ body::after{
   gap:5px;
   justify-content:center;
 }
-.page-subtitle i{width:13px;height:13px;stroke:var(--roxo-neon);fill:var(--roxo-neon);filter:drop-shadow(0 0 8px var(--roxo-glow))}
+.page-subtitle i{width:13px;height:13px;stroke:var(--roxo-neon);fill:var(--roxo-neon);filter:drop-shadow(0 0 10px var(--roxo-glow))}
 .servicos-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -92,11 +92,11 @@ body::after{
 }
 .servico-card{
   background:var(--card);
-  backdrop-filter:blur(25px);
+  backdrop-filter:blur(30px);
   border:1.5px solid var(--borda);
   border-radius:14px;
   padding:8px 6px;
-  box-shadow:0 0 20px rgba(168,85,247,.2),inset 0 0 25px rgba(168,85,247,.08);
+  box-shadow:0 8px 32px rgba(168,85,247,.25),inset 0 1px 0 rgba(255,255,255,.1),inset 0 0 30px rgba(168,85,247,.1);
   position:relative;
   overflow:hidden;
   transition:all.2s;
@@ -105,42 +105,57 @@ body::after{
   content:'';
   position:absolute;
   top:0;
-  left:0;
-  right:0;
-  height:2px;
-  background:linear-gradient(90deg,transparent,var(--roxo-neon),transparent);
-  box-shadow:0 0 15px var(--roxo-glow);
+  left:-100%;
+  width:100%;
+  height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
+  animation:reflexo 3s infinite;
+}
+@keyframes reflexo{
+  0%{left:-100%}
+  100%{left:100%}
 }
 .servico-card::after{
   content:'';
   position:absolute;
-  top:0;
-  right:0;
-  width:35px;
-  height:35px;
-  background:linear-gradient(135deg,var(--roxo-escuro),transparent);
-  opacity:.4;
-  border-radius:0 14px 0 100%;
+  top:-50%;
+  right:-50%;
+  width:100%;
+  height:100%;
+  background:radial-gradient(circle,rgba(255,255,255,.12) 0%,transparent 70%);
+  transform:rotate(45deg);
+  pointer-events:none;
 }
 .servico-card:active{
   transform:scale(.96);
-  box-shadow:0 0 35px rgba(168,85,247,.4);
+  box-shadow:0 0 40px rgba(168,85,247,.5),inset 0 1px 0 rgba(255,255,255,.2);
 }
 .servico-icon{
   width:28px;
   height:28px;
-  background:rgba(168,85,247,.25);
+  background:rgba(168,85,247,.3);
   border:1.5px solid var(--roxo);
   border-radius:7px;
   display:flex;
   align-items:center;
   justify-content:center;
   margin:0 auto 6px;
-  box-shadow:0 0 15px var(--roxo-glow),inset 0 0 10px rgba(168,85,247,.2);
+  box-shadow:0 0 20px var(--roxo-glow),inset 0 0 15px rgba(168,85,247,.3);
+  position:relative;
 }
-.servico-icon i{width:14px;height:14px;stroke:var(--roxo-neon);fill:none;stroke-width:2}
+.servico-icon::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:50%;
+  background:linear-gradient(180deg,rgba(255,255,255,.25),transparent);
+  border-radius:7px 0 0;
+}
+.servico-icon i{width:14px;height:14px;stroke:var(--roxo-neon);fill:none;stroke-width:2;z-index:1}
 .servico-tit{font-size:9px;font-weight:800;margin-bottom:5px;text-align:center;line-height:1.1}
-.servico-tit span{color:var(--roxo-neon);display:block}
+.servico-tit span{color:var(--roxo-neon);display:block;text-shadow:0 0 10px var(--roxo-glow)}
 .servico-lista{font-size:6.5px;color:var(--cinza);line-height:1.5;margin-bottom:6px;min-height:58px}
 .servico-lista div{display:flex;align-items:center;gap:2px}
 .servico-lista div::before{content:'✓';color:var(--roxo-neon);font-weight:900;font-size:7px}
@@ -154,50 +169,31 @@ body::after{
   font-weight:700;
   font-size:7px;
   cursor:pointer;
-  box-shadow:0 0 18px var(--roxo-glow);
+  box-shadow:0 4px 20px var(--roxo-glow),inset 0 1px 0 rgba(255,255,255,.3);
   display:flex;
   align-items:center;
   justify-content:center;
   gap:3px;
+  position:relative;
+  overflow:hidden;
+}
+.btn-servico::before{
+  content:'';
+  position:absolute;
+  top:-50%;
+  left:-50%;
+  width:200%;
+  height:200%;
+  background:linear-gradient(45deg,transparent,rgba(255,255,255,.35),transparent);
+  transform:rotate(45deg);
+  animation:brilho 2s infinite;
+}
+@keyframes brilho{
+  0%{transform:translateX(-100%) rotate(45deg)}
+  100%{transform:translateX(100%) rotate(45deg)}
 }
 .btn-servico:active{transform:scale(.95)}
-.btn-servico i{width:9px;height:9px}
-.cadastro-box{
-  background:var(--card);
-  backdrop-filter:blur(25px);
-  border:1.5px solid var(--borda);
-  border-radius:14px;
-  padding:16px;
-  margin-top:20px;
-  box-shadow:0 0 30px rgba(168,85,247,.2);
-}
-.cadastro-tit{font-size:12px;font-weight:800;margin-bottom:12px;text-align:center;color:var(--roxo-neon)}
-.input{
-  background:rgba(0,0,0,.4);
-  backdrop-filter:blur(10px);
-  border:1px solid var(--borda);
-  border-radius:10px;
-  padding:12px;
-  font-size:16px;
-  color:var(--branco);
-  width:100%;
-  outline:none;
-  margin-bottom:10px;
-}
-.input:focus{border-color:var(--roxo);box-shadow:0 0 15px var(--roxo-glow)}
-.btn-cadastro{
-  width:100%;
-  background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
-  color:var(--branco);
-  border:none;
-  border-radius:10px;
-  padding:12px;
-  font-weight:700;
-  font-size:10px;
-  cursor:pointer;
-  box-shadow:0 0 20px var(--roxo-glow);
-}
-.btn-cadastro:active{transform:scale(.96)}
+.btn-servico i{width:9px;height:9px;z-index:1}
 @media(max-width:380px){
  .servicos-grid{grid-template-columns:repeat(2,1fr)}
  .page-title{font-size:28px}
@@ -296,13 +292,6 @@ body::after{
       <button class="btn-servico" onclick="solicitar('Contas Premium')">Serviços <i data-lucide="chevron-right"></i></button>
     </div>
   </div>
-
-  <div class="cadastro-box">
-    <div class="cadastro-tit">CADASTRO RÁPIDO</div>
-    <input type="text" class="input" id="nome" placeholder="Seu nome">
-    <input type="tel" class="input" id="whatsapp" placeholder="Seu WhatsApp">
-    <button class="btn-cadastro" onclick="cadastrar()">QUERO ME CADASTRAR</button>
-  </div>
 </div>
 
 <script>
@@ -311,17 +300,6 @@ const WHATSAPP='5598984853563';
 function solicitar(servico){
   const msg = `Olá! Quero solicitar: ${servico}`;
   window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
-}
-
-function cadastrar(){
-  const nome = document.getElementById('nome').value.trim();
-  const whats = document.getElementById('whatsapp').value.trim();
-  if(!nome||!whats){alert('Preencha nome e WhatsApp');return}
-  const msg = `Olá! Quero me cadastrar na Prime Store Vz\n\nNome: ${nome}\nWhatsApp: ${whats}`;
-  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
-  document.getElementById('nome').value='';
-  document.getElementById('whatsapp').value='';
-  alert('Cadastro enviado! Te chamo no WhatsApp 💜');
 }
 
 lucide.createIcons();
