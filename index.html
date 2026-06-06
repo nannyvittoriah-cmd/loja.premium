@@ -35,7 +35,7 @@
   --roxo-escuro:#6D28D9;
   --branco:#FFFFFF;
   --cinza:#D1D5DB;
-  --borda:#1E1E1E;
+  --borda:#1E1E;
   --card:#0D0D0D;
   --verde:#22C55E;
   --amarelo:#F59E0B;
@@ -225,7 +225,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .comprovante-titulo i{width:16px;height:16px;stroke:#A855F7;fill:none;stroke-width:2.5;filter:drop-shadow(0 0 8px rgba(168,85,247,.7))}
 .comprovante-linha{display:flex;align-items:center;gap:6px;margin-bottom:3px;padding:3px 6px;background:rgba(13,13,13,0.6);border-radius:4px;border:1px solid #1E1E1E}
 .comprovante-icon{width:24px;height:24px;background:rgba(139,92,246,0.15);border:1px solid #8B5CF6;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 0 8px rgba(168,85,247,0.2)}
-.comprovante-icon i{width:14px;height:14px;stroke:#A855F7;fill:none;stroke-width:2.5;filter:drop-shadow(0 0 8px rgba(168,85,247,.7))}
+.comprovante-icon i{width:14px;height:14px;stroke:#A855F7;fill:none;stroke-width:2.5;filter:drop-shadow(0 8px rgba(168,85,247,.7))}
 .comprovante-info-wrap{flex:1;display:flex;justify-content:space-between;align-items:center}
 .comprovante-label{font-size:10px;font-weight:500;color:#D1D5DB}
 .comprovante-valor{font-size:10px;font-weight:700;color:#FFFFFF;text-align:right}
@@ -244,6 +244,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 .comprovante-footer-logo i{width:12px;height:12px;stroke:#A855F7;fill:none;stroke-width:2.5;filter:drop-shadow(0 0 8px rgba(168,85,247,.7))}
 .comprovante-footer-texto{font-size:9px;color:#D1D5DB;margin-bottom:1px}
 .comprovante-footer-heart{color:#A855F7;font-size:10px;filter:drop-shadow(0 0 6px rgba(168,85,247,.7))}
+.comprovante-msg-adm{font-size:9px;color:var(--amarelo);text-align:center;margin-top:6px;padding:6px;background:rgba(245,158,11,.1);border:1px solid var(--amarelo);border-radius:6px}
 
 .suporte-card{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:16px;margin-bottom:12px;text-align:center}
 .suporte-icon{width:60px;height:60px;margin:0 auto 12px;background:var(--roxo);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px var(--roxo-neon)}
@@ -257,7 +258,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 </head>
 <body>
 
-<div class="loading" id="loading">Carregando...</div>
+<div class="loading ativo" id="loading">Carregando...</div>
 
 <div id="login" class="tela ativa">
   <div class="login-wrapper">
@@ -314,13 +315,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
       <div class="passo-item">
         <div class="passo-num">3</div>
         <div class="passo-texto">Cole o <b>link/ID</b> da conta.</div>
-        <div class="passo-icon"><i data-lucide="link"></i></div>
-      </div>
-
-      <div class="passo-item">
-        <div class="passo-num">4</div>
-        <div class="passo-texto">Clique no botão <b>"ADICIONAR AO CARRINHO"</b>.</div>
-        <div class="passo-icon"><i data-lucide="shopping-cart"></i></div>
+     <div class="passo-icon"><i data-lucide="shopping-cart"></i></div>
       </div>
 
       <div class="passo-item">
@@ -343,8 +338,8 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 <div class="sidebar-overlay" id="overlay" onclick="fecharMenu()"></div>
 <div class="sidebar" id="sidebar">
   <div class="sidebar-tit">MENU</div>
-    <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
- <div class="sidebar-item" onclick="ir('carrinho');fecharMenu()"><i data-lucide="shopping-cart"></i>Meu Carrinho</div>
+  <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
+  <div class="sidebar-item" onclick="ir('carrinho');fecharMenu()"><i data-lucide="shopping-cart"></i>Meu Carrinho</div>
   <div class="sidebar-item" onclick="ir('comprovantes');fecharMenu()"><i data-lucide="receipt"></i>Meus comprovantes</div>
   <div class="sidebar-item" onclick="ir('suporte');fecharMenu()"><i data-lucide="headphones"></i>Suporte</div>
   <div class="sidebar-item" onclick="ir('faq');fecharMenu()"><i data-lucide="help-circle"></i>Dúvidas frequentes</div>
@@ -519,7 +514,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 <script>
 const EMAIL_ADM='nannyvittoriah@gmail.com',WHATSAPP='5598984853563';
 
-let db={cat:[],serv:[],config:{faq:"",termos:"",premiacao:{img:"",texto:""}},indicacoes:[],usuarios:{},pedidos:[]};
+let db={cat:[],serv:[],config:{faq:"",termos:"",premiacao:{img:"",texto:""},msgComprovante:"Obrigado por escolher a melhor!"},indicacoes:[],usuarios:{},pedidos:[]};
 let usuarioAtual=null,jogoSelecionado=null,produtoSelecionado=null;
 
 function showLoad(show){document.getElementById('loading').classList.toggle('ativo',show)}
@@ -557,15 +552,20 @@ window.addEventListener('load',()=>{
   lucide.createIcons();
   const { auth, onAuthStateChanged, db: fbdb, ref, onValue } = window.firebaseAuth;
 
+  let carregouDados = false;
+
   onValue(ref(fbdb, 'primevzdados'), (snap)=>{
     if(snap.exists()){
       const dados = snap.val();
       db.cat = dados.cat||[];
       db.serv = dados.serv||[];
-      db.config = dados.config||{faq:"",termos:"",premiacao:{img:"",texto:""}};
-      renderJogos();
-      renderProdutosLoja();
+      db.config = dados.config||{faq:"",termos:"",premiacao:{img:"",texto:""},msgComprovante:"Obrigado por escolher a melhor!"};
+      if(!db.config.msgComprovante) db.config.msgComprovante = "Obrigado por escolher a melhor!";
     }
+    carregouDados = true;
+    showLoad(false);
+    renderJogos();
+    renderProdutosLoja();
   });
 
   onValue(ref(fbdb, 'pedidos'), (snap)=>{
@@ -580,6 +580,9 @@ window.addEventListener('load',()=>{
   onValue(ref(fbdb, 'usuarios'), (snap)=>{
     db.usuarios = snap.exists()?snap.val():{};
   });
+
+  // Se não carregar em 3s, tira o loading mesmo assim
+  setTimeout(()=>{if(!carregouDados)showLoad(false)},3000);
 
   onAuthStateChanged(auth, async(user) => {
     if(user){
@@ -719,6 +722,7 @@ function renderCarrinho(){
           <div class="stat-num">R$ ${total.toFixed(2)}</div>
           <div class="stat-label">Total</div>
         </div>
+      </div>
       <button class="btn" onclick="enviarTodosPedidos()">ENVIAR PEDIDOS NO WHATSAPP</button>
     </div>
     <div class="titulo">ITENS PENDENTES</div>
@@ -776,7 +780,6 @@ function renderComprovantes(){
           <i data-lucide="file-text"></i>
           <span class="novo">COMPROVANTE</span>
         </div>
-      </div>
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="tag"></i></div>
         <div class="comprovante-info-wrap">
@@ -803,6 +806,7 @@ function renderComprovantes(){
           <div class="comprovante-label">Valor:</div>
           <div class="comprovante-valor verde">R$ ${p.valor.toFixed(2).replace('.',',')}</div>
         </div>
+      </div>
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="calendar"></i></div>
         <div class="comprovante-info-wrap">
@@ -825,7 +829,7 @@ function renderComprovantes(){
           <i data-lucide="gem"></i>
           PREMIUM STORE
         </div>
-        <div class="comprovante-footer-texto">Obrigado por escolher a melhor!</div>
+        <div class="comprovante-footer-texto">${db.config.msgComprovante||'Obrigado por escolher a melhor!'}</div>
         <div class="comprovante-footer-heart">💜</div>
       </div>
     </div>
@@ -1032,6 +1036,7 @@ function abrirAdmin(){
   <button class="btn" onclick="formFaq()">❓ DÚVIDAS FREQUENTES</button>
   <button class="btn" onclick="formTermos()">📄 TERMOS DO SITE</button>
   <button class="btn" onclick="formPremiacao()">🏆 PREMIAÇÃO</button>
+  <button class="btn" onclick="formMsgComprovante()">💬 MSG COMPROVANTE</button>
   <button class="btn btn-red" onclick="ir('home')">VOLTAR</button>`;
   ir('admin');
 }
@@ -1060,7 +1065,7 @@ function renderPedidos(filtro='todos',buscaId=''){
       <div class="lista-info">
         Cliente: ${p.email}<br>
         Valor: R$ ${p.valor.toFixed(2).replace('.',',')}<br>
-                Link: ${p.link.substring(0,50)}...<br>
+        Link: ${p.link.substring(0,50)}...<br>
         Data: ${new Date(p.data).toLocaleString('pt-BR')}
         ${p.codigoIndicacao?`<br>🎁 Código: ${p.codigoIndicacao}`:''}
       </div>
@@ -1306,7 +1311,6 @@ function renderIndicacoes(){
         </div>
         ${validas>=20?'<span class="badge badge-confirmada">✅</span>':''}
       </div>
-    </div>
     <div class="indicacao-card">
       <div class="indicacao-header">
         <div class="indicacao-tit">📜 HISTÓRICO</div>
@@ -1549,6 +1553,24 @@ async function salvarPremiacao(){
   await salvarFirebase();
   showLoad(false);
   alert('Salvo!');
+  document.getElementById('modal').classList.remove('ativo');
+}
+
+function formMsgComprovante(){
+  document.getElementById('modalTit').textContent='MENSAGEM DO COMPROVANTE';
+  document.getElementById('modalBody').innerHTML=`
+    <textarea class="textarea" id="msgCompTexto" style="min-height:100px" placeholder="Ex: Entrega em até 24h. Qualquer dúvida chama no WhatsApp!">${db.config.msgComprovante||''}</textarea>
+    <button class="btn" onclick="salvarMsgComprovante()">SALVAR</button>
+  `;
+  document.getElementById('modal').classList.add('ativo');
+}
+
+async function salvarMsgComprovante(){
+  showLoad(true);
+  db.config.msgComprovante=document.getElementById('msgCompTexto').value;
+  await salvarFirebase();
+  showLoad(false);
+  alert('Mensagem salva! Vai aparecer em todos os comprovantes.');
   document.getElementById('modal').classList.remove('ativo');
 }
 
