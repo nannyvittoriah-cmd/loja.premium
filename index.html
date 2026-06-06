@@ -339,8 +339,8 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
       <div class="passo-item">
         <div class="passo-num">5</div>
         <div class="passo-texto">Acesse o <b>carrinho</b> e envie os pedidos no WhatsApp.</div>
-        <div class="passo-icon"><i data-lucide="check-circle"></
-        </div>
+        <div class="passo-icon"><i data-lucide="check-circle"></i></div>
+      </div>
 
       <div class="aviso-box">
         <div class="aviso-icon"><i data-lucide="alert-triangle"></i></div>
@@ -770,6 +770,7 @@ function renderComprovantes(){
           <i data-lucide="file-text"></i>
           <span class="novo">COMPROVANTE</span>
         </div>
+      </div>
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="tag"></i></div>
         <div class="comprovante-info-wrap">
@@ -803,7 +804,6 @@ function renderComprovantes(){
           <div class="comprovante-label">Data:</div>
           <div class="comprovante-valor">${new Date(p.data).toLocaleDateString('pt-BR')}</div>
         </div>
-      </div>
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="clipboard-list"></i></div>
         <div class="comprovante-info-wrap">
@@ -1038,7 +1038,8 @@ function renderPedidos(filtro='todos',buscaId=''){
   const cancelados=db.pedidos.filter(p=>p.status==='cancelado').length;
   const faturamento=db.pedidos.filter(p=>p.status==='confirmado').reduce((t,p)=>t+p.valor,0);
   let pedidosFiltrados=db.pedidos;
-  pedidosFiltrados=pedidosFiltrados.filter(p=>p.status===filtro);
+  if(filtro!=='todos')pedidosFiltr
+  =pedidosFiltrados.filter(p=>p.status===filtro);
   if(buscaId){
     buscaId=buscaId.toLowerCase().trim();
     pedidosFiltrados=pedidosFiltrados.filter(p=>p.id.toLowerCase().includes(buscaId) ||p.email.toLowerCase().includes(buscaId));
@@ -1298,7 +1299,6 @@ function renderIndicacoes(){
         </div>
         ${validas>=20?'<span class="badge badge-confirmada">✅</span>':''}
       </div>
-    </div>
     <div class="indicacao-card">
       <div class="indicacao-header">
         <div class="indicacao-tit">📜 HISTÓRICO</div>
