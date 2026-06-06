@@ -66,8 +66,8 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 
 .sidebar{position:fixed;top:0;left:-250px;width:250px;height:100vh;background:var(--card);border-right:1px solid var(--borda);z-index:200;transition:left.3s;padding:16px;overflow-y:auto}
 .sidebar.ativo{left:0}
-.sidebar-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:199;display:none}
-.sidebar-overlay.ativo{display:block}
+.sidebar-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);z-index:199;display:none;pointer-events:none}
+.sidebar-overlay.ativo{display:block;pointer-events:all}
 .sidebar-tit{font-size:12px;font-weight:800;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--borda);color:var(--roxo)}
 .sidebar-item{padding:10px;border-radius:8px;cursor:pointer;font-size:10px;font-weight:600;color:var(--cinza);margin-bottom:4px;display:flex;align-items:center;gap:8px}
 .sidebar-item:hover{background:var(--borda);color:var(--branco)}
@@ -339,6 +339,7 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--branco);f
 
 <div class="sidebar-overlay" id="overlay" onclick="fecharMenu()"></div>
 <div class="sidebar" id="sidebar">
+  <div class="sidebar-tit">MENU</div>
   <div class="sidebar-item" onclick="ir('indicacoes');fecharMenu()"><i data-lucide="users"></i>Minhas Indicações</div>
   <div class="sidebar-item" onclick="ir('carrinho');fecharMenu()"><i data-lucide="shopping-cart"></i>Meu Carrinho</div>
   <div class="sidebar-item" onclick="ir('comprovantes');fecharMenu()"><i data-lucide="receipt"></i>Meus comprovantes</div>
@@ -596,6 +597,7 @@ window.addEventListener('load',()=>{
       }
     }else{
       document.getElementById('login').classList.add('ativa');
+      document.getElementById('home').classList.remove('ativa');
     }
   });
 });
@@ -769,6 +771,7 @@ function renderComprovantes(){
           <i data-lucide="file-text"></i>
           <span class="novo">COMPROVANTE</span>
         </div>
+      </div>
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="tag"></i></div>
         <div class="comprovante-info-wrap">
@@ -796,12 +799,14 @@ function renderComprovantes(){
           <div class="comprovante-label">Valor:</div>
           <div class="comprovante-valor verde">R$ ${p.valor.toFixed(2).replace('.',',')}</div>
         </div>
+      </div>
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="calendar"></i></div>
         <div class="comprovante-info-wrap">
           <div class="comprovante-label">Data:</div>
           <div class="comprovante-valor">${new Date(p.data).toLocaleDateString('pt-BR')}</div>
         </div>
+      </div>
       <div class="comprovante-linha">
         <div class="comprovante-icon"><i data-lucide="clipboard-list"></i></div>
         <div class="comprovante-info-wrap">
@@ -811,7 +816,6 @@ function renderComprovantes(){
             ${statusTxt}
           </div>
         </div>
-      </div>
       <div class="comprovante-footer">
         <div class="comprovante-footer-logo">
           <i data-lucide="gem"></i>
@@ -1047,7 +1051,7 @@ function renderPedidos(filtro='todos',buscaId=''){
   const lista=[...pedidosFiltrados].reverse().map(p=>`
     <div class="lista-item">
       <div class="lista-top">
-       <div class="lista-nome">🆔 ${p.id} - ${p.servico}</div>
+        <div class="lista-nome">🆔 ${p.id} - ${p.servico}</div>
         <span class="badge badge-${p.status}">${p.status==='pendente'?'⏳ Pendente':p.status==='confirmado'?'✅ Confirmado':'❌ Cancelado'}</span>
       </div>
       <div class="lista-info">
