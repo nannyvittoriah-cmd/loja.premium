@@ -4,6 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <title>Prime Store Vz</title>
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
+    authDomain: "premium-store-aa58b.firebaseapp.com",
+    databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
+    projectId: "premium-store-aa58b",
+    storageBucket: "premium-store-aa58b.firebasestorage.app",
+    messagingSenderId: "462239500057",
+    appId: "1:462239500057:web:f1b7cea162ed308a866788",
+    measurementId: "G-CN88J28WRX"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  window.fb = { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged };
+</script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
 :root{
@@ -198,12 +217,111 @@ body::after{
 .btn-servico:active{transform:scale(.95)}
 .btn-servico i{width:9px;height:9px;z-index:1}
 
-/* PAINEL SMM DASHBOARD */
-.header-painel{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+/* LOGIN EXCLUSIVO PAINEL SMM */
+.login-box{
+  background:var(--card-escuro);
+  backdrop-filter:blur(35px);
+  border:1.5px solid var(--borda);
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 10px 40px rgba(168,85,247,.3),inset 0 1px 0 rgba(255,255,255,.1);
+  position:relative;
+  overflow:hidden;
+  margin:20px auto;
+  max-width:380px;
+}
+.login-box::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:3px;
+  background:linear-gradient(90deg,transparent,var(--roxo-neon),transparent);
+  box-shadow:0 0 20px var(--roxo-glow);
+}
+.login-tit{
+  font-size:16px;
+  font-weight:900;
+  margin-bottom:4px;
+  text-align:center;
+  text-shadow:0 0 20px var(--roxo-glow);
+}
+.login-sub{
+  font-size:8px;
+  color:var(--cinza);
+  text-align:center;
   margin-bottom:16px;
+}
+.login-tabs{
+  display:flex;
+  gap:6px;
+  margin-bottom:16px;
+}
+.tab{
+  flex:1;
+  background:rgba(0,0,0,.3);
+  border:1px solid var(--borda);
+  border-radius:8px;
+  padding:8px;
+  font-size:8px;
+  font-weight:700;
+  text-align:center;
+  cursor:pointer;
+  transition:all.2s;
+}
+.tab.ativo{
+  background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
+  border-color:var(--roxo-neon);
+  box-shadow:0 0 15px var(--roxo-glow);
+}
+.input{
+  background:rgba(0,0,0,.5);
+  backdrop-filter:blur(15px);
+  border:1px solid var(--borda);
+  border-radius:10px;
+  padding:12px;
+  font-size:16px;
+  color:var(--branco);
+  width:100%;
+  outline:none;
+  margin-bottom:10px;
+}
+.input:focus{border-color:var(--roxo);box-shadow:0 0 20px var(--roxo-glow)}
+.btn-login{
+  width:100%;
+  background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
+  color:var(--branco);
+  border:none;
+  border-radius:10px;
+  padding:12px;
+  font-weight:700;
+  font-size:10px;
+  cursor:pointer;
+  box-shadow:0 4px 25px var(--roxo-glow),inset 0 1px 0 rgba(255,255,255,.3);
+  margin-top:6px;
+  position:relative;
+  overflow:hidden;
+}
+.btn-login::before{
+  content:'';
+  position:absolute;
+  top:-50%;
+  left:-50%;
+  width:200%;
+  height:200%;
+  background:linear-gradient(45deg,transparent,rgba(255,255,255,.3),transparent);
+  transform:rotate(45deg);
+  animation:brilho 2s infinite;
+}
+.btn-login:active{transform:scale(.96)}
+.esqueceu{
+  font-size:8px;
+  color:var(--roxo-neon);
+  text-align:center;
+  margin-top:10px;
+  cursor:pointer;
+  font-weight:600;
 }
 .btn-voltar{
   background:var(--card-escuro);
@@ -218,8 +336,32 @@ body::after{
   display:flex;
   align-items:center;
   gap:5px;
+  margin:0 auto 16px;
+  width:fit-content;
 }
 .btn-voltar i{width:12px;height:12px}
+
+/* PAINEL SMM DASHBOARD */
+.header-painel{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:16px;
+}
+.user-menu{
+  background:var(--card-escuro);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--borda);
+  border-radius:10px;
+  padding:8px 12px;
+  font-size:9px;
+  font-weight:700;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+.user-menu i{width:12px;height:12px}
 .dashboard-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -373,9 +515,9 @@ body::after{
   border-bottom:1px solid rgba(168,85,247,.3);
 }
 @media(max-width:380px){
- .servicos-grid{grid-template-columns:repeat(2,1fr)}
- .page-title{font-size:28px}
- .select-group{grid-template-columns:1fr}
+.servicos-grid{grid-template-columns:repeat(2,1fr)}
+.page-title{font-size:28px}
+.select-group{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -476,13 +618,50 @@ body::after{
   </div>
 </div>
 
-<!-- TELA PAINEL SMM -->
+<!-- TELA LOGIN PAINEL SMM -->
+<div id="loginSmm" class="tela">
+  <div class="container">
+    <button class="btn-voltar" onclick="voltarHome()"><i data-lucide="arrow-left"></i> Voltar</button>
+    <div class="login-box">
+      <div class="login-tit">PAINEL <span style="color:var(--roxo-neon)">SMM</span></div>
+      <div class="login-sub">Acesso exclusivo para clientes</div>
+      
+      <div class="login-tabs">
+        <div class="tab ativo" onclick="mudarTab('login')">LOGIN</div>
+        <div class="tab" onclick="mudarTab('cadastro')">CADASTRO</div>
+      </div>
+
+      <div id="tabLogin">
+        <input type="email" class="input" id="loginEmail" placeholder="E-mail">
+        <input type="password" class="input" id="loginSenha" placeholder="Senha">
+        <button class="btn-login" onclick="fazerLogin()">ENTRAR NO PAINEL</button>
+        <div class="esqueceu" onclick="mudarTab('esqueceu')">Esqueceu a senha?</div>
+      </div>
+
+      <div id="tabCadastro" style="display:none">
+        <input type="text" class="input" id="cadNome" placeholder="Nome completo">
+        <input type="email" class="input" id="cadEmail" placeholder="E-mail">
+        <input type="password" class="input" id="cadSenha" placeholder="Senha - mín 6 caracteres">
+        <button class="btn-login" onclick="fazerCadastro()">CRIAR CONTA</button>
+      </div>
+
+      <div id="tabEsqueceu" style="display:none">
+        <input type="email" class="input" id="esqEmail" placeholder="Digite seu e-mail">
+        <button class="btn-login" onclick="recuperarSenha()">ENVIAR LINK DE RECUPERAÇÃO</button>
+        <div class="esqueceu" onclick="mudarTab('login')">Voltar pro login</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TELA PAINEL SMM DASHBOARD -->
 <div id="painelSmm" class="tela">
   <div class="container">
     <div class="header-painel">
-      <button class="btn-voltar" onclick="voltarHome()"><i data-lucide="arrow-left"></i> Voltar</button>
-      <div class="logo" style="margin:0"><i data-lucide="crown"></i> Prime Store <span style="color:var(--roxo-neon)">Vz</span></div>
-      <div style="width:60px"></div>
+      <div class="logo" style="margin:0;font-size:12px"><i data-lucide="crown"></i> Prime Store <span style="color:var(--roxo-neon)">Vz</span></div>
+      <div class="user-menu" onclick="fazerLogout()">
+        <i data-lucide="log-out"></i> Sair
+      </div>
     </div>
 
     <div class="dashboard-grid">
@@ -513,13 +692,13 @@ body::after{
       <div class="select-group">
         <div class="select-box">
           <label>Categoria</label>
-          <div class="select-input" onclick="alert('Selecione uma categoria')">
+          <div class="select-input" onclick="alert('Selecione: Instagram, TikTok, YouTube, etc')">
             Selecione uma categoria <i data-lucide="chevron-down"></i>
           </div>
         </div>
         <div class="select-box">
           <label>Serviço</label>
-          <div class="select-input" onclick="alert('Selecione um serviço')">
+          <div class="select-input" onclick="alert('Selecione: Seguidores, Curtidas, Views, etc')">
             Selecione um serviço <i data-lucide="chevron-down"></i>
           </div>
         </div>
@@ -537,6 +716,28 @@ body::after{
 
 <script>
 const WHATSAPP='5598984853563';
+let usuarioSmm = null;
+
+window.addEventListener('load',()=>{
+  lucide.createIcons();
+  const { auth, onAuthStateChanged } = window.fb;
+  
+  onAuthStateChanged(auth, (user) => {
+    if(user && usuarioSmm){
+      ir('painelSmm');
+    }
+  });
+});
+
+function ir(t){
+  document.querySelectorAll('.tela').forEach(e=>e.classList.remove('ativa'));
+  document.getElementById(t).classList.add('ativa');
+  lucide.createIcons();
+}
+
+function voltarHome(){
+  ir('home');
+}
 
 function solicitar(servico){
   const msg = `Olá! Quero solicitar: ${servico}`;
@@ -544,15 +745,77 @@ function solicitar(servico){
 }
 
 function abrirPainelSmm(){
-  document.querySelectorAll('.tela').forEach(e=>e.classList.remove('ativa'));
-  document.getElementById('painelSmm').classList.add('ativa');
-  lucide.createIcons();
+  const { auth } = window.fb;
+  if(auth.currentUser){
+    usuarioSmm = true;
+    ir('painelSmm');
+  }else{
+    ir('loginSmm');
+  }
 }
 
-function voltarHome(){
-  document.querySelectorAll('.tela').forEach(e=>e.classList.remove('ativa'));
-  document.getElementById('home').classList.add('ativa');
-  lucide.createIcons();
+function mudarTab(tab){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('ativo'));
+  document.getElementById('tabLogin').style.display='none';
+  document.getElementById('tabCadastro').style.display='none';
+  document.getElementById('tabEsqueceu').style.display='none';
+  
+  if(tab==='login'){
+    document.querySelectorAll('.tab')[0].classList.add('ativo');
+    document.getElementById('tabLogin').style.display='block';
+  }else if(tab==='cadastro'){
+    document.querySelectorAll('.tab')[1].classList.add('ativo');
+    document.getElementById('tabCadastro').style.display='block';
+  }else{
+    document.getElementById('tabEsqueceu').style.display='block';
+  }
+}
+
+async function fazerLogin(){
+  const { auth, signInWithEmailAndPassword } = window.fb;
+  const email=document.getElementById('loginEmail').value.trim();
+  const senha=document.getElementById('loginSenha').value;
+  if(!email||!senha){alert('Preencha todos os campos');return}
+  try{
+    await signInWithEmailAndPassword(auth,email,senha);
+    usuarioSmm = true;
+    ir('painelSmm');
+  }catch(e){alert('Erro: '+e.message);}
+}
+
+async function fazerCadastro(){
+  const { auth, createUserWithEmailAndPassword } = window.fb;
+  const nome=document.getElementById('cadNome').value.trim();
+  const email=document.getElementById('cadEmail').value.trim();
+  const senha=document.getElementById('cadSenha').value;
+  if(!nome||!email||!senha){alert('Preencha todos os campos');return}
+  if(senha.length<6){alert('Senha deve ter no mínimo 6 caracteres');return}
+  try{
+        await createUserWithEmailAndPassword(auth,email,senha);
+    usuarioSmm = true;
+    alert('Conta criada com sucesso!');
+    ir('painelSmm');
+  }catch(e){alert('Erro: '+e.message);}
+}
+
+async function recuperarSenha(){
+  const { auth, sendPasswordResetEmail } = window.fb;
+  const email=document.getElementById('esqEmail').value.trim();
+  if(!email){alert('Digite seu e-mail');return}
+  try{
+    await sendPasswordResetEmail(auth,email);
+    alert('Link de recuperação enviado pro seu e-mail!');
+    mudarTab('login');
+  }catch(e){alert('Erro: '+e.message);}
+}
+
+async function fazerLogout(){
+  const { auth, signOut } = window.fb;
+  if(confirm('Deseja sair do Painel Smm?')){
+    await signOut(auth);
+    usuarioSmm = null;
+    ir('home');
+  }
 }
 
 lucide.createIcons();
