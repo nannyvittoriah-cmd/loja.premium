@@ -937,9 +937,10 @@ body::after{
           <div>Gift Cards</div>
           <div>Nacionais e Int.</div>
           <div>100% seguro</div>
-                    <div>E muito mais</div>
+          <div>E muito mais</div>
         </div>
-        <button class="btn-servico" onclick="solicitar('Contas Premium')">Acessar <i data-lucide="chevron-right"></i></button>
+        <button class="btn-servico" onclick="solicitar('Contas Premium')">Acessar <i data-lucide="
+        chevron-right"></i></button>
       </div>
     </div>
   </div>
@@ -992,7 +993,6 @@ body::after{
             <span id="servSelecionado">Selecione um serviço</span> <i data-lucide="chevron-down"></i>
           </div>
         </div>
-      </div>
       <button class="btn-pedido" onclick="fazerPedido()">FAZER PEDIDO</button>
     </div>
 
@@ -1074,14 +1074,26 @@ body::after{
     <div class="desc-tit"><i data-lucide="info"></i> Descrição do Serviço</div>
     <div class="desc-texto">
       <b>Informações importantes:</b><br><br>
-      • Entrega inicia em até 30 minutos<br>
-      • Perfis reais e brasileiros<br>
-      • Sem necessidade de senha<br>
-      • Reposição em caso de queda<br>
-      • Suporte via WhatsApp<br><br>
+      - Entrega inicia em até 30 minutos<br>
+      - Perfis reais e brasileiros<br>
+      - Sem necessidade de senha<br>
+      - Reposição em caso de queda<br>
+      - Suporte via WhatsApp<br><br>
       <b>Atenção:</b> Deixe seu perfil público antes de fazer o pedido. Perfis privados não recebem.
     </div>
     <button class="btn-fechar-desc" onclick="fecharDesc()">ENTENDI</button>
+  </div>
+</div>
+
+<!-- MODAL CONFIRMAÇÃO PEDIDO -->
+<div id="modalConfirmar" class="modal-desc" onclick="fecharConfirmar(event)">
+  <div class="desc-content" onclick="event.stopPropagation()">
+    <div class="desc-tit"><i data-lucide="shopping-bag"></i> Confirmar Pedido</div>
+    <div id="resumoPedido" style="background:rgba(0,0,0,.4);border:1px solid var(--borda);border-radius:8px;padding:12px;margin-bottom:14px;font-size:8px;line-height:1.6"></div>
+    <button class="btn-fechar-desc" onclick="enviarPedidoWhats()" style="background:linear-gradient(135deg,#25D366,#128C7E);box-shadow:0 4px 20px rgba(37,211,102,.4)">
+      <i data-lucide="send" style="width:14px;height:14px;margin-right:4px"></i> ENVIAR PEDIDO
+    </button>
+    <button class="btn-descricao" onclick="fecharConfirmar()" style="margin-bottom:0;margin-top:8px">CANCELAR</button>
   </div>
 </div>
 
@@ -1089,6 +1101,7 @@ body::after{
 const WHATSAPP='5598984853563';
 let userId = null;
 let totalPedidos = 0;
+let dadosPedidoTemp = null;
 
 window.addEventListener('load',()=>{
   lucide.createIcons();
@@ -1231,13 +1244,12 @@ function selecionarServ(){
 
 function calcularCusto(){
   const qtd = parseInt(document.getElementById('qtdPedido').value) || 0;
-  const preco = 0.015; // R$ 15,00 por 1000 = 0.015 por unidade
+  const preco = 0.015;
   const total = (qtd * preco).toFixed(2);
   document.getElementById('custoPedido').value = `R$ ${total.replace('.',',')}`;
 }
 
 async function fazerPedido(){
-  const { db, ref, set } = window.fb;
   const cat = document.getElementById('catSelecionada').textContent;
   const serv = document.getElementById('servSelecionado').textContent;
   const link = document.getElementById('linkPedido').value.trim();
@@ -1248,22 +1260,75 @@ async function fazerPedido(){
   if(!link){alert('Cole o link do pedido');return}
   if(qtd < 50 || qtd > 50000){alert('Quantidade deve ser entre 50 e 50.000');return}
 
-  totalPedidos++;
-  await set(ref(db, `usuarios/${userId}/totalPedidos`), totalPedidos);
-  await set(ref(db, `usuarios/${userId}/pedidos/${Date.now()}`), {
+  const { auth } = window.fb;
+  const nome = auth.currentUser.displayName || auth.currentUser.email.split('@')[0];
+
+  dadosPedidoTemp = {
+    cliente: nome,
     categoria: cat,
     servico: serv,
     link: link,
     quantidade: qtd,
-    custo: custo,
+    custo: custo
+  };
+
+  const resumo = `
+    <div style="color:var(--roxo-neon);font-weight:700;margin-bottom:8px">📋 Dados do Pedido</div>
+    <b>Cliente:</b> ${nome}<br>
+    <b>Categoria:</b> ${cat}<br>
+    <b>Serviço:</b> ${serv}<br>
+    <b>Quantidade:</b> ${qtd.toLocaleString('pt-BR')}<br>
+    <b>Link:</b> <span style="font-size:7px;word-break:break-all">${link}</span><br>
+    <div style="border-top:1px solid var(--borda);margin:8px 0;padding-top:8px">
+      <b style="color:var(--roxo-neon)">Total:</b> <b>${custo}</b>
+    </div>
+  `;
+
+  document.getElementById('resumoPedido').innerHTML = resumo;
+  document.getElementById('modalConfirmar').classList.add('ativo');
+  lucide.createIcons();
+}
+
+async function enviarPedidoWhats(){
+  const { db, ref, set } = window.fb;
+  const p = dadosPedidoTemp;
+
+  totalPedidos++;
+  await set(ref(db, `usuarios/${userId}/totalPedidos`), totalPedidos);
+  await set(ref(db, `usuarios/${userId}/pedidos/${Date.now()}`), {
+    categoria: p.categoria,
+    servico: p.servico,
+    link: p.link,
+    quantidade: p.quantidade,
+    custo: p.custo,
     data: Date.now()
   });
 
-  alert(`Pedido realizado!\n\nServiço: ${serv}\nQtd: ${qtd}\nCusto: ${custo}\nTotal de pedidos: ${totalPedidos}`);
+  const msg = `*NOVO PEDIDO - PRIME STORE VZ* 📦
+
+👤 *Cliente:* ${p.cliente}
+📂 *Categoria:* ${p.categoria}
+🎯 *Serviço:* ${p.servico}
+🔗 *Link:* ${p.link}
+📊 *Quantidade:* ${p.quantidade.toLocaleString('pt-BR')}
+💰 *Valor:* ${p.custo}
+
+Aguardo confirmação! ✅`;
+
+  window.open(`https://wa.me/5598984853563?text=${encodeURIComponent(msg)}`,'_blank');
 
   document.getElementById('linkPedido').value = '';
   document.getElementById('qtdPedido').value = '';
   document.getElementById('custoPedido').value = 'R$ 0,00';
+
+  fecharConfirmar();
+  alert('Pedido enviado pro WhatsApp! Aguarda nossa confirmação 💜');
+}
+
+function fecharConfirmar(e){
+  if(!e || e.target.id==='modalConfirmar'){
+    document.getElementById('modalConfirmar').classList.remove('ativo');
+  }
 }
 
 lucide.createIcons();
