@@ -221,10 +221,6 @@ body::after{
   justify-content:space-between;
   margin-bottom:16px;
 }
-.header-btns{
-  display:flex;
-  gap:6px;
-}
 .user-menu{
   background:var(--card-escuro);
   backdrop-filter:blur(20px);
@@ -239,11 +235,6 @@ body::after{
   gap:5px;
 }
 .user-menu i{width:12px;height:12px}
-.btn-suporte{
-  background:linear-gradient(135deg,var(--verde-whats),#128C7E);
-  border:none;
-  box-shadow:0 4px 15px rgba(37,211,102,.4);
-}
 .page-title{
   font-size:30px;
   font-weight:900;
@@ -623,6 +614,40 @@ body::after{
 .btn-descricao:active{background:rgba(168,85,247,.3);transform:scale(.98)}
 .btn-descricao i{width:12px;height:12px}
 
+/* SUPORTE PAINEL */
+.btn-suporte-painel{
+  width:100%;
+  background:linear-gradient(135deg,var(--verde-whats),#128C7E);
+  color:var(--branco);
+  border:none;
+  border-radius:10px;
+  padding:12px;
+  font-weight:700;
+  font-size:10px;
+  cursor:pointer;
+  box-shadow:0 4px 20px rgba(37,211,102,.4),inset 0 1px 0 rgba(255,255,255,.3);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  margin-bottom:14px;
+  position:relative;
+  overflow:hidden;
+}
+.btn-suporte-painel::before{
+  content:'';
+  position:absolute;
+  top:-50%;
+  left:-50%;
+  width:200%;
+  height:200%;
+  background:linear-gradient(45deg,transparent,rgba(255,255,255,.3),transparent);
+  transform:rotate(45deg);
+  animation:brilho 2s infinite;
+}
+.btn-suporte-painel:active{transform:scale(.96)}
+.btn-suporte-painel i{width:16px;height:16px}
+
 /* PASSO A PASSO */
 .passo-card{
   background:var(--card-escuro);
@@ -988,7 +1013,7 @@ body::after{
         <div class="esqueceu" onclick="mudarTab('esqueceu')">Esqueceu a senha?</div>
       </div>
 
-      <div id="tabCadastro" style="display:none">
+      <div id="tab Cadastro" style="display:none">
         <input type="text" class="input" id="cadNome" placeholder="Nome completo">
         <input type="email" class="input" id="cadEmail" placeholder="E-mail">
         <input type="password" class="input" id="cadSenha" placeholder="Senha - mín 6 caracteres">
@@ -1009,13 +1034,8 @@ body::after{
   <div class="container">
     <div class="header-servicos">
       <div class="logo" style="margin:0;font-size:12px"><i data-lucide="crown"></i> Prime Store <span style="color:var(--roxo-neon)">Vz</span></div>
-      <div class="header-btns">
-        <div class="user-menu btn-suporte" onclick="abrirChat()">
-          <i data-lucide="message-circle"></i> Suporte
-        </div>
-        <div class="user-menu" onclick="fazerLogout()">
-          <i data-lucide="log-out"></i> Sair
-        </div>
+      <div class="user-menu" onclick="fazerLogout()">
+        <i data-lucide="log-out"></i> Sair
       </div>
     </div>
 
@@ -1187,6 +1207,10 @@ body::after{
 
     <button class="btn-descricao" onclick="abrirDescricao()">
       <i data-lucide="info"></i> Ver Descrição
+    </button>
+
+    <button class="btn-suporte-painel" onclick="abrirChat()">
+      <i data-lucide="message-circle"></i> FALAR COM SUPORTE
     </button>
 
     <div class="passo-card">
