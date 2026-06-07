@@ -7,7 +7,7 @@
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-  import { getDatabase, ref, set, get, push, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+  import { getDatabase, ref, set, get, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
   const firebaseConfig = {
     apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -23,7 +23,7 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getDatabase(app);
-  window.fb = { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile, ref, set, get, push, onValue };
+  window.fb = { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile, ref, set, get, onValue };
 </script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
@@ -91,7 +91,7 @@ body::after{
 }
 .logo i{width:16px;height:16px;stroke:var(--roxo-neon);fill:var(--roxo-neon);filter:drop-shadow(0 0 12px var(--roxo-glow))}
 
-/* LOGIN EXCLUSIVO */
+/* LOGIN */
 .login-box{
   background:var(--card-escuro);
   backdrop-filter:blur(35px);
@@ -213,8 +213,8 @@ body::after{
   font-weight:600;
 }
 
-/* DASHBOARD PAINEL SMM */
-.header-painel{
+/* SERVIÇOS */
+.header-servicos{
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -234,6 +234,153 @@ body::after{
   gap:5px;
 }
 .user-menu i{width:12px;height:12px}
+.page-title{
+  font-size:30px;
+  font-weight:900;
+  margin-bottom:2px;
+  text-shadow:0 0 30px var(--roxo-glow);
+  letter-spacing:-1px;
+  text-align:center;
+}
+.page-subtitle{
+  font-size:9px;
+  color:var(--cinza);
+  margin-bottom:16px;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  justify-content:center;
+}
+.page-subtitle i{width:13px;height:13px;stroke:var(--roxo-neon);fill:var(--roxo-neon);filter:drop-shadow(0 0 10px var(--roxo-glow))}
+.servicos-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  margin-bottom:20px;
+}
+.servico-card{
+  background:var(--card);
+  backdrop-filter:blur(30px);
+  border:1.5px solid var(--borda);
+  border-radius:14px;
+  padding:8px 6px;
+  box-shadow:0 8px 32px rgba(168,85,247,.25),inset 0 1px 0 rgba(255,255,255,.1),inset 0 0 30px rgba(168,85,247,.1);
+  position:relative;
+  overflow:hidden;
+  transition:all.2s;
+}
+.servico-card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:100%;
+  height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
+  animation:reflexo 3s infinite;
+}
+@keyframes reflexo{
+  0%{left:-100%}
+  100%{left:100%}
+}
+.servico-card::after{
+  content:'';
+  position:absolute;
+  top:-50%;
+  right:-50%;
+  width:100%;
+  height:100%;
+  background:radial-gradient(circle,rgba(255,255,255,.12) 0%,transparent 70%);
+  transform:rotate(45deg);
+  pointer-events:none;
+}
+.servico-card:active{
+  transform:scale(.96);
+  box-shadow:0 0 40px rgba(168,85,247,.5),inset 0 1px 0 rgba(255,255,255,.2);
+}
+.servico-icon{
+  width:28px;
+  height:28px;
+  background:rgba(168,85,247,.3);
+  border:1.5px solid var(--roxo);
+  border-radius:7px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 6px;
+  box-shadow:0 0 20px var(--roxo-glow),inset 0 0 15px rgba(168,85,247,.3);
+  position:relative;
+}
+.servico-icon::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:50%;
+  background:linear-gradient(180deg,rgba(255,255,255,.25),transparent);
+  border-radius:7px 0 0;
+}
+.servico-icon i{width:14px;height:14px;stroke:var(--roxo-neon);fill:none;stroke-width:2;z-index:1}
+.servico-tit{font-size:9px;font-weight:800;margin-bottom:5px;text-align:center;line-height:1.1}
+.servico-tit span{color:var(--roxo-neon);display:block;text-shadow:0 0 10px var(--roxo-glow)}
+.servico-lista{font-size:6.5px;color:var(--cinza);line-height:1.5;margin-bottom:6px;min-height:58px}
+.servico-lista div{display:flex;align-items:center;gap:2px}
+.servico-lista div::before{content:'✓';color:var(--roxo-neon);font-weight:900;font-size:7px}
+.btn-servico{
+  width:100%;
+  background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
+  color:var(--branco);
+  border:none;
+  padding:6px;
+  border-radius:7px;
+  font-weight:700;
+  font-size:7px;
+  cursor:pointer;
+  box-shadow:0 4px 20px var(--roxo-glow),inset 0 1px 0 rgba(255,255,255,.3);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  position:relative;
+  overflow:hidden;
+}
+.btn-servico::before{
+  content:'';
+  position:absolute;
+  top:-50%;
+  left:-50%;
+  width:200%;
+  height:200%;
+  background:linear-gradient(45deg,transparent,rgba(255,255,255,.35),transparent);
+  transform:rotate(45deg);
+  animation:brilho 2s infinite;
+}
+.btn-servico:active{transform:scale(.95)}
+.btn-servico i{width:9px;height:9px;z-index:1}
+
+/* DASHBOARD PAINEL SMM */
+.header-painel{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:16px;
+}
+.btn-voltar{
+  background:var(--card-escuro);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--borda);
+  border-radius:10px;
+  padding:8px 12px;
+  font-size:9px;
+  font-weight:700;
+  color:var(--branco);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+.btn-voltar i{width:12px;height:12px}
 .dashboard-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -421,25 +568,15 @@ body::after{
   padding-bottom:8px;
   border-bottom:1px solid rgba(168,85,247,.3);
 }
-.servico-item{
-  background:rgba(0,0,0,.3);
-  border:1px solid var(--borda);
-  border-radius:8px;
-  padding:10px;
-  margin-bottom:8px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-.servico-item-nome{font-size:9px;font-weight:700}
-.servico-item-preco{font-size:9px;color:var(--roxo-neon);font-weight:800}
 @media(max-width:380px){
+.servicos-grid{grid-template-columns:repeat(2,1fr)}
+.page-title{font-size:28px}
 .select-group{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
-<!-- TELA LOGIN EXCLUSIVO -->
+<!-- TELA LOGIN -->
 <div id="login" class="tela ativa">
   <div class="container">
     <div class="logo"><i data-lucide="crown"></i> Prime Store <span style="color:var(--roxo-neon)">Vz</span></div>
@@ -476,14 +613,114 @@ body::after{
   </div>
 </div>
 
-<!-- TELA PAINEL SMM DASHBOARD -->
-<div id="dashboard" class="tela">
+<!-- TELA SERVIÇOS -->
+<div id="servicos" class="tela">
   <div class="container">
-    <div class="header-painel">
+    <div class="header-servicos">
       <div class="logo" style="margin:0;font-size:12px"><i data-lucide="crown"></i> Prime Store <span style="color:var(--roxo-neon)">Vz</span></div>
       <div class="user-menu" onclick="fazerLogout()">
         <i data-lucide="log-out"></i> Sair
       </div>
+    </div>
+    
+    <h1 class="page-title">Serviços</h1>
+    <p class="page-subtitle"><i data-lucide="crown"></i> Prime Store Vz</p>
+    
+    <div class="servicos-grid">
+      <div class="servico-card">
+        <div class="servico-icon"><i data-lucide="users"></i></div>
+        <div class="servico-tit">Painel <span>Smm</span></div>
+        <div class="servico-lista">
+          <div>Seguidores</div>
+          <div>Curtidas</div>
+          <div>Comentários</div>
+          <div>Visualizações</div>
+          <div>Alcance</div>
+          <div>E muito mais</div>
+        </div>
+        <button class="btn-servico" onclick="abrirPainelSmm()">Acessar <i data-lucide="chevron-right"></i></button>
+      </div>
+
+      <div class="servico-card">
+        <div class="servico-icon"><i data-lucide="crown"></i></div>
+        <div class="servico-tit">Assinaturas <span>Premium</span></div>
+        <div class="servico-lista">
+          <div>Netflix</div>
+          <div>Spotify</div>
+          <div>Disney+</div>
+          <div>Crunchyroll</div>
+          <div>Globoplay</div>
+          <div>E muito mais</div>
+        </div>
+        <button class="btn-servico" onclick="solicitar('Assinaturas Premium')">Acessar <i data-lucide="chevron-right"></i></button>
+      </div>
+
+      <div class="servico-card">
+        <div class="servico-icon"><i data-lucide="shopping-cart"></i></div>
+        <div class="servico-tit">Lojinha <span>Free Fire</span></div>
+        <div class="servico-lista">
+          <div>Diamantes grátis</div>
+          <div>Skins exclusivas</div>
+          <div>Passes de Elite</div>
+          <div>Personagens</div>
+          <div>Armas e mais</div>
+          <div>100% seguro</div>
+        </div>
+        <button class="btn-servico" onclick="solicitar('Lojinha Free Fire')">Acessar <i data-lucide="chevron-right"></i></button>
+      </div>
+
+      <div class="servico-card">
+        <div class="servico-icon"><i data-lucide="graduation-cap"></i></div>
+        <div class="servico-tit">Cursos <span>Digitais</span></div>
+        <div class="servico-lista">
+          <div>Marketing Digital</div>
+          <div>Design Gráfico</div>
+          <div>Social Media</div>
+          <div>Programação</div>
+          <div>Tráfego Pago</div>
+          <div>E muito mais</div>
+        </div>
+        <button class="btn-servico" onclick="solicitar('Cursos Digitais')">Acessar <i data-lucide="chevron-right"></i></button>
+      </div>
+
+      <div class="servico-card">
+        <div class="servico-icon"><i data-lucide="smartphone"></i></div>
+        <div class="servico-tit">Número <span>Virtual</span></div>
+        <div class="servico-lista">
+          <div>Receba SMS</div>
+          <div>WhatsApp</div>
+          <div>Telegram</div>
+          <div>Instagram</div>
+          <div>Facebook</div>
+          <div>E muito mais</div>
+        </div>
+        <button class="btn-servico" onclick="solicitar('Número Virtual')">Acessar <i data-lucide="chevron-right"></i></button>
+      </div>
+
+      <div class="servico-card">
+        <div class="servico-icon"><i data-lucide="gamepad-2"></i></div>
+        <div class="servico-tit">Contas <span>Premium</span></div>
+        <div class="servico-lista">
+          <div>Armazenamento</div>
+          <div>VPN Premium</div>
+          <div>Gift Cards</div>
+          <div>Nacionais e Int.</div>
+          <div>100% seguro</div>
+          <div>E muito mais</div>
+        </div>
+        <button class="btn-servico" onclick="solicitar('Contas Premium')">Acessar <i data-lucide="chevron-right"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TELA PAINEL SMM DASHBOARD -->
+<div id="painelSmm" class="tela">
+  <div class="container">
+    <div class="header-painel">
+      <button class="btn-voltar" onclick="voltarServicos()"><i data-lucide="arrow-left"></i> Voltar</button>
+      <div class="logo" style="margin:0;font-size:12px"><i data-lucide="crown"></i> Prime Store <span style="color:var(--roxo-neon)">Vz</span></div>
+      <div style="width:60px"></div>
     </div>
 
     <div class="dashboard-grid">
@@ -540,6 +777,7 @@ body::after{
 </div>
 
 <script>
+const WHATSAPP='5598984853563';
 let userId = null;
 let totalPedidos = 0;
 
@@ -553,14 +791,14 @@ window.addEventListener('load',()=>{
       const nome = user.displayName || user.email.split('@')[0];
       document.getElementById('nomeUsuario').innerHTML = nome + ' <i data-lucide="badge-check"></i>';
       
-      // Buscar total de pedidos do cliente
+      // Buscar total de pedidos DO CLIENTE
       const pedidosRef = ref(db, `usuarios/${userId}/totalPedidos`);
       onValue(pedidosRef, (snapshot) => {
         totalPedidos = snapshot.val() || 0;
         document.getElementById('totalPedidos').textContent = totalPedidos;
       });
       
-      ir('dashboard');
+      ir('servicos'); // AGORA VAI PROS CARDS
     }else{
       ir('login');
     }
@@ -572,6 +810,19 @@ function ir(t){
   document.querySelectorAll('.tela').forEach(e=>e.classList.remove('ativa'));
   document.getElementById(t).classList.add('ativa');
   lucide.createIcons();
+}
+
+function voltarServicos(){
+  ir('servicos');
+}
+
+function abrirPainelSmm(){
+  ir('painelSmm');
+}
+
+function solicitar(servico){
+  const msg = `Olá! Quero solicitar: ${servico}`;
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
 function mudarTab(tab){
@@ -681,7 +932,7 @@ function carregarServicos(cat){
 }
 
 async function fazerPedido(){
-  const { db, ref, set, get } = window.fb;
+  const { db, ref, set } = window.fb;
   const cat = document.getElementById('catSelecionada').textContent;
   if(cat==='Selecione uma categoria'){alert('Selecione categoria e serviço');return}
   totalPedidos++;
