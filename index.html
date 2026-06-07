@@ -627,75 +627,14 @@ body::after{
   grid-template-columns:repeat(2,1fr);
   gap:10px;
 }
-.cat-card{
-  background:var(--card-escuro);
-  backdrop-filter:blur(30px);
-  border:1.5px solid var(--borda);
-  border-radius:12px;
-  padding:12px;
-  box-shadow:0 8px 32px rgba(168,85,247,.2),inset 0 1px 0 rgba(255,255,255,.08);
-  position:relative;
-  overflow:hidden;
-  cursor:pointer;
-  transition:all.2s;
+.vazio-categorias{
+  grid-column:1/-1;
+  text-align:center;
+  padding:40px 20px;
+  color:var(--cinza);
+  font-size:9px;
 }
-.cat-card::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:2px;
-  background:linear-gradient(90deg,transparent,var(--roxo-neon),transparent);
-  box-shadow:0 0 15px var(--roxo-glow);
-}
-.cat-card:active{transform:scale(.96)}
-.cat-header{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  margin-bottom:10px;
-  padding-bottom:8px;
-  border-bottom:1px solid rgba(168,85,247,.2);
-}
-.cat-icon{
-  width:20px;
-  height:20px;
-  border-radius:6px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.cat-icon.youtube{background:#FF0000}
-.cat-icon.facebook{background:#1877F2}
-.cat-icon.twitter{background:#000000;border:1px solid var(--borda)}
-.cat-icon.outros{background:linear-gradient(135deg,var(--roxo),var(--roxo-neon))}
-.cat-icon i{width:12px;height:12px;fill:var(--branco);stroke:none}
-.cat-nome{font-size:10px;font-weight:800}
-.cat-servicos{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
-.cat-servico{
-  background:rgba(0,0,0,.4);
-  border:1px solid rgba(168,85,247,.3);
-  border-radius:7px;
-  padding:7px 8px;
-  font-size:7.5px;
-  font-weight:600;
-  display:flex;
-  align-items:center;
-  gap:5px;
-  cursor:pointer;
-  transition:all.2s;
-}
-.cat-servico:hover{
-  background:rgba(168,85,247,.2);
-  border-color:var(--roxo-neon);
-}
-.cat-servico:active{transform:scale(.95)}
-.cat-servico i{width:11px;height:11px;stroke:var(--roxo-neon);flex-shrink:0}
+.vazio-categorias i{width:32px;height:32px;margin-bottom:8px;stroke:var(--roxo-neon);opacity:.5}
 @media(max-width:480px){
 .grid-categorias{grid-template-columns:1fr}
 }
@@ -711,11 +650,11 @@ body::after{
 <div id="login" class="tela ativa">
   <div class="container">
     <div class="logo"><i data-lucide="crown"></i> Prime Store <span style="color:var(--roxo-neon)">Vz</span></div>
-    
+
     <div class="login-box">
       <div class="login-tit">FAÇA SEU <span style="color:var(--roxo-neon)">EXCLUSIVO</span></div>
       <div class="login-sub">Acesse sua conta para liberar os serviços</div>
-      
+
       <div class="login-tabs">
         <div class="tab ativo" onclick="mudarTab('login')">LOGIN</div>
         <div class="tab" onclick="mudarTab('cadastro')">CADASTRO</div>
@@ -753,10 +692,10 @@ body::after{
         <i data-lucide="log-out"></i> Sair
       </div>
     </div>
-    
+
     <h1 class="page-title">Serviços</h1>
     <p class="page-subtitle"><i data-lucide="crown"></i> Prime Store Vz</p>
-    
+
     <div class="servicos-grid">
       <div class="servico-card">
         <div class="servico-icon"><i data-lucide="users"></i></div>
@@ -907,73 +846,20 @@ body::after{
   </div>
 </div>
 
-<!-- MODAL CATEGORIAS -->
+<!-- MODAL CATEGORIAS - VAZIO PRA TU ADICIONAR -->
 <div id="modalCategorias" class="modal-categorias" onclick="fecharModal(event)">
   <div class="modal-content" onclick="event.stopPropagation()">
     <div class="modal-header">
       <div class="modal-tit">Selecione uma Categoria</div>
       <div class="btn-fechar" onclick="fecharModal()"><i data-lucide="x"></i></div>
     </div>
-    
-       <div class="grid-categorias">
-      <!-- YouTube -->
-      <div class="cat-card">
-        <div class="cat-header">
-          <div class="cat-icon youtube"><i data-lucide="youtube"></i></div>
-          <div class="cat-nome">YouTube</div>
-        </div>
-        <div class="cat-servicos">
-          <div class="cat-servico" onclick="selecionarServico('YouTube','Inscritos')"><i data-lucide="users"></i> Inscritos</div>
-          <div class="cat-servico" onclick="selecionarServico('YouTube','Visualizações')"><i data-lucide="eye"></i> Visualizações</div>
-          <div class="cat-servico" onclick="selecionarServico('YouTube','Curtidas')"><i data-lucide="thumbs-up"></i> Curtidas (Likes)</div>
-          <div class="cat-servico" onclick="selecionarServico('YouTube','Comentários')"><i data-lucide="message-circle"></i> Comentários</div>
-          <div class="cat-servico" onclick="selecionarServico('YouTube','Horas de exibição')"><i data-lucide="clock"></i> Horas de exibição</div>
-        </div>
-      </div>
 
-      <!-- Facebook -->
-      <div class="cat-card">
-        <div class="cat-header">
-          <div class="cat-icon facebook"><i data-lucide="facebook"></i></div>
-          <div class="cat-nome">Facebook</div>
-        </div>
-        <div class="cat-servicos">
-          <div class="cat-servico" onclick="selecionarServico('Facebook','Seguidores')"><i data-lucide="users"></i> Seguidores</div>
-          <div class="cat-servico" onclick="selecionarServico('Facebook','Curtidas')"><i data-lucide="heart"></i> Curtidas</div>
-          <div class="cat-servico" onclick="selecionarServico('Facebook','Comentários')"><i data-lucide="message-circle"></i> Comentários</div>
-          <div class="cat-servico" onclick="selecionarServico('Facebook','Compartilhamentos')"><i data-lucide="share-2"></i> Compartilhamentos</div>
-          <div class="cat-servico" onclick="selecionarServico('Facebook','Visualizações')"><i data-lucide="eye"></i> Visualizações</div>
-        </div>
-      </div>
-
-      <!-- Twitter X -->
-      <div class="cat-card">
-        <div class="cat-header">
-          <div class="cat-icon twitter"><i data-lucide="twitter"></i></div>
-          <div class="cat-nome">Twitter (X)</div>
-        </div>
-        <div class="cat-servicos">
-          <div class="cat-servico" onclick="selecionarServico('Twitter','Seguidores')"><i data-lucide="users"></i> Seguidores</div>
-          <div class="cat-servico" onclick="selecionarServico('Twitter','Curtidas')"><i data-lucide="heart"></i> Curtidas</div>
-          <div class="cat-servico" onclick="selecionarServico('Twitter','Retweets')"><i data-lucide="repeat"></i> Retweets</div>
-          <div class="cat-servico" onclick="selecionarServico('Twitter','Comentários')"><i data-lucide="message-circle"></i> Comentários</div>
-          <div class="cat-servico" onclick="selecionarServico('Twitter','Visualizações')"><i data-lucide="eye"></i> Visualizações</div>
-        </div>
-      </div>
-
-      <!-- Outros -->
-      <div class="cat-card">
-        <div class="cat-header">
-          <div class="cat-icon outros"><i data-lucide="more-horizontal"></i></div>
-          <div class="cat-nome">Outros</div>
-        </div>
-        <div class="cat-servicos">
-          <div class="cat-servico" onclick="selecionarServico('Outros','Kwai Seguidores')"><i data-lucide="video"></i> Kwai Seguidores</div>
-          <div class="cat-servico" onclick="selecionarServico('Outros','Kwai Visualizações')"><i data-lucide="play"></i> Kwai Visualizações</div>
-          <div class="cat-servico" onclick="selecionarServico('Outros','Telegram Membros')"><i data-lucide="send"></i> Telegram Membros</div>
-          <div class="cat-servico" onclick="selecionarServico('Outros','Spotify Streams')"><i data-lucide="music"></i> Spotify Streams</div>
-          <div class="cat-servico" onclick="selecionarServico('Outros','Website Tráfego')"><i data-lucide="globe"></i> Website Tráfego</div>
-        </div>
+    <div class="grid-categorias">
+      <!-- ADICIONA TUA CATEGORIAS AQUI QUANDO QUISER -->
+      <div class="vazio-categorias">
+        <i data-lucide="folder-plus"></i>
+        <div>Nenhuma categoria adicionada</div>
+        <div style="font-size:7px;margin-top:4px">Adicione suas categorias no código</div>
       </div>
     </div>
   </div>
@@ -997,7 +883,7 @@ window.addEventListener('load',()=>{
       const pedidosRef = ref(db, `usuarios/${userId}/totalPedidos`);
       onValue(pedidosRef, (snapshot) => {
         totalPedidos = snapshot.val() || 0;
-        document.getElementById('totalPedidos').textContent = totalPedidos;
+                document.getElementById('totalPedidos').textContent = totalPedidos;
       });
 
       ir('servicos');
@@ -1103,6 +989,7 @@ function fecharModal(e){
   }
 }
 
+// FUNÇÃO PRA TU ADICIONAR AS CATEGORIAS DEPOIS
 function selecionarServico(categoria,servico){
   document.getElementById('catSelecionada').textContent = categoria;
   document.getElementById('servSelecionado').textContent = servico;
@@ -1114,42 +1001,10 @@ function selecionarServ(){
   alert('Selecione uma categoria primeiro');
 }
 
+// DEIXEI VAZIO PRA TU COLOCAR TEUS SERVIÇOS QUANDO ORGANIZAR
 function carregarServicos(cat){
   const lista = document.getElementById('listaServicos');
-  const servicos = {
-    'YouTube':[
-      {nome:'Inscritos',preco:'R$ 15,00 / 1000'},
-      {nome:'Visualizações',preco:'R$ 8,00 / 1000'},
-      {nome:'Curtidas',preco:'R$ 5,00 / 1000'},
-      {nome:'Comentários',preco:'R$ 12,00 / 100'},
-      {nome:'Horas de exibição',preco:'R$ 25,00 / 1000h'}
-    ],
-    'Facebook':[
-      {nome:'Seguidores',preco:'R$ 12,00 / 1000'},
-      {nome:'Curtidas',preco:'R$ 6,00 / 1000'},
-      {nome:'Comentários',preco:'R$ 10,00 / 100'},
-      {nome:'Compartilhamentos',preco:'R$ 8,00 / 100'},
-      {nome:'Visualizações',preco:'R$ 4,00 / 1000'}
-    ],
-    'Twitter':[
-      {nome:'Seguidores',preco:'R$ 18,00 / 1000'},
-      {nome:'Curtidas',preco:'R$ 7,00 / 1000'},
-      {nome:'Retweets',preco:'R$ 9,00 / 100'},
-      {nome:'Comentários',preco:'R$ 11,00 / 100'},
-      {nome:'Visualizações',preco:'R$ 5,00 / 1000'}
-    ],
-    'Outros':[
-      {nome:'Kwai Seguidores',preco:'R$ 10,00 / 1000'},
-      {nome:'Kwai Visualizações',preco:'R$ 3,00 / 1000'},
-      {nome:'Telegram Membros',preco:'R$ 20,00 / 1000'},
-      {nome:'Spotify Streams',preco:'R$ 15,00 / 1000'},
-      {nome:'Website Tráfego',preco:'R$ 8,00 / 1000'}
-    ]
-  };
-  lista.innerHTML = '';
-  servicos[cat].forEach(s=>{
-    lista.innerHTML += `<div class="servico-item"><div class="servico-item-nome">${s.nome}</div><div class="servico-item-preco">${s.preco}</div></div>`;
-  });
+  lista.innerHTML = '<div style="font-size:8px;color:var(--cinza);text-align:center;padding:20px 0">Adicione os serviços dessa categoria no código</div>';
 }
 
 async function fazerPedido(){
