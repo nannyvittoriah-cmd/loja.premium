@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Prime Store Vz</title>
+<title>Admin - Prime Store Vz</title>
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-  import { getDatabase, ref, set, get, onValue, push, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+  import { getDatabase, ref, onValue, push, set, get, remove, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
   const firebaseConfig = {
     apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -23,7 +23,7 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getDatabase(app);
-  window.fb = { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile, ref, set, get, onValue, push, serverTimestamp };
+  window.fb = { auth, db, signInWithEmailAndPassword, onAuthStateChanged, signOut, ref, onValue, push, set, get, remove, update };
 </script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
@@ -39,6 +39,7 @@
   --borda:rgba(168,85,247,.5);
   --card-escuro:rgba(20,20,30,.6);
   --verde-whats:#25D366;
+  --vermelho:#EF4444;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{
@@ -46,9 +47,6 @@ body{
   background:var(--bg);
   color:var(--branco);
   font-size:11px;
-  touch-action:manipulation;
-  position:relative;
-  overflow-x:hidden;
   min-height:100vh;
 }
 body::before{
@@ -64,22 +62,9 @@ body::before{
   pointer-events:none;
   filter:blur(90px);
 }
-body::after{
-  content:'';
-  position:fixed;
-  top:0;
-  right:0;
-  width:220px;
-  height:100vh;
-  background:linear-gradient(135deg,transparent 0%,var(--roxo-escuro) 100%);
-  clip-path:polygon(100% 0,25% 0,100% 100%);
-  opacity:.6;
-  z-index:0;
-  pointer-events:none;
-}
 .tela{display:none;min-height:100vh;position:relative;z-index:1}
 .tela.ativa{display:block}
-.container{padding:14px 10px;max-width:600px;margin:0 auto;position:relative;z-index:1}
+.container{padding:14px 10px;max-width:1200px;margin:0 auto;position:relative;z-index:1}
 .logo{
   font-size:14px;
   font-weight:900;
@@ -92,38 +77,16 @@ body::after{
 }
 .logo i{width:16px;height:16px;stroke:var(--roxo-neon);fill:var(--roxo-neon);filter:drop-shadow(0 0 12px var(--roxo-glow))}
 
-/* LOGIN */
+/* LOGIN ADM */
 .login-box{
   background:var(--card-escuro);
   backdrop-filter:blur(35px);
   border:1.5px solid var(--borda);
   border-radius:16px;
   padding:24px 20px;
-  box-shadow:0 10px 40px rgba(168,85,247,.3),inset 0 1px 0 rgba(255,255,255,.1);
-  position:relative;
-  overflow:hidden;
+  box-shadow:0 10px 40px rgba(168,85,247,.3);
   margin:30px auto;
   max-width:380px;
-  animation:fadeIn.5s;
-}
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(20px)}
-  to{opacity:1;transform:translateY(0)}
-}
-.login-box::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:3px;
-  background:linear-gradient(90deg,transparent,var(--roxo-neon),transparent);
-  box-shadow:0 0 20px var(--roxo-glow);
-  animation:reflexoTopo 3s infinite;
-}
-@keyframes reflexoTopo{
-  0%{transform:translateX(-100%)}
-  100%{transform:translateX(100%)}
 }
 .login-tit{
   font-size:18px;
@@ -131,7 +94,6 @@ body::after{
   margin-bottom:4px;
   text-align:center;
   text-shadow:0 0 25px var(--roxo-glow);
-  letter-spacing:-.5px;
 }
 .login-sub{
   font-size:8px;
@@ -139,31 +101,8 @@ body::after{
   text-align:center;
   margin-bottom:18px;
 }
-.login-tabs{
-  display:flex;
-  gap:6px;
-  margin-bottom:18px;
-}
-.tab{
-  flex:1;
-  background:rgba(0,0,0,.3);
-  border:1px solid var(--borda);
-  border-radius:8px;
-  padding:9px;
-  font-size:8px;
-  font-weight:700;
-  text-align:center;
-  cursor:pointer;
-  transition:all.2s;
-}
-.tab.ativo{
-  background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
-  border-color:var(--roxo-neon);
-  box-shadow:0 0 18px var(--roxo-glow);
-}
 .input{
   background:rgba(0,0,0,.5);
-  backdrop-filter:blur(15px);
   border:1px solid var(--borda);
   border-radius:10px;
   padding:13px;
@@ -184,533 +123,228 @@ body::after{
   font-weight:700;
   font-size:10px;
   cursor:pointer;
-  box-shadow:0 4px 25px var(--roxo-glow),inset 0 1px 0 rgba(255,255,255,.3);
+  box-shadow:0 4px 25px var(--roxo-glow);
   margin-top:6px;
-  position:relative;
-  overflow:hidden;
-}
-.btn-login::before{
-  content:'';
-  position:absolute;
-  top:-50%;
-  left:-50%;
-  width:200%;
-  height:200%;
-  background:linear-gradient(45deg,transparent,rgba(255,255,255,.3),transparent);
-  transform:rotate(45deg);
-  animation:brilho 2s infinite;
-}
-@keyframes brilho{
-  0%{transform:translateX(-100%) rotate(45deg)}
-  100%{transform:translateX(100%) rotate(45deg)}
-}
-.btn-login:active{transform:scale(.96)}
-.esqueceu{
-  font-size:8px;
-  color:var(--roxo-neon);
-  text-align:center;
-  margin-top:11px;
-  cursor:pointer;
-  font-weight:600;
 }
 
-/* SERVIÇOS */
-.header-servicos{
+/* PAINEL ADM */
+.header-adm{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin-bottom:16px;
-}
-.user-menu{
-  background:var(--card-escuro);
-  backdrop-filter:blur(20px);
-  border:1px solid var(--borda);
-  border-radius:10px;
-  padding:8px 12px;
-  font-size:9px;
-  font-weight:700;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  gap:5px;
-}
-.user-menu i{width:12px;height:12px}
-.page-title{
-  font-size:30px;
-  font-weight:900;
-  margin-bottom:2px;
-  text-shadow:0 0 30px var(--roxo-glow);
-  letter-spacing:-1px;
-  text-align:center;
-}
-.page-subtitle{
-  font-size:9px;
-  color:var(--cinza);
-  margin-bottom:16px;
-  display:flex;
-  align-items:center;
-  gap:5px;
-  justify-content:center;
-}
-.page-subtitle i{width:13px;height:13px;stroke:var(--roxo-neon);fill:var(--roxo-neon);filter:drop-shadow(0 0 10px var(--roxo-glow))}
-.servicos-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:6px;
   margin-bottom:20px;
+  padding-bottom:12px;
+  border-bottom:2px solid var(--borda);
 }
-.servico-card{
-  background:var(--card);
-  backdrop-filter:blur(30px);
-  border:1.5px solid var(--borda);
-  border-radius:14px;
-  padding:8px 6px;
-  box-shadow:0 8px 32px rgba(168,85,247,.25),inset 0 1px 0 rgba(255,255,255,.1),inset 0 0 30px rgba(168,85,247,.1);
-  position:relative;
-  overflow:hidden;
-  transition:all.2s;
-}
-.servico-card::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:-100%;
-  width:100%;
-  height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
-  animation:reflexo 3s infinite;
-}
-@keyframes reflexo{
-  0%{left:-100%}
-  100%{left:100%}
-}
-.servico-card::after{
-  content:'';
-  position:absolute;
-  top:-50%;
-  right:-50%;
-  width:100%;
-  height:100%;
-  background:radial-gradient(circle,rgba(255,255,255,.12) 0%,transparent 70%);
-  transform:rotate(45deg);
-  pointer-events:none;
-}
-.servico-card:active{
-  transform:scale(.96);
-  box-shadow:0 0 40px rgba(168,85,247,.5),inset 0 1px 0 rgba(255,255,255,.2);
-}
-.servico-icon{
-  width:28px;
-  height:28px;
-  background:rgba(168,85,247,.3);
-  border:1.5px solid var(--roxo);
-  border-radius:7px;
+.adm-titulo{
+  font-size:20px;
+  font-weight:900;
+  text-shadow:0 0 25px var(--roxo-glow);
   display:flex;
   align-items:center;
-  justify-content:center;
-  margin:0 auto 6px;
-  box-shadow:0 0 20px var(--roxo-glow),inset 0 0 15px rgba(168,85,247,.3);
-  position:relative;
+  gap:8px;
 }
-.servico-icon::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:50%;
-  background:linear-gradient(180deg,rgba(255,255,255,.25),transparent);
-  border-radius:7px 0 0;
-}
-.servico-icon i{width:14px;height:14px;stroke:var(--roxo-neon);fill:none;stroke-width:2;z-index:1}
-.servico-tit{font-size:9px;font-weight:800;margin-bottom:5px;text-align:center;line-height:1.1}
-.servico-tit span{color:var(--roxo-neon);display:block;text-shadow:0 0 10px var(--roxo-glow)}
-.servico-lista{font-size:6.5px;color:var(--cinza);line-height:1.5;margin-bottom:6px;min-height:58px}
-.servico-lista div{display:flex;align-items:center;gap:2px}
-.servico-lista div::before{content:'✓';color:var(--roxo-neon);font-weight:900;font-size:7px}
-.btn-servico{
-  width:100%;
-  background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
-  color:var(--branco);
-  border:none;
-  padding:6px;
-  border-radius:7px;
-  font-weight:700;
-  font-size:7px;
-  cursor:pointer;
-  box-shadow:0 4px 20px var(--roxo-glow),inset 0 1px 0 rgba(255,255,255,.3);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:3px;
-  position:relative;
-  overflow:hidden;
-}
-.btn-servico::before{
-  content:'';
-  position:absolute;
-  top:-50%;
-  left:-50%;
-  width:200%;
-  height:200%;
-  background:linear-gradient(45deg,transparent,rgba(255,255,255,.35),transparent);
-  transform:rotate(45deg);
-  animation:brilho 2s infinite;
-}
-.btn-servico:active{transform:scale(.95)}
-.btn-servico i{width:9px;height:9px;z-index:1}
-
-/* DASHBOARD PAINEL SMM */
-.header-painel{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:16px;
-}
-.btn-voltar{
-  background:var(--card-escuro);
-  backdrop-filter:blur(20px);
-  border:1px solid var(--borda);
-  border-radius:10px;
+.adm-titulo i{width:22px;height:22px;stroke:var(--roxo-neon)}
+.btn-sair{
+  background:rgba(239,68,68,.2);
+  border:1px solid rgba(239,68,68,.5);
+  border-radius:8px;
   padding:8px 12px;
   font-size:9px;
   font-weight:700;
-  color:var(--branco);
+  color:#FCA5A5;
   cursor:pointer;
   display:flex;
   align-items:center;
   gap:5px;
 }
-.btn-voltar i{width:12px;height:12px}
-.dashboard-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
+.btn-sair i{width:12px;height:12px}
+
+.tabs-adm{
+  display:flex;
   gap:8px;
   margin-bottom:16px;
+  overflow-x:auto;
 }
-.dash-card{
+.tab-adm{
   background:var(--card-escuro);
-  backdrop-filter:blur(30px);
-  border:1.5px solid var(--borda);
-  border-radius:12px;
-  padding:12px;
-  box-shadow:0 8px 32px rgba(168,85,247,.2),inset 0 1px 0 rgba(255,255,255,.08);
-  position:relative;
-  overflow:hidden;
-}
-.dash-card::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:2px;
-  background:linear-gradient(90deg,transparent,var(--roxo-neon),transparent);
-  box-shadow:0 0 15px var(--roxo-glow);
-}
-.dash-card-header{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.dash-avatar{
-  width:32px;
-  height:32px;
-  background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  box-shadow:0 0 20px var(--roxo-glow);
-  flex-shrink:0;
-}
-.dash-avatar i{width:16px;height:16px;fill:var(--branco)}
-.dash-info{flex:1;min-width:0}
-.dash-welcome{font-size:8px;color:var(--cinza);margin-bottom:2px}
-.dash-name{
-  font-size:11px;
-  font-weight:800;
-  display:flex;
-  align-items:center;
-  gap:4px;
+  border:1px solid var(--borda);
+  border-radius:10px;
+  padding:10px 16px;
+  font-size:9px;
+  font-weight:700;
+  cursor:pointer;
   white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.dash-name i{width:10px;height:10px;fill:var(--roxo-neon);flex-shrink:0}
-.dash-sub{font-size:7px;color:var(--cinza)}
-.dash-stats{
   display:flex;
   align-items:center;
   gap:6px;
 }
-.dash-stat-icon{
-  width:28px;
-  height:28px;
-  background:rgba(168,85,247,.2);
-  border:1px solid var(--borda);
-  border-radius:8px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.tab-adm.ativo{
+  background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
+  box-shadow:0 0 20px var(--roxo-glow);
 }
-.dash-stat-icon i{width:14px;height:14px;stroke:var(--roxo-neon)}
-.dash-stat-info{flex:1}
-.dash-stat-label{font-size:7px;color:var(--cinza);margin-bottom:2px}
-.dash-stat-value{font-size:14px;font-weight:900;color:var(--branco)}
-.pedido-card{
+.tab-adm i{width:14px;height:14px}
+
+.conteudo-tab{display:none}
+.conteudo-tab.ativo{display:block}
+
+/* CARDS */
+.card-adm{
   background:var(--card-escuro);
-  backdrop-filter:blur(30px);
   border:1.5px solid var(--borda);
   border-radius:12px;
-  padding:12px;
-  box-shadow:0 8px 32px rgba(168,85,247,.2),inset 0 1px 0 rgba(255,255,255,.08);
-  margin-bottom:14px;
-  position:relative;
-  overflow:hidden;
+  padding:14px;
+  margin-bottom:12px;
+  box-shadow:0 8px 32px rgba(168,85,247,.2);
 }
-.pedido-card::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:2px;
-  background:linear-gradient(90deg,transparent,var(--roxo-neon),transparent);
-  box-shadow:0 0 15px var(--roxo-glow);
-}
-.pedido-tit{
-  font-size:11px;
+.card-tit{
+  font-size:12px;
   font-weight:800;
-  margin-bottom:10px;
-  padding-bottom:6px;
-  border-bottom:1px solid rgba(168,85,247,.3);
-}
-.select-group{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-bottom:10px;
-}
-.select-box label{
-  font-size:7px;
-  color:var(--cinza);
-  display:block;
-  margin-bottom:4px;
-  font-weight:600;
-}
-.select-input{
-  width:100%;
-  background:rgba(0,0,0,.4);
-  backdrop-filter:blur(15px);
-  border:1px solid var(--borda);
-  border-radius:6px;
-  padding:8px;
-  font-size:8px;
-  color:var(--cinza);
-  outline:none;
-  cursor:pointer;
+  margin-bottom:12px;
+  padding-bottom:8px;
+  border-bottom:1px solid var(--borda);
   display:flex;
   align-items:center;
-  justify-content:space-between;
+  gap:6px;
 }
-.select-input:active{border-color:var(--roxo)}
-.select-input i{width:10px;height:10px}
-.btn-pedido{
-  width:100%;
+.card-tit i{width:14px;height:14px;stroke:var(--roxo-neon)}
+
+.btn-primario{
   background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
   color:var(--branco);
   border:none;
   border-radius:8px;
-  padding:10px;
+  padding:10px 14px;
   font-weight:700;
   font-size:9px;
   cursor:pointer;
-  box-shadow:0 4px 20px var(--roxo-glow),inset 0 1px 0 rgba(255,255,255,.3);
-  position:relative;
-  overflow:hidden;
-}
-.btn-pedido::before{
-  content:'';
-  position:absolute;
-  top:-50%;
-  left:-50%;
-  width:200%;
-  height:200%;
-  background:linear-gradient(45deg,transparent,rgba(255,255,255,.3),transparent);
-  transform:rotate(45deg);
-  animation:brilho 2s infinite;
-}
-.btn-pedido:active{transform:scale(.96)}
-.nossos-servicos{
-  background:var(--card-escuro);
-  backdrop-filter:blur(30px);
-  border:1.5px solid var(--borda);
-  border-radius:12px;
-  padding:10px;
-  box-shadow:0 8px 32px rgba(168,85,247,.2),inset 0 1px 0 rgba(255,255,255,.08);
-  position:relative;
-  overflow:hidden;
-  margin-bottom:14px;
-}
-.nossos-servicos::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:2px;
-  background:linear-gradient(90deg,transparent,var(--roxo-neon),transparent);
-  box-shadow:0 0 15px var(--roxo-glow);
-}
-.nossos-servicos-tit{
-  font-size:10px;
-  font-weight:800;
-  margin-bottom:10px;
-  padding-bottom:6px;
-  border-bottom:1px solid rgba(168,85,247,.3);
-}
-.input-pequeno{
-  background:rgba(0,0,0,.5);
-  backdrop-filter:blur(15px);
-  border:1px solid var(--borda);
-  border-radius:6px;
-  padding:8px;
-  font-size:8px;
-  color:var(--branco);
-  width:100%;
-  outline:none;
-  margin-bottom:8px;
-}
-.input-pequeno:focus{border-color:var(--roxo);box-shadow:0 0 15px var(--roxo-glow)}
-.label-pequeno{
-  font-size:7px;
-  color:var(--branco);
-  margin-bottom:4px;
-  font-weight:700;
+  box-shadow:0 4px 20px var(--roxo-glow);
   display:flex;
   align-items:center;
-  gap:4px;
+  gap:5px;
 }
-.label-pequeno i{width:10px;height:10px;stroke:var(--roxo-neon)}
-.info-min{font-size:6px;color:var(--cinza);margin-top:-6px;margin-bottom:8px}
-.btn-descricao{
-  width:100%;
+.btn-primario:active{transform:scale(.96)}
+.btn-primario i{width:14px;height:14px}
+
+.btn-secundario{
   background:rgba(168,85,247,.15);
   border:1px solid var(--borda);
   border-radius:8px;
-  padding:9px;
+  padding:8px 12px;
   font-size:8px;
   font-weight:700;
   color:var(--roxo-neon);
   cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:5px;
-  margin-bottom:14px;
-  transition:all.2s;
 }
-.btn-descricao:active{background:rgba(168,85,247,.3);transform:scale(.98)}
-.btn-descricao i{width:12px;height:12px}
+.btn-perigo{
+  background:rgba(239,68,68,.2);
+  border:1px solid rgba(239,68,68,.5);
+  color:#FCA5A5;
+}
 
-/* SUPORTE PAINEL */
-.btn-suporte-painel{
-  width:100%;
-  background:linear-gradient(135deg,var(--verde-whats),#128C7E);
-  color:var(--branco);
-  border:none;
+.lista-grid{
+  display:grid;
+  gap:10px;
+}
+.item-lista{
+  background:rgba(0,0,0,.4);
+  border:1px solid var(--borda);
   border-radius:10px;
   padding:12px;
-  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.item-info{flex:1}
+.item-nome{
   font-size:10px;
-  cursor:pointer;
-  box-shadow:0 4px 20px rgba(37,211,102,.4),inset 0 1px 0 rgba(255,255,255,.3);
+  font-weight:700;
+  margin-bottom:3px;
+}
+.item-sub{
+  font-size:7px;
+  color:var(--cinza);
+}
+.item-acoes{
   display:flex;
-  align-items:center;
-  justify-content:center;
   gap:6px;
-  margin-bottom:14px;
-  position:relative;
-  overflow:hidden;
 }
-.btn-suporte-painel::before{
-  content:'';
-  position:absolute;
-  top:-50%;
-  left:-50%;
-  width:200%;
-  height:200%;
-  background:linear-gradient(45deg,transparent,rgba(255,255,255,.3),transparent);
-  transform:rotate(45deg);
-  animation:brilho 2s infinite;
-}
-.btn-suporte-painel:active{transform:scale(.96)}
-.btn-suporte-painel i{width:16px;height:16px}
 
-/* PASSO A PASSO */
-.passo-card{
-  background:var(--card-escuro);
-  backdrop-filter:blur(30px);
-  border:1.5px solid var(--borda);
-  border-radius:12px;
-  padding:12px;
-  box-shadow:0 8px 32px rgba(168,85,247,.2),inset 0 1px 0 rgba(255,255,255,.08);
-  position:relative;
-  overflow:hidden;
+.form-group{
+  margin-bottom:12px;
 }
-.passo-card::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:2px;
-  background:linear-gradient(90deg,transparent,var(--roxo-neon),transparent);
-  box-shadow:0 0 15px var(--roxo-glow);
-}
-.passo-tit{
-  font-size:11px;
-  font-weight:800;
-  margin-bottom:10px;
-  padding-bottom:6px;
-  border-bottom:1px solid rgba(168,85,247,.3);
-  display:flex;
-  align-items:center;
-  gap:6px;
-}
-.passo-tit i{width:14px;height:14px;stroke:var(--roxo-neon)}
-.passo-item{
-  display:flex;
-  gap:10px;
-  margin-bottom:10px;
-  align-items:flex-start;
-}
-.passo-item:last-child{margin-bottom:0}
-.passo-num{
-  width:20px;
-  height:20px;
-  background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:9px;
-  font-weight:900;
-  flex-shrink:0;
-  box-shadow:0 0 15px var(--roxo-glow);
-}
-.passo-texto{
-  flex:1;
+.form-label{
   font-size:8px;
   color:var(--cinza);
-  line-height:1.4;
-  padding-top:2px;
+  display:block;
+  margin-bottom:5px;
+  font-weight:600;
 }
-.passo-texto b{color:var(--branco)}
+.input-pequeno{
+  background:rgba(0,0,0,.5);
+  border:1px solid var(--borda);
+  border-radius:8px;
+  padding:10px;
+  font-size:9px;
+  color:var(--branco);
+  width:100%;
+  outline:none;
+}
+.input-pequeno:focus{border-color:var(--roxo)}
 
-/* MODAL CATEGORIAS */
-.modal-categorias{
+/* SWITCH ON/OFF */
+.switch-container{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px;
+  background:rgba(0,0,0,.4);
+  border:1px solid var(--borda);
+  border-radius:10px;
+  margin-bottom:12px;
+}
+.switch-info{flex:1}
+.switch-label{
+  font-size:10px;
+  font-weight:700;
+  margin-bottom:2px;
+}
+.switch-desc{
+  font-size:7px;
+  color:var(--cinza);
+}
+.switch{
+  position:relative;
+  width:50px;
+  height:26px;
+  background:rgba(168,85,247,.2);
+  border-radius:13px;
+  cursor:pointer;
+  transition:all.3s;
+}
+.switch.ativo{background:var(--verde-whats)}
+.switch-ball{
+  position:absolute;
+  top:3px;
+  left:3px;
+  width:20px;
+  height:20px;
+  background:var(--branco);
+  border-radius:50%;
+  transition:all.3s;
+}
+.switch.ativo.switch-ball{left:27px}
+
+.vazio{
+  text-align:center;
+  padding:40px 20px;
+  color:var(--cinza);
+  font-size:9px;
+}
+.vazio i{width:48px;height:48px;margin-bottom:12px;stroke:var(--roxo-neon);opacity:.5}
+
+/* MODAL */
+.modal{
   position:fixed;
   top:0;
   left:0;
@@ -723,16 +357,15 @@ body::after{
   align-items:center;
   justify-content:center;
   padding:20px;
-  animation:fadeIn.3s;
 }
-.modal-categorias.ativo{display:flex}
+.modal.ativo{display:flex}
 .modal-content{
   width:100%;
-  max-width:600px;
-  background:var(--bg);
+  max-width:500px;
+  background:var(--card-escuro);
   border:1.5px solid var(--borda);
   border-radius:16px;
-  padding:16px;
+  padding:20px;
   box-shadow:0 10px 50px rgba(168,85,247,.4);
   max-height:90vh;
   overflow-y:auto;
@@ -741,9 +374,9 @@ body::after{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin-bottom:14px;
+  margin-bottom:16px;
   padding-bottom:12px;
-  border-bottom:1px solid rgba(168,85,247,.3);
+  border-bottom:1px solid var(--borda);
 }
 .modal-tit{
   font-size:14px;
@@ -762,582 +395,279 @@ body::after{
   cursor:pointer;
 }
 .btn-fechar i{width:16px;height:16px;stroke:var(--roxo-neon)}
-.grid-categorias{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-}
-.vazio-categorias{
-  grid-column:1/-1;
-  text-align:center;
-  padding:40px 20px;
-  color:var(--cinza);
-  font-size:9px;
-}
-.vazio-categorias i{width:32px;height:32px;margin-bottom:8px;stroke:var(--roxo-neon);opacity:.5}
 
-/* MODAL DESCRIÇÃO */
-.modal-desc{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,.9);
-  backdrop-filter:blur(20px);
-  z-index:9999;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  animation:fadeIn.3s;
-}
-.modal-desc.ativo{display:flex}
-.desc-content{
-  width:100%;
-  max-width:400px;
-  background:var(--card-escuro);
-  border:1.5px solid var(--borda);
-  border-radius:16px;
-  padding:20px;
-  box-shadow:0 10px 50px rgba(168,85,247,.4);
-}
-.desc-tit{
-  font-size:14px;
-  font-weight:900;
-  margin-bottom:12px;
-  text-shadow:0 0 20px var(--roxo-glow);
-  display:flex;
-  align-items:center;
-  gap:6px;
-}
-.desc-tit i{width:16px;height:16px;stroke:var(--roxo-neon)}
-.desc-texto{
-  font-size:9px;
-  color:var(--cinza);
-  line-height:1.6;
-  margin-bottom:16px;
-}
-.desc-texto b{color:var(--branco)}
-.btn-fechar-desc{
-  width:100%;
-  background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
-  color:var(--branco);
-  border:none;
-  border-radius:8px;
-  padding:10px;
-  font-weight:700;
-  font-size:9px;
-  cursor:pointer;
-}
-
-/* CHAT SUPORTE ESTILO WHATSAPP */
-.chat-container{
-  position:fixed;
-  bottom:0;
-  right:0;
-  width:100%;
-  max-width:380px;
-  height:100vh;
-  max-height:600px;
-  background:var(--bg);
-  border:1.5px solid var(--borda);
-  border-radius:16px 16px 0 0;
-  box-shadow:0 -5px 30px rgba(168,85,247,.4);
-  z-index:99999;
-  display:none;
-  flex-direction:column;
-  animation:slideUp.3s;
-}
-.chat-container.ativo{display:flex}
-@keyframes slideUp{
-  from{transform:translateY(100%)}
-  to{transform:translateY(0)}
-}
-.chat-header{
-  background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
-  padding:12px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  border-radius:14px 14px 0 0;
-}
-.chat-header-info{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.chat-avatar{
-  width:36px;
-  height:36px;
-  background:rgba(255,255,255,.2);
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.chat-avatar i{width:18px;height:18px;fill:var(--branco)}
-.chat-user{
-  font-size:11px;
-  font-weight:800;
-  margin-bottom:2px;
-}
-.chat-status{
-  font-size:7px;
-  color:rgba(255,255,255,.8);
-  display:flex;
-  align-items:center;
-  gap:3px;
-}
-.chat-status-dot{
-  width:6px;
-  height:6px;
+.badge-novo{
   background:var(--verde-whats);
-  border-radius:50%;
-  box-shadow:0 0 8px var(--verde-whats);
-}
-.chat-close{
-  background:rgba(255,255,255,.2);
-  border:none;
-  border-radius:50%;
-  width:28px;
-  height:28px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-}
-.chat-close i{width:16px;height:16px;stroke:var(--branco)}
-.chat-messages{
-  flex:1;
-  padding:12px;
-  overflow-y:auto;
-  background:linear-gradient(180deg,rgba(168,85,247,.05),rgba(0,0,0,.3));
-}
-.chat-msg{
-  margin-bottom:10px;
-  display:flex;
-  flex-direction:column;
-  animation:fadeIn.3s;
-}
-.chat-msg.user{align-items:flex-end}
-.chat-msg.admin{align-items:flex-start}
-.chat-bubble{
-  max-width:75%;
-  padding:8px 12px;
-  border-radius:8px;
-  font-size:8px;
-  line-height:1.4;
-  word-wrap:break-word;
-}
-.chat-msg.user .chat-bubble{
-  background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
-  border-radius:8px 8px 0 8px;
-  box-shadow:0 2px 8px var(--roxo-glow);
-}
-.chat-msg.admin .chat-bubble{
-  background:var(--card-escuro);
-  border:1px solid var(--borda);
-  border-radius:8px 8px 8px 0;
-}
-.chat-time{
-  font-size:6px;
-  color:var(--cinza);
-  margin-top:2px;
-  padding:0 4px;
-}
-.chat-input-area{
-  padding:10px;
-  background:var(--card-escuro);
-  border-top:1px solid var(--borda);
-  display:flex;
-  gap:8px;
-  align-items:center;
-}
-.chat-input{
-  flex:1;
-  background:rgba(0,0,0,.5);
-  border:1px solid var(--borda);
-  border-radius:20px;
-  padding:10px 14px;
-  font-size:8px;
   color:var(--branco);
-  outline:none;
+  font-size:6px;
+  font-weight:700;
+  padding:3px 6px;
+  border-radius:10px;
+  margin-left:6px;
 }
-.chat-input:focus{border-color:var(--roxo)}
-.chat-send{
-  width:36px;
-  height:36px;
-  background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
-  border:none;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  box-shadow:0 2px 12px var(--roxo-glow);
-}
-.chat-send i{width:16px;height:16px;fill:var(--branco)}
-.chat-send:active{transform:scale(.9)}
 
-@media(max-width:480px){
-.grid-categorias{grid-template-columns:1fr}
-.chat-container{max-width:100%;border-radius:0}
-}
-@media(max-width:380px){
-.servicos-grid{grid-template-columns:repeat(2,1fr)}
-.page-title{font-size:28px}
-.select-group{grid-template-columns:1fr}
+@media(max-width:768px){
+.tabs-adm{flex-wrap:wrap}
 }
 </style>
 </head>
 <body>
-<!-- TELA LOGIN -->
-<div id="login" class="tela ativa">
+<!-- TELA LOGIN ADM -->
+<div id="loginAdm" class="tela ativa">
   <div class="container">
-    <div class="logo"><i data-lucide="crown"></i> Prime Store <span style="color:var(--roxo-neon)">Vz</span></div>
+    <div class="logo"><i data-lucide="shield-check"></i> Admin <span style="color:var(--roxo-neon)">Vz</span></div>
 
     <div class="login-box">
-      <div class="login-tit">FAÇA SEU <span style="color:var(--roxo-neon)">EXCLUSIVO</span></div>
-      <div class="login-sub">Acesse sua conta para liberar os serviços</div>
+      <div class="login-tit">PAINEL <span style="color:var(--roxo-neon)">ADMIN</span></div>
+      <div class="login-sub">Acesso restrito para administradores</div>
 
-      <div class="login-tabs">
-        <div class="tab ativo" onclick="mudarTab('login')">LOGIN</div>
-        <div class="tab" onclick="mudarTab('cadastro')">CADASTRO</div>
-      </div>
-
-      <div id="tabLogin">
-        <input type="email" class="input" id="loginEmail" placeholder="E-mail">
-        <input type="password" class="input" id="loginSenha" placeholder="Senha">
-        <button class="btn-login" onclick="fazerLogin()">ACESSAR EXCLUSIVO</button>
-        <div class="esqueceu" onclick="mudarTab('esqueceu')">Esqueceu a senha?</div>
-      </div>
-
-      <div id="tab Cadastro" style="display:none">
-        <input type="text" class="input" id="cadNome" placeholder="Nome completo">
-        <input type="email" class="input" id="cadEmail" placeholder="E-mail">
-        <input type="password" class="input" id="cadSenha" placeholder="Senha - mín 6 caracteres">
-        <button class="btn-login" onclick="fazerCadastro()">CRIAR EXCLUSIVO</button>
-      </div>
-
-      <div id="tabEsqueceu" style="display:none">
-        <input type="email" class="input" id="esqEmail" placeholder="Digite seu e-mail">
-        <button class="btn-login" onclick="recuperarSenha()">ENVIAR LINK</button>
-        <div class="esqueceu" onclick="mudarTab('login')">Voltar pro login</div>
-      </div>
+      <input type="email" class="input" id="admEmail" placeholder="E-mail do Admin">
+      <input type="password" class="input" id="admSenha" placeholder="Senha">
+      <button class="btn-login" onclick="fazerLoginAdm()">ACESSAR PAINEL</button>
     </div>
   </div>
 </div>
 
-<!-- TELA SERVIÇOS -->
-<div id="servicos" class="tela">
+<!-- TELA PAINEL ADM -->
+<div id="painelAdm" class="tela">
   <div class="container">
-    <div class="header-servicos">
-      <div class="logo" style="margin:0;font-size:12px"><i data-lucide="crown"></i> Prime Store <span style="color:var(--roxo-neon)">Vz</span></div>
-      <div class="user-menu" onclick="fazerLogout()">
+    <div class="header-adm">
+      <div class="adm-titulo">
+        <i data-lucide="shield-check"></i>
+        Painel Admin
+      </div>
+      <button class="btn-sair" onclick="fazerLogoutAdm()">
         <i data-lucide="log-out"></i> Sair
+      </button>
+    </div>
+
+    <div class="tabs-adm">
+      <div class="tab-adm ativo" onclick="mudarTabAdm('categorias')">
+        <i data-lucide="folder"></i> Categorias
+      </div>
+      <div class="tab-adm" onclick="mudarTabAdm('servicos')">
+        <i data-lucide="layers"></i> Serviços
+      </div>
+      <div class="tab-adm" onclick="mudarTabAdm('config')">
+        <i data-lucide="settings"></i> Config
+      </div>
+      <div class="tab-adm" onclick="mudarTabAdm('chats')">
+        <i data-lucide="message-circle"></i> Chats
+      </div>
+      <div class="tab-adm" onclick="mudarTabAdm('broadcast')">
+        <i data-lucide="megaphone"></i> Broadcast
       </div>
     </div>
 
-    <h1 class="page-title">Serviços</h1>
-    <p class="page-subtitle"><i data-lucide="crown"></i> Prime Store Vz</p>
-
-    <div class="servicos-grid">
-      <div class="servico-card">
-        <div class="servico-icon"><i data-lucide="users"></i></div>
-        <div class="servico-tit">Painel <span>Smm</span></div>
-        <div class="servico-lista">
-          <div>Seguidores</div>
-          <div>Curtidas</div>
-          <div>Comentários</div>
-          <div>Visualizações</div>
-          <div>Alcance</div>
-          <div>E muito mais</div>
+    <!-- TAB CATEGORIAS -->
+    <div id="tabCategorias" class="conteudo-tab ativo">
+      <div class="card-adm">
+        <div class="card-tit">
+          <i data-lucide="folder-plus"></i> Gerenciar Categorias Ilimitadas
         </div>
-        <button class="btn-servico" onclick="abrirPainelSmm()">Acessar <i data-lucide="chevron-right"></i></button>
+        <button class="btn-primario" onclick="abrirModalCategoria()">
+          <i data-lucide="plus"></i> NOVA CATEGORIA
+        </button>
       </div>
 
-      <div class="servico-card">
-        <div class="servico-icon"><i data-lucide="crown"></i></div>
-        <div class="servico-tit">Assinaturas <span>Premium</span></div>
-        <div class="servico-lista">
-          <div>Netflix</div>
-          <div>Spotify</div>
-          <div>Disney+</div>
-          <div>Crunchyroll</div>
-          <div>Globoplay</div>
-          <div>E muito mais</div>
+      <div id="listaCategorias" class="lista-grid">
+        <div class="vazio">
+          <i data-lucide="folder"></i>
+          <div>Nenhuma categoria cadastrada</div>
         </div>
-        <button class="btn-servico" onclick="solicitar('Assinaturas Premium')">Acessar <i data-lucide="chevron-right"></i></button>
+      </div>
+    </div>
+
+    <!-- TAB SERVIÇOS -->
+    <div id="tabServicos" class="conteudo-tab">
+      <div class="card-adm">
+        <div class="card-tit">
+          <i data-lucide="layers"></i> Gerenciar Serviços Ilimitados
+        </div>
+        <div class="form-group">
+          <label class="form-label">Selecionar Categoria</label>
+          <select class="input-pequeno" id="selectCategoriaServico" onchange="carregarServicos()">
+            <option value="">Selecione uma categoria</option>
+          </select>
+        </div>
+        <button class="btn-primario" onclick="abrirModalServico()">
+          <i data-lucide="plus"></i> NOVO SERVIÇO
+        </button>
       </div>
 
-      <div class="servico-card">
-        <div class="servico-icon"><i data-lucide="shopping-cart"></i></div>
-        <div class="servico-tit">Lojinha <span>Free Fire</span></div>
-        <div class="servico-lista">
-          <div>Diamantes grátis</div>
-          <div>Skins exclusivas</div>
-          <div>Passes de Elite</div>
-          <div>Personagens</div>
-          <div>Armas e mais</div>
-          <div>100% seguro</div>
+      <div id="listaServicos" class="lista-grid">
+        <div class="vazio">
+          <i data-lucide="layers"></i>
+          <div>Selecione uma categoria</div>
         </div>
-        <button class="btn-servico" onclick="solicitar('Lojinha Free Fire')">Acessar <i data-lucide="chevron-right"></i></button>
+      </div>
+    </div>
+
+    <!-- TAB CONFIG -->
+    <div id="tabConfig" class="conteudo-tab">
+      <div class="card-adm">
+        <div class="card-tit">
+          <i data-lucide="settings"></i> Configurações do Site
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Nome da Loja</label>
+          <input type="text" class="input-pequeno" id="configNome" placeholder="Prime Store Vz">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">WhatsApp</label>
+          <input type="text" class="input-pequeno" id="configWhats" placeholder="5598984853563">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Preço Base por 1000</label>
+          <input type="number" class="input-pequeno" id="configPreco" placeholder="15.00" step="0.01">
+        </div>
+
+        <button class="btn-primario" onclick="salvarConfig()">
+          <i data-lucide="save"></i> SALVAR CONFIGURAÇÕES
+        </button>
       </div>
 
-      <div class="servico-card">
-        <div class="servico-icon"><i data-lucide="graduation-cap"></i></div>
-        <div class="servico-tit">Cursos <span>Digitais</span></div>
-        <div class="servico-lista">
-          <div>Marketing Digital</div>
-          <div>Design Gráfico</div>
-          <div>Social Media</div>
-          <div>Programação</div>
-          <div>Tráfego Pago</div>
-          <div>E muito mais</div>
+      <div class="card-adm">
+        <div class="card-tit">
+          <i data-lucide="power"></i> Status do Suporte
         </div>
-        <button class="btn-servico" onclick="solicitar('Cursos Digitais')">Acessar <i data-lucide="chevron-right"></i></button>
+
+        <div class="switch-container">
+          <div class="switch-info">
+            <div class="switch-label">Suporte Online</div>
+            <div class="switch-desc">Ativa/desativa o chat para clientes</div>
+          </div>
+          <div class="switch" id="switchSuporte" onclick="toggleSuporte()">
+            <div class="switch-ball"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB CHATS -->
+    <div id="tabChats" class="conteudo-tab">
+      <div id="listaChats" class="lista-grid">
+        <div class="vazio">
+          <i data-lucide="message-circle-off"></i>
+          <div>Nenhuma conversa ainda</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB BROADCAST -->
+    <div id="tabBroadcast" class="conteudo-tab">
+      <div class="card-adm">
+        <div class="card-tit">
+          <i data-lucide="megaphone"></i> Enviar Mensagem para Todos
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Mensagem</label>
+          <textarea class="input-pequeno" id="msgBroadcast" rows="4" placeholder="Digite a mensagem que será enviada para todos os clientes..."></textarea>
+        </div>
+
+        <button class="btn-primario" onclick="enviarBroadcast()">
+          <i data-lucide="send"></i> ENVIAR PARA TODOS
+        </button>
       </div>
 
-      <div class="servico-card">
-        <div class="servico-icon"><i data-lucide="smartphone"></i></div>
-        <div class="servico-tit">Número <span>Virtual</span></div>
-        <div class="servico-lista">
-          <div>Receba SMS</div>
-          <div>WhatsApp</div>
-          <div>Telegram</div>
-          <div>Instagram</div>
-          <div>Facebook</div>
-          <div>E muito mais</div>
+      <div class="card-adm">
+        <div class="card-tit">
+          <i data-lucide="users"></i> Total de Clientes: <span id="totalClientes" style="color:var(--roxo-neon)">0</span>
         </div>
-        <button class="btn-servico" onclick="solicitar('Número Virtual')">Acessar <i data-lucide="chevron-right"></i></button>
-      </div>
-
-      <div class="servico-card">
-        <div class="servico-icon"><i data-lucide="gamepad-2"></i></div>
-        <div class="servico-tit">Contas <span>Premium</span></div>
-        <div class="servico-lista">
-          <div>Armazenamento</div>
-          <div>VPN Premium</div>
-          <div>Gift Cards</div>
-          <div>Nacionais e Int.</div>
-          <div>100% seguro</div>
-          <div>E muito mais</div>
-        </div>
-        <button class="btn-servico" onclick="solicitar('Contas Premium')">Acessar <i data-lucide="chevron-right"></i></button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- TELA PAINEL SMM DASHBOARD -->
-<div id="painelSmm" class="tela">
-  <div class="container">
-    <div class="header-painel">
-      <button class="btn-voltar" onclick="voltarServicos()"><i data-lucide="arrow-left"></i> Voltar</button>
-      <div class="logo" style="margin:0;font-size:12px"><i data-lucide="crown"></i> Prime Store <span style="color:var(--roxo-neon)">Vz</span></div>
-      <div style="width:60px"></div>
-    </div>
-
-    <div class="dashboard-grid">
-      <div class="dash-card">
-        <div class="dash-card-header">
-          <div class="dash-avatar"><i data-lucide="users"></i></div>
-          <div class="dash-info">
-            <div class="dash-welcome">Bem-vindo(a),</div>
-            <div class="dash-name" id="nomeUsuario">Carregando... <i data-lucide="badge-check"></i></div>
-            <div class="dash-sub">Painel de Controle</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="dash-card">
-        <div class="dash-stats">
-          <div class="dash-stat-icon"><i data-lucide="shopping-cart"></i></div>
-          <div class="dash-stat-info">
-            <div class="dash-stat-label">Total de Pedidos</div>
-            <div class="dash-stat-value" id="totalPedidos">0</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="pedido-card">
-      <div class="pedido-tit">Novo Pedido</div>
-      <div class="select-group">
-        <div class="select-box">
-          <label>Categoria</label>
-          <div class="select-input" onclick="selecionarCat()">
-            <span id="catSelecionada">Selecione uma categoria</span> <i data-lucide="chevron-down"></i>
-          </div>
-        </div>
-        <div class="select-box">
-          <label>Serviço</label>
-          <div class="select-input" onclick="selecionarServ()">
-            <span id="servSelecionado">Selecione um serviço</span> <i data-lucide="chevron-down"></i>
-          </div>
-        </div>
-      </div>
-      <button class="btn-pedido" onclick="fazerPedido()">FAZER PEDIDO</button>
-    </div>
-
-    <div class="nossos-servicos">
-      <div class="nossos-servicos-tit">Detalhes do Pedido</div>
-
-      <div style="margin-bottom:8px">
-        <div class="label-pequeno">
-          <i data-lucide="link"></i> Link:
-        </div>
-        <input type="text" class="input-pequeno" id="linkPedido" placeholder="Cole o link aqui">
-      </div>
-
-      <div style="margin-bottom:2px">
-        <div class="label-pequeno">Quantidade:</div>
-        <input type="number" class="input-pequeno" id="qtdPedido" placeholder="0" min="50" max="50000" oninput="calcularCusto()">
-        <div class="info-min">Mínimo: 50 - Max: 50 000</div>
-      </div>
-
-      <div>
-        <div class="label-pequeno">
-          <i data-lucide="dollar-sign"></i> Custo:
-        </div>
-        <input type="text" class="input-pequeno" id="custoPedido" placeholder="R$ 0,00" readonly style="background:rgba(168,85,247,.1);border-color:var(--roxo)">
-      </div>
-    </div>
-
-    <button class="btn-descricao" onclick="abrirDescricao()">
-      <i data-lucide="info"></i> Ver Descrição
-    </button>
-
-    <button class="btn-suporte-painel" onclick="abrirChat()">
-      <i data-lucide="message-circle"></i> FALAR COM SUPORTE
-    </button>
-
-    <div class="passo-card">
-      <div class="passo-tit"><i data-lucide="list-checks"></i> Como fazer a compra</div>
-      <div class="passo-item">
-        <div class="passo-num">1</div>
-        <div class="passo-texto">Selecione a <b>categoria</b> e o <b>serviço</b> que deseja</div>
-      </div>
-      <div class="passo-item">
-        <div class="passo-num">2</div>
-        <div class="passo-texto">Cole o <b>link</b> do perfil/post que vai receber</div>
-      </div>
-      <div class="passo-item">
-        <div class="passo-num">3</div>
-        <div class="passo-texto">Digite a <b>quantidade</b> - mín 50 e máx 50.000</div>
-      </div>
-      <div class="passo-item">
-        <div class="passo-num">4</div>
-        <div class="passo-texto">Confere o <b>custo</b> que calcula automático</div>
-      </div>
-      <div class="passo-item">
-        <div class="passo-num">5</div>
-        <div class="passo-texto">Clica em <b>FAZER PEDIDO</b> e aguarda entrega</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL CATEGORIAS - VAZIO PRA TU ADICIONAR -->
-<div id="modalCategorias" class="modal-categorias" onclick="fecharModal(event)">
+<!-- MODAL CATEGORIA -->
+<div id="modalCategoria" class="modal" onclick="fecharModal(event)">
   <div class="modal-content" onclick="event.stopPropagation()">
     <div class="modal-header">
-      <div class="modal-tit">Selecione uma Categoria</div>
+      <div class="modal-tit" id="modalCategoriaTit">Nova Categoria</div>
       <div class="btn-fechar" onclick="fecharModal()"><i data-lucide="x"></i></div>
     </div>
 
-    <div class="grid-categorias">
-      <div class="vazio-categorias">
-        <i data-lucide="folder-plus"></i>
-        <div>Nenhuma categoria adicionada</div>
-        <div style="font-size:7px;margin-top:4px">Adicione suas categorias no código</div>
-      </div>
-    </div>
-  </div>
-</div>
+    <input type="hidden" id="categoriaId">
 
-<!-- MODAL DESCRIÇÃO -->
-<div id="modalDesc" class="modal-desc" onclick="fecharDesc(event)">
-  <div class="desc-content" onclick="event.stopPropagation()">
-    <div class="desc-tit"><i data-lucide="info"></i> Descrição do Serviço</div>
-    <div class="desc-texto">
-      <b>Informações importantes:</b><br><br>
-      - Entrega inicia em até 30 minutos<br>
-      - Perfis reais e brasileiros<br>
-      - Sem necessidade de senha<br>
-      - Reposição em caso de queda<br>
-      - Suporte via WhatsApp<br><br>
-      <b>Atenção:</b> Deixe seu perfil público antes de fazer o pedido. Perfis privados não recebem.
+    <div class="form-group">
+      <label class="form-label">Nome da Categoria</label>
+      <input type="text" class="input-pequeno" id="categoriaNome" placeholder="Ex: Instagram">
     </div>
-    <button class="btn-fechar-desc" onclick="fecharDesc()">ENTENDI</button>
-  </div>
-</div>
 
-<!-- MODAL CONFIRMAÇÃO PEDIDO -->
-<div id="modalConfirmar" class="modal-desc" onclick="fecharConfirmar(event)">
-  <div class="desc-content" onclick="event.stopPropagation()">
-    <div class="desc-tit"><i data-lucide="shopping-bag"></i> Confirmar Pedido</div>
-    <div id="resumoPedido" style="background:rgba(0,0,0,.4);border:1px solid var(--borda);border-radius:8px;padding:12px;margin-bottom:14px;font-size:8px;line-height:1.6"></div>
-    <button class="btn-fechar-desc" onclick="enviarPedidoWhats()" style="background:linear-gradient(135deg,#25D366,#128C7E);box-shadow:0 4px 20px rgba(37,211,102,.4)">
-      <i data-lucide="send" style="width:14px;height:14px;margin-right:4px"></i> ENVIAR PEDIDO
+    <div class="form-group">
+      <label class="form-label">Ícone (Lucide)</label>
+      <input type="text" class="input-pequeno" id="categoriaIcone" placeholder="Ex: instagram, users, heart">
+    </div>
+
+    <button class="btn-primario" onclick="salvarCategoria()">
+      <i data-lucide="save"></i> SALVAR CATEGORIA
     </button>
-    <button class="btn-descricao" onclick="fecharConfirmar()" style="margin-bottom:0;margin-top:8px">CANCELAR</button>
   </div>
 </div>
 
-<!-- CHAT SUPORTE ESTILO WHATSAPP -->
-<div id="chatSuporte" class="chat-container">
-  <div class="chat-header">
-    <div class="chat-header-info">
-      <div class="chat-avatar"><i data-lucide="headphones"></i></div>
-      <div>
-        <div class="chat-user">Suporte Prime Vz</div>
-        <div class="chat-status"><div class="chat-status-dot"></div> Online</div>
-      </div>
+<!-- MODAL SERVIÇO -->
+<div id="modalServico" class="modal" onclick="fecharModal(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-tit" id="modalServicoTit">Novo Serviço</div>
+      <div class="btn-fechar" onclick="fecharModal()"><i data-lucide="x"></i></div>
     </div>
-    <button class="chat-close" onclick="fecharChat()"><i data-lucide="x"></i></button>
-  </div>
 
-  <div class="chat-messages" id="chatMessages">
-    <div class="chat-msg admin">
-      <div class="chat-bubble">Olá! 👋 Sou o suporte da Prime Store Vz. Como posso te ajudar?</div>
-      <div class="chat-time">Agora</div>
+    <input type="hidden" id="servicoId">
+    <input type="hidden" id="servicoCategoriaId">
+
+    <div class="form-group">
+      <label class="form-label">Nome do Serviço</label>
+      <input type="text" class="input-pequeno" id="servicoNome" placeholder="Ex: Seguidores Brasileiros">
     </div>
-  </div>
 
-  <div class="chat-input-area">
-    <input type="text" class="chat-input" id="chatInput" placeholder="Digite sua mensagem..." onkeypress="if(event.key==='Enter') enviarMensagem()">
-    <button class="chat-send" onclick="enviarMensagem()"><i data-lucide="send"></i></button>
+    <div class="form-group">
+      <label class="form-label">Descrição</label>
+      <textarea class="input-pequeno" id="servicoDesc" rows="3" placeholder="Descrição do serviço..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Preço por 1000</label>
+      <input type="number" class="input-pequeno" id="servicoPreco" placeholder="15.00" step="0.01">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Mínimo</label>
+      <input type="number" class="input-pequeno" id="servicoMin" placeholder="50">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Máximo</label>
+      <input type="number" class="input-pequeno" id="servicoMax" placeholder="50000">
+    </div>
+
+    <button class="btn-primario" onclick="salvarServico()">
+      <i data-lucide="save"></i> SALVAR SERVIÇO
+    </button>
   </div>
 </div>
 
 <script>
-const WHATSAPP='5598984853563';
-let userId = null;
-let totalPedidos = 0;
-let dadosPedidoTemp = null;
-let chatListener = null;
+const EMAIL_ADM = 'nannyvittoriah@gmail.com';
+let categoriaEditando = null;
+let servicoEditando = null;
+let categoriasCache = {};
+let configCache = {};
 
 window.addEventListener('load',()=>{
   lucide.createIcons();
-  const { auth, db, onAuthStateChanged, ref, onValue } = window.fb;
+  const { auth, onAuthStateChanged } = window.fb;
 
   onAuthStateChanged(auth, (user) => {
-    if(user){
-      userId = user.uid;
-      const nome = user.displayName || user.email.split('@')[0];
-      document.getElementById('nomeUsuario').innerHTML = nome + ' <i data-lucide="badge-check"></i>';
-
-      const pedidosRef = ref(db, `usuarios/${userId}/totalPedidos`);
-      onValue(pedidosRef, (snapshot) => {
-        totalPedidos = snapshot.val() || 0;
-        document.getElementById('totalPedidos').textContent = totalPedidos;
-      });
-
-      ir('servicos');
+    if(user && user.email === EMAIL_ADM){
+      ir('painelAdm');
+      carregarTudo();
     }else{
-      ir('login');
+      ir('loginAdm');
     }
     lucide.createIcons();
   });
@@ -1349,236 +679,391 @@ function ir(t){
   lucide.createIcons();
 }
 
-function voltarServicos(){
-  ir('servicos');
-}
-
-function abrirPainelSmm(){
-  ir('painelSmm');
-}
-
-function solicitar(servico){
-  const msg = `Olá! Quero solicitar: ${servico}`;
-  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,'_blank');
-}
-
-function mudarTab(tab){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('ativo'));
-  document.getElementById('tabLogin').style.display='none';
-  document.getElementById('tabCadastro').style.display='none';
-  document.getElementById('tabEsqueceu').style.display='none';
-
-  if(tab==='login'){
-    document.querySelectorAll('.tab')[0].classList.add('ativo');
-    document.getElementById('tabLogin').style.display='block';
-  }else if(tab==='cadastro'){
-    document.querySelectorAll('.tab')[1].classList.add('ativo');
-    document.getElementById('tabCadastro').style.display='block';
-  }else{
-    document.getElementById('tabEsqueceu').style.display='block';
-  }
-}
-
-async function fazerLogin(){
+async function fazerLoginAdm(){
   const { auth, signInWithEmailAndPassword } = window.fb;
-  const email=document.getElementById('loginEmail').value.trim();
-  const senha=document.getElementById('loginSenha').value;
+  const email=document.getElementById('admEmail').value.trim();
+  const senha=document.getElementById('admSenha').value;
   if(!email||!senha){alert('Preencha todos os campos');return}
   try{
     await signInWithEmailAndPassword(auth,email,senha);
   }catch(e){alert('Erro: '+e.message);}
 }
 
-async function fazerCadastro(){
-  const { auth, db, createUserWithEmailAndPassword, updateProfile, ref, set } = window.fb;
-  const nome=document.getElementById('cadNome').value.trim();
-  const email=document.getElementById('cadEmail').value.trim();
-  const senha=document.getElementById('cadSenha').value;
-  if(!nome||!email||!senha){alert('Preencha todos os campos');return}
-  if(senha.length<6){alert('Senha deve ter no mínimo 6 caracteres');return}
-  try{
-    const cred = await createUserWithEmailAndPassword(auth,email,senha);
-    await updateProfile(cred.user,{displayName:nome});
-    await set(ref(db, `usuarios/${cred.user.uid}`), {
-      nome:nome,
-      email:email,
-      totalPedidos:0,
-      criadoEm:Date.now()
-    });
-    alert('Exclusivo criado com sucesso!');
-  }catch(e){alert('Erro: '+e.message);}
-}
-
-async function recuperarSenha(){
-  const { auth, sendPasswordResetEmail } = window.fb;
-  const email=document.getElementById('esqEmail').value.trim();
-  if(!email){alert('Digite seu e-mail');return}
-  try{
-    await sendPasswordResetEmail(auth,email);
-    alert('Link de recuperação enviado pro seu e-mail!');
-    mudarTab('login');
-  }catch(e){alert('Erro: '+e.message);}
-}
-
-async function fazerLogout(){
+async function fazerLogoutAdm(){
   const { auth, signOut } = window.fb;
-  if(confirm('Deseja sair do Exclusivo?')){
+  if(confirm('Deseja sair do painel admin?')){
     await signOut(auth);
   }
 }
 
-function selecionarCat(){
-  document.getElementById('modalCategorias').classList.add('ativo');
-  lucide.createIcons();
+function mudarTabAdm(tab){
+  document.querySelectorAll('.tab-adm').forEach(t=>t.classList.remove('ativo'));
+  document.querySelectorAll('.conteudo-tab').forEach(t=>t.classList.remove('ativo'));
+
+  const tabs = ['categorias','servicos','config','chats','broadcast'];
+  const idx = tabs.indexOf(tab);
+  document.querySelectorAll('.tab-adm')[idx].classList.add('ativo');
+  document.getElementById('tab'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('ativo');
+
+  if(tab === 'servicos') carregarCategoriasSelect();
+  if(tab === 'chats') carregarChats();
+  if(tab === 'broadcast') contarClientes();
 }
 
-function fecharModal(e){
-  if(!e || e.target.id==='modalCategorias'){
-    document.getElementById('modalCategorias').classList.remove('ativo');
-  }
+function carregarTudo(){
+  carregarCategorias();
+  carregarConfig();
+  carregarChats();
 }
 
-function abrirDescricao(){
-  document.getElementById('modalDesc').classList.add('ativo');
-}
-
-function fecharDesc(e){
-  if(!e || e.target.id==='modalDesc'){
-    document.getElementById('modalDesc').classList.remove('ativo');
-  }
-}
-
-function selecionarServico(categoria,servico){
-  document.getElementById('catSelecionada').textContent = categoria;
-  document.getElementById('servSelecionado').textContent = servico;
-  fecharModal();
-}
-
-function selecionarServ(){
-  alert('Selecione uma categoria primeiro');
-}
-
-function calcularCusto(){
-  const qtd = parseInt(document.getElementById('qtdPedido').value) || 0;
-  const preco = 0.015;
-  const total = (qtd * preco).toFixed(2);
-  document.getElementById('custoPedido').value = `R$ ${total.replace('.',',')}`;
-}
-
-async function fazerPedido(){
-  const cat = document.getElementById('catSelecionada').textContent;
-  const serv = document.getElementById('servSelecionado').textContent;
-  const link = document.getElementById('linkPedido').value.trim();
-  const qtd = parseInt(document.getElementById('qtdPedido').value) || 0;
-  const custo = document.getElementById('custoPedido').value;
-
-  if(cat==='Selecione uma categoria'){alert('Selecione categoria e serviço');return}
-  if(!link){alert('Cole o link do pedido');return}
-  if(qtd < 50 || qtd > 50000){alert('Quantidade deve ser entre 50 e 50.000');return}
-
-  const { auth } = window.fb;
-  const nome = auth.currentUser.displayName || auth.currentUser.email.split('@')[0];
-
-  dadosPedidoTemp = {
-    cliente: nome,
-    categoria: cat,
-    servico: serv,
-    link: link,
-    quantidade: qtd,
-    custo: custo
-  };
-
-  const resumo = `
-    <div style="color:var(--roxo-neon);font-weight:700;margin-bottom:8px">📋 Dados do Pedido</div>
-    <b>Cliente:</b> ${nome}<br>
-    <b>Categoria:</b> ${cat}<br>
-    <b>Serviço:</b> ${serv}<br>
-    <b>Quantidade:</b> ${qtd.toLocaleString('pt-BR')}<br>
-    <b>Link:</b> <span style="font-size:7px;word-break:break-all">${link}</span><br>
-    <div style="border-top:1px solid var(--borda);margin:8px 0;padding-top:8px">
-      <b style="color:var(--roxo-neon)">Total:</b> <b>${custo}</b>
-    </div>
-  `;
-
-  document.getElementById('resumoPedido').innerHTML = resumo;
-  document.getElementById('modalConfirmar').classList.add('ativo');
-  lucide.createIcons();
-}
-
-async function enviarPedidoWhats(){
-  const { db, ref, set } = window.fb;
-  const p = dadosPedidoTemp;
-
-  totalPedidos++;
-  await set(ref(db, `usuarios/${userId}/totalPedidos`), totalPedidos);
-  await set(ref(db, `usuarios/${userId}/pedidos/${Date.now()}`), {
-    categoria: p.categoria,
-    servico: p.servico,
-    link: p.link,
-    quantidade: p.quantidade,
-    custo: p.custo,
-    data: Date.now()
-  });
-
-  const msg = `*NOVO PEDIDO - PRIME STORE VZ* 📦
-
-👤 *Cliente:* ${p.cliente}
-📂 *Categoria:* ${p.categoria}
-🎯 *Serviço:* ${p.servico}
-🔗 *Link:* ${p.link}
-📊 *Quantidade:* ${p.quantidade.toLocaleString('pt-BR')}
-💰 *Valor:* ${p.custo}
-
-Aguardo confirmação! ✅`;
-
-  window.open(`https://wa.me/5598984853563?text=${encodeURIComponent(msg)}`,'_blank');
-
-  document.getElementById('linkPedido').value = '';
-  document.getElementById('qtdPedido').value = '';
-  document.getElementById('custoPedido').value = 'R$ 0,00';
-
-  fecharConfirmar();
-  alert('Pedido enviado pro WhatsApp! Aguarda nossa confirmação 💜');
-}
-
-function fecharConfirmar(e){
-  if(!e || e.target.id==='modalConfirmar'){
-    document.getElementById('modalConfirmar').classList.remove('ativo');
-  }
-}
-
-// CHAT SUPORTE
-function abrirChat(){
-  document.getElementById('chatSuporte').classList.add('ativo');
-  carregarMensagens();
-}
-
-function fecharChat(){
-  document.getElementById('chatSuporte').classList.remove('ativo');
-  if(chatListener) chatListener();
-}
-
-function carregarMensagens(){
+function carregarCategorias(){
   const { db, ref, onValue } = window.fb;
-  const chatRef = ref(db, `usuarios/${userId}/chat`);
+  onValue(ref(db, 'categorias'), (snapshot) => {
+    categoriasCache = snapshot.val() || {};
+    renderizarCategorias();
+    carregarCategoriasSelect();
+  });
+}
 
-  chatListener = onValue(chatRef, (snapshot) => {
-    const msgs = snapshot.val() || {};
-    const container = document.getElementById('chatMessages');
-    container.innerHTML = `
-      <div class="chat-msg admin">
-        <div class="chat-bubble">Olá! 👋 Sou o suporte da Prime Store Vz. Como posso te ajudar?</div>
-        <div class="chat-time">Agora</div>
+function renderizarCategorias(){
+  const lista = document.getElementById('listaCategorias');
+  const cats = Object.entries(categoriasCache);
+
+  if(cats.length === 0){
+    lista.innerHTML = `<div class="vazio"><i data-lucide="folder"></i><div>Nenhuma categoria cadastrada</div></div>`;
+    lucide.createIcons();
+    return;
+  }
+
+  lista.innerHTML = '';
+  cats.forEach(([id, cat]) => {
+    const div = document.createElement('div');
+    div.className = 'item-lista';
+    div.innerHTML = `
+      <div class="item-info">
+        <div class="item-nome">${cat.nome}</div>
+        <div class="item-sub">Ícone: ${cat.icone}</div>
+      </div>
+      <div class="item-acoes">
+        <button class="btn-secundario" onclick="editarCategoria('${id}')">
+          <i data-lucide="edit"></i> Editar
+        </button>
+        <button class="btn-secundario btn-perigo" onclick="deletarCategoria('${id}')">
+          <i data-lucide="trash"></i>
+        </button>
       </div>
     `;
+    lista.appendChild(div);
+  });
+  lucide.createIcons();
+}
 
-    Object.values(msgs).forEach(msg => {
+function carregarCategoriasSelect(){
+  const select = document.getElementById('selectCategoriaServico');
+  const cats = Object.entries(categoriasCache);
+
+  select.innerHTML = '<option value="">Selecione uma categoria</option>';
+  cats.forEach(([id, cat]) => {
+    const opt = document.createElement('option');
+    opt.value = id;
+    opt.textContent = cat.nome;
+    select.appendChild(opt);
+  });
+}
+
+function abrirModalCategoria(){
+  categoriaEditando = null;
+  document.getElementById('modalCategoriaTit').textContent = 'Nova Categoria';
+  document.getElementById('categoriaId').value = '';
+  document.getElementById('categoriaNome').value = '';
+  document.getElementById('categoriaIcone').value = '';
+  document.getElementById('modalCategoria').classList.add('ativo');
+}
+
+function editarCategoria(id){
+  categoriaEditando = id;
+  const cat = categoriasCache[id];
+  document.getElementById('modalCategoriaTit').textContent = 'Editar Categoria';
+  document.getElementById('categoriaId').value = id;
+  document.getElementById('categoriaNome').value = cat.nome;
+  document.getElementById('categoriaIcone').value = cat.icone;
+  document.getElementById('modalCategoria').classList.add('ativo');
+}
+
+async function salvarCategoria(){
+  const { db, ref, push, set, update } = window.fb;
+  const nome = document.getElementById('categoriaNome').value.trim();
+  const icone = document.getElementById('categoriaIcone').value.trim();
+
+  if(!nome ||!icone){alert('Preencha todos os campos');return}
+
+  const dados = {nome, icone, criadoEm: Date.now()};
+
+  if(categoriaEditando){
+    await update(ref(db, `categorias/${categoriaEditando}`), dados);
+  }else{
+    await push(ref(db, 'categorias'), dados);
+  }
+
+  fecharModal();
+  alert('Categoria salva com sucesso!');
+}
+
+async function deletarCategoria(id){
+  if(!confirm('Tem certeza? Todos os serviços dessa categoria serão apagados.')) return;
+  const { db, ref, remove } = window.fb;
+  await remove(ref(db, `categorias/${id}`));
+  await remove(ref(db, `servicos/${id}`));
+}
+
+function carregarServicos(){
+  const catId = document.getElementById('selectCategoriaServico').value;
+  if(!catId) return;
+
+  const { db, ref, onValue } = window.fb;
+  onValue(ref(db, `servicos/${catId}`), (snapshot) => {
+    const servicos = snapshot.val() || {};
+    renderizarServicos(catId, servicos);
+  });
+}
+
+function renderizarServicos(catId, servicos){
+  const lista = document.getElementById('listaServicos');
+  const servs = Object.entries(servicos);
+
+  if(servs.length === 0){
+    lista.innerHTML = `<div class="vazio"><i data-lucide="layers"></i><div>Nenhum serviço cadastrado</div></div>`;
+    lucide.createIcons();
+    return;
+  }
+
+  lista.innerHTML = '';
+  servs.forEach(([id, serv]) => {
+    const div = document.createElement('div');
+    div.className = 'item-lista';
+    div.innerHTML = `
+      <div class="item-info">
+        <div class="item-nome">${serv.nome}</div>
+        <div class="item-sub">R$ ${serv.preco}/1000 | Min: ${serv.min} | Max: ${serv.max}</div>
+      </div>
+      <div class="item-acoes">
+        <button class="btn-secundario" onclick="editarServico('${catId}','${id}')">
+          <i data-lucide="edit"></i> Editar
+        </button>
+        <button class="btn-secundario btn-perigo" onclick="deletarServico('${catId}','${id}')">
+          <i data-lucide="trash"></i>
+        </button>
+      </div>
+    `;
+    lista.appendChild(div);
+  });
+  lucide.createIcons();
+}
+
+function abrirModalServico(){
+  const catId = document.getElementById('selectCategoriaServico').value;
+  if(!catId){alert('Selecione uma categoria primeiro');return}
+
+  servicoEditando = null;
+  document.getElementById('modalServicoTit').textContent = 'Novo Serviço';
+  document.getElementById('servicoId').value = '';
+  document.getElementById('servicoCategoriaId').value = catId;
+  document.getElementById('servicoNome').value = '';
+  document.getElementById('servicoDesc').value = '';
+  document.getElementById('servicoPreco').value = '';
+  document.getElementById('servicoMin').value = '50';
+  document.getElementById('servicoMax').value = '50000';
+  document.getElementById('modalServico').classList.add('ativo');
+}
+
+function editarServico(catId, servId){
+  const { db, ref, get } = window.fb;
+  get(ref(db, `servicos/${catId}/${servId}`)).then(snapshot => {
+    const serv = snapshot.val();
+    servicoEditando = servId;
+    document.getElementById('modalServicoTit').textContent = 'Editar Serviço';
+    document.getElementById('servicoId').value = servId;
+    document.getElementById('servicoCategoriaId').value = catId;
+    document.getElementById('servicoNome').value = serv.nome;
+    document.getElementById('servicoDesc').value = serv.desc;
+    document.getElementById('servicoPreco').value = serv.preco;
+    document.getElementById('servicoMin').value = serv.min;
+    document.getElementById('servicoMax').value = serv.max;
+    document.getElementById('modalServico').classList.add('ativo');
+  });
+}
+
+async function salvarServico(){
+  const { db, ref, push, set, update } = window.fb;
+  const catId = document.getElementById('servicoCategoriaId').value;
+  const nome = document.getElementById('servicoNome').value.trim();
+  const desc = document.getElementById('servicoDesc').value.trim();
+  const preco = parseFloat(document.getElementById('servicoPreco').value);
+  const min = parseInt(document.getElementById('servicoMin').value);
+  const max = parseInt(document.getElementById('servicoMax').value);
+
+  if(!nome ||!desc ||!preco ||!min ||!max){alert('Preencha todos os campos');return}
+
+  const dados = {nome, desc, preco, min, max, criadoEm: Date.now()};
+
+  if(servicoEditando){
+    await update(ref(db, `servicos/${catId}/${servicoEditando}`), dados);
+  }else{
+    await push(ref(db, `servicos/${catId}`), dados);
+  }
+
+  fecharModal();
+  carregarServicos();
+  alert('Serviço salvo com sucesso!');
+}
+
+async function deletarServico(catId, servId){
+  if(!confirm('Tem certeza?')) return;
+  const { db, ref, remove } = window.fb;
+  await remove(ref(db, `servicos/${catId}/${servId}`));
+}
+
+function carregarConfig(){
+  const { db, ref, onValue } = window.fb;
+  onValue(ref(db, 'config'), (snapshot) => {
+    configCache = snapshot.val() || {};
+    document.getElementById('configNome').value = configCache.nome || '';
+    document.getElementById('configWhats').value = configCache.whatsapp || '';
+    document.getElementById('configPreco').value = configCache.precoBase || '';
+    document.getElementById('switchSuporte').classList.toggle('ativo', configCache.suporteOnline);
+  });
+}
+
+async function salvarConfig(){
+  const { db, ref, set } = window.fb;
+  const dados = {
+    nome: document.getElementById('configNome').value.trim(),
+    whatsapp: document.getElementById('configWhats').value.trim(),
+    precoBase: parseFloat(document.getElementById('configPreco').value),
+    suporteOnline: configCache.suporteOnline || false
+  };
+
+  await set(ref(db, 'config'), dados);
+  alert('Configurações salvas!');
+}
+
+async function toggleSuporte(){
+  const { db, ref, update } = window.fb;
+  const novo Status =!configCache.suporteOnline;
+  await update(ref(db, 'config'), {suporteOnline: novoStatus});
+  document.getElementById('switchSuporte').classList.toggle('ativo', novoStatus);
+}
+
+function carregarChats(){
+  const { db, ref, onValue } = window.fb;
+  onValue(ref(db, 'usuarios'), (snapshot) => {
+    const usuarios = snapshot.val() || {};
+    const lista = document.getElementById('listaChats');
+    const chats = Object.entries(usuarios).filter(([uid,u]) => u.chat);
+
+    if(chats.length === 0){
+      lista.innerHTML = `<div class="vazio"><i data-lucide="message-circle-off"></i><div>Nenhuma conversa ainda</div></div>`;
+      lucide.createIcons();
+      return;
+    }
+
+    lista.innerHTML = '';
+    chats.forEach(([uid, user]) => {
+      const msgs = Object.values(user.chat);
+      const ultimaMsg = msgs[msgs.length - 1];
+      const temNovas = msgs.some(m => m.tipo === 'user' &&!m.lida);
+
+      const card = document.createElement('div');
+      card.className = 'item-lista';
+      card.style.cursor = 'pointer';
+      card.onclick = () => abrirChatAdm(uid, user.nome);
+      card.innerHTML = `
+        <div class="item-info">
+          <div class="item-nome">${user.nome} ${temNovas? '<span class="badge-novo">NOVA</span>' : ''}</div>
+          <div class="item-sub">${user.email} | Pedidos: ${user.totalPedidos || 0}</div>
+          <div class="item-sub" style="margin-top:4px;color:var(--roxo-neon)">${ultimaMsg.texto.substring(0,40)}...</div>
+        </div>
+        <div class="item-acoes">
+          <button class="btn-primario">
+            <i data-lucide="message-circle"></i> Abrir
+          </button>
+        </div>
+      `;
+      lista.appendChild(card);
+    });
+    lucide.createIcons();
+  });
+}
+
+function abrirChatAdm(uid, nome){
+  const { db, ref, onValue, push, update } = window.fb;
+
+  // Modal de chat simples
+  const modal = document.createElement('div');
+  modal.className = 'modal ativo';
+  modal.id = 'modalChatAdm';
+  modal.innerHTML = `
+    <div class="modal-content" style="max-width:600px;height:80vh;display:flex;flex-direction:column">
+      <div class="modal-header">
+        <div class="modal-tit">Chat - ${nome}</div>
+        <div class="btn-fechar" onclick="document.getElementById('modalChatAdm').remove()"><i data-lucide="x"></i></div>
+      </div>
+      <div id="chatAdmMsgs" style="flex:1;overflow-y:auto;padding:10px;background:rgba(0,0,0,.3);border-radius:8px;margin-bottom:10px"></div>
+      <div style="display:flex;gap:8px">
+        <input type="text" class="input-pequeno" id="inputChatAdm" placeholder="Digite sua resposta..." onkeypress="if(event.key==='Enter') enviarMsgAdm('${uid}')">
+        <button class="btn-primario" onclick="enviarMsgAdm('${uid}')">
+          <i data-lucide="send"></i>
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  lucide.createIcons();
+
+  // Carrega mensagens
+  onValue(ref(db, `usuarios/${uid}/chat`), (snapshot) => {
+    const msgs = snapshot.val() || {};
+    const container = document.getElementById('chatAdmMsgs');
+    container.innerHTML = '';
+
+    Object.entries(msgs).forEach(([msgId, msg]) => {
       const div = document.createElement('div');
       div.className = `chat-msg ${msg.tipo}`;
-      div.innerHTML = `
-        <div class="chat-bubble">${msg.texto}</div>
-        <div class="chat-time">${new Date(msg.data).toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'})}</div>
-      `;
+      div.style.marginBottom = '10px';
+      div.style.display = 'flex';
+      div.style.flexDirection = 'column';
+      div.style.alignItems = msg.tipo === 'admin' ? 'flex-end' : 'flex-start';
+
+      const bubble = document.createElement('div');
+      bubble.className = 'chat-bubble';
+      bubble.style.maxWidth = '75%';
+      bubble.style.padding = '8px 12px';
+      bubble.style.borderRadius = '8px';
+      bubble.style.fontSize = '8px';
+      bubble.style.lineHeight = '1.4';
+
+      if(msg.tipo === 'admin'){
+        bubble.style.background = 'linear-gradient(135deg,var(--roxo),var(--roxo-neon))';
+        bubble.style.borderRadius = '8px 8px 0 8px';
+      }else{
+        bubble.style.background = 'var(--card-escuro)';
+        bubble.style.border = '1px solid var(--borda)';
+        bubble.style.borderRadius = '8px 8px 8px 0';
+        // Marca como lida
+        update(ref(db, `usuarios/${uid}/chat/${msgId}`), {lida: true});
+      }
+
+      bubble.textContent = msg.texto;
+
+      const time = document.createElement('div');
+      time.className = 'chat-time';
+      time.style.fontSize = '6px';
+      time.style.color = 'var(--cinza)';
+      time.style.marginTop = '2px';
+      time.textContent = new Date(msg.data).toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+
+      div.appendChild(bubble);
+      div.appendChild(time);
       container.appendChild(div);
     });
 
@@ -1586,23 +1071,59 @@ function carregarMensagens(){
   });
 }
 
-async function enviarMensagem(){
-  const input = document.getElementById('chatInput');
+async function enviarMsgAdm(uid){
+  const input = document.getElementById('inputChatAdm');
   const texto = input.value.trim();
   if(!texto) return;
 
-  const { db, ref, push, serverTimestamp } = window.fb;
-  const { auth } = window.fb;
-  const nome = auth.currentUser.displayName || auth.currentUser.email.split('@')[0];
+  const { db, ref, push } = window.fb;
 
-  await push(ref(db, `usuarios/${userId}/chat`), {
-    tipo: 'user',
-    nome: nome,
+  await push(ref(db, `usuarios/${uid}/chat`), {
+    tipo: 'admin',
     texto: texto,
-    data: Date.now()
+    data: Date.now(),
+    lida: false
   });
 
   input.value = '';
+}
+
+function contarClientes(){
+  const { db, ref, onValue } = window.fb;
+  onValue(ref(db, 'usuarios'), (snapshot) => {
+    const total = Object.keys(snapshot.val() || {}).length;
+    document.getElementById('totalClientes').textContent = total;
+  });
+}
+
+async function enviarBroadcast(){
+  const msg = document.getElementById('msgBroadcast').value.trim();
+  if(!msg){alert('Digite uma mensagem');return}
+  if(!confirm(`Enviar essa mensagem para TODOS os clientes?`)) return;
+
+  const { db, ref, get, push } = window.fb;
+  const snapshot = await get(ref(db, 'usuarios'));
+  const usuarios = snapshot.val() || {};
+
+  let contador = 0;
+  for(const [uid, user] of Object.entries(usuarios)){
+    await push(ref(db, `usuarios/${uid}/chat`), {
+      tipo: 'admin',
+      texto: `📢 ${msg}`,
+      data: Date.now(),
+      lida: false
+    });
+    contador++;
+  }
+
+  alert(`Mensagem enviada para ${contador} clientes!`);
+  document.getElementById('msgBroadcast').value = '';
+}
+
+function fecharModal(e){
+  if(!e || e.target.classList.contains('modal')){
+    document.querySelectorAll('.modal').forEach(m => m.classList.remove('ativo'));
+  }
 }
 
 lucide.createIcons();
