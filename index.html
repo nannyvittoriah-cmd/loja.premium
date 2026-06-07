@@ -822,7 +822,7 @@ body::after{
         <div class="select-box">
           <label>Categoria</label>
           <div class="select-input" onclick="selecionarCat()">
-            <span id="catSelecionada">Selecione uma categoria</span> <i data-lucide="chevron-down"></i>
+             id="catSelecionada">Selecione uma categoria</span> <i data-lucide="chevron-down"></i>
           </div>
         </div>
         <div class="select-box">
@@ -836,11 +836,28 @@ body::after{
     </div>
 
     <div class="nossos-servicos">
-      <div class="nossos-servicos-tit">Nossos Serviços</div>
-      <div id="listaServicos">
-        <div style="font-size:8px;color:var(--cinza);text-align:center;padding:20px 0">
-          Selecione uma categoria acima para ver os serviços disponíveis
-        </div>
+      <div class="nossos-servicos-tit">Detalhes do Pedido</div>
+      
+      <div class="select-box" style="margin-bottom:14px">
+        <label style="display:flex;align-items:center;gap:5px;font-size:8px;color:var(--branco);margin-bottom:8px;font-weight:700">
+          <i data-lucide="link" style="width:12px;height:12px;stroke:var(--roxo-neon)"></i> Link:
+        </label>
+        <input type="text" class="input" id="linkPedido" placeholder="Cole o link aqui" style="margin-bottom:0;font-size:9px">
+      </div>
+
+      <div class="select-box" style="margin-bottom:4px">
+        <label style="font-size:8px;color:var(--branco);margin-bottom:8px;font-weight:700;display:block">
+          Quantidade:
+        </label>
+        <input type="number" class="input" id="qtdPedido" placeholder="0" min="50" max="50000" style="margin-bottom:6px;font-size:9px" oninput="calcularCusto()">
+        <div style="font-size:7px;color:var(--cinza);margin-bottom:12px">Mínimo: 50 - Max: 50 000</div>
+      </div>
+
+      <div class="select-box">
+        <label style="display:flex;align-items:center;gap:5px;font-size:8px;color:var(--branco);margin-bottom:8px;font-weight:700">
+          <i data-lucide="dollar-sign" style="width:12px;height:12px;stroke:var(--roxo-neon)"></i> Custo:
+        </label>
+        <input type="text" class="input" id="custoPedido" placeholder="R$ 0,00" readonly style="margin-bottom:0;font-size:9px;background:rgba(168,85,247,.1);border-color:var(--roxo)">
       </div>
     </div>
   </div>
@@ -883,7 +900,7 @@ window.addEventListener('load',()=>{
       const pedidosRef = ref(db, `usuarios/${userId}/totalPedidos`);
       onValue(pedidosRef, (snapshot) => {
         totalPedidos = snapshot.val() || 0;
-                document.getElementById('totalPedidos').textContent = totalPedidos;
+        document.getElementById('totalPedidos').textContent = totalPedidos;
       });
 
       ir('servicos');
@@ -989,34 +1006,54 @@ function fecharModal(e){
   }
 }
 
-// FUNÇÃO PRA TU ADICIONAR AS CATEGORIAS DEPOIS
 function selecionarServico(categoria,servico){
   document.getElementById('catSelecionada').textContent = categoria;
   document.getElementById('servSelecionado').textContent = servico;
   fecharModal();
-  carregarServicos(categoria);
 }
 
 function selecionarServ(){
   alert('Selecione uma categoria primeiro');
 }
 
-// DEIXEI VAZIO PRA TU COLOCAR TEUS SERVIÇOS QUANDO ORGANIZAR
-function carregarServicos(cat){
-  const lista = document.getElementById('listaServicos');
-  lista.innerHTML = '<div style="font-size:8px;color:var(--cinza);text-align:center;padding:20px 0">Adicione os serviços dessa categoria no código</div>';
+function calcularCusto(){
+  const qtd = parseInt(document.getElementById('qtdPedido').value) || 0;
+  const preco = 0.015; // R$ 15,00 por 1000 = 0.015 por unidade - MUDA AQUI DEPOIS
+  const total = (qtd * preco).toFixed(2);
+  document.getElementById('custoPedido').value = `R$ ${total.replace('.',',')}`;
 }
 
 async function fazerPedido(){
   const { db, ref, set } = window.fb;
   const cat = document.getElementById('catSelecionada').textContent;
+  const serv = document.getElementById('servSelecionado').textContent;
+  const link = document.getElementById('linkPedido').value.trim();
+  const qtd = parseInt(document.getElementById('qtdPedido').value) || 0;
+  const custo = document.getElementById('custoPedido').value;
+  
   if(cat==='Selecione uma categoria'){alert('Selecione categoria e serviço');return}
+  if(!link){alert('Cole o link do pedido');return}
+  if(qtd < 50 || qtd > 50000){alert('Quantidade deve ser entre 50 e 50.000');return}
+  
   totalPedidos++;
   await set(ref(db, `usuarios/${userId}/totalPedidos`), totalPedidos);
-  alert('Pedido realizado com sucesso! Total: '+totalPedidos);
+  await set(ref(db, `usuarios/${userId}/pedidos/${Date.now()}`), {
+    categoria: cat,
+    servico: serv,
+    link: link,
+    quantidade: qtd,
+    custo: custo,
+    data: Date.now()
+  });
+  
+  alert(`Pedido realizado!\n\nServiço: ${serv}\nQtd: ${qtd}\nCusto: ${custo}\nTotal de pedidos: ${totalPedidos}`);
+  
+  document.getElementById('linkPedido').value = '';
+  document.getElementById('qtdPedido').value = '';
+  document.getElementById('custoPedido').value = 'R$ 0,00';
 }
 
 lucide.createIcons();
 </script>
 </body>
-</html
+</html>
