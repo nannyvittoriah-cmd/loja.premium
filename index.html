@@ -7,7 +7,7 @@
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-  import { getDatabase, ref, set, get, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+  import { getDatabase, ref, set, get, onValue, push, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
   const firebaseConfig = {
     apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -23,7 +23,7 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getDatabase(app);
-  window.fb = { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile, ref, set, get, onValue };
+  window.fb = { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile, ref, set, get, onValue, push, serverTimestamp };
 </script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
@@ -38,6 +38,7 @@
   --card:rgba(17,17,17,.4);
   --borda:rgba(168,85,247,.5);
   --card-escuro:rgba(20,20,30,.6);
+  --verde-whats:#25D366;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{
@@ -220,6 +221,10 @@ body::after{
   justify-content:space-between;
   margin-bottom:16px;
 }
+.header-btns{
+  display:flex;
+  gap:6px;
+}
 .user-menu{
   background:var(--card-escuro);
   backdrop-filter:blur(20px);
@@ -234,6 +239,11 @@ body::after{
   gap:5px;
 }
 .user-menu i{width:12px;height:12px}
+.btn-suporte{
+  background:linear-gradient(135deg,var(--verde-whats),#128C7E);
+  border:none;
+  box-shadow:0 4px 15px rgba(37,211,102,.4);
+}
 .page-title{
   font-size:30px;
   font-weight:900;
@@ -796,8 +806,158 @@ body::after{
   cursor:pointer;
 }
 
+/* CHAT SUPORTE ESTILO WHATSAPP */
+.chat-container{
+  position:fixed;
+  bottom:0;
+  right:0;
+  width:100%;
+  max-width:380px;
+  height:100vh;
+  max-height:600px;
+  background:var(--bg);
+  border:1.5px solid var(--borda);
+  border-radius:16px 16px 0 0;
+  box-shadow:0 -5px 30px rgba(168,85,247,.4);
+  z-index:99999;
+  display:none;
+  flex-direction:column;
+  animation:slideUp.3s;
+}
+.chat-container.ativo{display:flex}
+@keyframes slideUp{
+  from{transform:translateY(100%)}
+  to{transform:translateY(0)}
+}
+.chat-header{
+  background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
+  padding:12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-radius:14px 14px 0 0;
+}
+.chat-header-info{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.chat-avatar{
+  width:36px;
+  height:36px;
+  background:rgba(255,255,255,.2);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.chat-avatar i{width:18px;height:18px;fill:var(--branco)}
+.chat-user{
+  font-size:11px;
+  font-weight:800;
+  margin-bottom:2px;
+}
+.chat-status{
+  font-size:7px;
+  color:rgba(255,255,255,.8);
+  display:flex;
+  align-items:center;
+  gap:3px;
+}
+.chat-status-dot{
+  width:6px;
+  height:6px;
+  background:var(--verde-whats);
+  border-radius:50%;
+  box-shadow:0 0 8px var(--verde-whats);
+}
+.chat-close{
+  background:rgba(255,255,255,.2);
+  border:none;
+  border-radius:50%;
+  width:28px;
+  height:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+.chat-close i{width:16px;height:16px;stroke:var(--branco)}
+.chat-messages{
+  flex:1;
+  padding:12px;
+  overflow-y:auto;
+  background:linear-gradient(180deg,rgba(168,85,247,.05),rgba(0,0,0,.3));
+}
+.chat-msg{
+  margin-bottom:10px;
+  display:flex;
+  flex-direction:column;
+  animation:fadeIn.3s;
+}
+.chat-msg.user{align-items:flex-end}
+.chat-msg.admin{align-items:flex-start}
+.chat-bubble{
+  max-width:75%;
+  padding:8px 12px;
+  border-radius:8px;
+  font-size:8px;
+  line-height:1.4;
+  word-wrap:break-word;
+}
+.chat-msg.user .chat-bubble{
+  background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
+  border-radius:8px 8px 0 8px;
+  box-shadow:0 2px 8px var(--roxo-glow);
+}
+.chat-msg.admin .chat-bubble{
+  background:var(--card-escuro);
+  border:1px solid var(--borda);
+  border-radius:8px 8px 8px 0;
+}
+.chat-time{
+  font-size:6px;
+  color:var(--cinza);
+  margin-top:2px;
+  padding:0 4px;
+}
+.chat-input-area{
+  padding:10px;
+  background:var(--card-escuro);
+  border-top:1px solid var(--borda);
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+.chat-input{
+  flex:1;
+  background:rgba(0,0,0,.5);
+  border:1px solid var(--borda);
+  border-radius:20px;
+  padding:10px 14px;
+  font-size:8px;
+  color:var(--branco);
+  outline:none;
+}
+.chat-input:focus{border-color:var(--roxo)}
+.chat-send{
+  width:36px;
+  height:36px;
+  background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
+  border:none;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  box-shadow:0 2px 12px var(--roxo-glow);
+}
+.chat-send i{width:16px;height:16px;fill:var(--branco)}
+.chat-send:active{transform:scale(.9)}
+
 @media(max-width:480px){
 .grid-categorias{grid-template-columns:1fr}
+.chat-container{max-width:100%;border-radius:0}
 }
 @media(max-width:380px){
 .servicos-grid{grid-template-columns:repeat(2,1fr)}
@@ -849,8 +1009,13 @@ body::after{
   <div class="container">
     <div class="header-servicos">
       <div class="logo" style="margin:0;font-size:12px"><i data-lucide="crown"></i> Prime Store <span style="color:var(--roxo-neon)">Vz</span></div>
-      <div class="user-menu" onclick="fazerLogout()">
-        <i data-lucide="log-out"></i> Sair
+      <div class="header-btns">
+        <div class="user-menu btn-suporte" onclick="abrirChat()">
+          <i data-lucide="message-circle"></i> Suporte
+        </div>
+        <div class="user-menu" onclick="fazerLogout()">
+          <i data-lucide="log-out"></i> Sair
+        </div>
       </div>
     </div>
 
@@ -939,8 +1104,7 @@ body::after{
           <div>100% seguro</div>
           <div>E muito mais</div>
         </div>
-        <button class="btn-servico" onclick="solicitar('Contas Premium')">Acessar <i data-lucide="
-        chevron-right"></i></button>
+        <button class="btn-servico" onclick="solicitar('Contas Premium')">Acessar <i data-lucide="chevron-right"></i></button>
       </div>
     </div>
   </div>
@@ -993,6 +1157,7 @@ body::after{
             <span id="servSelecionado">Selecione um serviço</span> <i data-lucide="chevron-down"></i>
           </div>
         </div>
+      </div>
       <button class="btn-pedido" onclick="fazerPedido()">FAZER PEDIDO</button>
     </div>
 
@@ -1097,11 +1262,38 @@ body::after{
   </div>
 </div>
 
+<!-- CHAT SUPORTE ESTILO WHATSAPP -->
+<div id="chatSuporte" class="chat-container">
+  <div class="chat-header">
+    <div class="chat-header-info">
+      <div class="chat-avatar"><i data-lucide="headphones"></i></div>
+      <div>
+        <div class="chat-user">Suporte Prime Vz</div>
+        <div class="chat-status"><div class="chat-status-dot"></div> Online</div>
+      </div>
+    </div>
+    <button class="chat-close" onclick="fecharChat()"><i data-lucide="x"></i></button>
+  </div>
+
+  <div class="chat-messages" id="chatMessages">
+    <div class="chat-msg admin">
+      <div class="chat-bubble">Olá! 👋 Sou o suporte da Prime Store Vz. Como posso te ajudar?</div>
+      <div class="chat-time">Agora</div>
+    </div>
+  </div>
+
+  <div class="chat-input-area">
+    <input type="text" class="chat-input" id="chatInput" placeholder="Digite sua mensagem..." onkeypress="if(event.key==='Enter') enviarMensagem()">
+    <button class="chat-send" onclick="enviarMensagem()"><i data-lucide="send"></i></button>
+  </div>
+</div>
+
 <script>
 const WHATSAPP='5598984853563';
 let userId = null;
 let totalPedidos = 0;
 let dadosPedidoTemp = null;
+let chatListener = null;
 
 window.addEventListener('load',()=>{
   lucide.createIcons();
@@ -1329,6 +1521,64 @@ function fecharConfirmar(e){
   if(!e || e.target.id==='modalConfirmar'){
     document.getElementById('modalConfirmar').classList.remove('ativo');
   }
+}
+
+// CHAT SUPORTE
+function abrirChat(){
+  document.getElementById('chatSuporte').classList.add('ativo');
+  carregarMensagens();
+}
+
+function fecharChat(){
+  document.getElementById('chatSuporte').classList.remove('ativo');
+  if(chatListener) chatListener();
+}
+
+function carregarMensagens(){
+  const { db, ref, onValue } = window.fb;
+  const chatRef = ref(db, `usuarios/${userId}/chat`);
+
+  chatListener = onValue(chatRef, (snapshot) => {
+    const msgs = snapshot.val() || {};
+    const container = document.getElementById('chatMessages');
+    container.innerHTML = `
+      <div class="chat-msg admin">
+        <div class="chat-bubble">Olá! 👋 Sou o suporte da Prime Store Vz. Como posso te ajudar?</div>
+        <div class="chat-time">Agora</div>
+      </div>
+    `;
+
+    Object.values(msgs).forEach(msg => {
+      const div = document.createElement('div');
+      div.className = `chat-msg ${msg.tipo}`;
+      div.innerHTML = `
+        <div class="chat-bubble">${msg.texto}</div>
+        <div class="chat-time">${new Date(msg.data).toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'})}</div>
+      `;
+      container.appendChild(div);
+    });
+
+    container.scrollTop = container.scrollHeight;
+  });
+}
+
+async function enviarMensagem(){
+  const input = document.getElementById('chatInput');
+  const texto = input.value.trim();
+  if(!texto) return;
+
+  const { db, ref, push, serverTimestamp } = window.fb;
+  const { auth } = window.fb;
+  const nome = auth.currentUser.displayName || auth.currentUser.email.split('@')[0];
+
+  await push(ref(db, `usuarios/${userId}/chat`), {
+    tipo: 'user',
+    nome: nome,
+    texto: texto,
+    data: Date.now()
+  });
+
+  input.value = '';
 }
 
 lucide.createIcons();
