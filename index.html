@@ -93,36 +93,110 @@ body.tema-claro::before{opacity:.15}
 .produto-vendedor{display:flex;align-items:center;gap:4px;font-size:7px;color:var(--cinza)}
 .vendedor-avatar{width:14px;height:14px;background:linear-gradient(135deg,var(--roxo-escuro),var(--roxo-medio));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:6px;font-weight:700;box-shadow:inset 0 1px 0 rgba(255,255,255,.2);color:#FFFFFF}
 
-/* MENU LATERAL */
-.menu-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);z-index:9998;display:none;opacity:0;transition:opacity .3s}
+/* MENU LATERAL - BOLHA BALÃO TRANSPARENTE */
+.menu-overlay{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,.6);
+  backdrop-filter:blur(15px);
+  z-index:9998;
+  display:none;
+  opacity:0;
+  transition:opacity .3s;
+}
 .menu-overlay.ativo{display:block;opacity:1}
-.menu-lateral{position:fixed;top:0;right:-280px;width:280px;height:100%;background:var(--card);backdrop-filter:blur(40px);border-left:1.5px solid var(--borda);z-index:9999;transition:right .3s;box-shadow:-10px 0 40px rgba(0,0,0,.5)}
+.menu-lateral{
+  position:fixed;
+  top:60px;
+  right:-300px;
+  width:280px;
+  height:auto;
+  max-height:calc(100vh - 80px);
+  background:rgba(15,15,20,.4);
+  backdrop-filter:blur(50px) saturate(180%);
+  border:1.5px solid rgba(76,29,149,.5);
+  border-radius:24px;
+  z-index:9999;
+  transition:right .4s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.15), inset 0 -2px 0 rgba(0,0,0,.3), 0 20px 60px rgba(76,29,149,.6);
+  overflow:hidden;
+  margin-right:16px;
+}
 .menu-lateral.ativo{right:0}
-.menu-header{padding:20px 16px;border-bottom:1px solid var(--borda);display:flex;align-items:center;justify-content:space-between}
+.menu-header{
+  padding:20px 16px 16px;
+  border-bottom:1px solid rgba(76,29,149,.3);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
 .menu-tit{font-size:14px;font-weight:900}
-.btn-fechar-menu{width:32px;height:32px;background:var(--roxo-glass);backdrop-filter:blur(20px);border:1px solid var(--borda);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+.btn-fechar-menu{
+  width:32px;
+  height:32px;
+  background:rgba(76,29,149,.3);
+  backdrop-filter:blur(20px);
+  border:1px solid rgba(76,29,149,.4);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.15);
+}
 .btn-fechar-menu i{width:18px;height:18px}
-.menu-lista{padding:12px 0}
-.menu-item{padding:14px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;border-left:3px solid transparent;transition:all .2s}
-.menu-item:active{background:var(--roxo-glass);border-left-color:var(--roxo-medio)}
+.menu-lista{padding:8px 0 16px}
+.menu-item{
+  padding:14px 20px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  cursor:pointer;
+  border-left:3px solid transparent;
+  transition:all .2s;
+}
+.menu-item:active{
+  background:rgba(76,29,149,.2);
+  border-left-color:var(--roxo-medio);
+}
 .menu-item i{width:20px;height:20px;stroke:var(--txt)}
 .menu-item-txt{font-size:10px;font-weight:600}
-.menu-divisor{height:1px;background:var(--borda);margin:8px 20px}
-.tema-switch{display:flex;align-items:center;justify-content:space-between;padding:14px 20px}
+.menu-divisor{height:1px;background:rgba(76,29,149,.3);margin:8px 20px}
+.tema-switch{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 20px;
+}
 .tema-label{display:flex;align-items:center;gap:12px;font-size:10px;font-weight:600}
 .tema-label i{width:20px;height:20px}
-.switch{width:44px;height:24px;background:var(--borda);border-radius:20px;position:relative;cursor:pointer;transition:background .3s}
+.switch{
+  width:44px;
+  height:24px;
+  background:rgba(76,29,149,.3);
+  border:1px solid rgba(76,29,149,.4);
+  border-radius:20px;
+  position:relative;
+  cursor:pointer;
+  transition:all .3s;
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.3);
+}
 .switch.ativo{background:linear-gradient(135deg,var(--roxo-escuro),var(--roxo-medio))}
-.switch-bola{width:20px;height:20px;background:#FFFFFF;border-radius:50%;position:absolute;top:2px;left:2px;transition:left .3s;box-shadow:0 2px 4px rgba(0,0,0,.3)}
-.switch.ativo .switch-bola{left:22px}
-
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.95);backdrop-filter:blur(20px);z-index:10000;display:none;align-items:center;justify-content:center;padding:20px}
-.modal.ativo{display:flex}
-.modal-content{width:100%;max-width:400px;background:var(--card);backdrop-filter:blur(40px);border:1.5px solid var(--borda);border-radius:16px;padding:24px 20px;box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 10px 60px rgba(76,29,149,.6);max-height:90vh;overflow-y:auto}
-.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.modal-tit{font-size:16px;font-weight:900}
-.btn-fechar{width:28px;height:28px;background:var(--roxo-glass);backdrop-filter:blur(20px);border:1px solid var(--borda);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
-.btn-fechar i{width:16px;height:16px}
+.switch-bola{
+  width:20px;
+  height:20px;
+  background:#FFFFFF;
+  border-radius:50%;
+  position:absolute;
+  top:1px;
+  left:1px;
+  transition:left .3s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:0 2px 8px rgba(0,0,0,.4);
+}
+.switch.ativo .switch-bola{left:21px}
 </style>
 </head>
 <body>
