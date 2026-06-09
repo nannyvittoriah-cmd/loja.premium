@@ -669,11 +669,6 @@ window.addEventListener('load',()=>{
 
   onAuthStateChanged(auth, (user) => {
     if(user){
-      if(user.email === 'nannyvittoriah@gmail.com'){
-        window.location.href = 'admin.html';
-        return;
-      }
-
       userId = user.uid;
       const nome = user.displayName || user.email.split('@')[0];
       document.getElementById('nomeUsuario').innerHTML = nome + ' <i data-lucide="badge-check"></i>';
@@ -717,16 +712,6 @@ async function fazerLogin(){
   const email=document.getElementById('loginEmail').value.trim();
   const senha=document.getElementById('loginSenha').value;
   if(!email||!senha){alert('Preencha todos os campos');return}
-
-  if(email === 'nannyvittoriah@gmail.com' && senha === 'Lorrannyh.101325'){
-    try{
-      await signInWithEmailAndPassword(auth,email,senha);
-    }catch(e){
-      alert('Erro no login ADM: '+e.message);
-    }
-    return;
-  }
-
   try{
     await signInWithEmailAndPassword(auth,email,senha);
   }catch(e){
