@@ -56,7 +56,7 @@ body::before{
   height:450px;
   background:radial-gradient(circle,var(--roxo-escuro) 0%,transparent 70%);
   opacity:.35;
-  z-index:0;
+  z-index:-1;
   pointer-events:none;
   filter:blur(90px);
 }
@@ -69,13 +69,13 @@ body::after{
   height:380px;
   background:radial-gradient(circle,var(--roxo) 0%,transparent 70%);
   opacity:.25;
-  z-index:0;
+  z-index:-1;
   pointer-events:none;
   filter:blur(90px);
 }
-.tela{display:none;min-height:100vh;position:relative;z-index:1}
+.tela{display:none;min-height:100vh;position:relative;z-index:10}
 .tela.ativa{display:block}
-.container{padding:14px 10px;max-width:500px;margin:0 auto;position:relative;z-index:1}
+.container{padding:14px 10px;max-width:500px;margin:0 auto;position:relative;z-index:10}
 .logo{
   font-size:14px;
   font-weight:900;
@@ -130,6 +130,9 @@ body::after{
   font-weight:600;
   cursor:pointer;
   transition:all.2s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 .tab.ativo{
   background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
@@ -165,6 +168,9 @@ body::after{
   box-shadow:0 4px 25px var(--roxo-glow),inset 0 1px 0 rgba(255,255,255,.25);
   margin-top:6px;
   transition:all.2s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 .btn-login:active{transform:scale(.96)}
 .esqueceu{
@@ -329,6 +335,9 @@ body::after{
   cursor:pointer;
   box-shadow:0 4px 25px var(--roxo-glow);
   margin-top:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 .btn-pedido:active{transform:scale(.96)}
 
@@ -433,7 +442,7 @@ body::after{
 .desc-tit i{width:18px;height:18px;stroke:var(--roxo-neon)}
 .desc-texto{font-size:8px;color:var(--cinza);line-height:1.6;margin-bottom:16px}
 .desc-texto b{color:var(--branco)}
-.btn-fechar-desc{width:100%;background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));color:var(--branco);border:none;border-radius:10px;padding:12px;font-weight:700;font-size:9px;cursor:pointer}
+.btn-fechar-desc{width:100%;background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));color:var(--branco);border:none;border-radius:10px;padding:12px;font-weight:700;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 
 .chat-container{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);z-index:9999;display:none;flex-direction:column}
 .chat-container.ativo{display:flex}
@@ -520,7 +529,6 @@ body::after{
             <div class="dash-name" id="nomeUsuario">Vz <i data-lucide="badge-check"></i></div>
             <div class="dash-sub">Sistema Completo</div>
           </div>
-        </div>
         <div class="dash-stats">
           <div class="dash-stat-icon"><i data-lucide="shopping-bag"></i></div>
           <div class="dash-stat-info">
@@ -661,13 +669,11 @@ window.addEventListener('load',()=>{
 
   onAuthStateChanged(auth, (user) => {
     if(user){
-      // SE FOR ADM, REDIRECIONA DIRETO PRO ADMIN.HTML
       if(user.email === 'nannyvittoriah@gmail.com'){
         window.location.href = 'admin.html';
         return;
       }
 
-      // CLIENTE NORMAL
       userId = user.uid;
       const nome = user.displayName || user.email.split('@')[0];
       document.getElementById('nomeUsuario').innerHTML = nome + ' <i data-lucide="badge-check"></i>';
@@ -712,7 +718,6 @@ async function fazerLogin(){
   const senha=document.getElementById('loginSenha').value;
   if(!email||!senha){alert('Preencha todos os campos');return}
 
-  // CHECA SE É ADM COM SENHA CORRETA
   if(email === 'nannyvittoriah@gmail.com' && senha === 'Lorrannyh.101325'){
     try{
       await signInWithEmailAndPassword(auth,email,senha);
@@ -751,7 +756,7 @@ async function fazerCadastro(){
   }catch(e){
     if(e.code==='auth/email-already-in-use')alert('Este e-mail já está cadastrado');
     else if(e.code==='auth/invalid-email')alert('E-mail inválido');
-    else if(e.code==='auth/weak-password')alert('Senha muito fraca
+    else if(e.code==='auth/weak-password')alert('Senha muito fraca');
     else alert('Erro: '+e.message);
   }
 }
