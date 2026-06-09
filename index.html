@@ -27,14 +27,16 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
 :root{
-  --bg:#0A0A0F;
-  --azul:#0099FF;
-  --azul-glow:rgba(0,153,255,.6);
+  --bg:#000000;
+  --roxo:#9333EA;
+  --roxo-forte:#7C3AED;
+  --roxo-neon:#A855F7;
+  --roxo-glow:rgba(147,51,234,.8);
   --branco:#FFFFFF;
   --cinza:#9CA3AF;
-  --card:rgba(20,20,30,.7);
-  --borda:rgba(255,255,255,.1);
-  --verde:#10B981;
+  --card:rgba(20,20,30,.6);
+  --borda:rgba(147,51,234,.3);
+  --glass:rgba(147,51,234,.15);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{
@@ -44,8 +46,22 @@ body{
   font-size:11px;
   min-height:100vh;
 }
+body::before{
+  content:'';
+  position:fixed;
+  top:-30%;
+  left:50%;
+  transform:translateX(-50%);
+  width:500px;
+  height:500px;
+  background:radial-gradient(circle,var(--roxo-forte) 0%,transparent 70%);
+  opacity:.4;
+  z-index:-1;
+  pointer-events:none;
+  filter:blur(120px);
+}
 
-/* HEADER GGMAX */
+/* HEADER */
 .header-gg{
   padding:12px 16px 0;
 }
@@ -58,11 +74,12 @@ body{
 .logo-gg{
   width:32px;
   height:32px;
-  background:var(--azul);
+  background:linear-gradient(135deg,var(--roxo-forte),var(--roxo-neon));
   border-radius:50%;
   display:flex;
   align-items:center;
   justify-content:center;
+  box-shadow:0 0 25px var(--roxo-glow);
 }
 .logo-gg i{width:18px;height:18px;fill:var(--branco)}
 .header-btns{
@@ -72,7 +89,8 @@ body{
 .btn-circle{
   width:36px;
   height:36px;
-  background:rgba(255,255,255,.05);
+  background:var(--glass);
+  backdrop-filter:blur(10px);
   border:1px solid var(--borda);
   border-radius:50%;
   display:flex;
@@ -80,13 +98,14 @@ body{
   justify-content:center;
   cursor:pointer;
   position:relative;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1);
 }
 .btn-circle i{width:16px;height:16px;stroke:var(--branco)}
 .notif-badge{
   position:absolute;
   top:-2px;
   right:-2px;
-  background:var(--azul);
+  background:linear-gradient(135deg,var(--roxo-forte),var(--roxo-neon));
   color:var(--branco);
   font-size:7px;
   font-weight:700;
@@ -96,9 +115,10 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
+  box-shadow:0 0 15px var(--roxo-glow);
 }
 
-/* BANNER CENTRAL */
+/* BANNER */
 .banner-gg{
   text-align:center;
   padding:30px 20px 40px;
@@ -106,16 +126,25 @@ body{
 .banner-tit{
   font-size:18px;
   font-weight:900;
-  margin-bottom:8px;
+  margin-bottom:12px;
   letter-spacing:.5px;
+  text-shadow:0 0 30px var(--roxo-glow);
 }
 .banner-sub{
-  font-size:9px;
-  color:var(--azul);
+  display:inline-block;
+  background:var(--glass);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--borda);
+  border-radius:20px;
+  padding:10px 18px;
+  font-size:8px;
+  color:var(--roxo-neon);
   margin-bottom:20px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 8px 32px rgba(147,51,234,.2);
+  cursor:pointer;
 }
 .btn-como-funciona{
-  background:var(--azul);
+  background:linear-gradient(135deg,var(--roxo-forte),var(--roxo-neon));
   color:var(--branco);
   border:none;
   border-radius:25px;
@@ -123,7 +152,7 @@ body{
   font-size:9px;
   font-weight:700;
   cursor:pointer;
-  box-shadow:0 4px 20px var(--azul-glow);
+  box-shadow:0 4px 30px var(--roxo-glow);
   text-transform:uppercase;
 }
 
@@ -157,23 +186,25 @@ body{
 .secao-tit-center::before{left:0}
 .secao-tit-center::after{right:0}
 
-/* CATEGORIAS POPULARES */
+/* CATEGORIAS - MENORES */
 .categorias-scroll{
   display:flex;
-  gap:10px;
+  gap:8px;
   overflow-x:auto;
   scrollbar-width:none;
   padding-bottom:4px;
 }
 .categorias-scroll::-webkit-scrollbar{display:none}
 .card-categoria{
-  min-width:140px;
-  height:180px;
-  border-radius:12px;
+  min-width:90px;
+  height:120px;
+  border-radius:10px;
   overflow:hidden;
   position:relative;
   cursor:pointer;
   flex-shrink:0;
+  border:1px solid var(--borda);
+  box-shadow:0 4px 20px rgba(147,51,234,.3);
 }
 .card-categoria img{
   width:100%;
@@ -185,14 +216,14 @@ body{
   bottom:0;
   left:0;
   right:0;
-  background:linear-gradient(transparent,rgba(0,0,0,.9));
-  padding:12px 8px 8px;
+  background:linear-gradient(transparent,rgba(0,0,0,.95));
+  padding:10px 6px 6px;
 }
 .card-categoria-nome{
-  font-size:10px;
+  font-size:8px;
   font-weight:900;
   text-transform:uppercase;
-  text-shadow:0 2px 8px rgba(0,0,0,.8);
+  text-shadow:0 2px 8px rgba(0,0,0,.9);
 }
 
 /* PRODUTOS */
@@ -203,11 +234,13 @@ body{
 }
 .card-produto{
   background:var(--card);
+  backdrop-filter:blur(20px);
   border:1px solid var(--borda);
   border-radius:12px;
   overflow:hidden;
   cursor:pointer;
   position:relative;
+  box-shadow:0 8px 32px rgba(147,51,234,.2);
 }
 .produto-img{
   width:100%;
@@ -226,14 +259,15 @@ body{
   width:24px;
   height:24px;
   background:rgba(0,0,0,.6);
+  backdrop-filter:blur(10px);
   border-radius:50%;
   display:flex;
   align-items:center;
   justify-content:center;
   cursor:pointer;
+  border:1px solid var(--borda);
 }
 .produto-fav i{width:12px;height:12px;stroke:var(--branco);fill:transparent}
-.produto-fav.ativo i{fill:var(--vermelho);stroke:var(--vermelho)}
 .produto-info{
   padding:10px;
 }
@@ -254,13 +288,15 @@ body{
 }
 .preco-box{
   display:inline-block;
-  background:rgba(0,153,255,.1);
-  border:1px solid var(--azul);
+  background:var(--glass);
+  backdrop-filter:blur(10px);
+  border:1px solid var(--roxo);
   border-radius:6px;
   padding:4px 8px;
   font-size:11px;
   font-weight:900;
-  color:var(--azul);
+  color:var(--roxo-neon);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 0 20px var(--roxo-glow);
 }
 .produto-vendedor{
   display:flex;
@@ -272,21 +308,15 @@ body{
 .vendedor-avatar{
   width:14px;
   height:14px;
-  background:var(--verde);
+  background:linear-gradient(135deg,var(--roxo-forte),var(--roxo-neon));
   border-radius:50%;
   display:flex;
   align-items:center;
   justify-content:center;
   font-size:6px;
   font-weight:700;
+  box-shadow:0 0 15px var(--roxo-glow);
 }
-.vendedor-rating{
-  display:flex;
-  align-items:center;
-  gap:2px;
-  color:var(--azul);
-}
-.vendedor-rating i{width:8px;height:8px;fill:var(--azul)}
 
 /* MODAL */
 .modal{
@@ -308,10 +338,11 @@ body{
   width:100%;
   max-width:400px;
   background:var(--card);
+  backdrop-filter:blur(30px);
   border:1.5px solid var(--borda);
   border-radius:16px;
   padding:24px 20px;
-  box-shadow:0 10px 50px rgba(0,153,255,.4);
+  box-shadow:0 10px 60px var(--roxo-glow);
   max-height:90vh;
   overflow-y:auto;
 }
@@ -324,11 +355,13 @@ body{
 .modal-tit{
   font-size:16px;
   font-weight:900;
+  text-shadow:0 0 25px var(--roxo-glow);
 }
 .btn-fechar{
   width:28px;
   height:28px;
-  background:rgba(255,255,255,.05);
+  background:var(--glass);
+  backdrop-filter:blur(10px);
   border:1px solid var(--borda);
   border-radius:8px;
   display:flex;
@@ -357,8 +390,9 @@ body{
   cursor:pointer;
 }
 .tab-modal.ativo{
-  background:var(--azul);
+  background:linear-gradient(135deg,var(--roxo-forte),var(--roxo-neon));
   color:var(--branco);
+  box-shadow:0 0 20px var(--roxo-glow);
 }
 .input-modal{
   background:rgba(0,0,0,.5);
@@ -372,12 +406,12 @@ body{
   margin-bottom:10px;
 }
 .input-modal:focus{
-  border-color:var(--azul);
-  box-shadow:0 0 20px var(--azul-glow);
+  border-color:var(--roxo);
+  box-shadow:0 0 25px var(--roxo-glow);
 }
 .btn-modal{
   width:100%;
-  background:var(--azul);
+  background:linear-gradient(135deg,var(--roxo-forte),var(--roxo-neon));
   color:var(--branco);
   border:none;
   border-radius:10px;
@@ -385,7 +419,7 @@ body{
   font-weight:700;
   font-size:9px;
   cursor:pointer;
-  box-shadow:0 4px 25px var(--azul-glow);
+  box-shadow:0 4px 30px var(--roxo-glow);
   margin-top:6px;
 }
 </style>
@@ -407,7 +441,7 @@ body{
 </div>
 
 <div class="banner-gg">
-  <div class="banner-tit">[ comprar e vender ]</div>
+  <div class="banner-tit">[ serviços digitais ]</div>
   <div class="banner-sub">contas, jogos, gift cards, gold, itens digitais e mais!</div>
   <button class="btn-como-funciona" onclick="alert('Em breve: tutorial')">COMO FUNCIONA?</button>
 </div>
@@ -431,6 +465,12 @@ body{
       <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=400" alt="Valorant">
       <div class="card-categoria-overlay">
         <div class="card-categoria-nome">VALORANT</div>
+      </div>
+    </div>
+    <div class="card-categoria" onclick="filtrarCategoria('roblox')">
+      <img src="https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=400" alt="Roblox">
+      <div class="card-categoria-overlay">
+        <div class="card-categoria-nome">ROBLOX</div>
       </div>
     </div>
   </div>
@@ -480,9 +520,6 @@ let produtos = [
     categoria: 'premium',
     preco: 4.20,
     imagem: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400',
-    vendedor: 'vanielethaina',
-    vendedorNota: 4.8,
-    vendedorVendas: 38
   },
   {
     id: '2',
@@ -490,9 +527,20 @@ let produtos = [
     categoria: 'premium',
     preco: 9.99,
     imagem: 'https://images.unsplash.com/photo-1563986768609-322da168b6f1?w=400',
-    vendedor: 'teustore',
-    vendedorNota: 5.0,
-    vendedorVendas: 2742
+  },
+  {
+    id: '3',
+    nome: 'SPOTIFY PREMIUM 30 DIAS | FAMÍLIA',
+    categoria: 'premium',
+    preco: 3.50,
+    imagem: 'https://images.unsplash.com/photo-1611339556316-e607c835dd28?w=400',
+  },
+  {
+    id: '4',
+    nome: 'DISNEY+ PREMIUM 30 DIAS | CONTA COMPARTILHADA',
+    categoria: 'premium',
+    preco: 5.00,
+    imagem: 'https://images.unsplash.com/photo-1603181601493-a4ea7ff75c23?w=400',
   }
 ];
 
@@ -528,12 +576,8 @@ function renderizarProdutos(){
           <div class="preco-box">R$ ${p.preco.toFixed(2)}</div>
         </div>
         <div class="produto-vendedor">
-          <div class="vendedor-avatar">${p.vendedor.charAt(0).toUpperCase()}</div>
-          <span>${p.vendedor}</span>
-          <div class="vendedor-rating">
-            <i data-lucide="star"></i>
-            <span>(${p.vendedorVendas})</span>
-          </div>
+          <div class="vendedor-avatar">L</div>
+          <span>L. Vz</span>
         </div>
       </div>
     </div>
@@ -548,7 +592,7 @@ function filtrarCategoria(cat){
 function verProduto(id){
   const p = produtos.find(prod => prod.id === id);
   if(!p) return;
-  alert(`Produto: ${p.nome}\n\nPreço: R$ ${p.preco.toFixed(2)}\nVendedor: ${p.vendedor}\n\nEm breve: página de compra`);
+  alert(`Produto: ${p.nome}\n\nPreço: R$ ${p.preco.toFixed(2)}\nVendedor: L. Vz\n\nEm breve: página de compra`);
 }
 
 function toggleFav(id){
