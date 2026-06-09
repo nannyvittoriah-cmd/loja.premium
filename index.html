@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>Prime Store Vz - Painel SMM</title>
+<title>Prime Store Vz</title>
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, updateProfile, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
@@ -88,7 +88,6 @@ body::after{
 }
 .logo i{width:16px;height:16px;stroke:var(--roxo-neon);fill:var(--roxo-neon);filter:drop-shadow(0 0 12px var(--roxo-glow))}
 
-/* LOGIN */
 .login-box{
   background:var(--card-escuro);
   backdrop-filter:blur(35px);
@@ -177,7 +176,6 @@ body::after{
   text-decoration:underline;
 }
 
-/* PAINEL SMM */
 .header-painel{
   display:flex;
   align-items:center;
@@ -412,52 +410,6 @@ body::after{
 }
 .btn-suporte-painel i{width:16px;height:16px}
 
-.passo-card{
-  background:var(--card-escuro);
-  border:1.5px solid var(--borda);
-  border-radius:12px;
-  padding:14px;
-  box-shadow:0 8px 32px rgba(168,85,247,.2);
-}
-.passo-tit{
-  font-size:11px;
-  font-weight:800;
-  margin-bottom:12px;
-  text-shadow:0 0 20px var(--roxo-glow);
-  display:flex;
-  align-items:center;
-  gap:5px;
-}
-.passo-tit i{width:16px;height:16px;stroke:var(--roxo-neon)}
-.passo-item{
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  margin-bottom:10px;
-}
-.passo-item:last-child{margin-bottom:0}
-.passo-num{
-  width:24px;
-  height:24px;
-  background:linear-gradient(135deg,var(--roxo),var(--roxo-neon));
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:9px;
-  font-weight:900;
-  flex-shrink:0;
-  box-shadow:0 0 20px var(--roxo-glow);
-}
-.passo-texto{
-  flex:1;
-  font-size:7px;
-  color:var(--cinza);
-  line-height:1.5;
-}
-.passo-texto b{color:var(--branco)}
-
-/* MODAIS */
 .modal-categorias{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.9);backdrop-filter:blur(20px);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
 .modal-categorias.ativo{display:flex}
 .modal-content{width:100%;max-width:400px;background:var(--card-escuro);border:1.5px solid var(--borda);border-radius:16px;padding:20px;box-shadow:0 10px 50px rgba(168,85,247,.4)}
@@ -518,8 +470,8 @@ body::after{
     <div class="logo"><i data-lucide="crown"></i> Prime Store <span style="color:var(--roxo-neon)">Vz</span></div>
 
     <div class="login-box">
-      <div class="login-tit">Painel <span style="color:var(--roxo-neon)">SMM</span></div>
-      <div class="login-sub">Seguidores, curtidas e mais</div>
+      <div class="login-tit">Sistema <span style="color:var(--roxo-neon)">Completo</span></div>
+      <div class="login-sub">SMM + Serviços Premium</div>
 
       <div class="tabs">
         <button class="tab ativo" onclick="mudarTab('login')">Login</button>
@@ -529,7 +481,7 @@ body::after{
       <div id="tabLogin">
         <input type="email" class="input" id="loginEmail" placeholder="E-mail">
         <input type="password" class="input" id="loginSenha" placeholder="Senha">
-        <button class="btn-login" onclick="fazerLogin()">ACESSAR PAINEL</button>
+        <button class="btn-login" onclick="fazerLogin()">ACESSAR SISTEMA</button>
         <div class="esqueceu" onclick="mudarTab('esqueceu')">Esqueceu a senha?</div>
       </div>
 
@@ -549,7 +501,7 @@ body::after{
   </div>
 </div>
 
-<!-- TELA PAINEL SMM -->
+<!-- TELA PAINEL SMM UNIFICADO -->
 <div id="painelSmm" class="tela">
   <div class="container">
     <div class="header-painel">
@@ -566,7 +518,7 @@ body::after{
           <div class="dash-info">
             <div class="dash-welcome">Bem-vindo</div>
             <div class="dash-name" id="nomeUsuario">Vz <i data-lucide="badge-check"></i></div>
-            <div class="dash-sub">Painel SMM Completo</div>
+            <div class="dash-sub">Sistema Completo</div>
           </div>
         </div>
         <div class="dash-stats">
@@ -601,10 +553,10 @@ body::after{
     </div>
 
     <div class="nossos-servicos" id="formPedido" style="display:none">
-      <div class="nossos-servicos-tit">Nossos Serviços</div>
+      <div class="nossos-servicos-tit">Detalhes do Pedido</div>
 
-      <label class="label-pequeno"><i data-lucide="link"></i> Link</label>
-      <input type="text" class="input-pequeno" id="pedidoLink" placeholder="https://instagram.com/usuario">
+      <label class="label-pequeno"><i data-lucide="link"></i> Link / Usuário</label>
+      <input type="text" class="input-pequeno" id="pedidoLink" placeholder="https://instagram.com/usuario ou ID Free Fire">
 
       <label class="label-pequeno"><i data-lucide="hash"></i> Quantidade</label>
       <input type="number" class="input-pequeno" id="pedidoQtd" placeholder="Mínimo: 50" oninput="calcularPreco()">
@@ -621,30 +573,6 @@ body::after{
       <button class="btn-suporte-painel" onclick="abrirChatSuporte()" style="background:linear-gradient(135deg,#25D366,#128C7E);margin-top:10px">
         <i data-lucide="message-circle"></i> SUPORTE
       </button>
-    </div>
-
-    <div class="passo-card">
-      <div class="passo-tit"><i data-lucide="info"></i> Passo a passo para realizar seu pedido</div>
-      <div class="passo-item">
-        <div class="passo-num">1</div>
-        <div class="passo-texto"><b>Escolha a Categoria</b><br>Selecione a rede social desejada</div>
-      </div>
-      <div class="passo-item">
-        <div class="passo-num">2</div>
-        <div class="passo-texto"><b>Escolha o Serviço</b><br>Selecione seguidores, curtidas, etc</div>
-      </div>
-      <div class="passo-item">
-        <div class="passo-num">3</div>
-        <div class="passo-texto"><b>Insira o Link</b><br>Cole o link do perfil ou publicação</div>
-      </div>
-      <div class="passo-item">
-        <div class="passo-num">4</div>
-        <div class="passo-texto"><b>Defina a Quantidade</b><br>Informe a quantidade desejada</div>
-      </div>
-      <div class="passo-item">
-        <div class="passo-num">5</div>
-        <div class="passo-texto"><b>Finalize o Pedido</b><br>Confirme e aguarde a entrega</div>
-      </div>
     </div>
   </div>
 </div>
@@ -733,13 +661,13 @@ window.addEventListener('load',()=>{
 
   onAuthStateChanged(auth, (user) => {
     if(user){
-      // SE FOR O EMAIL ADM, MANDA PRO PAINEL ADM ESCONDIDO
+      // SE FOR ADM, REDIRECIONA DIRETO PRO ADMIN.HTML
       if(user.email === 'nannyvittoriah@gmail.com'){
         window.location.href = 'admin.html';
         return;
       }
 
-      // CLIENTE NORMAL VAI DIRETO PRO SMM
+      // CLIENTE NORMAL
       userId = user.uid;
       const nome = user.displayName || user.email.split('@')[0];
       document.getElementById('nomeUsuario').innerHTML = nome + ' <i data-lucide="badge-check"></i>';
@@ -769,6 +697,7 @@ function ir(t){
   document.getElementById(t).classList.add('ativa');
   lucide.createIcons();
 }
+
 function mudarTab(t){
   document.querySelectorAll('.tab').forEach(e=>e.classList.remove('ativo'));
   event.target.classList.add('ativo');
@@ -782,6 +711,17 @@ async function fazerLogin(){
   const email=document.getElementById('loginEmail').value.trim();
   const senha=document.getElementById('loginSenha').value;
   if(!email||!senha){alert('Preencha todos os campos');return}
+
+  // CHECA SE É ADM COM SENHA CORRETA
+  if(email === 'nannyvittoriah@gmail.com' && senha === 'Lorrannyh.101325'){
+    try{
+      await signInWithEmailAndPassword(auth,email,senha);
+    }catch(e){
+      alert('Erro no login ADM: '+e.message);
+    }
+    return;
+  }
+
   try{
     await signInWithEmailAndPassword(auth,email,senha);
   }catch(e){
@@ -811,7 +751,7 @@ async function fazerCadastro(){
   }catch(e){
     if(e.code==='auth/email-already-in-use')alert('Este e-mail já está cadastrado');
     else if(e.code==='auth/invalid-email')alert('E-mail inválido');
-    else if(e.code==='auth/weak-password')alert('Senha muito fraca');
+    else if(e.code==='auth/weak-password')alert('Senha muito fraca
     else alert('Erro: '+e.message);
   }
 }
@@ -984,7 +924,7 @@ async function enviarPedido(){
   const link = document.getElementById('pedidoLink').value.trim();
   const qtd = parseInt(document.getElementById('pedidoQtd').value);
 
-  if(!link){alert('Insira o link');return}
+  if(!link){alert('Insira o link/usuário');return}
   if(!qtd || qtd < servicoMin){alert(`Quantidade mínima: ${servicoMin}`);return}
   if(qtd > servicoMax){alert(`Quantidade máxima: ${servicoMax}`);return}
 
