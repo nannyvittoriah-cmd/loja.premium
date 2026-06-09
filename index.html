@@ -16,14 +16,25 @@
   --cinza:#9CA3AF;
   --card:rgba(15,15,20,.8);
   --borda:rgba(76,29,149,.4);
+  --txt:var(--branco);
+}
+body.tema-claro{
+  --bg:#F3F4F6;
+  --roxo-glass:rgba(76,29,149,.08);
+  --branco:#1F2937;
+  --cinza:#6B7280;
+  --card:rgba(255,255,255,.9);
+  --borda:rgba(76,29,149,.2);
+  --txt:#1F2937;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{
   font-family:system-ui,sans-serif;
   background:var(--bg);
-  color:var(--branco);
+  color:var(--txt);
   font-size:11px;
   min-height:100vh;
+  transition:background .3s,color .3s;
 }
 body::before{
   content:'';
@@ -39,55 +50,79 @@ body::before{
   pointer-events:none;
   filter:blur(100px);
 }
+body.tema-claro::before{opacity:.15}
+
 .header-gg{padding:12px 16px 0}
 .header-icons{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
 .logo-gg{width:32px;height:32px;background:linear-gradient(135deg,var(--roxo-escuro),var(--roxo-medio));border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
-.logo-gg i{width:18px;height:18px;fill:var(--branco)}
+.logo-gg i{width:18px;height:18px;fill:#FFFFFF}
 .header-btns{display:flex;gap:8px}
 .btn-circle{width:36px;height:36px;background:var(--roxo-glass);backdrop-filter:blur(20px);border:1px solid var(--borda);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;box-shadow:inset 0 1px 0 rgba(255,255,255,.15), 0 4px 20px rgba(76,29,149,.3)}
-.btn-circle i{width:16px;height:16px;stroke:var(--branco)}
-.notif-badge{position:absolute;top:-2px;right:-2px;background:linear-gradient(135deg,var(--roxo-escuro),var(--roxo-medio));color:var(--branco);font-size:7px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.btn-circle i{width:16px;height:16px;stroke:var(--txt)}
+.notif-badge{position:absolute;top:-2px;right:-2px;background:linear-gradient(135deg,var(--roxo-escuro),var(--roxo-medio));color:#FFFFFF;font-size:7px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+
 .banner-gg{text-align:center;padding:30px 20px 40px}
 .banner-tit{font-size:18px;font-weight:900;margin-bottom:12px;letter-spacing:.5px}
-.banner-sub{display:inline-block;background:var(--roxo-glass);backdrop-filter:blur(30px);border:1px solid var(--borda);border-radius:20px;padding:10px 18px;font-size:8px;color:var(--branco);margin-bottom:20px;box-shadow:inset 0 2px 0 rgba(255,255,255,.1), inset 0 -1px 0 rgba(0,0,0,.2), 0 8px 32px rgba(76,29,149,.4);cursor:pointer}
-.btn-como-funciona{background:linear-gradient(135deg,var(--roxo-escuro),var(--roxo-medio));color:var(--branco);border:1px solid var(--borda);border-radius:25px;padding:12px 32px;font-size:9px;font-weight:700;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.2), 0 4px 25px rgba(76,29,149,.5);text-transform:uppercase}
+.banner-sub{display:inline-block;background:var(--roxo-glass);backdrop-filter:blur(30px);border:1px solid var(--borda);border-radius:20px;padding:10px 18px;font-size:8px;color:var(--txt);margin-bottom:20px;box-shadow:inset 0 2px 0 rgba(255,255,255,.1), inset 0 -1px 0 rgba(0,0,0,.2), 0 8px 32px rgba(76,29,149,.4);cursor:pointer}
+.btn-como-funciona{background:linear-gradient(135deg,var(--roxo-escuro),var(--roxo-medio));color:#FFFFFF;border:1px solid var(--borda);border-radius:25px;padding:12px 32px;font-size:9px;font-weight:700;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.2), 0 4px 25px rgba(76,29,149,.5);text-transform:uppercase}
+
 .secao{padding:0 16px;margin-bottom:24px}
 .secao-tit{font-size:13px;font-weight:700;margin-bottom:12px}
 .secao-tit-center{text-align:center;color:var(--cinza);font-size:8px;font-weight:600;margin:16px 0;position:relative}
 .secao-tit-center::before,.secao-tit-center::after{content:'';position:absolute;top:50%;width:30%;height:1px;background:var(--borda)}
 .secao-tit-center::before{left:0}
 .secao-tit-center::after{right:0}
+
 .categorias-scroll{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
 .categorias-scroll::-webkit-scrollbar{display:none}
 .card-categoria{min-width:48%;height:100px;border-radius:10px;overflow:hidden;position:relative;cursor:pointer;flex-shrink:0;border:1px solid var(--borda);box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 4px 15px rgba(76,29,149,.4)}
 .card-categoria img{width:100%;height:100%;object-fit:cover}
 .card-categoria-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.95));padding:8px 6px 6px}
-.card-categoria-nome{font-size:7px;font-weight:900;text-transform:uppercase}
+.card-categoria-nome{font-size:7px;font-weight:900;text-transform:uppercase;color:#FFFFFF}
+
 .produtos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .card-produto{background:var(--card);backdrop-filter:blur(30px);border:1px solid var(--borda);border-radius:12px;overflow:hidden;cursor:pointer;position:relative;box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 8px 32px rgba(76,29,149,.3)}
 .produto-img{width:100%;height:100px;position:relative}
 .produto-img img{width:100%;height:100%;object-fit:cover}
 .produto-fav{position:absolute;top:6px;right:6px;width:24px;height:24px;background:rgba(0,0,0,.7);backdrop-filter:blur(20px);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--borda);box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
-.produto-fav i{width:12px;height:12px;stroke:var(--branco);fill:transparent}
+.produto-fav i{width:12px;height:12px;stroke:#FFFFFF;fill:transparent}
 .produto-info{padding:10px}
 .produto-nome{font-size:8px;font-weight:600;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3;min-height:22px;color:var(--cinza)}
 .produto-preco{margin-bottom:6px}
-.preco-box{display:inline-block;background:var(--roxo-glass);backdrop-filter:blur(20px);border:1px solid var(--roxo-medio);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:900;color:var(--branco);box-shadow:inset 0 1px 0 rgba(255,255,255,.15)}
+.preco-box{display:inline-block;background:var(--roxo-glass);backdrop-filter:blur(20px);border:1px solid var(--roxo-medio);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:900;color:var(--txt);box-shadow:inset 0 1px 0 rgba(255,255,255,.15)}
 .produto-vendedor{display:flex;align-items:center;gap:4px;font-size:7px;color:var(--cinza)}
-.vendedor-avatar{width:14px;height:14px;background:linear-gradient(135deg,var(--roxo-escuro),var(--roxo-medio));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:6px;font-weight:700;box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
-.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.95);backdrop-filter:blur(20px);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
+.vendedor-avatar{width:14px;height:14px;background:linear-gradient(135deg,var(--roxo-escuro),var(--roxo-medio));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:6px;font-weight:700;box-shadow:inset 0 1px 0 rgba(255,255,255,.2);color:#FFFFFF}
+
+/* MENU LATERAL */
+.menu-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);z-index:9998;display:none;opacity:0;transition:opacity .3s}
+.menu-overlay.ativo{display:block;opacity:1}
+.menu-lateral{position:fixed;top:0;right:-280px;width:280px;height:100%;background:var(--card);backdrop-filter:blur(40px);border-left:1.5px solid var(--borda);z-index:9999;transition:right .3s;box-shadow:-10px 0 40px rgba(0,0,0,.5)}
+.menu-lateral.ativo{right:0}
+.menu-header{padding:20px 16px;border-bottom:1px solid var(--borda);display:flex;align-items:center;justify-content:space-between}
+.menu-tit{font-size:14px;font-weight:900}
+.btn-fechar-menu{width:32px;height:32px;background:var(--roxo-glass);backdrop-filter:blur(20px);border:1px solid var(--borda);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+.btn-fechar-menu i{width:18px;height:18px}
+.menu-lista{padding:12px 0}
+.menu-item{padding:14px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;border-left:3px solid transparent;transition:all .2s}
+.menu-item:active{background:var(--roxo-glass);border-left-color:var(--roxo-medio)}
+.menu-item i{width:20px;height:20px;stroke:var(--txt)}
+.menu-item-txt{font-size:10px;font-weight:600}
+.menu-divisor{height:1px;background:var(--borda);margin:8px 20px}
+.tema-switch{display:flex;align-items:center;justify-content:space-between;padding:14px 20px}
+.tema-label{display:flex;align-items:center;gap:12px;font-size:10px;font-weight:600}
+.tema-label i{width:20px;height:20px}
+.switch{width:44px;height:24px;background:var(--borda);border-radius:20px;position:relative;cursor:pointer;transition:background .3s}
+.switch.ativo{background:linear-gradient(135deg,var(--roxo-escuro),var(--roxo-medio))}
+.switch-bola{width:20px;height:20px;background:#FFFFFF;border-radius:50%;position:absolute;top:2px;left:2px;transition:left .3s;box-shadow:0 2px 4px rgba(0,0,0,.3)}
+.switch.ativo .switch-bola{left:22px}
+
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.95);backdrop-filter:blur(20px);z-index:10000;display:none;align-items:center;justify-content:center;padding:20px}
 .modal.ativo{display:flex}
 .modal-content{width:100%;max-width:400px;background:var(--card);backdrop-filter:blur(40px);border:1.5px solid var(--borda);border-radius:16px;padding:24px 20px;box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 10px 60px rgba(76,29,149,.6);max-height:90vh;overflow-y:auto}
 .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .modal-tit{font-size:16px;font-weight:900}
 .btn-fechar{width:28px;height:28px;background:var(--roxo-glass);backdrop-filter:blur(20px);border:1px solid var(--borda);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
 .btn-fechar i{width:16px;height:16px}
-.tabs-modal{display:flex;gap:6px;margin-bottom:16px;background:rgba(0,0,0,.5);padding:5px;border-radius:10px}
-.tab-modal{flex:1;padding:8px;background:transparent;border:none;border-radius:7px;color:var(--cinza);font-size:8px;font-weight:600;cursor:pointer}
-.tab-modal.ativo{background:linear-gradient(135deg,var(--roxo-escuro),var(--roxo-medio));color:var(--branco);box-shadow:inset 0 1px 0 rgba(255,255,255,.2)}
-.input-modal{background:rgba(0,0,0,.5);border:1px solid var(--borda);border-radius:10px;padding:12px;font-size:16px;color:var(--branco);width:100%;outline:none;margin-bottom:10px}
-.input-modal:focus{border-color:var(--roxo-medio);box-shadow:0 0 25px rgba(76,29,149,.5)}
-.btn-modal{width:100%;background:linear-gradient(135deg,var(--roxo-escuro),var(--roxo-medio));color:var(--branco);border:1px solid var(--borda);border-radius:10px;padding:12px;font-weight:700;font-size:9px;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.2), 0 4px 30px rgba(76,29,149,.6);margin-top:6px}
 </style>
 </head>
 <body>
@@ -98,7 +133,7 @@ body::before{
       <div class="btn-circle"><i data-lucide="search"></i></div>
       <div class="btn-circle"><i data-lucide="bell"></i><div class="notif-badge">1</div></div>
       <div class="btn-circle"><i data-lucide="bookmark"></i></div>
-      <div class="btn-circle" onclick="abrirLogin()"><i data-lucide="menu"></i></div>
+      <div class="btn-circle" onclick="abrirMenu()"><i data-lucide="menu"></i></div>
     </div>
   </div>
 </div>
@@ -137,26 +172,39 @@ body::before{
   <div class="produtos-grid" id="produtosGrid"></div>
 </div>
 
-<div id="modalLogin" class="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <div class="modal-tit">Entrar</div>
-      <div class="btn-fechar" onclick="fecharLogin()"><i data-lucide="x"></i></div>
+<!-- MENU LATERAL -->
+<div class="menu-overlay" id="menuOverlay" onclick="fecharMenu()"></div>
+<div class="menu-lateral" id="menuLateral">
+  <div class="menu-header">
+    <div class="menu-tit">Menu</div>
+    <div class="btn-fechar-menu" onclick="fecharMenu()"><i data-lucide="x"></i></div>
+  </div>
+  <div class="menu-lista">
+    <div class="menu-item" onclick="alert('Em breve: Minhas compras')">
+      <i data-lucide="shopping-bag"></i>
+      <div class="menu-item-txt">Minhas compras</div>
     </div>
-    <div class="tabs-modal">
-      <button class="tab-modal ativo" onclick="mudarTabLogin('login')">Login</button>
-      <button class="tab-modal" onclick="mudarTabLogin('cadastro')">Cadastro</button>
+    <div class="menu-item" onclick="alert('Em breve: Categorias')">
+      <i data-lucide="layout-grid"></i>
+      <div class="menu-item-txt">Categorias</div>
     </div>
-    <div id="tabLoginContent">
-      <input type="email" class="input-modal" id="loginEmail" placeholder="E-mail">
-      <input type="password" class="input-modal" id="loginSenha" placeholder="Senha">
-      <button class="btn-modal" onclick="alert('Login desabilitado - sem Firebase')">ENTRAR</button>
+    <div class="menu-item" onclick="alert('Em breve: Meus favoritos')">
+      <i data-lucide="heart"></i>
+      <div class="menu-item-txt">Meus favoritos</div>
     </div>
-    <div id="tabCadastroContent" style="display:none">
-      <input type="text" class="input-modal" id="cadNome" placeholder="Nome completo">
-      <input type="email" class="input-modal" id="cadEmail" placeholder="E-mail">
-      <input type="password" class="input-modal" id="cadSenha" placeholder="Senha - mín 6 caracteres">
-      <button class="btn-modal" onclick="alert('Cadastro desabilitado - sem Firebase')">CRIAR CONTA</button>
+    <div class="menu-item" onclick="alert('Em breve: Conta')">
+      <i data-lucide="user"></i>
+      <div class="menu-item-txt">Conta</div>
+    </div>
+    <div class="menu-divisor"></div>
+    <div class="tema-switch">
+      <div class="tema-label">
+        <i data-lucide="sun"></i>
+        <span>Tema</span>
+      </div>
+      <div class="switch" id="switchTema" onclick="trocarTema()">
+        <div class="switch-bola"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -172,6 +220,7 @@ let produtos = [
 window.addEventListener('load',()=>{
   lucide.createIcons();
   renderizarProdutos();
+  carregarTema();
 });
 
 function renderizarProdutos(){
@@ -198,13 +247,30 @@ function verProduto(id){
   alert(`Produto: ${p.nome}\n\nPreço: R$ ${p.preco.toFixed(2)}\nVendedor: L. Vz`);
 }
 
-function abrirLogin(){document.getElementById('modalLogin').classList.add('ativo')}
-function fecharLogin(){document.getElementById('modalLogin').classList.remove('ativo')}
-function mudarTabLogin(t){
-  document.querySelectorAll('.tab-modal').forEach(e=>e.classList.remove('ativo'));
-  event.target.classList.add('ativo');
-  document.getElementById('tabLoginContent').style.display=t==='login'?'block':'none';
-  document.getElementById('tabCadastroContent').style.display=t==='cadastro'?'block':'none';
+function abrirMenu(){
+  document.getElementById('menuOverlay').classList.add('ativo');
+  document.getElementById('menuLateral').classList.add('ativo');
+}
+
+function fecharMenu(){
+  document.getElementById('menuOverlay').classList.remove('ativo');
+  document.getElementById('menuLateral').classList.remove('ativo');
+}
+
+function trocarTema(){
+  const body = document.body;
+  const switchEl = document.getElementById('switchTema');
+  body.classList.toggle('tema-claro');
+  switchEl.classList.toggle('ativo');
+  localStorage.setItem('tema', body.classList.contains('tema-claro') ? 'claro' : 'escuro');
+}
+
+function carregarTema(){
+  const temaSalvo = localStorage.getItem('tema');
+  if(temaSalvo === 'claro'){
+    document.body.classList.add('tema-claro');
+    document.getElementById('switchTema').classList.add('ativo');
+  }
 }
 
 lucide.createIcons();
