@@ -5,6 +5,40 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <title>Prime Game Vz</title>
 <script src="https://unpkg.com/lucide@latest"></script>
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+  import { getDatabase, ref, set, get, push, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+  
+  const firebaseConfig = {
+    apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
+    authDomain: "premium-store-aa58b.firebaseapp.com",
+    databaseURL: "https://premium-store-aa58b-default-rtdb.firebaseio.com",
+    projectId: "premium-store-aa58b",
+    storageBucket: "premium-store-aa58b.firebasestorage.app",
+    messagingSenderId: "462239500057",
+    appId: "1:462239500057:web:f1b7cea162ed308a866788",
+    measurementId: "G-CN88J28WRX"
+  };
+  
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+  
+  window.firebaseAuth = auth;
+  window.firebaseDB = db;
+  window.firebaseRef = ref;
+  window.firebaseSet = set;
+  window.firebaseGet = get;
+  window.firebasePush = push;
+  window.firebaseOnValue = onValue;
+  window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+  window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+  window.sendPasswordResetEmail = sendPasswordResetEmail;
+  window.signOut = signOut;
+  window.onAuthStateChanged = onAuthStateChanged;
+  window.updateProfile = updateProfile;
+</script>
 <style>
 :root{
   --bg:#000000;
@@ -17,6 +51,8 @@
   --card:rgba(15,15,20,.8);
   --borda:rgba(76,29,149,.4);
   --txt:var(--branco);
+  --erro:#EF4444;
+  --sucesso:#10B981;
 }
 body.tema-claro{
   --bg:#FFFFFF;
@@ -253,7 +289,6 @@ body.tema-claro .card-pergunta{background:rgba(248,250,252,.95);border-color:rgb
 body.tema-claro .item-pergunta{background:rgba(248,250,252,.95);border-color:rgba(76,29,149,.25)}
 body.tema-claro .card-avaliacao{background:rgba(248,250,252,.95)}
 
-/* PAGINAS EXTRAS */
 .pagina-extra{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);z-index:10002;display:none;overflow-y:auto}
 .pagina-extra.ativo{display:block}
 .pagina-extra-header{padding:10px 12px;display:flex;align-items:center;gap:12px;position:sticky;top:0;background:var(--bg);z-index:10;border-bottom:1px solid var(--borda)}
@@ -264,7 +299,6 @@ body.tema-claro .card-avaliacao{background:rgba(248,250,252,.95)}
 .lista-vazia-txt{font-size:12px;font-weight:600;margin-bottom:8px}
 .lista-vazia-sub{font-size:9px}
 
-/* FAVORITOS */
 .item-favorito{display:flex;gap:10px;padding:12px;background:var(--card);backdrop-filter:blur(20px);border:1px solid var(--borda);border-radius:10px;margin-bottom:10px;cursor:pointer;position:relative}
 .item-favorito-img{width:70px;height:70px;border-radius:8px;overflow:hidden;flex-shrink:0}
 .item-favorito-img img{width:100%;height:100%;object-fit:cover}
@@ -274,7 +308,6 @@ body.tema-claro .card-avaliacao{background:rgba(248,250,252,.95)}
 .item-favorito-del{position:absolute;top:8px;right:8px;width:24px;height:24px;background:rgba(220,38,38,.2);border:1px solid rgba(220,38,38,.4);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .item-favorito-del i{width:13px;height:13px;stroke:#EF4444}
 
-/* CATEGORIAS */
 .categorias-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .card-cat-grande{height:110px;border-radius:12px;overflow:hidden;position:relative;cursor:pointer;border:1.5px solid var(--borda);box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 6px 25px rgba(76,29,149,.5)}
 .card-cat-grande img{width:100%;height:100%;object-fit:cover}
@@ -282,7 +315,6 @@ body.tema-claro .card-avaliacao{background:rgba(248,250,252,.95)}
 .card-cat-nome{font-size:9px;font-weight:900;text-transform:uppercase;color:#FFFFFF;margin-bottom:2px}
 .card-cat-count{font-size:7px;color:rgba(255,255,255,.7)}
 
-/* MINHAS COMPRAS */
 .item-compra{padding:14px;background:var(--card);backdrop-filter:blur(20px);border:1px solid var(--borda);border-radius:10px;margin-bottom:10px}
 .compra-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:10px}
 .compra-id{font-size:8px;color:var(--cinza);font-weight:600}
@@ -295,7 +327,6 @@ body.tema-claro .card-avaliacao{background:rgba(248,250,252,.95)}
 .compra-produto-preco{font-size:10px;font-weight:900}
 .compra-data{font-size:7px;color:var(--cinza);margin-top:8px}
 
-/* CONTA */
 .perfil-card{padding:20px;background:var(--card);backdrop-filter:blur(20px);border:1px solid var(--borda);border-radius:12px;margin-bottom:16px;text-align:center}
 .perfil-avatar{width:70px;height:70px;background:linear-gradient(135deg,var(--roxo-escuro),var(--roxo-medio));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:24px;font-weight:900;color:#FFFFFF;box-shadow:inset 0 2px 0 rgba(255,255,255,.2), 0 8px 30px rgba(76,29,149,.6)}
 .perfil-nome{font-size:14px;font-weight:900;margin-bottom:4px}
@@ -311,9 +342,42 @@ body.tema-claro .card-avaliacao{background:rgba(248,250,252,.95)}
 .conta-opcao-txt{font-size:9px;font-weight:600}
 .conta-opcao-seta{width:14px;height:14px;opacity:.5}
 .btn-sair{width:100%;background:rgba(220,38,38,.2);border:1.5px solid rgba(220,38,38,.4);border-radius:10px;padding:14px;font-size:10px;font-weight:700;color:#EF4444;cursor:pointer;margin-top:16px}
+
+/* LOGIN */
+.pagina-auth{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);z-index:10003;display:none;overflow-y:auto;padding:20px}
+.pagina-auth.ativo{display:flex;flex-direction:column;justify-content:center}
+.auth-card{max-width:400px;width:100%;margin:0 auto;background:var(--card);backdrop-filter:blur(40px);border:1.5px solid var(--borda);border-radius:16px;padding:24px;box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 10px 60px rgba(76,29,149,.6)}
+.auth-logo{width:50px;height:50px;background:linear-gradient(135deg,var(--roxo-escuro),var(--roxo-medio));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:inset 0 2px 0 rgba(255,255,255,.2), 0 8px 30px rgba(76,29,149,.6)}
+.auth-logo i{width:26px;height:26px;fill:#FFFFFF}
+.auth-tit{font-size:18px;font-weight:900;text-align:center;margin-bottom:6px}
+.auth-sub{font-size:8px;color:var(--cinza);text-align:center;margin-bottom:20px}
+.auth-form{display:flex;flex-direction:column;gap:12px}
+.auth-input-group{position:relative}
+.auth-input{width:100%;background:rgba(0,0,0,.3);border:1.5px solid var(--borda);border-radius:10px;padding:12px 12px 40px;font-size:11px;color:var(--txt);outline:none}
+.auth-input:focus{border-color:var(--roxo-medio);box-shadow:0 0 25px rgba(76,29,149,.5)}
+body.tema-claro .auth-input{background:#F8FAFC}
+.auth-input-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--cinza)}
+.auth-btn{width:100%;background:linear-gradient(135deg,var(--roxo-escuro),var(--roxo-medio));color:#FFFFFF;border:1px solid var(--borda);border-radius:10px;padding:13px;font-weight:700;font-size:10px;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.2), 0 4px 30px rgba(76,29,149,.6);text-transform:uppercase}
+.auth-btn:active{opacity:.9}
+.auth-btn:disabled{opacity:.5;cursor:not-allowed}
+.auth-links{display:flex;justify-content:space-between;margin-top:14px;font-size:8px}
+.auth-link{color:var(--roxo-medio);font-weight:700;cursor:pointer;text-decoration:none}
+.auth-erro{padding:10px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);border-radius:8px;font-size:8px;color:var(--erro);display:none;margin-bottom:10px}
+.auth-erro.ativo{display:block}
+.auth-sucesso{padding:10px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.4);border-radius:8px;font-size:8px;color:var(--sucesso);display:none;margin-bottom:10px}
+.auth-sucesso.ativo{display:block}
+.auth-divider{display:flex;align-items:center;gap:10px;margin:16px 0;font-size:8px;color:var(--cinza)}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--borda)}
+
+.btn-editar-perfil{width:100%;background:var(--roxo-glass);backdrop-filter:blur(20px);border:1.5px solid var(--borda);border-radius:10px;padding:12px;font-size:9px;font-weight:700;color:var(--txt);cursor:pointer;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-editar-perfil i{width:16px;height:16px}
+
+.modal-editar{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.95);backdrop-filter:blur(20px);z-index:10004;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-editar.ativo{display:flex}
 </style>
 </head>
 <body>
+<div id="appContent" style="display:none">
 <div class="header-gg">
   <div class="header-icons">
     <div class="logo-gg" onclick="voltarHome()"><i data-lucide="gamepad-2"></i></div>
@@ -351,13 +415,13 @@ body.tema-claro .card-avaliacao{background:rgba(248,250,252,.95)}
       <img src="https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=400" alt="Roblox">
       <div class="card-categoria-overlay"><div class="card-categoria-nome">ROBLOX</div></div>
     </div>
-  </div>
   <div class="secao-tit-center" onclick="abrirCategorias()">VER TODAS CATEGORIAS</div>
 </div>
 
 <div class="secao">
   <div class="secao-tit" id="tituloSecao">Assinaturas e Premium</div>
   <div class="produtos-grid" id="produtosGrid"></div>
+</div>
 </div>
 
 <!-- PAGINA PRODUTO -->
@@ -456,13 +520,11 @@ body.tema-claro .card-avaliacao{background:rgba(248,250,252,.95)}
             <div class="avaliacao-valor" id="mediaAvaliacoes">0</div>
             <div class="estrelas" id="estrelasMedia"></div>
           </div>
-        </div>
         <div class="barra-avaliacao">
           <div class="barra-like"><i data-lucide="thumbs-up"></i></div>
           <div class="barra-progresso">
             <div class="barra-progresso-fill" id="barraLike" style="width:0%"></div>
           </div>
-        </div>
         <div class="avaliacao-counts">
           <div class="count-item"><i data-lucide="thumbs-up" style="stroke:#10B981"></i><span id="countLike">0</span></div>
           <div class="count-item"><i data-lucide="thumbs-down" style="stroke:#EF4444"></i><span id="countDislike">0</span></div>
@@ -495,14 +557,12 @@ body.tema-claro .card-avaliacao{background:rgba(248,250,252,.95)}
           <div class="card-cat-nome">STREAMING</div>
           <div class="card-cat-count">4 produtos</div>
         </div>
-      </div>
       <div class="card-cat-grande" onclick="filtrarCategoriaECarregar('freefire')">
         <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400" alt="Free Fire">
         <div class="card-cat-overlay">
           <div class="card-cat-nome">FREE FIRE</div>
           <div class="card-cat-count">2 produtos</div>
         </div>
-      </div>
       <div class="card-cat-grande" onclick="filtrarCategoriaECarregar('vpn')">
         <img src="https://images.unsplash.com/photo-1563986768609-322da168b6f1?w=400" alt="VPN">
         <div class="card-cat-overlay">
@@ -516,14 +576,12 @@ body.tema-claro .card-avaliacao{background:rgba(248,250,252,.95)}
           <div class="card-cat-nome">MINECRAFT</div>
           <div class="card-cat-count">Em breve</div>
         </div>
-      </div>
       <div class="card-cat-grande" onclick="filtrarCategoriaECarregar('valorant')">
         <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=400" alt="Valorant">
         <div class="card-cat-overlay">
           <div class="card-cat-nome">VALORANT</div>
           <div class="card-cat-count">Em breve</div>
         </div>
-      </div>
       <div class="card-cat-grande" onclick="filtrarCategoriaECarregar('roblox')">
         <img src="https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=400" alt="Roblox">
         <div class="card-cat-overlay">
@@ -552,9 +610,9 @@ body.tema-claro .card-avaliacao{background:rgba(248,250,252,.95)}
   </div>
   <div class="pagina-extra-content">
     <div class="perfil-card">
-      <div class="perfil-avatar">L</div>
-      <div class="perfil-nome">L. Vz</div>
-      <div class="perfil-email">usuario@primegame.com</div>
+      <div class="perfil-avatar" id="perfilAvatar">L</div>
+      <div class="perfil-nome" id="perfilNome">Carregando...</div>
+      <div class="perfil-email" id="perfilEmail">carregando@email.com</div>
       <div class="perfil-stats">
         <div class="perfil-stat">
           <div class="perfil-stat-valor" id="contaCompras">0</div>
@@ -569,9 +627,13 @@ body.tema-claro .card-avaliacao{background:rgba(248,250,252,.95)}
           <div class="perfil-stat-label">Avaliações</div>
         </div>
       </div>
+      <button class="btn-editar-perfil" onclick="abrirEditarPerfil()">
+        <i data-lucide="edit-3"></i>
+        Editar Perfil
+      </button>
     </div>
     <div class="conta-opcoes">
-      <div class="conta-opcao" onclick="alert('Em breve: Editar perfil')">
+      <div class="conta-opcao" onclick="abrirEditarPerfil()">
         <div class="conta-opcao-left">
           <i data-lucide="user"></i>
           <div class="conta-opcao-txt">Editar Perfil</div>
@@ -607,7 +669,107 @@ body.tema-claro .card-avaliacao{background:rgba(248,250,252,.95)}
         <i data-lucide="chevron-right" class="conta-opcao-seta"></i>
       </div>
     </div>
-    <button class="btn-sair" onclick="alert('Saindo da conta...')">SAIR DA CONTA</button>
+    <button class="btn-sair" onclick="fazerLogout()">SAIR DA CONTA</button>
+  </div>
+</div>
+
+<!-- PAGINA LOGIN -->
+<div id="paginaLogin" class="pagina-auth">
+  <div class="auth-card">
+    <div class="auth-logo"><i data-lucide="gamepad-2"></i></div>
+    <div class="auth-tit">Bem-vindo de volta</div>
+    <div class="auth-sub">Entre na sua conta Prime Game Vz</div>
+    <div class="auth-erro" id="loginErro"></div>
+    <div class="auth-sucesso" id="loginSucesso"></div>
+    <form class="auth-form" onsubmit="fazerLogin(event)">
+      <div class="auth-input-group">
+        <i data-lucide="mail" class="auth-input-icon"></i>
+        <input type="email" class="auth-input" id="loginEmail" placeholder="E-mail" required>
+      </div>
+      <div class="auth-input-group">
+        <i data-lucide="lock" class="auth-input-icon"></i>
+        <input type="password" class="auth-input" id="loginSenha" placeholder="Senha" required>
+      </div>
+      <button type="submit" class="auth-btn" id="btnLogin">ENTRAR</button>
+    </form>
+    <div class="auth-links">
+      <a class="auth-link" onclick="mostrarEsqueceuSenha()">Esqueceu a senha?</a>
+      <a class="auth-link" onclick="mostrarCadastro()">Criar conta</a>
+    </div>
+  </div>
+</div>
+
+<!-- PAGINA CADASTRO -->
+<div id="paginaCadastro" class="pagina-auth">
+  <div class="auth-card">
+    <div class="auth-logo"><i data-lucide="gamepad-2"></i></div>
+    <div class="auth-tit">Criar conta</div>
+    <div class="auth-sub">Junte-se ao Prime Game Vz</div>
+    <div class="auth-erro" id="cadastroErro"></div>
+    <div class="auth-sucesso" id="cadastroSucesso"></div>
+    <form class="auth-form" onsubmit="fazerCadastro(event)">
+      <div class="auth-input-group">
+        <i data-lucide="user" class="auth-input-icon"></i>
+        <input type="text" class="auth-input" id="cadastroNome" placeholder="Nome completo" required>
+      </div>
+      <div class="auth-input-group">
+        <i data-lucide="mail" class="auth-input-icon"></i>
+        <input type="email" class="auth-input" id="cadastroEmail" placeholder="E-mail" required>
+      </div>
+      <div class="auth-input-group">
+        <i data-lucide="lock" class="auth-input-icon"></i>
+        <input type="password" class="auth-input" id="cadastroSenha" placeholder="Senha (mínimo 6 caracteres)" required minlength="6">
+      </div>
+      <button type="submit" class="auth-btn" id="btnCadastro">CRIAR CONTA</button>
+    </form>
+    <div class="auth-divider">ou</div>
+    <div class="auth-links" style="justify-content:center">
+      <a class="auth-link" onclick="mostrarLogin()">Já tem conta? Entrar</a>
+    </div>
+  </div>
+</div>
+
+<!-- PAGINA ESQUECEU SENHA -->
+<div id="paginaEsqueceuSenha" class="pagina-auth">
+  <div class="auth-card">
+    <div class="auth-logo"><i data-lucide="gamepad-2"></i></div>
+    <div class="auth-tit">Recuperar senha</div>
+    <div class="auth-sub">Enviaremos um link para seu e-mail</div>
+    <div class="auth-erro" id="esqueceuErro"></div>
+    <div class="auth-sucesso" id="esqueceuSucesso"></div>
+    <form class="auth-form" onsubmit="recuperarSenha(event)">
+      <div class="auth-input-group">
+        <i data-lucide="mail" class="auth-input-icon"></i>
+        <input type="email" class="auth-input" id="esqueceuEmail" placeholder="E-mail cadastrado" required>
+      </div>
+      <button type="submit" class="auth-btn" id="btnEsqueceu">ENVIAR LINK</button>
+    </form>
+    <div class="auth-links" style="justify-content:center">
+      <a class="auth-link" onclick="mostrarLogin()">Voltar para login</a>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR PERFIL -->
+<div id="modalEditarPerfil" class="modal-editar">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-tit">Editar Perfil</div>
+      <div class="btn-fechar" onclick="fecharEditarPerfil()"><i data-lucide="x"></i></div>
+    </div>
+    <div class="auth-erro" id="editarErro"></div>
+    <div class="auth-sucesso" id="editarSucesso"></div>
+    <form class="auth-form" onsubmit="salvarPerfil(event)">
+      <div class="auth-input-group">
+        <i data-lucide="user" class="auth-input-icon"></i>
+        <input type="text" class="auth-input" id="editarNome" placeholder="Nome completo" required>
+      </div>
+      <div class="auth-input-group">
+        <i data-lucide="mail" class="auth-input-icon"></i>
+        <input type="email" class="auth-input" id="editarEmail" placeholder="E-mail" disabled>
+      </div>
+      <button type="submit" class="auth-btn" id="btnSalvarPerfil">SALVAR</button>
+    </form>
   </div>
 </div>
 
@@ -775,19 +937,232 @@ let produtoAtual = null;
 let perguntas = {};
 let avaliacoes = {};
 let minhasCompras = [];
+let usuarioAtual = null;
 let notificacoes = [
   {id:1,titulo:'Bem-vindo ao Prime Game Vz!',desc:'Explore milhares de serviços digitais com os melhores preços.',tempo:'Agora'},
   {id:2,titulo:'Promoção YouTube Premium',desc:'Apenas R$ 4,20 por 30 dias de conta família!',tempo:'1h atrás'},
   {id:3,titulo:'Novo produto disponível',desc:'Spotify Premium 30 dias por R$ 3,50',tempo:'3h atrás'}
 ];
 
-window.addEventListener('load',()=>{
+// FIREBASE AUTH
+onAuthStateChanged(firebaseAuth, (user) => {
+  if (user) {
+    usuarioAtual = user;
+    document.getElementById('appContent').style.display = 'block';
+    document.getElementById('paginaLogin').classList.remove('ativo');
+    carregarDadosUsuario();
+    renderizarProdutos();
+    atualizarBadgeNotif();
+  } else {
+    usuarioAtual = null;
+    document.getElementById('appContent').style.display = 'none';
+    document.getElementById('paginaLogin').classList.add('ativo');
+  }
   lucide.createIcons();
-  renderizarProdutos();
-  carregarTema();
-  atualizarBadgeNotif();
-  carregarDados();
 });
+
+async function fazerLogin(e){
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value;
+  const senha = document.getElementById('loginSenha').value;
+  const btnLogin = document.getElementById('btnLogin');
+  const erro = document.getElementById('loginErro');
+  const sucesso = document.getElementById('loginSucesso');
+
+  erro.classList.remove('ativo');
+  sucesso.classList.remove('ativo');
+  btnLogin.disabled = true;
+  btnLogin.textContent = 'ENTRANDO...';
+
+  try {
+    await signInWithEmailAndPassword(firebaseAuth, email, senha);
+    sucesso.textContent = 'Login realizado com sucesso!';
+    sucesso.classList.add('ativo');
+  } catch (error) {
+    erro.textContent = traduzirErro(error.code);
+    erro.classList.add('ativo');
+  } finally {
+    btnLogin.disabled = false;
+    btnLogin.textContent = 'ENTRAR';
+  }
+}
+
+async function fazerCadastro(e){
+  e.preventDefault();
+  const nome = document.getElementById('cadastroNome').value;
+  const email = document.getElementById('cadastroEmail').value;
+  const senha = document.getElementById('cadastroSenha').value;
+  const btnCadastro = document.getElementById('btnCadastro');
+  const erro = document.getElementById('cadastroErro');
+  const sucesso = document.getElementById('cadastroSucesso');
+
+  erro.classList.remove('ativo');
+  sucesso.classList.remove('ativo');
+  btnCadastro.disabled = true;
+  btnCadastro.textContent = 'CRIANDO...';
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, senha);
+    await updateProfile(userCredential.user, { displayName: nome });
+
+    // Salva dados iniciais no banco
+    await firebaseSet(firebaseRef(firebaseDB, 'users/' + userCredential.user.uid), {
+      nome: nome,
+      email: email,
+      criadoEm: new Date().toISOString()
+    });
+
+    sucesso.textContent = 'Conta criada com sucesso!';
+    sucesso.classList.add('ativo');
+    setTimeout(() => mostrarLogin(), 1500);
+  } catch (error) {
+    erro.textContent = traduzirErro(error.code);
+    erro.classList.add('ativo');
+  } finally {
+    btnCadastro.disabled = false;
+    btnCadastro.textContent = 'CRIAR CONTA';
+  }
+}
+
+async function recuperarSenha(e){
+  e.preventDefault();
+  const email = document.getElementById('esqueceuEmail').value;
+  const btnEsqueceu = document.getElementById('btnEsqueceu');
+  const erro = document.getElementById('esqueceuErro');
+  const sucesso = document.getElementById('esqueceuSucesso');
+
+  erro.classList.remove('ativo');
+  sucesso.classList.remove('ativo');
+  btnEsqueceu.disabled = true;
+  btnEsqueceu.textContent = 'ENVIANDO...';
+
+  try {
+    await sendPasswordResetEmail(firebaseAuth, email);
+    sucesso.textContent = 'Link enviado! Verifique seu e-mail.';
+    sucesso.classList.add('ativo');
+    setTimeout(() => mostrarLogin(), 3000);
+  } catch (error) {
+    erro.textContent = traduzirErro(error.code);
+    erro.classList.add('ativo');
+  } finally {
+    btnEsqueceu.disabled = false;
+    btnEsqueceu.textContent = 'ENVIAR LINK';
+  }
+}
+
+async function fazerLogout(){
+  if(confirm('Deseja realmente sair?')){
+    await signOut(firebaseAuth);
+  }
+}
+
+async function salvarPerfil(e){
+  e.preventDefault();
+  const nome = document.getElementById('editarNome').value;
+  const btnSalvar = document.getElementById('btnSalvarPerfil');
+  const erro = document.getElementById('editarErro');
+  const sucesso = document.getElementById('editarSucesso');
+
+  erro.classList.remove('ativo');
+  sucesso.classList.remove('ativo');
+  btnSalvar.disabled = true;
+  btnSalvar.textContent = 'SALVANDO...';
+
+  try {
+    await updateProfile(usuarioAtual, { displayName: nome });
+    await firebaseSet(firebaseRef(firebaseDB, 'users/' + usuarioAtual.uid + '/nome'), nome);
+    sucesso.textContent = 'Perfil atualizado com sucesso!';
+    sucesso.classList.add('ativo');
+    setTimeout(() => {
+      fecharEditarPerfil();
+      atualizarConta();
+    }, 1500);
+  } catch (error) {
+    erro.textContent = 'Erro ao salvar perfil';
+    erro.classList.add('ativo');
+  } finally {
+    btnSalvar.disabled = false;
+    btnSalvar.textContent = 'SALVAR';
+  }
+}
+
+function traduzirErro(code){
+  const erros = {
+    'auth/email-already-in-use': 'E-mail já cadastrado',
+    'auth/invalid-email': 'E-mail inválido',
+    'auth/weak-password': 'Senha muito fraca',
+    'auth/user-not-found': 'Usuário não encontrado',
+    'auth/wrong-password': 'Senha incorreta',
+    'auth/too-many-requests': 'Muitas tentativas. Tente mais tarde',
+    'auth/network-request-failed': 'Erro de conexão'
+  };
+  return erros[code] || 'Erro ao processar solicitação';
+}
+
+function mostrarLogin(){
+  document.getElementById('paginaLogin').classList.add('ativo');
+  document.getElementById('paginaCadastro').classList.remove('ativo');
+  document.getElementById('paginaEsqueceuSenha').classList.remove('ativo');
+}
+
+function mostrarCadastro(){
+  document.getElementById('paginaLogin').classList.remove('ativo');
+  document.getElementById('paginaCadastro').classList.add('ativo');
+  document.getElementById('paginaEsqueceuSenha').classList.remove('ativo');
+}
+
+function mostrarEsqueceuSenha(){
+  document.getElementById('paginaLogin').classList.remove('ativo');
+  document.getElementById('paginaCadastro').classList.remove('ativo');
+  document.getElementById('paginaEsqueceuSenha').classList.add('ativo');
+}
+
+function abrirEditarPerfil(){
+  document.getElementById('editarNome').value = usuarioAtual.displayName || '';
+  document.getElementById('editarEmail').value = usuarioAtual.email;
+  document.getElementById('modalEditarPerfil').classList.add('ativo');
+  lucide.createIcons();
+}
+
+function fecharEditarPerfil(){
+  document.getElementById('modalEditarPerfil').classList.remove('ativo');
+  document.getElementById('editarErro').classList.remove('ativo');
+  document.getElementById('editarSucesso').classList.remove('ativo');
+}
+
+async function carregarDadosUsuario(){
+  if(!usuarioAtual) return;
+
+  // Atualiza perfil
+  document.getElementById('perfilNome').textContent = usuarioAtual.displayName || 'Usuário';
+  document.getElementById('perfilEmail').textContent = usuarioAtual.email;
+  document.getElementById('perfilAvatar').textContent = (usuarioAtual.displayName || 'U')[0].toUpperCase();
+
+  // Carrega dados do banco
+  const userRef = firebaseRef(firebaseDB, 'users/' + usuarioAtual.uid);
+  onValue(userRef, (snapshot) => {
+    const data = snapshot.val();
+    if(data){
+      if(data.favoritos) favoritos = data.favoritos;
+      if(data.compras) minhasCompras = data.compras;
+      if(data.avaliacoes) avaliacoes = data.avaliacoes;
+      if(data.perguntas) perguntas = data.perguntas;
+      atualizarConta();
+    }
+  });
+}
+
+async function salvarDadosUsuario(){
+  if(!usuarioAtual) return;
+  await firebaseSet(firebaseRef(firebaseDB, 'users/' + usuarioAtual.uid), {
+    nome: usuarioAtual.displayName,
+    email: usuarioAtual.email,
+    favoritos: favoritos,
+    compras: minhasCompras,
+    avaliacoes: avaliacoes,
+    perguntas: perguntas
+  });
+}
 
 function voltarHome(){
   fecharPaginaExtra();
@@ -817,7 +1192,7 @@ function renderizarProdutos(lista=produtos){
 function abrirProduto(id){
   produtoAtual = produtos.find(prod => prod.id === id);
   if(!produtoAtual) return;
-  
+
   document.getElementById('produtoImgGrande').src = produtoAtual.imagem;
   document.getElementById('produtoTitDetalhe').textContent = produtoAtual.nome;
   document.getElementById('statDisponiveis').textContent = produtoAtual.disponiveis;
@@ -825,32 +1200,32 @@ function abrirProduto(id){
   document.getElementById('statVendas').textContent = produtoAtual.vendas;
   document.getElementById('caracTipo').textContent = produtoAtual.tipo;
   document.getElementById('descAnuncio').textContent = produtoAtual.desc;
-  
+
   const tagsHtml = produtoAtual.tags.map(tag => `
     <div class="tag">
-      ${tag === 'diamante' ? '<i data-lucide="gem"></i>' : '<i data-lucide="zap"></i>'}
+      ${tag === 'diamante'? '<i data-lucide="gem"></i>' : '<i data-lucide="zap"></i>'}
       ${tag}
     </div>
   `).join('');
   document.getElementById('produtoTags').innerHTML = tagsHtml;
-  
+
   const btnFav = document.getElementById('btnFavProduto');
   if(favoritos.includes(id)){
     btnFav.classList.add('ativo');
   }else{
     btnFav.classList.remove('ativo');
   }
-  
+
   document.getElementById('selectItem').innerHTML = `
     <option>Escolha um item</option>
     <option>1x - R$ ${produtoAtual.preco.toFixed(2)}</option>
     <option>2x - R$ ${(produtoAtual.preco * 2).toFixed(2)}</option>
     <option>3x - R$ ${(produtoAtual.preco * 3).toFixed(2)}</option>
   `;
-  
+
   renderizarPerguntas(id);
   renderizarAvaliacoes(id);
-  
+
   document.getElementById('paginaProduto').classList.add('ativo');
   lucide.createIcons();
 }
@@ -864,14 +1239,14 @@ function toggleFavProduto(){
   if(!produtoAtual) return;
   const id = produtoAtual.id;
   if(favoritos.includes(id)){
-    favoritos = favoritos.filter(f => f !== id);
+    favoritos = favoritos.filter(f => f!== id);
   }else{
     favoritos.push(id);
   }
   const btnFav = document.getElementById('btnFavProduto');
   btnFav.classList.toggle('ativo');
   renderizarProdutos();
-  salvarDados();
+  salvarDadosUsuario();
 }
 
 function comprarProduto(){
@@ -883,12 +1258,12 @@ function comprarProduto(){
 
 function toggleFavorito(id){
   if(favoritos.includes(id)){
-    favoritos = favoritos.filter(f => f !== id);
+    favoritos = favoritos.filter(f => f!== id);
   }else{
     favoritos.push(id);
   }
   renderizarProdutos();
-  salvarDados();
+  salvarDadosUsuario();
 }
 
 function filtrarCategoria(cat){
@@ -913,7 +1288,7 @@ function abrirFavoritos(){
 function renderizarFavoritos(){
   const lista = document.getElementById('listaFavoritos');
   const produtosFav = produtos.filter(p => favoritos.includes(p.id));
-  
+
   if(produtosFav.length === 0){
     lista.innerHTML = `
       <div class="lista-vazia">
@@ -938,10 +1313,10 @@ function renderizarFavoritos(){
 }
 
 function removerFavorito(id){
-  favoritos = favoritos.filter(f => f !== id);
+  favoritos = favoritos.filter(f => f!== id);
   renderizarFavoritos();
   renderizarProdutos();
-  salvarDados();
+  salvarDadosUsuario();
 }
 
 // CATEGORIAS
@@ -959,7 +1334,7 @@ function abrirMinhasCompras(){
 
 function renderizarCompras(){
   const lista = document.getElementById('listaCompras');
-  
+
   if(minhasCompras.length === 0){
     lista.innerHTML = `
       <div class="lista-vazia">
@@ -1024,8 +1399,8 @@ function buscarProdutos(){
     resultado.innerHTML = '';
     return;
   }
-  const encontrados = produtos.filter(p => 
-    p.nome.toLowerCase().includes(termo) || 
+  const encontrados = produtos.filter(p =>
+    p.nome.toLowerCase().includes(termo) ||
     p.categoria.toLowerCase().includes(termo)
   );
   if(encontrados.length === 0){
@@ -1054,7 +1429,8 @@ function renderizarNotificacoes(){
     <div class="item-notif">
       <i data-lucide="bell"></i>
       <div class="notif-txt">
-       <div class="notif-desc">${n.desc}</div>
+        <div class="notif-tit">${n.titulo}</div>
+        <div class="notif-desc">${n.desc}</div>
         <div class="notif-tempo">${n.tempo}</div>
       </div>
     </div>
@@ -1084,7 +1460,7 @@ function adicionarCarrinho(id){
   }
 }
 function removerCarrinho(id){
-  carrinho = carrinho.filter(item => item.id !== id);
+  carrinho = carrinho.filter(item => item.id!== id);
   renderizarCarrinho();
 }
 function renderizarCarrinho(){
@@ -1113,8 +1489,7 @@ function finalizarCompra(){
     alert('Carrinho vazio!');
     return;
   }
-  
-  // Adiciona nas compras
+
   const agora = new Date();
   const data = agora.toLocaleDateString('pt-BR');
   carrinho.forEach(item => {
@@ -1125,18 +1500,18 @@ function finalizarCompra(){
       imagem: item.imagem,
       data: data
     });
-    
+
     if(!avaliacoes[item.id]) avaliacoes[item.id] = {total:0, media:0, likes:0, dislikes:0};
     avaliacoes[item.id].total++;
     avaliacoes[item.id].likes++;
     avaliacoes[item.id].media = 5;
   });
-  
+
   alert('Compra finalizada! Verifique em "Minhas compras"');
   carrinho = [];
   renderizarCarrinho();
   fecharCarrinho();
-  salvarDados();
+  salvarDadosUsuario();
   if(produtoAtual) renderizarAvaliacoes(produtoAtual.id);
 }
 
@@ -1156,7 +1531,7 @@ function trocarTema(){
   const switchEl = document.getElementById('switchTema');
   body.classList.toggle('tema-claro');
   switchEl.classList.toggle('ativo');
-  localStorage.setItem('tema', body.classList.contains('tema-claro') ? 'claro' : 'escuro');
+  localStorage.setItem('tema', body.classList.contains('tema-claro')? 'claro' : 'escuro');
 }
 
 function carregarTema(){
@@ -1172,7 +1547,7 @@ function renderizarPerguntas(produtoId){
   if(!perguntas[produtoId]) perguntas[produtoId] = [];
   const lista = document.getElementById('listaPerguntas');
   const btnMais = document.getElementById('btnCarregarMais');
-  
+
   if(perguntas[produtoId].length === 0){
     lista.innerHTML = '<div style="text-align:center;padding:16px;color:var(--cinza);font-size:9px">Seja o primeiro a perguntar!</div>';
     btnMais.style.display = 'none';
@@ -1186,30 +1561,30 @@ function renderizarPerguntas(produtoId){
         </div>
       </div>
     `).join('');
-    btnMais.style.display = perguntas[produtoId].length > 3 ? 'block' : 'none';
+    btnMais.style.display = perguntas[produtoId].length > 3? 'block' : 'none';
   }
 }
 
 function enviarPergunta(){
   const input = document.getElementById('inputPergunta');
   const texto = input.value.trim();
-  if(!texto || !produtoAtual) return;
-  
+  if(!texto ||!produtoAtual) return;
+
   if(!perguntas[produtoAtual.id]) perguntas[produtoAtual.id] = [];
-  
+
   const nomes = ['Francisco2030f', 'daniellysouza77', 'Cliente', 'Usuario'];
   const user = nomes[Math.floor(Math.random() * nomes.length)];
-  
+
   perguntas[produtoAtual.id].unshift({
     user: user,
     avatar: user[0].toUpperCase(),
     texto: texto,
     tempo: 'agora'
   });
-  
+
   input.value = '';
   renderizarPerguntas(produtoAtual.id);
-  salvarDados();
+  salvarDadosUsuario();
 }
 
 function carregarMaisPerguntas(){
@@ -1220,44 +1595,27 @@ function carregarMaisPerguntas(){
 function renderizarAvaliacoes(produtoId){
   if(!avaliacoes[produtoId]) avaliacoes[produtoId] = {total:0, media:0, likes:0, dislikes:0};
   const av = avaliacoes[produtoId];
-  
+
   document.getElementById('totalAvaliacoes').textContent = av.total;
   document.getElementById('mediaAvaliacoes').textContent = av.media.toFixed(0);
   document.getElementById('countLike').textContent = av.likes;
   document.getElementById('countDislike').textContent = av.dislikes;
-  
-  const estrelasHtml = Array(5).fill(0).map((_,i) => 
-    `<i data-lucide="star" style="${i >= av.media ? 'opacity:.3' : ''}"></i>`
+
+  const estrelasHtml = Array(5).fill(0).map((_,i) =>
+    `<i data-lucide="star" style="${i >= av.media? 'opacity:.3' : ''}"></i>`
   ).join('');
   document.getElementById('estrelasMedia').innerHTML = estrelasHtml;
-  
-  const percentual = av.total > 0 ? (av.likes / av.total) * 100 : 0;
+
+  const percentual = av.total > 0? (av.likes / av.total) * 100 : 0;
   document.getElementById('barraLike').style.width = percentual + '%';
-  
+
   lucide.createIcons();
 }
 
-// SALVAR/CARREGAR DADOS
-function salvarDados(){
-  localStorage.setItem('favoritos', JSON.stringify(favoritos));
-  localStorage.setItem('compras', JSON.stringify(minhasCompras));
-  localStorage.setItem('avaliacoes', JSON.stringify(avaliacoes));
-  localStorage.setItem('perguntas', JSON.stringify(perguntas));
-}
-
-function carregarDados(){
-  const fav = localStorage.getItem('favoritos');
-  const comp = localStorage.getItem('compras');
-  const av = localStorage.getItem('avaliacoes');
-  const perg = localStorage.getItem('perguntas');
-  
-  if(fav) favoritos = JSON.parse(fav);
-  if(comp) minhasCompras = JSON.parse(comp);
-  if(av) avaliacoes = JSON.parse(av);
-  if(perg) perguntas = JSON.parse(perg);
-}
-
-lucide.createIcons();
+window.addEventListener('load',()=>{
+  carregarTema();
+  lucide.createIcons();
+});
 </script>
 </body>
 </html>
