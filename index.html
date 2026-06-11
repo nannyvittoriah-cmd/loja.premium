@@ -234,8 +234,7 @@ body.tema-claro .editar-input{background:#F8FAFC}
 .notif-data{font-size:6px;color:var(--cinza)}
 .toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--card);backdrop-filter:blur(40px);border:1.5px solid var(--borda);border-radius:12px;padding:12px 20px;z-index:10004;display:none;box-shadow:0 10px 40px rgba(76,29,149,.6);min-width:200px;text-align:center}
 .toast.ativo{display:block;animation:slideDown .3s}
-@keyframes slideDown{from{opacity:0;transform:translateX(-50%) translateY(-20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-.toast-tit{font-size:10px;font-weight:700;margin-bottom:4px}
+@keyframes slideDown{from{opacity:0;transform:translateX(-50%) translateY(-20px)}to{opacity:1;transform:translateX(-50%) translateY(0toast-tit{font-size:10px;font-weight:700;margin-bottom:4px}
 .toast-txt{font-size:8px;color:var(--cinza)}
 .adm-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(245,158,11,.2);border:1px solid var(--adm);border-radius:6px;padding:4px 8px;font-size:7px;font-weight:700;color:var(--adm);margin-left:8px}
 .adm-badge i{width:10px;height:10px}
@@ -663,6 +662,7 @@ body.tema-claro .adm-input{background:#F8FAFC}
             <div class="upload-btn-trocar" id="admCatImgTrocar" style="display:none">
               <i data-lucide="refresh-cw"></i>TROCAR
             </div>
+          </div>
           <input type="file" id="admCatImgFile" accept="image/*" class="upload-input" onchange="previewUpload(event, 'admCatImgPreview', 'admCatImgPlaceholder', 'admCatImgTrocar')">
         </div>
         <button class="adm-btn" onclick="adicionarCategoriaAdm()">ADICIONAR CATEGORIA</button>
@@ -1665,12 +1665,13 @@ function carregarCategoriasAdm(){
 }
 
 async function deletarCategoriaAdm(id){
+  if(!confirm('Delet arCategoriaAdm(id){
   if(!confirm('Deletar esta categoria?')) return;
   await dbRemove(dbRef(db, 'categorias/' + id));
   mostrarToast('Deletado', 'Categoria removida');
 }
 
-carregarPerguntasAdm(){
+function carregarPerguntasAdm(){
   const lista = document.getElementById('listaPerguntasAdm');
   const perguntasRef = dbRef(db, 'perguntasTodas');
   dbOnValue(perguntasRef, (snapshot) => {
