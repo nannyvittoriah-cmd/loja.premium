@@ -75,7 +75,7 @@ body.tema-claro .auth-input{background:#F8FAFC}
 .auth-btn:disabled{opacity:.5;cursor:not-allowed}
 .auth-links{display:flex;justify-content:space-between;margin-top:14px;font-size:8px}
 .auth-link{color:var(--roxo-medio);font-weight:700;cursor:pointer;text-decoration:none}
-.auth-erro{padding:10px;background:rgba(239,68,.15);border:1px solid rgba(239,68,68,.4);border-radius:8px;font-size:8px;color:var(--erro);display:none;margin-bottom:10px}
+.auth-erro{padding:10px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);border-radius:8px;font-size:8px;color:var(--erro);display:none;margin-bottom:10px}
 .auth-erro.ativo{display:block}
 .auth-sucesso{padding:10px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.4);border-radius:8px;font-size:8px;color:var(--sucesso);display:none;margin-bottom:10px}
 .auth-sucesso.ativo{display:block}
@@ -260,7 +260,7 @@ body.tema-claro .menu-lateral{background:rgba(255,255,255,.6)}
   <div class="auth-card">
     <div class="auth-logo"><i data-lucide="gamepad-2"></i></div>
     <div class="auth-tit">Bem-vindo de volta</div>
-    <div class="auth-sub">Entre na sua conta Prime Game Vz</div>
+   <div class="auth-sub">Entre na sua conta Prime Game Vz</div>
     <div class="auth-erro" id="loginErro"></div>
     <div class="auth-sucesso" id="loginSucesso"></div>
     <form class="auth-form" onsubmit="fazerLogin(event)">
@@ -387,6 +387,7 @@ body.tema-claro .menu-lateral{background:rgba(255,255,255,.6)}
         <div class="stat-valor" id="statVendas">0</div>
         <div class="stat-label">Vendas</div>
       </div>
+    </div>
     <div class="produto-caracteristicas">
       <div class="caracteristicas-tit"><i data-lucide="info"></i>Características</div>
       <div class="caracteristica-item">
@@ -401,6 +402,7 @@ body.tema-claro .menu-lateral{background:rgba(255,255,255,.6)}
         <div class="caracteristica-label">Garantia</div>
         <div class="caracteristica-valor">7 dias</div>
       </div>
+    </div>
     <div class="produto-desc">
       <div class="desc-tit"><i data-lucide="file-text"></i>Descrição</div>
       <div class="desc-texto" id="descAnuncio"></div>
@@ -419,7 +421,6 @@ body.tema-claro .menu-lateral{background:rgba(255,255,255,.6)}
         <div class="pergunta-q"><i data-lucide="message-circle"></i>É seguro comprar?</div>
         <div class="pergunta-r">100% seguro. Trabalhamos só com contas originais e diamantes legítimos. Sem risco de ban.</div>
       </div>
-    </div>
     <select class="select-item" id="selectItem">
       <option value="">Escolha um item</option>
     </select>
@@ -637,7 +638,7 @@ window.addEventListener('load',()=>{
       carregarDadosUsuario();
       renderizarProdutos();
       atualizarBadgeCarrinho();
-      adicionarNotificacao('Bem-vindo!', 'Você entrou na Prime Game Vz 🔥');
+      if(notificacoes.length === 0) adicionarNotificacao('Bem-vindo!', 'Você entrou na Prime Game Vz 🔥');
     } else {
       usuarioAtual = null;
       document.getElementById('appContent').style.display = 'none';
@@ -1032,6 +1033,7 @@ function renderizarCompras(){
             <div class="compra-produto-nome">${c.nome}</div>
             <div class="compra-produto-preco">R$ ${c.preco.toFixed(2)}</div>
           </div>
+        </div>
         <div class="compra-data">Comprado em ${c.data}</div>
       </div>
     `).join('');
@@ -1118,7 +1120,7 @@ function finalizarCompra(){
   const data = agora.toLocaleDateString('pt-BR');
   carrinho.forEach(item => {
     minhasCompras.unshift({
-      id: Date.now() + Math.random(),
+      id: Math.floor(Date.now() + Math.random() * 1000),
       nome: item.nome,
       preco: item.preco,
       imagem: item.imagem,
