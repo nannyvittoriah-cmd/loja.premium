@@ -260,8 +260,9 @@ body.tema-claro .menu-lateral{background:rgba(255,255,255,.6)}
   <div class="auth-card">
     <div class="auth-logo"><i data-lucide="gamepad-2"></i></div>
     <div class="auth-tit">Bem-vindo de volta</div>
-   <div class="auth-sub">Entre na sua conta Prime Game Vz</div>
+    <div class="auth-sub">Entre na sua conta Prime Game Vz</div>
     <div class="auth-erro" id="loginErro"></div>
+    <div class="auth-sucesso" id="loginSucesso"></<div class="auth-erro" id="loginErro"></div>
     <div class="auth-sucesso" id="loginSucesso"></div>
     <form class="auth-form" onsubmit="fazerLogin(event)">
       <div class="auth-input-group">
@@ -372,8 +373,14 @@ body.tema-claro .menu-lateral{background:rgba(255,255,255,.6)}
       <img id="produtoImgGrande" src="" alt="">
       <div class="produto-fav-produto" id="btnFavProduto" onclick="toggleFavProduto()"><i data-lucide="heart"></i></div>
     </div>
+
+    <select class="select-item" id="selectItem">
+      <option value="">Escolha um item</option>
+    </select>
+
     <div class="produto-tit-detalhe" id="produtoTitDetalhe"></div>
     <div class="produto-tags" id="produtoTags"></div>
+
     <div class="produto-stats">
       <div class="stat-box">
         <div class="stat-valor" id="statDisponiveis">0</div>
@@ -388,6 +395,7 @@ body.tema-claro .menu-lateral{background:rgba(255,255,255,.6)}
         <div class="stat-label">Vendas</div>
       </div>
     </div>
+
     <div class="produto-caracteristicas">
       <div class="caracteristicas-tit"><i data-lucide="info"></i>Características</div>
       <div class="caracteristica-item">
@@ -403,10 +411,12 @@ body.tema-claro .menu-lateral{background:rgba(255,255,255,.6)}
         <div class="caracteristica-valor">7 dias</div>
       </div>
     </div>
+
     <div class="produto-desc">
       <div class="desc-tit"><i data-lucide="file-text"></i>Descrição</div>
       <div class="desc-texto" id="descAnuncio"></div>
     </div>
+
     <div class="produto-perguntas">
       <div class="perguntas-tit"><i data-lucide="help-circle"></i>Perguntas Frequentes</div>
       <div class="pergunta-item">
@@ -417,13 +427,17 @@ body.tema-claro .menu-lateral{background:rgba(255,255,255,.6)}
         <div class="pergunta-q"><i data-lucide="message-circle"></i>Tem garantia?</div>
         <div class="pergunta-r">Sim! 7 dias de garantia total. Se der problema a gente troca ou devolve seu dinheiro.</div>
       </div>
-      <div class="pergunta-item">
-        <div class="pergunta-q"><i data-lucide="message-circle"></i>É seguro comprar?</div>
-        <div class="pergunta-r">100% seguro. Trabalhamos só com contas originais e diamantes legítimos. Sem risco de ban.</div>
+    </div>
+
+    <div class="produto-perguntas">
+      <div class="perguntas-tit"><i data-lucide="message-square"></i>Fazer uma pergunta</div>
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <input type="text" id="inputPergunta" placeholder="Tire sua dúvida sobre o produto..." style="flex:1;background:rgba(0,0,0,.3);border:1.5px solid var(--borda);border-radius:8px;padding:10px;font-size:9px;color:var(--txt);outline:none">
+        <button onclick="enviarPergunta()" style="background:linear-gradient(135deg,var(--roxo-escuro),var(--roxo-medio));border:1px solid var(--borda);border-radius:8px;padding:0 16px;cursor:pointer"><i data-lucide="send" style="width:14px;height:14px;stroke:#FFF"></i></button>
       </div>
-    <select class="select-item" id="selectItem">
-      <option value="">Escolha um item</option>
-    </select>
+      <div id="listaPerguntasCliente"></div>
+    </div>
+
     <button class="btn-comprar" onclick="comprarProduto()">COMPRAR AGORA</button>
     <button class="btn-add-carrinho" onclick="addCarrinhoProduto()">ADICIONAR AO CARRINHO</button>
   </div>
@@ -895,6 +909,7 @@ function abrirProduto(id){
   `;
 
   document.getElementById('paginaProduto').classList.add('ativo');
+  carregarPerguntasProduto(id);
   lucide.createIcons();
 }
 
@@ -1031,9 +1046,8 @@ function renderizarCompras(){
           <div class="compra-produto-img"><img src="${c.imagem}" alt="${c.nome}"></div>
           <div class="compra-produto-info">
             <div class="compra-produto-nome">${c.nome}</div>
-            <div class="compra-produto-preco">R$ ${c.preco.toFixed(2)}</div>
+<div class="compra-produto-preco">R$ ${c.preco.toFixed(2)}</div>
           </div>
-        </div>
         <div class="compra-data">Comprado em ${c.data}</div>
       </div>
     `).join('');
@@ -1160,6 +1174,58 @@ function carregarTema(){
     document.body.classList.add('tema-claro');
     document.getElementById('switchTema').classList.add('ativo');
   }
+}
+
+// FUNÇÕES NOVAS DE PERGUNTAS DO CLIENTE
+function carregarPerguntasProduto(idProduto){
+  const lista = document.getElementById('listaPerguntasCliente');
+  const perguntasSalvas = JSON.parse(localStorage.getItem('perguntas_' + idProduto) || '[]');
+  
+  if(perguntasSalvas.length === 0){
+    lista.innerHTML = '<div style="font-size:8px;color:var(--cinza);text-align:center;padding:20px 0">Nenhuma pergunta ainda. Seja o primeiro!</div>';
+  }else{
+    lista.innerHTML = perguntasSalvas.map(p => `
+      <div class="pergunta-item">
+        <div class="pergunta-q"><i data-lucide="user"></i>${p.nome}</div>
+        <div class="pergunta-r">${p.pergunta}</div>
+        ${p.resposta ? `<div style="margin-top:6px;padding:8px;background:var(--roxo-glass);border-radius:6px;font-size:8px"><b>Vendedor:</b> ${p.resposta}</div>` : '<div style="margin-top:6px;font-size:7px;color:var(--cinza)">Aguardando resposta...</div>'}
+      </div>
+    `).join('');
+  }
+  lucide.createIcons();
+}
+
+function enviarPergunta(){
+  if(!produtoAtual) return;
+  const input = document.getElementById('inputPergunta');
+  const pergunta = input.value.trim();
+  
+  if(!pergunta){
+    mostrarToast('Erro', 'Digite sua pergunta primeiro');
+    return;
+  }
+  
+  if(!usuarioAtual){
+    mostrarToast('Erro', 'Faça login pra perguntar');
+    return;
+  }
+
+  const idProduto = produtoAtual.id;
+  const perguntasSalvas = JSON.parse(localStorage.getItem('perguntas_' + idProduto) || '[]');
+  
+  perguntasSalvas.unshift({
+    id: Date.now(),
+    nome: usuarioAtual.displayName || 'Cliente',
+    pergunta: pergunta,
+    resposta: null,
+    data: new Date().toLocaleString('pt-BR')
+  });
+  
+  localStorage.setItem('perguntas_' + idProduto, JSON.stringify(perguntasSalvas));
+  input.value = '';
+  mostrarToast('Enviado!', 'Sua pergunta foi enviada ao vendedor');
+  carregarPerguntasProduto(idProduto);
+  adicionarNotificacao('Pergunta enviada', `Você perguntou sobre ${produtoAtual.nome}`);
 }
 </script>
 </body>
