@@ -75,7 +75,6 @@ body.tema-claro .auth-input{background:#F8FAFC}
 .auth-btn{width:100%;background:linear-gradient(135deg,var(--roxo-escuro),var(--roxo-medio));color:#FFFFFF;border:1px solid var(--borda);border-radius:10px;padding:13px;font-weight:700;font-size:10px;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.2), 0 4px 30px rgba(76,29,149,.6);text-transform:uppercase}
 .auth-btn:active{opacity:.9}
 .auth-btn:disabled{opacity:.5;cursor:not-allowed}
-.auth-btn.adm{background:linear-gradient(135deg,var(--adm),#F97316);border-color:var(--adm)}
 .auth-links{display:flex;justify-content:space-between;margin-top:14px;font-size:8px}
 .auth-link{color:var(--roxo-medio);font-weight:700;cursor:pointer;text-decoration:none}
 .auth-erro{padding:10px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);border-radius:8px;font-size:8px;color:var(--erro);display:none;margin-bottom:10px}
@@ -89,7 +88,7 @@ body.tema-claro .auth-input{background:#F8FAFC}
 .menu-lateral{position:fixed;top:56px;right:-280px;width:260px;height:auto;max-height:calc(100vh - 72px);background:rgba(15,15,20,.4);backdrop-filter:blur(50px) saturate(180%);border:1.5px solid rgba(76,29,149,.5);border-radius:20px;z-index:9999;transition:right .4s cubic-bezier(.34,1.56,.64,1);box-shadow:inset 0 2px 0 rgba(255,255,255,.15), inset 0 -2px 0 rgba(0,0,0,.3), 0 20px 60px rgba(76,29,149,.6);overflow:hidden;margin-right:12px}
 body.tema-claro .menu-lateral{background:rgba(255,255,255,.6)}
 .menu-lateral.ativo{right:0}
-.menu-header{padding:16px 14px 14px;border-bottom:1px solid rgba(76,29,149,.3);display:flex;align-items:center;justify-content:space-between}
+.menu-header{padding:16px 14px;border-bottom:1px solid rgba(76,29,149,.3);display:flex;align-items:center;justify-content:space-between}
 .menu-tit{font-size:13px;font-weight:900}
 .btn-fechar-menu{width:30px;height:30px;background:rgba(76,29,149,.3);backdrop-filter:blur(20px);border:1px solid rgba(76,29,149,.4);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.15)}
 .btn-fechar-menu i{width:16px;height:16px}
@@ -286,6 +285,13 @@ body.tema-claro .adm-input{background:#F8FAFC}
 .adm-search-cliente input{flex:1}
 .adm-search-cliente button{padding:0 14px;background:var(--roxo-glass);border:1.5px solid var(--borda);border-radius:8px;cursor:pointer}
 .adm-search-cliente button i{width:16px;height:16px}
+.upload-preview{width:100%;height:140px;background:rgba(0,0,0,.3);border:2px dashed var(--borda);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;margin-bottom:10px}
+.upload-preview img{width:100%;height:100%;object-fit:cover}
+.upload-preview-txt{font-size:8px;color:var(--cinza);text-align:center}
+.upload-preview i{width:32px;height:32px;stroke:var(--cinza);margin-bottom:6px}
+.upload-input{display:none}
+.upload-btn-trocar{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.8);border:1px solid var(--borda);border-radius:6px;padding:6px 10px;font-size:7px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px}
+.upload-btn-trocar i{width:12px;height:12px}
 </style>
 </head>
 <body>
@@ -516,12 +522,12 @@ body.tema-claro .adm-input{background:#F8FAFC}
   </div>
   <div class="pagina-extra-content">
     <div class="perfil-card">
-      <div class="perfil-avatar" id="perfilAvatar" onclick="document.getElementById('inputFotoPerfil').click()">
+      <div class="perfil-avatar" onclick="document.getElementById('inputFotoPerfil').click()">
         <img id="perfilAvatarImg" src="" style="display:none">
         <span id="perfilAvatarLetra">U</span>
         <div class="perfil-avatar-edit"><i data-lucide="camera"></i></div>
       </div>
-      <input type="file" id="inputFotoPerfil" accept="image/*" style="display:none" onchange="trocarFotoPerfil(event)">
+      <input type="file" id="inputFotoPerfil" accept="image/*" class="upload-input" onchange="trocarFotoPerfil(event)">
       <div class="perfil-nome" id="perfilNome">Carregando...</div>
       <div class="perfil-email" id="perfilEmail">carregando@email.com</div>
       <div class="perfil-stats">
@@ -598,8 +604,18 @@ body.tema-claro .adm-input{background:#F8FAFC}
           <input type="number" class="adm-input" id="admProdPreco" placeholder="Ex: 15.00" step="0.01">
         </div>
         <div class="adm-input-group">
-          <label class="adm-label">URL da Imagem</label>
-          <input type="text" class="adm-input" id="admProdImg" placeholder="https://...">
+          <label class="adm-label">Imagem do produto</label>
+          <div class="upload-preview" onclick="document.getElementById('admProdImgFile').click()">
+            <img id="admProdImgPreview" src="" style="display:none">
+            <div id="admProdImgPlaceholder">
+              <i data-lucide="image-plus"></i>
+              <div class="upload-preview-txt">Clique pra escolher da galeria</div>
+            </div>
+            <div class="upload-btn-trocar" id="admProdImgTrocar" style="display:none">
+              <i data-lucide="refresh-cw"></i>TROCAR
+            </div>
+          </div>
+          <input type="file" id="admProdImgFile" accept="image/*" class="upload-input" onchange="previewUpload(event, 'admProdImgPreview', 'admProdImgPlaceholder', 'admProdImgTrocar')">
         </div>
         <div class="adm-input-group">
           <label class="adm-label">Categoria</label>
@@ -637,8 +653,18 @@ body.tema-claro .adm-input{background:#F8FAFC}
           <input type="text" class="adm-input" id="admCatNome" placeholder="Ex: streaming">
         </div>
         <div class="adm-input-group">
-          <label class="adm-label">URL da Imagem</label>
-          <input type="text" class="adm-input" id="admCatImg" placeholder="https://...">
+          <label class="adm-label">Imagem da categoria</label>
+          <div class="upload-preview" onclick="document.getElementById('admCatImgFile').click()">
+            <img id="admCatImgPreview" src="" style="display:none">
+            <div id="admCatImgPlaceholder">
+              <i data-lucide="image-plus"></i>
+              <div class="upload-preview-txt">Clique pra escolher da galeria</div>
+            </div>
+            <div class="upload-btn-trocar" id="admCatImgTrocar" style="display:none">
+              <i data-lucide="refresh-cw"></i>TROCAR
+            </div>
+          </div>
+          <input type="file" id="admCatImgFile" accept="image/*" class="upload-input" onchange="previewUpload(event, 'admCatImgPreview', 'admCatImgPlaceholder', 'admCatImgTrocar')">
         </div>
         <button class="adm-btn" onclick="adicionarCategoriaAdm()">ADICIONAR CATEGORIA</button>
       </div>
@@ -808,15 +834,16 @@ function carregarDadosGlobais(){
   const produtosRef = dbRef(db, 'produtos');
   dbOnValue(produtosRef, (snapshot) => {
     const data = snapshot.val();
-    produtos = data ? Object.values(data) : [];
+    produtos = data? Object.values(data) : [];
     renderizarProdutos();
   });
 
   const categoriasRef = dbRef(db, 'categorias');
   dbOnValue(categoriasRef, (snapshot) => {
     const data = snapshot.val();
-    categorias = data ? Object.values(data) : [];
+    categorias = data? Object.values(data) : [];
     renderizarCategorias();
+    carregarCategoriasAdm();
   });
 }
 
@@ -1023,6 +1050,8 @@ async function carregarDadosUsuario(){
         document.getElementById('perfilAvatarLetra').style.display = 'none';
       }else{
         document.getElementById('perfilAvatarLetra').textContent = (data.nome || 'U')[0].toUpperCase();
+        document.getElementById('perfilAvatarImg').style.display = 'none';
+        document.getElementById('perfilAvatarLetra').style.display = 'block';
       }
 
       favoritos = data.favoritos || [];
@@ -1040,28 +1069,74 @@ async function carregarDadosUsuario(){
   });
 }
 
+function comprimirImagem(file, maxWidth = 800, quality = 0.8){
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+        if(width > maxWidth){
+          height = (height * maxWidth) / width;
+          width = maxWidth;
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob((blob) => {
+          resolve(blob);
+        }, 'image/jpeg', quality);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function previewUpload(event, imgId, placeholderId, trocarId){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    document.getElementById(imgId).src = e.target.result;
+    document.getElementById(imgId).style.display = 'block';
+    document.getElementById(placeholderId).style.display = 'none';
+    document.getElementById(trocarId).style.display = 'flex';
+  };
+  reader.readAsDataURL(file);
+  lucide.createIcons();
+}
+
 async function trocarFotoPerfil(event){
   const file = event.target.files[0];
   if(!file) return;
-
-  mostrarToast('Enviando...', 'Aguarde o upload da foto');
-  const storageReference = storageRef(storage, 'perfis/' + usuarioAtual.uid + '/' + Date.now());
-  await storageUpload(storageReference, file);
-  const url = await storageGetUrl(storageReference);
-
-  await dbUpdate(dbRef(db, 'users/' + usuarioAtual.uid), { foto: url });
-  mostrarToast('Sucesso!', 'Foto atualizada');
+  mostrarToast('Enviando...', 'Comprimindo e enviando foto');
+  try{
+    const blob = await comprimirImagem(file, 400, 0.85);
+    const storageReference = storageRef(storage, 'perfis/' + usuarioAtual.uid + '/avatar.jpg');
+    await storageUpload(storageReference, blob);
+    const url = await storageGetUrl(storageReference);
+    await dbUpdate(dbRef(db, 'users/' + usuarioAtual.uid), { foto: url });
+    document.getElementById('perfilAvatarImg').src = url;
+    document.getElementById('perfilAvatarImg').style.display = 'block';
+    document.getElementById('perfilAvatarLetra').style.display = 'none';
+    mostrarToast('Sucesso!', 'Foto atualizada e salva');
+  }catch(err){
+    mostrarToast('Erro', 'Não deu pra enviar a foto');
+    console.error(err);
+  }
 }
 
 async function salvarPerfil(){
   const nome = document.getElementById('editarNome').value.trim();
   const telefone = document.getElementById('editarTelefone').value.trim();
-
   if(!nome){
     mostrarToast('Erro', 'Digite seu nome');
     return;
   }
-
   await dbUpdate(dbRef(db, 'users/' + usuarioAtual.uid), { nome, telefone });
   await updateUserProfile(usuarioAtual, { displayName: nome });
   mostrarToast('Salvo!', 'Perfil atualizado com sucesso');
@@ -1095,7 +1170,6 @@ function renderizarProdutos(lista=produtos){
 function abrirProduto(id){
   produtoAtual = produtos.find(prod => prod.id === id);
   if(!produtoAtual) return;
-
   document.getElementById('produtoImgGrande').src = produtoAtual.imagem;
   document.getElementById('produtoTitDetalhe').textContent = produtoAtual.nome;
   document.getElementById('statDisponiveis').textContent = produtoAtual.disponiveis;
@@ -1103,7 +1177,6 @@ function abrirProduto(id){
   document.getElementById('statVendas').textContent = produtoAtual.vendas || 0;
   document.getElementById('caracTipo').textContent = produtoAtual.tipo;
   document.getElementById('descAnuncio').textContent = produtoAtual.desc;
-
   const tagsHtml = (produtoAtual.tags || []).map(tag => `
     <div class="tag">
       ${tag === 'diamante'? '<i data-lucide="gem"></i>' : '<i data-lucide="zap"></i>'}
@@ -1111,21 +1184,18 @@ function abrirProduto(id){
     </div>
   `).join('');
   document.getElementById('produtoTags').innerHTML = tagsHtml;
-
   const btnFav = document.getElementById('btnFavProduto');
   if(favoritos.includes(id)){
     btnFav.classList.add('ativo');
   }else{
     btnFav.classList.remove('ativo');
   }
-
   document.getElementById('selectItem').innerHTML = `
     <option value="">Escolha um item</option>
     <option value="1">1x - R$ ${produtoAtual.preco.toFixed(2)}</option>
     <option value="2">2x - R$ ${(produtoAtual.preco * 2).toFixed(2)}</option>
     <option value="3">3x - R$ ${(produtoAtual.preco * 3).toFixed(2)}</option>
   `;
-
   document.getElementById('paginaProduto').classList.add('ativo');
   carregarPerguntasProduto(id);
   lucide.createIcons();
@@ -1211,7 +1281,6 @@ function abrirFavoritos(){
 function renderizarFavoritos(){
   const lista = document.getElementById('listaFavoritos');
   const produtosFav = produtos.filter(p => favoritos.includes(p.id));
-
   if(produtosFav.length === 0){
     lista.innerHTML = `
       <div class="lista-vazia">
@@ -1250,7 +1319,6 @@ function abrirCompras(){
 
 function renderizarCompras(){
   const lista = document.getElementById('listaCompras');
-
   if(minhasCompras.length === 0){
     lista.innerHTML = `
       <div class="lista-vazia">
@@ -1343,7 +1411,6 @@ async function finalizarCompra(){
     mostrarToast('Erro', 'Carrinho vazio!');
     return;
   }
-
   const agora = new Date();
   const data = agora.toLocaleDateString('pt-BR');
   const novasCompras = carrinho.map(item => ({
@@ -1354,10 +1421,8 @@ async function finalizarCompra(){
     imagem: item.imagem,
     data: data
   }));
-
   minhasCompras = [...novasCompras,...minhasCompras];
   await dbUpdate(dbRef(db, 'users/' + usuarioAtual.uid), { compras: minhasCompras });
-
   adicionarNotificacao('Compra realizada!', 'Seus produtos foram entregues automaticamente');
   mostrarToast('Sucesso!', 'Compra finalizada! Verifique em "Minhas compras"');
   carrinho = [];
@@ -1391,14 +1456,12 @@ function carregarTema(){
   }
 }
 
-// PERGUNTAS DO CLIENTE
 async function carregarPerguntasProduto(idProduto){
   const lista = document.getElementById('listaPerguntasCliente');
   const perguntasRef = dbRef(db, 'perguntas/' + idProduto);
   dbOnValue(perguntasRef, (snapshot) => {
     const data = snapshot.val();
     const perguntas = data? Object.values(data) : [];
-
     if(perguntas.length === 0){
       lista.innerHTML = '<div style="font-size:8px;color:var(--cinza);text-align:center;padding:20px 0">Nenhuma pergunta ainda. Seja o primeiro!</div>';
     }else{
@@ -1418,17 +1481,14 @@ async function enviarPergunta(){
   if(!produtoAtual) return;
   const input = document.getElementById('inputPergunta');
   const pergunta = input.value.trim();
-
   if(!pergunta){
     mostrarToast('Erro', 'Digite sua pergunta primeiro');
     return;
   }
-
   if(!usuarioAtual){
     mostrarToast('Erro', 'Faça login pra perguntar');
     return;
   }
-
   const idProduto = produtoAtual.id;
   const novaPergunta = {
     id: Date.now(),
@@ -1441,16 +1501,13 @@ async function enviarPergunta(){
     resposta: null,
     data: new Date().toLocaleString('pt-BR')
   };
-
   await dbPush(dbRef(db, 'perguntas/' + idProduto), novaPergunta);
   await dbPush(dbRef(db, 'perguntasTodas'), novaPergunta);
-
   input.value = '';
   mostrarToast('Enviado!', 'Sua pergunta foi enviada ao vendedor');
   adicionarNotificacao('Pergunta enviada', `Você perguntou sobre ${produtoAtual.nome}`);
 }
 
-// PAINEL ADM
 function abrirPainelAdm(){
   if(!isAdmin){
     mostrarToast('Erro', 'Acesso negado');
@@ -1473,42 +1530,52 @@ function trocarAbaAdm(aba){
 async function adicionarProdutoAdm(){
   const nome = document.getElementById('admProdNome').value.trim();
   const preco = parseFloat(document.getElementById('admProdPreco').value);
-  const img = document.getElementById('admProdImg').value.trim();
+  const imgFile = document.getElementById('admProdImgFile').files[0];
   const cat = document.getElementById('admProdCat').value;
   const subcat = document.getElementById('admProdSubcat').value.trim();
   const desc = document.getElementById('admProdDesc').value.trim();
   const disp = document.getElementById('admProdDisp').value.trim();
   const tipo = document.getElementById('admProdTipo').value.trim();
-
-  if(!nome ||!preco ||!img ||!cat){
-    mostrarToast('Erro', 'Preencha todos campos obrigatórios');
+  if(!nome ||!preco ||!imgFile ||!cat){
+    mostrarToast('Erro', 'Preencha nome, preço, imagem e categoria');
     return;
   }
-
-  const novoProd = {
-    id: Date.now().toString(),
-    nome,
-    preco,
-    imagem: img,
-    categoria: cat,
-    subcategoria: subcat,
-    desc,
-    disponiveis: disp,
-    vendidos: 0,
-    vendas: 0,
-    tipo,
-    tags: ['diamante']
-  };
-
-  await dbSet(dbRef(db, 'produtos/' + novoProd.id), novoProd);
-  mostrarToast('Sucesso!', 'Produto adicionado');
-
-  document.getElementById('admProdNome').value = '';
-  document.getElementById('admProdPreco').value = '';
-  document.getElementById('admProdImg').value = '';
-  document.getElementById('admProdDesc').value = '';
-  document.getElementById('admProdDisp').value = '';
-  document.getElementById('admProdTipo').value = '';
+  mostrarToast('Enviando...', 'Aguarde o upload');
+  try{
+    const blob = await comprimirImagem(imgFile, 800, 0.85);
+    const id = Date.now().toString();
+    const storageReference = storageRef(storage, 'produtos/' + id + '.jpg');
+    await storageUpload(storageReference, blob);
+    const imgUrl = await storageGetUrl(storageReference);
+    const novoProd = {
+      id,
+      nome,
+      preco,
+      imagem: imgUrl,
+      categoria: cat,
+      subcategoria: subcat,
+      desc,
+      disponiveis: disp,
+      vendidos: 0,
+      vendas: 0,
+      tipo,
+      tags: ['diamante']
+    };
+    await dbSet(dbRef(db, 'produtos/' + novoProd.id), novoProd);
+    mostrarToast('Sucesso!', 'Produto adicionado');
+    document.getElementById('admProdNome').value = '';
+    document.getElementById('admProdPreco').value = '';
+    document.getElementById('admProdImgFile').value = '';
+    document.getElementById('admProdImgPreview').style.display = 'none';
+    document.getElementById('admProdImgPlaceholder').style.display = 'block';
+    document.getElementById('admProdImgTrocar').style.display = 'none';
+    document.getElementById('admProdDesc').value = '';
+    document.getElementById('admProdDisp').value = '';
+    document.getElementById('admProdTipo').value = '';
+  }catch(err){
+    mostrarToast('Erro', 'Falha ao enviar produto');
+    console.error(err);
+  }
 }
 
 function carregarProdutosAdm(){
@@ -1544,42 +1611,54 @@ function editarProdutoAdm(id){
   if(!prod) return;
   document.getElementById('admProdNome').value = prod.nome;
   document.getElementById('admProdPreco').value = prod.preco;
-  document.getElementById('admProdImg').value = prod.imagem;
   document.getElementById('admProdCat').value = prod.categoria;
   document.getElementById('admProdSubcat').value = prod.subcategoria || '';
   document.getElementById('admProdDesc').value = prod.desc;
   document.getElementById('admProdDisp').value = prod.disponiveis;
   document.getElementById('admProdTipo').value = prod.tipo;
+  document.getElementById('admProdImgPreview').src = prod.imagem;
+  document.getElementById('admProdImgPreview').style.display = 'block';
+  document.getElementById('admProdImgPlaceholder').style.display = 'none';
+  document.getElementById('admProdImgTrocar').style.display = 'flex';
   window.scrollTo(0,0);
   mostrarToast('Editando', 'Modifique e clique em ADICIONAR para atualizar');
 }
 
 async function adicionarCategoriaAdm(){
   const nome = document.getElementById('admCatNome').value.trim();
-  const img = document.getElementById('admCatImg').value.trim();
-
-  if(!nome ||!img){
-    mostrarToast('Erro', 'Preencha todos campos');
+  const imgFile = document.getElementById('admCatImgFile').files[0];
+  if(!nome ||!imgFile){
+    mostrarToast('Erro', 'Preencha nome e imagem');
     return;
   }
-
-  const novaCat = {
-    id: Date.now().toString(),
-    nome,
-    imagem: img
-  };
-
-  await dbSet(dbRef(db, 'categorias/' + novaCat.id), novaCat);
-  mostrarToast('Sucesso!', 'Categoria adicionada');
-
-  document.getElementById('admCatNome').value = '';
-  document.getElementById('admCatImg').value = '';
+  mostrarToast('Enviando...', 'Aguarde o upload');
+  try{
+    const blob = await comprimirImagem(imgFile, 600, 0.85);
+    const id = Date.now().toString();
+    const storageReference = storageRef(storage, 'categorias/' + id + '.jpg');
+    await storageUpload(storageReference, blob);
+    const imgUrl = await storageGetUrl(storageReference);
+    const novaCat = {
+      id,
+      nome,
+      imagem: imgUrl
+    };
+    await dbSet(dbRef(db, 'categorias/' + novaCat.id), novaCat);
+    mostrarToast('Sucesso!', 'Categoria adicionada');
+    document.getElementById('admCatNome').value = '';
+    document.getElementById('admCatImgFile').value = '';
+    document.getElementById('admCatImgPreview').style.display = 'none';
+    document.getElementById('admCatImgPlaceholder').style.display = 'block';
+    document.getElementById('admCatImgTrocar').style.display = 'none';
+  }catch(err){
+    mostrarToast('Erro', 'Falha ao enviar categoria');
+    console.error(err);
+  }
 }
 
 function carregarCategoriasAdm(){
   const lista = document.getElementById('listaCategoriasAdm');
   const select = document.getElementById('admProdCat');
-
   if(categorias.length === 0){
     lista.innerHTML = '<div style="font-size:8px;color:var(--cinza);text-align:center;padding:20px">Nenhuma categoria</div>';
     select.innerHTML = '<option value="">Selecione...</option>';
@@ -1595,7 +1674,6 @@ function carregarCategoriasAdm(){
         </div>
       </div>
     `).join('');
-
     select.innerHTML = '<option value="">Selecione...</option>' + categorias.map(c =>
       `<option value="${c.id}">${c.nome}</option>`
     ).join('');
@@ -1615,7 +1693,6 @@ function carregarPerguntasAdm(){
   dbOnValue(perguntasRef, (snapshot) => {
     const data = snapshot.val();
     const perguntas = data? Object.entries(data).map(([key, val]) => ({key,...val})) : [];
-
     if(perguntas.length === 0){
       lista.innerHTML = '<div style="font-size:8px;color:var(--cinza);text-align:center;padding:20px">Nenhuma pergunta ainda</div>';
     }else{
@@ -1646,9 +1723,7 @@ async function responderPerguntaAdm(key, produtoId){
     mostrarToast('Erro', 'Digite a resposta');
     return;
   }
-
   await dbUpdate(dbRef(db, 'perguntasTodas/' + key), { resposta: resp });
-
   const pergRef = dbRef(db, 'perguntas/' + produtoId);
   const snap = await dbGet(pergRef);
   if(snap.exists()){
@@ -1660,7 +1735,6 @@ async function responderPerguntaAdm(key, produtoId){
       }
     }
   }
-
   mostrarToast('Respondido!', 'Resposta enviada ao cliente');
 }
 
@@ -1684,7 +1758,6 @@ async function buscarClienteNotif(){
     mostrarToast('Erro', 'Digite o e-mail');
     return;
   }
-
   const usersRef = dbRef(db, 'users');
   const snap = await dbGet(usersRef);
   if(snap.exists()){
@@ -1699,6 +1772,7 @@ async function buscarClienteNotif(){
     if(encontrado){
       document.getElementById('admClienteEncontrado').textContent = '✓ Cliente: ' + encontrado.nome;
       document.getElementById('admClienteEncontrado').style.display = 'block';
+      document.getElementById('admClienteEncontrado').style.color = 'var(--sucesso)';
     }else{
       document.getElementById('admClienteEncontrado').textContent = '✗ Cliente não encontrado';
       document.getElementById('admClienteEncontrado').style.display = 'block';
@@ -1710,12 +1784,10 @@ async function buscarClienteNotif(){
 async function enviarNotificacaoAdm(){
   const titulo = document.getElementById('admNotifTitulo').value.trim();
   const msg = document.getElementById('admNotifMsg').value.trim();
-
   if(!titulo ||!msg){
     mostrarToast('Erro', 'Preencha título e mensagem');
     return;
   }
-
   if(tipoNotifAtual === 'todos'){
     const usersRef = dbRef(db, 'users');
     const snap = await dbGet(usersRef);
@@ -1767,7 +1839,6 @@ async function enviarNotificacaoAdm(){
       }
     }
   }
-
   document.getElementById('admNotifTitulo').value = '';
   document.getElementById('admNotifMsg').value = '';
   document.getElementById('admNotifEmail').value = '';
