@@ -194,16 +194,6 @@ body.tema-claro .editar-input{background:#F8FAFC}
 .pergunta-q{font-size:8px;font-weight:700;margin-bottom:6px;display:flex;gap:6px}
 .pergunta-q i{width:12px;height:12px;flex-shrink:0;margin-top:1px}
 .pergunta-r{font-size:8px;color:var(--cinza);padding-left:18px;line-height:1.5}
-.pergunta-cliente{padding:10px;background:var(--roxo-glass);border-radius:8px;margin-bottom:8px}
-.pergunta-cliente-header{display:flex;justify-content:space-between;align-items:start;margin-bottom:6px}
-.pergunta-cliente-nome{font-size:8px;font-weight:700}
-.pergunta-cliente-data{font-size:6px;color:var(--cinza)}
-.pergunta-cliente-txt{font-size:8px;margin-bottom:8px}
-.pergunta-cliente-resp{padding:8px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);border-radius:6px;font-size:8px;margin-top:6px}
-.pergunta-cliente-actions{display:flex;gap:6px;margin-top:8px}
-.btn-resp-pergunta{flex:1;padding:8px;background:var(--roxo-glass);border:1px solid var(--borda);border-radius:6px;font-size:7px;font-weight:700;cursor:pointer;color:var(--txt)}
-.btn-del-pergunta{padding:8px;background:rgba(220,38,38,.2);border:1px solid rgba(220,38,38,.4);border-radius:6px;cursor:pointer}
-.btn-del-pergunta i{width:12px;height:12px;stroke:#EF4444}
 .select-item{width:100%;background:var(--roxo-glass);backdrop-filter:blur(20px);border:1.5px solid var(--borda);border-radius:10px;padding:12px;font-size:9px;color:var(--txt);margin-bottom:14px;outline:none}
 .btn-comprar{width:100%;background:linear-gradient(135deg,var(--roxo-escuro),var(--roxo-medio));color:#FFFFFF;border:1px solid var(--borda);border-radius:12px;padding:14px;font-size:10px;font-weight:700;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.2), 0 4px 30px rgba(76,29,149,.6);text-transform:uppercase;margin-bottom:14px}
 .btn-add-carrinho{width:100%;background:var(--roxo-glass);backdrop-filter:blur(20px);border:1.5px solid var(--roxo-medio);border-radius:12px;padding:14px;font-size:10px;font-weight:700;cursor:pointer;color:var(--txt);margin-bottom:14px}
@@ -234,7 +224,8 @@ body.tema-claro .editar-input{background:#F8FAFC}
 .notif-data{font-size:6px;color:var(--cinza)}
 .toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--card);backdrop-filter:blur(40px);border:1.5px solid var(--borda);border-radius:12px;padding:12px 20px;z-index:10004;display:none;box-shadow:0 10px 40px rgba(76,29,149,.6);min-width:200px;text-align:center}
 .toast.ativo{display:block;animation:slideDown .3s}
-@keyframes slideDown{from{opacity:0;transform:translateX(-50%) translateY(-20px)}to{opacity:1;transform:translateX(-50%) translateY(0toast-tit{font-size:10px;font-weight:700;margin-bottom:4px}
+@keyframes slideDown{from{opacity:0;transform:translateX(-50%) translateY(-20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.toast-tit{font-size:10px;font-weight:700;margin-bottom:4px}
 .toast-txt{font-size:8px;color:var(--cinza)}
 .adm-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(245,158,11,.2);border:1px solid var(--adm);border-radius:6px;padding:4px 8px;font-size:7px;font-weight:700;color:var(--adm);margin-left:8px}
 .adm-badge i{width:10px;height:10px}
@@ -831,7 +822,7 @@ function carregarDadosGlobais(){
     renderizarProdutos();
   });
 
-  const categoriasRef = dbRef(db, 'categorias');
+  const  categoriasRef = dbRef(db, 'categorias');
   dbOnValue(categoriasRef, (snapshot) => {
     const data = snapshot.val();
     categorias = data? Object.values(data) : [];
@@ -1665,7 +1656,6 @@ function carregarCategoriasAdm(){
 }
 
 async function deletarCategoriaAdm(id){
-  if(!confirm('Delet arCategoriaAdm(id){
   if(!confirm('Deletar esta categoria?')) return;
   await dbRemove(dbRef(db, 'categorias/' + id));
   mostrarToast('Deletado', 'Categoria removida');
