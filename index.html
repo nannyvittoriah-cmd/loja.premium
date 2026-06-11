@@ -8,7 +8,7 @@
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-  import { getDatabase, ref, set, get, push, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+  import { getDatabase, ref, set, get, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
   
   const firebaseConfig = {
     apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -22,22 +22,18 @@
   };
   
   const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getDatabase(app);
-  
-  window.firebaseAuth = auth;
-  window.firebaseDB = db;
-  window.firebaseRef = ref;
-  window.firebaseSet = set;
-  window.firebaseGet = get;
-  window.firebasePush = push;
-  window.firebaseOnValue = onValue;
-  window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
-  window.signInWithEmailAndPassword = signInWithEmailAndPassword;
-  window.sendPasswordResetEmail = sendPasswordResetEmail;
-  window.signOut = signOut;
-  window.onAuthStateChanged = onAuthStateChanged;
-  window.updateProfile = updateProfile;
+  window.auth = getAuth(app);
+  window.db = getDatabase(app);
+  window.dbRef = ref;
+  window.dbSet = set;
+  window.dbGet = get;
+  window.dbOnValue = onValue;
+  window.createUser = createUserWithEmailAndPassword;
+  window.signIn = signInWithEmailAndPassword;
+  window.resetPass = sendPasswordResetEmail;
+  window.signOutUser = signOut;
+  window.onAuthChange = onAuthStateChanged;
+  window.updateUserProfile = updateProfile;
 </script>
 <style>
 :root{
@@ -104,6 +100,7 @@ body.tema-claro .card-categoria{border:1.5px solid rgba(76,29,149,.25)}
 body.tema-claro .btn-circle{border:1.5px solid rgba(76,29,149,.25)}
 body.tema-claro .menu-lateral{border:1.5px solid rgba(76,29,149,.3)}
 
+#appContent{display:none}
 .header-gg{padding:10px 12px 0}
 .header-icons{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .logo-gg{width:30px;height:30px;background:linear-gradient(135deg,var(--roxo-escuro),var(--roxo-medio));border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.2);cursor:pointer}
@@ -148,7 +145,7 @@ body.tema-claro .menu-lateral{border:1.5px solid rgba(76,29,149,.3)}
 
 .menu-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);backdrop-filter:blur(15px);z-index:9998;display:none;opacity:0;transition:opacity .3s}
 .menu-overlay.ativo{display:block;opacity:1}
-.menu-lateral{position:fixed;top:56px;right:-280px;width:260px;height:auto;max-height:calc(100vh - 72px);background:rgba(15,15,20,.4);backdrop-filter:blur(50px) saturate(180%);border:1.5px solid rgba(76,29,149,.5);border-radius:20px;z-index:9999;transition:right .4s cubic-bezier(.34,1.56,.64,1);box-shadow:inset 0 2px 0 rgba(255,255,255,.15), inset 0 -2px 0 rgba(0,0,0,.3), 0 20px 60px rgba(76,29,149,.6);overflow:hidden;margin-right:12px}
+.menu-lateral{position:fixed;top:56px;right:-280px;width:260px;height:auto;max-height:calc(100vh - 72px);background:rgba(15,15,20,.4);backdrop-filter:blur(50px) saturate(180%);border:1.5px solid rgba(76,29,149,.5);border-radius:20px;z-index:9999;transition:right .4s cubic-bezier(.34,1.56,.64,1);box-shadow:inset 0 2px 0 rgba(255,255,.15), inset 0 -2px 0 rgba(0,0,0,.3), 0 20px 60px rgba(76,29,149,.6);overflow:hidden;margin-right:12px}
 body.tema-claro .menu-lateral{background:rgba(255,255,255,.6)}
 .menu-lateral.ativo{right:0}
 .menu-header{padding:16px 14px 14px;border-bottom:1px solid rgba(76,29,149,.3);display:flex;align-items:center;justify-content:space-between}
@@ -341,9 +338,8 @@ body.tema-claro .card-avaliacao{background:rgba(248,250,252,.95)}
 .conta-opcao i{width:18px;height:18px}
 .conta-opcao-txt{font-size:9px;font-weight:600}
 .conta-opcao-seta{width:14px;height:14px;opacity:.5}
-.btn-sair{width:100%;background:rgba(220,38,38,.2);border:1.5px solid rgba(220,38,38,.4);border-radius:10px;padding:14px;font-size:10px;font-weight:700;color:#EF4444;cursor:pointer;margin-top:16px}
+.btn-sair{width:100%;background:rgba(220,38,.2);border:1.5px solid rgba(220,38,38,.4);border-radius:10px;padding:14px;font-size:10px;font-weight:700;color:#EF4444;cursor:pointer;margin-top:16px}
 
-/* LOGIN */
 .pagina-auth{position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);z-index:10003;display:none;overflow-y:auto;padding:20px}
 .pagina-auth.ativo{display:flex;flex-direction:column;justify-content:center}
 .auth-card{max-width:400px;width:100%;margin:0 auto;background:var(--card);backdrop-filter:blur(40px);border:1.5px solid var(--borda);border-radius:16px;padding:24px;box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 10px 60px rgba(76,29,149,.6)}
@@ -377,7 +373,7 @@ body.tema-claro .auth-input{background:#F8FAFC}
 </style>
 </head>
 <body>
-<div id="appContent" style="display:none">
+<div id="appContent">
 <div class="header-gg">
   <div class="header-icons">
     <div class="logo-gg" onclick="voltarHome()"><i data-lucide="gamepad-2"></i></div>
@@ -415,6 +411,7 @@ body.tema-claro .auth-input{background:#F8FAFC}
       <img src="https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=400" alt="Roblox">
       <div class="card-categoria-overlay"><div class="card-categoria-nome">ROBLOX</div></div>
     </div>
+  </div>
   <div class="secao-tit-center" onclick="abrirCategorias()">VER TODAS CATEGORIAS</div>
 </div>
 
@@ -525,6 +522,7 @@ body.tema-claro .auth-input{background:#F8FAFC}
           <div class="barra-progresso">
             <div class="barra-progresso-fill" id="barraLike" style="width:0%"></div>
           </div>
+        </div>
         <div class="avaliacao-counts">
           <div class="count-item"><i data-lucide="thumbs-up" style="stroke:#10B981"></i><span id="countLike">0</span></div>
           <div class="count-item"><i data-lucide="thumbs-down" style="stroke:#EF4444"></i><span id="countDislike">0</span></div>
@@ -557,6 +555,7 @@ body.tema-claro .auth-input{background:#F8FAFC}
           <div class="card-cat-nome">STREAMING</div>
           <div class="card-cat-count">4 produtos</div>
         </div>
+      </div>
       <div class="card-cat-grande" onclick="filtrarCategoriaECarregar('freefire')">
         <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400" alt="Free Fire">
         <div class="card-cat-overlay">
@@ -576,12 +575,14 @@ body.tema-claro .auth-input{background:#F8FAFC}
           <div class="card-cat-nome">MINECRAFT</div>
           <div class="card-cat-count">Em breve</div>
         </div>
+      </div>
       <div class="card-cat-grande" onclick="filtrarCategoriaECarregar('valorant')">
         <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=400" alt="Valorant">
         <div class="card-cat-overlay">
           <div class="card-cat-nome">VALORANT</div>
           <div class="card-cat-count">Em breve</div>
         </div>
+      </div>
       <div class="card-cat-grande" onclick="filtrarCategoriaECarregar('roblox')">
         <img src="https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=400" alt="Roblox">
         <div class="card-cat-overlay">
@@ -610,7 +611,7 @@ body.tema-claro .auth-input{background:#F8FAFC}
   </div>
   <div class="pagina-extra-content">
     <div class="perfil-card">
-      <div class="perfil-avatar" id="perfilAvatar">L</div>
+      <div class="perfil-avatar" id="perfilAvatar">U</div>
       <div class="perfil-nome" id="perfilNome">Carregando...</div>
       <div class="perfil-email" id="perfilEmail">carregando@email.com</div>
       <div class="perfil-stats">
@@ -674,7 +675,7 @@ body.tema-claro .auth-input{background:#F8FAFC}
 </div>
 
 <!-- PAGINA LOGIN -->
-<div id="paginaLogin" class="pagina-auth">
+<div id="paginaLogin" class="pagina-auth ativo">
   <div class="auth-card">
     <div class="auth-logo"><i data-lucide="gamepad-2"></i></div>
     <div class="auth-tit">Bem-vindo de volta</div>
@@ -944,21 +945,26 @@ let notificacoes = [
   {id:3,titulo:'Novo produto disponível',desc:'Spotify Premium 30 dias por R$ 3,50',tempo:'3h atrás'}
 ];
 
-// FIREBASE AUTH
-onAuthStateChanged(firebaseAuth, (user) => {
-  if (user) {
-    usuarioAtual = user;
-    document.getElementById('appContent').style.display = 'block';
-    document.getElementById('paginaLogin').classList.remove('ativo');
-    carregarDadosUsuario();
-    renderizarProdutos();
-    atualizarBadgeNotif();
-  } else {
-    usuarioAtual = null;
-    document.getElementById('appContent').style.display = 'none';
-    document.getElementById('paginaLogin').classList.add('ativo');
-  }
+window.addEventListener('load',()=>{
+  carregarTema();
   lucide.createIcons();
+
+  // Mostra login por padrão se não tiver usuário
+  onAuthChange(auth, (user) => {
+    if (user) {
+      usuarioAtual = user;
+      document.getElementById('appContent').style.display = 'block';
+      document.getElementById('paginaLogin').classList.remove('ativo');
+      carregarDadosUsuario();
+      renderizarProdutos();
+      atualizarBadgeNotif();
+    } else {
+      usuarioAtual = null;
+      document.getElementById('appContent').style.display = 'none';
+      document.getElementById('paginaLogin').classList.add('ativo');
+    }
+    lucide.createIcons();
+  });
 });
 
 async function fazerLogin(e){
@@ -975,7 +981,7 @@ async function fazerLogin(e){
   btnLogin.textContent = 'ENTRANDO...';
 
   try {
-    await signInWithEmailAndPassword(firebaseAuth, email, senha);
+    await signIn(auth, email, senha);
     sucesso.textContent = 'Login realizado com sucesso!';
     sucesso.classList.add('ativo');
   } catch (error) {
@@ -1002,14 +1008,17 @@ async function fazerCadastro(e){
   btnCadastro.textContent = 'CRIANDO...';
 
   try {
-    const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, senha);
-    await updateProfile(userCredential.user, { displayName: nome });
+    const userCredential = await createUser(auth, email, senha);
+    await updateUserProfile(userCredential.user, { displayName: nome });
 
-    // Salva dados iniciais no banco
-    await firebaseSet(firebaseRef(firebaseDB, 'users/' + userCredential.user.uid), {
+    await dbSet(dbRef(db, 'users/' + userCredential.user.uid), {
       nome: nome,
       email: email,
-      criadoEm: new Date().toISOString()
+      criadoEm: new Date().toISOString(),
+      favoritos: [],
+      compras: [],
+      avaliacoes: {},
+      perguntas: {}
     });
 
     sucesso.textContent = 'Conta criada com sucesso!';
@@ -1037,7 +1046,7 @@ async function recuperarSenha(e){
   btnEsqueceu.textContent = 'ENVIANDO...';
 
   try {
-    await sendPasswordResetEmail(firebaseAuth, email);
+    await resetPass(auth, email);
     sucesso.textContent = 'Link enviado! Verifique seu e-mail.';
     sucesso.classList.add('ativo');
     setTimeout(() => mostrarLogin(), 3000);
@@ -1052,7 +1061,7 @@ async function recuperarSenha(e){
 
 async function fazerLogout(){
   if(confirm('Deseja realmente sair?')){
-    await signOut(firebaseAuth);
+    await signOutUser(auth);
   }
 }
 
@@ -1069,8 +1078,8 @@ async function salvarPerfil(e){
   btnSalvar.textContent = 'SALVANDO...';
 
   try {
-    await updateProfile(usuarioAtual, { displayName: nome });
-    await firebaseSet(firebaseRef(firebaseDB, 'users/' + usuarioAtual.uid + '/nome'), nome);
+    await updateUserProfile(usuarioAtual, { displayName: nome });
+    await dbSet(dbRef(db, 'users/' + usuarioAtual.uid + '/nome'), nome);
     sucesso.textContent = 'Perfil atualizado com sucesso!';
     sucesso.classList.add('ativo');
     setTimeout(() => {
@@ -1093,6 +1102,7 @@ function traduzirErro(code){
     'auth/weak-password': 'Senha muito fraca',
     'auth/user-not-found': 'Usuário não encontrado',
     'auth/wrong-password': 'Senha incorreta',
+    'auth/invalid-credential': 'Email ou senha incorretos',
     'auth/too-many-requests': 'Muitas tentativas. Tente mais tarde',
     'auth/network-request-failed': 'Erro de conexão'
   };
@@ -1133,14 +1143,12 @@ function fecharEditarPerfil(){
 async function carregarDadosUsuario(){
   if(!usuarioAtual) return;
 
-  // Atualiza perfil
   document.getElementById('perfilNome').textContent = usuarioAtual.displayName || 'Usuário';
   document.getElementById('perfilEmail').textContent = usuarioAtual.email;
   document.getElementById('perfilAvatar').textContent = (usuarioAtual.displayName || 'U')[0].toUpperCase();
 
-  // Carrega dados do banco
-  const userRef = firebaseRef(firebaseDB, 'users/' + usuarioAtual.uid);
-  onValue(userRef, (snapshot) => {
+  const userRef = dbRef(db, 'users/' + usuarioAtual.uid);
+  dbOnValue(userRef, (snapshot) => {
     const data = snapshot.val();
     if(data){
       if(data.favoritos) favoritos = data.favoritos;
@@ -1148,13 +1156,14 @@ async function carregarDadosUsuario(){
       if(data.avaliacoes) avaliacoes = data.avaliacoes;
       if(data.perguntas) perguntas = data.perguntas;
       atualizarConta();
+      renderizarProdutos();
     }
   });
 }
 
 async function salvarDadosUsuario(){
   if(!usuarioAtual) return;
-  await firebaseSet(firebaseRef(firebaseDB, 'users/' + usuarioAtual.uid), {
+  await dbSet(dbRef(db, 'users/' + usuarioAtual.uid), {
     nome: usuarioAtual.displayName,
     email: usuarioAtual.email,
     favoritos: favoritos,
@@ -1278,7 +1287,6 @@ function filtrarCategoriaECarregar(cat){
   window.scrollTo(0,0);
 }
 
-// FAVORITOS
 function abrirFavoritos(){
   fecharMenu();
   document.getElementById('paginaFavoritos').classList.add('ativo');
@@ -1319,13 +1327,11 @@ function removerFavorito(id){
   salvarDadosUsuario();
 }
 
-// CATEGORIAS
 function abrirCategorias(){
   fecharMenu();
   document.getElementById('paginaCategorias').classList.add('ativo');
 }
 
-// MINHAS COMPRAS
 function abrirMinhasCompras(){
   fecharMenu();
   document.getElementById('paginaCompras').classList.add('ativo');
@@ -1364,7 +1370,6 @@ function renderizarCompras(){
   lucide.createIcons();
 }
 
-// CONTA
 function abrirConta(){
   fecharMenu();
   document.getElementById('paginaConta').classList.add('ativo');
@@ -1382,7 +1387,6 @@ function fecharPaginaExtra(){
   document.querySelectorAll('.pagina-extra').forEach(p => p.classList.remove('ativo'));
 }
 
-// BUSCA
 function abrirBusca(){
   document.getElementById('modalBusca').classList.add('ativo');
   document.getElementById('inputBusca').focus();
@@ -1415,7 +1419,6 @@ function buscarProdutos(){
   `).join('');
 }
 
-// NOTIFICAÇÕES
 function abrirNotificacoes(){
   document.getElementById('modalNotif').classList.add('ativo');
   renderizarNotificacoes();
@@ -1441,7 +1444,6 @@ function atualizarBadgeNotif(){
   document.getElementById('notifBadge').textContent = notificacoes.length;
 }
 
-// CARRINHO
 function abrirCarrinho(){
   document.getElementById('modalCarrinho').classList.add('ativo');
   renderizarCarrinho();
@@ -1515,7 +1517,6 @@ function finalizarCompra(){
   if(produtoAtual) renderizarAvaliacoes(produtoAtual.id);
 }
 
-// MENU
 function abrirMenu(){
   document.getElementById('menuOverlay').classList.add('ativo');
   document.getElementById('menuLateral').classList.add('ativo');
@@ -1525,7 +1526,6 @@ function fecharMenu(){
   document.getElementById('menuLateral').classList.remove('ativo');
 }
 
-// TEMA
 function trocarTema(){
   const body = document.body;
   const switchEl = document.getElementById('switchTema');
@@ -1542,7 +1542,6 @@ function carregarTema(){
   }
 }
 
-// PERGUNTAS
 function renderizarPerguntas(produtoId){
   if(!perguntas[produtoId]) perguntas[produtoId] = [];
   const lista = document.getElementById('listaPerguntas');
@@ -1572,8 +1571,7 @@ function enviarPergunta(){
 
   if(!perguntas[produtoAtual.id]) perguntas[produtoAtual.id] = [];
 
-  const nomes = ['Francisco2030f', 'daniellysouza77', 'Cliente', 'Usuario'];
-  const user = nomes[Math.floor(Math.random() * nomes.length)];
+  const user = usuarioAtual.displayName || 'Usuario';
 
   perguntas[produtoAtual.id].unshift({
     user: user,
@@ -1591,7 +1589,6 @@ function carregarMaisPerguntas(){
   alert('Carregando mais perguntas...');
 }
 
-// AVALIAÇÕES
 function renderizarAvaliacoes(produtoId){
   if(!avaliacoes[produtoId]) avaliacoes[produtoId] = {total:0, media:0, likes:0, dislikes:0};
   const av = avaliacoes[produtoId];
@@ -1611,11 +1608,6 @@ function renderizarAvaliacoes(produtoId){
 
   lucide.createIcons();
 }
-
-window.addEventListener('load',()=>{
-  carregarTema();
-  lucide.createIcons();
-});
 </script>
 </body>
 </html>
