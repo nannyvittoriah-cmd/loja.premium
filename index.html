@@ -663,7 +663,6 @@ body.tema-claro .adm-input{background:#F8FAFC}
             <div class="upload-btn-trocar" id="admCatImgTrocar" style="display:none">
               <i data-lucide="refresh-cw"></i>TROCAR
             </div>
-          </div>
           <input type="file" id="admCatImgFile" accept="image/*" class="upload-input" onchange="previewUpload(event, 'admCatImgPreview', 'admCatImgPlaceholder', 'admCatImgTrocar')">
         </div>
         <button class="adm-btn" onclick="adicionarCategoriaAdm()">ADICIONAR CATEGORIA</button>
@@ -743,7 +742,6 @@ body.tema-claro .adm-input{background:#F8FAFC}
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
   import { getDatabase, ref, set, onValue, push, remove, update, get } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
-  import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
   const firebaseConfig = {
     apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -759,11 +757,9 @@ body.tema-claro .adm-input{background:#F8FAFC}
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getDatabase(app);
-  const storage = getStorage(app);
 
   window.auth = auth;
   window.db = db;
-  window.storage = storage;
   window.dbRef = ref;
   window.dbSet = set;
   window.dbPush = push;
@@ -771,9 +767,6 @@ body.tema-claro .adm-input{background:#F8FAFC}
   window.dbUpdate = update;
   window.dbGet = get;
   window.dbOnValue = onValue;
-  window.storageRef = storageRef;
-  window.storageUpload = uploadBytes;
-  window.storageGetUrl = getDownloadURL;
   window.createUser = createUserWithEmailAndPassword;
   window.signIn = signInWithEmailAndPassword;
   window.resetPass = sendPasswordResetEmail;
@@ -1069,7 +1062,7 @@ async function carregarDadosUsuario(){
   });
 }
 
-function comprimirImagem(file, maxWidth = 800, quality = 0.8){
+function comprimirImagemBase64(file, maxWidth = 400, quality = 0.7){
   return new Promise((resolve) => {
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -1086,9 +1079,8 @@ function comprimirImagem(file, maxWidth = 800, quality = 0.8){
         canvas.height = height;
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, width, height);
-        canvas.toBlob((blob) => {
-          resolve(blob);
-        }, 'image/jpeg', quality);
+        const base64 = canvas.toDataURL('image/jpeg', quality);
+        resolve(base64);
       };
       img.src = e.target.result;
     };
@@ -1113,19 +1105,16 @@ function previewUpload(event, imgId, placeholderId, trocarId){
 async function trocarFotoPerfil(event){
   const file = event.target.files[0];
   if(!file) return;
-  mostrarToast('Enviando...', 'Comprimindo e enviando foto');
+  mostrarToast('Processando...', 'Comprimindo imagem');
   try{
-    const blob = await comprimirImagem(file, 400, 0.85);
-    const storageReference = storageRef(storage, 'perfis/' + usuarioAtual.uid + '/avatar.jpg');
-    await storageUpload(storageReference, blob);
-    const url = await storageGetUrl(storageReference);
-    await dbUpdate(dbRef(db, 'users/' + usuarioAtual.uid), { foto: url });
-    document.getElementById('perfilAvatarImg').src = url;
+    const base64 = await comprimirImagemBase64(file, 300, 0.6);
+    await dbUpdate(dbRef(db, 'users/' + usuarioAtual.uid), { foto: base64 });
+    document.getElementById('perfilAvatarImg').src = base64;
     document.getElementById('perfilAvatarImg').style.display = 'block';
     document.getElementById('perfilAvatarLetra').style.display = 'none';
-    mostrarToast('Sucesso!', 'Foto atualizada e salva');
+    mostrarToast('Sucesso!', 'Foto atualizada');
   }catch(err){
-    mostrarToast('Erro', 'Não deu pra enviar a foto');
+    mostrarToast('Erro', 'Não deu pra processar a foto');
     console.error(err);
   }
 }
@@ -1540,18 +1529,15 @@ async function adicionarProdutoAdm(){
     mostrarToast('Erro', 'Preencha nome, preço, imagem e categoria');
     return;
   }
-  mostrarToast('Enviando...', 'Aguarde o upload');
+  mostrarToast('Processando...', 'Comprimindo imagem');
   try{
-    const blob = await comprimirImagem(imgFile, 800, 0.85);
+    const base64 = await comprimirImagemBase64(imgFile, 500, 0.6);
     const id = Date.now().toString();
-    const storageReference = storageRef(storage, 'produtos/' + id + '.jpg');
-    await storageUpload(storageReference, blob);
-    const imgUrl = await storageGetUrl(storageReference);
     const novoProd = {
       id,
       nome,
       preco,
-      imagem: imgUrl,
+      imagem: base64,
       categoria: cat,
       subcategoria: subcat,
       desc,
@@ -1573,7 +1559,7 @@ async function adicionarProdutoAdm(){
     document.getElementById('admProdDisp').value = '';
     document.getElementById('admProdTipo').value = '';
   }catch(err){
-    mostrarToast('Erro', 'Falha ao enviar produto');
+    mostrarToast('Erro', 'Falha ao adicionar produto');
     console.error(err);
   }
 }
@@ -1631,17 +1617,14 @@ async function adicionarCategoriaAdm(){
     mostrarToast('Erro', 'Preencha nome e imagem');
     return;
   }
-  mostrarToast('Enviando...', 'Aguarde o upload');
+  mostrarToast('Processando...', 'Comprimindo imagem');
   try{
-    const blob = await comprimirImagem(imgFile, 600, 0.85);
+    const base64 = await comprimirImagemBase64(imgFile, 400, 0.6);
     const id = Date.now().toString();
-    const storageReference = storageRef(storage, 'categorias/' + id + '.jpg');
-    await storageUpload(storageReference, blob);
-    const imgUrl = await storageGetUrl(storageReference);
     const novaCat = {
       id,
       nome,
-      imagem: imgUrl
+      imagem: base64
     };
     await dbSet(dbRef(db, 'categorias/' + novaCat.id), novaCat);
     mostrarToast('Sucesso!', 'Categoria adicionada');
@@ -1651,7 +1634,7 @@ async function adicionarCategoriaAdm(){
     document.getElementById('admCatImgPlaceholder').style.display = 'block';
     document.getElementById('admCatImgTrocar').style.display = 'none';
   }catch(err){
-    mostrarToast('Erro', 'Falha ao enviar categoria');
+    mostrarToast('Erro', 'Falha ao adicionar categoria');
     console.error(err);
   }
 }
@@ -1687,7 +1670,7 @@ async function deletarCategoriaAdm(id){
   mostrarToast('Deletado', 'Categoria removida');
 }
 
-function carregarPerguntasAdm(){
+carregarPerguntasAdm(){
   const lista = document.getElementById('listaPerguntasAdm');
   const perguntasRef = dbRef(db, 'perguntasTodas');
   dbOnValue(perguntasRef, (snapshot) => {
