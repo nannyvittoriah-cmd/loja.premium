@@ -77,7 +77,7 @@ body.tema-claro .auth-input{background:#F8FAFC}
 .auth-btn:disabled{opacity:.5;cursor:not-allowed}
 .auth-links{display:flex;justify-content:space-between;margin-top:14px;font-size:8px}
 .auth-link{color:var(--roxo-medio);font-weight:700;cursor:pointer;text-decoration:none}
-.auth-erro{padding:10px;background:rgba(239,68,.15);border:1px solid rgba(239,68,68,.4);border-radius:8px;font-size:8px;color:var(--erro);display:none;margin-bottom:10px}
+.auth-erro{padding:10px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);border-radius:8px;font-size:8px;color:var(--erro);display:none;margin-bottom:10px}
 .auth-erro.ativo{display:block}
 .auth-sucesso{padding:10px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.4);border-radius:8px;font-size:8px;color:var(--sucesso);display:none;margin-bottom:10px}
 .auth-sucesso.ativo{display:block}
@@ -506,6 +506,7 @@ body.tema-claro .adm-input{background:#F8FAFC}
         <div class="stat-valor" id="statVendas">0</div>
         <div class="stat-label">Vendas</div>
       </div>
+    </div>
     <div class="produto-caracteristicas">
       <div class="caracteristicas-tit"><i data-lucide="info"></i>Características</div>
       <div class="caracteristica-item">
@@ -520,6 +521,7 @@ body.tema-claro .adm-input{background:#F8FAFC}
         <div class="caracteristica-label">Garantia</div>
         <div class="caracteristica-valor">7 dias</div>
       </div>
+    </div>
     <div class="produto-desc">
       <div class="desc-tit"><i data-lucide="file-text"></i>Descrição</div>
       <div class="desc-texto" id="descAnuncio"></div>
@@ -696,7 +698,9 @@ body.tema-claro .adm-input{background:#F8FAFC}
             </div>
           </div>
           <input type="file" id="admCatImgFile" accept="image/*" class="upload-input" onchange="previewUpload(event, 'admCatImgPreview', 'admCatImgPlaceholder', 'admCatImgTrocar')">
-              </div>
+        </div>
+        <button class="adm-btn" onclick="adicionarCategoriaAdm()">ADICIONAR CATEGORIA</button>
+            </div>
       <div class="adm-section">
         <div class="adm-section-tit"><i data-lucide="folder"></i>Categorias Cadastradas</div>
         <div id="listaCategoriasAdm" class="adm-lista"></div>
@@ -826,6 +830,60 @@ let produtoAtual = null;
 let isAdmin = false;
 let tipoNotifAtual = 'todos';
 let chatPedidoAtual = null;
+
+window.fazerLogin = fazerLogin;
+window.fazerCadastro = fazerCadastro;
+window.recuperarSenha = recuperarSenha;
+window.mostrarLogin = mostrarLogin;
+window.mostrarCadastro = mostrarCadastro;
+window.mostrarEsqueceuSenha = mostrarEsqueceuSenha;
+window.fazerLogout = fazerLogout;
+window.voltarHome = voltarHome;
+window.abrirProduto = abrirProduto;
+window.fecharProduto = fecharProduto;
+window.toggleFavProduto = toggleFavProduto;
+window.comprarProduto = comprarProduto;
+window.addCarrinhoProduto = addCarrinhoProduto;
+window.toggleFavorito = toggleFavorito;
+window.filtrarCategoria = filtrarCategoria;
+window.abrirFavoritos = abrirFavoritos;
+window.removerFavorito = removerFavorito;
+window.abrirCompras = abrirCompras;
+window.abrirConta = abrirConta;
+window.trocarFotoPerfil = trocarFotoPerfil;
+window.salvarPerfil = salvarPerfil;
+window.fecharPaginaExtra = fecharPaginaExtra;
+window.abrirCarrinho = abrirCarrinho;
+window.fecharCarrinho = fecharCarrinho;
+window.removerCarrinho = removerCarrinho;
+window.finalizarCompra = finalizarCompra;
+window.abrirNotificacoes = abrirNotificacoes;
+window.fecharNotificacoes = fecharNotificacoes;
+window.abrirMenu = abrirMenu;
+window.fecharMenu = fecharMenu;
+window.trocarTema = trocarTema;
+window.enviarPergunta = enviarPergunta;
+window.abrirPainelAdm = abrirPainelAdm;
+window.trocarAbaAdm = trocarAbaAdm;
+window.adicionarProdutoAdm = adicionarProdutoAdm;
+window.deletarProdutoAdm = deletarProdutoAdm;
+window.editarProdutoAdm = editarProdutoAdm;
+window.adicionarCategoriaAdm = adicionarCategoriaAdm;
+window.deletarCategoriaAdm = deletarCategoriaAdm;
+window.responderPerguntaAdm = responderPerguntaAdm;
+window.deletarPerguntaAdm = deletarPerguntaAdm;
+window.tipoNotif = tipoNotif;
+window.buscarClienteNotif = buscarClienteNotif;
+window.enviarNotificacaoAdm = enviarNotificacaoAdm;
+window.abrirChatPedido = abrirChatPedido;
+window.fecharChatPedido = fecharChatPedido;
+window.enviarMsgChat = enviarMsgChat;
+window.enviarFotoChat = enviarFotoChat;
+window.abrirChatPedidoAdm = abrirChatPedidoAdm;
+window.buscarPedidoAdm = buscarPedidoAdm;
+window.atualizarStatusPedido = atualizarStatusPedido;
+window.salvarMsgPedido = salvarMsgPedido;
+window.previewUpload = previewUpload;
 
 carregarTema();
 lucide.createIcons();
@@ -1465,7 +1523,8 @@ async function finalizarCompra(){
 
 function abrirMenu(){
   document.getElementById('menuOverlay').classList.add('ativo');
-  document.getElementById('menuLateral').classList.add('ativo');
+  document.getElementById('menuL
+    lucide.createIcons();
 }
 function fecharMenu(){
   document.getElementById('menuOverlay').classList.remove('ativo');
@@ -1513,7 +1572,7 @@ async function enviarPergunta(){
   if(!produtoAtual) return;
   const input = document.getElementById('inputPergunta');
   const pergunta = input.value.trim();
-    if(!pergunta){
+  if(!pergunta){
     mostrarToast('Erro', 'Digite sua pergunta primeiro');
     return;
   }
@@ -1992,7 +2051,6 @@ async function buscarPedidoAdm(){
               <div class="adm-pedido-produto-nome">${p.nome}</div>
               <div class="adm-pedido-produto-preco">R$ ${p.preco.toFixed(2)}</div>
             </div>
-          </div>
           <textarea class="adm-pedido-msg-input" id="msg-${p.id}" placeholder="Mensagem pro cliente (opcional)...">${p.msgAdm || ''}</textarea>
           <div class="adm-pedido-actions">
             <button class="adm-pedido-btn adm-pedido-btn-salvar" onclick="salvarMsgPedido('${p.uid}', '${p.id}')">SALVAR STATUS + MSG</button>
