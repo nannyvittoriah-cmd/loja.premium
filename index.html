@@ -2,1180 +2,223 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>Make Fashion</title>
-<script type="importmap">
-{
-  "imports": {
-    "firebase/app": "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js",
-    "firebase/auth": "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js",
-    "firebase/database": "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js"
-  }
-}
-</script>
-<script src="https://unpkg.com/lucide@latest"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prime Beauty</title>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{
-  --preto:#000000;
-  --branco:#FFFFFF;
-  --cinza-escuro:#0A0A0A;
-  --cinza-medio:#1A1A1A;
-  --cinza-claro:#2A2A2A;
-  --bg:#000000;
-  --card:#0A0A0A;
-  --txt:#FFFFFF;
-  --txt-sec:#999999;
-  --borda:#1A1A1A;
-  --verde:#10B981;
-  --vermelho:#EF4444
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
 }
-body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--txt);padding-bottom:70px;letter-spacing:.3px}
-.header{position:sticky;top:0;z-index:100;background:var(--preto);border-bottom:1px solid var(--cinza-claro);padding:14px 16px}
-.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.logo{font-size:22px;font-weight:300;letter-spacing:3px;color:var(--branco)}
-.logo span{color:var(--branco);font-weight:600}
-.header-icons{display:flex;gap:20px}
-.header-icon{position:relative;cursor:pointer}
-.header-icon i{width:22px;height:22px;stroke:var(--branco)}
-.badge{position:absolute;top:-6px;right:-6px;background:var(--branco);color:var(--preto);font-size:9px;font-weight:600;min-width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.busca-box{display:flex;background:var(--cinza-medio);border:1px solid var(--cinza-claro)}
-.busca-box input{flex:1;border:none;background:transparent;padding:10px 14px;font-size:13px;outline:none;color:var(--branco)}
-.busca-box input::placeholder{color:var(--txt-sec)}
-.busca-btn{background:transparent;border:none;padding:0 14px;cursor:pointer}
-.busca-btn i{width:18px;height:18px;stroke:var(--txt-sec)}
-.banner-hero{margin:0 0 20px;height:280px;background:var(--preto);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--cinza-claro)}
-.banner-hero img{width:100%;height:100%;object-fit:cover;opacity:.6;filter:grayscale(100%)}
-.banner-texto{position:absolute;text-align:center;color:var(--branco);padding:20px}
-.banner-tit{font-size:32px;font-weight:200;letter-spacing:4px;margin-bottom:8px}
-.banner-sub{font-size:12px;letter-spacing:2px;text-transform:uppercase}
-.categorias-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 16px;margin-bottom:24px}
-.cat-card{aspect-ratio:1;background:var(--cinza-medio);border:1px solid var(--cinza-claro);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:.3s}
-.cat-card:hover{background:var(--cinza-claro)}
-.cat-card i{width:28px;height:28px;stroke:var(--branco)}
-.cat-card span{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--branco)}
-.secao{padding:0 16px;margin-bottom:30px}
-.secao-tit{font-size:18px;font-weight:300;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;text-align:center;color:var(--branco)}
-.secao-tit::after{content:'';display:block;width:40px;height:1px;background:var(--branco);margin:8px auto 0}
-.produtos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.produto-card{background:var(--card);cursor:pointer;transition:.3s;border:1px solid var(--cinza-claro)}
-.produto-card:hover{border-color:var(--branco)}
-.produto-img{width:100%;aspect-ratio:3/4;background:var(--cinza-medio);position:relative;overflow:hidden;margin-bottom:8px}
-.produto-img img{width:100%;height:100%;object-fit:cover;transition:.4s;filter:grayscale(20%)}
-.produto-card:hover .produto-img img{transform:scale(1.05)}
-.produto-tag{position:absolute;top:8px;left:8px;background:var(--branco);color:var(--preto);font-size:9px;font-weight:600;padding:4px 8px;letter-spacing:1px;text-transform:uppercase}
-.produto-info{padding:0 4px}
-.produto-nome{font-size:12px;font-weight:400;margin-bottom:6px;line-height:1.4;height:34px;overflow:hidden;text-transform:uppercase;letter-spacing:.5px;color:var(--branco)}
-.produto-preco{font-size:16px;font-weight:600;color:var(--branco)}
-.produto-preco-antigo{font-size:12px;color:var(--txt-sec);text-decoration:line-through;margin-left:6px;font-weight:400}
-.produto-estoque{font-size:10px;color:var(--verde);margin-top:4px}
-.produto-estoque.esgotado{color:var(--vermelho)}
-.nav-bottom{position:fixed;bottom:0;left:0;right:0;background:var(--preto);border-top:1px solid var(--cinza-claro);display:flex;justify-content:space-around;padding:8px 0;z-index:100}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px 12px}
-.nav-item i{width:20px;height:20px;stroke:var(--txt-sec);transition:.2s}
-.nav-item.ativo i{stroke:var(--branco)}
-.nav-item span{font-size:9px;color:var(--txt-sec);text-transform:uppercase;letter-spacing:.5px}
-.nav-item.ativo span{color:var(--branco);font-weight:600}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:200;display:none;align-items:flex-end}
-.modal.ativo{display:flex}
-.modal-conteudo{background:var(--preto);width:100%;max-height:92vh;overflow-y:auto}
-.modal-header{position:sticky;top:0;background:var(--preto);padding:18px 16px;border-bottom:1px solid var(--cinza-claro);display:flex;justify-content:space-between;align-items:center;z-index:10}
-.modal-tit{font-size:16px;font-weight:400;letter-spacing:2px;text-transform:uppercase;color:var(--branco)}
-.modal-fechar{width:32px;height:32px;background:transparent;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.modal-fechar i{width:20px;height:20px;stroke:var(--branco)}
-.btn-primario{width:100%;background:var(--branco);border:none;padding:14px;color:var(--preto);font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:.3s}
-.btn-primario:hover{opacity:.8}
-.btn-secundario{background:transparent;border:1px solid var(--branco);color:var(--branco)}
-.btn-secundario:hover{background:var(--branco);color:var(--preto)}
-.btn-perigo{background:var(--vermelho);color:var(--branco)}
-.pagina{display:none}
-.pagina.ativa{display:block}
-.input-group{margin-bottom:16px}
-.input-label{font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;display:block;color:var(--txt-sec)}
-.input-field{width:100%;padding:12px;border:1px solid var(--cinza-claro);background:var(--cinza-medio);font-size:13px;color:var(--branco);outline:none}
-.input-field:focus{border-color:var(--branco)}
-textarea.input-field{min-height:80px;resize:vertical}
-.upload-box{width:100%;aspect-ratio:1;background:var(--cinza-medio);border:2px dashed var(--cinza-claro);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden}
-.upload-box img{width:100%;height:100%;object-fit:cover}
-.upload-box i{width:40px;height:40px;stroke:var(--txt-sec)}
-.upload-input{display:none}
-.tamanhos-grid{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-.tamanho-btn{min-width:50px;padding:12px;border:1px solid var(--cinza-claro);background:transparent;font-size:12px;letter-spacing:1px;cursor:pointer;transition:.2s;color:var(--branco)}
-.tamanho-btn:hover,.tamanho-btn.ativo{border-color:var(--branco);background:var(--branco);color:var(--preto)}
-.adm-tabs{display:flex;border-bottom:1px solid var(--cinza-claro);margin-bottom:20px;overflow-x:auto}
-.adm-tab{padding:12px 20px;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--txt-sec)}
-.adm-tab.ativo{border-bottom-color:var(--branco);font-weight:600;color:var(--branco)}
-.adm-aba{display:none;padding:0 16px}
-.adm-aba.ativo{display:block}
-.tabela{width:100%;border-collapse:collapse;font-size:12px}
-.tabela th{text-align:left;padding:12px 8px;border-bottom:1px solid var(--cinza-claro);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--txt-sec)}
-.tabela td{padding:12px 8px;border-bottom:1px solid var(--cinza-claro);color:var(--branco)}
-.tabela tr:hover{background:var(--cinza-medio)}
-.status-badge{padding:4px 8px;font-size:9px;letter-spacing:1px;text-transform:uppercase;border-radius:3px}
-.status-badge.ativo{background:var(--branco);color:var(--preto)}
-.status-badge.esgotado{background:var(--vermelho);color:var(--branco)}
-.status-badge.pendente{background:var(--cinza-claro);color:var(--branco)}
-.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-100px);background:var(--branco);color:var(--preto);padding:12px 20px;z-index:300;font-size:11px;letter-spacing:1px;text-transform:uppercase;transition:.3s;font-weight:600}
-.toast.mostrar{transform:translateX(-50%) translateY(0)}
-.entrega-item{padding:12px;background:var(--cinza-medio);border:1px solid var(--cinza-claro);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
-.entrega-info{flex:1}
-.entrega-cidade{font-size:13px;font-weight:600;margin-bottom:4px;color:var(--branco)}
-.entrega-taxa{font-size:11px;color:var(--txt-sec)}
-.carrinho-item{display:flex;gap:12px;padding:16px;border-bottom:1px solid var(--cinza-claro)}
-.carrinho-item-img{width:80px;height:100px;object-fit:cover}
-.carrinho-item-info{flex:1}
-.carrinho-item-nome{font-size:12px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;color:var(--branco)}
-.carrinho-item-preco{font-size:14px;font-weight:600;margin-bottom:8px;color:var(--branco)}
-.produto-detalhe-img{width:100%;aspect-ratio:3/4;object-fit:cover;margin-bottom:20px}
-.produto-detalhe-info{padding:0 16px}
-.produto-detalhe-nome{font-size:20px;font-weight:300;margin-bottom:12px;letter-spacing:1px;text-transform:uppercase;color:var(--branco)}
-.produto-detalhe-preco{font-size:24px;font-weight:600;margin-bottom:16px;color:var(--branco)}
-.produto-detalhe-desc{font-size:13px;line-height:1.7;color:var(--txt-sec);margin-bottom:20px}
+
+body{
+    background:#111;
+    color:white;
+}
+
+header{
+    background:#000;
+    padding:20px;
+    text-align:center;
+    border-bottom:3px solid #ff4da6;
+}
+
+.logo{
+    font-size:40px;
+    font-weight:bold;
+    color:#ff4da6;
+}
+
+.slogan{
+    margin-top:10px;
+    color:#ddd;
+}
+
+.hero{
+    text-align:center;
+    padding:80px 20px;
+    background:linear-gradient(to right,#000,#ff4da6);
+}
+
+.hero h1{
+    font-size:50px;
+    margin-bottom:15px;
+}
+
+.hero p{
+    font-size:18px;
+}
+
+.btn{
+    display:inline-block;
+    margin-top:20px;
+    padding:12px 25px;
+    background:#ff4da6;
+    color:white;
+    text-decoration:none;
+    border-radius:10px;
+}
+
+.categorias{
+    padding:50px 20px;
+}
+
+.categorias h2{
+    text-align:center;
+    margin-bottom:30px;
+    color:#ff4da6;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+}
+
+.card{
+    background:#1a1a1a;
+    padding:20px;
+    text-align:center;
+    border-radius:15px;
+    border:1px solid #ff4da6;
+}
+
+.destaques{
+    padding:50px 20px;
+}
+
+.produtos{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.produto{
+    background:#1a1a1a;
+    border-radius:15px;
+    overflow:hidden;
+}
+
+.produto img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+}
+
+.produto-info{
+    padding:15px;
+}
+
+.preco{
+    color:#ff4da6;
+    font-size:22px;
+    font-weight:bold;
+}
+
+footer{
+    background:#000;
+    text-align:center;
+    padding:30px;
+    margin-top:50px;
+}
+
+.whatsapp{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:#25D366;
+    color:white;
+    padding:15px 20px;
+    border-radius:50px;
+    text-decoration:none;
+    font-weight:bold;
+}
 </style>
+
 </head>
 <body>
 
-<div class="header">
-  <div class="header-top">
-    <div class="logo">MAKE<span>FASHION</span></div>
-    <div class="header-icons">
-      <div class="header-icon" onclick="abrirCarrinho()">
-        <i data-lucide="shopping-bag"></i>
-        <div class="badge" id="badgeCarrinho" style="display:none">0</div>
-      </div>
-      <div class="header-icon" onclick="abrirPerfil()">
-        <i data-lucide="user"></i>
-      </div>
+<header>
+    <div class="logo">Prime Beauty</div>
+    <div class="slogan">
+        Elegância, beleza e economia em um só lugar.
     </div>
-  </div>
-  <div class="busca-box">
-    <input type="text" placeholder="BUSCAR PRODUTO..." id="buscaInput">
-    <button class="busca-btn" onclick="buscar()"><i data-lucide="search"></i></button>
-  </div>
-</div>
+</header>
 
-<div id="paginaHome" class="pagina ativa">
-  <div class="banner-hero">
-    <img src="https://images.unsplash.com/photo-1483985988355-763cb588c6e3?w=800" alt="Banner">
-    <div class="banner-texto">
-      <div class="banner-tit">MAKE FASHION</div>
-      <div class="banner-sub">Sua Moda, Seu Estilo</div>
+<section class="hero">
+    <h1>Prime Beauty</h1>
+    <p>As melhores maquiagens com preços incríveis.</p>
+    <a href="#produtos" class="btn">Ver Produtos</a>
+</section>
+
+<section class="categorias">
+    <h2>Categorias</h2>
+
+    <div class="grid">
+        <div class="card">💄 Batons</div>
+        <div class="card">✨ Gloss</div>
+        <div class="card">🌸 Blush</div>
+        <div class="card">👁️ Sombras</div>
+        <div class="card">🖌️ Bases</div>
+        <div class="card">💎 Iluminadores</div>
+        <div class="card">🧴 Skincare</div>
+        <div class="card">🎁 Kits</div>
     </div>
-  </div>
-  <div class="categorias-grid" id="categoriasGrid"></div>
-  <div class="secao">
-    <div class="secao-tit">Lançamentos</div>
-    <div class="produtos-grid" id="produtosGrid"></div>
-  </div>
-</div>
+</section>
 
-<div id="paginaProduto" class="pagina">
-  <div id="produtoDetalhes"></div>
-</div>
+<section class="destaques" id="produtos">
+    <h2 style="text-align:center;color:#ff4da6;margin-bottom:30px;">
+        Produtos em Destaque
+    </h2>
 
-<div id="paginaCarrinho" class="pagina">
-  <div style="padding:16px">
-    <h2 style="font-size:20px;font-weight:300;letter-spacing:2px;margin-bottom:20px;text-transform:uppercase">Sacola</h2>
-    <div id="carrinhoLista"></div>
-    <div id="carrinhoTotal"></div>
-  </div>
-</div>
+    <div class="produtos">
 
-<div id="paginaAdmin" class="pagina">
-  <div class="adm-tabs">
-    <div class="adm-tab ativo" onclick="trocarAbaAdm('produtos')">Produtos</div>
-    <div class="adm-tab" onclick="trocarAbaAdm('pedidos')">Pedidos</div>
-    <div class="adm-tab" onclick="trocarAbaAdm('entregas')">Entregas</div>
-    <div class="adm-tab" onclick="trocarAbaAdm('estoque')">Estoque</div>
-  </div>
-
-  <div id="abaAdmProdutos" class="adm-aba ativo">
-    <button class="btn-primario" style="margin-bottom:20px" onclick="abrirModalProduto()">+ NOVO PRODUTO</button>
-    <table class="tabela">
-      <thead>
-        <tr>
-          <th>Produto</th>
-          <th>Preço</th>
-          <th>Estoque</th>
-          <th>Status</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody id="tabelaProdutos"></tbody>
-    </table>
-  </div>
-
-  <div id="abaAdmPedidos" class="adm-aba">
-    <table class="tabela">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Cliente</th>
-          <th>Total</th>
-          <th>Status</th>
-          <th>Data</th>
-        </tr>
-      </thead>
-      <tbody id="tabelaPedidos"></tbody>
-    </table>
-  </div>
-
-  <div id="abaAdmEntregas" class="adm-aba">
-    <button class="btn-primario" style="margin-bottom:20px" onclick="abrirModalEntrega()">+ NOVA REGIÃO</button>
-    <div id="listaEntregas"></div>
-    <div style="margin-top:30px;padding-top:20px;border-top:1px solid var(--cinza-claro)">
-      <div style="font-size:14px;font-weight:600;margin-bottom:16px;letter-spacing:1px">CUPONS DE DESCONTO</div>
-      <button class="btn-primario" style="margin-bottom:20px" onclick="abrirModalCupom()">+ NOVO CUPOM</button>
-      <div id="listaCupons"></div>
-    </div>
-  </div>
-
-  <div id="abaAdmEstoque" class="adm-aba">
-    <div style="font-size:12px;color:var(--txt-sec);margin-bottom:16px">Histórico de movimentações</div>
-    <table class="tabela">
-      <thead>
-        <tr>
-          <th>Produto</th>
-          <th>Qtd</th>
-          <th>Tipo</th>
-          <th>Data</th>
-        </tr>
-      </thead>
-      <tbody id="tabelaEstoque"></tbody>
-    </table>
-  </div>
-</div>
-
-<nav class="nav-bottom">
-  <div class="nav-item ativo" onclick="trocarPagina('home')">
-    <i data-lucide="home"></i>
-    <span>Início</span>
-  </div>
-  <div class="nav-item" onclick="abrirCarrinho()">
-    <i data-lucide="shopping-bag"></i>
-    <span>Sacola</span>
-  </div>
-  <div class="nav-item" onclick="abrirPerfil()">
-    <i data-lucide="user"></i>
-    <span>Perfil</span>
-  </div>
-  <div class="nav-item" id="btnAdmin" style="display:none" onclick="trocarPagina('admin')">
-    <i data-lucide="settings"></i>
-    <span>Admin</span>
-  </div>
-</nav>
-
-<div class="modal" id="modalLogin">
-  <div class="modal-conteudo">
-    <div class="modal-header">
-      <div class="modal-tit">Entrar</div>
-      <button class="modal-fechar" onclick="fecharModal('modalLogin')"><i data-lucide="x"></i></button>
-    </div>
-    <div style="padding:24px 16px">
-      <input type="email" id="loginEmail" placeholder="EMAIL" class="input-field" style="margin-bottom:12px">
-      <input type="password" id="loginSenha" placeholder="SENHA" class="input-field" style="margin-bottom:16px">
-      <button class="btn-primario" onclick="fazerLogin()">ENTRAR</button>
-      <button class="btn-primario btn-secundario" style="margin-top:10px" onclick="fazerCadastro()">CRIAR CONTA</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal" id="modalProduto">
-  <div class="modal-conteudo">
-    <div class="modal-header">
-      <div class="modal-tit" id="tituloModalProduto">Novo Produto</div>
-      <button class="modal-fechar" onclick="fecharModal('modalProduto')"><i data-lucide="x"></i></button>
-    </div>
-    <div style="padding:24px 16px">
-      <div class="input-group">
-        <label class="input-label">Imagem do Produto</label>
-        <div class="upload-box" onclick="document.getElementById('inputImagem').click()">
-          <img id="previewImagem" style="display:none">
-          <i data-lucide="image-plus"></i>
+        <div class="produto">
+            <img src="https://via.placeholder.com/300x220" alt="">
+            <div class="produto-info">
+                <h3>Produto 1</h3>
+                <p class="preco">R$ 19,90</p>
+            </div>
         </div>
-        <input type="file" id="inputImagem" accept="image/*" class="upload-input" onchange="previewImagem(event)">
-      </div>
-      <div class="input-group">
-        <label class="input-label">Nome do Produto</label>
-        <input type="text" id="inputNome" class="input-field" placeholder="Ex: Vestido Midi Floral">
-      </div>
-      <div class="input-group">
-        <label class="input-label">Descrição</label>
-        <textarea id="inputDesc" class="input-field" placeholder="Descreva o produto..."></textarea>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="input-group">
-          <label class="input-label">Preço (R$)</label>
-          <input type="number" id="inputPreco" class="input-field" placeholder="189.90" step="0.01">
+
+        <div class="produto">
+            <img src="https://via.placeholder.com/300x220" alt="">
+            <div class="produto-info">
+                <h3>Produto 2</h3>
+                <p class="preco">R$ 24,90</p>
+            </div>
         </div>
-        <div class="input-group">
-          <label class="input-label">Preço Antigo (R$)</label>
-          <input type="number" id="inputPrecoAntigo" class="input-field" placeholder="259.90" step="0.01">
+
+        <div class="produto">
+            <img src="https://via.placeholder.com/300x220" alt="">
+            <div class="produto-info">
+                <h3>Produto 3</h3>
+                <p class="preco">R$ 29,90</p>
+            </div>
         </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="input-group">
-          <label class="input-label">Estoque Inicial</label>
-          <input type="number" id="inputEstoque" class="input-field" placeholder="10">
-        </div>
-        <div class="input-group">
-          <label class="input-label">Categoria</label>
-          <select id="inputCategoria" class="input-field">
-            <option value="1">Vestidos</option>
-            <option value="2">Blusas</option>
-            <option value="3">Calças</option>
-            <option value="4">Saias</option>
-            <option value="5">Acessórios</option>
-            <option value="6">Sapatos</option>
-          </select>
-        </div>
-      </div>
-      <div class="input-group">
-        <label class="input-label">Tamanhos (separar por vírgula)</label>
-        <input type="text" id="inputTamanhos" class="input-field" placeholder="P,M,G,GG ou 36,38,40,42">
-      </div>
-      <button class="btn-primario" onclick="salvarProduto()">SALVAR PRODUTO</button>
+
     </div>
-  </div>
-</div>
+</section>
 
-<div class="modal" id="modalEntrega">
-  <div class="modal-conteudo">
-    <div class="modal-header">
-      <div class="modal-tit">Nova Região de Entrega</div>
-      <button class="modal-fechar" onclick="fecharModal('modalEntrega')"><i data-lucide="x"></i></button>
-    </div>
-    <div style="padding:24px 16px">
-      <div class="input-group">
-        <label class="input-label">Cidade/Bairro</label>
-        <input type="text" id="inputCidade" class="input-field" placeholder="Ex: São Paulo - Centro">
-      </div>
-      <div class="input-group">
-        <label class="input-label">Taxa de Entrega (R$)</label>
-        <input type="number" id="inputTaxa" class="input-field" placeholder="15.00" step="0.01">
-      </div>
-      <div class="input-group">
-        <label class="input-label">Prazo (dias)</label>
-        <input type="number" id="inputPrazo" class="input-field" placeholder="3">
-      </div>
-      <button class="btn-primario" onclick="salvarEntrega()">SALVAR REGIÃO</button>
-    </div>
-  </div>
-</div>
+<footer>
+    <h2>Prime Beauty</h2>
+    <p>Elegância, beleza e economia em um só lugar.</p>
+    <br>
 
-<div class="modal" id="modalCupom">
-  <div class="modal-conteudo">
-    <div class="modal-header">
-      <div class="modal-tit">Novo Cupom</div>
-      <button class="modal-fechar" onclick="fecharModal('modalCupom')"><i data-lucide="x"></i></button>
-    </div>
-    <div style="padding:24px 16px">
-      <div class="input-group">
-        <label class="input-label">Código do Cupom</label>
-        <input type="text" id="inputCupomCodigo" class="input-field" placeholder="MAKE10" style="text-transform:uppercase">
-      </div>
-      <div class="input-group">
-        <label class="input-label">Tipo de Desconto</label>
-        <select id="inputCupomTipo" class="input-field">
-          <option value="porcentagem">Porcentagem (%)</option>
-          <option value="frete">Frete Grátis</option>
-        </select>
-      </div>
-      <div class="input-group">
-        <label class="input-label">Valor do Desconto</label>
-        <input type="number" id="inputCupomDesconto" class="input-field" placeholder="10" step="0.01">
-      </div>
-      <div class="input-group">
-        <label class="input-label">Compra Mínima (R$)</label>
-        <input type="number" id="inputCupomMinimo" class="input-field" placeholder="50.00" step="0.01">
-      </div>
-      <button class="btn-primario" onclick="salvarCupom()">CRIAR CUPOM</button>
-    </div>
-  </div>
-</div>
+    <p>📞 WhatsApp: (98) 98485-3563</p>
+    <p>📸 Instagram: @Lorrannyh_vahz</p>
 
-<div class="toast" id="toast"></div>
+    <br>
+    <p>© 2026 Prime Beauty - Todos os direitos reservados.</p>
+</footer>
 
-<script type="module">
-import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
-import { getDatabase, ref, set, get, onValue, push, update, remove } from 'firebase/database';
+<a class="whatsapp"
+href="https://wa.me/5598984853563"
+target="_blank">
+WhatsApp
+</a>
 
-const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_AUTH_DOMAIN",
-  databaseURL: "SUA_DATABASE_URL",
-  projectId: "SEU_PROJECT_ID",
-  storageBucket: "SEU_STORAGE_BUCKET",
-  messagingSenderId: "SEU_MESSAGING_SENDER_ID",
-  appId: "SEU_APP_ID"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getDatabase(app);
-
-let usuarioAtual = null;
-let isAdmin = false;
-let carrinho = [];
-let produtos = [];
-let pedidos = [];
-let entregas = [];
-let cupons = [];
-let produtoAtual = null;
-let tamanhoSelecionado = null;
-let editandoProdutoId = null;
-let imagemBase64 = null;
-let cupomAplicado = null;
-
-const ADM_EMAIL = "admin@makefashion.com";
-const WHATSAPP_NUMERO = "5511999999999";
-
-const categorias = [
-  {id:'1',nome:'Vestidos',icone:'shirt'},
-  {id:'2',nome:'Blusas',icone:'shopping-bag'},
-  {id:'3',nome:'Calças',icone:'person-standing'},
-  {id:'4',nome:'Saias',icone:'sparkles'},
-  {id:'5',nome:'Acessórios',icone:'gem'},
-  {id:'6',nome:'Sapatos',icone:'footprints'}
-];
-
-window.trocarPagina = trocarPagina;
-window.abrirCarrinho = abrirCarrinho;
-window.abrirPerfil = abrirPerfil;
-window.abrirProduto = abrirProduto;
-window.addCarrinho = addCarrinho;
-window.fazerLogin = fazerLogin;
-window.fazerCadastro = fazerCadastro;
-window.fecharModal = fecharModal;
-window.selecionarTamanho = selecionarTamanho;
-window.removerCarrinho = removerCarrinho;
-window.trocarAbaAdm = trocarAbaAdm;
-window.abrirModalProduto = abrirModalProduto;
-window.salvarProduto = salvarProduto;
-window.editarProduto = editarProduto;
-window.deletarProduto = deletarProduto;
-window.abrirModalEntrega = abrirModalEntrega;
-window.salvarEntrega = salvarEntrega;
-window.previewImagem = previewImagem;
-window.atualizarEstoque = atualizarEstoque;
-window.buscar = buscar;
-window.filtrarCategoria = filtrarCategoria;
-window.aplicarCupom = aplicarCupom;
-window.removerCupom = removerCupom;
-window.abrirWhatsApp = abrirWhatsApp;
-window.abrirModalCupom = abrirModalCupom;
-window.salvarCupom = salvarCupom;
-window.deletarCupom = deletarCupom;
-window.deletarEntrega = deletarEntrega;
-
-function mostrarToast(msg){
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.classList.add('mostrar');
-  setTimeout(()=>toast.classList.remove('mostrar'), 3000);
-}
-
-function trocarPagina(pag){
-  document.querySelectorAll('.pagina').forEach(p => p.classList.remove('ativa'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('ativo'));
-  if(pag === 'home') document.getElementById('paginaHome').classList.add('ativa');
-  if(pag === 'carrinho') document.getElementById('paginaCarrinho').classList.add('ativa');
-  if(pag === 'admin' && isAdmin) {
-    document.getElementById('paginaAdmin').classList.add('ativa');
-    carregarDadosAdmin();
-  }
-  event?.target.closest('.nav-item')?.classList.add('ativo');
-}
-
-function renderizarCategorias(){
-  document.getElementById('categoriasGrid').innerHTML = categorias.map(c => `
-    <div class="cat-card" onclick="filtrarCategoria('${c.id}')">
-      <i data-lucide="${c.icone}"></i>
-      <span>${c.nome}</span>
-    </div>
-  `).join('');
-  lucide.createIcons();
-}
-
-function carregarProdutos(){
-  onValue(ref(db, 'produtos'), (snapshot) => {
-    const data = snapshot.val();
-    produtos = data? Object.entries(data).map(([id, p]) => ({id, ...p})) : [];
-    renderizarProdutos();
-    if(isAdmin) renderizarTabelaProdutos();
-  });
-}
-
-function renderizarProdutos(){
-  document.getElementById('produtosGrid').innerHTML = produtos.filter(p => p.ativo !== false).map(p => produtoCard(p)).join('');
-  lucide.createIcons();
-}
-
-function produtoCard(p){
-  const estoque = p.estoque || 0;
-  return `
-    <div class="produto-card" onclick="abrirProduto('${p.id}')">
-      <div class="produto-img">
-        <img src="${p.imagem}" alt="${p.nome}">
-        ${p.tag? `<div class="produto-tag">${p.tag}</div>` : ''}
-      </div>
-      <div class="produto-info">
-        <div class="produto-nome">${p.nome}</div>
-        <div>
-          <span class="produto-preco">R$ ${p.preco.toFixed(2)}</span>
-          ${p.precoAntigo? `<span class="produto-preco-antigo">R$ ${p.precoAntigo.toFixed(2)}</span>` : ''}
-        </div>
-        <div class="produto-estoque ${estoque === 0?'esgotado':''}">${estoque === 0?'ESGOTADO':`${estoque} em estoque`}</div>
-      </div>
-    </div>
-  `;
-}
-
-function abrirProduto(id){
-  produtoAtual = produtos.find(p => p.id === id);
-  if(!produtoAtual) return;
-  tamanhoSelecionado = null;
-  document.querySelectorAll('.pagina').forEach(pg => pg.classList.remove('ativa'));
-  document.getElementById('paginaProduto').classList.add('ativa');
-  const estoque = produtoAtual.estoque || 0;
-  document.getElementById('produtoDetalhes').innerHTML = `
-    <img src="${produtoAtual.imagem}" class="produto-detalhe-img">
-    <div class="produto-detalhe-info">
-      <div class="produto-detalhe-nome">${produtoAtual.nome}</div>
-      <div class="produto-detalhe-preco">
-        R$ ${produtoAtual.preco.toFixed(2)}
-        ${produtoAtual.precoAntigo? `<span style="font-size:16px;color:var(--txt-sec);text-decoration:line-through;margin-left:10px;font-weight:400">R$ ${produtoAtual.precoAntigo.toFixed(2)}</span>` : ''}
-      </div>
-      <div style="font-size:11px;color:${estoque>0?'var(--verde)':'var(--vermelho)'};margin-bottom:16px;letter-spacing:1px">${estoque>0?`${estoque} UNIDADES DISPONÍVEIS`:'ESGOTADO'}</div>
-      ${produtoAtual.tamanhos && produtoAtual.tamanhos.length > 0? `
-        <div style="margin-bottom:20px">
-          <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">Tamanho</div>
-          <div class="tamanhos-grid">
-            ${produtoAtual.tamanhos.map(t => `<button class="tamanho-btn" onclick="selecionarTamanho('${t}')">${t}</button>`).join('')}
-          </div>
-        </div>
-      ` : ''}
-      <button class="btn-primario" onclick="addCarrinho()" ${estoque===0?'disabled style="opacity:.5"':''}>${estoque===0?'ESGOTADO':'ADICIONAR À SACOLA'}</button>
-      <div class="produto-detalhe-desc">${produtoAtual.descricao || 'Produto de alta qualidade. Modelagem confortável e moderna.'}</div>
-    </div>
-  `;
-  lucide.createIcons();
-}
-
-function selecionarTamanho(tam){
-  tamanhoSelecionado = tam;
-  document.querySelectorAll('.tamanho-btn').forEach(b => b.classList.remove('ativo'));
-  event.target.classList.add('ativo');
-}
-
-function addCarrinho(){
-  if(!produtoAtual) return;
-  if(produtoAtual.estoque === 0){
-    mostrarToast('PRODUTO ESGOTADO');
-    return;
-  }
-  if(produtoAtual.tamanhos && produtoAtual.tamanhos.length > 0 && !tamanhoSelecionado){
-    mostrarToast('SELECIONE UM TAMANHO');
-    return;
-  }
-  const item = {...produtoAtual, tamanho: tamanhoSelecionado || 'ÚNICO', qtd: 1};
-  carrinho.push(item);
-  atualizarBadgeCarrinho();
-  salvarCarrinho();
-  mostrarToast('ADICIONADO À SACOLA');
-}
-
-function atualizarBadgeCarrinho(){
-  const badge = document.getElementById('badgeCarrinho');
-  badge.textContent = carrinho.length;
-  badge.style.display = carrinho.length > 0? 'flex' : 'none';
-}
-
-function abrirCarrinho(){
-  trocarPagina('carrinho');
-  renderizarCarrinho();
-}
-
-function renderizarCarrinho(){
-  const lista = document.getElementById('carrinhoLista');
-  if(carrinho.length === 0){
-    lista.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--txt-sec);font-size:12px;letter-spacing:1px">SUA SACOLA ESTÁ VAZIA</div>';
-    document.getElementById('carrinhoTotal').innerHTML = '';
-  }else{
-    lista.innerHTML = carrinho.map((p,i) => `
-      <div class="carr     `).join('');
-    
-    const subtotal = carrinho.reduce((sum, p) => sum + p.preco, 0);
-    let desconto = 0;
-    let taxaEntrega = 15.00;
-    
-    if(cupomAplicado){
-      if(cupomAplicado.tipo === 'porcentagem'){
-        desconto = subtotal * (cupomAplicado.desconto / 100);
-      }else if(cupomAplicado.tipo === 'frete'){
-        taxaEntrega = 0;
-      }
-    }
-    
-    const total = subtotal - desconto + taxaEntrega;
-    
-    document.getElementById('carrinhoTotal').innerHTML = `
-      <div style="padding:20px 0;border-top:1px solid var(--cinza-claro);margin-top:20px">
-        <div class="input-group" style="margin-bottom:16px">
-          <label class="input-label">Cupom de Desconto</label>
-          <div style="display:flex;gap:8px">
-            <input type="text" id="inputCupom" class="input-field" placeholder="DIGITE O CUPOM" style="flex:1" ${cupomAplicado?'disabled':''}>
-            ${cupomAplicado? 
-              `<button class="btn-secundario" style="padding:0 16px" onclick="removerCupom()">REMOVER</button>` :
-              `<button class="btn-primario" style="padding:0 16px" onclick="aplicarCupom()">APLICAR</button>`
-            }
-          </div>
-          ${cupomAplicado? `<div style="font-size:10px;color:var(--verde);margin-top:6px">✓ ${cupomAplicado.codigo} APLICADO</div>` : ''}
-        </div>
-        
-        <div style="font-size:12px;margin-bottom:8px;display:flex;justify-content:space-between">
-          <span style="color:var(--txt-sec)">Subtotal:</span>
-          <span>R$ ${subtotal.toFixed(2)}</span>
-        </div>
-        ${desconto > 0? `
-          <div style="font-size:12px;margin-bottom:8px;display:flex;justify-content:space-between;color:var(--verde)">
-            <span>Desconto ${cupomAplicado.codigo}:</span>
-            <span>- R$ ${desconto.toFixed(2)}</span>
-          </div>
-        ` : ''}
-        <div style="font-size:12px;margin-bottom:12px;display:flex;justify-content:space-between">
-          <span style="color:var(--txt-sec)">Taxa de Entrega:</span>
-          <span style="${taxaEntrega === 0?'color:var(--verde)':''}">${taxaEntrega === 0?'GRÁTIS':'R$ ' + taxaEntrega.toFixed(2)}</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:16px;padding-top:12px;border-top:1px solid var(--cinza-claro)">
-          <span style="font-size:13px;letter-spacing:1px">TOTAL</span>
-          <span style="font-size:20px;font-weight:600">R$ ${total.toFixed(2)}</span>
-        </div>
-        <button class="btn-primario" onclick="finalizarCompra()">FINALIZAR COMPRA</button>
-        <button class="btn-primario btn-secundario" style="margin-top:10px" onclick="abrirWhatsApp()">
-          <i data-lucide="message-circle" style="width:16px;height:16px;vertical-align:middle;margin-right:6px"></i>
-          FALAR NO WHATSAPP
-        </button>
-      </div>
-    `;
-  }
-  lucide.createIcons();
-}
-
-function removerCarrinho(i){
-  carrinho.splice(i, 1);
-  atualizarBadgeCarrinho();
-  salvarCarrinho();
-  renderizarCarrinho();
-}
-
-async function finalizarCompra(){
-  if(!usuarioAtual){
-    mostrarToast('FAÇA LOGIN PARA CONTINUAR');
-    abrirPerfil();
-    return;
-  }
-  if(carrinho.length === 0) return;
-  
-  const subtotal = carrinho.reduce((sum, p) => sum + p.preco, 0);
-  let desconto = 0;
-  let taxaEntrega = 15.00;
-  
-  if(cupomAplicado){
-    if(cupomAplicado.tipo === 'porcentagem'){
-      desconto = subtotal * (cupomAplicado.desconto / 100);
-    }else if(cupomAplicado.tipo === 'frete'){
-      taxaEntrega = 0;
-    }
-  }
-  
-  const total = subtotal - desconto + taxaEntrega;
-  
-  const pedido = {
-    id: Date.now(),
-    userId: usuarioAtual.uid,
-    email: usuarioAtual.email,
-    produtos: carrinho,
-    subtotal: subtotal,
-    desconto: desconto,
-    taxaEntrega: taxaEntrega,
-    cupom: cupomAplicado?.codigo || null,
-    total: total,
-    status: 'pendente',
-    data: new Date().toLocaleDateString('pt-BR')
-  };
-  
-  await push(ref(db, 'pedidos'), pedido);
-  
-  for(const item of carrinho){
-    const prod = produtos.find(p => p.id === item.id);
-    if(prod){
-      await update(ref(db, 'produtos/' + item.id), {estoque: (prod.estoque || 0) - 1});
-      await push(ref(db, 'historicoEstoque'), {
-        produtoId: item.id,
-        quantidade: -1,
-        tipo: 'venda',
-        pedidoId: pedido.id,
-        data: new Date().toLocaleString('pt-BR')
-      });
-    }
-  }
-  
-  mostrarToast('COMPRA FINALIZADA COM SUCESSO');
-  carrinho = [];
-  cupomAplicado = null;
-  atualizarBadgeCarrinho();
-  salvarCarrinho();
-  trocarPagina('home');
-}
-
-function abrirPerfil(){
-  if(!usuarioAtual){
-    document.getElementById('modalLogin').classList.add('ativo');
-  }else{
-    mostrarToast('OLÁ, ' + usuarioAtual.email);
-  }
-}
-
-async function fazerLogin(){
-  const email = document.getElementById('loginEmail').value;
-  const senha = document.getElementById('loginSenha').value;
-  try{
-    await signInWithEmailAndPassword(auth, email, senha);
-    fecharModal('modalLogin');
-    mostrarToast('BEM-VINDA!');
-  }catch(err){
-    mostrarToast('EMAIL OU SENHA INVÁLIDOS');
-  }
-}
-
-async function fazerCadastro(){
-  const email = document.getElementById('loginEmail').value;
-  const senha = document.getElementById('loginSenha').value;
-  try{
-    await createUserWithEmailAndPassword(auth, email, senha);
-    fecharModal('modalLogin');
-    mostrarToast('CONTA CRIADA COM SUCESSO');
-  }catch(err){
-    mostrarToast('ERRO AO CRIAR CONTA');
-  }
-}
-
-function fecharModal(id){
-  document.getElementById(id).classList.remove('ativo');
-  editandoProdutoId = null;
-  imagemBase64 = null;
-}
-
-function trocarAbaAdm(aba){
-  document.querySelectorAll('.adm-tab').forEach(t => t.classList.remove('ativo'));
-  document.querySelectorAll('.adm-aba').forEach(a => a.classList.remove('ativo'));
-  event?.target.classList.add('ativo');
-  document.getElementById('abaAdm' + aba.charAt(0).toUpperCase() + aba.slice(1)).classList.add('ativo');
-  if(aba === 'produtos') renderizarTabelaProdutos();
-  if(aba === 'pedidos') carregarPedidos();
-  if(aba === 'entregas') {
-    carregarEntregas();
-    carregarCuponsAdmin();
-  }
-  if(aba === 'estoque') carregarHistoricoEstoque();
-}
-
-function carregarDadosAdmin(){
-  carregarProdutos();
-  carregarPedidos();
-  carregarEntregas();
-  carregarCuponsAdmin();
-}
-
-function renderizarTabelaProdutos(){
-  document.getElementById('tabelaProdutos').innerHTML = produtos.map(p => `
-    <tr>
-      <td style="display:flex;align-items:center;gap:10px">
-        <img src="${p.imagem}" style="width:40px;height:50px;object-fit:cover">
-        <div>
-          <div style="font-weight:600;font-size:12px">${p.nome}</div>
-          <div style="font-size:10px;color:var(--txt-sec)">ID: ${p.id}</div>
-        </div>
-      </td>
-      <td>R$ ${p.preco.toFixed(2)}</td>
-      <td>
-        <input type="number" value="${p.estoque || 0}" style="width:60px;padding:4px;border:1px solid var(--cinza-claro);background:var(--cinza-medio);color:var(--branco);text-align:center" 
-          onchange="atualizarEstoque('${p.id}', this.value)">
-      </td>
-      <td>
-        <span class="status-badge ${p.estoque > 0?'ativo':'esgotado'}">
-          ${p.estoque > 0?'ATIVO':'ESGOTADO'}
-        </span>
-      </td>
-      <td>
-        <button onclick="editarProduto('${p.id}')" style="background:none;border:none;cursor:pointer;margin-right:8px">
-          <i data-lucide="edit" style="width:16px;height:16px;stroke:var(--branco)"></i>
-        </button>
-        <button onclick="deletarProduto('${p.id}')" style="background:none;border:none;cursor:pointer">
-          <i data-lucide="trash-2" style="width:16px;height:16px;stroke:var(--vermelho)"></i>
-        </button>
-      </td>
-    </tr>
-  `).join('');
-  lucide.createIcons();
-}
-
-function abrirModalProduto(){
-  editandoProdutoId = null;
-  imagemBase64 = null;
-  document.getElementById('tituloModalProduto').textContent = 'NOVO PRODUTO';
-  document.getElementById('inputNome').value = '';
-  document.getElementById('inputDesc').value = '';
-  document.getElementById('inputPreco').value = '';
-  document.getElementById('inputPrecoAntigo').value = '';
-  document.getElementById('inputEstoque').value = '';
-  document.getElementById('inputCategoria').value = '1';
-  document.getElementById('inputTamanhos').value = '';
-  document.getElementById('previewImagem').style.display = 'none';
-  document.getElementById('modalProduto').classList.add('ativo');
-}
-
-function previewImagem(event){
-  const file = event.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    imagemBase64 = e.target.result;
-    document.getElementById('previewImagem').src = imagemBase64;
-    document.getElementById('previewImagem').style.display = 'block';
-  };
-  reader.readAsDataURL(file);
-}
-
-async function salvarProduto(){
-  const nome = document.getElementById('inputNome').value.trim();
-  const desc = document.getElementById('inputDesc').value.trim();
-  const preco = parseFloat(document.getElementById('inputPreco').value);
-  const precoAntigo = parseFloat(document.getElementById('inputPrecoAntigo').value) || null;
-  const estoque = parseInt(document.getElementById('inputEstoque').value);
-  const categoria = document.getElementById('inputCategoria').value;
-  const tamanhos = document.getElementById('inputTamanhos').value.split(',').map(t => t.trim()).filter(t => t);
-  
-  if(!nome || !preco || estoque < 0 || (!imagemBase64 && !editandoProdutoId)){
-    mostrarToast('PREENCHA TODOS OS CAMPOS');
-    return;
-  }
-  
-  const produto = {
-    nome,
-    descricao: desc,
-    preco,
-    precoAntigo,
-    estoque,
-    categoria,
-    tamanhos,
-    ativo: true,
-    dataCriacao: new Date().toISOString()
-  };
-  
-  if(imagemBase64) produto.imagem = imagemBase64;
-  
-  if(editandoProdutoId){
-    await update(ref(db, 'produtos/' + editandoProdutoId), produto);
-    mostrarToast('PRODUTO ATUALIZADO');
-  }else{
-    produto.id = Date.now().toString();
-    await set(ref(db, 'produtos/' + produto.id), produto);
-    mostrarToast('PRODUTO CADASTRADO');
-  }
-  
-  fecharModal('modalProduto');
-}
-
-function editarProduto(id){
-  const p = produtos.find(prod => prod.id === id);
-  if(!p) return;
-  editandoProdutoId = id;
-  imagemBase64 = p.imagem;
-  document.getElementById('tituloModalProduto').textContent = 'EDITAR PRODUTO';
-  document.getElementById('inputNome').value = p.nome;
-  document.getElementById('inputDesc').value = p.descricao || '';
-  document.getElementById('inputPreco').value = p.preco;
-  document.getElementById('inputPrecoAntigo').value = p.precoAntigo || '';
-  document.getElementById('inputEstoque').value = p.estoque;
-  document.getElementById('inputCategoria').value = p.categoria;
-  document.getElementById('inputTamanhos').value = p.tamanhos?.join(',') || '';
-  document.getElementById('previewImagem').src = p.imagem;
-  document.getElementById('previewImagem').style.display = 'block';
-  document.getElementById('modalProduto').classList.add('ativo');
-}
-
-async function deletarProduto(id){
-  if(!confirm('Tem certeza que deseja deletar este produto?')) return;
-  await remove(ref(db, 'produtos/' + id));
-  mostrarToast('PRODUTO DELETADO');
-}
-
-async function atualizarEstoque(id, novoEstoque){
-  await update(ref(db, 'produtos/' + id), {estoque: parseInt(novoEstoque)});
-  await push(ref(db, 'historicoEstoque'), {
-    produtoId: id,
-    quantidade: parseInt(novoEstoque),
-    tipo: 'ajuste_manual',
-    data: new Date().toLocaleString('pt-BR'),
-    admin: usuarioAtual.email
-  });
-  mostrarToast('ESTOQUE ATUALIZADO');
-}
-
-function carregarPedidos(){
-  onValue(ref(db, 'pedidos'), (snapshot) => {
-    const data = snapshot.val();
-    pedidos = data? Object.entries(data).map(([id, p]) => ({id, ...p})) : [];
-    renderizarTabelaPedidos();
-  });
-}
-
-function renderizarTabelaPedidos(){
-  document.getElementById('tabelaPedidos').innerHTML = pedidos.reverse().map(p => `
-    <tr>
-      <td>#${p.id}</td>
-      <td>${p.email}</td>
-      <td>R$ ${p.total.toFixed(2)}</td>
-      <td><span class="status-badge ${p.status}">${p.status.toUpperCase()}</span></td>
-      <td>${p.data}</td>
-    </tr>
-  `).join('');
-}
-
-function abrirModalEntrega(){
-  document.getElementById('inputCidade').value = '';
-  document.getElementById('inputTaxa').value = '';
-  document.getElementById('inputPrazo').value = '';
-  document.getElementById('modalEntrega').classList.add('ativo');
-}
-
-async function salvarEntrega(){
-  const cidade = document.getElementById('inputCidade').value.trim();
-  const taxa = parseFloat(document.getElementById('inputTaxa').value);
-  const prazo = parseInt(document.getElementById('inputPrazo').value);
-  if(!cidade || taxa < 0 || !prazo){
-    mostrarToast('PREENCHA TODOS OS CAMPOS');
-    return;
-  }
-  const entrega = {id: Date.now().toString(), cidade, taxa, prazo};
-  await set(ref(db, 'entregas/' + entrega.id), entrega);
-  mostrarToast('REGIÃO CADASTRADA');
-  fecharModal('modalEntrega');
-}
-
-function carregarEntregas(){
-  onValue(ref(db, 'entregas'), (snapshot) => {
-    const data = snapshot.val();
-    entregas = data? Object.values(data) : [];
-    renderizarEntregas();
-  });
-}
-
-function renderizarEntregas(){
-  document.getElementById('listaEntregas').innerHTML = entregas.map(e => `
-    <div class="entrega-item">
-      <div class="entrega-info">
-        <div class="entrega-cidade">${e.cidade}</div>
-        <div class="entrega-taxa">R$ ${e.taxa.toFixed(2)} - ${e.prazo} dias úteis</div>
-      </div>
-      <button onclick="deletarEntrega('${e.id}')" style="background:none;border:none;cursor:pointer">
-        <i data-lucide="trash-2" style="width:16px;height:16px;stroke:var(--vermelho)"></i>
-      </button>
-    </div>
-  `).join('');
-  lucide.createIcons();
-}
-
-async function deletarEntrega(id){
-  await remove(ref(db, 'entregas/' + id));
-  mostrarToast('REGIÃO REMOVIDA');
-}
-
-function carregarCupons(){
-  onValue(ref(db, 'cupons'), (snapshot) => {
-    const data = snapshot.val();
-    cupons = data? Object.values(data) : [];
-  });
-}
-
-function abrirModalCupom(){
-  document.getElementById('inputCupomCodigo').value = '';
-  document.getElementById('inputCupomDesconto').value = '';
-  document.getElementById('inputCupomTipo').value = 'porcentagem';
-  document.getElementById('inputCupomMinimo').value = '';
-  document.getElementById('modalCupom').classList.add('ativo');
-}
-
-async function salvarCupom(){
-  const codigo = document.getElementById('inputCupomCodigo').value.toUpperCase().trim();
-  const desconto = parseFloat(document.getElementById('inputCupomDesconto').value);
-  const tipo = document.getElementById('inputCupomTipo').value;
-  const minimo = parseFloat(document.getElementById('inputCupomMinimo').value);
-  if(!codigo || !desconto || !minimo){
-    mostrarToast('PREENCHA TODOS OS CAMPOS');
-    return;
-  }
-  const cupom = {
-    id: Date.now().toString(),
-    codigo,
-    desconto,
-    tipo,
-    minimo,
-    ativo: true,
-    criadoEm: new Date().toISOString()
-  };
-  await set(ref(db, 'cupons/' + cupom.id), cupom);
-  mostrarToast('CUPOM CRIADO');
-  fecharModal('modalCupom');
-}
-
-function carregarCuponsAdmin(){
-  onValue(ref(db, 'cupons'), (snapshot) => {
-    const data = snapshot.val();
-    const lista = data? Object.values(data) : [];
-    document.getElementById('listaCupons').innerHTML = lista.map(c => `
-      <div class="entrega-item">
-        <div class="entrega-info">
-          <div class="entrega-cidade">${c.codigo}</div>
-          <div class="entrega-taxa">
-            ${c.tipo === 'porcentagem'? c.desconto + '% OFF' : 'FRETE GRÁTIS'} - Mín: R$ ${c.minimo.toFixed(2)}
-          </div>
-        <button onclick="deletarCupom('${c.id}')" style="background:none;border:none;cursor:pointer">
-          <i data-lucide="trash-2" style="width:16px;height:16px;stroke:var(--vermelho)"></i>
-        </button>
-      </div>
-    `).join('');
-    lucide.createIcons();
-  });
-}
-
-async function deletarCupom(id){
-  await remove(ref(db, 'cupons/' + id));
-  mostrarToast('CUPOM REMOVIDO');
-}
-
-function aplicarCupom(){
-  const codigo = document.getElementById('inputCupom')?.value.toUpperCase().trim();
-  if(!codigo){
-    mostrarToast('DIGITE UM CUPOM');
-    return;
-  }
-  const cupom = cupons.find(c => c.codigo === codigo && c.ativo);
-  if(!cupom){
-    mostrarToast('CUPOM INVÁLIDO');
-    return;
-  }
-  const total = carrinho.reduce((sum, p) => sum + p.preco, 0);
-  if(total < cupom.minimo){
-    mostrarToast(`COMPRA MÍNIMA R$ ${cupom.minimo.toFixed(2)}`);
-    return;
-  }
-  cupomAplicado = cupom;
-  mostrarToast(`CUPOM ${cupom.codigo} APLICADO!`);
-  renderizarCarrinho();
-}
-
-function removerCupom(){
-  cupomAplicado = null;
-  mostrarToast('CUPOM REMOVIDO');
-  renderizarCarrinho();
-}
-
-function abrirWhatsApp(){
-  if(carrinho.length === 0){
-    mostrarToast('SACOLA VAZIA');
-    return;
-  }
-  const subtotal = carrinho.reduce((sum, p) => sum + p.preco, 0);
-  let desconto = 0;
-  let taxaEntrega = 15.00;
-  if(cupomAplicado){
-    if(cupomAplicado.tipo === 'porcentagem'){
-      desconto = subtotal * (cupomAplicado.desconto / 100);
-    }else if(cupomAplicado.tipo === 'frete'){
-      taxaEntrega = 0;
-    }
-  }
-  const total = subtotal - desconto + taxaEntrega;
-  let mensagem = `🛍️ *PEDIDO MAKE FASHION*\n\n`;
-  mensagem += `*Produtos:*\n`;
-  carrinho.forEach(p => {
-    mensagem += `• ${p.nome} - Tam: ${p.tamanho} - R$ ${p.preco.toFixed(2)}\n`;
-  });
-  mensagem += `\n*Subtotal:* R$ ${subtotal.toFixed(2)}\n`;
-  if(desconto > 0) mensagem += `*Desconto ${cupomAplicado.codigo}:* -R$ ${desconto.toFixed(2)}\n`;
-  mensagem += `*Taxa de Entrega:* ${taxaEntrega === 0?'GRÁTIS':'R$ ' + taxaEntrega.toFixed(2)}\n`;
-  mensagem += `*TOTAL: R$ ${total.toFixed(2)}*\n\n`;
-  mensagem += `Quero finalizar meu pedido! 💖`;
-  const url = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(mensagem)}`;
-  window.open(url, '_blank');
-}
-
-function carregarHistoricoEstoque(){
-  onValue(ref(db, 'historicoEstoque'), (snapshot) => {
-    const data = snapshot.val();
-    const historico = data? Object.values(data) : [];
-    document.getElementById('tabelaEstoque').innerHTML = historico.reverse().slice(0,50).map(h => {
-      const prod = produtos.find(p => p.id === h.produtoId);
-      return `
-        <tr>
-          <td>${prod?.nome || 'Produto deletado'}</td>
-          <td>${h.quantidade}</td>
-          <td>${h.tipo}</td>
-          <td>${h.data}</td>
-        </tr>
-      `;
-    }).join('');
-  });
-}
-
-function filtrarCategoria(id){
-  const produtosFiltrados = produtos.filter(p => p.categoria === id);
-  document.getElementById('produtosGrid').innerHTML = produtosFiltrados.map(p => produtoCard(p)).join('');
-  lucide.createIcons();
-}
-
-function buscar(){
-  const termo = document.getElementById('buscaInput').value.toLowerCase();
-  const resultados = produtos.filter(p => p.nome.toLowerCase().includes(termo));
-  document.getElementById('produtosGrid').innerHTML = resultados.map(p => produtoCard(p)).join('');
-  lucide.createIcons();
-}
-
-function salvarCarrinho(){
-  if(usuarioAtual){
-    set(ref(db, 'users/' + usuarioAtual.uid + '/carrinho'), carrinho);
-  }
-}
-
-onAuthStateChanged(auth, (user) => {
-  usuarioAtual = user;
-  isAdmin = user?.email === ADM_EMAIL;
-  if(isAdmin){
-    document.getElementById('btnAdmin').style.display = 'flex';
-  }else{
-    document.getElementById('btnAdmin').style.display = 'none';
-  }
-  if(user) carregarCarrinho();
-});
-
-function carregarCarrinho(){
-  if(!usuarioAtual) return;
-  onValue(ref(db, 'users/' + usuarioAtual.uid + '/carrinho'), (snapshot) => {
-    const data = snapshot.val();
-    carrinho = data? Object.values(data) : [];
-    atualizarBadgeCarrinho();
-  });
-}
-
-// INICIALIZAR
-renderizarCategorias();
-carregarProdutos();
-carregarCupons();
-lucide.createIcons();
-</script>
 </body>
 </html>
