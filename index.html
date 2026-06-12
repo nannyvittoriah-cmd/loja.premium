@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>ShopVZ - Marketplace</title>
+<title>Make Fashion - Sua Loja Online</title>
 <script type="importmap">
 {
   "imports": {
@@ -17,131 +17,163 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --laranja:#EE4D2D;
-  --laranja-escuro:#D73211;
-  --verde:#00BFA5;
-  --bg:#F5F5F5;
+  --preto:#000000;
+  --dourado:#C9A961;
+  --rosa:#F4A9B8;
+  --bg:#FFFFFF;
   --card:#FFFFFF;
-  --txt:#333333;
-  --txt-sec:#757575;
-  --borda:#E8E8E8;
-  --sombra:rgba(0,0,0,.08)
+  --txt:#1A1A1A;
+  --txt-sec:#6B6B6B;
+  --borda:#E5E5E5;
+  --cinza-claro:#F8F8F8
 }
 [data-theme="dark"]{
-  --bg:#121212;
-  --card:#1E1E1E;
+  --bg:#0A0A0A;
+  --card:#1A1A1A;
   --txt:#FFFFFF;
-  --txt-sec:#AAAAAA;
-  --borda:#2C2C2C;
-  --sombra:rgba(0,0,0,.3)
+  --txt-sec:#999;
+  --borda:#2A2A2A;
+  --cinza-claro:#151515
 }
-body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--txt);padding-bottom:60px;overflow-x:hidden}
-.header{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,var(--laranja),var(--laranja-escuro));padding:10px 12px}
-.header-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.logo{font-size:18px;font-weight:900;color:#FFF}
-.busca-box{flex:1;display:flex;background:#FFF;border-radius:4px;overflow:hidden}
-.busca-box input{flex:1;border:none;padding:8px 10px;font-size:13px;outline:none}
-.busca-btn{background:#FFF;border:none;padding:0 12px;cursor:pointer}
-.busca-btn i{width:18px;height:18px;stroke:var(--laranja)}
-.header-icons{display:flex;gap:16px}
+body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--txt);padding-bottom:70px;letter-spacing:.3px}
+.header{position:sticky;top:0;z-index:100;background:var(--card);border-bottom:1px solid var(--borda);padding:14px 16px}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.logo{font-size:22px;font-weight:300;letter-spacing:3px;color:var(--preto)}
+[data-theme="dark"] .logo{color:#FFF}
+.logo span{color:var(--dourado);font-weight:600}
+.header-icons{display:flex;gap:20px}
 .header-icon{position:relative;cursor:pointer}
-.header-icon i{width:24px;height:24px;stroke:#FFF}
-.badge{position:absolute;top:-6px;right:-6px;background:#FFF;color:var(--laranja);font-size:10px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.header-icon i{width:22px;height:22px;stroke:var(--txt)}
+.badge{position:absolute;top:-6px;right:-6px;background:var(--preto);color:#FFF;font-size:9px;font-weight:600;min-width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
 
-.categorias-scroll{display:flex;gap:8px;overflow-x:auto;padding:12px;scrollbar-width:none}
-.categorias-scroll::-webkit-scrollbar{display:none}
-.cat-item{min-width:70px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
-.cat-icone{width:50px;height:50px;background:var(--card);border:1px solid var(--borda);border-radius:8px;display:flex;align-items:center;justify-content:center}
-.cat-icone i{width:24px;height:24px;stroke:var(--laranja)}
-.cat-nome{font-size:10px;text-align:center;color:var(--txt-sec);line-height:1.2}
+.busca-box{display:flex;background:var(--cinza-claro);border:1px solid var(--borda);border-radius:0}
+.busca-box input{flex:1;border:none;background:transparent;padding:10px 14px;font-size:13px;outline:none;color:var(--txt)}
+.busca-box input::placeholder{color:var(--txt-sec)}
+.busca-btn{background:transparent;border:none;padding:0 14px;cursor:pointer}
+.busca-btn i{width:18px;height:18px;stroke:var(--txt-sec)}
 
-.banner{margin:0 12px 12px;height:120px;background:linear-gradient(135deg,var(--laranja),var(--laranja-escuro));border-radius:8px;position:relative;overflow:hidden}
-.banner img{width:100%;height:100%;object-fit:cover}
+.banner-hero{margin:0 0 20px;height:300px;background:linear-gradient(135deg,#1A1A1A,#2A2A2A);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.banner-hero img{width:100%;height:100%;object-fit:cover;opacity:.7}
+.banner-texto{position:absolute;text-align:center;color:#FFF;padding:20px}
+.banner-tit{font-size:32px;font-weight:200;letter-spacing:4px;margin-bottom:8px}
+.banner-sub{font-size:12px;letter-spacing:2px;text-transform:uppercase}
 
-.secao{margin:0 12px 16px}
-.secao-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.secao-tit{font-size:15px;font-weight:700;color:var(--laranja);display:flex;align-items:center;gap:6px}
-.secao-ver{font-size:12px;color:var(--txt-sec);cursor:pointer}
+.categorias-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 16px;margin-bottom:24px}
+.cat-card{aspect-ratio:1;background:var(--cinza-claro);border:1px solid var(--borda);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:.3s}
+.cat-card:hover{border-color:var(--dourado)}
+.cat-card i{width:28px;height:28px;stroke:var(--txt)}
+.cat-card span{font-size:11px;text-transform:uppercase;letter-spacing:1px}
 
-.produtos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.produto-card{background:var(--card);border-radius:4px;overflow:hidden;cursor:pointer;box-shadow:0 1px 2px var(--sombra)}
-.produto-img{width:100%;aspect-ratio:1;background:var(--borda);position:relative}
-.produto-img img{width:100%;height:100%;object-fit:cover}
-.produto-desconto{position:absolute;top:0;right:0;background:var(--laranja);color:#FFF;font-size:10px;font-weight:700;padding:2px 6px;border-radius:0 0 0 4px}
-.produto-info{padding:8px}
-.produto-nome{font-size:12px;line-height:1.3;margin-bottom:4px;height:32px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-.produto-preco{display:flex;align-items:baseline;gap:4px;margin-bottom:4px}
-.preco-atual{font-size:16px;font-weight:700;color:var(--laranja)}
-.preco-antigo{font-size:11px;color:var(--txt-sec);text-decoration:line-through}
-.produto-stats{display:flex;justify-content:space-between;font-size:10px;color:var(--txt-sec)}
-.produto-vendas{display:flex;align-items:center;gap:3px}
-.produto-loja{display:flex;align-items:center;gap:3px}
+.secao{padding:0 16px;margin-bottom:30px}
+.secao-tit{font-size:18px;font-weight:300;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;text-align:center}
+.secao-tit::after{content:'';display:block;width:40px;height:1px;background:var(--dourado);margin:8px auto 0}
 
-.nav-bottom{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--borda);display:flex;justify-content:space-around;padding:6px 0;z-index:100}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 12px}
-.nav-item i{width:22px;height:22px;stroke:var(--txt-sec)}
-.nav-item.ativo i{stroke:var(--laranja)}
-.nav-item span{font-size:10px;color:var(--txt-sec)}
-.nav-item.ativo span{color:var(--laranja);font-weight:600}
+.produtos-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.produto-card{background:var(--card);cursor:pointer;transition:.3s}
+.produto-card:hover{opacity:.8}
+.produto-img{width:100%;aspect-ratio:3/4;background:var(--cinza-claro);position:relative;overflow:hidden;margin-bottom:8px}
+.produto-img img{width:100%;height:100%;object-fit:cover;transition:.4s}
+.produto-card:hover .produto-img img{transform:scale(1.05)}
+.produto-tag{position:absolute;top:8px;left:8px;background:var(--preto);color:#FFF;font-size:9px;font-weight:600;padding:4px 8px;letter-spacing:1px;text-transform:uppercase}
+.produto-info{padding:0 4px}
+.produto-nome{font-size:12px;font-weight:400;margin-bottom:6px;line-height:1.4;height:34px;overflow:hidden;text-transform:uppercase;letter-spacing:.5px}
+.produto-preco{font-size:16px;font-weight:600;color:var(--preto)}
+[data-theme="dark"] .produto-preco{color:#FFF}
+.produto-preco-antigo{font-size:12px;color:var(--txt-sec);text-decoration:line-through;margin-left:6px;font-weight:400}
 
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end}
+.nav-bottom{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--borda);display:flex;justify-content:space-around;padding:8px 0;z-index:100}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px 12px}
+.nav-item i{width:20px;height:20px;stroke:var(--txt-sec);transition:.2s}
+.nav-item.ativo i{stroke:var(--preto)}
+[data-theme="dark"] .nav-item.ativo i{stroke:#FFF}
+.nav-item span{font-size:9px;color:var(--txt-sec);text-transform:uppercase;letter-spacing:.5px}
+.nav-item.ativo span{color:var(--txt);font-weight:600}
+
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:none;align-items:flex-end}
 .modal.ativo{display:flex}
-.modal-conteudo{background:var(--card);width:100%;max-height:90vh;border-radius:16px 16px 0 0;overflow-y:auto}
-.modal-header{position:sticky;top:0;background:var(--card);padding:16px;border-bottom:1px solid var(--borda);display:flex;justify-content:space-between;align-items:center;z-index:10}
-.modal-tit{font-size:16px;font-weight:700}
-.modal-fechar{width:32px;height:32px;background:var(--borda);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.modal-conteudo{background:var(--card);width:100%;max-height:92vh;overflow-y:auto}
+.modal-header{position:sticky;top:0;background:var(--card);padding:18px 16px;border-bottom:1px solid var(--borda);display:flex;justify-content:space-between;align-items:center;z-index:10}
+.modal-tit{font-size:16px;font-weight:400;letter-spacing:2px;text-transform:uppercase}
+.modal-fechar{width:32px;height:32px;background:transparent;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.modal-fechar i{width:20px;height:20px;stroke:var(--txt)}
 
-.btn-primario{width:100%;background:var(--laranja);border:none;border-radius:4px;padding:12px;color:#FFF;font-size:14px;font-weight:700;cursor:pointer;margin-top:12px}
-.btn-secundario{background:var(--card);border:1.5px solid var(--laranja);color:var(--laranja)}
+.btn-primario{width:100%;background:var(--preto);border:none;padding:14px;color:#FFF;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:.3s}
+.btn-primario:hover{background:var(--dourado)}
+.btn-secundario{background:transparent;border:1px solid var(--preto);color:var(--preto)}
+[data-theme="dark"] .btn-secundario{border-color:#FFF;color:#FFF}
+.btn-secundario:hover{background:var(--preto);color:#FFF}
 
-.pagina{display:none;padding:12px}
+.pagina{display:none}
 .pagina.ativa{display:block}
 
-.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-100px);background:var(--card);border:1px solid var(--borda);padding:10px 16px;border-radius:8px;box-shadow:0 4px 12px var(--sombra);z-index:300;font-size:12px;transition:.3s}
+.produto-detalhe-img{width:100%;aspect-ratio:3/4;object-fit:cover;margin-bottom:20px}
+.produto-detalhe-info{padding:0 16px}
+.produto-detalhe-nome{font-size:20px;font-weight:300;margin-bottom:12px;letter-spacing:1px;text-transform:uppercase}
+.produto-detalhe-preco{font-size:24px;font-weight:600;margin-bottom:16px}
+.produto-detalhe-desc{font-size:13px;line-height:1.7;color:var(--txt-sec);margin-bottom:20px}
+
+.tamanhos-grid{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.tamanho-btn{min-width:50px;padding:12px;border:1px solid var(--borda);background:transparent;font-size:12px;letter-spacing:1px;cursor:pointer;transition:.2s}
+.tamanho-btn:hover,.tamanho-btn.ativo{border-color:var(--preto);background:var(--preto);color:#FFF}
+[data-theme="dark"] .tamanho-btn.ativo{background:#FFF;color:#000}
+
+.carrinho-item{display:flex;gap:12px;padding:16px;border-bottom:1px solid var(--borda)}
+.carrinho-item-img{width:80px;height:100px;object-fit:cover}
+.carrinho-item-info{flex:1}
+.carrinho-item-nome{font-size:12px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.carrinho-item-preco{font-size:14px;font-weight:600;margin-bottom:8px}
+.carrinho-item-qtd{display:flex;align-items:center;gap:12px}
+.qtd-btn{width:28px;height:28px;border:1px solid var(--borda);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer}
+
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-100px);background:var(--preto);color:#FFF;padding:12px 20px;z-index:300;font-size:11px;letter-spacing:1px;text-transform:uppercase;transition:.3s}
 .toast.mostrar{transform:translateX(-50%) translateY(0)}
+
+.filtro-tabs{display:flex;gap:8px;padding:0 16px 16px;overflow-x:auto;scrollbar-width:none}
+.filtro-tabs::-webkit-scrollbar{display:none}
+.filtro-tab{padding:8px 16px;border:1px solid var(--borda);background:transparent;font-size:11px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:.2s}
+.filtro-tab.ativo{background:var(--preto);color:#FFF;border-color:var(--preto)}
+[data-theme="dark"] .filtro-tab.ativo{background:#FFF;color:#000}
 </style>
 </head>
 <body>
 
 <div class="header">
   <div class="header-top">
-    <div class="logo">ShopVZ</div>
-    <div class="busca-box">
-      <input type="text" placeholder="Buscar produtos..." id="buscaInput">
-      <button class="busca-btn" onclick="buscar()"><i data-lucide="search"></i></button>
-    </div>
+    <div class="logo">MAKE<span>FASHION</span></div>
     <div class="header-icons">
       <div class="header-icon" onclick="abrirCarrinho()">
-        <i data-lucide="shopping-cart"></i>
+        <i data-lucide="shopping-bag"></i>
         <div class="badge" id="badgeCarrinho" style="display:none">0</div>
       </div>
-      <div class="header-icon" onclick="abrirPerfil()">
-        <i data-lucide="user"></i>
+      <div class="header-icon" onclick="abrirMenu()">
+        <i data-lucide="menu"></i>
       </div>
     </div>
+  </div>
+  <div class="busca-box">
+    <input type="text" placeholder="BUSCAR PRODUTO..." id="buscaInput">
+    <button class="busca-btn" onclick="buscar()"><i data-lucide="search"></i></button>
   </div>
 </div>
 
 <div id="paginaHome" class="pagina ativa">
-  <div class="categorias-scroll" id="categoriasScroll"></div>
-  
-  <div class="banner">
-    <img src="https://picsum.photos/800/240?random=1" alt="Banner">
+  <div class="banner-hero">
+    <img src="https://images.unsplash.com/photo-1483985988355-763cb588c6e3?w=800" alt="Banner">
+    <div class="banner-texto">
+      <div class="banner-tit">NOVA COLEÇÃO</div>
+      <div class="banner-sub">Outono Inverno 2026</div>
+    </div>
   </div>
 
+  <div class="categorias-grid" id="categoriasGrid"></div>
+
   <div class="secao">
-    <div class="secao-header">
-      <div class="secao-tit"><i data-lucide="flame"></i>Ofertas Relâmpago</div>
-      <div class="secao-ver">Ver todos</div>
-    </div>
+    <div class="secao-tit">Lançamentos</div>
     <div class="produtos-grid" id="produtosGrid"></div>
   </div>
 
   <div class="secao">
-    <div class="secao-header">
-      <div class="secao-tit"><i data-lucide="trending-up"></i>Mais Vendidos</div>
-      <div class="secao-ver">Ver todos</div>
-    </div>
+    <div class="secao-tit">Mais Vendidos</div>
     <div class="produtos-grid" id="maisVendidosGrid"></div>
   </div>
 </div>
@@ -151,9 +183,18 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--txt);padd
 </div>
 
 <div id="paginaCarrinho" class="pagina">
-  <h2 style="font-size:18px;margin-bottom:16px">Carrinho de Compras</h2>
-  <div id="carrinhoLista"></div>
-  <div id="carrinhoTotal" style="margin-top:16px;padding:16px;background:var(--card);border-radius:8px"></div>
+  <div style="padding:16px">
+    <h2 style="font-size:20px;font-weight:300;letter-spacing:2px;margin-bottom:20px;text-transform:uppercase">Sacola</h2>
+    <div id="carrinhoLista"></div>
+    <div id="carrinhoTotal"></div>
+  </div>
+</div>
+
+<div id="paginaCategoria" class="pagina">
+  <div class="filtro-tabs" id="filtroTabs"></div>
+  <div style="padding:0 16px">
+    <div class="produtos-grid" id="categoriaProdutos"></div>
+  </div>
 </div>
 
 <nav class="nav-bottom">
@@ -161,35 +202,31 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--txt);padd
     <i data-lucide="home"></i>
     <span>Início</span>
   </div>
-  <div class="nav-item" onclick="trocarPagina('categorias')">
+  <div class="nav-item" onclick="trocarPagina('categoria')">
     <i data-lucide="grid-3x3"></i>
     <span>Categorias</span>
   </div>
-  <div class="nav-item" onclick="trocarPagina('live')">
-    <i data-lucide="video"></i>
-    <span>Live</span>
+  <div class="nav-item" onclick="abrirCarrinho()">
+    <i data-lucide="shopping-bag"></i>
+    <span>Sacola</span>
   </div>
-  <div class="nav-item" onclick="trocarPagina('notificacoes')">
-    <i data-lucide="bell"></i>
-    <span>Notificações</span>
-  </div>
-  <div class="nav-item" onclick="trocarPagina('eu')">
+  <div class="nav-item" onclick="abrirPerfil()">
     <i data-lucide="user"></i>
-    <span>Eu</span>
+    <span>Perfil</span>
   </div>
 </nav>
 
 <div class="modal" id="modalLogin">
   <div class="modal-conteudo">
     <div class="modal-header">
-      <div class="modal-tit">Entrar na ShopVZ</div>
+      <div class="modal-tit">Entrar</div>
       <button class="modal-fechar" onclick="fecharModal('modalLogin')"><i data-lucide="x"></i></button>
     </div>
-    <div style="padding:16px">
-      <input type="email" id="loginEmail" placeholder="Email" style="width:100%;padding:12px;border:1.5px solid var(--borda);border-radius:4px;margin-bottom:10px;font-size:14px">
-      <input type="password" id="loginSenha" placeholder="Senha" style="width:100%;padding:12px;border:1.5px solid var(--borda);border-radius:4px;margin-bottom:10px;font-size:14px">
+    <div style="padding:24px 16px">
+      <input type="email" id="loginEmail" placeholder="EMAIL" style="width:100%;padding:14px;border:1px solid var(--borda);margin-bottom:12px;font-size:13px;letter-spacing:1px">
+      <input type="password" id="loginSenha" placeholder="SENHA" style="width:100%;padding:14px;border:1px solid var(--borda);margin-bottom:16px;font-size:13px;letter-spacing:1px">
       <button class="btn-primario" onclick="fazerLogin()">ENTRAR</button>
-      <button class="btn-primario btn-secundario" onclick="fazerCadastro()">CRIAR CONTA</button>
+      <button class="btn-primario btn-secundario" style="margin-top:10px" onclick="fazerCadastro()">CRIAR CONTA</button>
     </div>
   </div>
 </div>
@@ -198,8 +235,8 @@ body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--txt);padd
 
 <script type="module">
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
-import { getDatabase, ref, set, get, onValue, push, update } from 'firebase/database';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { getDatabase, ref, set, get, onValue, push } from 'firebase/database';
 
 const firebaseConfig = {
   apiKey: "SUA_API_KEY",
@@ -218,15 +255,16 @@ const db = getDatabase(app);
 let usuarioAtual = null;
 let carrinho = [];
 let produtos = [];
-let categorias = [
-  {id:'1',nome:'Celulares',icone:'smartphone'},
-  {id:'2',nome:'Moda',icone:'shirt'},
-  {id:'3',nome:'Casa',icone:'home'},
-  {id:'4',nome:'Beleza',icone:'sparkles'},
-  {id:'5',nome:'Eletrônicos',icone:'laptop'},
-  {id:'6',nome:'Esportes',icone:'dumbbell'},
-  {id:'7',nome:'Brinquedos',icone:'gamepad-2'},
-  {id:'8',nome:'Ver Tudo',icone:'grid-3x3'}
+let produtoAtual = null;
+let tamanhoSelecionado = null;
+
+const categorias = [
+  {id:'1',nome:'Vestidos',icone:'shirt'},
+  {id:'2',nome:'Blusas',icone:'shopping-bag'},
+  {id:'3',nome:'Calças',icone:'person-standing'},
+  {id:'4',nome:'Saias',icone:'sparkles'},
+  {id:'5',nome:'Acessórios',icone:'gem'},
+  {id:'6',nome:'Sapatos',icone:'footprints'}
 ];
 
 window.trocarPagina = trocarPagina;
@@ -237,10 +275,13 @@ window.addCarrinho = addCarrinho;
 window.fazerLogin = fazerLogin;
 window.fazerCadastro = fazerCadastro;
 window.fecharModal = fecharModal;
+window.selecionarTamanho = selecionarTamanho;
+window.removerCarrinho = removerCarrinho;
+window.filtrarCategoria = filtrarCategoria;
 
-function mostrarToast(tit, msg){
+function mostrarToast(msg){
   const toast = document.getElementById('toast');
-  toast.innerHTML = `<b>${tit}</b><br>${msg}`;
+  toast.textContent = msg;
   toast.classList.add('mostrar');
   setTimeout(()=>toast.classList.remove('mostrar'), 3000);
 }
@@ -251,15 +292,19 @@ function trocarPagina(pag){
   
   if(pag === 'home') document.getElementById('paginaHome').classList.add('ativa');
   if(pag === 'carrinho') document.getElementById('paginaCarrinho').classList.add('ativa');
+  if(pag === 'categoria') {
+    document.getElementById('paginaCategoria').classList.add('ativa');
+    renderizarFiltros();
+  }
   
   event?.target.closest('.nav-item')?.classList.add('ativo');
 }
 
 function renderizarCategorias(){
-  document.getElementById('categoriasScroll').innerHTML = categorias.map(c => `
-    <div class="cat-item" onclick="filtrarCategoria('${c.id}')">
-      <div class="cat-icone"><i data-lucide="${c.icone}"></i></div>
-      <div class="cat-nome">${c.nome}</div>
+  document.getElementById('categoriasGrid').innerHTML = categorias.map(c => `
+    <div class="cat-card" onclick="filtrarCategoria('${c.id}')">
+      <i data-lucide="${c.icone}"></i>
+      <span>${c.nome}</span>
     </div>
   `).join('');
   lucide.createIcons();
@@ -276,83 +321,86 @@ function carregarProdutos(){
 
 function mockProdutos(){
   return [
-    {id:'1',nome:'Fone Bluetooth TWS Pro Cancelamento Ruído',preco:89.90,precoAntigo:199.90,vendas:1243,imagem:'https://picsum.photos/300/300?random=2',loja:'TechStore',desconto:55},
-    {id:'2',nome:'Smartwatch D20 Relógio Inteligente Android iOS',preco:59.90,precoAntigo:149.90,vendas:3421,imagem:'https://picsum.photos/300/300?random=3',loja:'GadgetWorld',desconto:60},
-    {id:'3',nome:'Tênis Esportivo Corrida Academia Masculino',preco:129.90,precoAntigo:249.90,vendas:892,imagem:'https://picsum.photos/300/300?random=4',loja:'SportMax',desconto:48},
-    {id:'4',nome:'Câmera Segurança WiFi 1080p Visão Noturna',preco:99.90,precoAntigo:179.90,vendas:2103,imagem:'https://picsum.photos/300/300?random=5',loja:'SecurityPro',desconto:44}
+    {id:'1',nome:'Vestido Midi Floral Elegante',preco:189.90,precoAntigo:259.90,imagem:'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400',categoria:'1',tag:'NOVO',tamanhos:['P','M','G','GG']},
+    {id:'2',nome:'Blusa Cropped Manga Longa',preco:89.90,imagem:'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400',categoria:'2',tamanhos:['P','M','G']},
+    {id:'3',nome:'Calça Jeans Wide Leg Premium',preco:159.90,precoAntigo:219.90,imagem:'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=400',categoria:'3',tag:'SALE',tamanhos:['36','38','40','42']},
+    {id:'4',nome:'Saia Plissada Midi',preco:129.90,imagem:'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=400',categoria:'4',tamanhos:['P','M','G']},
+    {id:'5',nome:'Bolsa Transversal Couro',preco:249.90,imagem:'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400',categoria:'5',tag:'NOVO',tamanhos:['ÚNICO']},
+    {id:'6',nome:'Sandália Salto Bloco',preco:179.90,imagem:'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400',categoria:'6',tamanhos:['35','36','37','38','39']}
   ];
 }
 
 function renderizarProdutos(){
-  document.getElementById('produtosGrid').innerHTML = produtos.map(p => `
-    <div class="produto-card" onclick="abrirProduto('${p.id}')">
-      <div class="produto-img">
-        <img src="${p.imagem}" alt="${p.nome}">
-        ${p.desconto? `<div class="produto-desconto">-${p.desconto}%</div>` : ''}
-      </div>
-      <div class="produto-info">
-        <div class="produto-nome">${p.nome}</div>
-        <div class="produto-preco">
-          <div class="preco-atual">R$ ${p.preco.toFixed(2)}</div>
-          ${p.precoAntigo? `<div class="preco-antigo">R$ ${p.precoAntigo.toFixed(2)}</div>` : ''}
-        </div>
-        <div class="produto-stats">
-          <div class="produto-vendas"><i data-lucide="trending-up" style="width:12px;height:12px"></i>${p.vendas}</div>
-          <div class="produto-loja"><i data-lucide="store" style="width:12px;height:12px"></i>${p.loja}</div>
-        </div>
-      </div>
-    </div>
-  `).join('');
-  
-  document.getElementById('maisVendidosGrid').innerHTML = [...produtos].sort((a,b) => b.vendas - a.vendas).slice(0,4).map(p => `
-    <div class="produto-card" onclick="abrirProduto('${p.id}')">
-      <div class="produto-img">
-        <img src="${p.imagem}" alt="${p.nome}">
-      </div>
-      <div class="produto-info">
-        <div class="produto-nome">${p.nome}</div>
-        <div class="produto-preco">
-          <div class="preco-atual">R$ ${p.preco.toFixed(2)}</div>
-        </div>
-        <div class="produto-stats">
-          <div class="produto-vendas"><i data-lucide="trending-up" style="width:12px;height:12px"></i>${p.vendas}</div>
-        </div>
-      </div>
-    </div>
-  `).join('');
-  
+  document.getElementById('produtosGrid').innerHTML = produtos.slice(0,4).map(p => produtoCard(p)).join('');
+  document.getElementById('maisVendidosGrid').innerHTML = produtos.slice(2,6).map(p => produtoCard(p)).join('');
   lucide.createIcons();
 }
 
+function produtoCard(p){
+  return `
+    <div class="produto-card" onclick="abrirProduto('${p.id}')">
+      <div class="produto-img">
+        <img src="${p.imagem}" alt="${p.nome}">
+        ${p.tag? `<div class="produto-tag">${p.tag}</div>` : ''}
+      </div>
+      <div class="produto-info">
+        <div class="produto-nome">${p.nome}</div>
+        <div>
+          <span class="produto-preco">R$ ${p.preco.toFixed(2)}</span>
+          ${p.precoAntigo? `<span class="produto-preco-antigo">R$ ${p.precoAntigo.toFixed(2)}</span>` : ''}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function abrirProduto(id){
-  const p = produtos.find(prod => prod.id === id);
-  if(!p) return;
+  produtoAtual = produtos.find(p => p.id === id);
+  if(!produtoAtual) return;
+  tamanhoSelecionado = null;
+  
   document.querySelectorAll('.pagina').forEach(pg => pg.classList.remove('ativa'));
   document.getElementById('paginaProduto').classList.add('ativa');
   
   document.getElementById('produtoDetalhes').innerHTML = `
-    <img src="${p.imagem}" style="width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;margin-bottom:12px">
-    <div style="font-size:16px;font-weight:600;margin-bottom:8px">${p.nome}</div>
-    <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:12px">
-      <div style="font-size:24px;font-weight:900;color:var(--laranja)">R$ ${p.preco.toFixed(2)}</div>
-      ${p.precoAntigo? `<div style="font-size:14px;color:var(--txt-sec);text-decoration:line-through">R$ ${p.precoAntigo.toFixed(2)}</div>` : ''}
+    <img src="${produtoAtual.imagem}" class="produto-detalhe-img">
+    <div class="produto-detalhe-info">
+      <div class="produto-detalhe-nome">${produtoAtual.nome}</div>
+      <div class="produto-detalhe-preco">
+        R$ ${produtoAtual.preco.toFixed(2)}
+        ${produtoAtual.precoAntigo? `<span style="font-size:16px;color:var(--txt-sec);text-decoration:line-through;margin-left:10px;font-weight:400">R$ ${produtoAtual.precoAntigo.toFixed(2)}</span>` : ''}
+      </div>
+      <div style="margin-bottom:20px">
+        <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">Tamanho</div>
+        <div class="tamanhos-grid">
+          ${produtoAtual.tamanhos.map(t => `<button class="tamanho-btn" onclick="selecionarTamanho('${t}')">${t}</button>`).join('')}
+        </div>
+      </div>
+      <button class="btn-primario" onclick="addCarrinho()">ADICIONAR À SACOLA</button>
+      <div class="produto-detalhe-desc">
+        Produto de alta qualidade, tecido premium. Modelagem confortável e moderna. Perfeito para qualquer ocasião.
+      </div>
     </div>
-    <div style="font-size:12px;color:var(--txt-sec);margin-bottom:16px;display:flex;gap:16px">
-      <span><i data-lucide="trending-up" style="width:14px;height:14px"></i> ${p.vendas} vendidos</span>
-      <span><i data-lucide="store" style="width:14px;height:14px"></i> ${p.loja}</span>
-    </div>
-    <button class="btn-primario" onclick="addCarrinho('${p.id}')">ADICIONAR AO CARRINHO</button>
-    <button class="btn-primario btn-secundario" onclick="comprarAgora('${p.id}')">COMPRAR AGORA</button>
   `;
   lucide.createIcons();
 }
 
-function addCarrinho(id){
-  const p = produtos.find(prod => prod.id === id);
-  if(!p) return;
-  carrinho.push(p);
+function selecionarTamanho(tam){
+  tamanhoSelecionado = tam;
+  document.querySelectorAll('.tamanho-btn').forEach(b => b.classList.remove('ativo'));
+  event.target.classList.add('ativo');
+}
+
+function addCarrinho(){
+  if(!tamanhoSelecionado && produtoAtual.tamanhos.length > 1){
+    mostrarToast('SELECIONE UM TAMANHO');
+    return;
+  }
+  const item = {...produtoAtual, tamanho: tamanhoSelecionado || 'ÚNICO', qtd: 1};
+  carrinho.push(item);
   atualizarBadgeCarrinho();
-  mostrarToast('Adicionado!', p.nome + ' no carrinho');
+  salvarCarrinho();
+  mostrarToast('ADICIONADO À SACOLA');
 }
 
 function atualizarBadgeCarrinho(){
@@ -369,36 +417,59 @@ function abrirCarrinho(){
 function renderizarCarrinho(){
   const lista = document.getElementById('carrinhoLista');
   if(carrinho.length === 0){
-    lista.innerHTML = '<div style="text-align:center;padding:40px;color:var(--txt-sec)">Carrinho vazio</div>';
+    lista.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--txt-sec);font-size:12px;letter-spacing:1px">SUA SACOLA ESTÁ VAZIA</div>';
     document.getElementById('carrinhoTotal').innerHTML = '';
   }else{
     lista.innerHTML = carrinho.map((p,i) => `
-      <div style="display:flex;gap:10px;background:var(--card);padding:10px;border-radius:8px;margin-bottom:8px">
-        <img src="${p.imagem}" style="width:60px;height:60px;object-fit:cover;border-radius:4px">
-        <div style="flex:1">
-          <div style="font-size:12px;margin-bottom:4px">${p.nome}</div>
-          <div style="font-size:14px;font-weight:700;color:var(--laranja)">R$ ${p.preco.toFixed(2)}</div>
+      <div class="carrinho-item">
+        <img src="${p.imagem}" class="carrinho-item-img">
+        <div class="carrinho-item-info">
+          <div class="carrinho-item-nome">${p.nome}</div>
+          <div style="font-size:11px;color:var(--txt-sec);margin-bottom:6px">Tamanho: ${p.tamanho}</div>
+          <div class="carrinho-item-preco">R$ ${p.preco.toFixed(2)}</div>
         </div>
-        <button onclick="removerCarrinho(${i})" style="background:none;border:none;cursor:pointer"><i data-lucide="trash-2" style="width:18px;height:18px;stroke:var(--laranja)"></i></button>
+        <button onclick="removerCarrinho(${i})" style="background:none;border:none;cursor:pointer"><i data-lucide="x" style="width:18px;height:18px;stroke:var(--txt-sec)"></i></button>
       </div>
     `).join('');
     const total = carrinho.reduce((sum, p) => sum + p.preco, 0);
     document.getElementById('carrinhoTotal').innerHTML = `
-      <div style="display:flex;justify-content:space-between;margin-bottom:12px">
-        <span style="font-size:14px">Total:</span>
-        <span style="font-size:18px;font-weight:900;color:var(--laranja)">R$ ${total.toFixed(2)}</span>
+      <div style="padding:20px 0;border-top:1px solid var(--borda);margin-top:20px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:16px">
+          <span style="font-size:13px;letter-spacing:1px">TOTAL</span>
+          <span style="font-size:20px;font-weight:600">R$ ${total.toFixed(2)}</span>
+        </div>
+        <button class="btn-primario" onclick="finalizarCompra()">FINALIZAR COMPRA</button>
       </div>
-      <button class="btn-primario" onclick="finalizarCompra()">FINALIZAR COMPRA</button>
     `;
   }
   lucide.createIcons();
+}
+
+function removerCarrinho(i){
+  carrinho.splice(i, 1);
+  atualizarBadgeCarrinho();
+  salvarCarrinho();
+  renderizarCarrinho();
+}
+
+function finalizarCompra(){
+  if(!usuarioAtual){
+    mostrarToast('FAÇA LOGIN PARA CONTINUAR');
+    abrirPerfil();
+    return;
+  }
+  mostrarToast('COMPRA FINALIZADA COM SUCESSO');
+  carrinho = [];
+  atualizarBadgeCarrinho();
+  salvarCarrinho();
+  trocarPagina('home');
 }
 
 function abrirPerfil(){
   if(!usuarioAtual){
     document.getElementById('modalLogin').classList.add('ativo');
   }else{
-    mostrarToast('Perfil', 'Logado como ' + usuarioAtual.email);
+    mostrarToast('OLÁ, ' + usuarioAtual.email);
   }
 }
 
@@ -408,9 +479,9 @@ async function fazerLogin(){
   try{
     await signInWithEmailAndPassword(auth, email, senha);
     fecharModal('modalLogin');
-    mostrarToast('Bem-vindo!', 'Login realizado');
+    mostrarToast('BEM-VINDA!');
   }catch(err){
-    mostrarToast('Erro', 'Email ou senha inválidos');
+    mostrarToast('EMAIL OU SENHA INVÁLIDOS');
   }
 }
 
@@ -420,9 +491,9 @@ async function fazerCadastro(){
   try{
     await createUserWithEmailAndPassword(auth, email, senha);
     fecharModal('modalLogin');
-    mostrarToast('Conta criada!', 'Bem-vindo à ShopVZ');
+    mostrarToast('CONTA CRIADA COM SUCESSO');
   }catch(err){
-    mostrarToast('Erro', 'Não foi possível criar conta');
+    mostrarToast('ERRO AO CRIAR CONTA');
   }
 }
 
@@ -430,21 +501,55 @@ function fecharModal(id){
   document.getElementById(id).classList.remove('ativo');
 }
 
+function renderizarFiltros(){
+  document.getElementById('filtroTabs').innerHTML = `
+    <div class="filtro-tab ativo" onclick="filtrarCategoria('todas')">TODAS</div>
+    ${categorias.map(c => `<div class="filtro-tab" onclick="filtrarCategoria('${c.id}')">${c.nome.toUpperCase()}</div>`).join('')}
+  `;
+}
+
+function filtrarCategoria(id){
+  const produtosFiltrados = id === 'todas'? produtos : produtos.filter(p => p.categoria === id);
+  document.getElementById('categoriaProdutos').innerHTML = produtosFiltrados.map(p => produtoCard(p)).join('');
+  document.querySelectorAll('.filtro-tab').forEach(t => t.classList.remove('ativo'));
+  event?.target.classList.add('ativo');
+  lucide.createIcons();
+}
+
+function salvarCarrinho(){
+  if(usuarioAtual){
+    set(ref(db, 'users/' + usuarioAtual.uid + '/carrinho'), carrinho);
+  }
+}
+
 onAuthStateChanged(auth, (user) => {
   usuarioAtual = user;
-  if(user){
-    carregarCarrinho();
-  }
+  if(user) carregarCarrinho();
 });
 
 function carregarCarrinho(){
   if(!usuarioAtual) return;
-  const carrinhoRef = ref(db, 'users/' + usuarioAtual.uid + '/carrinho');
-  onValue(carrinhoRef, (snapshot) => {
+  onValue(ref(db, 'users/' + usuarioAtual.uid + '/carrinho'), (snapshot) => {
     const data = snapshot.val();
     carrinho = data? Object.values(data) : [];
     atualizarBadgeCarrinho();
   });
+}
+
+function abrirMenu(){
+  mostrarToast('MENU EM BREVE');
+}
+
+function buscar(){
+  const termo = document.getElementById('buscaInput').value.toLowerCase();
+  const resultados = produtos.filter(p => p.nome.toLowerCase().includes(termo));
+  if(resultados.length > 0){
+    trocarPagina('categoria');
+    document.getElementById('categoriaProdutos').innerHTML = resultados.map(p => produtoCard(p)).join('');
+    lucide.createIcons();
+  }else{
+    mostrarToast('NENHUM PRODUTO ENCONTRADO');
+  }
 }
 
 // INICIALIZAR
