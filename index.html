@@ -135,12 +135,20 @@
   .product-desc {font-size:9px;color:#6B7280;margin-bottom:10px}
   .product-price {display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
   .price {font-size:16px;font-weight:800;color:#A78BFA}
+
+  /* BOTÕES ESPELHADOS */
+  .product-buttons {display:flex;gap:6px}
   .buy-btn {
-      width:100%;background:#7C3AED;border:none;color:#fff;
+      flex:1;background:#10B981;border:none;color:#fff;
       padding:9px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;transition:.2s
     }
-  .buy-btn:hover {background:#6D28D9}
+  .buy-btn:hover {background:#059669}
   .buy-btn:disabled {background:#1F1F2E;color:#4B5563;cursor:not-allowed}
+  .cart-btn-product {
+      flex:1;background:transparent;border:1px solid #2A2A35;color:#9CA3AF;
+      padding:9px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;transition:.2s
+    }
+  .cart-btn-product:hover {border-color:#7C3AED;color:#A78BFA}
     
     /* MODAL */
   .modal {display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
@@ -255,7 +263,7 @@
         
         <div class="feature">
           <div class="feature-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
           </div>
           <div class="feature-content">
             <h4>Pague com PIX</h4>
@@ -312,7 +320,10 @@
           <div class="product-price">
             <div><span class="price">R$ 19,90</span></div>
           </div>
-          <button class="buy-btn" onclick="addToCart('Produto Digital 1', 19.90)">Comprar</button>
+          <div class="product-buttons">
+            <button class="buy-btn" onclick="buyNow('Produto Digital 1', 19.90)">Comprar</button>
+            <button class="cart-btn-product" onclick="addToCart('Produto Digital 1', 19.90)">Carrinho</button>
+          </div>
         </div>
 
         <div class="product-card" data-cat="games">
@@ -322,7 +333,10 @@
           <div class="product-price">
             <div><span class="price">R$ 39,90</span></div>
           </div>
-          <button class="buy-btn" onclick="addToCart('Produto Digital 2', 39.90)">Comprar</button>
+          <div class="product-buttons">
+            <button class="buy-btn" onclick="buyNow('Produto Digital 2', 39.90)">Comprar</button>
+            <button class="cart-btn-product" onclick="addToCart('Produto Digital 2', 39.90)">Carrinho</button>
+          </div>
         </div>
 
         <div class="product-card" data-cat="contas">
@@ -332,7 +346,10 @@
           <div class="product-price">
             <div><span class="price">R$ 99,90</span></div>
           </div>
-          <button class="buy-btn" onclick="addToCart('Conta Premium', 99.90)">Comprar</button>
+          <div class="product-buttons">
+            <button class="buy-btn" onclick="buyNow('Conta Premium', 99.90)">Comprar</button>
+            <button class="cart-btn-product" onclick="addToCart('Conta Premium', 99.90)">Carrinho</button>
+          </div>
         </div>
 
         <div class="product-card" data-cat="servicos">
@@ -342,7 +359,10 @@
           <div class="product-price">
             <div><span class="price">R$ 149,90</span></div>
           </div>
-          <button class="buy-btn" onclick="addToCart('Serviço Personalizado', 149.90)">Comprar</button>
+          <div class="product-buttons">
+            <button class="buy-btn" onclick="buyNow('Serviço Personalizado', 149.90)">Comprar</button>
+            <button class="cart-btn-product" onclick="addToCart('Serviço Personalizado', 149.90)">Carrinho</button>
+          </div>
         </div>
       </div>
     </div>
@@ -441,7 +461,7 @@
     document.getElementById('clientCount').textContent = total >= 1000? (total/1000).toFixed(1) + 'K+' : total + '+';
   });
 
-  // Status ON/OFF - controla no Firebase: loja/status
+  // Status ON/OFF
   const statusRef = ref(db, 'loja/status');
   onValue(statusRef, (snapshot) => {
     const status = snapshot.exists()? snapshot.val() : 'on';
@@ -536,7 +556,7 @@
     document.getElementById('successMsg').style.display = 'none';
   }
 
-  window.logout = async () => {
+    window.logout = async () => {
     await signOut(auth);
   }
 
@@ -554,13 +574,26 @@
     document.querySelectorAll('.category-card').forEach(card => card.classList.remove('active'));
     if (el) el.classList.add('active');
     document.querySelectorAll('.product-card').forEach(card => {
-      card.style.display = cat === 'all' || card.dataset.cat === cat? 'block' : '
-        window.addToCart = (nome, preco) => {
+      card.style.display = cat === 'all' || card.dataset.cat === cat? 'block' : 'none';
+    });
+  }
+
+  window.addToCart = (nome, preco) => {
     if (!auth.currentUser) {
       openModal();
       return;
     }
     cart.push({nome, preco});
+    updateCartCount();
+    // Não abre o carrinho automático quando clica em "Carrinho"
+  }
+
+  window.buyNow = (nome, preco) => {
+    if (!auth.currentUser) {
+      openModal();
+      return;
+    }
+    cart = [{nome, preco}];
     updateCartCount();
     openCart();
   }
@@ -620,12 +653,11 @@
       criadoEm: Date.now()
     });
 
-    // Gera PIX copia e cola - TROCA PELA TUA CHAVE PIX AQUI
+    // TROCA PELA TUA CHAVE PIX AQUI
     const chavePix = 'SEU_EMAIL_OU_CHAVE_PIX_AQUI';
     const nomeRecebedor = 'GAMESTORE';
     const cidade = 'SAO PAULO';
 
-    // Formato PIX simplificado
     const pixCode = `00020126580014BR.GOV.BCB.PIX0136${chavePix}52040000530398654${total.toFixed(2).length.toString().padStart(2,'0')}${total.toFixed(2)}5802BR5925${nomeRecebedor}6009${cidade}62070503***6304`;
 
     document.getElementById('pixCode').textContent = pixCode;
