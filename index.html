@@ -22,7 +22,6 @@
     }
    .container {max-width:1000px;margin:0 auto;position:relative;z-index:2}
     
-    /* HEADER + LOGO GAME */
    .header {display:flex;justify-content:space-between;align-items:center;padding:14px 0 32px}
    .logo {display:flex;align-items:center;gap:10px}
    .logo-game {
@@ -58,12 +57,19 @@
       font-size:9px;font-weight:600;margin-bottom:18px;letter-spacing:.2px
     }
     h1 {font-size:36px;font-weight:900;line-height:1.05;margin-bottom:14px;letter-spacing:-.6px}
-    h1.purple {color:#A78BFA}
+    h1 .purple {color:#A78BFA}
    .hero-desc {color:#6B7280;font-size:12px;line-height:1.5;margin-bottom:28px;max-width:440px;font-weight:400}
     
    .stats {display:flex;gap:36px;margin-bottom:32px}
-   .stat h3 {font-size:24px;font-weight:800;margin-bottom:3px}
+   .stat h3 {font-size:24px;font-weight:800;margin-bottom:3px;display:flex;align-items:center;gap:6px}
    .stat p {font-size:8px;color:#4B5563;text-transform:uppercase;letter-spacing:1.2px;font-weight:600}
+   .status-dot {width:8px;height:8px;border-radius:50%;animation:pulse 2s infinite}
+   .status-dot.on {background:#10B981}
+   .status-dot.off {background:#EF4444}
+   @keyframes pulse {
+      0%,100% {opacity:1}
+      50% {opacity:.5}
+    }
     
    .features {display:flex;gap:8px;flex-wrap:nowrap}
    .feature {
@@ -80,30 +86,30 @@
    .feature h4 {font-size:10px;font-weight:700;margin-bottom:1px;color:#E5E7EB;line-height:1.1}
    .feature p {font-size:8px;color:#6B7280;line-height:1.1;font-weight:400}
     
-    /* MODAL LOGIN EMAIL/SENHA */
+    /* MODAL MENOR COM CADASTRO COMPLETO */
    .modal {display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:999;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
    .modal.active {display:flex}
    .modal-box {
-      background:#15151E;border:1px solid #1F1F2E;border-radius:16px;
-      padding:28px 22px;max-width:340px;width:90%
+      background:#15151E;border:1px solid #1F1F2E;border-radius:14px;
+      padding:24px 20px;max-width:320px;width:90%;max-height:90vh;overflow-y:auto
     }
-   .modal-box h3 {font-size:18px;margin-bottom:6px;text-align:center}
-   .modal-box p {font-size:11px;color:#6B7280;margin-bottom:20px;text-align:center}
-   .input-group {margin-bottom:14px}
-   .input-group label {display:block;font-size:11px;color:#9CA3AF;margin-bottom:6px;font-weight:500}
+   .modal-box h3 {font-size:16px;margin-bottom:4px;text-align:center}
+   .modal-box p {font-size:10px;color:#6B7280;margin-bottom:16px;text-align:center}
+   .input-group {margin-bottom:12px}
+   .input-group label {display:block;font-size:10px;color:#9CA3AF;margin-bottom:5px;font-weight:500}
    .input-group input {
       width:100%;background:#0A0A0F;border:1px solid #2A2A35;
-      color:#fff;padding:11px 12px;border-radius:9px;font-size:13px;outline:none
+      color:#fff;padding:10px 11px;border-radius:8px;font-size:12px;outline:none
     }
    .input-group input:focus {border-color:#7C3AED}
    .submit-btn {
       width:100%;background:#7C3AED;border:none;color:#fff;
-      padding:12px;border-radius:9px;font-weight:600;font-size:13px;cursor:pointer;margin-top:8px
+      padding:11px;border-radius:8px;font-weight:600;font-size:12px;cursor:pointer;margin-top:6px
     }
    .submit-btn:hover {background:#6D28D9}
    .modal-links {
-      display:flex;justify-content:space-between;margin-top:16px;
-      font-size:11px
+      display:flex;justify-content:space-between;margin-top:14px;
+      font-size:10px
     }
    .modal-links button {
       background:transparent;border:none;color:#A78BFA;cursor:pointer;font-weight:500
@@ -111,9 +117,10 @@
    .modal-links button:hover {color:#7C3AED}
    .close-btn {
       background:transparent;border:1px solid #2A2A35;color:#6B7280;
-      padding:10px;border-radius:9px;width:100%;cursor:pointer;font-size:12px;margin-top:12px
+      padding:9px;border-radius:8px;width:100%;cursor:pointer;font-size:11px;margin-top:10px
     }
-   .error-msg {color:#EF4444;font-size:11px;margin-top:8px;text-align:center;display:none}
+   .error-msg {color:#EF4444;font-size:10px;margin-top:6px;text-align:center;display:none}
+   .success-msg {color:#10B981;font-size:10px;margin-top:6px;text-align:center;display:none}
     
     @media(max-width:360px){
       h1{font-size:30px}
@@ -128,7 +135,6 @@
   
   <section class="hero">
     <div class="container">
-      <!-- HEADER COM LOGO GAME -->
       <header class="header">
         <div class="logo">
           <div class="logo-game">GAME</div>
@@ -143,7 +149,7 @@
           </div>
         </div>
         <div class="header-actions">
-          <button class="login-btn" id="loginBtn" onclick="openLogin()">
+          <button class="login-btn" id="loginBtn" onclick="openModal()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
             Entrar
           </button>
@@ -161,10 +167,23 @@
         Diamantes, contas raras e muito mais. Entrega rápida via ID, segurança garantida e sem risco de ban.
       </p>
       
+      <!-- STATS DINÂMICOS -->
       <div class="stats">
-        <div class="stat"><h3>12K+</h3><p>CLIENTES</p></div>
-        <div class="stat"><h3>99%</h3><p>SATISFAÇÃO</p></div>
-        <div class="stat"><h3>5MIN</h3><p>ENTREGA</p></div>
+        <div class="stat">
+          <h3 id="clientCount">7K+</h3>
+          <p>CLIENTES</p>
+        </div>
+        <div class="stat">
+          <h3>98%</h3>
+          <p>SATISFAÇÃO</p>
+        </div>
+        <div class="stat">
+          <h3 id="deliveryStatus">
+            <span class="status-dot on" id="statusDot"></span>
+            <span id="statusText">ON</span>
+          </h3>
+          <p>ENTREGA</p>
+        </div>
       </div>
       
       <div class="features">
@@ -201,13 +220,17 @@
     </div>
   </section>
 
-  <!-- MODAL LOGIN/CADASTRO -->
+  <!-- MODAL LOGIN/CADASTRO COMPLETO -->
   <div class="modal" id="authModal">
     <div class="modal-box">
       <h3 id="modalTitle">Entrar na GameStore</h3>
       <p id="modalDesc">Acesse sua conta pra continuar</p>
       
       <form id="authForm" onsubmit="handleAuth(event)">
+        <div class="input-group" id="nameGroup" style="display:none">
+          <label>Nome completo</label>
+          <input type="text" id="name" placeholder="Seu nome">
+        </div>
         <div class="input-group">
           <label>Email</label>
           <input type="email" id="email" placeholder="seu@email.com" required>
@@ -216,7 +239,12 @@
           <label>Senha</label>
           <input type="password" id="password" placeholder="••••••••" required minlength="6">
         </div>
+        <div class="input-group" id="confirmGroup" style="display:none">
+          <label>Confirmar senha</label>
+          <input type="password" id="confirmPassword" placeholder="••••••••">
+        </div>
         <div class="error-msg" id="errorMsg"></div>
+        <div class="success-msg" id="successMsg"></div>
         <button type="submit" class="submit-btn" id="submitBtn">Entrar</button>
       </form>
 
@@ -232,7 +260,8 @@
 <!-- FIREBASE -->
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+  import { getDatabase, ref, set, onValue, get, child } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
   const firebaseConfig = {
     apiKey: "AIzaSyAuAANdCDgT1pMucdYMdeHMPMsto-EUDAU",
@@ -247,7 +276,32 @@
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+  const db = getDatabase(app);
   let isLoginMode = true;
+  let lojaStatus = 'on'; // Muda pra 'off' se quiser desativar entrega
+
+  // Atualiza contador de clientes em tempo real
+  const usersRef = ref(db, 'users');
+  onValue(usersRef, (snapshot) => {
+    const count = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
+    const total = 7000 + count;
+    document.getElementById('clientCount').textContent = total >= 1000 ? (total/1000).toFixed(1) + 'K+' : total + '+';
+  });
+
+  // Status da loja ON/OFF
+  const statusRef = ref(db, 'loja/status');
+  onValue(statusRef, (snapshot) => {
+    lojaStatus = snapshot.exists() ? snapshot.val() : 'on';
+    const dot = document.getElementById('statusDot');
+    const text = document.getElementById('statusText');
+    if (lojaStatus === 'on') {
+      dot.className = 'status-dot on';
+      text.textContent = 'ON';
+    } else {
+      dot.className = 'status-dot off';
+      text.textContent = 'OFF';
+    }
+  });
 
   // Verifica login
   onAuthStateChanged(auth, (user) => {
@@ -265,16 +319,35 @@
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    const name = document.getElementById('name').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
     const errorMsg = document.getElementById('errorMsg');
+    const successMsg = document.getElementById('successMsg');
     errorMsg.style.display = 'none';
+    successMsg.style.display = 'none';
 
     try {
       if (isLoginMode) {
         await signInWithEmailAndPassword(auth, email, password);
+        closeModal();
       } else {
-        await createUserWithEmailAndPassword(auth, email, password);
+        if (password !== confirmPassword) {
+          throw {code: 'auth/password-mismatch'};
+        }
+        if (!name) {
+          throw {code: 'auth/name-required'};
+        }
+        const userCred = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(userCred.user, { displayName: name });
+        await set(ref(db, 'users/' + userCred.user.uid), {
+          nome: name,
+          email: email,
+          criadoEm: Date.now()
+        });
+        successMsg.textContent = 'Conta criada com sucesso!';
+        successMsg.style.display = 'block';
+        setTimeout(() => closeModal(), 1500);
       }
-      closeModal();
       document.getElementById('authForm').reset();
     } catch (error) {
       errorMsg.textContent = traduzErro(error.code);
@@ -285,6 +358,7 @@
   window.resetPassword = async () => {
     const email = document.getElementById('email').value;
     const errorMsg = document.getElementById('errorMsg');
+    const successMsg = document.getElementById('successMsg');
     if (!email) {
       errorMsg.textContent = 'Digite seu email primeiro';
       errorMsg.style.display = 'block';
@@ -292,9 +366,9 @@
     }
     try {
       await sendPasswordResetEmail(auth, email);
-      errorMsg.style.color = '#10B981';
-      errorMsg.textContent = 'Email de recuperação enviado!';
-      errorMsg.style.display = 'block';
+      successMsg.textContent = 'Email de recuperação enviado!';
+      successMsg.style.display = 'block';
+      errorMsg.style.display = 'none';
     } catch (error) {
       errorMsg.textContent = traduzErro(error.code);
       errorMsg.style.display = 'block';
@@ -307,7 +381,10 @@
     document.getElementById('modalDesc').textContent = isLoginMode? 'Acesse sua conta pra continuar' : 'Crie sua conta grátis';
     document.getElementById('submitBtn').textContent = isLoginMode? 'Entrar' : 'Cadastrar';
     document.getElementById('toggleBtn').textContent = isLoginMode? 'Criar conta' : 'Já tenho conta';
+    document.getElementById('nameGroup').style.display = isLoginMode? 'none' : 'block';
+    document.getElementById('confirmGroup').style.display = isLoginMode? 'none' : 'block';
     document.getElementById('errorMsg').style.display = 'none';
+    document.getElementById('successMsg').style.display = 'none';
   }
 
   window.logout = async () => {
@@ -321,6 +398,7 @@
   window.closeModal = () => {
     document.getElementById('authModal').classList.remove('active');
     document.getElementById('errorMsg').style.display = 'none';
+    document.getElementById('successMsg').style.display = 'none';
   }
 
   function traduzErro(code) {
@@ -330,7 +408,9 @@
       'auth/weak-password': 'Senha deve ter 6+ caracteres',
       'auth/user-not-found': 'Usuário não encontrado',
       'auth/wrong-password': 'Senha incorreta',
-      'auth/too-many-requests': 'Muitas tentativas. Tente depois'
+      'auth/too-many-requests': 'Muitas tentativas. Tente depois',
+      'auth/password-mismatch': 'Senhas não coincidem',
+      'auth/name-required': 'Digite seu nome'
     }
     return erros[code] || 'Erro ao processar. Tente novamente';
   }
