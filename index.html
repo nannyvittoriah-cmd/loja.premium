@@ -5,287 +5,156 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GameStore | A Melhor Loja FF do Brasil</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
     * {margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
     body {background:#0A0A0F;color:#fff}
     
-    /* HERO IDÊNTICO */
-    .hero {min-height:100vh;padding:20px 20px 60px;background:#0A0A0F;position:relative;overflow:hidden}
-    .hero::before {content:'';position:absolute;inset:0;background-image:
-      linear-gradient(rgba(24,24,37,.3) 1px,transparent 1px),
-      linear-gradient(90deg,rgba(24,24,37,.3) 1px,transparent 1px);
-      background-size:50px 50px;opacity:.4}
-    .container {max-width:1200px;margin:0 auto;position:relative;z-index:2}
+    /* HERO IDÊNTICO À IMAGEM */
+    .hero {min-height:100vh;padding:20px;background:#0A0A0F;position:relative;overflow:hidden}
+    .hero::before {
+      content:'';
+      position:absolute;
+      inset:0;
+      background-image:
+        linear-gradient(rgba(30,30,46,.4) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(30,30,46,.4) 1px,transparent 1px);
+      background-size:40px 40px;
+      opacity:.6
+    }
+    .container {max-width:1100px;margin:0 auto;position:relative;z-index:2}
     
     /* HEADER */
-    .header {display:flex;justify-content:space-between;align-items:center;padding:20px 0;margin-bottom:60px}
+    .header {display:flex;justify-content:space-between;align-items:center;padding:24px 0 60px}
     .logo {display:flex;align-items:center;gap:12px}
-    .logo-box {width:42px;height:42px;background:#7C3AED;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}
-    .logo-text h2 {font-size:18px;font-weight:800}
-    .logo-text p {font-size:10px;color:#71717A;letter-spacing:1.5px;font-weight:600}
-    .nav {display:flex;gap:32px}
-    .nav a {color:#A1A1AA;text-decoration:none;font-size:14px;font-weight:600}
-    .nav a:hover {color:#fff}
+    .logo-box {width:44px;height:44px;background:#A78BFA;border-radius:12px;display:flex;align-items:center;justify-content:center}
+    .logo-box svg {width:24px;height:24px;fill:#0A0A0F}
+    .logo-text h2 {font-size:16px;font-weight:800;letter-spacing:.5px}
+    .logo-text p {font-size:9px;color:#6B7280;letter-spacing:1.8px;font-weight:600;margin-top:2px}
+    .cart-btn {width:44px;height:44px;background:#1A1A25;border:1px solid #2A2A35;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+    .cart-btn svg {width:20px;height:20px;stroke:#A78BFA;fill:none}
     
     /* HERO CONTENT */
-    .badge {display:inline-flex;align-items:center;gap:8px;background:rgba(124,58,237,.1);border:1px solid #7C3AED;color:#A78BFA;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:28px}
-    .hero-grid {display:grid;grid-template-columns:1.2fr .8fr;gap:60px;align-items:center}
-    h1 {font-size:56px;font-weight:900;line-height:1.1;margin-bottom:20px}
+    .badge {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:rgba(167,139,250,.08);
+      border:1px solid rgba(167,139,250,.3);
+      color:#A78BFA;
+      padding:8px 16px;
+      border-radius:20px;
+      font-size:11px;
+      font-weight:600;
+      margin-bottom:28px;
+      letter-spacing:.5px
+    }
+    h1 {font-size:52px;font-weight:900;line-height:1.05;margin-bottom:20px;letter-spacing:-1px}
     h1 .purple {color:#A78BFA}
-    .hero-desc {color:#A1A1AA;font-size:16px;line-height:1.7;margin-bottom:40px;max-width:500px}
+    .hero-desc {color:#6B7280;font-size:15px;line-height:1.7;margin-bottom:48px;max-width:520px;font-weight:400}
     
-    /* STATS */
-    .stats {display:flex;gap:48px;margin-bottom:48px}
-    .stat h3 {font-size:36px;font-weight:800;margin-bottom:4px}
-    .stat p {font-size:11px;color:#71717A;text-transform:uppercase;letter-spacing:1.5px;font-weight:600}
+    /* STATS IGUAL IMAGEM */
+    .stats {display:flex;gap:60px;margin-bottom:60px}
+    .stat h3 {font-size:36px;font-weight:800;margin-bottom:6px}
+    .stat p {font-size:10px;color:#4B5563;text-transform:uppercase;letter-spacing:1.8px;font-weight:600}
     
-    /* FEATURES */
+    /* CARDS DE FEATURE - IDÊNTICOS À IMAGEM */
     .features {display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .feature {background:#15151E;border:1px solid #1F1F2E;border-radius:16px;padding:24px}
-    .feature-icon {width:48px;height:48px;background:#1F1F2E;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#A78BFA;font-size:20px;margin-bottom:16px}
-    .feature h4 {font-size:15px;font-weight:700;margin-bottom:6px}
-    .feature p {font-size:13px;color:#71717A;line-height:1.5}
-    
-    /* CATEGORIAS */
-    .section {padding:80px 20px}
-    .section-head {text-align:center;margin-bottom:48px}
-    .section-title {font-size:36px;font-weight:800;margin-bottom:12px}
-    .section-sub {color:#71717A;font-size:15px}
-    .cat-grid {display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:1200px;margin:0 auto}
-    .cat-card {background:#15151E;border:1px solid #1F1F2E;border-radius:20px;padding:32px 20px;text-align:center;cursor:pointer;transition:.3s}
-    .cat-card:hover {border-color:#7C3AED;transform:translateY(-6px);box-shadow:0 20px 40px rgba(124,58,237,.2)}
-    .cat-icon {width:80px;height:80px;background:#1F1F2E;border-radius:20px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:40px}
-    .cat-card h3 {font-size:16px;font-weight:700;margin-bottom:6px}
-    .cat-card p {font-size:12px;color:#71717A}
-    
-    /* PRODUTOS */
-    .prod-grid {display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:1200px;margin:0 auto}
-    .prod-card {background:#15151E;border:1px solid #1F1F2E;border-radius:20px;overflow:hidden;transition:.3s}
-    .prod-card:hover {border-color:#7C3AED;transform:translateY(-6px)}
-    .prod-img {width:100%;height:180px;background:#0A0A0F;display:flex;align-items:center;justify-content:center;position:relative}
-    .prod-img img {width:100%;height:100%;object-fit:cover}
-    .prod-badge {position:absolute;top:12px;left:12px;background:#7C3AED;color:#fff;font-size:10px;padding:6px 10px;border-radius:6px;font-weight:700}
-    .prod-info {padding:20px}
-    .prod-cat {font-size:11px;color:#71717A;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
-    .prod-card h3 {font-size:15px;font-weight:700;margin-bottom:12px;line-height:1.4;min-height:42px}
-    .prod-price {display:flex;align-items:baseline;gap:10px;margin-bottom:16px}
-    .price {font-size:24px;font-weight:800;color:#A78BFA}
-    .old-price {font-size:14px;color:#71717A;text-decoration:line-through}
-    .prod-btn {width:100%;background:#7C3AED;border:none;color:#fff;padding:14px;border-radius:12px;font-weight:700;cursor:pointer;font-size:14px;transition:.2s}
-    .prod-btn:hover {background:#6D28D9}
+    .feature {
+      background:#15151E;
+      border:1px solid #1F1F2E;
+      border-radius:16px;
+      padding:28px 24px;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start
+    }
+    .feature-icon {
+      width:44px;
+      height:44px;
+      background:#1F1F2E;
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom:16px
+    }
+    .feature-icon svg {width:22px;height:22px;fill:#A78BFA}
+    .feature h4 {font-size:14px;font-weight:700;margin-bottom:6px;color:#E5E7EB}
+    .feature p {font-size:12px;color:#6B7280;line-height:1.5;font-weight:400}
     
     /* RESPONSIVO */
-    @media(max-width:1024px){
-      .hero-grid{grid-template-columns:1fr}
-      .cat-grid,.prod-grid{grid-template-columns:repeat(2,1fr)}
-      h1{font-size:42px}
-    }
-    @media(max-width:640px){
-      .nav{display:none}
-      h1{font-size:32px}
-      .stats{gap:24px}
+    @media(max-width:768px){
+      h1{font-size:38px}
+      .stats{gap:32px}
+      .stat h3{font-size:28px}
       .features{grid-template-columns:1fr}
-      .cat-grid,.prod-grid{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
   
-  <!-- HERO -->
   <section class="hero">
     <div class="container">
+      <!-- HEADER -->
       <header class="header">
         <div class="logo">
-          <div class="logo-box">🎮</div>
+          <div class="logo-box">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          </div>
           <div class="logo-text">
             <h2>GAMESTORE</h2>
-            <p>NITRO & BOOST SHOP</p>
+            <p>FREE FIRE SHOP</p>
           </div>
         </div>
-        <nav class="nav">
-          <a href="#inicio">Início</a>
-          <a href="#produtos">Produtos</a>
-          <a href="#como-funciona">Como Funciona</a>
-          <a href="#contato">Contato</a>
-        </nav>
+        <div class="cart-btn">
+          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+        </div>
       </header>
       
-      <div class="hero-grid">
-        <div>
-          <div class="badge">⚡ ENTREGA MANUAL</div>
-          <h1>A MELHOR<br><span class="purple">LOJA FF</span><br>DO BRASIL</h1>
-          <p class="hero-desc">
-            Boosts, Nitro, contas e muito mais. Entrega rápida via ID, segurança garantida e sem risco de ban.
-          </p>
-          
-          <div class="stats">
-            <div class="stat"><h3>12K+</h3><p>CLIENTES</p></div>
-            <div class="stat"><h3>99%</h3><p>SATISFAÇÃO</p></div>
-            <div class="stat"><h3>5MIN</h3><p>ENTREGA</p></div>
+      <!-- HERO -->
+      <div class="badge">⚡ ENTREGA IMEDIATA</div>
+      
+      <h1>A MELHOR<br><span class="purple">LOJA FF</span><br>DO BRASIL</h1>
+      
+      <p class="hero-desc">
+        Diamantes, contas raras e muito mais. Entrega rápida via ID, segurança garantida e sem risco de ban.
+      </p>
+      
+      <!-- STATS -->
+      <div class="stats">
+        <div class="stat"><h3>12K+</h3><p>CLIENTES</p></div>
+        <div class="stat"><h3>99%</h3><p>SATISFAÇÃO</p></div>
+        <div class="stat"><h3>5MIN</h3><p>ENTREGA</p></div>
+      </div>
+      
+      <!-- CARDS IDÊNTICOS -->
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
           </div>
+          <h4>100% Seguro</h4>
+          <p>Sem risco de ban</p>
         </div>
         
-        <div class="features">
-          <div class="feature">
-            <div class="feature-icon">🛡️</div>
-            <h4>100% Seguro</h4>
-            <p>Sem risco de ban</p>
+        <div class="feature">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
           </div>
-          <div class="feature">
-            <div class="feature-icon">⚡</div>
-            <h4>Pague com PIX</h4>
-            <p>Aprovação instantânea</p>
+          <h4>Pague com PIX</h4>
+          <p>Aprovação instantânea</p>
+        </div>
+        
+        <div class="feature">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z"/></svg>
           </div>
-          <div class="feature">
-            <div class="feature-icon">💬</div>
-            <h4>Suporte 24h</h4>
-            <p>Atendimento via chat</p>
-          </div>
+          <h4>Suporte 24h</h4>
+          <p>Atendimento via chat</p>
         </div>
       </div>
     </div>
   </section>
-
-  <!-- CATEGORIAS MAIS ESCOLHIDAS -->
-  <section class="section">
-    <div class="section-head">
-      <h2 class="section-title">Categorias mais escolhidas</h2>
-      <p class="section-sub">As categorias que mais vendem na loja</p>
-    </div>
-    
-    <div class="cat-grid">
-      <div class="cat-card">
-        <div class="cat-icon">🎯</div>
-        <h3>FF BOOYAH</h3>
-        <p>128 vendidos</p>
-      </div>
-      <div class="cat-card">
-        <div class="cat-icon">🔥</div>
-        <h3>FREE FIRE</h3>
-        <p>230 vendidos</p>
-      </div>
-      <div class="cat-card">
-        <div class="cat-icon">👤</div>
-        <h3>CONTAS FF</h3>
-        <p>89 vendidos</p>
-      </div>
-      <div class="cat-card">
-        <div class="cat-icon">👑</div>
-        <h3>CONTAS REI</h3>
-        <p>156 vendidos</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- PRODUTOS MAIS COMPRADOS -->
-  <section class="section" style="background:#0A0A0F;padding-top:0">
-    <div class="section-head">
-      <h2 class="section-title">Produtos mais comprados</h2>
-      <p class="section-sub">Os favoritos da galera</p>
-    </div>
-    
-    <div class="prod-grid">
-      <div class="prod-card">
-        <div class="prod-img">
-          <span class="prod-badge">MAIS VENDIDO</span>
-          <div style="font-size:60px">💎</div>
-        </div>
-        <div class="prod-info">
-          <p class="prod-cat">NITRO BOOST</p>
-          <h3>14 IMPULSOS - 1 MÊS</h3>
-          <div class="prod-price">
-            <span class="price">R$ 69,90</span>
-            <span class="old-price">R$ 89,90</span>
-          </div>
-          <button class="prod-btn" onclick="comprar('14-impulsos-1m')">COMPRAR AGORA</button>
-        </div>
-      </div>
-
-      <div class="prod-card">
-        <div class="prod-img">
-          <span class="prod-badge">OFERTA</span>
-          <div style="font-size:60px">🔥</div>
-        </div>
-        <div class="prod-info">
-          <p class="prod-cat">NITRO BOOST</p>
-          <h3>6 IMPULSOS - 3 MESES</h3>
-          <div class="prod-price">
-            <span class="price">R$ 89,99</span>
-            <span class="old-price">R$ 119,99</span>
-          </div>
-          <button class="prod-btn" onclick="comprar('6-impulsos-3m')">COMPRAR AGORA</button>
-        </div>
-      </div>
-
-      <div class="prod-card">
-        <div class="prod-img">
-          <span class="prod-badge">PROMO</span>
-          <div style="font-size:60px">🦊</div>
-        </div>
-        <div class="prod-info">
-          <p class="prod-cat">NITRO GAMING</p>
-          <h3>NITRO 1 MÊS + 2 BOOSTS</h3>
-          <div class="prod-price">
-            <span class="price">R$ 2,00</span>
-            <span class="old-price">R$ 9,90</span>
-          </div>
-          <button class="prod-btn" onclick="comprar('nitro-1m-2b')">COMPRAR AGORA</button>
-        </div>
-      </div>
-
-      <div class="prod-card">
-        <div class="prod-img">
-          <div style="font-size:60px">⚡</div>
-        </div>
-        <div class="prod-info">
-          <p class="prod-cat">NITRO BOOST</p>
-          <h3>6 IMPULSOS - 1 MÊS</h3>
-          <div class="prod-price">
-            <span class="price">R$ 29,90</span>
-            <span class="old-price">R$ 39,90</span>
-          </div>
-          <button class="prod-btn" onclick="comprar('6-impulsos-1m')">COMPRAR AGORA</button>
-        </div>
-      </div>
-
-      <div class="prod-card">
-        <div class="prod-img">
-          <div style="font-size:60px">🎯</div>
-        </div>
-        <div class="prod-info">
-          <p class="prod-cat">NITRO BOOST</p>
-          <h3>1 IMPULSO - 1 MÊS</h3>
-          <div class="prod-price">
-            <span class="price">R$ 9,90</span>
-            <span class="old-price">R$ 14,90</span>
-          </div>
-          <button class="prod-btn" onclick="comprar('1-impulso-1m')">COMPRAR AGORA</button>
-        </div>
-      </div>
-
-      <div class="prod-card">
-        <div class="prod-img">
-          <span class="prod-badge">DESTAQUE</span>
-          <div style="font-size:60px">👑</div>
-        </div>
-        <div class="prod-info">
-          <p class="prod-cat">NITRO BOOST</p>
-          <h3>14 IMPULSOS - 3 MESES</h3>
-          <div class="prod-price">
-            <span class="price">R$ 139,99</span>
-            <span class="old-price">R$ 189,99</span>
-          </div>
-          <button class="prod-btn" onclick="comprar('14-impulsos-3m')">COMPRAR AGORA</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-<script>
-function comprar(id) {
-  window.open(`https://wa.me/55SEUNUMERO?text=Quero%20comprar%20${id}`,'_blank')
-}
-</script>
 
 </body>
 </html>
