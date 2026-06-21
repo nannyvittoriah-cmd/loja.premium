@@ -1,12 +1,39 @@
-bot-whatsapp/
-│
-├── index.js
-├── package.json
-├── comandos/
-│   ├── menu.js
-│   ├── regras.js
-│   └── bemvindo.js
-│
-└── painel/
-    ├── index.html
-    └── style.css
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Sistema de Likes</title>
+</head>
+<body>
+  <h1>Likes do Perfil</h1>
+
+  <h2 id="likes">0</h2>
+
+  <button onclick="darLike()">Curtir 👍</button>
+
+  <script>
+    // 🔴 AQUI você coloca sua API
+    const API_URL = "https://SUA-API-AQUI.com/like";
+
+    async function darLike() {
+      await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      carregarLikes();
+    }
+
+    async function carregarLikes() {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+
+      document.getElementById("likes").innerText = data.likes;
+    }
+
+    carregarLikes();
+  </script>
+</body>
+</html>
