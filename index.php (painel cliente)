@@ -1,0 +1,129 @@
+<?php
+
+
+session_start();
+
+
+include "api.php";
+
+include "conexao.php";
+
+
+
+if(!isset($_SESSION['user'])){
+
+header("Location:login.php");
+
+}
+
+
+
+$id=$_SESSION['user'];
+
+
+
+$user=$conn->query(
+
+"SELECT * FROM usuarios WHERE id=$id"
+
+)->fetch_assoc();
+
+
+
+$servicos=pegarServicos();
+
+
+
+?>
+
+
+<link rel="stylesheet" href="style.css">
+
+
+
+<h1>
+
+Olá <?=$user['nome']?>
+
+</h1>
+
+
+
+<h2>
+
+Saldo:
+
+R$ <?=$user['saldo']?>
+
+</h2>
+
+
+
+
+<form action="pedido.php" method="POST">
+
+
+<select name="servico">
+
+
+<?php foreach($servicos as $s){ ?>
+
+
+<option value="<?=$s['service']?>">
+
+
+<?=$s['name']?>
+
+
+</option>
+
+
+<?php } ?>
+
+
+</select>
+
+
+
+<input name="link" placeholder="Link">
+
+
+<input name="qtd" placeholder="Quantidade">
+
+
+<button>
+
+
+Comprar
+
+
+</button>
+
+
+</form>
+
+
+
+<h2>
+
+Adicionar saldo Pix
+
+</h2>
+
+
+<p>
+
+Pix:
+
+<?=PIX?>
+
+</p>
+
+
+<p>
+
+Titular:
+
+<?=TITULAR?>
+
+</p>
